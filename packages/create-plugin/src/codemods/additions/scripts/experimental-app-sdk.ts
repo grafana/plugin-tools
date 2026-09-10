@@ -1,7 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { parseDocument, stringify, YAMLMap, Scalar } from 'yaml';
 import type { Context } from '../../context.js';
-import { output } from '../../../utils/utils.console.js';
 import { additionsDebug, renderTemplate } from '../../utils.js';
 import { getTemplateData } from '../../../utils/utils.templates.js';
 
@@ -43,7 +42,7 @@ export default function appSdk(context: Context): Context {
 
   // Only guide the user when we actually scaffolded something; a re-run should stay quiet.
   if (Object.keys(context.listChanges()).length > changesBefore) {
-    printNextSteps();
+    addNextSteps(context);
   }
 
   return context;
@@ -57,7 +56,7 @@ function isAppPlugin(context: Context): boolean {
   const pluginJsonContent = context.getFile('src/plugin.json');
 
   if (!pluginJsonContent) {
-    skip('Could not find src/plugin.json.', ['Run this from the root of your plugin.']);
+    context.skip('could not find src/plugin.json.', ['Run this from the root of your plugin.']);
     return false;
   }
 
@@ -66,26 +65,21 @@ function isAppPlugin(context: Context): boolean {
     pluginJson = JSON.parse(pluginJsonContent);
   } catch (error) {
     additionsDebug(`Failed to parse src/plugin.json: ${error}`);
-    skip('Could not parse src/plugin.json.');
+    context.skip('could not parse src/plugin.json.');
     return false;
   }
 
   if (pluginJson.type !== 'app') {
-    skip(`grafana-app-sdk codegen needs an app plugin, but this is a ${pluginJson.type} plugin.`, [
-      'The app-sdk serves Kubernetes-style resources from an app plugin.',
-    ]);
+    context.skip(
+      pluginJson.type
+        ? `needs an app plugin, but this is a ${pluginJson.type} plugin.`
+        : 'needs an app plugin, but src/plugin.json declares no type.',
+      ['The app-sdk serves Kubernetes-style resources from an app plugin.']
+    );
     return false;
   }
 
   return true;
-}
-
-/**
- * Explains why nothing happened. The runner reports success for a no-op codemod, so without this the
- * user is left guessing.
- */
-function skip(title: string, body: string[] = []) {
-  output.warning({ title: `Skipping app-sdk: ${title}`, body });
 }
 
 function addTemplateFiles(context: Context) {
@@ -223,16 +217,11 @@ function addFeatureToggle(context: Context) {
   context.updateFile(composePath, stringify(composeData, { lineWidth: 120, singleQuote: true }));
 }
 
-/** Tells the user what to run next. */
-function printNextSteps() {
+/** Records what to run next. The command renders these once the changes are on disk. */
+function addNextSteps(context: Context) {
   const { packageManagerName } = getTemplateData();
 
-  output.log({
-    title: 'Added grafana-app-sdk code generation. Next steps:',
-    body: [
-      'Edit your kinds in ./kinds (start with kinds/example.cue), then run:',
-      `  ${packageManagerName} run generate:kinds`,
-      'See ./kinds/README.md for the full workflow.',
-    ],
-  });
+  context.addNextStep('Edit your kinds in ./kinds, starting with kinds/example.cue');
+  context.addNextStep(`Run ${packageManagerName} run generate:kinds to generate from them`);
+  context.addNextStep('See ./kinds/README.md for the full workflow');
 }

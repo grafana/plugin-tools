@@ -32,9 +32,25 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
 
   output.log({ title: 'Running the following migrations:', body: migrationListBody });
 
+  // an update runs many migrations, so their next steps are gathered here and rendered once by the
+  // caller rather than interleaved with each migration's change list
+  const nextSteps: string[] = [];
+  const skipped: string[] = [];
+
   // run migrations sequentially in version order where lowest version runs first
   for (const migration of migrations) {
     const context = await runCodemod(migration, options.codemodOptions);
+
+    // a skipped migration made no changes, so there is nothing to commit. next steps still count -
+    // a migration that recorded one before deciding it could not finish has something worth saying.
+    nextSteps.push(...context.listNextSteps());
+
+    // the runner has already explained the skip. record it so the caller can avoid claiming success
+    if (context.getSkip()) {
+      skipped.push(migration.name);
+      continue;
+    }
+
     const shouldCommit = options.commitEachMigration && context.hasChanges();
 
     if (shouldCommit) {
@@ -48,4 +64,6 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
   if (options.commitEachMigration) {
     await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`);
   }
+
+  return { nextSteps, skipped };
 }

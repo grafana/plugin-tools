@@ -151,4 +151,42 @@ describe('Context', () => {
       expect(context.hasChanges()).toEqual(true);
     });
   });
+
+  describe('user messaging', () => {
+    it('records next steps in the order they were added', () => {
+      const context = new Context();
+
+      context.addNextStep('first');
+      context.addNextStep('second');
+
+      expect(context.listNextSteps()).toEqual(['first', 'second']);
+    });
+
+    it('has no next steps by default', () => {
+      expect(new Context().listNextSteps()).toEqual([]);
+    });
+
+    it('is not skipped by default', () => {
+      expect(new Context().getSkip()).toBeUndefined();
+    });
+
+    it('records a skip reason and its hints', () => {
+      const context = new Context();
+
+      context.skip('needs an app plugin', ['Run this from an app plugin.']);
+
+      expect(context.getSkip()).toEqual({
+        reason: 'needs an app plugin',
+        hints: ['Run this from an app plugin.'],
+      });
+    });
+
+    it('defaults skip hints to an empty list', () => {
+      const context = new Context();
+
+      context.skip('no reason to run');
+
+      expect(context.getSkip()?.hints).toEqual([]);
+    });
+  });
 });

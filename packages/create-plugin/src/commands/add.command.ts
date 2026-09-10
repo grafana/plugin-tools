@@ -24,11 +24,22 @@ export const add = async (argv: minimist.ParsedArgs) => {
 
     // filter out minimist internal properties (_ and $0) before passing to codemod
     const { _, $0, ...codemodOptions } = argv;
-    await runCodemod(addition, codemodOptions);
+    const context = await runCodemod(addition, codemodOptions);
 
-    output.success({
-      title: `Successfully added ${addition.name} to your plugin.`,
-    });
+    const nextSteps = context.listNextSteps();
+
+    // the runner has already explained the skip. declining is not failing, so don't exit non-zero -
+    // just don't follow the explanation with a success line that contradicts it.
+    if (!context.getSkip()) {
+      output.success({
+        title: `Successfully added ${addition.name} to your plugin.`,
+      });
+    }
+
+    // last, so it survives the change list and the dependency install above it
+    if (nextSteps.length > 0) {
+      output.log({ title: 'Next steps', body: output.bulletList(nextSteps) });
+    }
   } catch (error) {
     if (error instanceof Error) {
       output.error({

@@ -25,7 +25,9 @@ vi.mock('../../utils/utils.console.js', () => ({
     log: vi.fn(),
     addHorizontalLine: vi.fn(),
     logSingleLine: vi.fn(),
+    warning: vi.fn(),
     bulletList: vi.fn().mockReturnValue(['']),
+    formatCode: vi.fn((code: string) => code),
   },
 }));
 
@@ -202,6 +204,48 @@ describe('Migrations', () => {
 
       // 2 migration commits + 1 version update commit = 3 total
       expect(gitCommitNoVerify).toHaveBeenCalledTimes(3);
+    });
+
+    it('should skip a migration that declined to run, without flushing or committing it', async () => {
+      migrationOneFn.mockImplementation((context: Context) => {
+        context.skip('this plugin has no backend.', ['Add a backend first.']);
+        return context;
+      });
+
+      const { skipped } = await runMigrations(migrations, { commitEachMigration: true });
+
+      // only migration-two did any work
+      expect(flushChanges).toHaveBeenCalledTimes(1);
+      expect(gitCommitNoVerify).toHaveBeenCalledTimes(2); // migration-two, plus the .cprc.json bump
+      // reported back so the command can avoid claiming plain success
+      expect(skipped).toEqual(['migration-one']);
+    });
+
+    it('should keep next steps recorded by a migration that then skipped', async () => {
+      migrationOneFn.mockImplementation((context: Context) => {
+        context.addNextStep('add a backend, then run update again');
+        context.skip('this plugin has no backend.');
+        return context;
+      });
+
+      const { nextSteps } = await runMigrations(migrations);
+
+      expect(nextSteps).toContain('add a backend, then run update again');
+    });
+
+    it('should collect next steps across migrations for the caller to render', async () => {
+      migrationOneFn.mockImplementation((context: Context) => {
+        context.addNextStep('do the first thing');
+        return context;
+      });
+      migrationTwoFn.mockImplementation((context: Context) => {
+        context.addNextStep('then the second');
+        return context;
+      });
+
+      const { nextSteps } = await runMigrations(migrations);
+
+      expect(nextSteps).toEqual(['do the first thing', 'then the second']);
     });
 
     it('should not create a commit for a migration that has no changes', async () => {

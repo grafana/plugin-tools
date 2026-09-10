@@ -43,13 +43,28 @@ export const update = async (argv: minimist.ParsedArgs) => {
 
     // filter out minimist internal properties (_ and $0) before passing to codemod
     const { _, $0, ...codemodOptions } = argv;
-    await runMigrations(migrations, {
+    const { nextSteps, skipped } = await runMigrations(migrations, {
       commitEachMigration: !!argv.commit,
       codemodOptions,
     });
-    output.success({
-      title: `Successfully updated create-plugin from ${version} to ${CURRENT_APP_VERSION}.`,
-    });
+
+    // don't claim plain success when part of the run declined - the warnings are further up the
+    // scroll and a green line at the bottom is what the reader takes away
+    if (skipped.length > 0) {
+      output.warning({
+        title: `Updated create-plugin from ${version} to ${CURRENT_APP_VERSION}, with ${skipped.length === 1 ? '1 migration' : `${skipped.length} migrations`} skipped.`,
+        body: output.bulletList(skipped),
+      });
+    } else {
+      output.success({
+        title: `Successfully updated create-plugin from ${version} to ${CURRENT_APP_VERSION}.`,
+      });
+    }
+
+    // one combined list, last, rather than a block per migration
+    if (nextSteps.length > 0) {
+      output.log({ title: 'Next steps', body: output.bulletList(nextSteps) });
+    }
   } catch (error) {
     if (error instanceof Error) {
       output.error({

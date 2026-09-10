@@ -1,5 +1,4 @@
 import { Context } from '../../context.js';
-import { output } from '../../../utils/utils.console.js';
 import appSdk from './experimental-app-sdk.js';
 
 vi.mock(import('../../../utils/utils.plugin.js'), async (importOriginal) => {
@@ -10,15 +9,11 @@ vi.mock(import('../../../utils/utils.plugin.js'), async (importOriginal) => {
   };
 });
 
-
 vi.mock(import('../../utils.js'), async (importOriginal) => {
   const originalModule = await importOriginal();
   // Disk I/O is slow so render the templates once and key off the requested path.
   const render = (file: string) =>
-    originalModule.renderTemplate(
-      new URL(`../../../../templates/app-sdk/${file}`, import.meta.url).pathname,
-      false
-    );
+    originalModule.renderTemplate(new URL(`../../../../templates/app-sdk/${file}`, import.meta.url).pathname, false);
   const rendered: Record<string, string> = {
     '.config/app-sdk/generate-kinds.mjs': render('.config/app-sdk/generate-kinds.mjs'),
     '.config/AGENTS/app-sdk.md': render('.config/AGENTS/app-sdk.md'),
@@ -78,11 +73,7 @@ function createAppContext({
 }
 
 describe('experimental-app-sdk addition', () => {
-  // Silence terminal output, and let us assert on what the user is told.
-  beforeEach(() => {
-    vi.spyOn(output, 'log').mockImplementation(() => {});
-    vi.spyOn(output, 'warning').mockImplementation(() => {});
-  });
+  // no output spies needed - the codemod prints nothing, it records on the context
 
   afterEach(() => {
     vi.restoreAllMocks();
@@ -304,35 +295,44 @@ describe('experimental-app-sdk addition', () => {
     });
   });
 
+  // the codemod records what to say; the command renders it. see Context.addNextStep / Context.skip
   describe('user messaging', () => {
     it('explains why it skipped an unsupported plugin type', () => {
       const context = createAppContext({ pluginType: 'panel' });
 
       appSdk(context);
 
-      expect(output.warning).toHaveBeenCalledWith(
-        expect.objectContaining({ title: expect.stringContaining('needs an app plugin') })
-      );
+      expect(context.getSkip()?.reason).toContain('needs an app plugin');
     });
 
-    it('prints next steps after scaffolding', () => {
+    it('explains a missing plugin.json rather than failing silently', () => {
+      const context = new Context();
+
+      appSdk(context);
+
+      expect(context.getSkip()?.reason).toContain('src/plugin.json');
+      expect(context.getSkip()?.hints).toContain('Run this from the root of your plugin.');
+    });
+
+    it('records next steps after scaffolding', () => {
       const context = createAppContext();
 
       appSdk(context);
 
-      expect(output.log).toHaveBeenCalledWith(expect.objectContaining({ title: expect.stringContaining('Next steps') }));
+      expect(context.getSkip()).toBeUndefined();
+      expect(context.listNextSteps().join('\n')).toContain('generate:kinds');
     });
 
     it('stays quiet on a re-run', () => {
       const context = createAppContext();
       appSdk(context);
-      vi.mocked(output.log).mockClear();
+      const afterFirstRun = context.listNextSteps().length;
 
       appSdk(context);
 
-      expect(output.log).not.toHaveBeenCalled();
+      // nothing was scaffolded the second time, so nothing new to say
+      expect(context.listNextSteps()).toHaveLength(afterFirstRun);
     });
-
   });
 
   it('is idempotent', async () => {
