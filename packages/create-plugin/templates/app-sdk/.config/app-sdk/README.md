@@ -33,7 +33,7 @@ the same version. To run a local build instead, set `GRAFANA_APP_SDK_BIN` to its
 Generated code is meant to be committed, so schema changes show up in review and a fresh clone builds
 without running code generation.
 
-> **Note:** No Go toolchain is not needed to run generate:kinds unless generating Go code.** 
+> **Note:** No Go toolchain is needed to run generate:kinds unless generating Go code.** 
 
 ## How the manifest reaches Grafana
 
