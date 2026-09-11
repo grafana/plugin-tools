@@ -9,15 +9,18 @@ import { getTemplateData } from '../../../utils/utils.templates.js';
 // these toggles are enabled.
 const APP_SDK_FEATURE_TOGGLES = ['appplugins.loadAppManifest', 'appplugins.registerAPIServer'];
 
-// Files copied verbatim from templates/app-sdk. Paths are relative to both the template folder and
-// the plugin root.
-const TEMPLATE_FILES = [
-  '.config/app-sdk/generate-kinds.mjs',
-  'kinds/config.cue',
-  'kinds/manifest.cue',
-  'kinds/example.cue',
-  'kinds/cue.mod/module.cue',
-  'kinds/README.md',
+// Files copied verbatim from templates/app-sdk, and whether they get the "scaffolded by create-plugin,
+// don't edit" header. Paths are relative to both the template folder and the plugin root.
+//
+// The CUE kinds are meant to be edited (declaring your own kinds is the point), so they're excluded.
+// generate-kinds.mjs is a tool, not something devs hand-edit, so it gets the header.
+const TEMPLATE_FILES: Array<[path: string, includeWarning: boolean]> = [
+  ['.config/app-sdk/generate-kinds.mjs', true],
+  ['kinds/config.cue', false],
+  ['kinds/manifest.cue', false],
+  ['kinds/example.cue', false],
+  ['kinds/cue.mod/module.cue', false],
+  ['kinds/README.md', false],
 ];
 
 // Points agents at the app-sdk guidance. Only added alongside an existing instructions.md.
@@ -89,15 +92,13 @@ function skip(title: string, body: string[] = []) {
 }
 
 function addTemplateFiles(context: Context) {
-  for (const file of TEMPLATE_FILES) {
+  for (const [file, includeWarning] of TEMPLATE_FILES) {
     if (context.doesFileExist(file)) {
       additionsDebug(`${file} already exists. Skipping.`);
       continue;
     }
 
-    // includeWarning is false: the CUE kinds are meant to be edited (declaring your own kinds is the
-    // point), and generate-kinds.mjs starts with a shebang, which a prepended comment would break.
-    context.addFile(file, renderTemplate(templatePath(file), false));
+    context.addFile(file, renderTemplate(templatePath(file), includeWarning));
   }
 }
 

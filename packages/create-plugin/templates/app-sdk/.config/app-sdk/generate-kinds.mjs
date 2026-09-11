@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // Runs grafana-app-sdk kind code generation from the CUE kinds in ./kinds.
 //
 // Always runs the CLI at the version pinned in VERSION below, resolved as:
