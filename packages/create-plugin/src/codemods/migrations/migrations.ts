@@ -91,6 +91,13 @@ export default [
       'Support @grafana/ui@13.2.0 in Jest by transforming @react-hookz/web and @ver0/deep-equal ESM dependencies.',
     scriptPath: import.meta.resolve('./scripts/013-jest-esmodules.js'),
   },
+  {
+    name: '014-eslint-config-v10',
+    version: '7.10.2',
+    description:
+      'Update @grafana/eslint-config to v10: drop the removed ./flat.js subpath import and swap @stylistic/eslint-plugin-ts for @stylistic/eslint-plugin.',
+    scriptPath: import.meta.resolve('./scripts/014-eslint-config-v10.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
 ] satisfies Migration[];
