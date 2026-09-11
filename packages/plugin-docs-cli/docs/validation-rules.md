@@ -19,17 +19,17 @@ it before you submit your plugin, since it will block publishing.
 
 ## Folder & file structure
 
-| Rule | What it checks | Severity |
-| ---- | -------------- | -------- |
-| `has-markdown-files` | Your docs folder must contain at least one markdown page. | Error |
-| `root-index-exists` | Your docs folder must have an `index.md` at its root - this is the landing page for your documentation. | Error |
-| `nested-dir-has-index` | A subfolder that contains pages needs its own `index.md`. Without one, the sidebar shows an unnamed category using the folder name instead. | Warning |
-| `no-spaces-in-names` | File and folder names can't contain spaces - they break the URL for that page. Use hyphens instead. | Error |
-| `valid-file-naming` | File and folder names should use only lowercase letters, digits and hyphens, for clean URLs. | Warning † |
-| `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it. | Warning † |
-| `no-symlinks` | Symbolic links aren't allowed in the docs folder - use real files. | Error |
-| `allowed-file-types` | Only markdown files and images (`png`, `jpg`, `jpeg`, `webp`, `gif`) are allowed in the docs folder. | Suggestion † |
-| `max-nesting-depth` | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages. | Suggestion † |
+| Rule                   | What it checks                                                                                                                              | Severity     |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `has-markdown-files`   | Your docs folder must contain at least one markdown page.                                                                                   | Error        |
+| `root-index-exists`    | Your docs folder must have an `index.md` at its root - this is the landing page for your documentation.                                     | Error        |
+| `nested-dir-has-index` | A subfolder that contains pages needs its own `index.md`. Without one, the sidebar shows an unnamed category using the folder name instead. | Warning      |
+| `no-spaces-in-names`   | File and folder names can't contain spaces - they break the URL for that page. Use hyphens instead.                                         | Error        |
+| `valid-file-naming`    | File and folder names should use only lowercase letters, digits and hyphens, for clean URLs.                                                | Warning †    |
+| `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it.                                                                       | Warning †    |
+| `no-symlinks`          | Symbolic links aren't allowed in the docs folder - use real files.                                                                          | Error        |
+| `allowed-file-types`   | Only markdown files and images (`png`, `jpg`, `jpeg`, `webp`, `gif`) are allowed in the docs folder.                                        | Suggestion † |
+| `max-nesting-depth`    | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages.                | Suggestion † |
 
 ## Page frontmatter
 
@@ -50,15 +50,15 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 
 ## Images & other assets
 
-| Rule                      | What it checks                                                                                                           | Severity                            |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
-| `no-svg-files`            | SVG images aren't allowed - they can contain embedded scripts, which is a security risk. Use PNG or WebP instead.        | Error                               |
-| `referenced-images-exist` | An image referenced in a page (`![alt](img/foo.png)`) must actually exist in your docs folder.                           | Error                               |
-| `max-image-size`          | Static images (png/jpg/webp) must be 300KB or smaller; GIFs must be 1MB or smaller. Compress or resize oversized images. | Suggestion †                        |
-| `max-total-images-size`   | The total size of all images in your docs folder must stay under 5MB. Only checked in strict mode (`validate`), not during `serve`.     | Warning (strict mode only)    |
-| `image-file-naming`       | Image filenames should use only letters, digits, hyphens, underscores and dots.                                          | Suggestion †                        |
-| `no-orphaned-images`      | An image that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.                | Suggestion (strict mode only) |
-| `max-data-uri-size`       | An inline (data URI) image must be 300KB or smaller. Save larger images as files instead of embedding them.              | Suggestion †                        |
+| Rule                      | What it checks                                                                                                                      | Severity                      |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `no-svg-files`            | SVG images aren't allowed - they can contain embedded scripts, which is a security risk. Use PNG or WebP instead.                   | Error                         |
+| `referenced-images-exist` | An image referenced in a page (`![alt](img/foo.png)`) must actually exist in your docs folder.                                      | Error                         |
+| `max-image-size`          | Static images (png/jpg/webp) must be 300KB or smaller; GIFs must be 1MB or smaller. Compress or resize oversized images.            | Suggestion †                  |
+| `max-total-images-size`   | The total size of all images in your docs folder must stay under 5MB. Only checked in strict mode (`validate`), not during `serve`. | Warning (strict mode only)    |
+| `image-file-naming`       | Image filenames should use only letters, digits, hyphens, underscores and dots.                                                     | Suggestion †                  |
+| `no-orphaned-images`      | An image that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.            | Suggestion (strict mode only) |
+| `max-data-uri-size`       | An inline (data URI) image must be 300KB or smaller. Save larger images as files instead of embedding them.                         | Suggestion †                  |
 
 ## Markdown content & security
 
@@ -86,6 +86,55 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
 | `min-content-length`     | A page's body should have at least 150 characters of real content. A heads-up, not a hard requirement - catches pages that are still effectively blank. Only checked as part of the pre-publish check.       | Suggestion (pre-publish check only) |
 | `unfilled-section-brief` | If you scaffolded your docs from a create-plugin template, remove the `<!-- section-brief:start -->` / `<!-- section-brief:end -->` placeholder block once you've written the real content for that section. | Warning †                           |
+
+## Writing style
+
+These come from the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/), the style
+guide Grafana's own documentation follows. We transcribe a curated subset of its rules and apply
+them here, so you get the same feedback without installing anything extra.
+
+They are advice, not a gate. **No writing-style rule ever blocks publishing**, even in `validate` -
+the worst any of them does is print a warning, and the † convention above does not apply to them.
+Every finding links to the full rule in the toolkit, so you only need to read the ones you hit.
+Fix them at your own pace.
+
+| Rule                               | What it checks                                                                                                       | Severity   | Toolkit rule                       |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------- | ---------------------------------- |
+| `style-allows-to`                  | Write `allows you to` rather than `allows to`.                                                                       | Warning    | `Grafana.AllowsTo`                 |
+| `style-and-or`                     | Avoid `and/or`. Usually `and` already implies `or`.                                                                  | Warning    | `Grafana.AndOr`                    |
+| `style-archives`                   | Write `extract` rather than `unzip`, and `archive` rather than `zip file`.                                           | Suggestion | `Grafana.Archives`                 |
+| `style-dialog-box`                 | Write `dialog box` rather than `modal` or `dialog`.                                                                  | Warning    | `Grafana.DialogBox`                |
+| `style-drop-down`                  | Write `drop-down` rather than `dropdown` or `drop down`.                                                             | Warning    | `Grafana.DropDown`                 |
+| `style-end-to-end`                 | Write `end-to-end` rather than `E2E`.                                                                                | Warning    | `Grafana.EndToEnd`                 |
+| `style-exclamation`                | Avoid exclamation points in body text.                                                                               | Warning    | `Grafana.Exclamation`              |
+| `style-google-ampm`                | Write `AM` and `PM` in caps with a space before them.                                                                | Warning    | `Grafana.GoogleAMPM`               |
+| `style-google-date-format`         | Write dates as `July 31, 2016` rather than a numeric format.                                                         | Warning    | `Grafana.GoogleDateFormat`         |
+| `style-google-ellipses`            | Avoid ellipses in prose.                                                                                             | Warning    | `Grafana.GoogleEllipses`           |
+| `style-google-em-dash`             | Write an em dash without spaces around it.                                                                           | Warning    | `Grafana.GoogleEmDash`             |
+| `style-google-en-dash`             | Use an em dash rather than an en dash (`–`).                                                                         | Warning    | `Grafana.GoogleEnDash`             |
+| `style-google-gender`              | Use a gender-neutral alternative to the constructs `he/she`, `s/he` or `(s)he`, not pronouns generally.              | Warning    | `Grafana.GoogleGender`             |
+| `style-google-gender-bias`         | Use gender-neutral job and role nouns.                                                                               | Warning    | `Grafana.GoogleGenderBias`         |
+| `style-google-heading-punctuation` | Don't end a heading with a period.                                                                                   | Warning    | `Grafana.GoogleHeadingPunctuation` |
+| `style-google-ly-hyphens`          | Don't hyphenate after an adverb ending in `-ly`.                                                                     | Warning    | `Grafana.GoogleLyHyphens`          |
+| `style-google-optional-plurals`    | Write the plural rather than `option(s)`.                                                                            | Warning    | `Grafana.GoogleOptionalPlurals`    |
+| `style-google-periods`             | Write acronyms without periods, so `US` rather than `U.S.`.                                                          | Warning    | `Grafana.GooglePeriods`            |
+| `style-google-ranges`              | Write `from 10 to 20`, not `from 10-20` or `between 10-20` - the hyphen reads as ambiguous next to "from"/"between". | Warning    | `Grafana.GoogleRanges`             |
+| `style-google-slang`               | Avoid slang and idioms, which are hard on translators and non-native readers.                                        | Warning    | `Grafana.GoogleSlang`              |
+| `style-google-will`                | Prefer present tense to `will`. Future tense is fine for deprecations and roadmap notes.                             | Suggestion | `Grafana.GoogleWill`               |
+| `style-kubernetes`                 | Use correct Kubernetes object and CLI casing, such as `CronJob`, `Pod`, `` `kubectl` `` and `` `kubelet` ``.         | Warning    | `Grafana.Kubernetes`               |
+| `style-latin`                      | Write `for example` and `that is` rather than `e.g.` and `i.e.`.                                                     | Warning    | `Grafana.Latin`                    |
+| `style-ok`                         | Avoid any form of `OK`/`okay` in prose, except when quoting a UI, an HTTP status code or other code.                 | Warning    | `Grafana.OK`                       |
+| `style-ordinal`                    | Write `first` through `ninth` as words; use numerals from `10th`.                                                    | Warning    | `Grafana.Ordinal`                  |
+| `style-please`                     | Drop `please` from instructions. Direct imperatives are clearer.                                                     | Warning    | `Grafana.Please`                   |
+| `style-quickstart`                 | Write `quickstart` rather than `quick start`.                                                                        | Warning    | `Grafana.Quickstart`               |
+| `style-react`                      | Write `React` rather than `React.js` or `ReactJS`.                                                                   | Warning    | `Grafana.React`                    |
+| `style-refer-to`                   | When linking, write `refer to [Page]` rather than `see [Page]` or `check out [Page]`.                                | Warning    | `Grafana.ReferTo`                  |
+| `style-repeated-words`             | Catches an accidentally repeated word, such as `the the`.                                                            | Warning    | `Grafana.RepeatedWords`            |
+| `style-simple`                     | Avoid `easy`, `easily`, `simple` and `simply` - what's simple for you may not be for your reader.                    | Warning    | `Grafana.Simple`                   |
+| `style-sql`                        | Write `an SQL` rather than `a SQL`.                                                                                  | Warning    | `Grafana.SQL`                      |
+| `style-timeless`                   | Avoid `currently`, `at present` and `soon`, which date the page.                                                     | Suggestion | `Grafana.Timeless`                 |
+| `style-wish`                       | Write `want` or `need` rather than `wish`.                                                                           | Warning    | `Grafana.Wish`                     |
+| `style-word-list`                  | Use Grafana's preferred term, for example `data source` rather than `datasource`, and `GitHub` rather than `github`. | Warning    | `Grafana.WordList`                 |
 
 ## Generated manifest
 
