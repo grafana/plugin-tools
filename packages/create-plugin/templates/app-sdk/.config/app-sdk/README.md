@@ -1,6 +1,6 @@
 # Kinds (grafana-app-sdk)
 
-This directory declares your app's API as [CUE](https://cuelang.org/) "kinds", which
+The [kinds/](../../kinds) directory declares your app's API as [CUE](https://cuelang.org/) "kinds", which
 [grafana-app-sdk](https://github.com/grafana/grafana-app-sdk) turns into TypeScript types and an app
 manifest.
 
