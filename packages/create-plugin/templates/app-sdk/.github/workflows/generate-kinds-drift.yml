@@ -61,6 +61,12 @@ jobs:
       - name: Install dependencies
         run: {{ packageManagerInstallCmd }}
 
+      - name: Cache grafana-app-sdk CLI
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/grafana-app-sdk
+          key: grafana-app-sdk-cli-${{ '{{' }} hashFiles('.config/app-sdk/generate-kinds.mjs') {{ '}}' }}
+
       - name: Generate kinds
         run: {{ packageManagerName }} run generate:kinds
 
