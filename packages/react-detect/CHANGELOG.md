@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.3](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.2...@grafana/react-detect@0.7.3) (2026-09-11)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency source-map to v0.8.0 ([#2851](https://github.com/grafana/plugin-tools/issues/2851)) ([465c148](https://github.com/grafana/plugin-tools/commit/465c1484d72ddd8cfdf7a43d5d28f153841323ce))
+
 ## [0.7.2](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.1...@grafana/react-detect@0.7.2) (2026-07-29)
 
 

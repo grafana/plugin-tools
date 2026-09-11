@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.2.2...@grafana/plugin-docs-cli@0.3.0) (2026-09-11)
+
+
+### Features
+
+* **plugin-docs-cli:** add docs-path, size and SEO length validation rules ([#2864](https://github.com/grafana/plugin-tools/issues/2864)) ([bb1c414](https://github.com/grafana/plugin-tools/commit/bb1c4140b11e652c9381eaf4b65959019199c4b6))
+
 ## [0.2.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.2.1...@grafana/plugin-docs-cli@0.2.2) (2026-08-21)
 
 
