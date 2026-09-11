@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { getCodeBlockLines, isMetaFile, maskInlineCode } from './utils.js';
+import { getCodeBlockLines, isMetaFile, matchOutsideCode } from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
@@ -33,34 +33,6 @@ const EXTERNAL_URL_RE = /^https?:\/\//i;
 
 // matches path traversal
 const PATH_TRAVERSAL_RE = /(?:^|\/)\.\.\//;
-
-/**
- * Tests a regex against content lines, skipping code blocks.
- * Returns all matches with their line numbers.
- */
-function matchOutsideCode(
-  content: string,
-  re: RegExp,
-  codeLines: Set<number>,
-  options?: { maskInlineCode?: boolean }
-): Array<{ match: RegExpExecArray; line: number }> {
-  const results: Array<{ match: RegExpExecArray; line: number }> = [];
-  const lines = content.split('\n');
-
-  for (let i = 0; i < lines.length; i++) {
-    if (codeLines.has(i + 1)) {
-      continue;
-    }
-    const lineText = options?.maskInlineCode ? maskInlineCode(lines[i]) : lines[i];
-    const lineRe = new RegExp(re.source, re.flags);
-    let m: RegExpExecArray | null;
-    while ((m = lineRe.exec(lineText)) !== null) {
-      results.push({ match: m, line: i + 1 });
-    }
-  }
-
-  return results;
-}
 
 export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];

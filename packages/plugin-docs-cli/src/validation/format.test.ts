@@ -64,6 +64,36 @@ describe('formatResult', () => {
     expect(output).toContain('page.md:7');
   });
 
+  it('should print errors before warnings and info, regardless of collection order', () => {
+    const result: ValidationResult = {
+      valid: false,
+      diagnostics: [
+        { rule: Rule.NestedDirIndex, severity: 'warning', title: 'A warning', detail: '' },
+        { rule: Rule.AllowedFileTypes, severity: 'info', title: 'An info', detail: '' },
+        { rule: Rule.HasMarkdown, severity: 'error', title: 'An error', detail: '' },
+      ],
+    };
+    const output = formatResult(result);
+    const errorIndex = output.indexOf('An error');
+    const warningIndex = output.indexOf('A warning');
+    const infoIndex = output.indexOf('An info');
+    expect(errorIndex).toBeLessThan(warningIndex);
+    expect(warningIndex).toBeLessThan(infoIndex);
+  });
+
+  it('should keep the relative order of diagnostics within the same severity', () => {
+    const result: ValidationResult = {
+      valid: false,
+      diagnostics: [
+        { rule: Rule.NestedDirIndex, severity: 'warning', title: 'First warning', detail: '' },
+        { rule: Rule.HasMarkdown, severity: 'error', title: 'The error', detail: '' },
+        { rule: Rule.ValidSlug, severity: 'warning', title: 'Second warning', detail: '' },
+      ],
+    };
+    const output = formatResult(result);
+    expect(output.indexOf('First warning')).toBeLessThan(output.indexOf('Second warning'));
+  });
+
   it('should handle mixed severities', () => {
     const result: ValidationResult = {
       valid: false,
