@@ -1,5 +1,21 @@
 # Changelog
 
+## [7.11.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.10.1...@grafana/create-plugin@7.11.0) (2026-09-11)
+
+
+### Features
+
+* **create-plugin:** add CI drift check workflow to experimental-app-sdk ([#2862](https://github.com/grafana/plugin-tools/issues/2862)) ([89b3a07](https://github.com/grafana/plugin-tools/commit/89b3a077b4ec9a9a85e58ceb514f7e94ee2ef21e))
+* **create-plugin:** add grafana-app-sdk CUE kind code generation ([#2853](https://github.com/grafana/plugin-tools/issues/2853)) ([5f1a3c1](https://github.com/grafana/plugin-tools/commit/5f1a3c136b97ee451b8dae97fb65372f661ac589))
+
+
+### Bug Fixes
+
+* **create-plugin:** drop shebang from generate-kinds.mjs so it gets the do-not-edit header ([#2872](https://github.com/grafana/plugin-tools/issues/2872)) ([d1d25d9](https://github.com/grafana/plugin-tools/commit/d1d25d9f85ade3c7079ab04954daf23c413c8603))
+* **create-plugin:** preserve 'add' changeType when updating a newly added file ([#2865](https://github.com/grafana/plugin-tools/issues/2865)) ([20e57ed](https://github.com/grafana/plugin-tools/commit/20e57ed48334e4e941d9fe3b6e07e370b36d2672))
+* **deps:** Update dependency recast to v0.24.0 ([#2824](https://github.com/grafana/plugin-tools/issues/2824)) ([c57eba3](https://github.com/grafana/plugin-tools/commit/c57eba3601d70aee202f4786405d62cee38af264))
+* **templates:** Update dependency @grafana/plugin-e2e to v3.12.0 ([#2870](https://github.com/grafana/plugin-tools/issues/2870)) ([c32a68c](https://github.com/grafana/plugin-tools/commit/c32a68c88a746df67400564100167aa65cd7dd3b))
+
 ## [7.10.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.10.0...@grafana/create-plugin@7.10.1) (2026-08-27)
 
 
