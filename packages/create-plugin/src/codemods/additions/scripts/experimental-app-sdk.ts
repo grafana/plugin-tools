@@ -3,6 +3,7 @@ import { parseDocument, stringify, YAMLMap, Scalar } from 'yaml';
 import type { Context } from '../../context.js';
 import { output } from '../../../utils/utils.console.js';
 import { additionsDebug, renderTemplate } from '../../utils.js';
+import { addRequireToGoMod } from '../../utils.goMod.js';
 import { getTemplateData } from '../../../utils/utils.templates.js';
 
 // Grafana reads an app-sdk manifest from the plugin bundle, and registers its API server, only when
@@ -17,6 +18,7 @@ const APP_SDK_FEATURE_TOGGLES = ['appplugins.loadAppManifest', 'appplugins.regis
 // is a tool, not something devs hand-edit, so it gets the header.
 const TEMPLATE_FILES: Array<[path: string, includeWarning: boolean]> = [
   ['.config/app-sdk/generate-kinds.mjs', true],
+  ['.config/app-sdk/README.md', false],
   ['.github/workflows/generate-kinds-drift.yml', false],
   ['kinds/config.cue', false],
   ['kinds/manifest.cue', false],
@@ -45,10 +47,11 @@ export default function appSdk(context: Context): Context {
   referenceAgentInstructions(context);
   addGenerateScript(context);
   addFeatureToggle(context);
+  wireGoBackend(context);
 
   // Only guide the user when we actually scaffolded something; a re-run should stay quiet.
   if (Object.keys(context.listChanges()).length > changesBefore) {
-    printNextSteps();
+    printNextSteps(hasGoBackend(context));
   }
 
   return context;
@@ -226,8 +229,156 @@ function addFeatureToggle(context: Context) {
   context.updateFile(composePath, stringify(composeData, { lineWidth: 120, singleQuote: true }));
 }
 
+/**
+ * Wires the generated kinds into the Go backend, for app plugins that have one. Go code generation
+ * itself is enabled when kinds/config.cue is first scaffolded, in addTemplateFiles.
+ */
+function wireGoBackend(context: Context) {
+  if (!hasGoBackend(context)) {
+    additionsDebug('No Go backend found. Skipping main.go wiring.');
+    return;
+  }
+
+  addAppProvider(context);
+  wireMainGo(context);
+  addGoModDependency(context);
+}
+
+// Pinned to pseudo-versions rather than tagged releases: plugin.Run and simple.NewAppProvider
+// (https://github.com/grafana/grafana-app-sdk/pull/1516, merged 2026-08-27 at commit 9c1ef77)
+// haven't shipped in a tagged release of either module yet. `plugin/` is a separate Go module nested
+// in the grafana-app-sdk repo, versioned independently of the root module — hence the two different
+// version prefixes below, both pinned to the same commit. Once go.mod has *a* requirement for each,
+// `go mod tidy` (which printNextSteps tells the user to run) resolves exact versions and go.sum
+// entries for everything actually needed.
+const GRAFANA_APP_SDK_VERSION = 'v0.59.1-0.20260827170158-9c1ef7716f5a';
+const GRAFANA_APP_SDK_PLUGIN_VERSION = 'v0.17.3-0.20260827170158-9c1ef7716f5a';
+
+/**
+ * Adds github.com/grafana/grafana-app-sdk and its plugin/ submodule to go.mod. The generated Go kind
+ * types, provider.go, and main.go all import them, but the scaffolded backend's go.mod has no reason
+ * to know about either until app-sdk is added.
+ *
+ * Only adds the require lines — go.sum entries and any transitive requirements (k8s.io/apimachinery,
+ * k8s.io/kube-openapi, ...) still need `go mod tidy`, which this doesn't run itself.
+ */
+function addGoModDependency(context: Context) {
+  addRequireToGoMod(context, 'github.com/grafana/grafana-app-sdk', GRAFANA_APP_SDK_VERSION);
+  addRequireToGoMod(context, 'github.com/grafana/grafana-app-sdk/plugin', GRAFANA_APP_SDK_PLUGIN_VERSION);
+}
+
+/**
+ * Scaffolds pkg/provider/provider.go: the app.Provider/app.App wiring that plugin.Run needs, built
+ * from the generated manifest and the example kind. Named "provider", not "app", so it doesn't
+ * collide with the app-sdk's own `app` package and force an import alias everywhere it's used.
+ *
+ * Not overwritten on a re-run — like kinds/*.cue, it's meant to be edited as the plugin adds
+ * validators, mutators, or more kinds.
+ */
+function addAppProvider(context: Context) {
+  const path = 'pkg/provider/provider.go';
+
+  if (context.doesFileExist(path)) {
+    additionsDebug(`${path} already exists. Skipping.`);
+    return;
+  }
+
+  context.addFile(path, renderTemplate(templatePath(path), false));
+}
+
+/** A Go backend is declared by `backend: true` in src/plugin.json, same as the rest of create-plugin. */
+function hasGoBackend(context: Context): boolean {
+  const pluginJsonContent = context.getFile('src/plugin.json');
+
+  if (!pluginJsonContent) {
+    return false;
+  }
+
+  try {
+    return JSON.parse(pluginJsonContent).backend === true;
+  } catch (error) {
+    additionsDebug(`Failed to parse src/plugin.json: ${error}`);
+    return false;
+  }
+}
+
+// Matches the backend-app template's `if err := app.Manage(...); err != nil { ... }` statement,
+// capturing the plugin ID, app factory, and error-handling body so they can be preserved verbatim.
+const APP_MANAGE_STATEMENT_REGEX =
+  /if err := app\.Manage\((".*?"), (\S+), app\.ManageOpts\{\}\); err != nil \{\n(\t+[\s\S]*?\n)\t\}/;
+
+/**
+ * Wires the app-sdk's plugin.Run helper into main.go, replacing the plain app.Manage call, using the
+ * app.Provider scaffolded into pkg/provider by addAppProvider.
+ *
+ * Bails out rather than guessing if main.go has already diverged from the scaffolded shape this
+ * transform expects.
+ */
+function wireMainGo(context: Context) {
+  const path = 'pkg/main.go';
+  const content = context.getFile(path);
+
+  if (!content) {
+    additionsDebug(`Could not find ${path}. Skipping the app-sdk backend wiring.`);
+    return;
+  }
+
+  if (content.includes('grafana-app-sdk/plugin"')) {
+    additionsDebug(`${path} already wires plugin.Run. Skipping.`);
+    return;
+  }
+
+  const match = content.match(APP_MANAGE_STATEMENT_REGEX);
+
+  if (!match) {
+    skip(`${path} does not match the expected app.Manage(...) call.`, [
+      'Wire the grafana-app-sdk plugin.Run helper into main.go yourself:',
+      'https://github.com/grafana/grafana-app-sdk/blob/main/plugin/run.go',
+    ]);
+    return;
+  }
+
+  const [fullStatement, pluginId, appFactory, errorBody] = match;
+  const moduleMatch = content.match(/"(github\.com\/[^/]+\/[^/]+)\/pkg\/plugin"/);
+  const providerImportPath = moduleMatch ? `${moduleMatch[1]}/pkg/provider` : undefined;
+
+  if (!providerImportPath) {
+    skip(`${path} does not import its own pkg/plugin package under a recognisable module path.`, [
+      'Wire the grafana-app-sdk plugin.Run helper into main.go yourself:',
+      'https://github.com/grafana/grafana-app-sdk/blob/main/plugin/run.go',
+    ]);
+    return;
+  }
+
+  const appImport = '\t"github.com/grafana/grafana-plugin-sdk-go/backend/app"';
+  const pluginImport = `"${moduleMatch![1]}/pkg/plugin"`;
+
+  if (!content.includes(appImport) || !content.includes(pluginImport)) {
+    skip(`${path} does not match the expected import shape.`, [
+      'Wire the grafana-app-sdk plugin.Run helper into main.go yourself:',
+      'https://github.com/grafana/grafana-app-sdk/blob/main/plugin/run.go',
+    ]);
+    return;
+  }
+
+  const updated = content
+    .replace(appImport, '\tsdkplugin "github.com/grafana/grafana-app-sdk/plugin"')
+    .replace(pluginImport, `${pluginImport}\n\t"${providerImportPath}"`)
+    .replace(
+      fullStatement,
+      `if err := sdkplugin.Run(
+		provider.New(),
+		sdkplugin.WithPluginID(${pluginId}),
+		sdkplugin.WithAppFunc(${appFactory}),
+	); err != nil {
+${errorBody}\t}`
+    );
+
+  context.updateFile(path, updated);
+}
+
 /** Tells the user what to run next. */
-function printNextSteps() {
+function printNextSteps(hasGoBackend: boolean) {
   const { packageManagerName } = getTemplateData();
 
   output.log({
@@ -235,7 +386,16 @@ function printNextSteps() {
     body: [
       'Edit your kinds in ./kinds (start with kinds/example.cue), then run:',
       `  ${packageManagerName} run generate:kinds`,
-      'See ./kinds/README.md for the full workflow.',
+      ...(hasGoBackend
+        ? [
+            // provider.go imports the packages generate:kinds writes to pkg/generated/, so `go mod
+            // tidy` (which resolves the grafana-app-sdk dependency added to go.mod) must run after —
+            // running it first fails, since it can't find those not-yet-generated packages locally.
+            'Then, to resolve the grafana-app-sdk dependency added to go.mod, run:',
+            '  go mod tidy',
+          ]
+        : []),
+      'See ./.config/app-sdk/README.md for the full workflow.',
     ],
   });
 }
