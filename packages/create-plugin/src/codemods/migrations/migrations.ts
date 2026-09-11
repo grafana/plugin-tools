@@ -1,8 +1,30 @@
 import { LEGACY_UPDATE_CUTOFF_VERSION } from '../../constants.js';
-import { Codemod } from '../types.js';
 
-export interface Migration extends Codemod {
+interface MigrationBase {
+  name: string;
+  description: string;
   version: string;
+}
+
+export interface ScriptMigration extends MigrationBase {
+  scriptPath: string;
+  // hybrid migrations pair a codemod script with agent instructions that finish the work
+  prompt?: string;
+}
+
+export interface PromptOnlyMigration extends MigrationBase {
+  prompt: string;
+  scriptPath?: undefined;
+}
+
+export type Migration = ScriptMigration | PromptOnlyMigration;
+
+export function isScriptMigration(migration: Migration): migration is ScriptMigration {
+  return typeof migration.scriptPath === 'string';
+}
+
+export function hasPromptStep(migration: Migration): migration is Migration & { prompt: string } {
+  return typeof migration.prompt === 'string';
 }
 
 export default [

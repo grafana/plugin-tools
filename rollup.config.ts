@@ -2,7 +2,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { glob, GlobOptions } from 'glob';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { chmod, cp } from 'node:fs/promises';
 import { join } from 'node:path';
 import { inspect } from 'node:util';
@@ -141,6 +141,15 @@ function copyAssets(): Plugin {
         const srcStyles = join(projectRoot, 'src', 'server', 'styles');
         const distStyles = join(projectRoot, 'dist', 'server', 'styles');
         await cp(srcStyles, distStyles, { recursive: true });
+      }
+
+      if (pkg.name === '@grafana/create-plugin') {
+        // migration prompt .md files are resolved relative to migrations.js at runtime via import.meta.resolve
+        const srcPrompts = join(projectRoot, 'src', 'codemods', 'migrations', 'prompts');
+        const distPrompts = join(projectRoot, 'dist', 'codemods', 'migrations', 'prompts');
+        if (existsSync(srcPrompts)) {
+          await cp(srcPrompts, distPrompts, { recursive: true });
+        }
       }
     },
   };
