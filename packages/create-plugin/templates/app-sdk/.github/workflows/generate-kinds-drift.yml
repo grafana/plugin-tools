@@ -1,0 +1,84 @@
+name: Kinds drift check
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - 'kinds/**'
+      - 'pkg/generated/**'
+      - 'src/generated/**'
+      - 'src/app-sdk-manifest.json'
+      - '.github/workflows/generate-kinds-drift.yml'
+  pull_request:
+    branches:
+      - master
+      - main
+    paths:
+      - 'kinds/**'
+      - 'pkg/generated/**'
+      - 'src/generated/**'
+      - 'src/app-sdk-manifest.json'
+      - '.github/workflows/generate-kinds-drift.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check-drift:
+    name: Check generated kinds are up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+{{#if_eq packageManagerName "pnpm"}}
+      # pnpm action uses the packageManager field in package.json to
+      # understand which version to install.
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+{{/if_eq}}
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: '{{ packageManagerName }}'
+
+      - name: Check for backend
+        id: check-for-backend
+        run: |
+          if [ -f "Magefile.go" ]
+          then
+            echo "has-backend=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Go environment
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      - name: Install dependencies
+        run: {{ packageManagerInstallCmd }}
+
+      - name: Cache grafana-app-sdk CLI
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/grafana-app-sdk
+          key: grafana-app-sdk-cli-${{ '{{' }} hashFiles('.config/app-sdk/generate-kinds.mjs') {{ '}}' }}
+
+      - name: Generate kinds
+        run: {{ packageManagerName }} run generate:kinds
+
+      - name: Fail if generated code is out of date
+        run: |
+          # Scoped to kinds/ and the generated output: installing dependencies above can itself touch
+          # files (e.g. package-lock.json, if CI's Node version differs from the one used to generate
+          # the committed lockfile), which is not kind drift and shouldn't fail this check.
+          paths="kinds src/generated pkg/generated src/app-sdk-manifest.json"
+          if [ -n "$(git status --porcelain -- $paths)" ]; then
+            echo "::error::Generated code is out of date. Run '{{ packageManagerName }} run generate:kinds' and commit the result."
+            git status --porcelain -- $paths
+            git diff --stat -- $paths
+            exit 1
+          fi

@@ -9,8 +9,9 @@
 // that mismatch invisible. To use your own build, set GRAFANA_APP_SDK_BIN to the binary — an explicit,
 // per-invocation override for local development.
 //
-// Downloading the CLI needs no Go toolchain, but note that generation itself always requires Go: the
-// generator formats its output with golang.org/x/tools, which shells out to `go`.
+// Downloading the CLI needs no Go toolchain. Generation itself only needs Go when codegen.goEnabled
+// is set in kinds/config.cue: the generator formats Go output with golang.org/x/tools, which shells
+// out to `go`.
 //
 // Output paths are configured in kinds/config.cue. Generated code is intended to be committed.
 
