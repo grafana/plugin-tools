@@ -72,9 +72,13 @@ jobs:
 
       - name: Fail if generated code is out of date
         run: |
-          if [ -n "$(git status --porcelain)" ]; then
+          # Scoped to kinds/ and the generated output: installing dependencies above can itself touch
+          # files (e.g. package-lock.json, if CI's Node version differs from the one used to generate
+          # the committed lockfile), which is not kind drift and shouldn't fail this check.
+          paths="kinds src/generated pkg/generated src/app-sdk-manifest.json"
+          if [ -n "$(git status --porcelain -- $paths)" ]; then
             echo "::error::Generated code is out of date. Run '{{ packageManagerName }} run generate:kinds' and commit the result."
-            git status --porcelain
-            git diff --stat
+            git status --porcelain -- $paths
+            git diff --stat -- $paths
             exit 1
           fi
