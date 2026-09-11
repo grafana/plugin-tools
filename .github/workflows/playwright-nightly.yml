@@ -92,6 +92,9 @@ jobs:
 
       - name: Run Playwright tests
         id: run-tests
+        env:
+          # dogfood runtime e2e-selectors here before shipping the default to all consumers
+          PLUGIN_E2E_RUNTIME_SELECTORS: 'true'
         run: npm run playwright:test --w @grafana/plugin-e2e
 
       - name: Upload e2e test summary
