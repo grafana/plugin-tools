@@ -5,10 +5,22 @@ on:
     branches:
       - master
       - main
+    paths:
+      - 'kinds/**'
+      - 'pkg/generated/**'
+      - 'src/generated/**'
+      - 'src/app-sdk-manifest.json'
+      - '.github/workflows/generate-kinds-drift.yml'
   pull_request:
     branches:
       - master
       - main
+    paths:
+      - 'kinds/**'
+      - 'pkg/generated/**'
+      - 'src/generated/**'
+      - 'src/app-sdk-manifest.json'
+      - '.github/workflows/generate-kinds-drift.yml'
 
 permissions:
   contents: read
