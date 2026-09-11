@@ -22,6 +22,7 @@ The `@grafana/plugin-e2e` tool offers a consistent way to interact with the Graf
 - **Predefined fixtures:** Offers a set of predefined fixtures that are tailored for Grafana plugin testing.
 - **Custom models:** Provides custom models that represent pages and components in Grafana, simplifying maintenance and creating reusable code to avoid repetition.
 - **Expect matchers:** Includes a range of expect matchers that are specialized for Grafana plugin assertions, helping you validate plugin behavior more effectively.
+- **Accessibility testing:** Integrates with [Axe](https://www.deque.com/axe/) to run configurable accessibility scans inside your tests, with default rules aligned with Grafana's [WCAG 2.1 AA](https://www.w3.org/TR/WCAG21/) target.
 - **Integration with Playwright:** Seamlessly integrates with the Playwright testing framework, leveraging its powerful browser automation capabilities.
 
 ## End-to-end testing guides
