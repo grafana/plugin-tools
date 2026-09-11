@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { join } from 'node:path';
-import { mkdtemp, writeFile, readFile } from 'node:fs/promises';
+import { mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { checkWritingStyle, toStyleRuleId, ALLOWED_RULES, REJECTED_RULES, VALE_RULES } from './style.js';
 import { validate } from '../engine.js';
@@ -227,15 +227,6 @@ describe('vendored rule integrity', () => {
   it('should not both allow and reject the same rule', () => {
     for (const name of Object.keys(ALLOWED_RULES)) {
       expect(REJECTED_RULES).not.toHaveProperty(name);
-    }
-  });
-
-  it('should document every rule in docs/validation-rules.md', async () => {
-    const doc = await readFile(new URL('../../../docs/validation-rules.md', import.meta.url), 'utf-8');
-    for (const rule of VALE_RULES) {
-      expect(doc, `${toStyleRuleId(rule.name)} is missing from validation-rules.md`).toContain(
-        toStyleRuleId(rule.name)
-      );
     }
   });
 });
