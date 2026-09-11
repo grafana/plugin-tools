@@ -19,6 +19,7 @@ function addPackageJson(context: Context, eslintConfigVersion = '^9.0.0') {
       devDependencies: {
         '@grafana/eslint-config': eslintConfigVersion,
         '@stylistic/eslint-plugin-ts': '^4.4.0',
+        'eslint-config-prettier': '^8.8.0',
         'eslint-plugin-react-hooks': '^7.0.0',
       },
     })
@@ -50,6 +51,7 @@ describe('014-eslint-config-v10', () => {
     expect(packageJson.devDependencies['@grafana/eslint-config']).toBe('^10.0.0');
     expect(packageJson.devDependencies['@stylistic/eslint-plugin']).toBe('^5.10.0');
     expect(packageJson.devDependencies['@stylistic/eslint-plugin-ts']).toBeUndefined();
+    expect(packageJson.devDependencies['eslint-config-prettier']).toBe('^10.1.0');
     expect(packageJson.devDependencies['eslint-plugin-react-hooks']).toBe('^7.1.0');
   });
 

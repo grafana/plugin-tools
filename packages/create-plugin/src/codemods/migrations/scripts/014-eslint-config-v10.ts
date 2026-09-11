@@ -30,6 +30,7 @@ export default function migrate(context: Context) {
     {
       '@grafana/eslint-config': '^10.0.0',
       '@stylistic/eslint-plugin': '^5.10.0',
+      'eslint-config-prettier': '^10.1.0',
       'eslint-plugin-react-hooks': '^7.1.0',
     }
   );
