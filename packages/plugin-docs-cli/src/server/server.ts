@@ -3,7 +3,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
-import { parseMarkdown, type Manifest, type Page, type MarkdownFiles } from '@grafana/plugin-docs-parser';
+import { parseMarkdown, type Manifest, type Page } from '@grafana/plugin-docs-parser';
 import { toHtml } from 'hast-util-to-html';
 import { scanDocsFolder } from '../scanner.js';
 import { validate } from '../validation/engine.js';
@@ -56,12 +56,11 @@ export async function startServer(options: ServerOptions): Promise<Server> {
     }
   };
 
-  // scan filesystem and generate manifest + load files into memory
+  // scan filesystem and generate manifest; page content lives on each Page, not a separate map
   debug('Scanning docs folder: %s', docsPath);
   const scanned = await scanDocsFolder(docsPath);
   let manifest: Manifest = scanned.manifest;
-  let files: MarkdownFiles = scanned.files;
-  debug('Manifest generated with %d pages, %d files loaded', manifest.pages.length, Object.keys(files).length);
+  debug('Manifest generated with %d pages', manifest.pages.length);
 
   // validate on startup
   await runValidation();
@@ -79,7 +78,6 @@ export async function startServer(options: ServerOptions): Promise<Server> {
     try {
       const rescanned = await scanDocsFolder(docsPath);
       manifest = rescanned.manifest;
-      files = rescanned.files;
     } catch (error) {
       console.error('Error re-scanning docs folder:', error);
     }
@@ -152,13 +150,13 @@ export async function startServer(options: ServerOptions): Promise<Server> {
         return;
       }
 
-      // get markdown content from memory
-      const fileContent = files[page.file];
-      if (!fileContent) {
-        debug('File content not found in memory for: %s', page.file);
+      // === undefined, not falsy: a frontmatter-only page has content '', which is real
+      if (page.content === undefined) {
+        debug('No content on page for: %s', page.file);
         res.status(404).send('File content not found');
         return;
       }
+      const fileContent = page.content;
 
       // route through the parser's asset rewriting so local preview exercises the same
       // code path as production. assetBaseUrl '/' produces root-relative srcs which the

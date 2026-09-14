@@ -241,6 +241,8 @@ function treeToPages(node: TreeNode): Page[] {
         title: child.file.frontmatter.title,
         slug: customSlug || generatedSlug,
         file: child.file.relativePath,
+        frontmatter: child.file.frontmatter,
+        content: child.file.content,
       };
 
       // extract h2/h3 headings via the canonical parser pipeline so heading

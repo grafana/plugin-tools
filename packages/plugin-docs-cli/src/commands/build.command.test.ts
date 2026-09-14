@@ -33,6 +33,23 @@ describe('build', () => {
     expect(manifest.pages[0].slug).toBe('home');
   });
 
+  it('should inline frontmatter and content into manifest.json, self-contained', async () => {
+    await buildDocs(tmpDir, docsPath);
+
+    const manifestPath = join(tmpDir, 'dist', 'docs', 'manifest.json');
+    const manifest = JSON.parse(await readFile(manifestPath, 'utf-8'));
+
+    const home = manifest.pages[0];
+    expect(home.frontmatter).toEqual({
+      title: 'Home Page',
+      description: 'Welcome to the test docs',
+      sidebar_position: 1,
+    });
+    expect(home.content).toContain('# Welcome');
+    // the built manifest carries everything a reader needs; no separate file read required
+    expect(home.content).not.toContain('---');
+  });
+
   it('should copy markdown files preserving directory structure', async () => {
     await buildDocs(tmpDir, docsPath);
 

@@ -33,6 +33,17 @@ export interface Page {
    * Optional nested child pages.
    */
   children?: Page[];
+
+  /**
+   * Parsed frontmatter metadata. Present in self-contained manifests, where page content is
+   * inlined rather than fetched separately from the file the manifest points at.
+   */
+  frontmatter?: Frontmatter;
+
+  /**
+   * Raw markdown body with frontmatter stripped. Present in self-contained manifests.
+   */
+  content?: string;
 }
 
 /**

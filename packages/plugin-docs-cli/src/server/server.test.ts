@@ -7,6 +7,7 @@ import { startServer, type Server } from './server.js';
 describe('startServer', () => {
   const testDocsPath = join(__dirname, '..', '__fixtures__', 'test-docs');
   const unsafeSlugDocsPath = join(__dirname, '..', '__fixtures__', 'unsafe-slug-docs');
+  const emptyContentDocsPath = join(__dirname, '..', '__fixtures__', 'empty-content-docs');
   let app: Express;
   let server: Server | null = null;
 
@@ -28,6 +29,17 @@ describe('startServer', () => {
     expect(response.text).toContain('<title>Home Page - Plugin Documentation</title>');
     expect(response.text).toContain('<h1 class="docs-page-title">Home Page</h1>');
     expect(response.text).toContain('This is the home page of the test documentation.');
+  });
+
+  it('should serve a frontmatter-only page with an empty body, not 404', async () => {
+    const result = await startServer({ docsPath: emptyContentDocsPath, port: 0 });
+    server = result;
+    app = result.app;
+
+    const response = await request(app).get('/');
+
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('<title>Empty Body - Plugin Documentation</title>');
   });
 
   it('should serve a specific page by slug', async () => {
