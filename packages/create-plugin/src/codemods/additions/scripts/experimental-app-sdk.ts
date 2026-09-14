@@ -51,7 +51,7 @@ export default function appSdk(context: Context): Context {
 
   // Only guide the user when we actually scaffolded something; a re-run should stay quiet.
   if (Object.keys(context.listChanges()).length > changesBefore) {
-    printNextSteps(hasGoBackend(context));
+    context.setSuccessMessage(() => printNextSteps(hasGoBackend(context)));
   }
 
   return context;

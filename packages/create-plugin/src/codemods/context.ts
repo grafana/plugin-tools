@@ -14,10 +14,28 @@ export type ContextFile = Record<
 
 export class Context {
   private files: ContextFile = {};
+  private successMessage?: () => void;
   basePath: string;
 
   constructor(basePath?: string) {
     this.basePath = basePath || process.cwd();
+  }
+
+  /**
+   * Lets a codemod defer printing its success message until after the caller has reported
+   * success, instead of printing immediately during the codemod's own execution.
+   */
+  setSuccessMessage(fn: () => void) {
+    this.successMessage = fn;
+  }
+
+  hasSuccessMessage() {
+    return this.successMessage !== undefined;
+  }
+
+  printSuccessMessage() {
+    this.successMessage?.();
+    this.successMessage = undefined;
   }
 
   addFile(filePath: string, content: string) {

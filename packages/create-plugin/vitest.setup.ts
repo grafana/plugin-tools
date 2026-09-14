@@ -28,10 +28,10 @@ const parseContent = (content?: string) => (content ? JSON.parse(content) : '');
 expect.extend({
   async toBeIdempotent(migrate: (context: Context) => Promise<Context>, context: Context) {
     const firstRun = await migrate(context);
-    const firstRunDeepCopy = structuredClone(firstRun) as unknown as ClonedContext;
+    const firstRunDeepCopy = { files: structuredClone(firstRun.listChanges()) } as unknown as ClonedContext;
 
     const secondRun = await migrate(firstRun);
-    const secondRunDeepCopy = structuredClone(secondRun) as unknown as ClonedContext;
+    const secondRunDeepCopy = { files: structuredClone(secondRun.listChanges()) } as unknown as ClonedContext;
 
     const result = await compareContexts(firstRunDeepCopy, secondRunDeepCopy);
 

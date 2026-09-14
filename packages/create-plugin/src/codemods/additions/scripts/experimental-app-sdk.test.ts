@@ -418,6 +418,7 @@ describe('experimental-app-sdk addition', () => {
       const context = createAppContext();
 
       appSdk(context);
+      context.printSuccessMessage();
 
       expect(output.log).toHaveBeenCalledWith(expect.objectContaining({ title: expect.stringContaining('Next steps') }));
     });
@@ -425,9 +426,11 @@ describe('experimental-app-sdk addition', () => {
     it('stays quiet on a re-run', () => {
       const context = createAppContext();
       appSdk(context);
+      context.printSuccessMessage();
       vi.mocked(output.log).mockClear();
 
       appSdk(context);
+      context.printSuccessMessage();
 
       expect(output.log).not.toHaveBeenCalled();
     });
@@ -575,6 +578,7 @@ func main() {
       const context = createAppContext({ hasBackend: true });
 
       appSdk(context);
+      context.printSuccessMessage();
 
       expect(output.log).toHaveBeenCalledWith(expect.objectContaining({ body: expect.arrayContaining(['  go mod tidy']) }));
     });
@@ -583,6 +587,7 @@ func main() {
       const context = createAppContext({ hasBackend: true });
 
       appSdk(context);
+      context.printSuccessMessage();
 
       const body = vi.mocked(output.log).mock.calls[0][0].body ?? [];
       const generateIndex = body.indexOf('  npm run generate:kinds');
@@ -595,6 +600,7 @@ func main() {
       const context = createAppContext({ hasBackend: false });
 
       appSdk(context);
+      context.printSuccessMessage();
 
       expect(output.log).toHaveBeenCalledWith(
         expect.objectContaining({ body: expect.not.arrayContaining(['  go mod tidy']) })

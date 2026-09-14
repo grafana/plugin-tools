@@ -24,11 +24,16 @@ export const add = async (argv: minimist.ParsedArgs) => {
 
     // filter out minimist internal properties (_ and $0) before passing to codemod
     const { _, $0, ...codemodOptions } = argv;
-    await runCodemod(addition, codemodOptions);
+    const context = await runCodemod(addition, codemodOptions);
 
     output.success({
       title: `Successfully added ${addition.name} to your plugin.`,
     });
+
+    if (context.hasSuccessMessage()) {
+      output.addHorizontalLine('gray');
+      context.printSuccessMessage();
+    }
   } catch (error) {
     if (error instanceof Error) {
       output.error({
