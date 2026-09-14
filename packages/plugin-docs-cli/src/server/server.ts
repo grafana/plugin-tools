@@ -150,7 +150,8 @@ export async function startServer(options: ServerOptions): Promise<Server> {
         return;
       }
 
-      if (!page.content) {
+      // === undefined, not falsy: a frontmatter-only page has content '', which is real
+      if (page.content === undefined) {
         debug('No content on page for: %s', page.file);
         res.status(404).send('File content not found');
         return;
