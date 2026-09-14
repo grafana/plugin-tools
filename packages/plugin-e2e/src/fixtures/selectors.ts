@@ -56,7 +56,11 @@ async function fetchRuntimeGroups(
   try {
     response = await request.get(selectorsUrl, { maxRedirects: 0 });
   } catch (error) {
-    console.warn(`@grafana/plugin-e2e: failed to fetch ${selectorsUrl}, falling back to bundled selectors.`, error);
+    // a fetch error on a Grafana that should serve the file is unexpected, so make it loud
+    console.error(
+      `@grafana/plugin-e2e: could not fetch runtime selectors from ${selectorsUrl}, falling back to bundled selectors.`,
+      error
+    );
     return bundledGroups(grafanaVersion);
   }
 
@@ -66,8 +70,8 @@ async function fetchRuntimeGroups(
   }
 
   if (!response.ok()) {
-    console.warn(
-      `@grafana/plugin-e2e: ${selectorsUrl} returned ${response.status()}, falling back to bundled selectors.`
+    console.error(
+      `@grafana/plugin-e2e: runtime selectors at ${selectorsUrl} returned ${response.status()}, falling back to bundled selectors.`
     );
     return bundledGroups(grafanaVersion);
   }
@@ -89,7 +93,11 @@ async function fetchRuntimeGroups(
     const pages = reconstructSelectorTree(data.versionedPages) as VersionedPages;
     return buildGroups(components, pages, grafanaVersion);
   } catch (error) {
-    console.warn(`@grafana/plugin-e2e: failed to read ${selectorsUrl}, falling back to bundled selectors.`, error);
+    // reachable but unreadable (bad schema, malformed JSON) is a real problem, so make it loud
+    console.error(
+      `@grafana/plugin-e2e: could not read runtime selectors from ${selectorsUrl}, falling back to bundled selectors.`,
+      error
+    );
     return bundledGroups(grafanaVersion);
   }
 }

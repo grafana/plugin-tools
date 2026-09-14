@@ -12,10 +12,14 @@ function isDescriptor(node: object): node is TemplateDescriptor {
   return '$template' in node;
 }
 
-// substitutes each named {param} placeholder with the positional call arg at the same index. braced
-// tokens are unique per name, so `{id}` never partially matches `{idx}` and replacement order is safe.
+// substitutes each named {param} placeholder with the positional call arg at the same index, in a
+// single pass so a substituted value that happens to contain another param's token is never
+// re-replaced. tokens that don't match a param name are left untouched.
 function fill(template: string, params: string[], args: string[]): string {
-  return params.reduce((acc, name, index) => acc.split(`{${name}}`).join(args[index] ?? ''), template);
+  return template.replace(/\{(\w+)\}/g, (match, name) => {
+    const index = params.indexOf(name);
+    return index === -1 ? match : (args[index] ?? '');
+  });
 }
 
 function reconstructDescriptor(descriptor: TemplateDescriptor): (...args: string[]) => string {
@@ -30,6 +34,8 @@ function reconstructDescriptor(descriptor: TemplateDescriptor): (...args: string
     typeof template.whenPresent === 'string' &&
     typeof template.whenAbsent === 'string'
   ) {
+    // the truthy check mirrors the source selector, which is written as `(x) => x ? present : absent`,
+    // so an empty-string arg means the absent branch. checking `undefined` instead would diverge from it.
     return (...args: string[]) => (args[0] ? fill(template.whenPresent, params, args) : template.whenAbsent);
   }
   throw new Error('@grafana/plugin-e2e: malformed e2e-selectors template descriptor');

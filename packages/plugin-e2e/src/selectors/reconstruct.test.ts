@@ -43,6 +43,14 @@ describe('reconstructSelectorTree', () => {
     expect(fn('')).toBe('Options group');
   });
 
+  it('does not re-replace a param token that appears inside a substituted value', () => {
+    const tree = reconstructSelectorTree({
+      s: { '8.0.0': { $template: '{pluginId}/{pageId}', params: ['pluginId', 'pageId'] } },
+    }) as any;
+    // the '{pageId}' inside the pluginId value must stay literal, not become 'settings'
+    expect(tree.s['8.0.0']('plugin-{pageId}', 'settings')).toBe('plugin-{pageId}/settings');
+  });
+
   it('throws on a malformed descriptor', () => {
     expect(() => reconstructSelectorTree({ s: { '8.0.0': { $template: 42, params: [] } } })).toThrow();
   });

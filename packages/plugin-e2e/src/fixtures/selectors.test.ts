@@ -45,9 +45,11 @@ async function runFixture(args: { grafanaVersion: string; request: never; select
 
 describe('selectors fixture', () => {
   const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
   beforeEach(() => {
     warnSpy.mockClear();
+    errorSpy.mockClear();
     // enable the runtime path for these tests; the default (toggle off) is covered separately below
     process.env.PLUGIN_E2E_RUNTIME_SELECTORS = 'true';
   });
@@ -65,6 +67,7 @@ describe('selectors fixture', () => {
     expect(get).not.toHaveBeenCalled();
     expect(result.components).toEqual({ __source: 'dep-components' });
     expect(warnSpy).not.toHaveBeenCalled();
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 
   it('uses the runtime selectors served by Grafana when present', async () => {
@@ -77,6 +80,7 @@ describe('selectors fixture', () => {
     expect(result.pages).toEqual({ __source: 'fetched-pages' });
     expect(result.apis).toEqual({ __source: 'local-apis' });
     expect(warnSpy).not.toHaveBeenCalled();
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 
   it('falls back to the bundled dependency quietly when the URL cannot be derived from bootData', async () => {
@@ -91,6 +95,7 @@ describe('selectors fixture', () => {
     expect(get).not.toHaveBeenCalled();
     expect(result.components).toEqual({ __source: 'dep-components' });
     expect(warnSpy).not.toHaveBeenCalled();
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 
   it('falls back to the bundled dependency quietly when Grafana does not serve the file (404)', async () => {
@@ -100,43 +105,44 @@ describe('selectors fixture', () => {
 
     expect(result.components).toEqual({ __source: 'dep-components' });
     expect(warnSpy).not.toHaveBeenCalled();
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 
-  it('falls back with a warning on a server error', async () => {
+  it('falls back loudly on a server error', async () => {
     const get = vi.fn().mockResolvedValue(mockResponse({ status: 503 }));
 
     const result = await runFixture({ grafanaVersion: '11.0.0-503', request: mockRequest(get) });
 
     expect(result.components).toEqual({ __source: 'dep-components' });
-    expect(warnSpy).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalled();
   });
 
-  it('falls back with a warning on a network error', async () => {
+  it('falls back loudly on a network error', async () => {
     const get = vi.fn().mockRejectedValue(new Error('ECONNREFUSED'));
 
     const result = await runFixture({ grafanaVersion: '11.0.0-net', request: mockRequest(get) });
 
     expect(result.components).toEqual({ __source: 'dep-components' });
-    expect(warnSpy).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalled();
   });
 
-  it('falls back with a warning on invalid JSON', async () => {
+  it('falls back loudly on invalid JSON', async () => {
     const get = vi.fn().mockResolvedValue(mockResponse({ status: 200, body: 'not json' }));
 
     const result = await runFixture({ grafanaVersion: '11.0.0-badjson', request: mockRequest(get) });
 
     expect(result.components).toEqual({ __source: 'dep-components' });
-    expect(warnSpy).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalled();
   });
 
-  it('falls back with a warning on an unexpected schema', async () => {
+  it('falls back loudly on an unexpected schema', async () => {
     const body = JSON.stringify({ schemaVersion: 2, versionedComponents: {}, versionedPages: {} });
     const get = vi.fn().mockResolvedValue(mockResponse({ status: 200, body }));
 
     const result = await runFixture({ grafanaVersion: '11.0.0-badschema', request: mockRequest(get) });
 
     expect(result.components).toEqual({ __source: 'dep-components' });
-    expect(warnSpy).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('shares a single fetch across concurrent fixtures for the same version', async () => {
