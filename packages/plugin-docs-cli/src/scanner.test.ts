@@ -53,6 +53,21 @@ describe('scanDocsFolder', () => {
     expect(result.files['home.md']).not.toContain('---');
   });
 
+  it('should attach frontmatter and content to each page in the manifest', async () => {
+    const result = await scanDocsFolder(testDocsPath);
+
+    const home = result.manifest.pages[0];
+    expect(home.frontmatter).toEqual({
+      title: 'Home Page',
+      description: 'Welcome to the test docs',
+      sidebar_position: 1,
+    });
+    expect(home.content).toContain('# Welcome');
+    expect(home.content).not.toContain('---');
+    // page.content matches what the flat files map holds for the same file
+    expect(home.content).toBe(result.files[home.file]);
+  });
+
   it('should include file reference in page object', async () => {
     const result = await scanDocsFolder(testDocsPath);
 
