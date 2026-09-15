@@ -26,14 +26,13 @@ export const add = async (argv: minimist.ParsedArgs) => {
     const { _, $0, ...codemodOptions } = argv;
     const context = await runCodemod(addition, codemodOptions);
 
-    output.success({
-      title: `Successfully added ${addition.name} to your plugin.`,
-    });
-
     const message = context.getMessage();
     if (message) {
-      output.addHorizontalLine('gray');
       output[message.level]({ title: message.title, body: message.body });
+    } else {
+      output.success({
+        title: `Successfully added ${addition.name} to your plugin.`,
+      });
     }
   } catch (error) {
     if (error instanceof Error) {
