@@ -39,7 +39,7 @@ export function printGenerateSuccessMessage(answers: TemplateData) {
   });
 }
 
-function getBackendCmd() {
+export function getBackendCmd() {
   const platform = machine();
   if (platform === 'arm64') {
     return output.formatCode('mage -v build:linuxARM64');
