@@ -493,6 +493,7 @@ export type InternalFixtures = {
   bootData: {
     version: string | undefined;
     namespace: string | undefined;
+    selectorsUrl: string | undefined;
   };
 };
 
