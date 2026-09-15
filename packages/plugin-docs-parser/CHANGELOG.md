@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.2.0...@grafana/plugin-docs-parser@0.3.0) (2026-09-15)
+
+
+### Features
+
+* **plugin-docs-cli:** inline content into the manifest ([#2875](https://github.com/grafana/plugin-tools/issues/2875)) ([0f5a6d1](https://github.com/grafana/plugin-tools/commit/0f5a6d1dc362b40aa6b12fc2689a5f5c7ffa748e))
+
 ## [0.2.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.1.0...@grafana/plugin-docs-parser@0.2.0) (2026-07-09)
 
 
