@@ -12,9 +12,15 @@ export type ContextFile = Record<
   }
 >;
 
+export interface ContextMessage {
+  level: 'error' | 'success' | 'warning' | 'log';
+  title: string;
+  body?: string[];
+}
+
 export class Context {
   private files: ContextFile = {};
-  private successMessage?: () => void;
+  private message?: ContextMessage;
   basePath: string;
 
   constructor(basePath?: string) {
@@ -22,20 +28,15 @@ export class Context {
   }
 
   /**
-   * Lets a codemod defer printing its success message until after the caller has reported
-   * success, instead of printing immediately during the codemod's own execution.
+   * Lets a codemod defer printing a message until after the caller has reported success, instead
+   * of printing immediately during the codemod's own execution.
    */
-  setSuccessMessage(fn: () => void) {
-    this.successMessage = fn;
+  setMessage(message: ContextMessage) {
+    this.message = message;
   }
 
-  hasSuccessMessage() {
-    return this.successMessage !== undefined;
-  }
-
-  printSuccessMessage() {
-    this.successMessage?.();
-    this.successMessage = undefined;
+  getMessage() {
+    return this.message;
   }
 
   addFile(filePath: string, content: string) {

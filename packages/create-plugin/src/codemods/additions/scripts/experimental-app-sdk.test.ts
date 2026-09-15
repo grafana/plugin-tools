@@ -418,21 +418,20 @@ describe('experimental-app-sdk addition', () => {
       const context = createAppContext();
 
       appSdk(context);
-      context.printSuccessMessage();
 
-      expect(output.log).toHaveBeenCalledWith(expect.objectContaining({ title: expect.stringContaining('Next steps') }));
+      expect(context.getMessage()).toEqual(expect.objectContaining({ title: expect.stringContaining('Next steps') }));
     });
 
-    it('stays quiet on a re-run', () => {
+    it('does not set a new message on a re-run', () => {
       const context = createAppContext();
       appSdk(context);
-      context.printSuccessMessage();
-      vi.mocked(output.log).mockClear();
+      const messageAfterFirstRun = context.getMessage();
 
       appSdk(context);
-      context.printSuccessMessage();
 
-      expect(output.log).not.toHaveBeenCalled();
+      // A re-run makes no changes, so it never calls setMessage again; the message from the first
+      // run is untouched rather than replaced or cleared.
+      expect(context.getMessage()).toBe(messageAfterFirstRun);
     });
 
   });
@@ -578,18 +577,16 @@ func main() {
       const context = createAppContext({ hasBackend: true });
 
       appSdk(context);
-      context.printSuccessMessage();
 
-      expect(output.log).toHaveBeenCalledWith(expect.objectContaining({ body: expect.arrayContaining(['  go mod tidy']) }));
+      expect(context.getMessage()).toEqual(expect.objectContaining({ body: expect.arrayContaining(['  go mod tidy']) }));
     });
 
     it('tells the user to generate:kinds before go mod tidy, since provider.go imports generated packages', () => {
       const context = createAppContext({ hasBackend: true });
 
       appSdk(context);
-      context.printSuccessMessage();
 
-      const body = vi.mocked(output.log).mock.calls[0][0].body ?? [];
+      const body = context.getMessage()?.body ?? [];
       const generateIndex = body.indexOf('  npm run generate:kinds');
       const tidyIndex = body.indexOf('  go mod tidy');
       expect(generateIndex).toBeGreaterThanOrEqual(0);
@@ -600,9 +597,8 @@ func main() {
       const context = createAppContext({ hasBackend: false });
 
       appSdk(context);
-      context.printSuccessMessage();
 
-      expect(output.log).toHaveBeenCalledWith(
+      expect(context.getMessage()).toEqual(
         expect.objectContaining({ body: expect.not.arrayContaining(['  go mod tidy']) })
       );
     });

@@ -30,9 +30,10 @@ export const add = async (argv: minimist.ParsedArgs) => {
       title: `Successfully added ${addition.name} to your plugin.`,
     });
 
-    if (context.hasSuccessMessage()) {
+    const message = context.getMessage();
+    if (message) {
       output.addHorizontalLine('gray');
-      context.printSuccessMessage();
+      output[message.level]({ title: message.title, body: message.body });
     }
   } catch (error) {
     if (error instanceof Error) {
