@@ -48,7 +48,7 @@
     "@libs/version": "1.0.2",
     "@types/glob": "9.0.0",
     "@types/minimist": "1.2.5",
-    "@types/semver": "7.7.1",
+    "@types/semver": "7.8.0",
     "@types/tmp": "0.2.6",
     "@types/which": "3.0.4",
     "tmp": "0.2.7"
