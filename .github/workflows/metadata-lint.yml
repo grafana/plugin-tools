@@ -16,7 +16,7 @@ jobs:
     outputs:
       docs: ${{ steps.detect-changes.outputs.docs }}
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: true # required to get more history in the changed-files action
           fetch-depth: 2
@@ -38,7 +38,7 @@ jobs:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
