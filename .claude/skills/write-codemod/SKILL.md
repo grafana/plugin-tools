@@ -105,9 +105,17 @@ context.renameFile(from: string, to: string)           // delete old + add new
 // Inspect
 context.listChanges(): ContextFile
 context.hasChanges(): boolean
+
+// Defer user-facing output
+context.setMessage(message: ContextMessage)  // { level: 'error' | 'success' | 'warning' | 'log', title, body? }
+context.getMessage(): ContextMessage | undefined
 ```
 
 Always check `doesFileExist` before `getFile` or `updateFile`.
+
+### Deferring a message with `setMessage`
+
+Don't call `output.*` directly from a codemod to tell the author what to do next. Prefer using `context.setMessage(...)` instead to customise the message displayed. When set, this message replaces the command's default success output — it's the fallback, not an addition to it.
 
 ## Utility functions (from `../../utils.js`)
 
