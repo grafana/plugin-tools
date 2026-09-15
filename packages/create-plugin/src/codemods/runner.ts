@@ -1,5 +1,5 @@
 import { Context } from './context.js';
-import { formatFiles, flushChanges, installNPMDependencies, printChanges } from './utils.js';
+import { formatFiles, flushChanges, installNPMDependencies, printChanges, runGoModTidy } from './utils.js';
 import { parseAndValidateOptions } from './schema-parser.js';
 import { Codemod } from './types.js';
 
@@ -14,6 +14,7 @@ import { Codemod } from './types.js';
  * 5. Flush changes to disk
  * 6. Print summary
  * 7. Install dependencies if needed
+ * 8. Run `go mod tidy` if go.mod changed
  */
 export async function runCodemod(codemod: Codemod, options?: Record<string, any>): Promise<Context> {
   const codemodModule = await import(codemod.scriptPath);
@@ -38,6 +39,7 @@ export async function runCodemod(codemod: Codemod, options?: Record<string, any>
     flushChanges(updatedContext);
     printChanges(updatedContext, codemod.name, codemod.description);
     installNPMDependencies(updatedContext);
+    runGoModTidy(updatedContext);
 
     return updatedContext;
   } catch (error) {

@@ -6,6 +6,7 @@ import { styleText } from 'node:util';
 import { output } from '../utils/utils.console.js';
 import { getPackageManagerSilentInstallCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { execSync } from 'node:child_process';
+import which from 'which';
 import { clean, coerce, gt, gte } from 'semver';
 import { debug } from '../utils/utils.cli.js';
 import { renderHandlebarsTemplate } from '../utils/utils.handlebars.js';
@@ -131,6 +132,44 @@ export function installNPMDependencies(context: Context) {
     );
     execSync(installCmd, { cwd: context.basePath, stdio: 'inherit' });
   }
+}
+
+// Cache the go.mod contents to avoid re-running `go mod tidy` if go.mod hasn't changed
+// (This runs for each codemod used in an update)
+let goModTidyCache: string;
+
+/**
+ * Runs `go mod tidy` when a codemod has updated go.mod, mirroring installNPMDependencies. Skipped
+ * when there is no `go` binary on PATH, since a Go backend is optional for plugins that use this repo's
+ * tooling from a machine without a Go toolchain.
+ */
+export function runGoModTidy(context: Context) {
+  const hasGoModChanges = Object.entries(context.listChanges()).some(
+    ([filePath, { changeType }]) => filePath === 'go.mod' && changeType === 'update'
+  );
+
+  if (!hasGoModChanges) {
+    return;
+  }
+
+  const goModContents = context.getFile('go.mod');
+
+  if (!goModContents) {
+    return;
+  }
+
+  if (goModContents === goModTidyCache) {
+    return;
+  }
+
+  if (!which.sync('go', { nothrow: true })) {
+    additionsDebug('No `go` binary found on PATH. Skipping `go mod tidy`.');
+    return;
+  }
+
+  goModTidyCache = goModContents;
+  output.logSingleLine('Running `go mod tidy`...');
+  execSync('go mod tidy', { cwd: context.basePath, stdio: 'inherit' });
 }
 
 export function readJsonFile<T extends object = any>(context: Context, path: string): T {

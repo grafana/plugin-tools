@@ -8,12 +8,24 @@ import {
   readJsonFile,
   isVersionGreater,
   printChanges,
+  runGoModTidy,
 } from './utils.js';
 import { join } from 'node:path';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { readFileSync } from 'node:fs';
+import { execSync } from 'node:child_process';
+import which from 'which';
 import { output } from '../utils/utils.console.js';
 import { vi } from 'vitest';
+
+vi.mock(import('node:child_process'), async (importOriginal) => ({
+  ...(await importOriginal()),
+  execSync: vi.fn(),
+}));
+
+vi.mock('which', () => ({
+  default: { sync: vi.fn() },
+}));
 
 describe('utils', () => {
   const tmpObj = dirSync({ unsafeCleanup: true });
@@ -118,6 +130,43 @@ describe('utils', () => {
       flushChanges(context);
       expect(readFileSync(join(tmpDir, 'file.json'), 'utf-8')).toBe('[{ "foo": "bar", "baz": "qux" }]\n');
       expect(readFileSync(join(tmpDir, 'file.txt'), 'utf-8')).toBe("file which isn't supported");
+    });
+  });
+
+  describe('runGoModTidy', () => {
+    beforeEach(() => {
+      vi.mocked(execSync).mockClear();
+      vi.mocked(which.sync).mockReset().mockReturnValue('/usr/local/bin/go');
+    });
+
+    it('runs `go mod tidy` when go.mod was updated', async () => {
+      await writeFile(join(tmpDir, 'go.mod'), 'module example.com/foo\n');
+      const context = new Context(tmpDir);
+      context.updateFile('go.mod', 'module example.com/foo\n\nrequire example.com/bar v1.0.0\n');
+
+      runGoModTidy(context);
+
+      expect(execSync).toHaveBeenCalledWith('go mod tidy', { cwd: tmpDir, stdio: 'inherit' });
+    });
+
+    it('does nothing when go.mod was not changed', () => {
+      const context = new Context(tmpDir);
+      context.addFile('other.txt', 'content');
+
+      runGoModTidy(context);
+
+      expect(execSync).not.toHaveBeenCalled();
+    });
+
+    it('does nothing when there is no `go` binary on PATH', async () => {
+      vi.mocked(which.sync).mockReturnValue(null as unknown as string);
+      await writeFile(join(tmpDir, 'go.mod'), 'module example.com/foo\n');
+      const context = new Context(tmpDir);
+      context.updateFile('go.mod', 'module example.com/foo\n\nrequire example.com/baz v2.0.0\n');
+
+      runGoModTidy(context);
+
+      expect(execSync).not.toHaveBeenCalled();
     });
   });
 

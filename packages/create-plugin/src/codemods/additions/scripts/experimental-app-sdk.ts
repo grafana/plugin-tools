@@ -240,6 +240,7 @@ function wireGoBackend(context: Context) {
   }
 
   addAppProvider(context);
+  addGeneratedStubs(context);
   wireMainGo(context);
   addGoModDependency(context);
 }
@@ -253,7 +254,8 @@ const GRAFANA_APP_SDK_VERSION = 'v0.60.0';
  * to know about either until app-sdk is added.
  *
  * Only adds the require lines — go.sum entries and any transitive requirements (k8s.io/apimachinery,
- * k8s.io/kube-openapi, ...) still need `go mod tidy`, which this doesn't run itself.
+ * k8s.io/kube-openapi, ...) still need `go mod tidy`. This doesn't run it itself; the codemod runner
+ * does, once every change (including the pkg/generated/ stubs below) has been flushed to disk.
  */
 function addGoModDependency(context: Context) {
   addRequireToGoMod(context, 'github.com/grafana/grafana-app-sdk', GRAFANA_APP_SDK_VERSION);
@@ -277,6 +279,29 @@ function addAppProvider(context: Context) {
   }
 
   context.addFile(path, renderTemplate(templatePath(path), false));
+}
+
+// Stub doc.go files under pkg/generated/. Both are real packages `generate:kinds` fills in; they
+// exist solely so the `go mod tidy` the codemod runner runs automatically (see runGoModTidy in
+// ../../utils.js) succeeds before code generation has ever run, since it otherwise can't resolve the
+// packages pkg/provider/provider.go imports. `generate:kinds` writes its own, differently-named files
+// into these directories rather than overwriting doc.go, so it's left behind afterwards — but an
+// unused doc.go with no exported symbols compiles fine alongside the generated code.
+const GENERATED_STUB_PATHS = ['pkg/generated/example/v1alpha1/doc.go', 'pkg/generated/manifestdata/doc.go'];
+
+/**
+ * Scaffolds stub packages under pkg/generated/, so provider.go's imports resolve for `go mod tidy`
+ * before `generate:kinds` has run for the first time.
+ */
+function addGeneratedStubs(context: Context) {
+  for (const path of GENERATED_STUB_PATHS) {
+    if (context.doesFileExist(path)) {
+      additionsDebug(`${path} already exists. Skipping.`);
+      continue;
+    }
+
+    context.addFile(path, renderTemplate(templatePath(path), false));
+  }
 }
 
 /** A Go backend is declared by `backend: true` in src/plugin.json, same as the rest of create-plugin. */
@@ -371,7 +396,7 @@ ${errorBody}\t}`
 }
 
 /** Builds the message telling the user what to run next. */
-function buildNextStepsMessage(hasGoBackend: boolean): ContextMessage {
+function buildNextStepsMessage(_hasGoBackend: boolean): ContextMessage {
   const { packageManagerName } = getTemplateData();
 
   return {
@@ -380,15 +405,6 @@ function buildNextStepsMessage(hasGoBackend: boolean): ContextMessage {
     body: [
       'Edit your kinds in ./kinds (start with kinds/example.cue), then run:',
       `  ${packageManagerName} run generate:kinds`,
-      ...(hasGoBackend
-        ? [
-            // provider.go imports the packages generate:kinds writes to pkg/generated/, so `go mod
-            // tidy` (which resolves the grafana-app-sdk dependency added to go.mod) must run after —
-            // running it first fails, since it can't find those not-yet-generated packages locally.
-            'Then, to resolve the grafana-app-sdk dependency added to go.mod, run:',
-            '  go mod tidy',
-          ]
-        : []),
       'See ./.config/app-sdk/README.md for the full workflow.',
     ],
   };
