@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { parseDocument, stringify, YAMLMap, Scalar } from 'yaml';
-import type { Context } from '../../context.js';
+import type { Context, ContextMessage } from '../../context.js';
 import { output } from '../../../utils/utils.console.js';
 import { additionsDebug, renderTemplate } from '../../utils.js';
 import { addRequireToGoMod } from '../../utils.goMod.js';
@@ -51,7 +51,7 @@ export default function appSdk(context: Context): Context {
 
   // Only guide the user when we actually scaffolded something; a re-run should stay quiet.
   if (Object.keys(context.listChanges()).length > changesBefore) {
-    printNextSteps(hasGoBackend(context));
+    context.setMessage(buildNextStepsMessage(hasGoBackend(context)));
   }
 
   return context;
@@ -370,11 +370,12 @@ ${errorBody}\t}`
   context.updateFile(path, updated);
 }
 
-/** Tells the user what to run next. */
-function printNextSteps(hasGoBackend: boolean) {
+/** Builds the message telling the user what to run next. */
+function buildNextStepsMessage(hasGoBackend: boolean): ContextMessage {
   const { packageManagerName } = getTemplateData();
 
-  output.log({
+  return {
+    level: 'log',
     title: 'Added grafana-app-sdk code generation. Next steps:',
     body: [
       'Edit your kinds in ./kinds (start with kinds/example.cue), then run:',
@@ -390,5 +391,5 @@ function printNextSteps(hasGoBackend: boolean) {
         : []),
       'See ./.config/app-sdk/README.md for the full workflow.',
     ],
-  });
+  };
 }
