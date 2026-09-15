@@ -1,9 +1,10 @@
 import { flushChanges, formatFiles, printChanges } from '../utils.js';
 import { getMigrationsToRun, runMigrations } from './manager.js';
 
+import { AgenticRuntime, createAgenticRuntime } from '../agentic/index.js';
 import { Context } from '../context.js';
 import { Migration } from './migrations.js';
-import { gitCommitNoVerify } from '../../utils/utils.git.js';
+import { gitCommitNoVerify, isGitDirectoryClean } from '../../utils/utils.git.js';
 import migrationFixtures from './fixtures/migrations.js';
 import { setRootConfig } from '../../utils/utils.config.js';
 import { vi } from 'vitest';
@@ -34,6 +35,10 @@ vi.mock('../../utils/utils.config.js', () => ({
 }));
 vi.mock('../../utils/utils.git.js', () => ({
   gitCommitNoVerify: vi.fn(),
+  isGitDirectoryClean: vi.fn().mockResolvedValue(false),
+}));
+vi.mock('../agentic/index.js', () => ({
+  createAgenticRuntime: vi.fn(),
 }));
 
 vi.mock('@libs/version', () => ({
@@ -233,6 +238,118 @@ describe('Migrations', () => {
       }).rejects.toThrow();
 
       expect(setRootConfig).not.toHaveBeenCalled();
+    });
+
+    describe('agentic migrations', () => {
+      const createAgenticRuntimeMock = vi.mocked(createAgenticRuntime);
+
+      const promptOnlyMigration: Migration = {
+        name: 'prompt-migration',
+        version: '1.5.0',
+        description: 'A migration applied by an agent.',
+        prompt: 'file:///virtual/prompts/prompt-migration.md',
+      };
+
+      const hybridMigration: Migration = {
+        name: 'hybrid-migration',
+        version: '1.6.0',
+        description: 'A codemod finished off by an agent.',
+        scriptPath: 'virtual-test-migration.js',
+        prompt: 'file:///virtual/prompts/hybrid-migration.md',
+      };
+
+      function createFakeRuntime(overrides: Partial<AgenticRuntime> = {}): AgenticRuntime {
+        return {
+          resolution: { mode: 'disabled', reason: 'no-agents' },
+          softForceCommits: false,
+          runPromptStep: vi.fn().mockResolvedValue({ kind: 'deferred' }),
+          printSummary: vi.fn(),
+          ...overrides,
+        };
+      }
+
+      it('should not create the agentic runtime when no queued migration has a prompt', async () => {
+        await runMigrations(migrations);
+
+        expect(createAgenticRuntimeMock).not.toHaveBeenCalled();
+      });
+
+      it('should pass the agent flag and tri-state commit flag to the runtime', async () => {
+        createAgenticRuntimeMock.mockResolvedValue(createFakeRuntime());
+
+        await runMigrations([promptOnlyMigration], { agent: 'claude-code' });
+
+        expect(createAgenticRuntimeMock).toHaveBeenCalledWith({
+          agentFlag: 'claude-code',
+          commitEachMigration: undefined,
+          basePath: process.cwd(),
+        });
+      });
+
+      it('should run prompt-only migrations through the agent step and skip the codemod runner', async () => {
+        const runtime = createFakeRuntime();
+        createAgenticRuntimeMock.mockResolvedValue(runtime);
+
+        await runMigrations([promptOnlyMigration]);
+
+        expect(flushChanges).not.toHaveBeenCalled();
+        expect(runtime.runPromptStep).toHaveBeenCalledWith(promptOnlyMigration, undefined);
+      });
+
+      it('should run the codemod before the agent step for hybrid migrations', async () => {
+        const runtime = createFakeRuntime();
+        createAgenticRuntimeMock.mockResolvedValue(runtime);
+
+        await runMigrations([hybridMigration]);
+
+        expect(flushChanges).toHaveBeenCalledTimes(1);
+        expect(runtime.runPromptStep).toHaveBeenCalledWith(hybridMigration, expect.any(Context));
+      });
+
+      it('should still stamp the version when prompt steps are deferred and print the summary', async () => {
+        const runtime = createFakeRuntime();
+        createAgenticRuntimeMock.mockResolvedValue(runtime);
+
+        await runMigrations([promptOnlyMigration]);
+
+        expect(setRootConfig).toHaveBeenCalledWith({ version: '2.0.0' });
+        expect(runtime.printSummary).toHaveBeenCalled();
+      });
+
+      it('should soft-force per-migration commits when the runtime asks for it', async () => {
+        const runtime = createFakeRuntime({
+          softForceCommits: true,
+          runPromptStep: vi.fn().mockResolvedValue({ kind: 'applied', summary: 'done' }),
+        });
+        createAgenticRuntimeMock.mockResolvedValue(runtime);
+        vi.mocked(isGitDirectoryClean).mockResolvedValue(false);
+
+        await runMigrations([promptOnlyMigration]);
+
+        // 1 migration commit (the agent step dirtied the tree) + 1 version update commit
+        expect(gitCommitNoVerify).toHaveBeenCalledTimes(2);
+      });
+
+      it('should not commit agent steps when the user explicitly disabled commits', async () => {
+        const runtime = createFakeRuntime({
+          runPromptStep: vi.fn().mockResolvedValue({ kind: 'applied', summary: 'done' }),
+        });
+        createAgenticRuntimeMock.mockResolvedValue(runtime);
+
+        await runMigrations([promptOnlyMigration], { commitEachMigration: false });
+
+        expect(gitCommitNoVerify).not.toHaveBeenCalled();
+      });
+
+      it('should abort without stamping the version when an agent step fails', async () => {
+        const runtime = createFakeRuntime({
+          runPromptStep: vi.fn().mockRejectedValue(new Error('agent failed')),
+        });
+        createAgenticRuntimeMock.mockResolvedValue(runtime);
+
+        await expect(runMigrations([promptOnlyMigration])).rejects.toThrow('agent failed');
+        expect(setRootConfig).not.toHaveBeenCalled();
+      });
     });
   });
 });
