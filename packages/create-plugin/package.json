@@ -40,7 +40,7 @@
     "title-case": "4.3.2",
     "valibot": "1.4.2",
     "which": "7.0.0",
-    "yaml": "2.9.0"
+    "yaml": "2.9.1"
   },
   "devDependencies": {
     "@libs/find-up": "1.0.0",
