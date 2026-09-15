@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.13.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.12.0...@grafana/plugin-e2e@3.13.0) (2026-09-15)
+
+
+### Features
+
+* **plugin-e2e:** fetch e2e-selectors from Grafana at runtime ([#2819](https://github.com/grafana/plugin-tools/issues/2819)) ([f771f00](https://github.com/grafana/plugin-tools/commit/f771f007f26f7d0ae9865802945fa18f7316b8d4))
+
 ## [3.12.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.11.2...@grafana/plugin-e2e@3.12.0) (2026-09-07)
 
 
