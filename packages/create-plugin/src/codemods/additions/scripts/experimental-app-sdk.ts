@@ -244,15 +244,8 @@ function wireGoBackend(context: Context) {
   addGoModDependency(context);
 }
 
-// Pinned to pseudo-versions rather than tagged releases: plugin.Run and simple.NewAppProvider
-// (https://github.com/grafana/grafana-app-sdk/pull/1516, merged 2026-08-27 at commit 9c1ef77)
-// haven't shipped in a tagged release of either module yet. `plugin/` is a separate Go module nested
-// in the grafana-app-sdk repo, versioned independently of the root module — hence the two different
-// version prefixes below, both pinned to the same commit. Once go.mod has *a* requirement for each,
-// `go mod tidy` (which printNextSteps tells the user to run) resolves exact versions and go.sum
-// entries for everything actually needed.
-const GRAFANA_APP_SDK_VERSION = 'v0.59.1-0.20260827170158-9c1ef7716f5a';
-const GRAFANA_APP_SDK_PLUGIN_VERSION = 'v0.17.3-0.20260827170158-9c1ef7716f5a';
+// The go.mod version for grafana-app-sdk and its plugin/ submodule.
+const GRAFANA_APP_SDK_VERSION = 'v0.60.0';
 
 /**
  * Adds github.com/grafana/grafana-app-sdk and its plugin/ submodule to go.mod. The generated Go kind
@@ -264,7 +257,7 @@ const GRAFANA_APP_SDK_PLUGIN_VERSION = 'v0.17.3-0.20260827170158-9c1ef7716f5a';
  */
 function addGoModDependency(context: Context) {
   addRequireToGoMod(context, 'github.com/grafana/grafana-app-sdk', GRAFANA_APP_SDK_VERSION);
-  addRequireToGoMod(context, 'github.com/grafana/grafana-app-sdk/plugin', GRAFANA_APP_SDK_PLUGIN_VERSION);
+  addRequireToGoMod(context, 'github.com/grafana/grafana-app-sdk/plugin', GRAFANA_APP_SDK_VERSION);
 }
 
 /**
