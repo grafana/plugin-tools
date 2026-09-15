@@ -6,6 +6,12 @@ const SEVERITY_LABEL: Record<Severity, string> = {
   info: 'info ',
 };
 
+const SEVERITY_RANK: Record<Severity, number> = {
+  error: 0,
+  warning: 1,
+  info: 2,
+};
+
 /**
  * Formats a validation result as human-readable text.
  */
@@ -46,13 +52,20 @@ export function formatResult(result: ValidationResult): string {
     lines.push('');
   }
 
-  for (const d of result.diagnostics) {
+  // errors first, so the things that actually block validation aren't buried among warnings.
+  // a stable sort keeps each severity's diagnostics in the order rules produced them.
+  const sorted = [...result.diagnostics].sort((a, b) => SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity]);
+
+  for (const d of sorted) {
     const label = SEVERITY_LABEL[d.severity] ?? d.severity;
     const location = d.file ? (d.line ? `  ${d.file}:${d.line}` : `  ${d.file}`) : '';
     lines.push(`  ${label}${location}`);
     lines.push(`         ${d.title}`);
     if (d.detail) {
       lines.push(`         ${d.detail}`);
+    }
+    if (d.url) {
+      lines.push(`         ${d.url}`);
     }
     lines.push('');
   }
