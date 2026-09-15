@@ -230,6 +230,7 @@ const sidebars: SidebarsConfig = {
         'e2e-test-a-plugin/use-authentication',
         'e2e-test-a-plugin/feature-toggles',
         'e2e-test-a-plugin/setup-resources',
+        'e2e-test-a-plugin/accessibility-testing',
         {
           type: 'category',
           label: 'Test an app plugin',
