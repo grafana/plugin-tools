@@ -44,6 +44,8 @@ vi.mock(import('../../utils.js'), async (importOriginal) => {
     'kinds/cue.mod/module.cue',
     'kinds/README.md',
     'pkg/provider/provider.go',
+    'pkg/generated/example/v1alpha1/doc.go',
+    'pkg/generated/manifestdata/doc.go',
   ];
   const rendered: Record<string, Record<'true' | 'false', { withoutBackend: string; withBackend: string }>> =
     Object.fromEntries(
@@ -492,6 +494,34 @@ describe('experimental-app-sdk addition', () => {
       expect(result.getFile('pkg/provider/provider.go')).toBe(userProviderGo);
     });
 
+    it('scaffolds pkg/generated stub packages so go mod tidy resolves provider.go imports', () => {
+      const context = createAppContext({ hasBackend: true });
+
+      const result = appSdk(context);
+
+      expect(result.doesFileExist('pkg/generated/example/v1alpha1/doc.go')).toBe(true);
+      expect(result.doesFileExist('pkg/generated/manifestdata/doc.go')).toBe(true);
+    });
+
+    it('does not scaffold pkg/generated stubs when there is no Go backend', () => {
+      const context = createAppContext({ hasBackend: false });
+
+      const result = appSdk(context);
+
+      expect(result.doesFileExist('pkg/generated/example/v1alpha1/doc.go')).toBe(false);
+      expect(result.doesFileExist('pkg/generated/manifestdata/doc.go')).toBe(false);
+    });
+
+    it('does not overwrite existing pkg/generated stubs', () => {
+      const context = createAppContext({ hasBackend: true });
+      const userStub = 'package v1alpha1\n\n// hand-edited after real codegen\n';
+      context.addFile('pkg/generated/example/v1alpha1/doc.go', userStub);
+
+      const result = appSdk(context);
+
+      expect(result.getFile('pkg/generated/example/v1alpha1/doc.go')).toBe(userStub);
+    });
+
     it('wires plugin.Run into main.go', () => {
       const context = createAppContext({ hasBackend: true });
 
@@ -573,24 +603,13 @@ func main() {
       expect((context.getFile('go.mod') ?? '').match(/github\.com\/grafana\/grafana-app-sdk /g)).toHaveLength(1);
     });
 
-    it('tells the user to run go mod tidy when a Go backend is present', () => {
-      const context = createAppContext({ hasBackend: true });
-
-      appSdk(context);
-
-      expect(context.getMessage()).toEqual(expect.objectContaining({ body: expect.arrayContaining(['  go mod tidy']) }));
-    });
-
-    it('tells the user to generate:kinds before go mod tidy, since provider.go imports generated packages', () => {
+    it('does not tell the user to run go mod tidy, since the codemod runner already ran it', () => {
       const context = createAppContext({ hasBackend: true });
 
       appSdk(context);
 
       const body = context.getMessage()?.body ?? [];
-      const generateIndex = body.indexOf('  npm run generate:kinds');
-      const tidyIndex = body.indexOf('  go mod tidy');
-      expect(generateIndex).toBeGreaterThanOrEqual(0);
-      expect(tidyIndex).toBeGreaterThan(generateIndex);
+      expect(body.some((line) => line.includes('go mod tidy'))).toBe(false);
     });
 
     it('does not mention go mod tidy without a Go backend', () => {
