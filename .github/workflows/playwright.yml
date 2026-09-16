@@ -92,7 +92,7 @@ jobs:
         run: npm run playwright:test --w @grafana/plugin-e2e
 
       - name: Upload report artifacts
-        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/upload-report-artifacts@dd4832df7fd7d0f0708ee5f01a9d8d60585fe80c # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
+        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/upload-report-artifacts@6e2b02007105a096f831cada3430fb8077ffd858 # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
         if: ${{ always() && !cancelled() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false }}
         with:
           test-outcome: ${{ steps.run-tests.outcome }}
@@ -110,4 +110,4 @@ jobs:
       contents: read
     steps:
       - name: Publish report
-        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/publish-report@dd4832df7fd7d0f0708ee5f01a9d8d60585fe80c # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
+        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/publish-report@6e2b02007105a096f831cada3430fb8077ffd858 # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
