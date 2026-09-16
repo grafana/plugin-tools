@@ -1,6 +1,8 @@
 import { fileURLToPath } from 'node:url';
+import { styleText } from 'node:util';
 import { parseDocument, stringify, YAMLMap, Scalar } from 'yaml';
 import type { Context, ContextMessage } from '../../context.js';
+import { getBackendCmd } from '../../../commands/generate/print-success-message.js';
 import { output } from '../../../utils/utils.console.js';
 import { additionsDebug, renderTemplate } from '../../utils.js';
 import { addRequireToGoMod } from '../../utils.goMod.js';
@@ -396,16 +398,34 @@ ${errorBody}\t}`
 }
 
 /** Builds the message telling the user what to run next. */
-function buildNextStepsMessage(_hasGoBackend: boolean): ContextMessage {
+function buildNextStepsMessage(hasGoBackend: boolean): ContextMessage {
   const { packageManagerName } = getTemplateData();
+  const versionBadge = styleText(['reset', 'inverse', 'bold', 'cyan'], ` grafana-app-sdk@${GRAFANA_APP_SDK_VERSION} `);
+
+  const commands = output.bulletList([
+    `${output.formatCode(`${packageManagerName} run generate:kinds`)} ${styleText(['dim'], 'to generate code from the definitions in kinds/')}`,
+    ...(hasGoBackend
+      ? [
+          // The generated Go code under pkg/generated/ only takes effect once it's compiled into the
+          // backend binary.
+          `${getBackendCmd()} ${styleText(['dim'], 'to rebuild the plugin backend with the generated code')}`,
+        ]
+      : []),
+    // Grafana reads the app manifest from the bundle at startup, so a manifest change (any change to
+    // the kinds) isn't picked up by an already-running Grafana instance until it's restarted.
+    `${output.formatCode('docker compose restart grafana')} ${styleText(['dim'], 'to pick up changes to kinds/')}`,
+  ]);
 
   return {
-    level: 'log',
-    title: 'Added grafana-app-sdk code generation. Next steps:',
+    level: 'success',
+    title: 'Successfully added grafana-app-sdk code generation to your plugin.',
     body: [
-      'Edit your kinds in ./kinds (start with kinds/example.cue), then run:',
-      `  ${packageManagerName} run generate:kinds`,
-      'See ./.config/app-sdk/README.md for the full workflow.',
+      `${versionBadge} ${styleText(['cyan', 'bold'], 'Next steps:')}`,
+      '',
+      'Run the following commands to get started:',
+      ...commands,
+      '',
+      `See ${output.formatCode('./.config/app-sdk/README.md')} for the full workflow.`,
     ],
   };
 }

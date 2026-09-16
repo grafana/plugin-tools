@@ -421,7 +421,8 @@ describe('experimental-app-sdk addition', () => {
 
       appSdk(context);
 
-      expect(context.getMessage()).toEqual(expect.objectContaining({ title: expect.stringContaining('Next steps') }));
+      const body = context.getMessage()?.body ?? [];
+      expect(body.some((line) => line.includes('Next steps'))).toBe(true);
     });
 
     it('does not set a new message on a re-run', () => {
@@ -617,9 +618,38 @@ func main() {
 
       appSdk(context);
 
-      expect(context.getMessage()).toEqual(
-        expect.objectContaining({ body: expect.not.arrayContaining(['  go mod tidy']) })
-      );
+      const body = context.getMessage()?.body ?? [];
+      expect(body.some((line) => line.includes('go mod tidy'))).toBe(false);
+    });
+
+    it('tells the user to rebuild the backend after generating kinds, when a Go backend is present', () => {
+      const context = createAppContext({ hasBackend: true });
+
+      appSdk(context);
+
+      const body = context.getMessage()?.body ?? [];
+      const generateIndex = body.findIndex((line) => line.includes('generate:kinds'));
+      const buildIndex = body.findIndex((line) => line.includes('mage'));
+      expect(buildIndex).toBeGreaterThanOrEqual(0);
+      expect(buildIndex).toBeGreaterThan(generateIndex);
+    });
+
+    it('does not tell the user to rebuild a Go backend that does not exist', () => {
+      const context = createAppContext({ hasBackend: false });
+
+      appSdk(context);
+
+      const body = context.getMessage()?.body ?? [];
+      expect(body.some((line) => line.includes('mage'))).toBe(false);
+    });
+
+    it('tells the user to restart grafana to pick up the manifest', () => {
+      const context = createAppContext();
+
+      appSdk(context);
+
+      const body = context.getMessage()?.body ?? [];
+      expect(body.some((line) => line.includes('docker compose restart grafana'))).toBe(true);
     });
   });
 });
