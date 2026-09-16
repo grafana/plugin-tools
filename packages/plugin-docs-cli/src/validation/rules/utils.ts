@@ -90,15 +90,31 @@ export function getCodeBlockLines(content: string): Set<number> {
  * inside a URL. `[Data formats](./see-data.md)` keeps its visible text but the target becomes
  * filler. Length must be preserved because callers index the raw line using offsets taken from
  * the masked one.
+ *
+ * Covers all four ways Markdown carries a target: inline `](url)`, autolink `<url>`, a bare URL
+ * written as plain text and a `[ref]: url` link definition. A word inside a URL is not prose - a
+ * rule that "corrects" `github.com/grafana/my-datasource` would break the link.
  */
 export function maskLinkTargets(line: string): string {
-  return line
-    .replace(/(\]\()([^)\n]*)(\))/g, (_m, open: string, target: string, close: string) => {
-      return `${open}${'#'.repeat(target.length)}${close}`;
-    })
-    .replace(/(<)(https?:[^>\n]*)(>)/g, (_m, open: string, url: string, close: string) => {
-      return `${open}${'#'.repeat(url.length)}${close}`;
-    });
+  const mask = (value: string) => '#'.repeat(value.length);
+
+  return (
+    line
+      // inline links and images: [text](target)
+      .replace(/(\]\()([^)\n]*)(\))/g, (_m, open: string, target: string, close: string) => {
+        return `${open}${mask(target)}${close}`;
+      })
+      // autolinks: <https://example.com>
+      .replace(/(<)(https?:[^>\n]*)(>)/g, (_m, open: string, url: string, close: string) => {
+        return `${open}${mask(url)}${close}`;
+      })
+      // link reference definitions: [ref]: ./target.md
+      .replace(/^(\s*\[[^\]\n]+\]:\s*)(\S+)/, (_m, prefix: string, target: string) => {
+        return `${prefix}${mask(target)}`;
+      })
+      // bare URLs in plain text. runs last so the forms above are already filler by now.
+      .replace(/https?:\/\/\S+/g, mask)
+  );
 }
 
 /**

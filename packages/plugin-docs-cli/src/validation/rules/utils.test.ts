@@ -123,6 +123,30 @@ describe('maskLinkTargets', () => {
     const line = 'Plain prose with no links at all.';
     expect(maskLinkTargets(line)).toBe(line);
   });
+
+  it('should mask a bare URL written as plain text', () => {
+    const masked = maskLinkTargets('See https://github.com/grafana/my-datasource for more.');
+    expect(masked).not.toContain('github');
+    expect(masked).not.toContain('datasource');
+    expect(masked).toContain('See ');
+    expect(masked).toContain(' for more.');
+  });
+
+  it('should mask the target of a link reference definition', () => {
+    const masked = maskLinkTargets('[guide]: ./configure-datasource.md');
+    expect(masked).toContain('[guide]:');
+    expect(masked).not.toContain('datasource');
+  });
+
+  it('should preserve length for every link form', () => {
+    for (const line of [
+      'See https://github.com/org/repo now.',
+      '[ref]: ./some-datasource.md',
+      'An ![i](./a.png) and <https://e.com/x> and [l](./b.md).',
+    ]) {
+      expect(maskLinkTargets(line)).toHaveLength(line.length);
+    }
+  });
 });
 
 describe('getNonProseLines', () => {

@@ -202,6 +202,37 @@ describe('checkWritingStyle', () => {
       }
     });
   });
+
+  describe('link syntaxes', () => {
+    // a word inside a URL is not prose - "correcting" it would break the link
+    it.each([
+      ['an inline link', 'Read the [setup guide](./configure-datasource.md) first.'],
+      ['an autolink', 'See <https://github.com/grafana/my-datasource> for more.'],
+      ['a bare URL', 'See https://github.com/grafana/my-datasource for more.'],
+      ['a link reference definition', 'Read the [setup guide][guide] first.\n\n[guide]: ./configure-datasource.md'],
+    ])('should not flag words inside %s', async (_name, body) => {
+      expect(await checkWritingStyle(input(await withDoc(body)))).toHaveLength(0);
+    });
+
+    it('should still flag the same words when they appear in prose', async () => {
+      const findings = await checkWritingStyle(input(await withDoc('Configure the datasource on github.')));
+      const titles = findings.map((f) => f.title).sort();
+      expect(titles).toEqual([expect.stringContaining('GitHub'), expect.stringContaining('data source')]);
+    });
+  });
+
+  describe('reporting order', () => {
+    it('should report findings by line rather than by rule', async () => {
+      const tmp = await withDoc(
+        ['Please configure the datasource.', '', 'It will be simple, e.g. very simple.'].join('\n')
+      );
+
+      const lines = (await checkWritingStyle(input(tmp))).map((f) => f.line ?? 0);
+
+      expect(lines).toEqual([...lines].sort((a, b) => a - b));
+      expect(new Set(lines).size).toBeGreaterThan(1);
+    });
+  });
 });
 
 describe('vendored rule integrity', () => {
