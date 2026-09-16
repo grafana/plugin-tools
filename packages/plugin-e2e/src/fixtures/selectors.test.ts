@@ -46,10 +46,12 @@ async function runFixture(args: { grafanaVersion: string; request: never; select
 describe('selectors fixture', () => {
   const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
   const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   beforeEach(() => {
     warnSpy.mockClear();
     errorSpy.mockClear();
+    logSpy.mockClear();
     // enable the runtime path for these tests; the default (toggle off) is covered separately below
     process.env.PLUGIN_E2E_RUNTIME_SELECTORS = 'true';
   });
@@ -79,6 +81,8 @@ describe('selectors fixture', () => {
     expect(result.components).toEqual({ __source: 'fetched-components' });
     expect(result.pages).toEqual({ __source: 'fetched-pages' });
     expect(result.apis).toEqual({ __source: 'local-apis' });
+    // positive signal that the runtime path was used, not a silent fallback
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('using runtime selectors'));
     expect(warnSpy).not.toHaveBeenCalled();
     expect(errorSpy).not.toHaveBeenCalled();
   });

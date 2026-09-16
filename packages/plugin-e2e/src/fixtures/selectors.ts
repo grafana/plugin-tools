@@ -91,6 +91,10 @@ async function fetchRuntimeGroups(
     }
     const components = reconstructSelectorTree(data.versionedComponents) as VersionedComponents;
     const pages = reconstructSelectorTree(data.versionedPages) as VersionedPages;
+    // positive signal so CI logs show the runtime path was actually used (vs a silent fallback).
+    // TODO: remove in the final phase when @grafana/e2e-selectors is removed and the selectors are
+    // vendored - runtime becomes the only path then, so this trial-visibility log is no longer needed.
+    console.log(`@grafana/plugin-e2e: using runtime selectors from ${selectorsUrl}`);
     return buildGroups(components, pages, grafanaVersion);
   } catch (error) {
     // reachable but unreadable (bad schema, malformed JSON) is a real problem, so make it loud
