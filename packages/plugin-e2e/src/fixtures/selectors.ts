@@ -18,11 +18,6 @@ type VersionedPages = typeof bundledVersionedPages;
 // per-worker cache keyed by grafanaVersion so concurrent fixtures share one in-flight fetch
 const selectorsCache = new Map<string, Promise<E2ESelectorGroups>>();
 
-// escape hatch: set to 'false' to force the selectors bundled with the installed release
-function runtimeSelectorsEnabled(): boolean {
-  return process.env.PLUGIN_E2E_RUNTIME_SELECTORS !== 'false';
-}
-
 // first Grafana release that emits e2e-selectors.json, so a missing file below this is expected
 const RUNTIME_SELECTORS_MIN_VERSION = '13.3.0';
 
@@ -118,11 +113,6 @@ async function fetchRuntimeGroups(
 }
 
 export const selectors: SelectorFixture = async ({ grafanaVersion, bootData, request }, use) => {
-  if (!runtimeSelectorsEnabled()) {
-    await use(bundledGroups(grafanaVersion));
-    return;
-  }
-
   // use the runtime selectors served by the Grafana under test when available, otherwise fall back
   // to the selectors bundled with the installed release
   let groups = selectorsCache.get(grafanaVersion);

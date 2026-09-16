@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // identity resolveSelectors so we can assert which tree flowed through; tagged bundled data so we
 // can tell the bundled dependency apart from the fetched, reconstructed data
@@ -50,23 +50,6 @@ describe('selectors fixture', () => {
   beforeEach(() => {
     warnSpy.mockClear();
     errorSpy.mockClear();
-    delete process.env.PLUGIN_E2E_RUNTIME_SELECTORS;
-  });
-
-  afterEach(() => {
-    delete process.env.PLUGIN_E2E_RUNTIME_SELECTORS;
-  });
-
-  it('uses the bundled selectors without fetching when the runtime path is disabled', async () => {
-    process.env.PLUGIN_E2E_RUNTIME_SELECTORS = 'false';
-    const get = vi.fn();
-
-    const result = await runFixture({ grafanaVersion: '11.0.0-off', request: mockRequest(get) });
-
-    expect(get).not.toHaveBeenCalled();
-    expect(result.components).toEqual({ __source: 'dep-components' });
-    expect(warnSpy).not.toHaveBeenCalled();
-    expect(errorSpy).not.toHaveBeenCalled();
   });
 
   it('uses the runtime selectors served by Grafana when present', async () => {
