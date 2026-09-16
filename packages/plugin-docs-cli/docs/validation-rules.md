@@ -53,15 +53,14 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 
 ## Images & other assets
 
-| Rule                      | What it checks                                                                                                                                                                                    | Severity                      |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `no-svg-files`            | SVG images aren't allowed - they can contain embedded scripts, which is a security risk. Use PNG or WebP instead.                                                                                 | Error                         |
-| `referenced-images-exist` | An image referenced in a page (`![alt](img/foo.png)`) must actually exist in your docs folder.                                                                                                    | Error                         |
-| `max-image-size`          | Static images (png/jpg/webp) must be 300KB or smaller; GIFs must be 1MB or smaller. Compress or resize oversized images.                                                                          | Suggestion †                  |
-| `max-total-images-size`   | The total size of all images in your docs folder must stay under 5MB. Only checked in strict mode (`validate`), not during `serve`.                                                               | Warning (strict mode only)    |
-| `image-file-naming`       | Image filenames should use only letters, digits, hyphens, underscores and dots.                                                                                                                   | Suggestion †                  |
-| `no-orphaned-images`      | An image that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.                                                                          | Suggestion (strict mode only) |
-| `max-data-uri-size`       | Adds a size note when an inline (data URI) image is over 300KB. Data URIs are rejected at any size by `no-base64-images` or `no-dangerous-urls`, so you will always have one of those errors too. | Suggestion †                  |
+| Rule                      | What it checks                                                                                                                      | Severity                      |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `no-svg-files`            | SVG images aren't allowed - they can contain embedded scripts, which is a security risk. Use PNG or WebP instead.                   | Error                         |
+| `referenced-images-exist` | An image referenced in a page (`![alt](img/foo.png)`) must actually exist in your docs folder.                                      | Error                         |
+| `max-image-size`          | Static images (png/jpg/webp) must be 300KB or smaller; GIFs must be 1MB or smaller. Compress or resize oversized images.            | Suggestion †                  |
+| `max-total-images-size`   | The total size of all images in your docs folder must stay under 5MB. Only checked in strict mode (`validate`), not during `serve`. | Warning (strict mode only)    |
+| `image-file-naming`       | Image filenames should use only letters, digits, hyphens, underscores and dots.                                                     | Suggestion †                  |
+| `no-orphaned-images`      | An image that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.            | Suggestion (strict mode only) |
 
 ## Markdown content & security
 
