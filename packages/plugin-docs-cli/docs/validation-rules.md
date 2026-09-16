@@ -30,6 +30,9 @@ it before you submit your plugin, since it will block publishing.
 | `no-symlinks`          | Symbolic links aren't allowed in the docs folder - use real files.                                                                          | Error        |
 | `allowed-file-types`   | Only markdown files and images (`png`, `jpg`, `jpeg`, `webp`, `gif`) are allowed in the docs folder.                                        | Suggestion † |
 | `max-nesting-depth`    | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages.                | Suggestion † |
+| `docs-path-exists`     | The `docsPath` in `src/plugin.json` must point at a folder that exists.                                                                     | Error        |
+| `max-total-pages`      | A docs folder shouldn't have more than 50 pages. Consolidate related pages, or move the long tail to an external resource.                  | Suggestion † |
+| `max-total-docs-size`  | The whole docs folder should stay under 10MB, including images - it ships inside the plugin archive.                                        | Warning      |
 
 ## Page frontmatter
 
@@ -50,15 +53,15 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 
 ## Images & other assets
 
-| Rule                      | What it checks                                                                                                                      | Severity                      |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `no-svg-files`            | SVG images aren't allowed - they can contain embedded scripts, which is a security risk. Use PNG or WebP instead.                   | Error                         |
-| `referenced-images-exist` | An image referenced in a page (`![alt](img/foo.png)`) must actually exist in your docs folder.                                      | Error                         |
-| `max-image-size`          | Static images (png/jpg/webp) must be 300KB or smaller; GIFs must be 1MB or smaller. Compress or resize oversized images.            | Suggestion †                  |
-| `max-total-images-size`   | The total size of all images in your docs folder must stay under 5MB. Only checked in strict mode (`validate`), not during `serve`. | Warning (strict mode only)    |
-| `image-file-naming`       | Image filenames should use only letters, digits, hyphens, underscores and dots.                                                     | Suggestion †                  |
-| `no-orphaned-images`      | An image that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.            | Suggestion (strict mode only) |
-| `max-data-uri-size`       | An inline (data URI) image must be 300KB or smaller. Save larger images as files instead of embedding them.                         | Suggestion †                  |
+| Rule                      | What it checks                                                                                                                                                                                    | Severity                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `no-svg-files`            | SVG images aren't allowed - they can contain embedded scripts, which is a security risk. Use PNG or WebP instead.                                                                                 | Error                         |
+| `referenced-images-exist` | An image referenced in a page (`![alt](img/foo.png)`) must actually exist in your docs folder.                                                                                                    | Error                         |
+| `max-image-size`          | Static images (png/jpg/webp) must be 300KB or smaller; GIFs must be 1MB or smaller. Compress or resize oversized images.                                                                          | Suggestion †                  |
+| `max-total-images-size`   | The total size of all images in your docs folder must stay under 5MB. Only checked in strict mode (`validate`), not during `serve`.                                                               | Warning (strict mode only)    |
+| `image-file-naming`       | Image filenames should use only letters, digits, hyphens, underscores and dots.                                                                                                                   | Suggestion †                  |
+| `no-orphaned-images`      | An image that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.                                                                          | Suggestion (strict mode only) |
+| `max-data-uri-size`       | Adds a size note when an inline (data URI) image is over 300KB. Data URIs are rejected at any size by `no-base64-images` or `no-dangerous-urls`, so you will always have one of those errors too. | Suggestion †                  |
 
 ## Markdown content & security
 
