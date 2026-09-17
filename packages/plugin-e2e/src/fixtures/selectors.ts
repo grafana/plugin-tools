@@ -1,4 +1,5 @@
 import { APIRequestContext, TestFixture } from '@playwright/test';
+import { gte, valid } from 'semver';
 import {
   resolveSelectors,
   versionedComponents as bundledVersionedComponents,
@@ -17,11 +18,11 @@ type VersionedPages = typeof bundledVersionedPages;
 // per-worker cache keyed by grafanaVersion so concurrent fixtures share one in-flight fetch
 const selectorsCache = new Map<string, Promise<E2ESelectorGroups>>();
 
-// opt-in toggle while the runtime path is validated in plugin-tools' own Playwright workflows. when
-// unset, the fixture uses the bundled selectors as before. remove once runtime selectors ship to all
-// consumers.
-function runtimeSelectorsEnabled(): boolean {
-  return process.env.PLUGIN_E2E_RUNTIME_SELECTORS === 'true';
+// first Grafana release that emits e2e-selectors.json, so a missing file below this is expected
+const RUNTIME_SELECTORS_MIN_VERSION = '13.3.0';
+
+function supportsRuntimeSelectors(grafanaVersion: string): boolean {
+  return valid(grafanaVersion) !== null && gte(grafanaVersion, RUNTIME_SELECTORS_MIN_VERSION);
 }
 
 function buildGroups(
@@ -47,8 +48,12 @@ async function fetchRuntimeGroups(
   selectorsUrl: string | undefined,
   grafanaVersion: string
 ): Promise<E2ESelectorGroups> {
-  // couldn't derive where the instance serves the file (older Grafana, or assets missing) -> bundled
   if (!selectorsUrl) {
+    if (supportsRuntimeSelectors(grafanaVersion)) {
+      console.error(
+        `@grafana/plugin-e2e: could not derive the runtime selectors URL from bootData on Grafana ${grafanaVersion}, falling back to bundled selectors.`
+      );
+    }
     return bundledGroups(grafanaVersion);
   }
 
@@ -64,8 +69,13 @@ async function fetchRuntimeGroups(
     return bundledGroups(grafanaVersion);
   }
 
-  // 404 -> Grafana predates the feature; expected on older images, fall back quietly
+  // quiet on older Grafana, loud on a version that should serve it
   if (response.status() === 404) {
+    if (supportsRuntimeSelectors(grafanaVersion)) {
+      console.error(
+        `@grafana/plugin-e2e: ${selectorsUrl} returned 404 on Grafana ${grafanaVersion}, which should serve it, falling back to bundled selectors.`
+      );
+    }
     return bundledGroups(grafanaVersion);
   }
 
@@ -91,10 +101,6 @@ async function fetchRuntimeGroups(
     }
     const components = reconstructSelectorTree(data.versionedComponents) as VersionedComponents;
     const pages = reconstructSelectorTree(data.versionedPages) as VersionedPages;
-    // positive signal so CI logs show the runtime path was actually used (vs a silent fallback).
-    // TODO: remove in the final phase when @grafana/e2e-selectors is removed and the selectors are
-    // vendored - runtime becomes the only path then, so this trial-visibility log is no longer needed.
-    console.log(`@grafana/plugin-e2e: using runtime selectors from ${selectorsUrl}`);
     return buildGroups(components, pages, grafanaVersion);
   } catch (error) {
     // reachable but unreadable (bad schema, malformed JSON) is a real problem, so make it loud
@@ -107,13 +113,6 @@ async function fetchRuntimeGroups(
 }
 
 export const selectors: SelectorFixture = async ({ grafanaVersion, bootData, request }, use) => {
-  // until the runtime path is rolled out, only fetch when explicitly enabled; otherwise use the
-  // selectors bundled with the installed release
-  if (!runtimeSelectorsEnabled()) {
-    await use(bundledGroups(grafanaVersion));
-    return;
-  }
-
   // use the runtime selectors served by the Grafana under test when available, otherwise fall back
   // to the selectors bundled with the installed release
   let groups = selectorsCache.get(grafanaVersion);

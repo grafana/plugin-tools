@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // identity resolveSelectors so we can assert which tree flowed through; tagged bundled data so we
 // can tell the bundled dependency apart from the fetched, reconstructed data
@@ -46,30 +46,10 @@ async function runFixture(args: { grafanaVersion: string; request: never; select
 describe('selectors fixture', () => {
   const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
   const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-  const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
   beforeEach(() => {
     warnSpy.mockClear();
     errorSpy.mockClear();
-    logSpy.mockClear();
-    // enable the runtime path for these tests; the default (toggle off) is covered separately below
-    process.env.PLUGIN_E2E_RUNTIME_SELECTORS = 'true';
-  });
-
-  afterEach(() => {
-    delete process.env.PLUGIN_E2E_RUNTIME_SELECTORS;
-  });
-
-  it('uses the bundled selectors without fetching when the runtime toggle is off', async () => {
-    delete process.env.PLUGIN_E2E_RUNTIME_SELECTORS;
-    const get = vi.fn();
-
-    const result = await runFixture({ grafanaVersion: '11.0.0-off', request: mockRequest(get) });
-
-    expect(get).not.toHaveBeenCalled();
-    expect(result.components).toEqual({ __source: 'dep-components' });
-    expect(warnSpy).not.toHaveBeenCalled();
-    expect(errorSpy).not.toHaveBeenCalled();
   });
 
   it('uses the runtime selectors served by Grafana when present', async () => {
@@ -81,8 +61,6 @@ describe('selectors fixture', () => {
     expect(result.components).toEqual({ __source: 'fetched-components' });
     expect(result.pages).toEqual({ __source: 'fetched-pages' });
     expect(result.apis).toEqual({ __source: 'local-apis' });
-    // positive signal that the runtime path was used, not a silent fallback
-    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('using runtime selectors'));
     expect(warnSpy).not.toHaveBeenCalled();
     expect(errorSpy).not.toHaveBeenCalled();
   });
@@ -110,6 +88,29 @@ describe('selectors fixture', () => {
     expect(result.components).toEqual({ __source: 'dep-components' });
     expect(warnSpy).not.toHaveBeenCalled();
     expect(errorSpy).not.toHaveBeenCalled();
+  });
+
+  it('falls back loudly when a Grafana that should serve the file returns 404', async () => {
+    const get = vi.fn().mockResolvedValue(mockResponse({ status: 404 }));
+
+    const result = await runFixture({ grafanaVersion: '13.4.0-sup404', request: mockRequest(get) });
+
+    expect(result.components).toEqual({ __source: 'dep-components' });
+    expect(errorSpy).toHaveBeenCalled();
+  });
+
+  it('falls back loudly when the URL cannot be derived on a supported Grafana', async () => {
+    const get = vi.fn();
+
+    const result = await runFixture({
+      grafanaVersion: '13.4.0-supnourl',
+      request: mockRequest(get),
+      selectorsUrl: undefined,
+    });
+
+    expect(get).not.toHaveBeenCalled();
+    expect(result.components).toEqual({ __source: 'dep-components' });
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('falls back loudly on a server error', async () => {
