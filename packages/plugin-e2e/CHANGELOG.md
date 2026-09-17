@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.14.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.13.0...@grafana/plugin-e2e@3.14.0) (2026-09-17)
+
+
+### Features
+
+* **plugin-e2e:** enable runtime e2e-selectors by default ([#2886](https://github.com/grafana/plugin-tools/issues/2886)) ([a5b5480](https://github.com/grafana/plugin-tools/commit/a5b5480d683f5a8f31a2a852e7407aeb3c9d51b0))
+
 ## [3.13.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.12.0...@grafana/plugin-e2e@3.13.0) (2026-09-16)
 
 
