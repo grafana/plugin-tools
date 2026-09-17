@@ -279,7 +279,7 @@ describe('experimental-app-sdk addition', () => {
 
       const packageJson = JSON.parse(result.getFile('package.json') ?? '{}');
       expect(Object.keys(packageJson.dependencies)).toEqual(
-        expect.arrayContaining(['@grafana/api-clients', '@reduxjs/toolkit', 'react-redux'])
+        expect.arrayContaining(['@reduxjs/toolkit', 'react-redux'])
       );
     });
 

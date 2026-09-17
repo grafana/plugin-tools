@@ -11,6 +11,11 @@
 // A `grafana` on your PATH is deliberately ignored: the spec has to come from the Grafana version the
 // plugin targets. To use your own build, set GRAFANA_BIN to the binary.
 //
+// Step 2 uses the `grafana-api-clients` bin from @grafana/api-clients, which this script adds to
+// package.json on first run (pinned to API_CLIENTS_VERSION). To try a build from an unreleased
+// grafana/grafana pull request instead, set GRAFANA_PR=<number>: the package tarball that PR's CI
+// packed is downloaded with `gh` (which must be authenticated) and installed for this run.
+//
 // Run this after `generate:kinds` whenever the manifest changes. Generated clients are intended to be
 // committed; the openapi/ directory is not.
 
@@ -26,6 +31,9 @@ import { join, resolve } from 'node:path';
 // commit with `gh run view <id> --repo grafana/grafana --json headSha`.
 const GRAFANA_VERSION = '13.3.0-35040200895';
 const BIN_OVERRIDE = 'GRAFANA_BIN';
+const PR_OVERRIDE = 'GRAFANA_PR';
+// First @grafana/api-clients release with the `grafana-api-clients` CLI.
+const API_CLIENTS_VERSION = '^13.3.0';
 
 const MANIFEST = resolve('src', 'app-sdk-manifest.json');
 const SPEC_DIR = resolve('.config', 'app-sdk', 'openapi');
@@ -124,9 +132,79 @@ async function resolveGrafana() {
   return download(target());
 }
 
+/**
+ * Installs @grafana/api-clients from the packages a grafana/grafana pull request's CI built, so the
+ * `grafana-api-clients` bin can be tried before it is released. Every PR runs the "Levitate" workflow,
+ * which packs all @grafana/* packages into a `buildPr` artifact.
+ */
+function installApiClientsFromPR(pr) {
+  const gh = (args) => execFileSync('gh', args, { encoding: 'utf8' }).trim();
+  console.log(`Installing @grafana/api-clients from grafana/grafana#${pr}...`);
+
+  const sha = gh(['pr', 'view', pr, '--repo', 'grafana/grafana', '--json', 'headRefOid', '-q', '.headRefOid']);
+  const runId = gh([
+    'run',
+    'list',
+    '--repo',
+    'grafana/grafana',
+    '--commit',
+    sha,
+    '--workflow',
+    'detect-breaking-changes-levitate.yml',
+    '--status',
+    'success',
+    '--limit',
+    '1',
+    '--json',
+    'databaseId',
+    '-q',
+    '.[0].databaseId',
+  ]);
+  if (!runId) {
+    console.error(`grafana/grafana#${pr} (${sha.slice(0, 12)}) has no successful package build yet.`);
+    process.exit(1);
+  }
+
+  const dir = join(tmpdir(), `grafana-api-clients-pr${pr}-${process.pid}`);
+  mkdirSync(dir, { recursive: true });
+  execFileSync('gh', ['run', 'download', runId, '--repo', 'grafana/grafana', '-n', 'buildPr', '-D', dir], {
+    stdio: 'inherit',
+  });
+  const unzip = run('unzip', ['-q', '-o', join(dir, 'pr_built_packages.zip'), '-d', dir]);
+  if (unzip.status !== 0) {
+    console.error('Could not unzip the package artifact. Is unzip available on your PATH?');
+    process.exit(1);
+  }
+  const tarball = join(dir, 'packages', 'grafana-api-clients', '@grafana-api-clients.tgz');
+  if (!existsSync(tarball)) {
+    console.error(`${tarball} not found in the artifact.`);
+    process.exit(1);
+  }
+  // --no-save: a path dependency must not end up in package.json.
+  const install = run('npm', ['install', '--no-save', '--ignore-scripts', tarball]);
+  rmSync(dir, { recursive: true, force: true });
+  if (install.status !== 0) {
+    process.exit(install.status ?? 1);
+  }
+}
+
 if (!existsSync(MANIFEST)) {
   console.error(`${MANIFEST} not found. Run generate:kinds first.`);
   process.exit(1);
+}
+
+if (process.env[PR_OVERRIDE]) {
+  installApiClientsFromPR(process.env[PR_OVERRIDE]);
+} else if (!existsSync(resolve('node_modules', '.bin', 'grafana-api-clients'))) {
+  console.log(`Installing @grafana/api-clients@${API_CLIENTS_VERSION}...`);
+  const install = run('npm', ['install', '--save', `@grafana/api-clients@${API_CLIENTS_VERSION}`]);
+  if (install.status !== 0) {
+    console.error(
+      `Could not install @grafana/api-clients@${API_CLIENTS_VERSION}. If it is not released yet, set ` +
+        `${PR_OVERRIDE}=<grafana/grafana pull request number> to use a build from that PR.`
+    );
+    process.exit(install.status ?? 1);
+  }
 }
 
 const grafana = await resolveGrafana();

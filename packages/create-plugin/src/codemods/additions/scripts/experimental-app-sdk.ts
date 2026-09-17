@@ -189,10 +189,10 @@ function addGenerateScripts(context: Context) {
   context.updateFile('package.json', JSON.stringify(packageJson, null, 2));
 }
 
-// The generated RTK Query clients import these. @grafana/api-clients also provides the
-// `grafana-api-clients` CLI that generate-api-client.mjs runs.
+// The generated RTK Query clients import these. @grafana/api-clients (which also provides the
+// `grafana-api-clients` CLI) is installed by generate-api-client.mjs itself, so it can come from an
+// npm release or from a grafana/grafana pull request's build while the CLI is unreleased.
 const API_CLIENT_DEPENDENCIES = {
-  '@grafana/api-clients': '^13.3.0',
   '@reduxjs/toolkit': '^2.10.0',
   'react-redux': '^9.2.0',
 };
