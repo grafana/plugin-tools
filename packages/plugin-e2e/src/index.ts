@@ -93,6 +93,7 @@ export * from './types';
 // helper functions
 export { isLegacyFeatureEnabled, isFeatureEnabled } from './fixtures/isFeatureToggleEnabled';
 export { DEFAULT_A11Y_TAGS } from './fixtures/scanForA11yViolations';
+export { resolveGrafanaSelector } from './models/utils';
 export { gte, lt, lte, gt, eq, satisfies } from './utils/version';
 
 // first extend with internal fixtures (not exposed to tests)
