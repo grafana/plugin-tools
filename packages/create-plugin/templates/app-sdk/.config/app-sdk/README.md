@@ -58,3 +58,72 @@ be required for:
 - Controller logic (informers, watchers, or any other background work)
 
 If this plugin has a backend, `pkg/provider/provider.go` is where you wire those up as your app grows.
+
+## Authorization & RBAC
+
+You don't write permission checks in code. You declare roles and scoping in the manifest, and Grafana's
+aggregated API server enforces them for every caller (kubectl, Terraform, generated clients, your
+frontend). This only applies to requests from users (UI, Service Account tokens) — requests from a
+Service Identity (another internal operator) are less strict.
+
+### Scope
+
+Every kind's `scope` (set in `kinds/*.cue`, see `example.cue`) decides who can touch it:
+
+- **`Namespaced` kinds are folder-scoped by default.** Access requires *both* the right Stack Role
+  (see below) *and* folder access on the resource's `grafana.app/folder`. If your kind's data doesn't
+  belong in folders, opt out with `folderScoped: false` — access then comes down to the Stack Role
+  alone, and adding a folder annotation to a request is rejected.
+- **`Cluster` kinds are invisible to users by default.** Only internal services can read or write them.
+  Set `userReadable: true` to let all Grafana users read (get/list) the kind — they can still never
+  write to it. Service identities aren't affected by this switch.
+
+```cue
+examplev1alpha1: exampleKind & {
+    // Opt this kind out of folder-scoped access (Namespaced kinds only).
+    folderScoped: false
+    // Let users read this kind even though it's cluster-scoped (Cluster kinds only).
+    userReadable: true
+    schema: {
+        spec: {
+            title:       string
+            description: string
+        }
+    }
+}
+```
+
+### Roles and role bindings
+
+Declare custom roles in `kinds/manifest.cue`. A role name follows `<app>:<role>` and grants one of three
+tiers — `viewer` (read), `editor` (read + write), or `admin` (currently identical to `editor` — don't
+design around admin having extra powers yet). Role bindings attach your app's roles to Grafana's basic
+roles (`viewer`, `editor`, `admin`), so every Grafana user inherits the matching app role automatically.
+
+```cue
+manifest: {
+    appName: "{{ pluginId }}"
+    versions: {
+        "v1alpha1": v1alpha1
+    }
+    extraPermissions: {
+        accessKinds: []
+    }
+    // roles your app grants, and which Grafana basic role gets each one by default.
+    roles: [
+        {
+            name: "{{ pluginId }}:editor"
+            permissionSet: "editor"
+        },
+    ]
+    roleBindings: [
+        {
+            roleName: "{{ pluginId }}:editor"
+            basicRole: "editor"
+        },
+    ]
+}
+```
+
+Without a `roleBindings` entry, a role you define is never granted to anyone — add one for every role you
+want users to actually have.

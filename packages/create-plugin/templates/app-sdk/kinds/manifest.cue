@@ -18,6 +18,26 @@ manifest: {
 	extraPermissions: {
 		accessKinds: []
 	}
+
+	// roles declares custom RBAC roles for your app. Each role name follows "<app>:<role>" and grants
+	// one of three tiers: "viewer" (read), "editor" (read + write), or "admin" (currently identical
+	// to "editor"). A role you define here is never granted to anyone without a matching entry in
+	// roleBindings below.
+	// roles: [
+	// 	{
+	// 		name:          "{{ pluginId }}:editor"
+	// 		permissionSet: "editor"
+	// 	},
+	// ]
+
+	// roleBindings attaches your app's roles to Grafana's basic roles (viewer/editor/admin), so every
+	// Grafana user with that basic role automatically inherits the matching app role.
+	// roleBindings: [
+	// 	{
+	// 		roleName:  "{{ pluginId }}:editor"
+	// 		basicRole: "editor"
+	// 	},
+	// ]
 }
 
 // v1alpha1 is the v1alpha1 version of the app's API.

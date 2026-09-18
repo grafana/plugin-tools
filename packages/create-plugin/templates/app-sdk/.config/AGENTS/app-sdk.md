@@ -31,6 +31,16 @@ TypeScript types and an app manifest that Grafana reads from the plugin bundle.
   `generate:kinds` without it.
 - **Do not add code generation to the build.** It is a schema-change-time step, not a build step. The
   frontend build must keep working without a Go toolchain.
+- **Never write authorization/permission checks in app code.** Access is declared in the manifest and
+  enforced by Grafana's API server, not by this plugin.
+- **A `Namespaced` kind is folder-scoped by default:** callers need the Stack Role *and* folder access.
+  Set `folderScoped: false` on the kind if it shouldn't be gated by folders.
+- **A `Cluster` kind is invisible to users by default.** Set `userReadable: true` to allow read (never
+  write) access; leave it unset for internal-only kinds.
+- **Every role needs a `roleBindings` entry to be granted to anyone.** Defining a role in
+  `kinds/manifest.cue` without binding it to a basic role (`viewer`/`editor`/`admin`) leaves it unused.
+- **`admin` currently grants the same actions as `editor`.** Don't design a feature assuming admin has
+  extra permissions today.
 
 ## Layout
 
