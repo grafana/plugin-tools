@@ -22,8 +22,8 @@ TypeScript types and an app manifest that Grafana reads from the plugin bundle.
   ```
 - **Generated code is committed.** Commit the regenerated files alongside the CUE change so schema
   changes are reviewable and a fresh clone builds without running code generation.
-- **This plugin generates no Go code.** `kinds/config.cue` sets `codegen: goEnabled: false`, so
-  generation emits only TypeScript and the JSON definitions. Do not add Go output paths or a Go
+- **Go code generation follows `kinds/config.cue`'s `codegen.goEnabled` setting.** If it's `false`,
+  generation emits only TypeScript and the JSON definitions — don't add Go output paths or a Go
   backend to work around a generation problem.
 - **Do not set `GRAFANA_APP_SDK_BIN`.** It overrides the pinned CLI with a local build, and is meant
   for people working on the app-sdk itself. Code generated with it can differ from what `VERSION` in
@@ -91,5 +91,5 @@ Resources are served under a Kubernetes-style path:
 The namespace is deployment-dependent — `default` on single-tenant Grafana, `stacks-<id>` on Grafana
 Cloud. Read it from `config.namespace` in `@grafana/runtime`; never hardcode it.
 
-This plugin has no Go backend, and does not need one for storage or CRUD. Admission (validation and
-mutation), conversion between versions, and custom routes would require adding one.
+No backend is needed for storage or CRUD — that comes from the manifest alone. Admission (validation
+and mutation), conversion between versions, and custom routes require a backend.
