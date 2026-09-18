@@ -85,3 +85,10 @@ Cloud. Read it from `config.namespace` in `@grafana/runtime`; never hardcode it.
 
 This plugin has no Go backend, and does not need one for storage or CRUD. Admission (validation and
 mutation), conversion between versions, and custom routes would require adding one.
+
+## API clients
+
+`{{ packageManagerName }} run generate:api-client` generates RTK Query hooks for every kind and custom route into
+`src/api/generated/<version>/`. Use these hooks (`useList<Kind>Query`, `useCreate<Kind>Mutation`, ...) from
+components instead of calling `getBackendSrv()` against `/apis/...` by hand. `endpoints.gen.ts` is regenerated
+on every run — never edit it; customise via `baseAPI.ts` / `index.ts` (`generatedAPI.enhanceEndpoints`).

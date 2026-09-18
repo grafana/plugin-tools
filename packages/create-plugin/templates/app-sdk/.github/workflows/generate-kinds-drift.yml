@@ -9,6 +9,7 @@ on:
       - 'kinds/**'
       - 'pkg/generated/**'
       - 'src/generated/**'
+      - 'src/api/generated/**'
       - 'src/app-sdk-manifest.json'
       - '.github/workflows/generate-kinds-drift.yml'
   pull_request:
@@ -19,6 +20,7 @@ on:
       - 'kinds/**'
       - 'pkg/generated/**'
       - 'src/generated/**'
+      - 'src/api/generated/**'
       - 'src/app-sdk-manifest.json'
       - '.github/workflows/generate-kinds-drift.yml'
 
@@ -61,23 +63,25 @@ jobs:
       - name: Install dependencies
         run: {{ packageManagerInstallCmd }}
 
-      - name: Cache grafana-app-sdk CLI
+      - name: Cache grafana-app-sdk CLI and Grafana
         uses: actions/cache@v4
         with:
-          path: node_modules/.cache/grafana-app-sdk
-          key: grafana-app-sdk-cli-${{ '{{' }} hashFiles('.config/app-sdk/generate-kinds.mjs') {{ '}}' }}
+          path: |
+            node_modules/.cache/grafana-app-sdk
+            node_modules/.cache/grafana
+          key: app-sdk-tools-${{ '{{' }} hashFiles('.config/app-sdk/generate-kinds.mjs', '.config/app-sdk/generate-api-client.mjs') {{ '}}' }}
 
-      - name: Generate kinds
-        run: {{ packageManagerName }} run generate:kinds
+      - name: Generate kinds and API clients
+        run: {{ packageManagerName }} run generate
 
       - name: Fail if generated code is out of date
         run: |
           # Scoped to kinds/ and the generated output: installing dependencies above can itself touch
           # files (e.g. package-lock.json, if CI's Node version differs from the one used to generate
           # the committed lockfile), which is not kind drift and shouldn't fail this check.
-          paths="kinds src/generated pkg/generated src/app-sdk-manifest.json"
+          paths="kinds src/generated src/api/generated pkg/generated src/app-sdk-manifest.json"
           if [ -n "$(git status --porcelain -- $paths)" ]; then
-            echo "::error::Generated code is out of date. Run '{{ packageManagerName }} run generate:kinds' and commit the result."
+            echo "::error::Generated code is out of date. Run '{{ packageManagerName }} run generate' and commit the result."
             git status --porcelain -- $paths
             git diff --stat -- $paths
             exit 1

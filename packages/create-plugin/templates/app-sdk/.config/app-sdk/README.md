@@ -35,6 +35,47 @@ without running code generation.
 
 > **Note:** No Go toolchain is needed to run generate:kinds unless generating Go code.** 
 
+## Generating API clients
+
+```bash
+{{ packageManagerName }} run generate:api-client
+```
+
+(or `{{ packageManagerName }} run generate`, which runs `generate:kinds` first.) This produces typed
+[RTK Query](https://redux-toolkit.js.org/rtk-query/overview) hooks for every kind, subresource and custom
+route your app serves — the same kind of client core Grafana uses for its own APIs — in two steps, both
+driven by `.config/app-sdk/generate-api-client.mjs`:
+
+1. `grafana cli write-openapi` renders the OpenAPI documents Grafana serves for `src/app-sdk-manifest.json`
+   into `.config/app-sdk/openapi/` (gitignored). It runs the Grafana release pinned as `GRAFANA_VERSION` at
+   the top of the script, downloaded once into `node_modules/.cache/`; set `GRAFANA_BIN` to use your own build.
+2. `grafana-api-clients generate` from `@grafana/api-clients` turns them into clients:
+
+| Output | Path |
+| ------ | ---- |
+| Endpoints, types and hooks (regenerated every run) | `src/api/generated/<version>/endpoints.gen.ts` |
+| `createApi()` the endpoints are injected into (written once, yours to edit) | `src/api/generated/<version>/baseAPI.ts`, `index.ts` |
+| Shared base query over `getBackendSrv()` (written once) | `src/api/generated/createBaseQuery.ts` |
+
+To use the hooks, add the API to a redux store and render your app inside a `<Provider>`:
+
+```ts
+import { configureStore } from '@reduxjs/toolkit';
+import { api } from './api/generated/v1alpha1/baseAPI';
+
+export const store = configureStore({
+  reducer: { [api.reducerPath]: api.reducer },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
+});
+```
+
+```tsx
+const { data, isLoading } = useListExampleQuery();
+const [createExample] = useCreateExampleMutation();
+```
+
+Mutations invalidate the kind's cache tag, so lists refetch on their own.
+
 ## How the manifest reaches Grafana
 
 The generator writes the manifest straight into `src/app-sdk-manifest.json`, so the frontend build's

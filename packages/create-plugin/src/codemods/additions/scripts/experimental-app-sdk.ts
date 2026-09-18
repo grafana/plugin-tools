@@ -4,7 +4,7 @@ import { parseDocument, stringify, YAMLMap, Scalar } from 'yaml';
 import type { Context, ContextMessage } from '../../context.js';
 import { getBackendCmd } from '../../../commands/generate/print-success-message.js';
 import { output } from '../../../utils/utils.console.js';
-import { additionsDebug, renderTemplate } from '../../utils.js';
+import { addDependenciesToPackageJson, additionsDebug, renderTemplate } from '../../utils.js';
 import { addRequireToGoMod } from '../../utils.goMod.js';
 import { getTemplateData } from '../../../utils/utils.templates.js';
 
@@ -20,6 +20,7 @@ const APP_SDK_FEATURE_TOGGLES = ['appplugins.loadAppManifest', 'appplugins.regis
 // is a tool, not something devs hand-edit, so it gets the header.
 const TEMPLATE_FILES: Array<[path: string, includeWarning: boolean]> = [
   ['.config/app-sdk/generate-kinds.mjs', true],
+  ['.config/app-sdk/generate-api-client.mjs', true],
   ['.config/app-sdk/README.md', false],
   ['.github/workflows/generate-kinds-drift.yml', false],
   ['kinds/config.cue', false],
@@ -47,7 +48,9 @@ export default function appSdk(context: Context): Context {
 
   addTemplateFiles(context);
   referenceAgentInstructions(context);
-  addGenerateScript(context);
+  addGenerateScripts(context);
+  addApiClientDependencies(context);
+  ignoreOpenAPIDir(context);
   addFeatureToggle(context);
   wireGoBackend(context);
 
@@ -143,12 +146,19 @@ function referenceAgentInstructions(context: Context) {
   );
 }
 
-/** Adds the `generate:kinds` npm script that runs code generation. */
-function addGenerateScript(context: Context) {
+// npm scripts the addition wires up. `generate` runs both so a manifest change and the client it
+// implies land together.
+const GENERATE_SCRIPTS: Record<string, string> = {
+  'generate:kinds': 'node ./.config/app-sdk/generate-kinds.mjs',
+  'generate:api-client': 'node ./.config/app-sdk/generate-api-client.mjs',
+};
+
+/** Adds the code generation npm scripts, leaving any the user already has alone. */
+function addGenerateScripts(context: Context) {
   const raw = context.getFile('package.json');
 
   if (!raw) {
-    additionsDebug('Could not find package.json. Skipping the generate:kinds script.');
+    additionsDebug('Could not find package.json. Skipping the generate scripts.');
     return;
   }
 
@@ -160,13 +170,54 @@ function addGenerateScript(context: Context) {
     return;
   }
 
-  if (packageJson.scripts?.['generate:kinds']) {
-    additionsDebug('A generate:kinds script already exists. Skipping.');
+  const { packageManagerName } = getTemplateData();
+  const scripts = { ...packageJson.scripts };
+  const missing = Object.entries({
+    ...GENERATE_SCRIPTS,
+    generate: `${packageManagerName} run generate:kinds && ${packageManagerName} run generate:api-client`,
+  }).filter(([name]) => !scripts[name]);
+
+  if (missing.length === 0) {
+    additionsDebug('The generate scripts already exist. Skipping.');
     return;
   }
 
-  packageJson.scripts = { ...packageJson.scripts, 'generate:kinds': 'node ./.config/app-sdk/generate-kinds.mjs' };
+  for (const [name, command] of missing) {
+    scripts[name] = command;
+  }
+  packageJson.scripts = scripts;
   context.updateFile('package.json', JSON.stringify(packageJson, null, 2));
+}
+
+// The generated RTK Query clients import these. @grafana/api-clients (which also provides the
+// `grafana-api-clients` CLI) is installed by generate-api-client.mjs itself, so it can come from an
+// npm release or from a grafana/grafana pull request's build while the CLI is unreleased.
+const API_CLIENT_DEPENDENCIES = {
+  '@reduxjs/toolkit': '^2.10.0',
+  'react-redux': '^9.2.0',
+};
+
+function addApiClientDependencies(context: Context) {
+  if (!context.getFile('package.json')) {
+    additionsDebug('Could not find package.json. Skipping the API client dependencies.');
+    return;
+  }
+  addDependenciesToPackageJson(context, API_CLIENT_DEPENDENCIES);
+}
+
+// The OpenAPI documents are an intermediate artifact regenerated on every run.
+const OPENAPI_DIR = '.config/app-sdk/openapi/';
+
+function ignoreOpenAPIDir(context: Context) {
+  const gitignore = context.getFile('.gitignore');
+  if (gitignore === undefined) {
+    additionsDebug('Could not find .gitignore. Skipping.');
+    return;
+  }
+  if (gitignore.split('\n').some((line) => line.trim() === OPENAPI_DIR || line.trim() === OPENAPI_DIR.slice(0, -1))) {
+    return;
+  }
+  context.updateFile('.gitignore', `${gitignore.trimEnd()}\n${OPENAPI_DIR}\n`);
 }
 
 /**
@@ -403,7 +454,7 @@ function buildNextStepsMessage(hasGoBackend: boolean): ContextMessage {
   const versionBadge = styleText(['reset', 'inverse', 'bold', 'cyan'], ` grafana-app-sdk@${GRAFANA_APP_SDK_VERSION} `);
 
   const commands = output.bulletList([
-    `${output.formatCode(`${packageManagerName} run generate:kinds`)} ${styleText(['dim'], 'to generate code from the definitions in kinds/')}`,
+    `${output.formatCode(`${packageManagerName} run generate`)} ${styleText(['dim'], 'to generate types, the app manifest, and RTK Query API clients from the definitions in kinds/')}`,
     ...(hasGoBackend
       ? [
           // The generated Go code under pkg/generated/ only takes effect once it's compiled into the
