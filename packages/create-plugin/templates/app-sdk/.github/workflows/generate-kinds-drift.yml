@@ -36,7 +36,7 @@ jobs:
 {{#if_eq packageManagerName "pnpm"}}
       # pnpm action uses the packageManager field in package.json to
       # understand which version to install.
-      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 {{/if_eq}}
       - name: Setup Node.js environment
         uses: actions/setup-node@v6
