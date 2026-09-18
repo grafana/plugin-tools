@@ -237,27 +237,15 @@ func (a *App) handleMyRequest(w http.ResponseWriter, req *http.Request) {
 
 ### Work with cookies
 
-Your app plugin can read the cookies forwarded by Grafana to the app.
+Grafana doesn't forward cookies to app plugin backends. Cookie forwarding is available only for data source plugins, configured with the **Allowed cookies** option. For more information, refer to [Add authentication for data source plugins](../data-source-plugins/add-authentication-for-data-source-plugins.md#work-with-cookies). There's no equivalent setting for app plugins.
 
-```go
-func (a *App) handleMyRequest(w http.ResponseWriter, req *http.Request) {
+To identify the user who made a request to your app backend, use one of the following:
 
-	cookies := req.Cookies()
+- `backend.PluginConfigFromContext(req.Context()).User` for the login, name, email, and role of the calling user, when a user originated the request.
+- The `X-Grafana-Id` header, a signed token that your backend can verify. For more information, refer to [Implement RBAC in app plugins](./implement-rbac-in-app-plugins.md).
+- The `X-Grafana-User` header, when [`send_user_header`](https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#send_user_header) is enabled.
 
-        // loop through cookies as an example
-	for _, cookie := range cookies {
-		log.Printf("cookie: %+v", cookie)
-	}
-        // Use the cookies
-
-	w.Header().Add("Content-Type", "application/json")
-	if _, err := w.Write([]byte(`{"message": "ok}`)); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusOK)
-}
-```
+To call the Grafana API from your app backend, use a managed service account. For more information, refer to [Use a service account](./use-a-service-account.md).
 
 ### Forward the user header for the logged-in user
 
