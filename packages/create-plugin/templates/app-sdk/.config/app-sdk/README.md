@@ -66,24 +66,18 @@ aggregated API server enforces them for every caller (kubectl, Terraform, genera
 frontend). This only applies to requests from users (UI, Service Account tokens) — requests from a
 Service Identity (another internal operator) are less strict.
 
-### Scope
+### Folder scoping
 
-Every kind's `scope` (set in `kinds/*.cue`, see `example.cue`) decides who can touch it:
-
-- **`Namespaced` kinds are folder-scoped by default.** Access requires *both* the right Stack Role
-  (see below) *and* folder access on the resource's `grafana.app/folder`. If your kind's data doesn't
-  belong in folders, opt out with `folderScoped: false` — access then comes down to the Stack Role
-  alone, and adding a folder annotation to a request is rejected.
-- **`Cluster` kinds are invisible to users by default.** Only internal services can read or write them.
-  Set `userReadable: true` to let all Grafana users read (get/list) the kind — they can still never
-  write to it. Service identities aren't affected by this switch.
+Namespaced kinds (set in `kinds/*.cue`, see `example.cue`) are **folder-scoped by default**. Access
+requires *both* the right Stack Role (see below) *and* folder access on the resource's
+`grafana.app/folder`. If your kind's data doesn't belong in folders, opt out with
+`folderScoped: false` — access then comes down to the Stack Role alone, and adding a folder annotation
+to a request is rejected.
 
 ```cue
 examplev1alpha1: exampleKind & {
-    // Opt this kind out of folder-scoped access (Namespaced kinds only).
+    // Opt this kind out of folder-scoped access.
     folderScoped: false
-    // Let users read this kind even though it's cluster-scoped (Cluster kinds only).
-    userReadable: true
     schema: {
         spec: {
             title:       string
