@@ -9,7 +9,6 @@ const IMAGE_FILE_NAME_RE = /^[a-zA-Z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
 const MAX_GIF_SIZE = 1024 * 1024; // 1MB
 const MAX_TOTAL_SIZE = 5 * 1024 * 1024; // 5MB
-const MAX_DATA_URI_SIZE = 300 * 1024; // 300KB
 
 /**
  * Finds the 1-based line number of the first occurrence of a string in content.
@@ -124,29 +123,8 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     let match: RegExpExecArray | null;
     while ((match = imageRefRe.exec(content)) !== null) {
       const ref = match[2];
-      // skip external URLs, protocol-relative URLs and blob URLs
-      if (/^https?:\/\//i.test(ref) || /^\/\//.test(ref) || /^blob:/i.test(ref)) {
-        continue;
-      }
-
-      // max-data-uri-size: check size of inline data URIs
-      if (/^data:/i.test(ref)) {
-        const commaIdx = ref.indexOf(',');
-        if (commaIdx !== -1) {
-          const encoded = ref.slice(commaIdx + 1);
-          const isBase64 = /;base64$/i.test(ref.slice(0, commaIdx));
-          const byteSize = isBase64 ? Math.ceil((encoded.length * 3) / 4) : encoded.length;
-          if (byteSize > MAX_DATA_URI_SIZE) {
-            diagnostics.push({
-              rule: Rule.MaxDataUriSize,
-              severity: input.strict ? 'error' : 'info',
-              file: mdRelPath,
-              line: findRefLine(content, ref),
-              title: 'Data URI exceeds 300KB limit',
-              detail: `Inline data URI is approximately ${formatBytes(byteSize)} which exceeds the 300KB limit. Use a file reference instead.`,
-            });
-          }
-        }
+      // skip refs that aren't local file paths; data URIs are rejected by no-base64-images and no-dangerous-urls
+      if (/^https?:\/\//i.test(ref) || /^\/\//.test(ref) || /^blob:/i.test(ref) || /^data:/i.test(ref)) {
         continue;
       }
 

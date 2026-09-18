@@ -220,56 +220,18 @@ describe('checkAssets', () => {
     });
   });
 
-  // --- max-data-uri-size ---
-
-  describe('max-data-uri-size', () => {
-    it('should not report small data URIs', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      const smallB64 = base64OfSize(100);
-      await writeFile(join(tmp, 'index.md'), md(`![pixel](data:image/png;base64,${smallB64})`));
-
-      const findings = await checkAssets(input(tmp));
-      expect(findings.filter((f) => f.rule === Rule.MaxDataUriSize)).toHaveLength(0);
-    });
-
-    it('should report data URIs over 300KB', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      const largeB64 = base64OfSize(400 * 1024);
-      await writeFile(join(tmp, 'index.md'), md(`![big](data:image/png;base64,${largeB64})`));
-
-      const findings = await checkAssets(input(tmp));
-
-      const dataUri = findings.filter((f) => f.rule === Rule.MaxDataUriSize);
-      expect(dataUri).toHaveLength(1);
-      expect(dataUri[0].severity).toBe('error');
-      expect(dataUri[0].title).toContain('300KB');
-    });
-
-    it('should report as info in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      const largeB64 = base64OfSize(400 * 1024);
-      await writeFile(join(tmp, 'index.md'), md(`![big](data:image/png;base64,${largeB64})`));
-
-      const findings = await checkAssets(input(tmp, false));
-
-      const dataUri = findings.filter((f) => f.rule === Rule.MaxDataUriSize);
-      expect(dataUri).toHaveLength(1);
-      expect(dataUri[0].severity).toBe('info');
-    });
-
-    it('should not report data URIs for the referenced-images-exist rule', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      const largeB64 = base64OfSize(400 * 1024);
-      await writeFile(join(tmp, 'index.md'), md(`![big](data:image/png;base64,${largeB64})`));
-
-      const findings = await checkAssets(input(tmp));
-      expect(findings.filter((f) => f.rule === Rule.ReferencedImagesExist)).toHaveLength(0);
-    });
-  });
-
   // --- referenced-images-exist ---
 
   describe('referenced-images-exist', () => {
+    it('should not report data URIs', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      const largeB64 = base64OfSize(400 * 1024);
+      await writeFile(join(tmp, 'index.md'), md(`![big](data:image/png;base64,${largeB64})`));
+
+      const findings = await checkAssets(input(tmp));
+      expect(findings).toHaveLength(0);
+    });
+
     it('should not report when referenced image exists', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await mkdir(join(tmp, 'img'));
