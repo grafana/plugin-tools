@@ -16,4 +16,9 @@ export default [
     description: 'Adds grafana-app-sdk CUE kind code generation to an app plugin',
     scriptPath: import.meta.resolve('./scripts/experimental-app-sdk.js'),
   },
+  {
+    name: 'docs',
+    description: 'Scaffolds multi-page documentation for a Grafana plugin',
+    scriptPath: import.meta.resolve('./scripts/docs.js'),
+  },
 ] satisfies Codemod[];
