@@ -44,12 +44,29 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   app.set('view engine', 'ejs');
   app.set('views', join(__dirname, 'views'));
 
-  // run validation in non-strict mode and log results without blocking
+  // run validation in non-strict mode and log results without blocking. this reruns on every
+  // save, so writing-style findings are collapsed to a single line - printing all of them would
+  // bury the structural problems the author actually has to fix.
   const runValidation = async () => {
     try {
       const result = await validate({ docsPath, strict: false }, allRules);
-      if (result.diagnostics.length > 0) {
-        console.log(formatResult(result));
+      const styleFindings = result.diagnostics.filter((d) => d.rule.startsWith('style-'));
+      const rest = { ...result, diagnostics: result.diagnostics.filter((d) => !d.rule.startsWith('style-')) };
+
+      if (rest.diagnostics.length > 0) {
+        console.log(formatResult(rest));
+      }
+      if (styleFindings.length > 0) {
+        const warnings = styleFindings.filter((d) => d.severity === 'warning').length;
+        const suggestions = styleFindings.length - warnings;
+        const parts: string[] = [];
+        if (warnings > 0) {
+          parts.push(`${warnings} writing-style warning${warnings === 1 ? '' : 's'}`);
+        }
+        if (suggestions > 0) {
+          parts.push(`${suggestions} suggestion${suggestions === 1 ? '' : 's'}`);
+        }
+        console.log(`  ${parts.join(', ')} - run \`docs:validate\` to see them\n`);
       }
     } catch (error) {
       console.error('Validation failed:', error instanceof Error ? error.message : error);

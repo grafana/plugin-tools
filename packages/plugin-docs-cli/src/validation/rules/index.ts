@@ -6,6 +6,7 @@ import { checkFrontmatter } from './frontmatter.js';
 import { checkManifest } from './manifest.js';
 import { checkMarkdown } from './markdown.js';
 import { checkStubContent } from './stub-content.js';
+import { checkWritingStyle } from './style.js';
 
 export const allRules: RuleRunner[] = [
   checkFilesystem,
@@ -15,4 +16,6 @@ export const allRules: RuleRunner[] = [
   checkStubContent,
   checkCrossFile,
   checkManifest,
+  // last, so writing-style advice renders below the findings an author has to act on
+  checkWritingStyle,
 ];
