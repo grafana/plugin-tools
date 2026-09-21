@@ -39,6 +39,8 @@ TypeScript types and an app manifest that Grafana reads from the plugin bundle.
   kind if it shouldn't be gated by folders (writes then skip the annotation).
 - **Every role needs a `roleBindings` entry to be granted to anyone.** Defining a role in
   `kinds/manifest.cue` without binding it to a basic role (`viewer`/`editor`/`admin`) leaves it unused.
+- **Set `appDisplayName` in `kinds/manifest.cue`** so the app's roles show a readable name in Grafana's
+  role picker, instead of the raw `appName`.
 - **`admin` currently grants the same actions as `editor`.** Don't design a feature assuming admin has
   extra permissions today.
 

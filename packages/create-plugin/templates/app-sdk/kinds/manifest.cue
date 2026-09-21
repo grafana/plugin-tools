@@ -7,6 +7,10 @@ manifest: {
 	// different group.
 	appName: "{{ pluginId }}"
 
+	// appDisplayName is the human-readable name shown for your app's roles in Grafana's role picker.
+	// Set it to something more readable than appName.
+	appDisplayName: "{{ pluginId }}"
+
 	// versions maps each version your app serves to the kinds it exposes. Version names follow the
 	// format "v<integer>" or "v<integer>(alpha|beta)<integer>".
 	versions: {

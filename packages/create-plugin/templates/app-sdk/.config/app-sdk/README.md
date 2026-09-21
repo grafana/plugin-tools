@@ -93,10 +93,13 @@ Declare custom roles in `kinds/manifest.cue`. A role name follows `<app>:<role>`
 tiers — `viewer` (read), `editor` (read + write), or `admin` (currently identical to `editor` — don't
 design around admin having extra powers yet). Role bindings attach your app's roles to Grafana's basic
 roles (`viewer`, `editor`, `admin`), so every Grafana user inherits the matching app role automatically.
+Set `appDisplayName` so your app shows up with a readable name in the Grafana UI's role picker, instead
+of the raw `appName`.
 
 ```cue
 manifest: {
     appName: "{{ pluginId }}"
+    appDisplayName: "{{ pluginId }}"
     versions: {
         "v1alpha1": v1alpha1
     }
