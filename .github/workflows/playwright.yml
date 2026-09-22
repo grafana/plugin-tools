@@ -92,8 +92,8 @@ jobs:
         run: npm run playwright:test --w @grafana/plugin-e2e
 
       - name: Upload report artifacts
-        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/upload-report-artifacts@6e2b02007105a096f831cada3430fb8077ffd858 # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
-        if: ${{ always() && !cancelled() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false }}
+        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/upload-report-artifacts@5108f0a51da19d13ced054b6ee42259b40722d7c # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
+        if: ${{ always() && !cancelled() }}
         with:
           test-outcome: ${{ steps.run-tests.outcome }}
           report-dir: packages/plugin-e2e/playwright-report
@@ -101,13 +101,13 @@ jobs:
           grafana-version: ${{ matrix.GRAFANA_IMAGE.VERSION }}
 
   publish-report:
-    if: ${{ always() && !cancelled() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false }}
+    if: ${{ always() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
     needs: [playwright-tests]
-    runs-on: ubuntu-x64
+    # Deliberately a reusable workflow call, not the publish-report action inlined into a job
+    # here: the GCS service account trusts only plugin-ci-workflows' own playwright-publish-reports.yml
+    # via job_workflow_ref, so calling the action directly from this repo's workflow can't authenticate.
+    uses: grafana/plugin-ci-workflows/.github/workflows/playwright-publish-reports.yml@5108f0a51da19d13ced054b6ee42259b40722d7c # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
     permissions:
       id-token: write
       pull-requests: write
       contents: read
-    steps:
-      - name: Publish report
-        uses: grafana/plugin-ci-workflows/actions/plugins/playwright-reports/publish-report@6e2b02007105a096f831cada3430fb8077ffd858 # PR grafana/plugin-ci-workflows#819 (GCS reports) - TEMP, do not merge
