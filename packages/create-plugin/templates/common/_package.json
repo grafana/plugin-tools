@@ -31,8 +31,8 @@
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^29.5.0",
     "@types/node": "^24.0.0",
-    "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",{{#if useExperimentalRspack}}
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",{{#if useExperimentalRspack}}
     "@types/ws": "^8.18.1",{{/if}}
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",{{#unless useExperimentalRspack}}
@@ -74,14 +74,14 @@
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
-    "@grafana/data": "13.1.0",
-    "@grafana/i18n": "13.1.0",
-    "@grafana/runtime": "13.1.0",
-    "@grafana/ui": "13.1.0",
-    "@grafana/schema": "13.1.0",{{#if_eq pluginType "scenesapp" }}
+    "@grafana/data": "13.2.2",
+    "@grafana/i18n": "13.2.2",
+    "@grafana/runtime": "13.2.2",
+    "@grafana/ui": "13.2.2",
+    "@grafana/schema": "13.2.2",{{#if_eq pluginType "scenesapp" }}
     "@grafana/scenes": "{{ scenesVersion }}",{{/if_eq}}
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0"{{#if isAppType}},
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"{{#if isAppType}},
     "react-router-dom": "^6.22.0",
     "rxjs": "7.8.2"{{/if}}
   },
