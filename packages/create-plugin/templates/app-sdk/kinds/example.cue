@@ -7,6 +7,9 @@ exampleKind: {
 	pluralName: "Examples"
 	// Namespaced resources are created per-tenant. Use "Cluster" for global resources.
 	scope: "Namespaced"
+	// Namespaced kinds are folder-scoped by default: callers need both the Stack Role (see roles in
+	// manifest.cue) and folder access. Uncomment to opt this kind out of folder scoping.
+	// folderScoped: false
 	codegen: {
 		ts: {
 			enabled: true

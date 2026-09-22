@@ -22,8 +22,8 @@ TypeScript types and an app manifest that Grafana reads from the plugin bundle.
   ```
 - **Generated code is committed.** Commit the regenerated files alongside the CUE change so schema
   changes are reviewable and a fresh clone builds without running code generation.
-- **This plugin generates no Go code.** `kinds/config.cue` sets `codegen: goEnabled: false`, so
-  generation emits only TypeScript and the JSON definitions. Do not add Go output paths or a Go
+- **Go code generation follows `kinds/config.cue`'s `codegen.goEnabled` setting.** If it's `false`,
+  generation emits only TypeScript and the JSON definitions — don't add Go output paths or a Go
   backend to work around a generation problem.
 - **Do not set `GRAFANA_APP_SDK_BIN`.** It overrides the pinned CLI with a local build, and is meant
   for people working on the app-sdk itself. Code generated with it can differ from what `VERSION` in
@@ -31,6 +31,18 @@ TypeScript types and an app manifest that Grafana reads from the plugin bundle.
   `generate:kinds` without it.
 - **Do not add code generation to the build.** It is a schema-change-time step, not a build step. The
   frontend build must keep working without a Go toolchain.
+- **Never write authorization/permission checks in app code.** Access is declared in the manifest and
+  enforced by Grafana's API server, not by this plugin.
+- **A `Namespaced` kind is folder-scoped by default:** callers need the Stack Role *and* folder access,
+  and every write must set the `grafana.app/folder` annotation to a real folder the caller can access —
+  this applies to anything your backend writes on a user's behalf too. Set `folderScoped: false` on the
+  kind if it shouldn't be gated by folders (writes then skip the annotation).
+- **Every role needs a `roleBindings` entry to be granted to anyone.** Defining a role in
+  `kinds/manifest.cue` without binding it to a basic role (`viewer`/`editor`/`admin`) leaves it unused.
+- **Set `appDisplayName` in `kinds/manifest.cue`** so the app's roles show a readable name in Grafana's
+  role picker, instead of the raw `appName`.
+- **`admin` currently grants the same actions as `editor`.** Don't design a feature assuming admin has
+  extra permissions today.
 
 ## Layout
 
@@ -83,5 +95,5 @@ Resources are served under a Kubernetes-style path:
 The namespace is deployment-dependent — `default` on single-tenant Grafana, `stacks-<id>` on Grafana
 Cloud. Read it from `config.namespace` in `@grafana/runtime`; never hardcode it.
 
-This plugin has no Go backend, and does not need one for storage or CRUD. Admission (validation and
-mutation), conversion between versions, and custom routes would require adding one.
+No backend is needed for storage or CRUD — that comes from the manifest alone. Admission (validation
+and mutation), conversion between versions, and custom routes require a backend.
