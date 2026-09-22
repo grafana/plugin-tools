@@ -91,6 +91,13 @@ export default [
       'Support @grafana/ui@13.2.0 in Jest by transforming @react-hookz/web and @ver0/deep-equal ESM dependencies.',
     scriptPath: import.meta.resolve('./scripts/013-jest-esmodules.js'),
   },
+  {
+    name: '014-jest-mjs-transform',
+    version: '7.11.1',
+    description:
+      'Support ESM-only Grafana packages such as @grafana/plugin-compat in Jest by transforming them and matching .mjs files.',
+    scriptPath: import.meta.resolve('./scripts/014-jest-mjs-transform.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
 ] satisfies Migration[];

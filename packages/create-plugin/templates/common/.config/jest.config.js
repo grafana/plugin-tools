@@ -22,7 +22,9 @@ module.exports = {
     '<rootDir>/src/**/*.{spec,test,jest}.{js,jsx,ts,tsx}',
   ],
   transform: {
-    '^.+\\.(t|j)sx?$': [
+    // `.mjs` is matched explicitly: ESM-only packages such as @grafana/plugin-compat ship .mjs files,
+    // which `(t|j)sx?` would otherwise leave untransformed and Jest would fail to load.
+    '^.+\\.(t|j)sx?$|^.+\\.mjs$': [
       '@swc/jest',
       {
         sourceMaps: 'inline',
