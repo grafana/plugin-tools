@@ -94,11 +94,14 @@ export default [
   },
   {
     name: '014-eslint-config-v10',
-    version: '7.11.1',
+    version: '0.0.0-unreleased', // x-release-please-version
     description:
       'Update @grafana/eslint-config to v10: drop the removed ./flat.js subpath import and swap @stylistic/eslint-plugin-ts for @stylistic/eslint-plugin.',
     scriptPath: import.meta.resolve('./scripts/014-eslint-config-v10.js'),
   },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
+  //
+  // New migrations never pick a version: copy the unreleased version line from ../AGENTS.md exactly.
+  // Do not paste it into a comment in this file, as release-please rewrites every line that carries it.
 ] satisfies Migration[];
