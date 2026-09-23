@@ -111,6 +111,9 @@ Note that certain files are intentionally named differently (e.g. npmrc, package
 
 Migrations are scripts that update a particular aspect of a project created with create-plugin. When users run `@grafana/create-plugin@latest update`, the command compares their project's version against the running package version and executes any necessary migrations to bring their project up to date.
 
+> [!TIP]
+> If you use Claude Code, the `write-codemod` skill in [`.claude/skills/write-codemod`](../../.claude/skills/write-codemod/SKILL.md) helps you write migrations and additions. Ask Claude to "write a migration" or run `/write-codemod`.
+
 ```js
 └── src/
     ├── migrations/
