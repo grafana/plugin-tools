@@ -26,6 +26,11 @@ runs:
       run: |
         set -euo pipefail
 
+        # Security: the release branch is only ever read as data through the API, never checked out and run.
+        # It has no review or required checks, so anyone with write access can push to it, while this job holds
+        # the release bot token and runs as main. Running this action's code from the reviewed main checkout
+        # stops unreviewed code pushed to the release branch from executing with those privileges.
+
         # Pin the commit first so the file we read and the commit we write refer to the same branch state.
         head_oid=$(gh api "repos/${GITHUB_REPOSITORY}/branches/${BRANCH}" --jq .commit.sha)
         local_file="${RUNNER_TEMP}/migrations.ts"
