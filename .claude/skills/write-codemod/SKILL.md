@@ -170,17 +170,26 @@ Add to the end of the `default` array in `migrations/migrations.ts`:
 ```ts
 {
   name: 'NNN-migration-title',
-  version: 'X.Y.Z+1',   // next patch from the current @grafana/create-plugin version — see below
+  version: '0.0.0-unreleased', // x-release-please-version
   description: 'One sentence explaining WHY this migration is needed (the problem/consequence), not just what it does.',
   scriptPath: import.meta.resolve('./scripts/NNN-migration-title.js'),
 },
 ```
 
-### `version` field — always the next patch
+### `version` field — never pick one
 
-A plugin records the create-plugin version it was last updated to in `.config/.cprc.json`. `update` selects every registered migration whose `version` falls inside the range from that recorded version to the current create-plugin version (inclusive), runs them in ascending order, then bumps `.cprc.json`.
+Copy this line exactly, including the comment:
 
-Set `version` to the next **patch** of the current version in `packages/create-plugin/package.json` (e.g. `7.3.0` → `7.3.1`), regardless of the semver bump the change will actually ship in. The registry version only gates which migrations run — it is decoupled from the release version chosen by release-please — and the next patch is the lowest possible next version, so the migration is guaranteed to fire on the next release whatever bump that release turns out to be.
+```ts
+version: '0.0.0-unreleased', // x-release-please-version
+```
+
+The release that ships a migration isn't known when it's written. release-please picks the bump from the commits that land afterwards. So new migrations use the `UNRELEASED` sentinel from `src/constants.ts`:
+
+- At runtime the sentinel resolves to the running create-plugin version, so the migration always runs locally, in CI, and in `pkg.pr.new` previews. No version bump is needed to test it.
+- release-please (`extra-files` in `release-please-config.json`) rewrites the value to the released version in the release PR. The `release` job then strips the comment so the next release leaves it alone.
+- It must be the literal string, not `UNRELEASED`: release-please matches digits in the source text. Never paste the line into a comment in `migrations.ts`, because release-please rewrites every line that carries the annotation.
+- `migrations.test.ts` fails the build if the line is missing, changed, or left annotated after release.
 
 Do not use `LEGACY_UPDATE_CUTOFF_VERSION` for new migrations — that constant is reserved for the original batch written before the "updates as migrations" model.
 
@@ -315,4 +324,4 @@ describe('NNN-migration-title', () => {
   ```bash
   npm run test -w @grafana/create-plugin -- --run src/codemods/migrations/scripts/NNN-migration-title.test.ts
   ```
-- For anything non-trivial, run the codemod against a real plugin: follow "How to test a migration locally" in `packages/create-plugin/CONTRIBUTING.md` (link the local build, check `.config/.cprc.json` is below the bumped version, run `npx create-plugin update` in a test plugin) and inspect the resulting diff.
+- For anything non-trivial, run the codemod against a real plugin: follow "How to test a migration locally" in `packages/create-plugin/CONTRIBUTING.md` (link the local build, check `.config/.cprc.json` is below the create-plugin version, run `npx create-plugin update` in a test plugin) and inspect the resulting diff.
