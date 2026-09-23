@@ -1,6 +1,6 @@
 import defaultMigrations, { Migration } from './migrations.js';
 import { runCodemod } from '../runner.js';
-import { gte, satisfies } from 'semver';
+import { compare, satisfies } from 'semver';
 import { CURRENT_APP_VERSION } from '../../utils/utils.version.js';
 import { gitCommitNoVerify } from '../../utils/utils.git.js';
 import { output } from '../../utils/utils.console.js';
@@ -23,7 +23,7 @@ export function getMigrationsToRun(
   return migrations
     .filter((meta) => satisfies(resolveVersion(meta, toVersion), semverRange))
     .sort((a, b) => {
-      return gte(resolveVersion(a, toVersion), resolveVersion(b, toVersion)) ? 1 : -1;
+      return compare(resolveVersion(a, toVersion), resolveVersion(b, toVersion));
     });
 }
 

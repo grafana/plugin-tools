@@ -166,6 +166,26 @@ describe('Migrations', () => {
 
       expect(migrations.map((m) => m.name)).toEqual(['released', 'unreleased']);
     });
+
+    it('should keep declaration order for migrations with the same version', () => {
+      const names = ['012-a', '013-b', '014-c', '015-d', '016-e', '017-f'];
+      const unreleased = names.map((name) => ({
+        name,
+        version: UNRELEASED,
+        description: 'Not yet shipped',
+        scriptPath: `./${name}.js`,
+      }));
+      const released = {
+        name: '011-released',
+        version: '5.3.0',
+        description: 'Shipped in 5.3.0',
+        scriptPath: './011-released.js',
+      };
+
+      const migrations = getMigrationsToRun('2.0.0', '6.0.0', [released, ...unreleased]);
+
+      expect(migrations.map((m) => m.name)).toEqual(['011-released', ...names]);
+    });
   });
 
   describe('runMigrations', () => {
