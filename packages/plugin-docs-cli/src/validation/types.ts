@@ -35,7 +35,6 @@ export const Rule = {
   MaxTotalImagesSize: 'max-total-images-size',
   ImageFileNaming: 'image-file-naming',
   NoOrphanedImages: 'no-orphaned-images',
-  MaxDataUriSize: 'max-data-uri-size',
   // markdown + security rules
   NoRawHtml: 'no-raw-html',
   ImageRefsRelative: 'image-refs-relative',
@@ -56,15 +55,28 @@ export const Rule = {
 export type Rule = (typeof Rule)[keyof typeof Rule];
 
 /**
+ * Id of a writing-style rule, always `style-` plus the kebab-case name of the Grafana Writers'
+ * Toolkit rule it comes from, so `Grafana.ReferTo` is reported as `style-refer-to`. These are
+ * derived from the vendored rule definitions rather than enumerated in `Rule`, so `ALLOWED_RULES`
+ * in `rules/style.ts` stays the single source of truth for which ones exist.
+ */
+export type StyleRuleId = `style-${string}`;
+
+/**
  * A diagnostic reported by a rule runner.
  */
 export interface Diagnostic {
-  rule: Rule;
+  rule: Rule | StyleRuleId;
   severity: Severity;
   file?: string;
   line?: number;
   title: string;
   detail: string;
+  /**
+   * Authoritative documentation for this rule. Set on writing-style diagnostics so a reader - or
+   * an agent fixing them - can look up the full guidance for a rule only once they have tripped it.
+   */
+  url?: string;
 }
 
 /**
