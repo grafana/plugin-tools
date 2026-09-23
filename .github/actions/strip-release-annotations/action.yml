@@ -1,0 +1,60 @@
+name: Strip release annotations
+description: >-
+  Removes x-release-please-version annotations from create-plugin migrations once release-please has written the
+  release version into them, so the next release does not re-stamp them. Commits to the release pull request branch
+  through the GitHub API, which signs the commit.
+inputs:
+  token:
+    description: A token that can push to the release pull request branch.
+    required: true
+  branch:
+    description: The release pull request head branch.
+    required: true
+  path:
+    description: The migrations registry, relative to the repository root.
+    required: false
+    default: packages/create-plugin/src/codemods/migrations/migrations.ts
+runs:
+  using: composite
+  steps:
+    - name: Strip and commit
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        BRANCH: ${{ inputs.branch }}
+        FILE: ${{ inputs.path }}
+      run: |
+        set -euo pipefail
+
+        # Pin the commit first so the file we read and the commit we write refer to the same branch state.
+        head_oid=$(gh api "repos/${GITHUB_REPOSITORY}/branches/${BRANCH}" --jq .commit.sha)
+        local_file="${RUNNER_TEMP}/migrations.ts"
+        gh api "repos/${GITHUB_REPOSITORY}/contents/${FILE}?ref=${head_oid}" --jq .content | base64 -d > "${local_file}"
+
+        stripped=$(node "${GITHUB_ACTION_PATH}/strip.mjs" "${local_file}")
+        if [ "${stripped}" = "0" ]; then
+          echo "No release-please annotations to strip."
+          exit 0
+        fi
+
+        # createCommitOnBranch fails instead of overwriting if the branch has moved since head_oid.
+        jq -n \
+          --arg repo "${GITHUB_REPOSITORY}" \
+          --arg branch "${BRANCH}" \
+          --arg oid "${head_oid}" \
+          --arg path "${FILE}" \
+          --arg contents "$(base64 -w0 "${local_file}")" \
+          '{
+            query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }",
+            variables: {
+              input: {
+                branch: { repositoryNameWithOwner: $repo, branchName: $branch },
+                expectedHeadOid: $oid,
+                message: { headline: "chore: strip release-please annotations from migrations" },
+                fileChanges: { additions: [{ path: $path, contents: $contents }] }
+              }
+            }
+          }' > "${RUNNER_TEMP}/strip-commit.json"
+
+        gh api graphql --input "${RUNNER_TEMP}/strip-commit.json" --jq .data.createCommitOnBranch.commit.oid
+        echo "Stripped ${stripped} release-please annotation(s) from ${FILE}."
