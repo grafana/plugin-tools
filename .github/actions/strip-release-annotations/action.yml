@@ -26,7 +26,7 @@ runs:
       run: |
         set -euo pipefail
 
-        # Security: read the release branch as data only. It's unreviewed, and this job holds the release token.
+        # Security: read the release branch as data only. It's unreviewed code and this job holds the release token.
 
         # Pin the commit first so the file we read and the commit we write refer to the same branch state.
         head_oid=$(gh api "repos/${GITHUB_REPOSITORY}/branches/${BRANCH}" --jq .commit.sha)

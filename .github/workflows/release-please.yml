@@ -32,7 +32,7 @@ jobs:
 
       # release-please rewrites "0.0.0-unreleased" create-plugin migrations using its extra-files config.
       # Here we strip the annotations on the release PR branch so future releases don't re-stamp them.
-      # Security: keep this on main. Never check out the unreviewed release branch here.
+      # Checks out main so the action can only run reviewed code.
       - name: Checkout repository
         if: ${{ steps.release.outputs.prs_created == 'true' }}
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
