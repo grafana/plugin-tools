@@ -2,6 +2,7 @@ import { flushChanges, formatFiles, printChanges } from '../utils.js';
 import { getMigrationsToRun, runMigrations } from './manager.js';
 
 import { Context } from '../context.js';
+import { UNRELEASED } from '../../constants.js';
 import { Migration } from './migrations.js';
 import { gitCommitNoVerify } from '../../utils/utils.git.js';
 import migrationFixtures from './fixtures/migrations.js';
@@ -126,6 +127,44 @@ describe('Migrations', () => {
         'migration-key2',
         'migration-key1',
       ]);
+    });
+
+    it('should always include unreleased migrations', () => {
+      const migrations = getMigrationsToRun('5.1.0', '5.5.0', [
+        {
+          name: 'released',
+          version: '5.0.0',
+          description: 'Already applied to plugins at 5.1.0',
+          scriptPath: './released.js',
+        },
+        {
+          name: 'unreleased',
+          version: UNRELEASED,
+          description: 'Not yet shipped',
+          scriptPath: './unreleased.js',
+        },
+      ]);
+
+      expect(migrations.map((m) => m.name)).toEqual(['unreleased']);
+    });
+
+    it('should run unreleased migrations after released ones', () => {
+      const migrations = getMigrationsToRun('2.0.0', '6.0.0', [
+        {
+          name: 'unreleased',
+          version: UNRELEASED,
+          description: 'Not yet shipped',
+          scriptPath: './unreleased.js',
+        },
+        {
+          name: 'released',
+          version: '5.3.0',
+          description: 'Shipped in 5.3.0',
+          scriptPath: './released.js',
+        },
+      ]);
+
+      expect(migrations.map((m) => m.name)).toEqual(['released', 'unreleased']);
     });
   });
 

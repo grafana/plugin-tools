@@ -5,6 +5,13 @@ import { CURRENT_APP_VERSION } from '../../utils/utils.version.js';
 import { gitCommitNoVerify } from '../../utils/utils.git.js';
 import { output } from '../../utils/utils.console.js';
 import { setRootConfig } from '../../utils/utils.config.js';
+import { UNRELEASED } from '../../constants.js';
+
+// An unreleased migration has not shipped in any version a plugin can be on yet, so it resolves to the
+// version being updated to. That keeps it inside the range, and running it last.
+function resolveVersion(migration: Migration, toVersion: string): string {
+  return migration.version === UNRELEASED ? toVersion : migration.version;
+}
 
 export function getMigrationsToRun(
   fromVersion: string,
@@ -14,9 +21,9 @@ export function getMigrationsToRun(
   const semverRange = `${fromVersion} - ${toVersion}`;
 
   return migrations
-    .filter((meta) => satisfies(meta.version, semverRange))
+    .filter((meta) => satisfies(resolveVersion(meta, toVersion), semverRange))
     .sort((a, b) => {
-      return gte(a.version, b.version) ? 1 : -1;
+      return gte(resolveVersion(a, toVersion), resolveVersion(b, toVersion)) ? 1 : -1;
     });
 }
 
