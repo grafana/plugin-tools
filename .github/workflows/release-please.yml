@@ -30,12 +30,11 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      # release-please rewrites the unreleased create-plugin migrations (extra-files). Strip their annotations on the
-      # release PR branch so the next release does not re-stamp them. Runs in this job so the concurrency group
-      # serialises it with release-please's own pushes to the branch.
+      # release-please rewrites "0.0.0-unreleased" create-plugin migrations using its extra-files config.
+      # Here we strip the annotations on the release PR branch so future releases don't re-stamp them.
       - name: Checkout repository
         if: ${{ steps.release.outputs.prs_created == 'true' }}
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
