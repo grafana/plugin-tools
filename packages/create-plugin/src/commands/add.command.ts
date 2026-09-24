@@ -1,7 +1,11 @@
-import defaultAdditions, { isScriptAddition } from '../codemods/additions/additions.js';
+import defaultAdditions, { hasPromptStep, isScriptAddition } from '../codemods/additions/additions.js';
+import { prepareAgenticAddition, runAgenticStep } from '../codemods/agentic/index.js';
+import { buildDirectiveBlock, buildNextStepsLine, getPromptPath } from '../codemods/agentic/prompts.js';
+import { Context } from '../codemods/context.js';
 import { runCodemod } from '../codemods/runner.js';
 import { getPackageManagerExecCmd, getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
 import { performPreCodemodChecks } from '../utils/utils.checks.js';
+import { isGitDirectoryClean } from '../utils/utils.git.js';
 import minimist from 'minimist';
 import { output } from '../utils/utils.console.js';
 
@@ -22,22 +26,67 @@ export const add = async (argv: minimist.ParsedArgs) => {
       throw new Error(`Unknown addition: ${subCommand}\n\nAvailable additions: ${additionsList.join(', ')}`);
     }
 
-    if (!isScriptAddition(addition)) {
-      throw new Error(`Addition ${addition.name} has no codemod to run.`);
+    // filter out minimist internal properties (_ and $0) and the agent flag before passing to codemod
+    const { _, $0, agent: agentFlag, ...codemodOptions } = argv;
+
+    // resolved before any codemod work so a missing agent cannot leave a half-applied addition.
+    // undefined when this addition carries no agent instructions
+    const resolution = await prepareAgenticAddition(addition, agentFlag);
+
+    // captured before the codemod flushes, so we know whether --force let unrelated changes through
+    const treeWasDirty = resolution?.mode === 'enabled' ? !(await isGitDirectoryClean()) : false;
+
+    let context: Context | undefined;
+    if (isScriptAddition(addition)) {
+      context = await runCodemod(addition, codemodOptions);
     }
 
-    // filter out minimist internal properties (_ and $0) before passing to codemod
-    const { _, $0, ...codemodOptions } = argv;
-    const context = await runCodemod(addition, codemodOptions);
-
-    const message = context.getMessage();
+    const message = context?.getMessage();
     if (message) {
       output[message.level]({ title: message.title, body: message.body });
-    } else {
+    }
+
+    if (!resolution || !hasPromptStep(addition)) {
+      if (!message) {
+        output.success({
+          title: `Successfully added ${addition.name} to your plugin.`,
+        });
+      }
+      return;
+    }
+
+    if (resolution.mode === 'enabled') {
+      const result = await runAgenticStep({
+        addition,
+        agent: resolution.agent,
+        context,
+        basePath: process.cwd(),
+        treeWasDirty,
+      });
+
       output.success({
         title: `Successfully added ${addition.name} to your plugin.`,
+        body: result.kind === 'applied' ? [result.summary] : undefined,
       });
+      return;
     }
+
+    // opted out, or already running inside an agent: the agent step is handed onwards
+    const deferredAddition = {
+      name: addition.name,
+      description: addition.description,
+      instructionsPath: getPromptPath(addition.prompt),
+    };
+
+    if (resolution.mode === 'inside-agent') {
+      output.logSingleLine(buildDirectiveBlock(deferredAddition));
+      return;
+    }
+
+    output.warning({
+      title: `${addition.name} includes AI-agent instructions that were not applied.`,
+      body: [buildNextStepsLine(deferredAddition)],
+    });
   } catch (error) {
     if (error instanceof Error) {
       output.error({
