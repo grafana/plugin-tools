@@ -1,10 +1,10 @@
 import { flushChanges, formatFiles, printChanges } from '../utils.js';
-import { getMigrationsToRun, runMigrations } from './manager.js';
+import { getMigrationsToRun, isUpToDate, runMigrations } from './manager.js';
 
 import { Context } from '../context.js';
 import { UNRELEASED } from '../../constants.js';
 import { Migration } from './migrations.js';
-import { gitCommitNoVerify } from '../../utils/utils.git.js';
+import { gitCommitNoVerify, isGitDirectoryClean } from '../../utils/utils.git.js';
 import migrationFixtures from './fixtures/migrations.js';
 import { setRootConfig } from '../../utils/utils.config.js';
 import { vi } from 'vitest';
@@ -35,6 +35,7 @@ vi.mock('../../utils/utils.config.js', () => ({
 }));
 vi.mock('../../utils/utils.git.js', () => ({
   gitCommitNoVerify: vi.fn(),
+  isGitDirectoryClean: vi.fn(),
 }));
 
 vi.mock('@libs/version', () => ({
@@ -44,6 +45,40 @@ vi.mock('@libs/version', () => ({
 describe('Migrations', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(isGitDirectoryClean).mockResolvedValue(false);
+  });
+
+  describe('isUpToDate', () => {
+    const released: Migration = {
+      name: '001-released',
+      version: '5.0.0',
+      description: 'Shipped in 5.0.0',
+      scriptPath: './001-released.js',
+    };
+    const unreleased: Migration = {
+      name: '002-unreleased',
+      version: UNRELEASED,
+      description: 'Not yet shipped',
+      scriptPath: './002-unreleased.js',
+    };
+
+    it('should be up to date when the plugin is on the running version', () => {
+      expect(isUpToDate('5.0.0', '5.0.0', [released])).toBe(true);
+    });
+
+    it('should not be up to date when the plugin is behind the running version', () => {
+      expect(isUpToDate('4.0.0', '5.0.0', [released])).toBe(false);
+    });
+
+    it('should be up to date when the plugin is ahead of the running version', () => {
+      expect(isUpToDate('6.0.0', '5.0.0', [released, unreleased])).toBe(true);
+    });
+
+    it('should not be up to date on the running version when there are unreleased migrations', () => {
+      // Local and preview builds report the latest release version, so plugins already on it must still get
+      // unreleased migrations.
+      expect(isUpToDate('5.0.0', '5.0.0', [released, unreleased])).toBe(false);
+    });
   });
 
   describe('getMigrationsToRun', () => {
@@ -270,6 +305,17 @@ describe('Migrations', () => {
 
       // 1 migration commit (only migration-one has changes) + 1 version update commit = 2 total
       expect(gitCommitNoVerify).toHaveBeenCalledTimes(2);
+    });
+
+    it('should not create a version update commit when nothing changed', async () => {
+      // Re-running unreleased migrations on a plugin already on the running version leaves .cprc.json as it was.
+      migrationOneFn.mockImplementation(async (context: Context) => context);
+      migrationTwoFn.mockImplementation(async (context: Context) => context);
+      vi.mocked(isGitDirectoryClean).mockResolvedValue(true);
+
+      await runMigrations(migrations, { commitEachMigration: true });
+
+      expect(gitCommitNoVerify).not.toHaveBeenCalled();
     });
 
     it('should update version in ".config/.cprc.json" on a successful update', async () => {

@@ -1,8 +1,8 @@
 import defaultMigrations, { Migration } from './migrations.js';
 import { runCodemod } from '../runner.js';
-import { compare, satisfies } from 'semver';
+import { compare, eq, gt, satisfies } from 'semver';
 import { CURRENT_APP_VERSION } from '../../utils/utils.version.js';
-import { gitCommitNoVerify } from '../../utils/utils.git.js';
+import { gitCommitNoVerify, isGitDirectoryClean } from '../../utils/utils.git.js';
 import { output } from '../../utils/utils.console.js';
 import { setRootConfig } from '../../utils/utils.config.js';
 import { UNRELEASED } from '../../constants.js';
@@ -11,6 +11,24 @@ import { UNRELEASED } from '../../constants.js';
 // version being updated to. That keeps it inside the range, and running it last.
 function resolveVersion(migration: Migration, toVersion: string): string {
   return migration.version === UNRELEASED ? toVersion : migration.version;
+}
+
+// Local and preview builds report the latest release version, so a plugin already on it still needs its unreleased
+// migrations.
+export function isUpToDate(
+  fromVersion: string,
+  toVersion: string,
+  migrations: Migration[] = defaultMigrations
+): boolean {
+  if (gt(fromVersion, toVersion)) {
+    return true;
+  }
+
+  if (eq(fromVersion, toVersion)) {
+    return !migrations.some((migration) => migration.version === UNRELEASED);
+  }
+
+  return false;
 }
 
 export function getMigrationsToRun(
@@ -52,7 +70,8 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
 
   await setRootConfig({ version: CURRENT_APP_VERSION });
 
-  if (options.commitEachMigration) {
+  // Nothing to commit when only unreleased migrations re-ran on a plugin already on this version.
+  if (options.commitEachMigration && !(await isGitDirectoryClean())) {
     await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`);
   }
 }
