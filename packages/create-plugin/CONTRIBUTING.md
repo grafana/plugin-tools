@@ -111,6 +111,9 @@ Note that certain files are intentionally named differently (e.g. npmrc, package
 
 Migrations are scripts that update a particular aspect of a project created with create-plugin. When users run `@grafana/create-plugin@latest update`, the command compares their project's version against the running package version and executes any necessary migrations to bring their project up to date.
 
+> [!TIP]
+> If you use Claude Code, the `write-codemod` skill in [`.claude/skills/write-codemod`](../../.claude/skills/write-codemod/SKILL.md) helps you write migrations and additions. Ask Claude to "write a migration" or run `/write-codemod`.
+
 ```js
 └── src/
     ├── migrations/
@@ -135,18 +138,25 @@ The update command follows these steps:
 
 #### How to add a migration?
 
-1. Create a new migration script file with a descriptive name (e.g. `add-webpack-profile.ts`)
-2. Register your migration in `migrations.ts`:
+1. Create a new migration script file named with the next number in sequence and a short summary (e.g. `015-add-webpack-profile.ts`)
+2. Register your migration at the end of the array in `migrations.ts`:
 
    ```typescript
-   migrations: {
-      'add-webpack-profile': {
-         version: '5.13.0',
-         description: 'Update build command to use webpack profile flag.',
-         migrationScript: './scripts/add-webpack-profile.js',
-      },
+   {
+     name: '015-add-webpack-profile',
+     version: '0.0.0-unreleased', // x-release-please-version
+     description: 'Update build command to use webpack profile flag.',
+     scriptPath: import.meta.resolve('./scripts/015-add-webpack-profile.js'),
    },
    ```
+
+   Copy the `version` line exactly, including the comment. Don't choose a version yourself: the release that ships
+   your migration isn't known until release-please opens the release pull request.
+   - `0.0.0-unreleased` is the `UNRELEASED` constant. It resolves to the running create-plugin version, so your
+     migration runs locally, in CI, and in `pkg.pr.new` previews.
+   - release-please replaces it with the released version in the release pull request, and the release workflow
+     removes the comment.
+   - The registry tests in `migrations.test.ts` fail if the line or the comment is missing or changed.
 
 3. Write your migration script:
 
@@ -227,6 +237,5 @@ describe('Migration - append profile to webpack', () => {
 
 To test a migration locally you'll need a plugin to test on.
 
-- Bump the version of create-plugin _(This can be necessary if your plugin was already updated using the latest create-plugin version.)_
-- Verify that the `.config/.cprc.json` in your plugin has a version that is lower than the bumped `create-plugin` version. `.cprc.json` holds the version of `create-plugin` that was used to scaffold or make the last update of the plugin.
+- Verify that the `.config/.cprc.json` in your plugin has a version no higher than the version in `packages/create-plugin/package.json`. `.cprc.json` holds the version of `create-plugin` that was used to scaffold or make the last update of the plugin. You don't need to bump the create-plugin version: unreleased migrations run even when the plugin is on the current version.
 - Run `npx create-plugin update` in your plugin (see instructions on how to link your create-plugin dev version)

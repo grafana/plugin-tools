@@ -5,7 +5,15 @@ This guide provides specific instructions for working with migrations and additi
 ## Agent Behavior
 
 - Refer to current migrations and additions typescript files found in @./additions/scripts and @./migrations/scripts
-- When creating a new migration add it to the exported migrations object in @./migrations/migrations.ts
+- When creating a new migration add it to the end of the exported migrations array in @./migrations/migrations.ts
+- Never choose a version for a new migration. Use this `version` line exactly, including the comment, and never paste it into a comment in @./migrations/migrations.ts:
+
+  ```ts
+  version: '0.0.0-unreleased', // x-release-please-version
+  ```
+
+  release-please replaces it with the released version. The registry tests in @./migrations/migrations.test.ts enforce this
+
 - Always refer to @./context.ts to know what methods are available on the context class
 - Always check for file existence using the @./context.ts class before attempting to do anything with it
 - Never write files with any 3rd party npm library. Use the context for all file operations

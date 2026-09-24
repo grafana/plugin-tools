@@ -53,6 +53,8 @@ jobs:
         run: npm exec nx affected -- --target lint --parallel
       - name: Unit tests
         run: npm exec nx affected -- --target test --run
+      - name: Unit tests (release actions)
+        run: node --test '.github/actions/strip-release-annotations/*.test.mjs'
       - name: Build all packages
         run: npm run build
       - name: Lint built packages

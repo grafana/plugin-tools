@@ -30,6 +30,22 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
+      # release-please rewrites "0.0.0-unreleased" create-plugin migrations using its extra-files config.
+      # Here we strip the annotations on the release PR branch so future releases don't re-stamp them.
+      # Checks out main so the action can only run reviewed code.
+      - name: Checkout repository
+        if: ${{ steps.release.outputs.prs_created == 'true' }}
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Strip release annotations from migrations
+        if: ${{ steps.release.outputs.prs_created == 'true' }}
+        uses: ./.github/actions/strip-release-annotations
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          branch: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
+
   publish:
     needs: release
     if: ${{ needs.release.outputs.releases_created == 'true' }}
