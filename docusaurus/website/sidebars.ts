@@ -195,6 +195,7 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'how-to-guides/add-anonymous-usage-reporting',
+        'how-to-guides/add-features-to-a-plugin',
         'how-to-guides/add-user-storage',
         'how-to-guides/extend-configurations',
         {
