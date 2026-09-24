@@ -1,4 +1,4 @@
-import defaultAdditions from '../codemods/additions/additions.js';
+import defaultAdditions, { isScriptAddition } from '../codemods/additions/additions.js';
 import { runCodemod } from '../codemods/runner.js';
 import { getPackageManagerExecCmd, getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
 import { performPreCodemodChecks } from '../utils/utils.checks.js';
@@ -20,6 +20,10 @@ export const add = async (argv: minimist.ParsedArgs) => {
     if (!addition) {
       const additionsList = defaultAdditions.map((addition) => addition.name);
       throw new Error(`Unknown addition: ${subCommand}\n\nAvailable additions: ${additionsList.join(', ')}`);
+    }
+
+    if (!isScriptAddition(addition)) {
+      throw new Error(`Addition ${addition.name} has no codemod to run.`);
     }
 
     // filter out minimist internal properties (_ and $0) before passing to codemod
