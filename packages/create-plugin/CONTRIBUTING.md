@@ -237,5 +237,5 @@ describe('Migration - append profile to webpack', () => {
 
 To test a migration locally you'll need a plugin to test on.
 
-- Verify that the `.config/.cprc.json` in your plugin has a version lower than the version in `packages/create-plugin/package.json`. `.cprc.json` holds the version of `create-plugin` that was used to scaffold or make the last update of the plugin. You don't need to bump the create-plugin version: unreleased migrations always run.
+- Verify that the `.config/.cprc.json` in your plugin has a version no higher than the version in `packages/create-plugin/package.json`. `.cprc.json` holds the version of `create-plugin` that was used to scaffold or make the last update of the plugin. You don't need to bump the create-plugin version: unreleased migrations run even when the plugin is on the current version.
 - Run `npx create-plugin update` in your plugin (see instructions on how to link your create-plugin dev version)

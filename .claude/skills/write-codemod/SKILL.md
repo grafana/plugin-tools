@@ -324,4 +324,4 @@ describe('NNN-migration-title', () => {
   ```bash
   npm run test -w @grafana/create-plugin -- --run src/codemods/migrations/scripts/NNN-migration-title.test.ts
   ```
-- For anything non-trivial, run the codemod against a real plugin: follow "How to test a migration locally" in `packages/create-plugin/CONTRIBUTING.md` (link the local build, check `.config/.cprc.json` is below the create-plugin version, run `npx create-plugin update` in a test plugin) and inspect the resulting diff.
+- For anything non-trivial, run the codemod against a real plugin: follow "How to test a migration locally" in `packages/create-plugin/CONTRIBUTING.md` (link the local build, check `.config/.cprc.json` is no higher than the create-plugin version, run `npx create-plugin update` in a test plugin) and inspect the resulting diff.
