@@ -94,7 +94,7 @@ export default [
   },
   {
     name: '014-eslint-config-v10',
-    version: '0.0.0-unreleased', // x-release-please-version
+    version: '7.11.1',
     description:
       'Update @grafana/eslint-config to v10: drop the removed ./flat.js subpath import and swap @stylistic/eslint-plugin-ts for @stylistic/eslint-plugin.',
     scriptPath: import.meta.resolve('./scripts/014-eslint-config-v10.js'),
