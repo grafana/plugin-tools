@@ -15,15 +15,17 @@ export async function resolveAgenticMode(options: ResolveAgenticOptions): Promis
   const isTTY = options.isTTY ?? Boolean(process.stdout.isTTY && process.stdin.isTTY);
   const detect = options.detect ?? detectInstalledAgents;
 
+  // checked before the inside-agent probe: --no-agent means no agent at all, and handing the step to an
+  // outer agent via a directive block would contradict that
+  if (options.agentFlag === false) {
+    return { mode: 'opted-out', reason: 'flag' };
+  }
+
   if (isInsideAgent(options.env)) {
     output.log({
       title: 'Running inside an AI agent. The agent step will be handed to it instead of spawning another agent.',
     });
     return { mode: 'inside-agent' };
-  }
-
-  if (options.agentFlag === false) {
-    return { mode: 'opted-out', reason: 'flag' };
   }
 
   // the agent session is interactive, so it cannot run without a terminal to attach to

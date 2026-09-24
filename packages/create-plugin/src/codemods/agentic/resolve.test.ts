@@ -57,8 +57,13 @@ describe('resolveAgenticMode', () => {
     expect(resolution).toEqual({ mode: 'inside-agent' });
   });
 
-  it('should resolve to disabled when --no-agent is passed', async () => {
+  it('should resolve to opted-out when --no-agent is passed', async () => {
     const resolution = await resolveAgenticMode(createOptions({ agentFlag: false }));
+    expect(resolution).toEqual({ mode: 'opted-out', reason: 'flag' });
+  });
+
+  it('should honour --no-agent even when running inside an agent', async () => {
+    const resolution = await resolveAgenticMode(createOptions({ agentFlag: false, env: { CLAUDECODE: '1' } }));
     expect(resolution).toEqual({ mode: 'opted-out', reason: 'flag' });
   });
 
@@ -118,7 +123,7 @@ describe('resolveAgenticMode', () => {
     ).rejects.toThrow(/not installed/i);
   });
 
-  it('should disable when no flag is passed and nothing is installed', async () => {
+  it('should resolve to unavailable when no flag is passed and nothing is installed', async () => {
     const resolution = await resolveAgenticMode(createOptions({ detect: vi.fn().mockResolvedValue([]) }));
     expect(resolution).toEqual({ mode: 'unavailable', reason: 'no-agents' });
     expect(confirmPromptMock).not.toHaveBeenCalled();
@@ -130,7 +135,7 @@ describe('resolveAgenticMode', () => {
     expect(resolution).toEqual({ mode: 'enabled', agent: claude });
   });
 
-  it('should disable when the user declines the confirm prompt', async () => {
+  it('should resolve to opted-out when the user declines the confirm prompt', async () => {
     confirmPromptMock.mockResolvedValue(false);
     const resolution = await resolveAgenticMode(createOptions());
     expect(resolution).toEqual({ mode: 'opted-out', reason: 'declined' });
