@@ -23,3 +23,26 @@ This guide provides specific instructions for working with migrations and additi
   - `NNN-migration-title.ts` - main migration logic
   - `NNN-migration-title.test.ts` - migration logic tests
 - Each migration should export a default function named "migrate"
+
+## Addition shapes
+
+An addition registry entry in @./additions/additions.ts takes one of three shapes:
+
+- **Script addition** — `scriptPath` only. A codemod applies the change automatically.
+- **Prompt addition** — `prompt` only. A Markdown instructions file that an installed AI agent, or the user by hand, applies. Use when the change touches user-authored code or configuration that a codemod cannot transform reliably.
+- **Hybrid addition** — `scriptPath` and `prompt`. The codemod applies the deterministic part first, then the agent finishes the parts that depend on user code.
+
+Prefer a script addition whenever the change is mechanically expressible. Reach for a prompt only when judgement over user-authored code is unavoidable.
+
+The registry is annotated `Addition[]` rather than using `satisfies`. With `satisfies` the inferred element type stays the object literal, which stops `isScriptAddition` and `hasPromptStep` narrowing it for consumers.
+
+## Prompt authoring rules
+
+Prompt files live under @./additions/prompts as `<addition-name>.md`, matching the subcommand the user types, and are registered with `prompt: import.meta.resolve('./prompts/<addition-name>.md')`. See @./additions/prompts/example-prompt.md for a template. Rules:
+
+- **Standalone**: when no agent is used the file is surfaced to the user to apply by hand, so it must read as complete manual instructions with no agent-specific context.
+- **State the starting state, and check it**: a hybrid prompt is always read on a project where the codemod half has already run, and a user may take the codemod half with `--no-agent` and come back for the agent half later. Start with how to detect that there is nothing to do.
+- **No handoff or completion mechanics**: the agent handoff contract is injected by the system prompt at run time and does not exist on the manual path.
+- **Bounded scope**: include a "Verify" section (what command proves it worked) and an "Out of scope" section (at minimum: never modify `.config/`).
+- **No `toBeIdempotent`**: agent output is not deterministic and cannot be made so, unlike a script codemod. Describe the end state you want and how to confirm it rather than promising a specific diff. What the design guarantees instead is reviewability — the session is interactive, the tree is clean beforehand so `git diff` is exactly the agent's work, and nothing is committed.
+- The registry test in @./additions/additions.test.ts asserts every registered `prompt` file exists. Prompt files ship verbatim to `dist` via `copyAssets()` in the root rollup config.
