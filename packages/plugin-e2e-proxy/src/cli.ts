@@ -1,0 +1,148 @@
+import { defaultConfig, loadConfig } from './config.js';
+import { summarizeFields } from './fields.js';
+import { readHar, writeHar } from './har.js';
+import { redactExistingHar } from './offlineRedact.js';
+import { findProvisionedSecrets } from './provisioning.js';
+import { SecretScrubber } from './redact.js';
+import { scanHar } from './scan.js';
+import { startProxyServer } from './server.js';
+import { loadOrCreateCA } from './tls.js';
+import type { ProxyMode } from './types.js';
+
+export interface CliArgs {
+  command: string;
+  options: Record<string, string>;
+}
+
+const KNOWN_COMMANDS = ['serve', 'scan', 'fields', 'redact'];
+
+/** A deliberately small `--key value` parser - the flag set here doesn't need a general-purpose library. */
+export function parseArgs(argv: string[]): CliArgs {
+  const [command, ...rest] = argv;
+  const options: Record<string, string> = {};
+  for (let i = 0; i < rest.length; i++) {
+    const token = rest[i];
+    if (!token.startsWith('--')) {
+      continue;
+    }
+    const key = token.slice(2);
+    const next = rest[i + 1];
+    if (next !== undefined && !next.startsWith('--')) {
+      options[key] = next;
+      i++;
+    } else {
+      options[key] = 'true';
+    }
+  }
+  return { command: command ?? '', options };
+}
+
+function requireOption(options: Record<string, string>, name: string): string {
+  const value = options[name];
+  if (!value) {
+    throw new Error(`missing required --${name}`);
+  }
+  return value;
+}
+
+async function loadConfigOrDefault(configPath: string | undefined): Promise<ReturnType<typeof defaultConfig>> {
+  if (!configPath) {
+    return defaultConfig();
+  }
+  return loadConfig(configPath);
+}
+
+export async function runServe(options: Record<string, string>): Promise<void> {
+  const mode = requireOption(options, 'mode') as ProxyMode;
+  if (mode !== 'record' && mode !== 'replay') {
+    throw new Error(`--mode must be "record" or "replay", got "${mode}"`);
+  }
+  const harPath = requireOption(options, 'har');
+  const config = await loadConfigOrDefault(options.config);
+  const caDir = options['ca-dir'] ?? `${harPath}.ca`;
+  const ca = await loadOrCreateCA(caDir);
+  const knownSecrets = options.provisioning ? await findProvisionedSecrets(options.provisioning) : {};
+  const port = options.port ? Number(options.port) : 8080;
+
+  const proxy = await startProxyServer({ mode, config, harPath, ca, knownSecrets, port });
+  console.log(`plugin-e2e-proxy listening on :${proxy.port} in ${mode} mode, CA at ${caDir}/ca.pem`);
+
+  const shutdown = async (): Promise<void> => {
+    const summary = await proxy.close();
+    if (summary) {
+      if (summary.findings.length > 0) {
+        console.error(`refused to write ${harPath}: ${summary.findings.length} finding(s) - see the scan command`);
+        process.exitCode = 1;
+      } else {
+        console.log(`wrote ${summary.entries} entr${summary.entries === 1 ? 'y' : 'ies'} to ${harPath}`);
+      }
+    }
+    console.log(
+      `matched=${proxy.stats.matched} missed=${proxy.stats.missed} recorded=${proxy.stats.recorded} passthrough=${proxy.stats.passthrough}`
+    );
+    if (proxy.stats.missed > 0) {
+      process.exitCode = 1;
+    }
+  };
+
+  process.once('SIGINT', () => void shutdown().then(() => process.exit()));
+  process.once('SIGTERM', () => void shutdown().then(() => process.exit()));
+}
+
+export async function runScan(options: Record<string, string>): Promise<void> {
+  const harPath = requireOption(options, 'har');
+  const knownSecrets = options.provisioning ? await findProvisionedSecrets(options.provisioning) : {};
+  const har = await readHar(harPath);
+  const findings = scanHar(har, harPath, new SecretScrubber(knownSecrets));
+
+  if (findings.length === 0) {
+    console.log(`${harPath}: no findings`);
+    return;
+  }
+  for (const finding of findings) {
+    console.log(`${finding.file} entry ${finding.entry} [${finding.location}] ${finding.rule}: ${finding.preview}`);
+  }
+  process.exitCode = 1;
+}
+
+export async function runFields(options: Record<string, string>): Promise<void> {
+  const harPath = requireOption(options, 'har');
+  const har = await readHar(harPath);
+  const fields = summarizeFields(har);
+  for (const field of fields) {
+    console.log(`${field.path}\t${field.samples.join(', ')}`);
+  }
+}
+
+export async function runRedact(options: Record<string, string>): Promise<void> {
+  const harPath = requireOption(options, 'har');
+  const config = await loadConfigOrDefault(options.config);
+  const knownSecrets = options.provisioning ? await findProvisionedSecrets(options.provisioning) : {};
+  const har = await readHar(harPath);
+  const redacted = redactExistingHar(har, config, knownSecrets);
+
+  const findings = scanHar(redacted, harPath, new SecretScrubber(knownSecrets));
+  if (findings.length > 0) {
+    for (const finding of findings) {
+      console.error(`${finding.file} entry ${finding.entry} [${finding.location}] ${finding.rule}: ${finding.preview}`);
+    }
+    throw new Error(`refusing to write ${harPath}: ${findings.length} finding(s) remain after redaction`);
+  }
+
+  await writeHar(harPath, redacted, config);
+  console.log(`rewrote ${redacted.log.entries.length} entries in ${harPath}`);
+}
+
+export async function main(argv: string[]): Promise<void> {
+  const { command, options } = parseArgs(argv);
+  if (!KNOWN_COMMANDS.includes(command)) {
+    throw new Error(`usage: plugin-e2e-proxy <${KNOWN_COMMANDS.join('|')}> [--flags]`);
+  }
+  const handlers: Record<string, (options: Record<string, string>) => Promise<void>> = {
+    serve: runServe,
+    scan: runScan,
+    fields: runFields,
+    redact: runRedact,
+  };
+  await handlers[command](options);
+}

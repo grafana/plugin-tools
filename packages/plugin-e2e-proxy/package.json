@@ -1,0 +1,41 @@
+{
+  "name": "@grafana/plugin-e2e-proxy",
+  "version": "0.0.0",
+  "description": "Record and replay the HTTP traffic between a Grafana datasource plugin and its third-party API",
+  "repository": {
+    "type": "git",
+    "directory": "packages/plugin-e2e-proxy",
+    "url": "https://github.com/grafana/plugin-tools"
+  },
+  "author": "Grafana",
+  "license": "Apache-2.0",
+  "bin": "./dist/bin/run.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "rollup -c ../../rollup.config.ts --configPlugin esbuild",
+    "dev": "npm run build -- -w",
+    "lint": "eslint --cache ./src",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:package": "publint",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "node-forge": "1.4.0"
+  },
+  "devDependencies": {
+    "@types/node-forge": "1.3.14"
+  }
+}

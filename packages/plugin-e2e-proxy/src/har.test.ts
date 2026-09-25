@@ -1,0 +1,72 @@
+import { describe, expect, it } from 'vitest';
+import { mergeConfig } from './config.js';
+import { emptyHar, ReplayStore, toHarEntry } from './har.js';
+import type { CapturedRequest, CapturedResponse } from './types.js';
+
+function req(url = 'https://api.example.com/v1/status'): CapturedRequest {
+  return { method: 'GET', url, headers: {}, body: Buffer.from('') };
+}
+
+function res(body: string): CapturedResponse {
+  return { status: 200, statusText: 'OK', headers: { 'content-type': 'application/json' }, body: Buffer.from(body) };
+}
+
+describe('ReplayStore', () => {
+  it('returns undefined (a miss) for a request with no recording', () => {
+    const har = emptyHar();
+    const store = new ReplayStore(har, mergeConfig({}));
+    expect(store.next(req(), mergeConfig({}))).toBeUndefined();
+  });
+
+  it('replays two identical requests in the order they were recorded', () => {
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res('{"state":"running"}'), new Date(), 1));
+    har.log.entries.push(toHarEntry(req(), res('{"state":"succeeded"}'), new Date(), 1));
+    const config = mergeConfig({});
+    const store = new ReplayStore(har, config);
+
+    expect(store.next(req(), config)?.response.content.text).toBe('{"state":"running"}');
+    expect(store.next(req(), config)?.response.content.text).toBe('{"state":"succeeded"}');
+  });
+
+  it('repeats the last response once the recorded sequence is exhausted', () => {
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res('{"state":"running"}'), new Date(), 1));
+    har.log.entries.push(toHarEntry(req(), res('{"state":"succeeded"}'), new Date(), 1));
+    const config = mergeConfig({});
+    const store = new ReplayStore(har, config);
+
+    store.next(req(), config);
+    store.next(req(), config);
+    expect(store.next(req(), config)?.response.content.text).toBe('{"state":"succeeded"}');
+    expect(store.next(req(), config)?.response.content.text).toBe('{"state":"succeeded"}');
+  });
+});
+
+describe('ReplayStore.closestMatch', () => {
+  it('finds a recorded request with the same method/host/path and reports what differs', () => {
+    const har = emptyHar();
+    const recorded: CapturedRequest = {
+      method: 'POST',
+      url: 'https://api.example.com/v1/query',
+      headers: { 'content-type': 'application/json' },
+      body: Buffer.from(JSON.stringify({ query: 'select 1' })),
+    };
+    har.log.entries.push(toHarEntry(recorded, res('{"ok":true}'), new Date(), 1));
+    const config = mergeConfig({});
+    const store = new ReplayStore(har, config);
+
+    const missed: CapturedRequest = { ...recorded, body: Buffer.from(JSON.stringify({ query: 'select 2' })) };
+    const closest = store.closestMatch(missed, config);
+
+    expect(closest?.url).toBe(recorded.url);
+    expect(closest?.differences).toContain('body differs');
+  });
+
+  it('returns undefined when nothing with that method/host/path was ever recorded', () => {
+    const har = emptyHar();
+    const config = mergeConfig({});
+    const store = new ReplayStore(har, config);
+    expect(store.closestMatch(req(), config)).toBeUndefined();
+  });
+});

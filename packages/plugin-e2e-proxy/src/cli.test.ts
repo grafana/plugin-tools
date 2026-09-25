@@ -1,0 +1,108 @@
+import { mkdtemp, rm, writeFile } from 'fs/promises';
+import { tmpdir } from 'os';
+import { join } from 'path';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { parseArgs, runFields, runRedact, runScan } from './cli.js';
+import { emptyHar, readHar, toHarEntry } from './har.js';
+import type { CapturedRequest, CapturedResponse } from './types.js';
+
+describe('parseArgs', () => {
+  it('reads the command and --key value pairs', () => {
+    expect(parseArgs(['serve', '--mode', 'record', '--har', 'e2e/api.har'])).toEqual({
+      command: 'serve',
+      options: { mode: 'record', har: 'e2e/api.har' },
+    });
+  });
+
+  it('treats a flag with no following value as boolean true', () => {
+    expect(parseArgs(['scan', '--verbose'])).toEqual({ command: 'scan', options: { verbose: 'true' } });
+  });
+});
+
+function req(): CapturedRequest {
+  return { method: 'GET', url: 'https://api.example.com/v1/items', headers: {}, body: Buffer.from('') };
+}
+
+function res(body: object): CapturedResponse {
+  return {
+    status: 200,
+    statusText: 'OK',
+    headers: { 'content-type': 'application/json' },
+    body: Buffer.from(JSON.stringify(body)),
+  };
+}
+
+describe('CLI subcommands', () => {
+  let dir: string;
+  let harPath: string;
+  let logSpy: ReturnType<typeof vi.spyOn>;
+  let errorSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(async () => {
+    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-cli-'));
+    harPath = join(dir, 'api.har');
+    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(async () => {
+    logSpy.mockRestore();
+    errorSpy.mockRestore();
+    process.exitCode = undefined;
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  it('scan reports no findings on a clean recording and does not set an exit code', async () => {
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res({ ok: true }), new Date(), 1));
+    await writeFile(harPath, JSON.stringify(har));
+
+    await runScan({ har: harPath });
+
+    expect(process.exitCode).toBeUndefined();
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('no findings'));
+  });
+
+  it('scan sets a non-zero exit code when it finds something', async () => {
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res({ key: 'AKIAABCDEFGHIJKLMNOP' }), new Date(), 1));
+    await writeFile(harPath, JSON.stringify(har));
+
+    await runScan({ har: harPath });
+
+    expect(process.exitCode).toBe(1);
+  });
+
+  it('fields lists distinct field paths with sample values', async () => {
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res({ user: { email: 'a@example.com' } }), new Date(), 1));
+    await writeFile(harPath, JSON.stringify(har));
+
+    await runFields({ har: harPath });
+
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('user.email'));
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('a@example.com'));
+  });
+
+  it('redact rewrites the har file using a proxy.json rule added after recording', async () => {
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res({ user: { email: 'real@example.com' } }), new Date(), 1));
+    await writeFile(harPath, JSON.stringify(har));
+
+    const configPath = join(dir, 'proxy.json');
+    await writeFile(configPath, JSON.stringify({ redactFields: ['email'] }));
+
+    await runRedact({ har: harPath, config: configPath });
+
+    const rewritten = await readHar(harPath);
+    expect(JSON.parse(rewritten.log.entries[0].response.content.text)).toEqual({ user: { email: 'REDACTED' } });
+  });
+
+  it('redact reads secrets from provisioning and refuses to write if scanning still finds something', async () => {
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res({ key: 'AKIAABCDEFGHIJKLMNOP' }), new Date(), 1));
+    await writeFile(harPath, JSON.stringify(har));
+
+    await expect(runRedact({ har: harPath })).rejects.toThrow(/refusing to write/);
+  });
+});
