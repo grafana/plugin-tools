@@ -53,3 +53,4 @@ packed-artifacts/
 # Don't commit local claude settings
 .claude/settings.local.json
 .claude/hooks
+.claude/worktrees
