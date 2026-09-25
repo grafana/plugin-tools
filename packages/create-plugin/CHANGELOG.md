@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.12.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.12.0...@grafana/create-plugin@7.12.1) (2026-09-25)
+
+
+### Bug Fixes
+
+* **create-plugin:** bump grafana-app-sdk to v0.60.3 in experimental-app-sdk ([#2899](https://github.com/grafana/plugin-tools/issues/2899)) ([f57e8a8](https://github.com/grafana/plugin-tools/commit/f57e8a837d36c1b5e566ad81cf8fe426337aca88))
+
 ## [7.12.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.11.0...@grafana/create-plugin@7.12.0) (2026-09-22)
 
 
