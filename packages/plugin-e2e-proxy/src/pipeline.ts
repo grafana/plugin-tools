@@ -6,23 +6,6 @@ import type { CapturedRequest, CapturedResponse, ProxyConfig } from './types.js'
 /** Always stored, whatever keepHeaders says: never a secret, and both sides need it to parse the body. */
 const ALWAYS_KEPT_HEADERS = ['content-type'];
 
-/** Query params that carry a credential by convention, redacted even when the value isn't a known secret. */
-const CREDENTIAL_QUERY_PARAMS = new Set([
-  'access_token',
-  'api-key',
-  'api_key',
-  'apikey',
-  'client_secret',
-  'key',
-  'password',
-  'sig',
-  'signature',
-  'token',
-  'x-amz-credential',
-  'x-amz-security-token',
-  'x-amz-signature',
-]);
-
 /**
  * Turns a real request/response pair into what gets written to disk: only allowlisted headers,
  * redacted and faked JSON fields, and every known secret value scrubbed out of what's left.
@@ -55,7 +38,7 @@ export function sanitizeRequest(
 ): CapturedRequest {
   return {
     ...req,
-    url: scrubber.scrub(redactCredentialQueryParams(req.url), scrubCounts),
+    url: scrubber.scrub(redactCredentialQueryParams(req.url, config.credentialQueryParams), scrubCounts),
     headers: scrubHeaderValues(keepAllowlisted(req.headers, config.keepHeaders), scrubber, scrubCounts),
     body: scrubBuffer(req.body, scrubber, scrubCounts),
   };
@@ -81,10 +64,11 @@ function keepAllowlisted(headers: Record<string, string>, allowlist: string[]): 
   return Object.fromEntries(Object.entries(headers).filter(([name]) => kept.has(name.toLowerCase())));
 }
 
-function redactCredentialQueryParams(rawUrl: string): string {
+function redactCredentialQueryParams(rawUrl: string, credentialQueryParams: string[]): string {
   const url = new URL(rawUrl);
+  const credentialNames = new Set(credentialQueryParams.map((name) => name.toLowerCase()));
   const credentialParams = [...new Set(url.searchParams.keys())].filter((name) =>
-    CREDENTIAL_QUERY_PARAMS.has(name.toLowerCase())
+    credentialNames.has(name.toLowerCase())
   );
   if (credentialParams.length === 0) {
     return rawUrl;

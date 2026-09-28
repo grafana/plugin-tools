@@ -154,7 +154,9 @@ function handleReplay(
     const closest = replayStore.closestMatch(request, config);
     const miss: Miss = { method: request.method, url: request.url, closest };
     misses.push(miss);
-    log(`miss ${describeRequest(request)}${closest ? ` - closest recording: ${closest.differences.join(', ')}` : ''}`);
+    log(
+      `miss ${describeRequest(request, config)}${closest ? ` - closest recording: ${closest.differences.join(', ')}` : ''}`
+    );
     // 501, not 502: AWS and other SDKs retry 502s with backoff, which only delays the failure
     sendJson(res, 501, {
       error: 'no recording',
@@ -192,17 +194,23 @@ async function handleRecord(
   const sanitized = sanitizeForRecording(captured, upstream, config, scrubber, fakeStore, scrubCounts);
   recordedEntries.push(toHarEntry(sanitized.req, sanitized.res, startedAt, durationMs));
   stats.recorded++;
-  log(`recorded ${describeRequest(sanitized.req)} -> ${upstream.status}`);
+  log(`recorded ${describeRequest(sanitized.req, config)} -> ${upstream.status}`);
 
   // the plugin gets the real, unsanitized response - only the recording on disk is sanitized
   sendResponse(res, upstream);
 }
 
-/** Sanitized, so it's safe to log: e.g. "POST redshift-data.us-east-2.amazonaws.com/ RedshiftData.ExecuteStatement". */
-function describeRequest(req: CapturedRequest): string {
+/**
+ * Sanitized, so it's safe to log. Values of kept headers are included, since some APIs only name
+ * the operation in one: "POST redshift-data.us-east-2.amazonaws.com/ RedshiftData.ExecuteStatement".
+ */
+function describeRequest(req: CapturedRequest, config: ProxyConfig): string {
   const url = new URL(req.url);
-  const target = req.headers['x-amz-target'];
-  return `${req.method} ${url.hostname}${url.pathname}${target ? ` ${target}` : ''}`;
+  const operation = config.keepHeaders
+    .filter((name) => !['accept', 'content-type'].includes(name))
+    .map((name) => req.headers[name])
+    .filter(Boolean);
+  return [`${req.method} ${url.hostname}${url.pathname}`, ...operation].join(' ');
 }
 
 async function finalizeRecording(

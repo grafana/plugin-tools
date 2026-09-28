@@ -4,6 +4,9 @@ export type ProxyMode = (typeof PROXY_MODES)[number];
 export const FAKE_KINDS = ['email', 'username', 'name', 'ip', 'string'] as const;
 export type FakeKind = (typeof FAKE_KINDS)[number];
 
+export const PRESETS = ['aws'] as const;
+export type Preset = (typeof PRESETS)[number];
+
 export interface ProxyConfig {
   /** Hosts to record and replay. Exact names or a leading `*.` wildcard. */
   hosts: string[];
@@ -15,6 +18,8 @@ export interface ProxyConfig {
   ignoreFields: string[];
   /** Query params that are left out when matching. */
   ignoreQueryParams: string[];
+  /** Query params whose value is a credential by convention, redacted even when it isn't a known secret. */
+  credentialQueryParams: string[];
   /** `host/path` prefixes whose request body is left out when matching. */
   ignoreBodyFor: string[];
   /** Response JSON fields replaced with `REDACTED`, at any depth. */

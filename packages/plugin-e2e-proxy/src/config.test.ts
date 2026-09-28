@@ -23,3 +23,22 @@ describe('hostIsRecorded', () => {
     expect(hostIsRecorded('notamazonaws.com', config)).toBe(false);
   });
 });
+
+describe('presets', () => {
+  it('adds the aws preset on top of the defaults', () => {
+    const config = mergeConfig({ preset: 'aws' });
+    expect(config.keepHeaders).toEqual(['content-type', 'accept', 'x-amz-target']);
+    expect(config.ignoreFields).toContain('ClientToken');
+  });
+
+  it('adds the aws preset on top of lists you set yourself, instead of being replaced by them', () => {
+    const config = mergeConfig({ preset: 'aws', keepHeaders: ['content-type'], ignoreFields: ['requestId'] });
+    expect(config.keepHeaders).toEqual(['content-type', 'x-amz-target']);
+    expect(config.ignoreFields).toEqual(['requestId', 'ClientToken', 'ClientRequestToken', 'IdempotencyToken']);
+  });
+
+  it('keeps AWS names out of the defaults', () => {
+    const defaults = JSON.stringify(defaultConfig());
+    expect(defaults).not.toMatch(/amz|SecretAccessKey|SessionToken|ClientToken/i);
+  });
+});
