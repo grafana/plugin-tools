@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import http from 'node:http';
 import net from 'node:net';
+import path from 'node:path';
 import tls from 'node:tls';
 import { hostIsRecorded } from './config.js';
 import { Correlator } from './correlation.js';
@@ -17,6 +18,8 @@ export interface ProxyServerOptions {
   config: ProxyConfig;
   harPath: string;
   ca: CertKeyPair;
+  /** Directory where the CA cert and any other .pem files are stored; served over HTTP for Grafana startup. */
+  caDir?: string;
   knownSecrets: Record<string, string>;
   port?: number;
   /** How long record mode waits after the last new entry before writing the recording. */
@@ -84,6 +87,12 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
   async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
     try {
       const forcedOrigin = (req.socket as SocketWithOrigin).__forcedOrigin;
+
+      // direct request to the proxy itself (not a CONNECT-tunnelled or absolute-form proxy request)
+      if (!forcedOrigin && req.url && !req.url.startsWith('http')) {
+        await serveAdminFile(req.url, res, options.ca.certPem, options.caDir ?? '');
+        return;
+      }
       const captured = await captureRequest(req, forcedOrigin);
       const host = new URL(captured.url).hostname;
 
@@ -322,6 +331,30 @@ function passthroughTunnel(
   serverSocket.on('close', () => clientSocket.destroy());
   clientSocket.on('error', () => serverSocket.destroy());
   clientSocket.on('close', () => serverSocket.destroy());
+}
+
+/**
+ * Serves .pem files from the CA directory over HTTP so Grafana can fetch the proxy CA cert at
+ * startup without a shared volume. Never serves ca-key.pem (the private key).
+ */
+async function serveAdminFile(url: string, res: http.ServerResponse, caCertPem: string, caDir: string): Promise<void> {
+  if (url === '/ca.pem') {
+    res.writeHead(200, { 'Content-Type': 'application/x-pem-file', 'Cache-Control': 'no-store' });
+    res.end(caCertPem);
+    return;
+  }
+  const filename = url.slice(1);
+  if (filename.endsWith('.pem') && !filename.includes('/') && filename !== 'ca-key.pem') {
+    try {
+      const content = await fs.readFile(path.join(caDir, filename), 'utf8');
+      res.writeHead(200, { 'Content-Type': 'application/x-pem-file', 'Cache-Control': 'no-store' });
+      res.end(content);
+      return;
+    } catch {
+      // fall through to 404
+    }
+  }
+  sendJson(res, 404, { error: 'not found' });
 }
 
 function listen(server: http.Server, port: number): Promise<number> {
