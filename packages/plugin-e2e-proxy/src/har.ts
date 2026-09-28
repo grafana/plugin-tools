@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { decodeUtf8Strict } from './bytes.js';
+import { findFollowedUpEntries } from './followups.js';
 import type { CapturedRequest, CapturedResponse, Har, HarEntry, HarNameValue, ProxyConfig } from './types.js';
 import { buildMatchKey, describeDifferences, matchKeyToString, type MatchKey } from './match.js';
 
@@ -129,7 +130,8 @@ function toNameValue(headers: Record<string, string>): HarNameValue[] {
 /**
  * Serves recorded responses for replay. Requests that map to the same match key are replayed
  * in the order they were recorded (so a polling loop sees "running" then "succeeded"), and the
- * last response in the sequence repeats once the sequence is exhausted.
+ * last response in the sequence repeats once the sequence is exhausted. Responses whose new
+ * identifiers were never used afterwards are skipped when others were, see `findFollowedUpEntries`.
  */
 export class ReplayStore {
   private readonly sequences = new Map<string, HarEntry[]>();
@@ -145,6 +147,16 @@ export class ReplayStore {
       sequence.push(entry);
       this.sequences.set(key, sequence);
       this.structuredKeys.set(key, structuredKey);
+    }
+
+    // a request recorded many times may include executions the client abandoned; replaying one of
+    // those leaves its follow-up (a status poll for that query ID) with nothing to match
+    const followedUp = findFollowedUpEntries(har.log.entries);
+    for (const [key, sequence] of this.sequences) {
+      const used = sequence.filter((entry) => followedUp.has(entry));
+      if (used.length > 0 && used.length < sequence.length) {
+        this.sequences.set(key, used);
+      }
     }
   }
 
