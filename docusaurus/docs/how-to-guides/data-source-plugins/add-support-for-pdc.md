@@ -182,7 +182,7 @@ Other example PRs:
 
 Check if we can set the `Transport` object (usually an `http.RoundTripper`). Then it’s possible to use `httpclient.GetTransport(opts ...Options)` to obtain the `Transport` object and set it in the library or connector.
 
-### Verifying that the changes are working
+### Verify that the changes are working
 
 #### Test with a Grafana Cloud instance
 
