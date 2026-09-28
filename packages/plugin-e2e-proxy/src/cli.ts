@@ -1,3 +1,6 @@
+import { generateKeyPairSync } from 'node:crypto';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import { defaultConfig, loadConfig } from './config.js';
 import { summarizeFields } from './fields.js';
 import { readHar, writeHar } from './har.js';
@@ -14,7 +17,7 @@ export interface CliArgs {
   options: Record<string, string>;
 }
 
-const KNOWN_COMMANDS = ['serve', 'scan', 'fields', 'redact'];
+const KNOWN_COMMANDS = ['serve', 'scan', 'fields', 'redact', 'keygen'];
 
 /** A deliberately small `--key value` parser - the flag set here doesn't need a general-purpose library. */
 export function parseArgs(argv: string[]): CliArgs {
@@ -143,6 +146,27 @@ export async function runRedact(options: Record<string, string>): Promise<void> 
   console.log(`rewrote ${redacted.log.entries.length} entries in ${harPath}`);
 }
 
+/**
+ * Writes a throwaway RSA private key, for plugins whose auth signs requests locally (e.g. a Google
+ * service account JWT). Replay needs a key that can sign, but never one with real access, and
+ * generating it means no key file is ever committed. Keeps an existing key unless --force is set.
+ */
+export async function runKeygen(options: Record<string, string>): Promise<void> {
+  const outPath = requireOption(options, 'out');
+  const exists = await fs.access(outPath).then(
+    () => true,
+    () => false
+  );
+  if (exists && options.force !== 'true') {
+    console.log(`kept existing key at ${outPath}`);
+    return;
+  }
+  const { privateKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
+  await fs.mkdir(path.dirname(outPath), { recursive: true });
+  await fs.writeFile(outPath, privateKey.export({ type: 'pkcs8', format: 'pem' }), { mode: 0o600 });
+  console.log(`wrote a throwaway RSA key to ${outPath}`);
+}
+
 export async function main(argv: string[]): Promise<void> {
   const { command, options } = parseArgs(argv);
   if (!KNOWN_COMMANDS.includes(command)) {
@@ -153,6 +177,7 @@ export async function main(argv: string[]): Promise<void> {
     scan: runScan,
     fields: runFields,
     redact: runRedact,
+    keygen: runKeygen,
   };
   await handlers[command](options);
 }

@@ -1,8 +1,9 @@
-import { mkdtemp, rm, writeFile } from 'fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { parseArgs, runFields, runRedact, runScan } from './cli.js';
+import { createPrivateKey } from 'node:crypto';
+import { parseArgs, runFields, runKeygen, runRedact, runScan } from './cli.js';
 import { emptyHar, readHar, toHarEntry } from './har.js';
 import type { CapturedRequest, CapturedResponse } from './types.js';
 
@@ -85,6 +86,16 @@ describe('CLI subcommands', () => {
 
     delete process.env.VENDOR_API_KEY;
     expect(process.exitCode).toBe(1);
+  });
+
+  it('keygen writes a usable RSA key, and keeps it on a second run', async () => {
+    const keyPath = join(dir, 'keys', 'dummy-key.pem');
+    await runKeygen({ out: keyPath });
+    const first = await readFile(keyPath, 'utf8');
+    expect(createPrivateKey(first).asymmetricKeyType).toBe('rsa');
+
+    await runKeygen({ out: keyPath });
+    expect(await readFile(keyPath, 'utf8')).toBe(first);
   });
 
   it('fields lists distinct field paths with sample values', async () => {
