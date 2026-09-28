@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.3.0...@grafana/plugin-docs-cli@0.4.0) (2026-09-22)
+
+
+### Features
+
+* **plugin-docs-cli:** add writing-style validation rules ([#2866](https://github.com/grafana/plugin-tools/issues/2866)) ([4668e57](https://github.com/grafana/plugin-tools/commit/4668e57b7f043420198c1bf79b03c739d5c7aff3))
+
 ## [0.3.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.2.2...@grafana/plugin-docs-cli@0.3.0) (2026-09-16)
 
 

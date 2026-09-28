@@ -2,6 +2,7 @@ import { LEGACY_UPDATE_CUTOFF_VERSION } from '../../constants.js';
 import { Codemod } from '../types.js';
 
 export interface Migration extends Codemod {
+  /** The create-plugin release that shipped this migration, or UNRELEASED if it has not shipped yet. */
   version: string;
 }
 
@@ -100,4 +101,7 @@ export default [
   },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
+  //
+  // New migrations never pick a version: copy the unreleased version line from ../AGENTS.md exactly.
+  // Do not paste it into a comment in this file, as release-please rewrites every line that carries it.
 ] satisfies Migration[];

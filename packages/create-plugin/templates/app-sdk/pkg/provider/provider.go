@@ -2,6 +2,7 @@ package provider
 
 import (
 	"github.com/grafana/grafana-app-sdk/app"
+	"github.com/grafana/grafana-app-sdk/plugin"
 	"github.com/grafana/grafana-app-sdk/simple"
 
 	examplev1alpha1 "github.com/{{ kebabCase orgName }}/{{ kebabCase pluginName }}/pkg/generated/example/v1alpha1"
@@ -18,9 +19,12 @@ func New() app.Provider {
 // config. Attach a Validator, Mutator, or Reconciler per kind as you need one — see
 // simple.AppManagedKind and ./.config/AGENTS/app-sdk.md.
 func newApp(cfg app.Config) (app.App, error) {
+	// The client generator creates clients for interacting with resources.
+	clientGenerator := plugin.BuildClientGenerator(cfg.KubeConfig)
+
 	return simple.NewApp(simple.AppConfig{
-		Name:       "{{ pluginId }}",
-		KubeConfig: cfg.KubeConfig,
+		Name:            "{{ pluginId }}",
+		ClientGenerator: clientGenerator,
 		ManagedKinds: []simple.AppManagedKind{
 			{
 				Kind: examplev1alpha1.Kind(),

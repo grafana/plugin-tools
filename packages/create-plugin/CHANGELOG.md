@@ -1,5 +1,18 @@
 # Changelog
 
+## [7.12.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.11.0...@grafana/create-plugin@7.12.0) (2026-09-22)
+
+
+### Features
+
+* **deps:** bump grafana libs to latest in templates in create plugin ([#2893](https://github.com/grafana/plugin-tools/issues/2893)) ([d3c3f4b](https://github.com/grafana/plugin-tools/commit/d3c3f4b2a775d9bfcb0a9209a0c62a2ef16bbd58))
+
+
+### Bug Fixes
+
+* **create-plugin:** Improve experimental-app-sdk templates with RBAC guidance. ([#2892](https://github.com/grafana/plugin-tools/issues/2892)) ([ec59abe](https://github.com/grafana/plugin-tools/commit/ec59abe7f7508e6dc206a24a0658d121d64b3f1f))
+* **create-plugin:** support @grafana/eslint-config v10 in scaffold ([#2873](https://github.com/grafana/plugin-tools/issues/2873)) ([67f6fec](https://github.com/grafana/plugin-tools/commit/67f6fec1321943ae8062e130745b37f3e45c1d72))
+
 ## [7.11.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.10.1...@grafana/create-plugin@7.11.0) (2026-09-16)
 
 

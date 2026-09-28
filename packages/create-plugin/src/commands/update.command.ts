@@ -1,10 +1,10 @@
-import { getMigrationsToRun, runMigrations } from '../codemods/migrations/manager.js';
+import { getMigrationsToRun, isUpToDate, runMigrations } from '../codemods/migrations/manager.js';
 import {
   getPackageManagerExecCmd,
   getPackageManagerSilentInstallCmd,
   getPackageManagerWithFallback,
 } from '../utils/utils.packageManager.js';
-import { gte, lt } from 'semver';
+import { lt } from 'semver';
 import { performPreCodemodChecks } from '../utils/utils.checks.js';
 
 import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
@@ -23,7 +23,7 @@ export const update = async (argv: minimist.ParsedArgs) => {
   }
 
   try {
-    if (gte(version, CURRENT_APP_VERSION)) {
+    if (isUpToDate(version, CURRENT_APP_VERSION)) {
       output.log({
         title: 'Nothing to update, exiting.',
       });

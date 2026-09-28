@@ -42,6 +42,12 @@ export enum PLUGIN_TYPES {
 // Plugins >= 5.27.1 use the new migration-based update system.
 export const LEGACY_UPDATE_CUTOFF_VERSION = '5.27.1';
 
+// Version placeholder for a migration that has not been released yet. It resolves to the running
+// create-plugin version, so the migration runs in local dev, CI and preview builds. release-please
+// replaces it with the released version (see `extra-files` in release-please-config.json).
+// Must stay semver-shaped: release-please only rewrites strings that look like a version.
+export const UNRELEASED = '0.0.0-unreleased';
+
 // This gets merged into variables coming from user prompts (when scaffolding) or any other dynamic variables,
 // and will be available to use in the templates.
 export const EXTRA_TEMPLATE_VARIABLES = {

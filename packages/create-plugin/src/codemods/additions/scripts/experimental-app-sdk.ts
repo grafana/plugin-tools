@@ -248,7 +248,7 @@ function wireGoBackend(context: Context) {
 }
 
 // The go.mod version for grafana-app-sdk and its plugin/ submodule.
-const GRAFANA_APP_SDK_VERSION = 'v0.60.0';
+const GRAFANA_APP_SDK_VERSION = 'v0.60.3';
 
 /**
  * Adds github.com/grafana/grafana-app-sdk and its plugin/ submodule to go.mod. The generated Go kind

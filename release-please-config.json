@@ -22,7 +22,11 @@
     { "type": "ci", "section": "CI", "hidden": true }
   ],
   "packages": {
-    "packages/create-plugin": { "package-name": "@grafana/create-plugin", "component": "@grafana/create-plugin" },
+    "packages/create-plugin": {
+      "package-name": "@grafana/create-plugin",
+      "component": "@grafana/create-plugin",
+      "extra-files": ["src/codemods/migrations/migrations.ts"]
+    },
     "packages/eslint-plugin-plugins": {
       "package-name": "@grafana/eslint-plugin-plugins",
       "component": "@grafana/eslint-plugin-plugins"
