@@ -431,3 +431,59 @@ describe('startProxyServer: recording survives a killed proxy', () => {
     await waitFor(async () => (await exists(`${harPath}.quarantine.json`)) && !(await exists(harPath)));
   });
 });
+
+describe('startProxyServer: host discovery', () => {
+  let dir: string;
+  let apiServer: http.Server;
+  let tunnelTarget: net.Server;
+  let proxy: ProxyServerHandle | undefined;
+
+  beforeEach(async () => {
+    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-hosts-'));
+    apiServer = http.createServer((_req, res) => res.end('ok'));
+    tunnelTarget = net.createServer((socket) => socket.end());
+    await Promise.all([
+      new Promise<void>((resolve) => apiServer.listen(0, resolve)),
+      new Promise<void>((resolve) => tunnelTarget.listen(0, '127.0.0.1', resolve)),
+    ]);
+  });
+
+  afterEach(async () => {
+    await proxy?.close().catch(() => undefined);
+    proxy = undefined;
+    await new Promise((resolve) => apiServer.close(resolve));
+    await new Promise((resolve) => tunnelTarget.close(resolve));
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  const portOf = (server: http.Server | net.Server): number => {
+    const address = server.address();
+    return typeof address === 'object' && address ? address.port : 0;
+  };
+
+  it('lists hosts it passed through, once each and in first-seen order, for plain HTTP and CONNECT', async () => {
+    const lines: string[] = [];
+    const ca = await loadOrCreateCA(join(dir, 'ca'));
+    proxy = await startProxyServer({
+      mode: 'replay',
+      config: mergeConfig({ hosts: ['recorded.example.com'] }),
+      harPath: join(dir, 'api.har'),
+      ca,
+      knownSecrets: {},
+      log: (line) => lines.push(line),
+    });
+
+    await requestThroughProxy(proxy.port, `http://localhost:${portOf(apiServer)}/a`);
+    await requestThroughProxy(proxy.port, `http://localhost:${portOf(apiServer)}/b`);
+    const tunnel = net.connect(proxy.port, '127.0.0.1');
+    await new Promise<void>((resolve) => {
+      tunnel.once('data', () => resolve());
+      tunnel.write(`CONNECT 127.0.0.1:${portOf(tunnelTarget)} HTTP/1.1\r\n\r\n`);
+    });
+    tunnel.destroy();
+
+    expect(proxy.passthroughHosts).toEqual(['localhost', '127.0.0.1']);
+    expect(proxy.stats.passthrough).toBe(3);
+    expect(lines.filter((line) => line.startsWith('passthrough'))).toHaveLength(2);
+  });
+});

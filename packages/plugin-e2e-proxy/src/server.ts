@@ -28,6 +28,8 @@ export interface ProxyServerHandle {
   port: number;
   stats: ProxyStats;
   misses: Miss[];
+  /** Hosts traffic went to without being recorded, in first-seen order, to help fill in `hosts`. */
+  passthroughHosts: string[];
   /** Stops the server. In record mode, writes any entries not yet on disk and returns a summary. */
   close(): Promise<SaveSummary | undefined>;
 }
@@ -84,8 +86,8 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
       const host = new URL(captured.url).hostname;
 
       if (!hostIsRecorded(host, config)) {
+        notePassthrough(host);
         const upstream = await forwardRequest(captured);
-        stats.passthrough++;
         sendResponse(res, upstream);
         return;
       }
@@ -112,10 +114,21 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
   };
   server.on('connection', track);
 
+  const passthroughHosts: string[] = [];
+  function notePassthrough(host: string): void {
+    stats.passthrough++;
+    if (!passthroughHosts.includes(host)) {
+      passthroughHosts.push(host);
+      log(`passthrough ${host} - not recorded, add it to "hosts" in proxy.json if the plugin calls it`);
+    }
+  }
+
   server.on('connect', (req, clientSocket, head) => {
-    void handleConnect(req, clientSocket as net.Socket, head, config, certStore, server, track).catch(() => {
-      clientSocket.destroy();
-    });
+    void handleConnect(req, clientSocket as net.Socket, head, config, certStore, server, track, notePassthrough).catch(
+      () => {
+        clientSocket.destroy();
+      }
+    );
   });
 
   const port = await listen(server, options.port ?? 0);
@@ -124,6 +137,7 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
     port,
     stats,
     misses,
+    passthroughHosts,
     async close() {
       const closed = new Promise<void>((resolve) => server.close(() => resolve()));
       openSockets.forEach((socket) => socket.destroy());
@@ -255,12 +269,14 @@ async function handleConnect(
   config: ProxyConfig,
   certStore: CertificateStore,
   server: http.Server,
-  track: (socket: net.Socket) => void
+  track: (socket: net.Socket) => void,
+  notePassthrough: (host: string) => void
 ): Promise<void> {
   const [targetHost, targetPortRaw] = (req.url ?? '').split(':');
   const targetPort = Number(targetPortRaw || 443);
 
   if (!hostIsRecorded(targetHost, config)) {
+    notePassthrough(targetHost);
     return passthroughTunnel(clientSocket, targetHost, targetPort, head, track);
   }
 

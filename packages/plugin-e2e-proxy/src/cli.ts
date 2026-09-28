@@ -86,6 +86,9 @@ export async function runServe(options: Record<string, string>): Promise<void> {
     console.log(
       `matched=${proxy.stats.matched} missed=${proxy.stats.missed} recorded=${proxy.stats.recorded} passthrough=${proxy.stats.passthrough}`
     );
+    if (proxy.passthroughHosts.length > 0) {
+      console.log(`passed through without recording: ${proxy.passthroughHosts.join(', ')}`);
+    }
     if (proxy.stats.missed > 0) {
       process.exitCode = 1;
     }
