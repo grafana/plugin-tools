@@ -28,6 +28,12 @@ jobs:
           repo_secrets: |
             NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
 
+      # get-vault-secrets v2 no longer exports env vars, and Nx reads the token from the environment.
+      - name: Export Nx Cloud token
+        env:
+          NX_CLOUD_ACCESS_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).NX_CLOUD_ACCESS_TOKEN }}
+        run: echo "NX_CLOUD_ACCESS_TOKEN=${NX_CLOUD_ACCESS_TOKEN}" >> "$GITHUB_ENV"
+
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

@@ -30,6 +30,13 @@ jobs:
           repo_secrets: |
             NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
 
+      # get-vault-secrets v2 no longer exports env vars, and Nx reads the token from the environment.
+      - name: Export Nx Cloud token
+        if: ${{ github.event.pull_request.head.repo.fork != true }}
+        env:
+          NX_CLOUD_ACCESS_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).NX_CLOUD_ACCESS_TOKEN }}
+        run: echo "NX_CLOUD_ACCESS_TOKEN=${NX_CLOUD_ACCESS_TOKEN}" >> "$GITHUB_ENV"
+
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -98,7 +105,6 @@ jobs:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
             GRAFANA_ACCESS_POLICY_TOKEN=gcom_access_policy_token:gcom_access_policy_token
-          export_env: false
 
       - name: Setup nodejs
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -292,9 +298,9 @@ jobs:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
           repo_secrets: |
             GRAFANA_ACCESS_POLICY_TOKEN=gcom_access_policy_token:gcom_access_policy_token
-          export_env: false
 
       - name: Get secrets for DockerHub login
+        id: get-dockerhub-secrets
         if: ${{ github.event.pull_request.head.repo.fork != true }}
         uses: grafana/shared-workflows/actions/get-vault-secrets@2f1ddaf3ce1aa677356243d0dd584be33cfa35e3 # get-vault-secrets/v2.1
         with:
@@ -390,8 +396,8 @@ jobs:
         if: ${{ github.event.pull_request.head.repo.fork != true }}
         uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
-          username: ${{ env.DOCKERHUB_USERNAME }}
-          password: ${{ env.DOCKERHUB_PASSWORD }}
+          username: ${{ fromJSON(steps.get-dockerhub-secrets.outputs.secrets).DOCKERHUB_USERNAME }}
+          password: ${{ fromJSON(steps.get-dockerhub-secrets.outputs.secrets).DOCKERHUB_PASSWORD }}
 
       - name: Start grafana server for e2e tests (latest)
         run: ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=latest docker compose up -d
