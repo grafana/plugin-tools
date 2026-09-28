@@ -1,4 +1,4 @@
-import { mkdtemp, rm } from 'fs/promises';
+import { mkdtemp, readFile, rm } from 'fs/promises';
 import http from 'node:http';
 import https from 'node:https';
 import net from 'node:net';
@@ -90,6 +90,35 @@ describe('startProxyServer: plain HTTP (record/replay over absolute-form proxyin
     expect(replayed.status).toBe(200);
     expect(JSON.parse(replayed.body).callCount).toBe(1);
     expect(proxy.stats.matched).toBe(1);
+  });
+
+  it('refuses to write the recording when the scan finds something, but quarantines it for inspection', async () => {
+    const leakyServer = http.createServer((_req, res) => {
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ key: 'AKIAABCDEFGHIJKLMNOP' }));
+    });
+    await new Promise<void>((resolve) => leakyServer.listen(0, '127.0.0.1', resolve));
+    const leakyAddress = leakyServer.address();
+    const leakyPort = typeof leakyAddress === 'object' && leakyAddress ? leakyAddress.port : 0;
+
+    const ca = await loadOrCreateCA(join(dir, 'ca'));
+    const config = mergeConfig({ hosts: ['127.0.0.1'] });
+    proxy = await startProxyServer({ mode: 'record', config, harPath, ca, knownSecrets: {} });
+    await requestThroughProxy(proxy.port, `http://127.0.0.1:${leakyPort}/v1/status`);
+
+    const summary = await proxy.close();
+    proxy = undefined;
+    await new Promise((resolve) => leakyServer.close(resolve));
+
+    expect(summary?.files).toEqual([]);
+    expect(summary?.findings.length).toBeGreaterThan(0);
+    expect(summary?.quarantined).toEqual([`${harPath}.quarantine.json`]);
+
+    // nothing was ever written at the real recording path
+    await expect(readFile(harPath, 'utf8')).rejects.toThrow();
+    // but the quarantined copy exists and can be inspected
+    const quarantined = await readHar(`${harPath}.quarantine.json`);
+    expect(quarantined.log.entries).toHaveLength(1);
   });
 
   it('fails closed on replay when a request has no recording, instead of calling the real API', async () => {

@@ -161,7 +161,11 @@ async function finalizeRecording(
   const findings = scanHar(har, harPath, scrubber);
 
   if (findings.length > 0) {
-    return { files: [], entries: recordedEntries.length, scrubbed: {}, findings, quarantined: [harPath] };
+    // still written to disk, under a name that never gets picked up as a real recording - a
+    // "refuses to write" that leaves nothing to inspect just makes the finding unactionable
+    const quarantinePath = `${harPath}.quarantine.json`;
+    await writeHar(quarantinePath, har, config);
+    return { files: [], entries: recordedEntries.length, scrubbed: {}, findings, quarantined: [quarantinePath] };
   }
 
   await writeHar(harPath, har, config);

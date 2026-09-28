@@ -71,7 +71,9 @@ export async function runServe(options: Record<string, string>): Promise<void> {
     const summary = await proxy.close();
     if (summary) {
       if (summary.findings.length > 0) {
-        console.error(`refused to write ${harPath}: ${summary.findings.length} finding(s) - see the scan command`);
+        console.error(
+          `refused to write ${harPath}: ${summary.findings.length} finding(s), quarantined at ${summary.quarantined.join(', ')}`
+        );
         process.exitCode = 1;
       } else {
         console.log(`wrote ${summary.entries} entr${summary.entries === 1 ? 'y' : 'ies'} to ${harPath}`);
