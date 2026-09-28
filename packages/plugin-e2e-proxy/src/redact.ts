@@ -4,6 +4,7 @@ import {
   childKeyPath,
   isJsonObject,
   matchesFieldPattern,
+  parseEmbeddedJson,
   walkFields,
   type JsonNode,
 } from './jsonPaths.js';
@@ -196,7 +197,10 @@ export function applyFakeFields(json: JsonNode, fakeFields: Record<string, FakeK
   return applyRedactionRules(json, [], fakeFields, store).json;
 }
 
-/** Replaces every object value or array element whose path matches a pattern. Doesn't mutate `json`. */
+/**
+ * Replaces every object value or array element whose path matches a pattern, including fields of
+ * JSON held in a string value (re-encoded afterwards only if something changed). Doesn't mutate `json`.
+ */
 function transformMatchingFields(
   json: JsonNode,
   patterns: string[],
@@ -226,6 +230,15 @@ function transformMatchingFields(
       return Object.fromEntries(
         Object.entries(node).map(([key, value]) => [key, visitChild(value, childKeyPath(patternPath, key))])
       );
+    }
+    const embedded = typeof node === 'string' ? parseEmbeddedJson(node) : undefined;
+    if (embedded !== undefined) {
+      const changedBefore = changed;
+      changed = false;
+      const transformed = walk(embedded, patternPath);
+      const embeddedChanged = changed;
+      changed = changedBefore || embeddedChanged;
+      return embeddedChanged ? JSON.stringify(transformed) : node;
     }
     return node;
   };

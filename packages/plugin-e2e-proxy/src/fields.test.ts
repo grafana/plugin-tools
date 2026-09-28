@@ -64,3 +64,11 @@ describe('summarizeFields output as redaction rules', () => {
     }
   });
 });
+
+describe('summarizeFields with JSON held in a string value', () => {
+  it('lists the embedded fields, e.g. SecretString.password, so they can be reviewed', () => {
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res({ SecretString: JSON.stringify({ password: 'x' }) }), new Date(), 1));
+    expect(summarizeFields(har).map((f) => f.path)).toContain('SecretString.password');
+  });
+});

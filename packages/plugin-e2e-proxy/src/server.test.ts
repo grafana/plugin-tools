@@ -129,7 +129,7 @@ describe('startProxyServer: plain HTTP (record/replay over absolute-form proxyin
     proxy = await startProxyServer({ mode: 'replay', config, harPath, ca, knownSecrets: {} });
     const result = await requestThroughProxy(proxy.port, `http://127.0.0.1:${api.port}/v1/status`);
 
-    expect(result.status).toBe(502);
+    expect(result.status).toBe(501);
     expect(JSON.parse(result.body).error).toBe('no recording');
     expect(proxy.stats.missed).toBe(1);
   });

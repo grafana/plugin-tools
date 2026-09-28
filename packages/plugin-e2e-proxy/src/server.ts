@@ -124,7 +124,8 @@ function handleReplay(
     const closest = replayStore.closestMatch(request, config);
     const miss: Miss = { method: request.method, url: request.url, closest };
     misses.push(miss);
-    sendJson(res, 502, {
+    // 501, not 502: AWS and other SDKs retry 502s with backoff, which only delays the failure
+    sendJson(res, 501, {
       error: 'no recording',
       method: request.method,
       url: request.url,

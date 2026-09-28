@@ -46,6 +46,23 @@ export function isJsonContentType(contentType: string): boolean {
   return /json/i.test(contentType);
 }
 
+/**
+ * A string that holds a JSON object or array, such as AWS Secrets Manager's `SecretString`, parsed
+ * so its fields can be matched as `SecretString.password`. Undefined for any other string.
+ */
+export function parseEmbeddedJson(value: string): JsonNode | undefined {
+  const trimmed = value.trim();
+  if (!(trimmed.startsWith('{') && trimmed.endsWith('}')) && !(trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+    return undefined;
+  }
+  try {
+    const parsed = parseJsonLossless(trimmed);
+    return Array.isArray(parsed) || isJsonObject(parsed) ? parsed : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 /** Text form of a leaf value, with numbers in their original source form. */
 export function leafToString(node: JsonNode): string {
   return isRawJson(node) ? node.rawJSON : String(node);
@@ -71,7 +88,11 @@ export interface FieldMatch {
  * Visits every node below the root, depth first, containers included. Results are collected by the
  * caller rather than returned per level, so a huge array doesn't overflow the call stack.
  */
-export function visitJson(root: JsonNode, visit: (match: FieldMatch, isLeaf: boolean) => void): void {
+export function visitJson(
+  root: JsonNode,
+  visit: (match: FieldMatch, isLeaf: boolean) => void,
+  { descendIntoJsonStrings = false }: { descendIntoJsonStrings?: boolean } = {}
+): void {
   const walk = (node: JsonNode, path: string, patternPath: string): void => {
     if (Array.isArray(node)) {
       if (path !== '') {
@@ -92,18 +113,26 @@ export function visitJson(root: JsonNode, visit: (match: FieldMatch, isLeaf: boo
     if (path !== '') {
       visit({ path, patternPath, value: node }, true);
     }
+    const embedded = descendIntoJsonStrings && typeof node === 'string' ? parseEmbeddedJson(node) : undefined;
+    if (embedded !== undefined) {
+      walk(embedded, path, patternPath);
+    }
   };
   walk(root, '', '');
 }
 
-/** Every leaf value in a JSON document, depth first. */
+/** Every leaf value in a JSON document, depth first, including the fields of JSON held in string values. */
 export function walkFields(root: JsonNode): FieldMatch[] {
   const results: FieldMatch[] = [];
-  visitJson(root, (match, isLeaf) => {
-    if (isLeaf) {
-      results.push(match);
-    }
-  });
+  visitJson(
+    root,
+    (match, isLeaf) => {
+      if (isLeaf) {
+        results.push(match);
+      }
+    },
+    { descendIntoJsonStrings: true }
+  );
   return results;
 }
 

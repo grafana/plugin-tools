@@ -9,10 +9,19 @@ export function defaultConfig(): ProxyConfig {
     ignoreFields: [],
     ignoreQueryParams: [],
     ignoreBodyFor: [],
-    redactFields: [],
+    redactFields: ['password'],
     fakeFields: {},
     secretEnvVars: [],
-    learnSecretFields: ['access_token', 'id_token', 'refresh_token', 'session_token'],
+    learnSecretFields: [
+      'access_token',
+      'client_secret',
+      'id_token',
+      'password',
+      'refresh_token',
+      'session_token',
+      'SecretAccessKey',
+      'SessionToken',
+    ],
   };
 }
 

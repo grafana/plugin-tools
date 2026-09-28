@@ -201,3 +201,38 @@ describe('sanitizeForRecording response bodies', () => {
     expect(sanitized.body.equals(binary)).toBe(true);
   });
 });
+
+describe('JSON held in a string value (AWS Secrets Manager SecretString)', () => {
+  const secretString = JSON.stringify({
+    username: 'cloud-datasources',
+    password: 'hunter2hunter2',
+    dbClusterIdentifier: 'redshift-cluster-grafana',
+  });
+  const getSecretValue = () =>
+    res(JSON.stringify({ Name: 'my-secret', SecretString: secretString }), {
+      'content-type': 'application/x-amz-json-1.1',
+    });
+
+  it('redacts the password inside SecretString by default and keeps it parseable for the plugin', () => {
+    const { res: sanitized } = sanitizeForRecording(
+      req(),
+      getSecretValue(),
+      mergeConfig({}),
+      new SecretScrubber({}),
+      new FakeValueStore(),
+      {}
+    );
+    const recorded = JSON.parse(sanitized.body.toString());
+    expect(JSON.parse(recorded.SecretString)).toEqual({
+      username: 'cloud-datasources',
+      password: 'REDACTED',
+      dbClusterIdentifier: 'redshift-cluster-grafana',
+    });
+  });
+
+  it('learns the embedded password, so it is scrubbed wherever else it appears', () => {
+    const scrubber = new SecretScrubber({});
+    sanitizeForRecording(req(), getSecretValue(), mergeConfig({}), scrubber, new FakeValueStore(), {});
+    expect(scrubber.scrub('connecting with hunter2hunter2', {})).toBe('connecting with REDACTED');
+  });
+});
