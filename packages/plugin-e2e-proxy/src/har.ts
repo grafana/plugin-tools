@@ -3,7 +3,8 @@ import path from 'path';
 import { decodeUtf8Strict } from './bytes.js';
 import { findFollowedUpEntries } from './followups.js';
 import type { CapturedRequest, CapturedResponse, Har, HarEntry, HarNameValue, ProxyConfig } from './types.js';
-import { buildMatchKey, describeDifferences, matchKeyToString, type MatchKey } from './match.js';
+import { closenessRank, describeDifferences } from './differences.js';
+import { buildMatchKey, matchKeyToString, type MatchKey } from './match.js';
 
 const CREATOR = { name: '@grafana/plugin-e2e-proxy', version: '0' };
 
@@ -174,18 +175,26 @@ export class ReplayStore {
   }
 
   /**
-   * On a miss, finds a recorded request with the same method, host and path and reports what
-   * differs (query, headers or body). Returns undefined when nothing with that method/host/path
-   * was ever recorded.
+   * On a miss, finds the recorded request with the same method, host and path that differs the
+   * least, and reports field by field what differs. Returns undefined when nothing with that
+   * method/host/path was ever recorded.
    */
   closestMatch(req: CapturedRequest, config: ProxyConfig): { url: string; differences: string[] } | undefined {
     const current = buildMatchKey(req, config);
+    let closest: { key: string; candidate: MatchKey; rank: [number, number] } | undefined;
     for (const [key, candidate] of this.structuredKeys) {
-      if (candidate.method === current.method && candidate.host === current.host && candidate.path === current.path) {
-        const entry = this.sequences.get(key)![0];
-        return { url: entry.request.url, differences: describeDifferences(current, candidate) };
+      if (candidate.method !== current.method || candidate.host !== current.host || candidate.path !== current.path) {
+        continue;
+      }
+      const rank = closenessRank(current, candidate);
+      if (!closest || rank[0] < closest.rank[0] || (rank[0] === closest.rank[0] && rank[1] < closest.rank[1])) {
+        closest = { key, candidate, rank };
       }
     }
-    return undefined;
+    if (!closest) {
+      return undefined;
+    }
+    const entry = this.sequences.get(closest.key)![0];
+    return { url: entry.request.url, differences: describeDifferences(current, closest.candidate) };
   }
 }

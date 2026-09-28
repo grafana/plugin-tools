@@ -59,25 +59,6 @@ export function matchKeyToString(key: MatchKey): string {
   return `${key.method} ${key.host}${key.path}?${key.query}\n${key.headers}\n${key.body}`;
 }
 
-/**
- * Describes what differs between a request that missed on replay and a candidate recorded
- * request with the same method, host and path. Used to turn a miss into "body field X differs"
- * instead of a bare 404.
- */
-export function describeDifferences(current: MatchKey, recorded: MatchKey): string[] {
-  const differences: string[] = [];
-  if (current.query !== recorded.query) {
-    differences.push(`query differs: got "${current.query}", recording has "${recorded.query}"`);
-  }
-  if (current.headers !== recorded.headers) {
-    differences.push('headers differ');
-  }
-  if (current.body !== recorded.body) {
-    differences.push('body differs');
-  }
-  return differences;
-}
-
 function canonicalBody(req: CapturedRequest, config: ProxyConfig): string {
   if (req.body.length === 0) {
     return '';

@@ -62,7 +62,7 @@ describe('ReplayStore.closestMatch', () => {
     const closest = store.closestMatch(missed, config);
 
     expect(closest?.url).toBe(recorded.url);
-    expect(closest?.differences).toContain('body differs');
+    expect(closest?.differences).toEqual(['body field "query": got "select 2", recording has "select 1"']);
   });
 
   it('returns undefined when nothing with that method/host/path was ever recorded', () => {
