@@ -184,7 +184,7 @@ Check if we can set the `Transport` object (usually an `http.RoundTripper`). The
 
 ### Verifying that the changes are working
 
-#### Testing with Grafana Cloud instance
+#### Test with a Grafana Cloud instance
 
 **Pre-requisites:** If you do not have a Grafana Cloud instance to test on yet, [sign up](https://grafana.com/docs/grafana-cloud/get-started/#sign-up-for-a-grafana-cloud-account) for a free Grafana Cloud account instance first.
 
