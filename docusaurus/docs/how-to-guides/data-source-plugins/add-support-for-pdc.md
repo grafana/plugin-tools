@@ -195,7 +195,7 @@ Once you have added PDC support and before you wish to publish your plugin into 
 1. We provision your instance with this plugin version and let you know that you can test
 1. Once tested and confirmed you can go on with making this a regular release and submitting it for review
 
-#### Simulating / Testing locally with microsocks
+#### Simulate or test locally with microsocks
 
 In this case, we will use [microsocks](https://github.com/rofl0r/microsocks), which is an open source SOCKS server. This will not be the same as how Grafana runs in our cloud, but it shows a lightweight way to do this without any internal dependency.
 
