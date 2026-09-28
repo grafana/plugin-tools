@@ -73,6 +73,20 @@ describe('CLI subcommands', () => {
     expect(process.exitCode).toBe(1);
   });
 
+  it('scan also checks for values of env vars listed in secretEnvVars', async () => {
+    process.env.VENDOR_API_KEY = 'vendor-key-value';
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res({ echo: 'vendor-key-value' }), new Date(), 1));
+    await writeFile(harPath, JSON.stringify(har));
+    const configPath = join(dir, 'proxy.json');
+    await writeFile(configPath, JSON.stringify({ secretEnvVars: ['VENDOR_API_KEY'] }));
+
+    await runScan({ har: harPath, config: configPath });
+
+    delete process.env.VENDOR_API_KEY;
+    expect(process.exitCode).toBe(1);
+  });
+
   it('fields lists distinct field paths with sample values', async () => {
     const har = emptyHar();
     har.log.entries.push(toHarEntry(req(), res({ user: { email: 'a@example.com' } }), new Date(), 1));

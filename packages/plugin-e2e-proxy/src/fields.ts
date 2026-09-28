@@ -1,8 +1,8 @@
 import type { Har } from './types.js';
-import { walkFields, type JsonNode } from './jsonPaths.js';
+import { isJsonContentType, leafToString, parseJsonLossless, walkFields, type JsonNode } from './jsonPaths.js';
 
 export interface FieldSummary {
-  /** Field-name-only path, e.g. "items[*].author.email". */
+  /** Pattern path, e.g. "items[*].author.email". Can be pasted into redactFields or fakeFields as-is. */
   path: string;
   /** A few distinct sample values seen at this path, for a human (or an agent) to eyeball. */
   samples: string[];
@@ -19,23 +19,23 @@ export function summarizeFields(har: Har): FieldSummary[] {
   const samplesByPath = new Map<string, Set<string>>();
 
   for (const entry of har.log.entries) {
-    const body = entry.response.content.text;
-    if (!body || !entry.response.content.mimeType.includes('json')) {
+    const { content } = entry.response;
+    if (!content.text || content.encoding === 'base64' || !isJsonContentType(content.mimeType)) {
       continue;
     }
     let parsed: JsonNode;
     try {
-      parsed = JSON.parse(body);
+      parsed = parseJsonLossless(content.text);
     } catch {
       continue;
     }
     for (const field of walkFields(parsed)) {
-      if (typeof field.value !== 'string' && typeof field.value !== 'number' && typeof field.value !== 'boolean') {
+      if (field.value === null) {
         continue;
       }
       const samples = samplesByPath.get(field.patternPath) ?? new Set<string>();
       if (samples.size < MAX_SAMPLES_PER_PATH) {
-        samples.add(String(field.value));
+        samples.add(leafToString(field.value));
       }
       samplesByPath.set(field.patternPath, samples);
     }

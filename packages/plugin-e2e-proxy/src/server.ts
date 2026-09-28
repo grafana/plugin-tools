@@ -4,7 +4,7 @@ import tls from 'node:tls';
 import { hostIsRecorded } from './config.js';
 import { emptyHar, readHar, ReplayStore, toHarEntry, writeHar } from './har.js';
 import { captureRequest, forwardRequest, sendJson, sendResponse } from './httpUtil.js';
-import { sanitizeForRecording } from './pipeline.js';
+import { sanitizeForRecording, sanitizeRequest } from './pipeline.js';
 import { FakeValueStore, SecretScrubber } from './redact.js';
 import { scanHar } from './scan.js';
 import { CertificateStore, type CertKeyPair } from './tls.js';
@@ -63,7 +63,7 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
       }
 
       if (mode === 'replay') {
-        handleReplay(captured, res, replayStore!, config, stats, misses);
+        handleReplay(captured, res, replayStore!, config, scrubber, stats, misses);
         return;
       }
 
@@ -75,8 +75,16 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
 
   const server = http.createServer((req, res) => void handleRequest(req, res));
 
+  // CONNECT tunnels are detached from the http server, so server.close() alone waits until clients drop them
+  const openSockets = new Set<net.Socket>();
+  const track = (socket: net.Socket): void => {
+    openSockets.add(socket);
+    socket.once('close', () => openSockets.delete(socket));
+  };
+  server.on('connection', track);
+
   server.on('connect', (req, clientSocket, head) => {
-    void handleConnect(req, clientSocket as net.Socket, head, config, certStore, server).catch(() => {
+    void handleConnect(req, clientSocket as net.Socket, head, config, certStore, server, track).catch(() => {
       clientSocket.destroy();
     });
   });
@@ -88,11 +96,13 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
     stats,
     misses,
     async close() {
-      await new Promise<void>((resolve) => server.close(() => resolve()));
+      const closed = new Promise<void>((resolve) => server.close(() => resolve()));
+      openSockets.forEach((socket) => socket.destroy());
+      await closed;
       if (mode !== 'record') {
         return undefined;
       }
-      return finalizeRecording(harPath, recordedEntries, config, scrubber);
+      return finalizeRecording(harPath, recordedEntries, config, scrubber, scrubCounts);
     },
   };
 }
@@ -102,19 +112,22 @@ function handleReplay(
   res: http.ServerResponse,
   replayStore: ReplayStore,
   config: ProxyConfig,
+  scrubber: SecretScrubber,
   stats: ProxyStats,
   misses: Miss[]
 ): void {
-  const entry = replayStore.next(captured, config);
+  // recordings were keyed on sanitized requests, so the live one has to be sanitized the same way
+  const request = sanitizeRequest(captured, config, scrubber, {});
+  const entry = replayStore.next(request, config);
   if (!entry) {
     stats.missed++;
-    const closest = replayStore.closestMatch(captured, config);
-    const miss: Miss = { method: captured.method, url: captured.url, closest };
+    const closest = replayStore.closestMatch(request, config);
+    const miss: Miss = { method: request.method, url: request.url, closest };
     misses.push(miss);
     sendJson(res, 502, {
       error: 'no recording',
-      method: captured.method,
-      url: captured.url,
+      method: request.method,
+      url: request.url,
       hint: 'run the record command to update e2e/recordings',
       closest,
     });
@@ -155,7 +168,8 @@ async function finalizeRecording(
   harPath: string,
   recordedEntries: HarEntry[],
   config: ProxyConfig,
-  scrubber: SecretScrubber
+  scrubber: SecretScrubber,
+  scrubbed: Record<string, number>
 ): Promise<SaveSummary> {
   const har: Har = { ...emptyHar(), log: { ...emptyHar().log, entries: recordedEntries } };
   const findings = scanHar(har, harPath, scrubber);
@@ -165,11 +179,11 @@ async function finalizeRecording(
     // "refuses to write" that leaves nothing to inspect just makes the finding unactionable
     const quarantinePath = `${harPath}.quarantine.json`;
     await writeHar(quarantinePath, har, config);
-    return { files: [], entries: recordedEntries.length, scrubbed: {}, findings, quarantined: [quarantinePath] };
+    return { files: [], entries: recordedEntries.length, scrubbed, findings, quarantined: [quarantinePath] };
   }
 
   await writeHar(harPath, har, config);
-  return { files: [harPath], entries: recordedEntries.length, scrubbed: {}, findings: [], quarantined: [] };
+  return { files: [harPath], entries: recordedEntries.length, scrubbed, findings: [], quarantined: [] };
 }
 
 async function handleConnect(
@@ -178,13 +192,14 @@ async function handleConnect(
   head: Buffer,
   config: ProxyConfig,
   certStore: CertificateStore,
-  server: http.Server
+  server: http.Server,
+  track: (socket: net.Socket) => void
 ): Promise<void> {
   const [targetHost, targetPortRaw] = (req.url ?? '').split(':');
   const targetPort = Number(targetPortRaw || 443);
 
   if (!hostIsRecorded(targetHost, config)) {
-    return passthroughTunnel(clientSocket, targetHost, targetPort, head);
+    return passthroughTunnel(clientSocket, targetHost, targetPort, head, track);
   }
 
   clientSocket.write('HTTP/1.1 200 Connection Established\r\n\r\n');
@@ -203,7 +218,13 @@ async function handleConnect(
   server.emit('connection', tlsSocket);
 }
 
-function passthroughTunnel(clientSocket: net.Socket, host: string, port: number, head: Buffer): void {
+function passthroughTunnel(
+  clientSocket: net.Socket,
+  host: string,
+  port: number,
+  head: Buffer,
+  track: (socket: net.Socket) => void
+): void {
   const serverSocket = net.connect(port, host, () => {
     clientSocket.write('HTTP/1.1 200 Connection Established\r\n\r\n');
     if (head.length > 0) {
@@ -212,8 +233,11 @@ function passthroughTunnel(clientSocket: net.Socket, host: string, port: number,
     serverSocket.pipe(clientSocket);
     clientSocket.pipe(serverSocket);
   });
+  track(serverSocket);
   serverSocket.on('error', () => clientSocket.destroy());
+  serverSocket.on('close', () => clientSocket.destroy());
   clientSocket.on('error', () => serverSocket.destroy());
+  clientSocket.on('close', () => serverSocket.destroy());
 }
 
 function listen(server: http.Server, port: number): Promise<number> {

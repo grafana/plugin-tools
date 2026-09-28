@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { emptyHar, toHarEntry } from './har.js';
 import { summarizeFields } from './fields.js';
+import { applyFieldRedaction } from './redact.js';
 import type { CapturedRequest, CapturedResponse } from './types.js';
 
 function req(): CapturedRequest {
@@ -29,7 +30,7 @@ describe('summarizeFields', () => {
     );
 
     const fields = summarizeFields(har);
-    const emailField = fields.find((f) => f.path === 'items.[*].author.email');
+    const emailField = fields.find((f) => f.path === 'items[*].author.email');
     expect(emailField?.samples).toEqual(['a@example.com', 'b@example.com']);
   });
 
@@ -48,5 +49,18 @@ describe('summarizeFields', () => {
     }
     const fields = summarizeFields(har);
     expect(fields.find((f) => f.path === 'id')?.samples).toHaveLength(3);
+  });
+});
+
+describe('summarizeFields output as redaction rules', () => {
+  it('prints paths that work as redactFields patterns when pasted as-is', () => {
+    const body = { items: [{ author: { email: 'a@example.com', tags: ['x'] } }], total: 1 };
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res(body), new Date(), 1));
+
+    for (const { path } of summarizeFields(har)) {
+      const redacted = JSON.stringify(applyFieldRedaction(body, [path]));
+      expect(redacted, `pattern "${path}" should redact something`).toContain('REDACTED');
+    }
   });
 });

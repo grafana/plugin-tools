@@ -1,5 +1,14 @@
 import type { CapturedRequest, ProxyConfig } from './types.js';
-import { matchesFieldPattern, type JsonNode } from './jsonPaths.js';
+import {
+  childKeyPath,
+  isJsonContentType,
+  isJsonObject,
+  isRawJson,
+  matchesFieldPattern,
+  parseJsonLossless,
+  visitJson,
+  type JsonNode,
+} from './jsonPaths.js';
 
 export interface MatchKey {
   method: string;
@@ -74,12 +83,15 @@ function canonicalBody(req: CapturedRequest, config: ProxyConfig): string {
     return '';
   }
   const contentType = req.headers['content-type'] ?? '';
-  if (contentType.includes('application/json')) {
+  if (isJsonContentType(contentType)) {
+    let parsed: JsonNode | undefined;
     try {
-      const parsed = JSON.parse(req.body.toString('utf8'));
-      return canonicalJsonWithoutIgnored(parsed, config.ignoreFields);
+      parsed = parseJsonLossless(req.body.toString('utf8'));
     } catch {
-      // not actually JSON despite the content-type; fall through to raw bytes
+      // not actually JSON despite the content-type; falls through to raw bytes
+    }
+    if (parsed !== undefined) {
+      return canonicalJsonWithoutIgnored(parsed, config.ignoreFields);
     }
   }
   if (contentType.includes('application/x-www-form-urlencoded')) {
@@ -95,59 +107,31 @@ function canonicalBody(req: CapturedRequest, config: ProxyConfig): string {
 
 /** Stable JSON stringify (sorted object keys) with any field matching an ignore pattern removed. */
 export function canonicalJsonWithoutIgnored(value: JsonNode, ignoreFields: string[]): string {
-  if (ignoreFields.length === 0) {
-    return canonicalStringify(value);
-  }
-  const ignoredPaths = new Set(
-    walkFieldsIncludingContainers(value)
-      .filter((match) => ignoreFields.some((pattern) => matchesFieldPattern(match.patternPath, pattern)))
-      .map((match) => match.path)
-  );
-  return canonicalStringify(value, ignoredPaths);
-}
-
-/** Like walkFields, but also yields object/array container nodes so a whole sub-object can be ignored. */
-function walkFieldsIncludingContainers(
-  node: JsonNode,
-  pathSegments: string[] = [],
-  patternSegments: string[] = []
-): Array<{ path: string; patternPath: string }> {
-  const results: Array<{ path: string; patternPath: string }> = [];
-  if (pathSegments.length > 0) {
-    results.push({ path: pathSegments.join('.'), patternPath: patternSegments.join('.') });
-  }
-  if (Array.isArray(node)) {
-    node.forEach((item, index) => {
-      results.push(
-        ...walkFieldsIncludingContainers(item, [...pathSegments, String(index)], [...patternSegments, '[*]'])
-      );
+  const ignoredPaths = new Set<string>();
+  if (ignoreFields.length > 0) {
+    visitJson(value, (match) => {
+      if (ignoreFields.some((pattern) => matchesFieldPattern(match.patternPath, pattern))) {
+        ignoredPaths.add(match.path);
+      }
     });
-  } else if (typeof node === 'object' && node !== null) {
-    for (const [key, value] of Object.entries(node)) {
-      results.push(...walkFieldsIncludingContainers(value, [...pathSegments, key], [...patternSegments, key]));
-    }
   }
-  return results;
+  return canonicalStringify(value, ignoredPaths, '');
 }
 
-function canonicalStringify(value: JsonNode, ignoredPaths?: Set<string>, pathSegments: readonly string[] = []): string {
-  const currentPath = pathSegments.join('.');
-  if (ignoredPaths?.has(currentPath)) {
-    return '"__ignored__"';
-  }
+function canonicalStringify(value: JsonNode, ignoredPaths: Set<string>, path: string): string {
   if (Array.isArray(value)) {
-    return `[${value.map((item, index) => canonicalStringify(item, ignoredPaths, [...pathSegments, String(index)])).join(',')}]`;
+    const items = value.map((item, index) => {
+      const itemPath = childKeyPath(path, String(index));
+      return ignoredPaths.has(itemPath) ? '"__ignored__"' : canonicalStringify(item, ignoredPaths, itemPath);
+    });
+    return `[${items.join(',')}]`;
   }
-  if (typeof value === 'object' && value !== null) {
-    const keys = Object.keys(value).sort();
-    const entries = keys
-      .map((key) => [key, [...pathSegments, key]] as const)
-      .filter(([, segs]) => !ignoredPaths?.has(segs.join('.')))
-      .map(
-        ([key, segs]) =>
-          `${JSON.stringify(key)}:${canonicalStringify((value as Record<string, JsonNode>)[key], ignoredPaths, segs)}`
-      );
+  if (isJsonObject(value)) {
+    const entries = Object.keys(value)
+      .sort()
+      .filter((key) => !ignoredPaths.has(childKeyPath(path, key)))
+      .map((key) => `${JSON.stringify(key)}:${canonicalStringify(value[key], ignoredPaths, childKeyPath(path, key))}`);
     return `{${entries.join(',')}}`;
   }
-  return JSON.stringify(value);
+  return isRawJson(value) ? value.rawJSON : JSON.stringify(value);
 }

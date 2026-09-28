@@ -1,28 +1,49 @@
 import type { FakeKind } from './types.js';
-import { matchesFieldPattern, walkFields, type JsonNode } from './jsonPaths.js';
+import {
+  childIndexPath,
+  childKeyPath,
+  isJsonObject,
+  matchesFieldPattern,
+  walkFields,
+  type JsonNode,
+} from './jsonPaths.js';
 
-/** Minimum length a string value must have to be treated as a learnable secret, to avoid redacting short common words. */
+/** Minimum length for a learned secret, so a short common word issued as a token doesn't get redacted everywhere. */
 const MIN_LEARNED_SECRET_LENGTH = 8;
+/** Minimum length for a known secret. Shorter values would wreck unrelated text and aren't realistic credentials. */
+const MIN_KNOWN_SECRET_LENGTH = 4;
+/** Base64 runs at least this long are decoded to look for an embedded secret, e.g. `Basic base64(user:password)`. */
+const EMBEDDED_BASE64_RE = /[A-Za-z0-9+/_-]{12,}={0,2}/g;
+
+const LEARNED_LABEL = 'learned';
 
 /**
  * Tracks every value known or discovered to be a secret, and scrubs them out of anything written
- * to disk. Values are matched raw, base64-encoded and URL-encoded, so a token embedded in a
- * `Authorization: Basic ...` header or a redirect URL is caught too.
+ * to disk. A value is matched raw and in each encoding a client is likely to put it on the wire:
+ * base64, URL, form and Go query encoding, JSON escaping, and inside a larger base64 token such as
+ * `Authorization: Basic base64(user:password)`.
+ *
+ * Counts are keyed by a label (the env var name, or "learned"), never by the secret itself.
  */
 export class SecretScrubber {
-  private readonly values = new Set<string>();
-  private encodedVariants: string[] = [];
+  private readonly labels = new Map<string, string>();
+  private variants: Array<{ text: string; label: string }> = [];
 
   constructor(knownSecrets: Record<string, string>) {
-    Object.values(knownSecrets).forEach((value) => this.add(value));
+    Object.entries(knownSecrets).forEach(([name, value]) => this.add(value, name, MIN_KNOWN_SECRET_LENGTH));
   }
 
-  add(value: string): void {
-    if (!value || this.values.has(value)) {
+  add(value: string, label = LEARNED_LABEL, minLength = MIN_KNOWN_SECRET_LENGTH): void {
+    if (!value || value.length < minLength || value === 'REDACTED' || this.labels.has(value)) {
       return;
     }
-    this.values.add(value);
-    this.encodedVariants.push(value, Buffer.from(value, 'utf8').toString('base64'), encodeURIComponent(value));
+    this.labels.set(value, label);
+    const forms = new Set(encodedForms(value));
+    for (const text of forms) {
+      this.variants.push({ text, label });
+    }
+    // longest first, so a shorter secret that's a substring of a longer one doesn't leave the rest behind
+    this.variants.sort((a, b) => b.text.length - a.text.length);
   }
 
   /** Scans a parsed JSON response for fields named in `learnSecretFields` and adds their values. */
@@ -33,39 +54,83 @@ export class SecretScrubber {
     for (const field of walkFields(json)) {
       if (
         typeof field.value === 'string' &&
-        field.value.length >= MIN_LEARNED_SECRET_LENGTH &&
         learnSecretFields.some((pattern) => matchesFieldPattern(field.patternPath, pattern))
       ) {
-        this.add(field.value);
+        this.add(field.value, LEARNED_LABEL, MIN_LEARNED_SECRET_LENGTH);
       }
     }
   }
 
-  /** Replaces every known secret occurrence in `text` with `REDACTED`, counting matches per original value. */
+  /** Replaces every known secret occurrence in `text` with `REDACTED`, counting matches per label. */
   scrub(text: string, counts: Record<string, number>): string {
-    if (this.encodedVariants.length === 0 || text.length === 0) {
+    if (this.variants.length === 0 || text.length === 0) {
       return text;
     }
-    let result = text;
-    // longest variants first, so a shorter value that happens to be a substring of a longer one doesn't mask it
-    const sorted = [...new Set(this.encodedVariants)].sort((a, b) => b.length - a.length);
-    for (const variant of sorted) {
-      if (!variant) {
-        continue;
+    // whole base64 tokens first, otherwise a variant can replace just the aligned tail of one
+    let result = text.replace(EMBEDDED_BASE64_RE, (run) => {
+      const label = this.labelOfEmbeddedSecret(run);
+      if (!label) {
+        return run;
       }
-      const before = result;
-      result = result.split(variant).join('REDACTED');
-      if (result !== before) {
-        counts[variant] = (counts[variant] ?? 0) + before.split(variant).length - 1;
+      counts[label] = (counts[label] ?? 0) + 1;
+      return 'REDACTED';
+    });
+    for (const { text: variant, label } of this.variants) {
+      const parts = result.split(variant);
+      if (parts.length > 1) {
+        counts[label] = (counts[label] ?? 0) + parts.length - 1;
+        result = parts.join('REDACTED');
       }
     }
     return result;
   }
+
+  private labelOfEmbeddedSecret(run: string): string | undefined {
+    const decoded = Buffer.from(run, 'base64').toString('utf8');
+    for (const [value, label] of this.labels) {
+      if (decoded.includes(value)) {
+        return label;
+      }
+    }
+    return undefined;
+  }
 }
 
-/** Sets every field matching `redactFields` to the literal string `REDACTED`. Mutates and returns `json`. */
-export function applyFieldRedaction(json: JsonNode, redactFields: string[]): JsonNode {
-  return transformMatchingFields(json, redactFields, () => 'REDACTED');
+function encodedForms(value: string): string[] {
+  const bytes = Buffer.from(value, 'utf8');
+  const jsonEscaped = JSON.stringify(value).slice(1, -1);
+  return [
+    value,
+    bytes.toString('base64'),
+    bytes.toString('base64url'),
+    encodeURIComponent(value),
+    new URLSearchParams({ v: value }).toString().slice('v='.length),
+    goQueryEscape(bytes),
+    jsonEscaped,
+    // Go's encoding/json also escapes these for safe embedding in HTML
+    jsonEscaped
+      .replace(/&/g, '\\u0026')
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/\u2028/g, '\\u2028')
+      .replace(/\u2029/g, '\\u2029'),
+  ];
+}
+
+/** Go's url.QueryEscape, which differs from encodeURIComponent for space and !*'() */
+function goQueryEscape(bytes: Buffer): string {
+  let out = '';
+  for (const byte of bytes) {
+    const char = String.fromCharCode(byte);
+    if (/[A-Za-z0-9\-_.~]/.test(char)) {
+      out += char;
+    } else if (char === ' ') {
+      out += '+';
+    } else {
+      out += `%${byte.toString(16).toUpperCase().padStart(2, '0')}`;
+    }
+  }
+  return out;
 }
 
 /**
@@ -105,51 +170,65 @@ function generateFake(kind: FakeKind, n: number): string {
   }
 }
 
-export function applyFakeFields(json: JsonNode, fakeFields: Record<string, FakeKind>, store: FakeValueStore): JsonNode {
-  const patterns = Object.keys(fakeFields);
-  if (patterns.length === 0) {
-    return json;
-  }
-  return transformMatchingFieldsWithPattern(json, patterns, (value, pattern) => {
-    if (typeof value !== 'string') {
-      return value;
-    }
-    return store.fakeFor(fakeFields[pattern], value);
-  });
+/**
+ * Applies `redactFields` then `fakeFields` to a parsed JSON document. `changed` is false when no
+ * rule matched, so the caller can keep the original bytes instead of re-serializing.
+ */
+export function applyRedactionRules(
+  json: JsonNode,
+  redactFields: string[],
+  fakeFields: Record<string, FakeKind>,
+  store: FakeValueStore
+): { json: JsonNode; changed: boolean } {
+  const redacted = transformMatchingFields(json, redactFields, () => 'REDACTED');
+  const faked = transformMatchingFields(redacted.json, Object.keys(fakeFields), (value, pattern) =>
+    typeof value === 'string' ? store.fakeFor(fakeFields[pattern], value) : value
+  );
+  return { json: faked.json, changed: redacted.changed || faked.changed };
 }
 
+/** Sets every field matching `redactFields` to the literal string `REDACTED`. */
+export function applyFieldRedaction(json: JsonNode, redactFields: string[]): JsonNode {
+  return transformMatchingFields(json, redactFields, () => 'REDACTED').json;
+}
+
+export function applyFakeFields(json: JsonNode, fakeFields: Record<string, FakeKind>, store: FakeValueStore): JsonNode {
+  return applyRedactionRules(json, [], fakeFields, store).json;
+}
+
+/** Replaces every object value or array element whose path matches a pattern. Doesn't mutate `json`. */
 function transformMatchingFields(
   json: JsonNode,
   patterns: string[],
-  transform: (value: JsonNode) => JsonNode
-): JsonNode {
-  return transformMatchingFieldsWithPattern(json, patterns, transform);
-}
-
-function transformMatchingFieldsWithPattern(
-  json: JsonNode,
-  patterns: string[],
   transform: (value: JsonNode, matchedPattern: string) => JsonNode
-): JsonNode {
+): { json: JsonNode; changed: boolean } {
   if (patterns.length === 0) {
-    return json;
+    return { json, changed: false };
   }
+  let changed = false;
 
-  function walk(node: JsonNode, patternSegments: string[]): JsonNode {
-    if (Array.isArray(node)) {
-      return node.map((item) => walk(item, [...patternSegments, '[*]']));
+  const visitChild = (node: JsonNode, patternPath: string): JsonNode => {
+    const matched = patterns.find((pattern) => matchesFieldPattern(patternPath, pattern));
+    if (!matched) {
+      return walk(node, patternPath);
     }
-    if (typeof node === 'object' && node !== null) {
-      const result: Record<string, JsonNode> = {};
-      for (const [key, value] of Object.entries(node)) {
-        const childPatternPath = [...patternSegments, key].join('.');
-        const matched = patterns.find((pattern) => matchesFieldPattern(childPatternPath, pattern));
-        result[key] = matched ? transform(value, matched) : walk(value, [...patternSegments, key]);
-      }
-      return result;
+    const replaced = transform(node, matched);
+    changed ||= replaced !== node;
+    return replaced;
+  };
+
+  const walk = (node: JsonNode, patternPath: string): JsonNode => {
+    if (Array.isArray(node)) {
+      return node.map((item) => visitChild(item, childIndexPath(patternPath)));
+    }
+    if (isJsonObject(node)) {
+      // fromEntries defines own properties, so a "__proto__" key stays data instead of setting the prototype
+      return Object.fromEntries(
+        Object.entries(node).map(([key, value]) => [key, visitChild(value, childKeyPath(patternPath, key))])
+      );
     }
     return node;
-  }
+  };
 
-  return walk(json, []);
+  return { json: walk(json, ''), changed };
 }

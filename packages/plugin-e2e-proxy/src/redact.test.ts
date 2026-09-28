@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyFakeFields, applyFieldRedaction, FakeValueStore, SecretScrubber } from './redact.js';
+import { applyFakeFields, applyFieldRedaction, applyRedactionRules, FakeValueStore, SecretScrubber } from './redact.js';
 
 describe('SecretScrubber', () => {
   it('scrubs a known secret value out of arbitrary text', () => {
@@ -82,5 +82,49 @@ describe('applyFakeFields', () => {
     };
     expect(result.items[0].author.email).toBe(result.items[1].author.email);
     expect(result.items[0].author.email).not.toBe('a@example.com');
+  });
+});
+
+describe('SecretScrubber encodings', () => {
+  it('scrubs a password inside a Basic auth token, where base64 covers "user:password"', () => {
+    const scrubber = new SecretScrubber({ DB_PASSWORD: 'supersecretpw' });
+    const header = `Basic ${Buffer.from('admin:supersecretpw').toString('base64')}`;
+    expect(scrubber.scrub(header, {})).toBe('Basic REDACTED');
+  });
+
+  it("scrubs Go's form and query encoding, which differs from encodeURIComponent", () => {
+    const scrubber = new SecretScrubber({ CLIENT_SECRET: 's3cret value!' });
+    expect(scrubber.scrub('client_secret=s3cret+value%21', {})).toBe('client_secret=REDACTED');
+  });
+
+  it("scrubs Go's JSON escaping of & < >", () => {
+    const scrubber = new SecretScrubber({ API_KEY: 'a&b<c>d-key' });
+    expect(scrubber.scrub('{"key":"a\\u0026b\\u003cc\\u003ed-key"}', {})).toBe('{"key":"REDACTED"}');
+  });
+
+  it('counts matches by env var name, never by the secret value', () => {
+    const scrubber = new SecretScrubber({ API_KEY: 'sekret-value-123' });
+    const counts: Record<string, number> = {};
+    scrubber.scrub('sekret-value-123 and sekret-value-123', counts);
+    expect(counts).toEqual({ API_KEY: 2 });
+  });
+});
+
+describe('array element patterns', () => {
+  it('redacts array elements matched by a [*] pattern', () => {
+    const json = { emails: ['alice@corp.com', 'bob@corp.com'] };
+    expect(applyFieldRedaction(json, ['$.emails[*]'])).toEqual({ emails: ['REDACTED', 'REDACTED'] });
+  });
+
+  it('reports no change when no rule matches, so the caller can keep the original bytes', () => {
+    const result = applyRedactionRules({ a: 1 }, ['password'], {}, new FakeValueStore());
+    expect(result.changed).toBe(false);
+  });
+
+  it('keeps a "__proto__" key as data instead of setting the prototype', () => {
+    const json = JSON.parse('{"__proto__":{"polluted":true},"password":"x"}');
+    const result = applyFieldRedaction(json, ['password']) as Record<string, unknown>;
+    expect(Object.keys(result)).toEqual(['__proto__', 'password']);
+    expect(({} as Record<string, unknown>).polluted).toBeUndefined();
   });
 });

@@ -74,3 +74,31 @@ describe('scanHar', () => {
     expect(findings.some((f) => f.rule === 'aws-secret-key-like')).toBe(true);
   });
 });
+
+describe('scanHar locations', () => {
+  it('flags an unknown api key in a response body', () => {
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res('{"api_key":"abcdefghijklmnopqrstuvwx"}'), new Date(), 1));
+    const findings = scanHar(har, 'e2e/recordings/api.har', new SecretScrubber({}));
+    expect(findings).toContainEqual(expect.objectContaining({ rule: 'generic-api-key', location: 'response.body' }));
+  });
+
+  it('flags a known secret left in the request URL, and says where', () => {
+    const har = emptyHar();
+    const leaky = { ...req(), url: 'https://api.example.com/v1/status?q=sekret-value-123' };
+    har.log.entries.push(toHarEntry(leaky, res('{}'), new Date(), 1));
+    const findings = scanHar(har, 'e2e/recordings/api.har', new SecretScrubber({ API_KEY: 'sekret-value-123' }));
+    expect(findings).toContainEqual(expect.objectContaining({ rule: 'known-secret-value', location: 'request.url' }));
+  });
+
+  it('flags a known secret inside a binary body stored as base64', () => {
+    const har = emptyHar();
+    const binary = Buffer.concat([Buffer.from([0xff, 0xfe, 0x00]), Buffer.from('sekret-value-123')]);
+    har.log.entries.push(
+      toHarEntry(req(), { status: 200, statusText: 'OK', headers: {}, body: binary }, new Date(), 1)
+    );
+    expect(har.log.entries[0].response.content.encoding).toBe('base64');
+    const findings = scanHar(har, 'e2e/recordings/api.har', new SecretScrubber({ API_KEY: 'sekret-value-123' }));
+    expect(findings).toContainEqual(expect.objectContaining({ rule: 'known-secret-value', location: 'response.body' }));
+  });
+});

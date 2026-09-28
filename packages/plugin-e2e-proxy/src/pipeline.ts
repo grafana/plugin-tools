@@ -1,17 +1,34 @@
-import { applyFakeFields, applyFieldRedaction, type FakeValueStore, type SecretScrubber } from './redact.js';
+import { decodeUtf8Strict } from './bytes.js';
+import { isJsonContentType, parseJsonLossless, type JsonNode } from './jsonPaths.js';
+import { applyRedactionRules, type FakeValueStore, type SecretScrubber } from './redact.js';
 import type { CapturedRequest, CapturedResponse, ProxyConfig } from './types.js';
+
+/** Always stored, whatever keepHeaders says: never a secret, and both sides need it to parse the body. */
+const ALWAYS_KEPT_HEADERS = ['content-type'];
+
+/** Query params that carry a credential by convention, redacted even when the value isn't a known secret. */
+const CREDENTIAL_QUERY_PARAMS = new Set([
+  'access_token',
+  'api-key',
+  'api_key',
+  'apikey',
+  'client_secret',
+  'key',
+  'password',
+  'sig',
+  'signature',
+  'token',
+  'x-amz-credential',
+  'x-amz-security-token',
+  'x-amz-signature',
+]);
 
 /**
  * Turns a real request/response pair into what gets written to disk: only allowlisted headers,
  * redacted and faked JSON fields, and every known secret value scrubbed out of what's left.
  *
- * Order matters. Secrets issued in this very response (an OAuth token, for example) are learned
- * first, so the final scrub pass also catches that value inside this same response body.
- *
- * Bodies are treated as UTF-8 text. A genuinely binary request or response body round-trips
- * through this pipeline unless byte sequences happen to be invalid UTF-8, in which case they are
- * replaced by the platform's UTF-8 replacement character. Binary bodies aren't expected for the
- * JSON/REST APIs this proxy targets; this is a known limitation, not a design goal.
+ * The response goes first, so a secret it issues (an OAuth token, for example) is learned before
+ * anything is scrubbed and is caught in its own headers and body too.
  */
 export function sanitizeForRecording(
   req: CapturedRequest,
@@ -21,28 +38,59 @@ export function sanitizeForRecording(
   fakeStore: FakeValueStore,
   scrubCounts: Record<string, number>
 ): { req: CapturedRequest; res: CapturedResponse } {
-  const keptRequestHeaders = keepAllowlisted(req.headers, config.keepHeaders);
-  const keptResponseHeaders = keepAllowlisted(res.headers, config.keepResponseHeaders);
+  const sanitizedRes = sanitizeResponse(res, config, scrubber, fakeStore, scrubCounts);
+  return { req: sanitizeRequest(req, config, scrubber, scrubCounts), res: sanitizedRes };
+}
 
-  const responseBody = redactJsonBody(res.body, res.headers['content-type'] ?? '', config, scrubber, fakeStore);
-
+/**
+ * The request half of the pipeline. Replay runs each live request through this too, with the
+ * current environment's secrets, so a request carrying a credential still matches a recording
+ * made with a different value of it.
+ */
+export function sanitizeRequest(
+  req: CapturedRequest,
+  config: ProxyConfig,
+  scrubber: SecretScrubber,
+  scrubCounts: Record<string, number>
+): CapturedRequest {
   return {
-    req: {
-      ...req,
-      headers: scrubHeaderValues(keptRequestHeaders, scrubber, scrubCounts),
-      body: scrubBuffer(req.body, scrubber, scrubCounts),
-    },
-    res: {
-      ...res,
-      headers: scrubHeaderValues(keptResponseHeaders, scrubber, scrubCounts),
-      body: scrubBuffer(responseBody, scrubber, scrubCounts),
-    },
+    ...req,
+    url: scrubber.scrub(redactCredentialQueryParams(req.url), scrubCounts),
+    headers: scrubHeaderValues(keepAllowlisted(req.headers, config.keepHeaders), scrubber, scrubCounts),
+    body: scrubBuffer(req.body, scrubber, scrubCounts),
+  };
+}
+
+function sanitizeResponse(
+  res: CapturedResponse,
+  config: ProxyConfig,
+  scrubber: SecretScrubber,
+  fakeStore: FakeValueStore,
+  scrubCounts: Record<string, number>
+): CapturedResponse {
+  const redactedBody = redactJsonBody(res.body, res.headers['content-type'] ?? '', config, scrubber, fakeStore);
+  return {
+    ...res,
+    body: scrubBuffer(redactedBody, scrubber, scrubCounts),
+    headers: scrubHeaderValues(keepAllowlisted(res.headers, config.keepResponseHeaders), scrubber, scrubCounts),
   };
 }
 
 function keepAllowlisted(headers: Record<string, string>, allowlist: string[]): Record<string, string> {
-  const lowerAllowlist = allowlist.map((h) => h.toLowerCase());
-  return Object.fromEntries(Object.entries(headers).filter(([name]) => lowerAllowlist.includes(name.toLowerCase())));
+  const kept = new Set([...allowlist, ...ALWAYS_KEPT_HEADERS].map((h) => h.toLowerCase()));
+  return Object.fromEntries(Object.entries(headers).filter(([name]) => kept.has(name.toLowerCase())));
+}
+
+function redactCredentialQueryParams(rawUrl: string): string {
+  const url = new URL(rawUrl);
+  const credentialParams = [...new Set(url.searchParams.keys())].filter((name) =>
+    CREDENTIAL_QUERY_PARAMS.has(name.toLowerCase())
+  );
+  if (credentialParams.length === 0) {
+    return rawUrl;
+  }
+  credentialParams.forEach((name) => url.searchParams.set(name, 'REDACTED'));
+  return url.toString();
 }
 
 function redactJsonBody(
@@ -52,20 +100,19 @@ function redactJsonBody(
   scrubber: SecretScrubber,
   fakeStore: FakeValueStore
 ): Buffer {
-  if (body.length === 0 || !contentType.includes('json')) {
+  if (body.length === 0 || !isJsonContentType(contentType)) {
     return body;
   }
+  let json: JsonNode;
   try {
-    let json = JSON.parse(body.toString('utf8'));
-    // learn secrets before redacting, so this response's own scrub pass also catches a value it just issued
-    scrubber.learnFromJson(json, config.learnSecretFields);
-    json = applyFieldRedaction(json, config.redactFields);
-    json = applyFakeFields(json, config.fakeFields, fakeStore);
-    return Buffer.from(JSON.stringify(json), 'utf8');
+    json = parseJsonLossless(body.toString('utf8'));
   } catch {
-    // not actually JSON despite the content-type; the raw-text scrub pass below still runs on it
+    // not actually JSON despite the content-type; the raw-text scrub pass still runs on it
     return body;
   }
+  scrubber.learnFromJson(json, config.learnSecretFields);
+  const result = applyRedactionRules(json, config.redactFields, config.fakeFields, fakeStore);
+  return result.changed ? Buffer.from(JSON.stringify(result.json), 'utf8') : body;
 }
 
 function scrubHeaderValues(
@@ -76,9 +123,12 @@ function scrubHeaderValues(
   return Object.fromEntries(Object.entries(headers).map(([name, value]) => [name, scrubber.scrub(value, counts)]));
 }
 
+/** Binary bodies are left untouched here. The pre-write scan still checks them for known secrets. */
 function scrubBuffer(body: Buffer, scrubber: SecretScrubber, counts: Record<string, number>): Buffer {
-  if (body.length === 0) {
+  const text = body.length > 0 ? decodeUtf8Strict(body) : undefined;
+  if (text === undefined) {
     return body;
   }
-  return Buffer.from(scrubber.scrub(body.toString('utf8'), counts), 'utf8');
+  const scrubbed = scrubber.scrub(text, counts);
+  return scrubbed === text ? body : Buffer.from(scrubbed, 'utf8');
 }

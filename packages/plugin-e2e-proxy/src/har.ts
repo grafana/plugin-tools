@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import { decodeUtf8Strict } from './bytes.js';
 import type { CapturedRequest, CapturedResponse, Har, HarEntry, HarNameValue, ProxyConfig } from './types.js';
 import { buildMatchKey, describeDifferences, matchKeyToString, type MatchKey } from './match.js';
 
@@ -55,10 +56,16 @@ export function harEntryToCaptured(entry: HarEntry): { req: CapturedRequest; res
 }
 
 function harRequestToCaptured(req: HarEntry['request']): CapturedRequest {
+  const headers: Record<string, string> = Object.fromEntries(req.headers.map((h) => [h.name.toLowerCase(), h.value]));
+  // older recordings may not have kept content-type, but matching needs it to parse the body the same way.
+  // the octet-stream placeholder means the request had none, so restoring it would break the match.
+  if (!headers['content-type'] && req.postData?.mimeType && req.postData.mimeType !== 'application/octet-stream') {
+    headers['content-type'] = req.postData.mimeType;
+  }
   return {
     method: req.method,
     url: req.url,
-    headers: Object.fromEntries(req.headers.map((h) => [h.name.toLowerCase(), h.value])),
+    headers,
     body: Buffer.from(req.postData?.text ?? '', 'utf8'),
   };
 }
@@ -92,11 +99,7 @@ export function toHarEntry(req: CapturedRequest, res: CapturedResponse, startedA
       httpVersion: 'HTTP/1.1',
       headers: toNameValue(res.headers),
       cookies: [],
-      content: {
-        size: res.body.length,
-        mimeType: res.headers['content-type'] ?? 'application/octet-stream',
-        text: res.body.toString('utf8'),
-      },
+      content: responseContent(res),
       redirectURL: '',
       headersSize: -1,
       bodySize: res.body.length,
@@ -104,6 +107,16 @@ export function toHarEntry(req: CapturedRequest, res: CapturedResponse, startedA
     cache: {},
     timings: { send: 0, wait: durationMs, receive: 0 },
   };
+}
+
+/** Text bodies are stored as-is so diffs stay readable; anything that isn't valid UTF-8 is stored as base64. */
+function responseContent(res: CapturedResponse): HarEntry['response']['content'] {
+  const mimeType = res.headers['content-type'] ?? 'application/octet-stream';
+  const text = decodeUtf8Strict(res.body);
+  if (text === undefined) {
+    return { size: res.body.length, mimeType, text: res.body.toString('base64'), encoding: 'base64' };
+  }
+  return { size: res.body.length, mimeType, text };
 }
 
 function toNameValue(headers: Record<string, string>): HarNameValue[] {

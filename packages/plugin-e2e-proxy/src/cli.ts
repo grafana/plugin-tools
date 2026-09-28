@@ -2,7 +2,7 @@ import { defaultConfig, loadConfig } from './config.js';
 import { summarizeFields } from './fields.js';
 import { readHar, writeHar } from './har.js';
 import { redactExistingHar } from './offlineRedact.js';
-import { findProvisionedSecrets } from './provisioning.js';
+import { resolveKnownSecrets } from './provisioning.js';
 import { SecretScrubber } from './redact.js';
 import { scanHar } from './scan.js';
 import { startProxyServer } from './server.js';
@@ -61,7 +61,7 @@ export async function runServe(options: Record<string, string>): Promise<void> {
   const config = await loadConfigOrDefault(options.config);
   const caDir = options['ca-dir'] ?? `${harPath}.ca`;
   const ca = await loadOrCreateCA(caDir);
-  const knownSecrets = options.provisioning ? await findProvisionedSecrets(options.provisioning) : {};
+  const knownSecrets = await resolveKnownSecrets(options.provisioning, config.secretEnvVars);
   const port = options.port ? Number(options.port) : 8080;
 
   const proxy = await startProxyServer({ mode, config, harPath, ca, knownSecrets, port });
@@ -78,6 +78,8 @@ export async function runServe(options: Record<string, string>): Promise<void> {
       } else {
         console.log(`wrote ${summary.entries} entr${summary.entries === 1 ? 'y' : 'ies'} to ${harPath}`);
       }
+      const scrubbed = Object.entries(summary.scrubbed).map(([label, count]) => `${label} x${count}`);
+      console.log(`scrubbed: ${scrubbed.length > 0 ? scrubbed.join(', ') : 'nothing'}`);
     }
     console.log(
       `matched=${proxy.stats.matched} missed=${proxy.stats.missed} recorded=${proxy.stats.recorded} passthrough=${proxy.stats.passthrough}`
@@ -93,7 +95,8 @@ export async function runServe(options: Record<string, string>): Promise<void> {
 
 export async function runScan(options: Record<string, string>): Promise<void> {
   const harPath = requireOption(options, 'har');
-  const knownSecrets = options.provisioning ? await findProvisionedSecrets(options.provisioning) : {};
+  const config = await loadConfigOrDefault(options.config);
+  const knownSecrets = await resolveKnownSecrets(options.provisioning, config.secretEnvVars);
   const har = await readHar(harPath);
   const findings = scanHar(har, harPath, new SecretScrubber(knownSecrets));
 
@@ -119,7 +122,7 @@ export async function runFields(options: Record<string, string>): Promise<void> 
 export async function runRedact(options: Record<string, string>): Promise<void> {
   const harPath = requireOption(options, 'har');
   const config = await loadConfigOrDefault(options.config);
-  const knownSecrets = options.provisioning ? await findProvisionedSecrets(options.provisioning) : {};
+  const knownSecrets = await resolveKnownSecrets(options.provisioning, config.secretEnvVars);
   const har = await readHar(harPath);
   const redacted = redactExistingHar(har, config, knownSecrets);
 

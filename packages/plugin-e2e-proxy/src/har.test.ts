@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { mergeConfig } from './config.js';
-import { emptyHar, ReplayStore, toHarEntry } from './har.js';
+import { emptyHar, harEntryToCaptured, ReplayStore, toHarEntry } from './har.js';
+import { sanitizeForRecording, sanitizeRequest } from './pipeline.js';
+import { FakeValueStore, SecretScrubber } from './redact.js';
 import type { CapturedRequest, CapturedResponse } from './types.js';
 
 function req(url = 'https://api.example.com/v1/status'): CapturedRequest {
@@ -68,5 +70,31 @@ describe('ReplayStore.closestMatch', () => {
     const config = mergeConfig({});
     const store = new ReplayStore(har, config);
     expect(store.closestMatch(req(), config)).toBeUndefined();
+  });
+});
+
+describe('recording then replaying through the sanitize pipeline', () => {
+  it('matches a POST even when keepHeaders leaves out content-type', () => {
+    const config = mergeConfig({ keepHeaders: ['x-amz-target'] });
+    const post: CapturedRequest = {
+      method: 'POST',
+      url: 'https://redshift-data.us-east-2.amazonaws.com/',
+      headers: { 'content-type': 'application/x-amz-json-1.1', 'x-amz-target': 'RedshiftData.ExecuteStatement' },
+      body: Buffer.from(JSON.stringify({ Sql: 'select 1' })),
+    };
+    const scrubber = new SecretScrubber({});
+    const sanitized = sanitizeForRecording(post, res('{"Id":"1"}'), config, scrubber, new FakeValueStore(), {});
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(sanitized.req, sanitized.res, new Date(), 1));
+
+    const store = new ReplayStore(har, config);
+    expect(store.next(sanitizeRequest(post, config, scrubber, {}), config)?.response.content.text).toBe('{"Id":"1"}');
+  });
+
+  it('stores a binary response as base64 and replays the same bytes', () => {
+    const binary = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0xff, 0xfe, 0x00]);
+    const entry = toHarEntry(req(), { status: 200, statusText: 'OK', headers: {}, body: binary }, new Date(), 1);
+    expect(entry.response.content.encoding).toBe('base64');
+    expect(harEntryToCaptured(entry).res.body.equals(binary)).toBe(true);
   });
 });

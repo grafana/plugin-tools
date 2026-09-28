@@ -1,94 +1,117 @@
 /**
- * Shared helpers for walking parsed JSON and matching against a small set of field-name and
- * JSON-path patterns. Used by matching (ignoreFields), redaction (redactFields/fakeFields) and
- * the field summary (fields.ts).
+ * Shared helpers for walking parsed JSON and matching config patterns against its fields. Used by
+ * matching (ignoreFields), redaction (redactFields/fakeFields), token learning and `fields`.
  *
- * Patterns are either a bare field name ("password", matches at any depth and any array index)
- * or a JSONPath-ish string using "$" and "[*]" for arrays, e.g. "$.items[*].author.email".
+ * A field's pattern path joins object keys with "." and marks array elements with "[*]", e.g.
+ * "items[*].author.email". A config pattern is either a bare field name ("password", matching that
+ * key at any depth) or a path in the same form, optionally prefixed with "$.". The paths printed by
+ * the `fields` command can be pasted into proxy.json as they are.
  */
 
-export type JsonNode = string | number | boolean | null | JsonNode[] | { [key: string]: JsonNode };
+/** A number kept as its original source text, see `parseJsonLossless`. */
+export interface RawJson {
+  readonly rawJSON: string;
+}
+
+export type JsonNode = string | number | boolean | null | RawJson | JsonNode[] | { [key: string]: JsonNode };
+
+interface LosslessJson {
+  parse(text: string, reviver: (key: string, value: unknown, context: { source?: string }) => unknown): unknown;
+  rawJSON(text: string): RawJson;
+  isRawJSON(value: unknown): value is RawJson;
+}
+
+const losslessJson = JSON as unknown as LosslessJson;
+
+/**
+ * Parses JSON keeping every number as its original text, so serializing it again with
+ * `JSON.stringify` never rounds integers above 2^53 or rewrites `1.0` as `1`.
+ */
+export function parseJsonLossless(text: string): JsonNode {
+  return losslessJson.parse(text, (_key, value, context) =>
+    typeof value === 'number' && context.source !== undefined ? losslessJson.rawJSON(context.source) : value
+  ) as JsonNode;
+}
+
+export function isRawJson(node: unknown): node is RawJson {
+  return losslessJson.isRawJSON(node);
+}
+
+export function isJsonObject(node: JsonNode): node is { [key: string]: JsonNode } {
+  return typeof node === 'object' && node !== null && !Array.isArray(node) && !isRawJson(node);
+}
+
+/** Covers application/json, AWS's application/x-amz-json-1.1 and vendor types like application/vnd.api+json. */
+export function isJsonContentType(contentType: string): boolean {
+  return /json/i.test(contentType);
+}
+
+/** Text form of a leaf value, with numbers in their original source form. */
+export function leafToString(node: JsonNode): string {
+  return isRawJson(node) ? node.rawJSON : String(node);
+}
+
+export function childKeyPath(parent: string, key: string): string {
+  return parent === '' ? key : `${parent}.${key}`;
+}
+
+export function childIndexPath(parent: string): string {
+  return `${parent}[*]`;
+}
 
 export interface FieldMatch {
-  /** Dotted path with array indices, e.g. "items.0.author.email". Stable for a given document shape. */
+  /** Dotted path with array indices, e.g. "items.0.author.email". Unique per node in a document. */
   path: string;
-  /** The field-name-only path, with array indices collapsed to "[*]". Used to match config patterns. */
+  /** Path with array indices collapsed to "[*]", e.g. "items[*].author.email". Used to match config patterns. */
   patternPath: string;
   value: JsonNode;
 }
 
-/** Walks every leaf and object key in a JSON document, depth first. */
-export function walkFields(node: JsonNode, pathSegments: string[] = [], patternSegments: string[] = []): FieldMatch[] {
-  const results: FieldMatch[] = [];
-
-  if (Array.isArray(node)) {
-    node.forEach((item, index) => {
-      results.push(...walkFields(item, [...pathSegments, String(index)], [...patternSegments, '[*]']));
-    });
-    return results;
-  }
-
-  if (typeof node === 'object' && node !== null) {
-    for (const [key, value] of Object.entries(node)) {
-      results.push(...walkFields(value, [...pathSegments, key], [...patternSegments, key]));
+/**
+ * Visits every node below the root, depth first, containers included. Results are collected by the
+ * caller rather than returned per level, so a huge array doesn't overflow the call stack.
+ */
+export function visitJson(root: JsonNode, visit: (match: FieldMatch, isLeaf: boolean) => void): void {
+  const walk = (node: JsonNode, path: string, patternPath: string): void => {
+    if (Array.isArray(node)) {
+      if (path !== '') {
+        visit({ path, patternPath, value: node }, false);
+      }
+      node.forEach((item, index) => walk(item, childKeyPath(path, String(index)), childIndexPath(patternPath)));
+      return;
     }
-    return results;
-  }
+    if (isJsonObject(node)) {
+      if (path !== '') {
+        visit({ path, patternPath, value: node }, false);
+      }
+      for (const [key, value] of Object.entries(node)) {
+        walk(value, childKeyPath(path, key), childKeyPath(patternPath, key));
+      }
+      return;
+    }
+    if (path !== '') {
+      visit({ path, patternPath, value: node }, true);
+    }
+  };
+  walk(root, '', '');
+}
 
-  if (pathSegments.length > 0) {
-    results.push({
-      path: pathSegments.join('.'),
-      patternPath: patternSegments.join('.'),
-      value: node,
-    });
-  }
+/** Every leaf value in a JSON document, depth first. */
+export function walkFields(root: JsonNode): FieldMatch[] {
+  const results: FieldMatch[] = [];
+  visitJson(root, (match, isLeaf) => {
+    if (isLeaf) {
+      results.push(match);
+    }
+  });
   return results;
 }
 
-/** True when `patternPath` (e.g. "items.[*].author.email") matches `pattern` (a bare field name or a "$.a[*].b" path). */
+/** True when a field at `patternPath` (e.g. "items[*].author.email") is selected by a config `pattern`. */
 export function matchesFieldPattern(patternPath: string, pattern: string): boolean {
-  if (!pattern.startsWith('$')) {
-    // bare field name: matches the last segment at any depth
-    const segments = patternPath.split('.');
-    return segments[segments.length - 1] === pattern;
+  const normalized = pattern.replace(/^\$\.?/, '').replace(/\.\[\*\]/g, '[*]');
+  if (!/[.[]/.test(normalized)) {
+    return patternPath.slice(patternPath.lastIndexOf('.') + 1) === normalized;
   }
-  const normalized = pattern
-    .replace(/^\$\.?/, '')
-    .replace(/\[\*\]/g, '[*]')
-    .replace(/\./g, '.')
-    .replace(/\[\*\]\.?/g, '[*].');
-  const normalizedPatternPath = patternPath.replace(/\.\[\*\]/g, '[*]');
-  return normalizedPatternPath === normalized.replace(/\.$/, '');
-}
-
-/** Returns the leaf-object path used to remove a matched field, split on "." with array indices as-is. */
-export function pathToSegments(path: string): Array<string | number> {
-  return path.split('.').map((segment) => (/^\d+$/.test(segment) ? Number(segment) : segment));
-}
-
-export function getAtPath(node: JsonNode, segments: Array<string | number>): JsonNode | undefined {
-  let current: JsonNode | undefined = node;
-  for (const segment of segments) {
-    if (current === undefined || current === null || typeof current !== 'object') {
-      return undefined;
-    }
-    current = Array.isArray(current) ? current[segment as number] : current[segment as string];
-  }
-  return current;
-}
-
-export function setAtPath(node: JsonNode, segments: Array<string | number>, value: JsonNode): void {
-  let current: JsonNode = node;
-  for (let i = 0; i < segments.length - 1; i++) {
-    const segment = segments[i];
-    current = Array.isArray(current)
-      ? current[segment as number]
-      : (current as Record<string, JsonNode>)[segment as string];
-  }
-  const last = segments[segments.length - 1];
-  if (Array.isArray(current)) {
-    current[last as number] = value;
-  } else if (typeof current === 'object' && current !== null) {
-    (current as Record<string, JsonNode>)[last as string] = value;
-  }
+  return patternPath.replace(/\.\[\*\]/g, '[*]') === normalized;
 }

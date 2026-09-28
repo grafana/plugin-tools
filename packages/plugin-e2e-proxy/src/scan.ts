@@ -1,11 +1,6 @@
-import type { Finding, Har } from './types.js';
+import type { Finding, Har, HarEntry, HarNameValue } from './types.js';
 import type { SecretScrubber } from './redact.js';
 
-/**
- * Built-in patterns for secret-shaped strings that scrubbing might have missed, because they
- * weren't in provisioning and weren't learned (a hardcoded key, a webhook signing secret, ...).
- * This is a backstop, not the primary control - the primary control is scrubbing known values.
- */
 /** A 40-char lowercase-hex string is a git SHA-1, not a base64 secret - ubiquitous in GitHub API data. */
 const isGitSha = (match: string): boolean => /^[0-9a-f]{40}$/.test(match);
 
@@ -16,6 +11,11 @@ interface SecretShapePattern {
   isFalsePositive?: (match: string) => boolean;
 }
 
+/**
+ * Built-in patterns for secret-shaped strings that scrubbing might have missed, because they
+ * weren't in provisioning and weren't learned (a hardcoded key, a webhook signing secret, ...).
+ * This is a backstop, not the primary control - the primary control is scrubbing known values.
+ */
 const SECRET_SHAPE_PATTERNS: SecretShapePattern[] = [
   { rule: 'aws-access-key-id', pattern: /\bAKIA[0-9A-Z]{16}\b/ },
   { rule: 'aws-secret-key-like', pattern: /\b[A-Za-z0-9/+=]{40}\b/, isFalsePositive: isGitSha },
@@ -28,57 +28,71 @@ const SECRET_SHAPE_PATTERNS: SecretShapePattern[] = [
 /**
  * Scans a HAR document for anything that still looks like a secret after scrubbing. Called
  * right before writing a recording to disk - a non-empty result means the write is refused.
+ * Each part of an entry is scanned as the raw text a client sends or receives, not as the escaped
+ * JSON it's stored as.
  */
 export function scanHar(har: Har, filePath: string, scrubber: SecretScrubber): Finding[] {
   const findings: Finding[] = [];
-  const serialized = JSON.stringify(har.log.entries);
-  const learnedCounts: Record<string, number> = {};
-  const stillPresent = scrubber.scrub(serialized, learnedCounts) !== serialized;
-  // scrub() mutates nothing; a difference here means a known secret value is still in the file.
-  if (stillPresent) {
-    findings.push({
-      file: filePath,
-      entry: -1,
-      location: '(document)',
-      rule: 'known-secret-value',
-      preview: 'a known secret value from provisioning or a learned token is still present',
-    });
-  }
 
   har.log.entries.forEach((entry, index) => {
-    const requestText = JSON.stringify(entry.request);
-    const responseText = JSON.stringify(entry.response);
-    for (const shapePattern of SECRET_SHAPE_PATTERNS) {
-      checkText(requestText, 'request', index, shapePattern, findings, filePath);
-      checkText(responseText, 'response', index, shapePattern, findings, filePath);
+    for (const [location, text] of scannableParts(entry)) {
+      if (text === '') {
+        continue;
+      }
+      // scrub() has no side effects; any change means a known or learned secret is still present
+      if (scrubber.scrub(text, {}) !== text) {
+        findings.push({
+          file: filePath,
+          entry: index,
+          location,
+          rule: 'known-secret-value',
+          preview: 'a known secret value from provisioning or a learned token is still present',
+        });
+      }
+      for (const shapePattern of SECRET_SHAPE_PATTERNS) {
+        const match = firstRealMatch(text, shapePattern);
+        if (match) {
+          findings.push({
+            file: filePath,
+            entry: index,
+            location,
+            rule: shapePattern.rule,
+            preview: maskPreview(match),
+          });
+        }
+      }
     }
   });
 
   return findings;
 }
 
-function checkText(
-  text: string,
-  location: 'request' | 'response',
-  entryIndex: number,
-  { rule, pattern, isFalsePositive }: SecretShapePattern,
-  findings: Finding[],
-  filePath: string
-): void {
+function scannableParts(entry: HarEntry): Array<[string, string]> {
+  const { content } = entry.response;
+  // binary bodies are stored as base64; latin1 maps each byte to one char, so an ASCII secret stays findable
+  const responseBody =
+    content.encoding === 'base64' ? Buffer.from(content.text, 'base64').toString('latin1') : content.text;
+  return [
+    ['request.url', entry.request.url],
+    ['request.headers', headerText(entry.request.headers)],
+    ['request.body', entry.request.postData?.text ?? ''],
+    ['response.headers', headerText(entry.response.headers)],
+    ['response.body', responseBody],
+  ];
+}
+
+function headerText(headers: HarNameValue[]): string {
+  return headers.map((h) => `${h.name}: ${h.value}`).join('\n');
+}
+
+function firstRealMatch(text: string, { pattern, isFalsePositive }: SecretShapePattern): string | undefined {
   const globalPattern = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : `${pattern.flags}g`);
   for (const match of text.matchAll(globalPattern)) {
-    if (isFalsePositive?.(match[0])) {
-      continue;
+    if (!isFalsePositive?.(match[0])) {
+      return match[0];
     }
-    findings.push({
-      file: filePath,
-      entry: entryIndex,
-      location,
-      rule,
-      preview: maskPreview(match[0]),
-    });
-    return;
   }
+  return undefined;
 }
 
 function maskPreview(value: string): string {

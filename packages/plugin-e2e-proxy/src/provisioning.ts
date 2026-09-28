@@ -3,11 +3,28 @@ import path from 'path';
 import { parse as parseYml } from 'yaml';
 
 /**
+ * Every secret value this run knows about: env vars referenced under `secureJsonData` in
+ * provisioning, plus any listed in proxy.json's `secretEnvVars`. Keyed by env var name.
+ */
+export async function resolveKnownSecrets(
+  provisioningRootDir: string | undefined,
+  secretEnvVars: string[]
+): Promise<Record<string, string>> {
+  const secrets = provisioningRootDir ? await findProvisionedSecrets(provisioningRootDir) : {};
+  for (const name of secretEnvVars) {
+    const value = process.env[name];
+    if (value) {
+      secrets[name] = value;
+    }
+  }
+  return secrets;
+}
+
+/**
  * Reads `provisioning/datasources/*.yaml`, finds every `$VAR` / `${VAR}` / `${VAR:-default}`
- * reference under a `secureJsonData` block, and resolves each one against `process.env`.
- *
- * Returns a map of env var name to real value, for env vars that are actually set. Unset vars
- * (dummy defaults used in CI) are left out, since there's nothing to scrub.
+ * reference under a `secureJsonData` block, and resolves it the way Grafana does: the env var's
+ * value, or the default when it's unset or empty. That default is the value Grafana actually sends
+ * in CI, and replay needs it to normalize requests the same way the recording was.
  */
 export async function findProvisionedSecrets(provisioningRootDir: string): Promise<Record<string, string>> {
   const secrets: Record<string, string> = {};
@@ -28,22 +45,22 @@ export async function findProvisionedSecrets(provisioningRootDir: string): Promi
     } catch {
       continue;
     }
-    collectSecretVarNames(doc).forEach((varName) => {
-      const value = process.env[varName];
-      if (value !== undefined && value !== '') {
-        secrets[varName] = value;
+    for (const [name, fallback] of collectSecretVarRefs(doc)) {
+      const value = process.env[name] || fallback;
+      if (value) {
+        secrets[name] = value;
       }
-    });
+    }
   }
 
   return secrets;
 }
 
-const VAR_REF_RE = /\$\{(\w+)(?::-.*?)?\}|\$(\w+)/g;
+const VAR_REF_RE = /\$\{(\w+)(?::-(.*?))?\}|\$(\w+)/g;
 
-/** Walks every `secureJsonData` object in the parsed provisioning YAML and collects referenced env var names. */
-function collectSecretVarNames(doc: unknown): Set<string> {
-  const names = new Set<string>();
+/** Walks every `secureJsonData` object in the parsed provisioning YAML and collects referenced env vars and their defaults. */
+function collectSecretVarRefs(doc: unknown): Map<string, string | undefined> {
+  const refs = new Map<string, string | undefined>();
 
   function walk(node: unknown, insideSecureJsonData: boolean): void {
     if (Array.isArray(node)) {
@@ -53,9 +70,9 @@ function collectSecretVarNames(doc: unknown): Set<string> {
     if (typeof node !== 'object' || node === null) {
       if (insideSecureJsonData && typeof node === 'string') {
         for (const match of node.matchAll(VAR_REF_RE)) {
-          const varName = match[1] ?? match[2];
-          if (varName) {
-            names.add(varName);
+          const name = match[1] ?? match[3];
+          if (name) {
+            refs.set(name, match[2]);
           }
         }
       }
@@ -67,5 +84,5 @@ function collectSecretVarNames(doc: unknown): Set<string> {
   }
 
   walk(doc, false);
-  return names;
+  return refs;
 }

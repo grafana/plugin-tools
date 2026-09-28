@@ -75,3 +75,13 @@ describe('buildMatchKey', () => {
     expect(a).toBe(b);
   });
 });
+
+describe('buildMatchKey with AWS JSON-protocol bodies', () => {
+  it('applies ignoreFields to application/x-amz-json-1.1 bodies', () => {
+    const config = mergeConfig({ ignoreFields: ['ClientToken'] });
+    const headers = { 'content-type': 'application/x-amz-json-1.1' };
+    const a = req({ headers, body: Buffer.from(JSON.stringify({ Sql: 'select 1', ClientToken: 'uuid-1' })) });
+    const b = req({ headers, body: Buffer.from(JSON.stringify({ Sql: 'select 1', ClientToken: 'uuid-2' })) });
+    expect(matchKeyToString(buildMatchKey(a, config))).toBe(matchKeyToString(buildMatchKey(b, config)));
+  });
+});

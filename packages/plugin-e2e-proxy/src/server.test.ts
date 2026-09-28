@@ -3,6 +3,7 @@ import http from 'node:http';
 import https from 'node:https';
 import net from 'node:net';
 import tls from 'node:tls';
+import zlib from 'node:zlib';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -226,5 +227,135 @@ describe('startProxyServer: HTTPS via CONNECT (TLS interception)', () => {
     expect(rawResponse).toContain('HTTP/1.1 200');
     expect(rawResponse).toContain('"ok":true');
     expect(proxy.stats.recorded).toBe(1);
+  });
+});
+
+describe('startProxyServer: shutdown and wire formats', () => {
+  let dir: string;
+  let harPath: string;
+  let servers: Array<http.Server | net.Server>;
+  let proxy: ProxyServerHandle | undefined;
+
+  beforeEach(async () => {
+    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-wire-'));
+    harPath = join(dir, 'api.har');
+    servers = [];
+  });
+
+  afterEach(async () => {
+    await proxy?.close().catch(() => undefined);
+    proxy = undefined;
+    await Promise.all(servers.map((s) => new Promise((resolve) => s.close(resolve))));
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  /** Listens on all interfaces, so "localhost" works whichever address family it resolves to. */
+  function listen(server: http.Server | net.Server): Promise<number> {
+    servers.push(server);
+    return new Promise((resolve) =>
+      server.listen(0, () => {
+        const address = server.address();
+        resolve(typeof address === 'object' && address ? address.port : 0);
+      })
+    );
+  }
+
+  function postThroughProxy(
+    proxyPort: number,
+    targetUrl: string,
+    body: string
+  ): Promise<{ status: number; body: string }> {
+    return new Promise((resolve, reject) => {
+      const req = http.request(
+        {
+          host: '127.0.0.1',
+          port: proxyPort,
+          method: 'POST',
+          path: targetUrl,
+          headers: { 'content-type': 'application/json', 'content-length': Buffer.byteLength(body) },
+        },
+        (res) => {
+          const chunks: Buffer[] = [];
+          res.on('data', (c) => chunks.push(c));
+          res.on('end', () => resolve({ status: res.statusCode ?? 0, body: Buffer.concat(chunks).toString('utf8') }));
+        }
+      );
+      req.on('error', reject);
+      req.end(body);
+    });
+  }
+
+  it('closes promptly and still writes the recording while a passthrough tunnel is open', async () => {
+    const tunnelTargetPort = await listen(net.createServer(() => undefined));
+    const apiPort = await listen(
+      http.createServer((_req, res) => {
+        res.writeHead(200, { 'content-type': 'application/json' });
+        res.end('{"ok":true}');
+      })
+    );
+    const ca = await loadOrCreateCA(join(dir, 'ca'));
+    proxy = await startProxyServer({
+      mode: 'record',
+      config: mergeConfig({ hosts: ['localhost'] }),
+      harPath,
+      ca,
+      knownSecrets: {},
+    });
+
+    const tunnel = net.connect(proxy.port, '127.0.0.1');
+    await new Promise<void>((resolve) => {
+      tunnel.once('data', () => resolve());
+      tunnel.write(`CONNECT 127.0.0.1:${tunnelTargetPort} HTTP/1.1\r\nHost: 127.0.0.1:${tunnelTargetPort}\r\n\r\n`);
+    });
+    tunnel.on('error', () => undefined);
+    await requestThroughProxy(proxy.port, `http://localhost:${apiPort}/v1/status`);
+
+    const startedAt = Date.now();
+    const summary = await proxy.close();
+    proxy = undefined;
+
+    expect(Date.now() - startedAt).toBeLessThan(2000);
+    expect(summary?.files).toEqual([harPath]);
+  });
+
+  it('records a gzipped upstream response as readable, redacted JSON', async () => {
+    const apiPort = await listen(
+      http.createServer((_req, res) => {
+        res.writeHead(200, { 'content-type': 'application/json', 'content-encoding': 'gzip' });
+        res.end(zlib.gzipSync('{"password":"hunter2","ok":true}'));
+      })
+    );
+    const ca = await loadOrCreateCA(join(dir, 'ca'));
+    const config = mergeConfig({ hosts: ['localhost'], redactFields: ['password'] });
+    proxy = await startProxyServer({ mode: 'record', config, harPath, ca, knownSecrets: {} });
+
+    await requestThroughProxy(proxy.port, `http://localhost:${apiPort}/v1/status`);
+    await proxy.close();
+    proxy = undefined;
+
+    const { content } = (await readHar(harPath)).log.entries[0].response;
+    expect(JSON.parse(content.text)).toEqual({ password: 'REDACTED', ok: true });
+  });
+
+  it('replays a request that carries a provisioned secret when CI has a different value', async () => {
+    const apiPort = await listen(
+      http.createServer((_req, res) => {
+        res.writeHead(200, { 'content-type': 'application/json' });
+        res.end('{"access_token":"issued-token-value"}');
+      })
+    );
+    const ca = await loadOrCreateCA(join(dir, 'ca'));
+    const config = mergeConfig({ hosts: ['localhost'] });
+    const tokenUrl = `http://localhost:${apiPort}/oauth/token`;
+
+    proxy = await startProxyServer({ mode: 'record', config, harPath, ca, knownSecrets: { S: 'real-secret-value' } });
+    await postThroughProxy(proxy.port, tokenUrl, JSON.stringify({ client_secret: 'real-secret-value' }));
+    await proxy.close();
+
+    proxy = await startProxyServer({ mode: 'replay', config, harPath, ca, knownSecrets: { S: 'dummy-ci-value' } });
+    const replayed = await postThroughProxy(proxy.port, tokenUrl, JSON.stringify({ client_secret: 'dummy-ci-value' }));
+
+    expect(replayed.status).toBe(200);
+    expect(proxy.stats.matched).toBe(1);
   });
 });
