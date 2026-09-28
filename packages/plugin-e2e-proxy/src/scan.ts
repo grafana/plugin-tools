@@ -20,7 +20,8 @@ const SECRET_SHAPE_PATTERNS: SecretShapePattern[] = [
   { rule: 'aws-access-key-id', pattern: /\bAKIA[0-9A-Z]{16}\b/ },
   { rule: 'aws-secret-key-like', pattern: /\b[A-Za-z0-9/+=]{40}\b/, isFalsePositive: isGitSha },
   { rule: 'github-token', pattern: /\bgh[pousr]_[A-Za-z0-9]{36,}\b/ },
-  { rule: 'bearer-jwt', pattern: /\bBearer\s+eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/ },
+  // any JWT, not just a Bearer header: a form-encoded OAuth assertion is exchangeable for an access token
+  { rule: 'jwt', pattern: /\beyJ[A-Za-z0-9_-]{8,}\.eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}/ },
   { rule: 'generic-api-key', pattern: /"(?:api[_-]?key|apikey)"\s*:\s*"(?!REDACTED)[^"]{12,}"/i },
   { rule: 'private-key-block', pattern: /-----BEGIN [A-Z ]*PRIVATE KEY-----/ },
 ];

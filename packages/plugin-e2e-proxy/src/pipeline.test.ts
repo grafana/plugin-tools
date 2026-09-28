@@ -236,3 +236,35 @@ describe('JSON held in a string value (AWS Secrets Manager SecretString)', () =>
     expect(scrubber.scrub('connecting with hunter2hunter2', {})).toBe('connecting with REDACTED');
   });
 });
+
+describe('OAuth token requests with a form-encoded JWT assertion (Google service accounts)', () => {
+  const jwt = (issuedAt: number) =>
+    [
+      Buffer.from('{"alg":"RS256","typ":"JWT"}').toString('base64url'),
+      Buffer.from(JSON.stringify({ iss: 'sa@project.iam.gserviceaccount.com', iat: issuedAt })).toString('base64url'),
+      'c2lnbmF0dXJlLWJ5dGVzLWhlcmU',
+    ].join('.');
+  const tokenRequest = (issuedAt: number) =>
+    req({
+      method: 'POST',
+      url: 'https://oauth2.googleapis.com/token',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: Buffer.from(`grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt(issuedAt)}`),
+    });
+
+  it('redacts the assertion and keeps the other form fields', () => {
+    const sanitized = sanitizeRequest(tokenRequest(1759050000), mergeConfig({}), new SecretScrubber({}), {});
+    const form = new URLSearchParams(sanitized.body.toString());
+    expect(form.get('assertion')).toBe('REDACTED');
+    expect(form.get('grant_type')).toBe('urn:ietf:params:oauth:grant-type:jwt-bearer');
+  });
+
+  it('gives token requests signed at different times the same match key', () => {
+    const config = mergeConfig({});
+    const key = (issuedAt: number) =>
+      matchKeyToString(
+        buildMatchKey(sanitizeRequest(tokenRequest(issuedAt), config, new SecretScrubber({}), {}), config)
+      );
+    expect(key(1759053600)).toBe(key(1759050000));
+  });
+});

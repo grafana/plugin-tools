@@ -102,3 +102,19 @@ describe('scanHar locations', () => {
     expect(findings).toContainEqual(expect.objectContaining({ rule: 'known-secret-value', location: 'response.body' }));
   });
 });
+
+describe('scanHar JWT rule', () => {
+  it('flags a bare JWT in a form body, not just a Bearer header', () => {
+    const har = emptyHar();
+    const jwt = 'eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzYUBwcm9qZWN0In0.c2lnbmF0dXJlLWJ5dGVz';
+    const tokenRequest: CapturedRequest = {
+      method: 'POST',
+      url: 'https://oauth2.googleapis.com/token',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: Buffer.from(`grant_type=jwt-bearer&assertion=${jwt}`),
+    };
+    har.log.entries.push(toHarEntry(tokenRequest, res('{}'), new Date(), 1));
+    const findings = scanHar(har, 'e2e/recordings/api.har', new SecretScrubber({}));
+    expect(findings).toContainEqual(expect.objectContaining({ rule: 'jwt', location: 'request.body' }));
+  });
+});

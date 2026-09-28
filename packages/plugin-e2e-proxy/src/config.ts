@@ -4,7 +4,7 @@ import { PRESETS, type Preset, type ProxyConfig } from './types.js';
 /** What proxy.json may contain: any config field, plus an optional preset. */
 export type ConfigFile = Partial<ProxyConfig> & { preset?: Preset };
 
-type ListField = 'keepHeaders' | 'ignoreFields' | 'learnSecretFields' | 'credentialQueryParams';
+type ListField = 'keepHeaders' | 'ignoreFields' | 'learnSecretFields' | 'credentialParams';
 
 /** Vendor conventions, kept out of the defaults. Added on top of the defaults or your own lists. */
 const PRESET_ADDITIONS: Record<Preset, Partial<Record<ListField, string[]>>> = {
@@ -14,7 +14,7 @@ const PRESET_ADDITIONS: Record<Preset, Partial<Record<ListField, string[]>>> = {
     // idempotency tokens the AWS SDK fills with a fresh UUID on every call
     ignoreFields: ['ClientToken', 'ClientRequestToken', 'IdempotencyToken'],
     learnSecretFields: ['SecretAccessKey', 'SessionToken'],
-    credentialQueryParams: ['x-amz-credential', 'x-amz-security-token', 'x-amz-signature'],
+    credentialParams: ['x-amz-credential', 'x-amz-security-token', 'x-amz-signature'],
   },
 };
 
@@ -25,14 +25,18 @@ export function defaultConfig(): ProxyConfig {
     keepResponseHeaders: ['content-type'],
     ignoreFields: [],
     ignoreQueryParams: [],
-    credentialQueryParams: [
+    credentialParams: [
       'access_token',
       'api-key',
       'api_key',
       'apikey',
+      // OAuth: a signed JWT (Google service accounts) that can be exchanged for an access token until it expires
+      'assertion',
+      'client_assertion',
       'client_secret',
       'key',
       'password',
+      'refresh_token',
       'sig',
       'signature',
       'token',
@@ -78,7 +82,7 @@ function validateConfig(value: unknown): void {
     'keepResponseHeaders',
     'ignoreFields',
     'ignoreQueryParams',
-    'credentialQueryParams',
+    'credentialParams',
     'ignoreBodyFor',
     'redactFields',
     'secretEnvVars',

@@ -38,9 +38,9 @@ export function sanitizeRequest(
 ): CapturedRequest {
   return {
     ...req,
-    url: scrubber.scrub(redactCredentialQueryParams(req.url, config.credentialQueryParams), scrubCounts),
+    url: scrubber.scrub(redactCredentialQueryParams(req.url, config.credentialParams), scrubCounts),
     headers: scrubHeaderValues(keepAllowlisted(req.headers, config.keepHeaders), scrubber, scrubCounts),
-    body: scrubBuffer(req.body, scrubber, scrubCounts),
+    body: scrubBuffer(redactCredentialFormFields(req, config.credentialParams), scrubber, scrubCounts),
   };
 }
 
@@ -64,17 +64,25 @@ function keepAllowlisted(headers: Record<string, string>, allowlist: string[]): 
   return Object.fromEntries(Object.entries(headers).filter(([name]) => kept.has(name.toLowerCase())));
 }
 
-function redactCredentialQueryParams(rawUrl: string, credentialQueryParams: string[]): string {
+function redactCredentialQueryParams(rawUrl: string, credentialParams: string[]): string {
   const url = new URL(rawUrl);
-  const credentialNames = new Set(credentialQueryParams.map((name) => name.toLowerCase()));
-  const credentialParams = [...new Set(url.searchParams.keys())].filter((name) =>
-    credentialNames.has(name.toLowerCase())
-  );
-  if (credentialParams.length === 0) {
-    return rawUrl;
+  return redactParams(url.searchParams, credentialParams) ? url.toString() : rawUrl;
+}
+
+function redactCredentialFormFields(req: CapturedRequest, credentialParams: string[]): Buffer {
+  if (req.body.length === 0 || !(req.headers['content-type'] ?? '').includes('application/x-www-form-urlencoded')) {
+    return req.body;
   }
-  credentialParams.forEach((name) => url.searchParams.set(name, 'REDACTED'));
-  return url.toString();
+  const form = new URLSearchParams(req.body.toString('utf8'));
+  return redactParams(form, credentialParams) ? Buffer.from(form.toString(), 'utf8') : req.body;
+}
+
+/** Sets every credential param to REDACTED in place. Returns whether any was present. */
+function redactParams(params: URLSearchParams, credentialParams: string[]): boolean {
+  const credentialNames = new Set(credentialParams.map((name) => name.toLowerCase()));
+  const present = [...new Set(params.keys())].filter((name) => credentialNames.has(name.toLowerCase()));
+  present.forEach((name) => params.set(name, 'REDACTED'));
+  return present.length > 0;
 }
 
 function redactJsonBody(

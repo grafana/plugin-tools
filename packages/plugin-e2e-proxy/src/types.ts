@@ -18,8 +18,11 @@ export interface ProxyConfig {
   ignoreFields: string[];
   /** Query params that are left out when matching. */
   ignoreQueryParams: string[];
-  /** Query params whose value is a credential by convention, redacted even when it isn't a known secret. */
-  credentialQueryParams: string[];
+  /**
+   * Query params and form-encoded body fields whose value is a credential by convention, redacted
+   * even when it isn't a known secret (e.g. an OAuth `assertion` or an API `key`).
+   */
+  credentialParams: string[];
   /** `host/path` prefixes whose request body is left out when matching. */
   ignoreBodyFor: string[];
   /** Response JSON fields replaced with `REDACTED`, at any depth. */
