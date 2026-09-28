@@ -146,13 +146,23 @@ export async function runRedact(options: Record<string, string>): Promise<void> 
   console.log(`rewrote ${redacted.log.entries.length} entries in ${harPath}`);
 }
 
+const KEYGEN_FORMATS = ['pem', 'google-service-account'];
+
 /**
  * Writes a throwaway RSA private key, for plugins whose auth signs requests locally (e.g. a Google
  * service account JWT). Replay needs a key that can sign, but never one with real access, and
- * generating it means no key file is ever committed. Keeps an existing key unless --force is set.
+ * generating it means no key file is ever committed. Keeps an existing file unless --force is set.
+ *
+ * `--format google-service-account` wraps the key in a service account JSON file. The token URI
+ * must match the recording (default https://oauth2.googleapis.com/token); the email doesn't
+ * matter, since the signed assertion carrying it is redacted from recordings.
  */
 export async function runKeygen(options: Record<string, string>): Promise<void> {
   const outPath = requireOption(options, 'out');
+  const format = options.format ?? 'pem';
+  if (!KEYGEN_FORMATS.includes(format)) {
+    throw new Error(`--format must be one of ${KEYGEN_FORMATS.join(', ')}, got "${format}"`);
+  }
   const exists = await fs.access(outPath).then(
     () => true,
     () => false
@@ -162,9 +172,25 @@ export async function runKeygen(options: Record<string, string>): Promise<void> 
     return;
   }
   const { privateKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
+  const pem = privateKey.export({ type: 'pkcs8', format: 'pem' }).toString();
+  const contents =
+    format === 'pem'
+      ? pem
+      : JSON.stringify(
+          {
+            type: 'service_account',
+            project_id: options.project ?? 'e2e-replay',
+            private_key_id: 'e2e-replay',
+            private_key: pem,
+            client_email: options['client-email'] ?? 'e2e-replay@e2e-replay.iam.gserviceaccount.com',
+            token_uri: options['token-uri'] ?? 'https://oauth2.googleapis.com/token',
+          },
+          null,
+          2
+        );
   await fs.mkdir(path.dirname(outPath), { recursive: true });
-  await fs.writeFile(outPath, privateKey.export({ type: 'pkcs8', format: 'pem' }), { mode: 0o600 });
-  console.log(`wrote a throwaway RSA key to ${outPath}`);
+  await fs.writeFile(outPath, contents, { mode: 0o600 });
+  console.log(`wrote a throwaway ${format} key to ${outPath}`);
 }
 
 export async function main(argv: string[]): Promise<void> {

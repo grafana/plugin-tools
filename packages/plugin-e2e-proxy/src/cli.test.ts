@@ -98,6 +98,15 @@ describe('CLI subcommands', () => {
     expect(await readFile(keyPath, 'utf8')).toBe(first);
   });
 
+  it('keygen can wrap the key in a Google service account JSON file', async () => {
+    const keyPath = join(dir, 'keys', 'service-account.json');
+    await runKeygen({ out: keyPath, format: 'google-service-account' });
+    const account = JSON.parse(await readFile(keyPath, 'utf8'));
+    expect(account.type).toBe('service_account');
+    expect(account.token_uri).toBe('https://oauth2.googleapis.com/token');
+    expect(createPrivateKey(account.private_key).asymmetricKeyType).toBe('rsa');
+  });
+
   it('fields lists distinct field paths with sample values', async () => {
     const har = emptyHar();
     har.log.entries.push(toHarEntry(req(), res({ user: { email: 'a@example.com' } }), new Date(), 1));
