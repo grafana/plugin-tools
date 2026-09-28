@@ -16,4 +16,9 @@ export default [
     description: 'Adds grafana-app-sdk CUE kind code generation to an app plugin',
     scriptPath: import.meta.resolve('./scripts/experimental-app-sdk.js'),
   },
+  {
+    name: 'vcr',
+    description: "Adds plugin-vcr record and replay of a backend plugin's third-party API traffic",
+    scriptPath: import.meta.resolve('./scripts/vcr.js'),
+  },
 ] satisfies Codemod[];
