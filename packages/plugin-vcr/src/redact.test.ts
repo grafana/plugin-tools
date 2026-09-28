@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { applyFakeFields, applyFieldRedaction, applyRedactionRules, FakeValueStore, SecretScrubber } from './redact.js';
+import { applyRedactionRules, FakeValueStore, SecretScrubber } from './redact.js';
+import type { JsonNode } from './jsonPaths.js';
+
+/** Test helper: applies only redactFields, discarding the "did anything change" flag the pipeline needs. */
+function redactFields(json: JsonNode, fields: string[]): JsonNode {
+  return applyRedactionRules(json, fields, {}, new FakeValueStore()).json;
+}
 
 describe('SecretScrubber', () => {
   it('scrubs a known secret value out of arbitrary text', () => {
@@ -41,10 +47,10 @@ describe('SecretScrubber', () => {
   });
 });
 
-describe('applyFieldRedaction', () => {
+describe('redactFields', () => {
   it('replaces every matching field, at any depth, with REDACTED', () => {
     const json = { user: { password: 'hunter2' }, items: [{ password: 'x' }, { password: 'y' }] };
-    const result = applyFieldRedaction(json, ['password']);
+    const result = redactFields(json, ['password']);
     expect(result).toEqual({
       user: { password: 'REDACTED' },
       items: [{ password: 'REDACTED' }, { password: 'REDACTED' }],
@@ -53,7 +59,7 @@ describe('applyFieldRedaction', () => {
 
   it('leaves fields that do not match untouched', () => {
     const json = { user: { name: 'Ada' } };
-    expect(applyFieldRedaction(json, ['password'])).toEqual({ user: { name: 'Ada' } });
+    expect(redactFields(json, ['password'])).toEqual({ user: { name: 'Ada' } });
   });
 });
 
@@ -71,13 +77,13 @@ describe('FakeValueStore', () => {
   });
 });
 
-describe('applyFakeFields', () => {
+describe('fakeFields', () => {
   it('replaces matching fields with a stable fake and keeps cross-entry consistency', () => {
     const store = new FakeValueStore();
     const json = {
       items: [{ author: { email: 'a@example.com' } }, { author: { email: 'a@example.com' } }],
     };
-    const result = applyFakeFields(json, { '$.items[*].author.email': 'email' }, store) as {
+    const result = applyRedactionRules(json, [], { '$.items[*].author.email': 'email' }, store).json as {
       items: Array<{ author: { email: string } }>;
     };
     expect(result.items[0].author.email).toBe(result.items[1].author.email);
@@ -113,7 +119,7 @@ describe('SecretScrubber encodings', () => {
 describe('array element patterns', () => {
   it('redacts array elements matched by a [*] pattern', () => {
     const json = { emails: ['alice@corp.com', 'bob@corp.com'] };
-    expect(applyFieldRedaction(json, ['$.emails[*]'])).toEqual({ emails: ['REDACTED', 'REDACTED'] });
+    expect(redactFields(json, ['$.emails[*]'])).toEqual({ emails: ['REDACTED', 'REDACTED'] });
   });
 
   it('reports no change when no rule matches, so the caller can keep the original bytes', () => {
@@ -123,7 +129,7 @@ describe('array element patterns', () => {
 
   it('keeps a "__proto__" key as data instead of setting the prototype', () => {
     const json = JSON.parse('{"__proto__":{"polluted":true},"password":"x"}');
-    const result = applyFieldRedaction(json, ['password']) as Record<string, unknown>;
+    const result = redactFields(json, ['password']) as Record<string, unknown>;
     expect(Object.keys(result)).toEqual(['__proto__', 'password']);
     expect(({} as Record<string, unknown>).polluted).toBeUndefined();
   });

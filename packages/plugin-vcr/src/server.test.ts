@@ -53,7 +53,7 @@ describe('startProxyServer: plain HTTP (record/replay over absolute-form proxyin
   let proxy: ProxyServerHandle | undefined;
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-server-'));
+    dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-server-'));
     harPath = join(dir, 'api.har');
     api = await startFakeHttpApi();
   });
@@ -162,7 +162,7 @@ describe('startProxyServer: HTTPS via CONNECT (TLS interception)', () => {
   let originalGlobalAgentCa: https.AgentOptions['ca'];
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-tls-'));
+    dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-tls-'));
     harPath = join(dir, 'api.har');
 
     const ca = await loadOrCreateCA(join(dir, 'ca'));
@@ -238,7 +238,7 @@ describe('startProxyServer: shutdown and wire formats', () => {
   let proxy: ProxyServerHandle | undefined;
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-wire-'));
+    dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-wire-'));
     harPath = join(dir, 'api.har');
     servers = [];
   });
@@ -369,7 +369,7 @@ describe('startProxyServer: recording survives a killed proxy', () => {
   let proxy: ProxyServerHandle | undefined;
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-flush-'));
+    dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-flush-'));
     harPath = join(dir, 'api.har');
     apiServer = http.createServer((req, res) => {
       res.writeHead(200, { 'content-type': 'application/json' });
@@ -440,7 +440,7 @@ describe('startProxyServer: host discovery', () => {
   let proxy: ProxyServerHandle | undefined;
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-hosts-'));
+    dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-hosts-'));
     apiServer = http.createServer((_req, res) => res.end('ok'));
     tunnelTarget = net.createServer((socket) => socket.end());
     await Promise.all([
@@ -489,13 +489,126 @@ describe('startProxyServer: host discovery', () => {
   });
 });
 
+/** A direct request to the proxy's own port, as Grafana's startup script makes to fetch the CA cert - not a proxied request. */
+function requestDirect(proxyPort: number, path: string): Promise<{ status: number; body: string }> {
+  return new Promise((resolve, reject) => {
+    const req = http.request({ host: '127.0.0.1', port: proxyPort, method: 'GET', path }, (res) => {
+      const chunks: Buffer[] = [];
+      res.on('data', (c) => chunks.push(c));
+      res.on('end', () => resolve({ status: res.statusCode ?? 0, body: Buffer.concat(chunks).toString('utf8') }));
+    });
+    req.on('error', reject);
+    req.end();
+  });
+}
+
+describe('startProxyServer: serving .pem files over HTTP', () => {
+  let dir: string;
+  let proxy: ProxyServerHandle | undefined;
+
+  beforeEach(async () => {
+    dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-admin-'));
+  });
+
+  afterEach(async () => {
+    await proxy?.close().catch(() => undefined);
+    proxy = undefined;
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  it('serves the CA cert at /ca.pem', async () => {
+    const caDir = join(dir, 'ca');
+    const ca = await loadOrCreateCA(caDir);
+    proxy = await startProxyServer({
+      mode: 'replay',
+      config: mergeConfig({ hosts: [] }),
+      harPath: join(dir, 'api.har'),
+      ca,
+      caDir,
+      knownSecrets: {},
+    });
+
+    const response = await requestDirect(proxy.port, '/ca.pem');
+    expect(response.status).toBe(200);
+    expect(response.body).toBe(ca.certPem);
+  });
+
+  it('serves another .pem file from the CA directory, such as a generated replay key', async () => {
+    const caDir = join(dir, 'ca');
+    const ca = await loadOrCreateCA(caDir);
+    await writeFile(join(caDir, 'replay-key.pem'), 'fake-replay-key-contents', 'utf8');
+    proxy = await startProxyServer({
+      mode: 'replay',
+      config: mergeConfig({ hosts: [] }),
+      harPath: join(dir, 'api.har'),
+      ca,
+      caDir,
+      knownSecrets: {},
+    });
+
+    const response = await requestDirect(proxy.port, '/replay-key.pem');
+    expect(response.status).toBe(200);
+    expect(response.body).toBe('fake-replay-key-contents');
+  });
+
+  it('never serves the CA private key', async () => {
+    const caDir = join(dir, 'ca');
+    const ca = await loadOrCreateCA(caDir);
+    proxy = await startProxyServer({
+      mode: 'replay',
+      config: mergeConfig({ hosts: [] }),
+      harPath: join(dir, 'api.har'),
+      ca,
+      caDir,
+      knownSecrets: {},
+    });
+
+    const response = await requestDirect(proxy.port, '/ca-key.pem');
+    expect(response.status).toBe(404);
+    expect(response.body).not.toContain(ca.keyPem);
+  });
+
+  it('404s for a path outside the CA directory instead of reading an arbitrary file', async () => {
+    const caDir = join(dir, 'ca');
+    const ca = await loadOrCreateCA(caDir);
+    await writeFile(join(dir, 'outside.pem'), 'should-not-be-served', 'utf8');
+    proxy = await startProxyServer({
+      mode: 'replay',
+      config: mergeConfig({ hosts: [] }),
+      harPath: join(dir, 'api.har'),
+      ca,
+      caDir,
+      knownSecrets: {},
+    });
+
+    const response = await requestDirect(proxy.port, '/../outside.pem');
+    expect(response.status).toBe(404);
+  });
+
+  it('404s any other path, including one that is not a .pem file', async () => {
+    const caDir = join(dir, 'ca');
+    const ca = await loadOrCreateCA(caDir);
+    proxy = await startProxyServer({
+      mode: 'replay',
+      config: mergeConfig({ hosts: [] }),
+      harPath: join(dir, 'api.har'),
+      ca,
+      caDir,
+      knownSecrets: {},
+    });
+
+    expect((await requestDirect(proxy.port, '/nope')).status).toBe(404);
+    expect((await requestDirect(proxy.port, '/')).status).toBe(404);
+  });
+});
+
 describe('startProxyServer: correlation through a running proxy', () => {
   let dir: string;
   let api: http.Server;
   let proxy: ProxyServerHandle | undefined;
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-correlate-'));
+    dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-correlate-'));
     api = http.createServer((req, res) => {
       void collectBody(req).then((body) => {
         res.writeHead(200, { 'content-type': 'application/json' });

@@ -1,11 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { defaultConfig, hostIsRecorded, mergeConfig } from './config.js';
+import { defaultConfig, hostIsRecorded, mergeConfig, validateConfig } from './config.js';
 
 describe('mergeConfig', () => {
   it('fills in defaults for anything left out of the partial config', () => {
     const config = mergeConfig({ hosts: ['api.example.com'] });
     expect(config.hosts).toEqual(['api.example.com']);
     expect(config.keepHeaders).toEqual(defaultConfig().keepHeaders);
+  });
+
+  it('lowercases keepHeaders and keepResponseHeaders, so a mixed-case name in the config still matches', () => {
+    const config = mergeConfig({ keepHeaders: ['X-Amz-Target'], keepResponseHeaders: ['X-Request-Id'] });
+    expect(config.keepHeaders).toContain('x-amz-target');
+    expect(config.keepResponseHeaders).toContain('x-request-id');
   });
 });
 
@@ -40,5 +46,21 @@ describe('presets', () => {
   it('keeps AWS names out of the defaults', () => {
     const defaults = JSON.stringify(defaultConfig());
     expect(defaults).not.toMatch(/amz|SecretAccessKey|SessionToken|ClientToken/i);
+  });
+});
+
+describe('validateConfig', () => {
+  it('rejects a misspelled field name instead of silently ignoring it', () => {
+    expect(() => validateConfig({ redactField: ['password'] }, 'config.json')).toThrow(/unknown field/);
+  });
+
+  it('rejects a fakeFields kind that does not exist', () => {
+    expect(() => validateConfig({ fakeFields: { email: 'not-a-real-kind' } }, 'config.json')).toThrow(/must be one of/);
+  });
+
+  it('accepts a config using only known fields and fake kinds', () => {
+    expect(() =>
+      validateConfig({ hosts: ['api.example.com'], fakeFields: { email: 'email' } }, 'config.json')
+    ).not.toThrow();
   });
 });

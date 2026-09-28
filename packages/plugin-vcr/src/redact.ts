@@ -188,15 +188,6 @@ export function applyRedactionRules(
   return { json: faked.json, changed: redacted.changed || faked.changed };
 }
 
-/** Sets every field matching `redactFields` to the literal string `REDACTED`. */
-export function applyFieldRedaction(json: JsonNode, redactFields: string[]): JsonNode {
-  return transformMatchingFields(json, redactFields, () => 'REDACTED').json;
-}
-
-export function applyFakeFields(json: JsonNode, fakeFields: Record<string, FakeKind>, store: FakeValueStore): JsonNode {
-  return applyRedactionRules(json, [], fakeFields, store).json;
-}
-
 /**
  * Replaces every object value or array element whose path matches a pattern, including fields of
  * JSON held in a string value (re-encoded afterwards only if something changed). Doesn't mutate `json`.

@@ -12,16 +12,11 @@ const TIME_RE = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}|^\d{10}(\d{3})?$/;
  * sanitized requests, so the values are safe to log.
  */
 export function describeDifferences(current: MatchKey, recorded: MatchKey): string[] {
-  const differences = listDifferences(current, recorded);
+  const differences = compare(current, recorded).differences;
   if (differences.length <= MAX_REPORTED) {
     return differences;
   }
   return [...differences.slice(0, MAX_REPORTED), `and ${differences.length - MAX_REPORTED} more`];
-}
-
-/** Every difference, untruncated. */
-export function listDifferences(current: MatchKey, recorded: MatchKey): string[] {
-  return compare(current, recorded).differences;
 }
 
 /**

@@ -9,7 +9,7 @@ describe('findProvisionedSecrets', () => {
   const originalEnv = { ...process.env };
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-'));
+    dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-'));
     await mkdir(join(dir, 'datasources'), { recursive: true });
   });
 
@@ -29,15 +29,15 @@ describe('findProvisionedSecrets', () => {
     expect(secrets).toEqual({ ACCESS_KEY: 'real-access-key' });
   });
 
-  it('supports ${VAR} and ${VAR:-default} forms', async () => {
+  it('supports the ${VAR} form', async () => {
     process.env.SECRET_KEY = 'real-secret';
     await writeFile(
       join(dir, 'datasources', 'aws.yaml'),
-      'datasources:\n  - name: redshift\n    secureJsonData:\n      secretKey: ${SECRET_KEY}\n      other: ${OTHER_VAR:-dummy}\n'
+      'datasources:\n  - name: redshift\n    secureJsonData:\n      secretKey: ${SECRET_KEY}\n'
     );
 
     const secrets = await findProvisionedSecrets(dir);
-    expect(secrets).toEqual({ SECRET_KEY: 'real-secret', OTHER_VAR: 'dummy' });
+    expect(secrets).toEqual({ SECRET_KEY: 'real-secret' });
   });
 
   it('ignores env var references outside secureJsonData', async () => {
@@ -51,7 +51,7 @@ describe('findProvisionedSecrets', () => {
     expect(secrets).toEqual({});
   });
 
-  it('falls back to the ${VAR:-default} value when the var is unset, since that is what Grafana sends', async () => {
+  it('ignores a ${VAR:-default} fallback value, since Grafana provisioning does not support that syntax and sends an empty string instead', async () => {
     delete process.env.ACCESS_KEY;
     await writeFile(
       join(dir, 'datasources', 'aws.yaml'),
@@ -59,7 +59,7 @@ describe('findProvisionedSecrets', () => {
     );
 
     const secrets = await findProvisionedSecrets(dir);
-    expect(secrets).toEqual({ ACCESS_KEY: 'dummy' });
+    expect(secrets).toEqual({});
   });
 
   it('leaves out a var that is unset and has no default', async () => {

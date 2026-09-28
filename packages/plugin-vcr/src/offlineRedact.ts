@@ -4,7 +4,7 @@ import { FakeValueStore, SecretScrubber } from './redact.js';
 import type { Har, ProxyConfig } from './types.js';
 
 /**
- * Re-runs the sanitize pipeline over an already-recorded HAR, with the current `proxy.json`.
+ * Re-runs the sanitize pipeline over an already-recorded HAR, with the current config.
  * Used to apply a new `redactFields`/`fakeFields` rule to old recordings, without re-recording
  * against the real API. Timing fields are preserved; only headers and bodies change.
  */

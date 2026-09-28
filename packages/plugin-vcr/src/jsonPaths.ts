@@ -5,7 +5,7 @@
  * A field's pattern path joins object keys with "." and marks array elements with "[*]", e.g.
  * "items[*].author.email". A config pattern is either a bare field name ("password", matching that
  * key at any depth) or a path in the same form, optionally prefixed with "$.". The paths printed by
- * the `fields` command can be pasted into proxy.json as they are.
+ * the `fields` command can be pasted into the config as they are.
  */
 
 /** A number kept as its original source text, see `parseJsonLossless`. */
@@ -22,6 +22,11 @@ interface LosslessJson {
 }
 
 const losslessJson = JSON as unknown as LosslessJson;
+
+/** True on Node.js 22+, where `JSON.rawJSON` exists. `parseJsonLossless` needs it to keep numbers exact. */
+export function hasLosslessJsonSupport(): boolean {
+  return typeof losslessJson.rawJSON === 'function';
+}
 
 /**
  * Parses JSON keeping every number as its original text, so serializing it again with

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { defaultConfig, loadConfig } from './config.js';
 import { summarizeFields } from './fields.js';
 import { readHar, writeHar } from './har.js';
+import { hasLosslessJsonSupport } from './jsonPaths.js';
 import { redactExistingHar } from './offlineRedact.js';
 import { resolveKnownSecrets } from './provisioning.js';
 import { SecretScrubber } from './redact.js';
@@ -68,7 +69,7 @@ export async function runServe(options: Record<string, string>): Promise<void> {
   const port = options.port ? Number(options.port) : 8080;
 
   const proxy = await startProxyServer({ mode, config, harPath, ca, caDir, knownSecrets, port, log: console.log });
-  console.log(`plugin-e2e-proxy listening on :${proxy.port} in ${mode} mode, CA at ${caDir}/ca.pem`);
+  console.log(`plugin-vcr listening on :${proxy.port} in ${mode} mode, CA at ${caDir}/ca.pem`);
 
   const shutdown = async (): Promise<void> => {
     const summary = await proxy.close();
@@ -179,10 +180,10 @@ export async function runKeygen(options: Record<string, string>): Promise<void> 
       : JSON.stringify(
           {
             type: 'service_account',
-            project_id: options.project ?? 'e2e-replay',
-            private_key_id: 'e2e-replay',
+            project_id: options.project ?? 'vcr-replay',
+            private_key_id: 'vcr-replay',
             private_key: pem,
-            client_email: options['client-email'] ?? 'e2e-replay@e2e-replay.iam.gserviceaccount.com',
+            client_email: options['client-email'] ?? 'vcr-replay@vcr-replay.iam.gserviceaccount.com',
             token_uri: options['token-uri'] ?? 'https://oauth2.googleapis.com/token',
           },
           null,
@@ -194,9 +195,12 @@ export async function runKeygen(options: Record<string, string>): Promise<void> 
 }
 
 export async function main(argv: string[]): Promise<void> {
+  if (!hasLosslessJsonSupport()) {
+    throw new Error('plugin-vcr needs Node.js 22 or later (JSON.rawJSON is missing)');
+  }
   const { command, options } = parseArgs(argv);
   if (!KNOWN_COMMANDS.includes(command)) {
-    throw new Error(`usage: plugin-e2e-proxy <${KNOWN_COMMANDS.join('|')}> [--flags]`);
+    throw new Error(`usage: plugin-vcr <${KNOWN_COMMANDS.join('|')}> [--flags]`);
   }
   const handlers: Record<string, (options: Record<string, string>) => Promise<void>> = {
     serve: runServe,

@@ -1,10 +1,10 @@
 {
-  "name": "@grafana/plugin-e2e-proxy",
+  "name": "@grafana/plugin-vcr",
   "version": "0.0.0",
   "description": "Record and replay the HTTP traffic between a Grafana datasource plugin and its third-party API",
   "repository": {
     "type": "git",
-    "directory": "packages/plugin-e2e-proxy",
+    "directory": "packages/plugin-vcr",
     "url": "https://github.com/grafana/plugin-tools"
   },
   "author": "Grafana",
@@ -30,7 +30,7 @@
     "typecheck": "tsc --noEmit"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "dependencies": {
     "node-forge": "1.4.0",

@@ -7,7 +7,7 @@ export interface CertKeyPair {
   keyPem: string;
 }
 
-const CA_COMMON_NAME = 'Grafana plugin-e2e-proxy CA';
+const CA_COMMON_NAME = 'Grafana plugin-vcr CA';
 const CA_VALID_YEARS = 5;
 const LEAF_VALID_DAYS = 825; // under the CA/Browser Forum's max leaf lifetime
 

@@ -40,7 +40,7 @@ describe('CLI subcommands', () => {
   let errorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-cli-'));
+    dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-cli-'));
     harPath = join(dir, 'api.har');
     logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -79,7 +79,7 @@ describe('CLI subcommands', () => {
     const har = emptyHar();
     har.log.entries.push(toHarEntry(req(), res({ echo: 'vendor-key-value' }), new Date(), 1));
     await writeFile(harPath, JSON.stringify(har));
-    const configPath = join(dir, 'proxy.json');
+    const configPath = join(dir, 'vcr.json');
     await writeFile(configPath, JSON.stringify({ secretEnvVars: ['VENDOR_API_KEY'] }));
 
     await runScan({ har: harPath, config: configPath });
@@ -118,12 +118,12 @@ describe('CLI subcommands', () => {
     expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('a@example.com'));
   });
 
-  it('redact rewrites the har file using a proxy.json rule added after recording', async () => {
+  it('redact rewrites the har file using a vcr.json rule added after recording', async () => {
     const har = emptyHar();
     har.log.entries.push(toHarEntry(req(), res({ user: { email: 'real@example.com' } }), new Date(), 1));
     await writeFile(harPath, JSON.stringify(har));
 
-    const configPath = join(dir, 'proxy.json');
+    const configPath = join(dir, 'vcr.json');
     await writeFile(configPath, JSON.stringify({ redactFields: ['email'] }));
 
     await runRedact({ har: harPath, config: configPath });

@@ -1,10 +1,25 @@
 import { promises as fs } from 'fs';
-import { PRESETS, type Preset, type ProxyConfig } from './types.js';
+import { FAKE_KINDS, PRESETS, type Preset, type ProxyConfig } from './types.js';
 
-/** What proxy.json may contain: any config field, plus an optional preset. */
+/** What the config file may contain: any config field, plus an optional preset. */
 export type ConfigFile = Partial<ProxyConfig> & { preset?: Preset };
 
 type ListField = 'keepHeaders' | 'ignoreFields' | 'learnSecretFields' | 'credentialParams';
+
+const KNOWN_KEYS = [
+  'hosts',
+  'keepHeaders',
+  'keepResponseHeaders',
+  'ignoreFields',
+  'ignoreQueryParams',
+  'credentialParams',
+  'ignoreBodyFor',
+  'redactFields',
+  'fakeFields',
+  'secretEnvVars',
+  'learnSecretFields',
+  'preset',
+];
 
 /** Vendor conventions, kept out of the defaults. Added on top of the defaults or your own lists. */
 const PRESET_ADDITIONS: Record<Preset, Partial<Record<ListField, string[]>>> = {
@@ -49,6 +64,9 @@ export function defaultConfig(): ProxyConfig {
   };
 }
 
+/** Header names in the config are matched case-insensitively; store them lowercased once, up front. */
+const HEADER_FIELDS = ['keepHeaders', 'keepResponseHeaders'] as const;
+
 /**
  * Merges a partial config over the defaults. A field you set replaces its default, then a preset's
  * values are added to whatever is there.
@@ -61,21 +79,32 @@ export function mergeConfig(partial: ConfigFile): ProxyConfig {
       merged[field] = [...new Set([...merged[field], ...additions])];
     }
   }
+  for (const field of HEADER_FIELDS) {
+    merged[field] = merged[field].map((name) => name.toLowerCase());
+  }
   return merged;
 }
 
 export async function loadConfig(filePath: string): Promise<ProxyConfig> {
   const raw = await fs.readFile(filePath, 'utf8');
   const parsed = JSON.parse(raw);
-  validateConfig(parsed);
+  validateConfig(parsed, filePath);
   return mergeConfig(parsed);
 }
 
-function validateConfig(value: unknown): void {
+export function validateConfig(value: unknown, filePath: string): void {
   if (typeof value !== 'object' || value === null) {
-    throw new Error('proxy.json must contain a JSON object');
+    throw new Error(`${filePath} must contain a JSON object`);
   }
   const obj = value as Record<string, unknown>;
+
+  const unknownKeys = Object.keys(obj).filter((key) => !KNOWN_KEYS.includes(key));
+  if (unknownKeys.length > 0) {
+    throw new Error(
+      `${filePath}: unknown field(s) ${unknownKeys.join(', ')} - typo? valid fields are ${KNOWN_KEYS.join(', ')}`
+    );
+  }
+
   const stringArrayFields = [
     'hosts',
     'keepHeaders',
@@ -90,16 +119,21 @@ function validateConfig(value: unknown): void {
   ];
   for (const field of stringArrayFields) {
     if (field in obj && !isStringArray(obj[field])) {
-      throw new Error(`proxy.json: "${field}" must be an array of strings`);
+      throw new Error(`${filePath}: "${field}" must be an array of strings`);
     }
   }
   if ('preset' in obj && !PRESETS.includes(obj.preset as Preset)) {
-    throw new Error(`proxy.json: "preset" must be one of ${PRESETS.join(', ')}`);
+    throw new Error(`${filePath}: "preset" must be one of ${PRESETS.join(', ')}`);
   }
   if ('fakeFields' in obj) {
     const fakeFields = obj.fakeFields;
     if (typeof fakeFields !== 'object' || fakeFields === null || Array.isArray(fakeFields)) {
-      throw new Error('proxy.json: "fakeFields" must be an object mapping a JSON path to a fake kind');
+      throw new Error(`${filePath}: "fakeFields" must be an object mapping a JSON path to a fake kind`);
+    }
+    for (const [path, kind] of Object.entries(fakeFields as Record<string, unknown>)) {
+      if (!FAKE_KINDS.includes(kind as (typeof FAKE_KINDS)[number])) {
+        throw new Error(`${filePath}: "fakeFields.${path}" must be one of ${FAKE_KINDS.join(', ')}, got "${kind}"`);
+      }
     }
   }
 }

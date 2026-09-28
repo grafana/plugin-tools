@@ -104,14 +104,14 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
       }
 
       if (mode === 'replay') {
-        handleReplay(captured, res, replayStore!, correlator, config, scrubber, stats, misses, log);
+        handleReplay(captured, res, replayStore!, correlator, config, scrubber, stats, misses, harPath, log);
         return;
       }
 
       await handleRecord(captured, res, config, scrubber, fakeStore, scrubCounts, stats, recordedEntries, log);
       scheduleFlush();
     } catch (err) {
-      sendJson(res, 502, { error: 'plugin-e2e-proxy internal error', message: (err as Error).message });
+      sendJson(res, 502, { error: 'plugin-vcr internal error', message: (err as Error).message });
     }
   }
 
@@ -130,7 +130,7 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
     stats.passthrough++;
     if (!passthroughHosts.includes(host)) {
       passthroughHosts.push(host);
-      log(`passthrough ${host} - not recorded, add it to "hosts" in proxy.json if the plugin calls it`);
+      log(`passthrough ${host} - not recorded, add it to "hosts" in the config to record and replay it`);
     }
   }
 
@@ -170,6 +170,7 @@ function handleReplay(
   scrubber: SecretScrubber,
   stats: ProxyStats,
   misses: Miss[],
+  harPath: string,
   log: (line: string) => void
 ): void {
   // recordings were keyed on sanitized requests, so the live one has to be sanitized the same way
@@ -191,7 +192,7 @@ function handleReplay(
       error: 'no recording',
       method: request.method,
       url: request.url,
-      hint: 'run the record command to update e2e/recordings',
+      hint: `record again to add this request to ${harPath}`,
       closest,
     });
     return;

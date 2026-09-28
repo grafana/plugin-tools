@@ -9,7 +9,7 @@ describe('loadOrCreateCA', () => {
   let dir: string;
 
   beforeEach(async () => {
-    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-ca-'));
+    dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-ca-'));
   });
 
   afterEach(async () => {
@@ -19,7 +19,7 @@ describe('loadOrCreateCA', () => {
   it('creates a self-signed CA and persists it to disk', async () => {
     const ca = await loadOrCreateCA(dir);
     const cert = forge.pki.certificateFromPem(ca.certPem);
-    expect(cert.subject.getField('CN').value).toBe('Grafana plugin-e2e-proxy CA');
+    expect(cert.subject.getField('CN').value).toBe('Grafana plugin-vcr CA');
   });
 
   it('reuses the same CA on a second call', async () => {
@@ -31,7 +31,7 @@ describe('loadOrCreateCA', () => {
 
 describe('signLeafCertificate', () => {
   it('signs a leaf certificate for a host that verifies against the CA', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-ca-'));
+    const dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-ca-'));
     try {
       const ca = await loadOrCreateCA(dir);
       const leaf = signLeafCertificate('api.example.com', ca);
@@ -48,7 +48,7 @@ describe('signLeafCertificate', () => {
 
 describe('CertificateStore', () => {
   it('caches the signed certificate for a host instead of re-signing it', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-ca-'));
+    const dir = await mkdtemp(join(tmpdir(), 'plugin-vcr-ca-'));
     try {
       const ca = await loadOrCreateCA(dir);
       const store = new CertificateStore(ca);

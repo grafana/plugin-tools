@@ -6,7 +6,7 @@ import type { CapturedRequest, CapturedResponse, Har, HarEntry, HarNameValue, Pr
 import { closenessRank, describeDifferences } from './differences.js';
 import { buildMatchKey, matchKeyToString, type MatchKey } from './match.js';
 
-const CREATOR = { name: '@grafana/plugin-e2e-proxy', version: '0' };
+const CREATOR = { name: '@grafana/plugin-vcr', version: '0' };
 
 export function emptyHar(): Har {
   return { log: { version: '1.2', creator: CREATOR, entries: [] } };
@@ -30,13 +30,16 @@ export async function writeHar(filePath: string, har: Har, config: ProxyConfig):
     ...har,
     log: {
       ...har.log,
+      // ordinal comparison, not localeCompare: a match key can hold arbitrary response text, and
+      // locale-aware sorting isn't guaranteed to agree between the machine that recorded and the
+      // one that later reviews the diff
       entries: [...har.log.entries].sort((a, b) => {
         const keyA = matchKeyToString(buildMatchKey(harRequestToCaptured(a.request), config));
         const keyB = matchKeyToString(buildMatchKey(harRequestToCaptured(b.request), config));
         if (keyA !== keyB) {
-          return keyA.localeCompare(keyB);
+          return keyA < keyB ? -1 : 1;
         }
-        return a.startedDateTime.localeCompare(b.startedDateTime);
+        return a.startedDateTime < b.startedDateTime ? -1 : a.startedDateTime > b.startedDateTime ? 1 : 0;
       }),
     },
   };

@@ -1,8 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { emptyHar, toHarEntry } from './har.js';
 import { summarizeFields } from './fields.js';
-import { applyFieldRedaction } from './redact.js';
+import { applyRedactionRules, FakeValueStore } from './redact.js';
 import type { CapturedRequest, CapturedResponse } from './types.js';
+import type { JsonNode } from './jsonPaths.js';
+
+function redactFields(json: JsonNode, fields: string[]): JsonNode {
+  return applyRedactionRules(json, fields, {}, new FakeValueStore()).json;
+}
 
 function req(): CapturedRequest {
   return { method: 'GET', url: 'https://api.example.com/v1/items', headers: {}, body: Buffer.from('') };
@@ -59,7 +64,7 @@ describe('summarizeFields output as redaction rules', () => {
     har.log.entries.push(toHarEntry(req(), res(body), new Date(), 1));
 
     for (const { path } of summarizeFields(har)) {
-      const redacted = JSON.stringify(applyFieldRedaction(body, [path]));
+      const redacted = JSON.stringify(redactFields(body, [path]));
       expect(redacted, `pattern "${path}" should redact something`).toContain('REDACTED');
     }
   });
