@@ -39,7 +39,10 @@ export async function writeHar(filePath: string, har: Har, config: ProxyConfig):
     },
   };
   await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, JSON.stringify(sorted, null, 2) + '\n', 'utf8');
+  // write then rename, so a proxy killed mid-write never leaves a truncated recording behind
+  const tmpPath = `${filePath}.tmp`;
+  await fs.writeFile(tmpPath, JSON.stringify(sorted, null, 2) + '\n', 'utf8');
+  await fs.rename(tmpPath, filePath);
 }
 
 /** Splits a recorded entry back into a request/response pair, for re-running the sanitize pipeline offline. */

@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm } from 'fs/promises';
+import { access, mkdtemp, readFile, rm, writeFile } from 'fs/promises';
 import http from 'node:http';
 import https from 'node:https';
 import net from 'node:net';
@@ -357,5 +357,77 @@ describe('startProxyServer: shutdown and wire formats', () => {
 
     expect(replayed.status).toBe(200);
     expect(proxy.stats.matched).toBe(1);
+  });
+});
+
+describe('startProxyServer: recording survives a killed proxy', () => {
+  let dir: string;
+  let harPath: string;
+  let apiServer: http.Server;
+  let apiPort: number;
+  let proxy: ProxyServerHandle | undefined;
+
+  beforeEach(async () => {
+    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-flush-'));
+    harPath = join(dir, 'api.har');
+    apiServer = http.createServer((req, res) => {
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(req.url === '/leaky' ? '{"key":"AKIAABCDEFGHIJKLMNOP"}' : '{"ok":true}');
+    });
+    await new Promise<void>((resolve) => apiServer.listen(0, resolve));
+    const address = apiServer.address();
+    apiPort = typeof address === 'object' && address ? address.port : 0;
+  });
+
+  afterEach(async () => {
+    await proxy?.close().catch(() => undefined);
+    proxy = undefined;
+    await new Promise((resolve) => apiServer.close(resolve));
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  async function startRecording(): Promise<ProxyServerHandle> {
+    const ca = await loadOrCreateCA(join(dir, 'ca'));
+    const config = mergeConfig({ hosts: ['localhost'] });
+    return startProxyServer({ mode: 'record', config, harPath, ca, knownSecrets: {}, flushDelayMs: 10 });
+  }
+
+  async function waitFor(condition: () => Promise<boolean>): Promise<void> {
+    for (let attempt = 0; attempt < 100; attempt++) {
+      if (await condition()) {
+        return;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 20));
+    }
+    throw new Error('condition not met within 2s');
+  }
+
+  const exists = (filePath: string): Promise<boolean> =>
+    access(filePath).then(
+      () => true,
+      () => false
+    );
+
+  it('writes the recording while still running, without waiting for a shutdown', async () => {
+    proxy = await startRecording();
+    await requestThroughProxy(proxy.port, `http://localhost:${apiPort}/ok`);
+    await waitFor(async () => (await readHar(harPath)).log.entries.length === 1);
+  });
+
+  it('leaves an existing recording alone when nothing was recorded', async () => {
+    await writeFile(harPath, 'existing recording');
+    proxy = await startRecording();
+    await proxy.close();
+    proxy = undefined;
+    expect(await readFile(harPath, 'utf8')).toBe('existing recording');
+  });
+
+  it('removes its own partial recording once a later entry has to be quarantined', async () => {
+    proxy = await startRecording();
+    await requestThroughProxy(proxy.port, `http://localhost:${apiPort}/ok`);
+    await waitFor(() => exists(harPath));
+
+    await requestThroughProxy(proxy.port, `http://localhost:${apiPort}/leaky`);
+    await waitFor(async () => (await exists(`${harPath}.quarantine.json`)) && !(await exists(harPath)));
   });
 });

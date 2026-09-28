@@ -1,3 +1,4 @@
+import { promises as fs } from 'fs';
 import http from 'node:http';
 import net from 'node:net';
 import tls from 'node:tls';
@@ -17,13 +18,17 @@ export interface ProxyServerOptions {
   ca: CertKeyPair;
   knownSecrets: Record<string, string>;
   port?: number;
+  /** How long record mode waits after the last new entry before writing the recording. */
+  flushDelayMs?: number;
+  /** One line per recorded entry and per replay miss. */
+  log?: (line: string) => void;
 }
 
 export interface ProxyServerHandle {
   port: number;
   stats: ProxyStats;
   misses: Miss[];
-  /** Stops the server. In record mode, scans and writes the recorded HAR file and returns a summary. */
+  /** Stops the server. In record mode, writes any entries not yet on disk and returns a summary. */
   close(): Promise<SaveSummary | undefined>;
 }
 
@@ -42,6 +47,29 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
   const stats: ProxyStats = { matched: 0, missed: 0, recorded: 0, passthrough: 0 };
   const misses: Miss[] = [];
   const recordedEntries: HarEntry[] = [];
+  const log = options.log ?? (() => undefined);
+
+  // written shortly after each new entry, not only on shutdown, so a SIGKILL loses at most the last moments
+  const flushDelayMs = options.flushDelayMs ?? 500;
+  const recordingState = { wroteHar: false };
+  let flushTimer: NodeJS.Timeout | undefined;
+  let lastWrite: Promise<SaveSummary> | undefined;
+  const flush = (): Promise<SaveSummary> => {
+    clearTimeout(flushTimer);
+    flushTimer = undefined;
+    // chained, so two flushes never write the same file at once, and a failed one doesn't block the next
+    const previous = lastWrite?.catch(() => undefined) ?? Promise.resolve();
+    lastWrite = previous.then(() =>
+      finalizeRecording(harPath, recordedEntries, config, scrubber, scrubCounts, recordingState)
+    );
+    return lastWrite;
+  };
+  const scheduleFlush = (): void => {
+    clearTimeout(flushTimer);
+    flushTimer = setTimeout(() => {
+      flush().catch((err: Error) => log(`failed to write ${harPath}: ${err.message}`));
+    }, flushDelayMs);
+  };
 
   let replayStore: ReplayStore | undefined;
   if (mode === 'replay') {
@@ -63,11 +91,12 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
       }
 
       if (mode === 'replay') {
-        handleReplay(captured, res, replayStore!, config, scrubber, stats, misses);
+        handleReplay(captured, res, replayStore!, config, scrubber, stats, misses, log);
         return;
       }
 
-      await handleRecord(captured, res, config, scrubber, fakeStore, scrubCounts, stats, recordedEntries);
+      await handleRecord(captured, res, config, scrubber, fakeStore, scrubCounts, stats, recordedEntries, log);
+      scheduleFlush();
     } catch (err) {
       sendJson(res, 502, { error: 'plugin-e2e-proxy internal error', message: (err as Error).message });
     }
@@ -102,7 +131,7 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
       if (mode !== 'record') {
         return undefined;
       }
-      return finalizeRecording(harPath, recordedEntries, config, scrubber, scrubCounts);
+      return flush();
     },
   };
 }
@@ -114,7 +143,8 @@ function handleReplay(
   config: ProxyConfig,
   scrubber: SecretScrubber,
   stats: ProxyStats,
-  misses: Miss[]
+  misses: Miss[],
+  log: (line: string) => void
 ): void {
   // recordings were keyed on sanitized requests, so the live one has to be sanitized the same way
   const request = sanitizeRequest(captured, config, scrubber, {});
@@ -124,6 +154,7 @@ function handleReplay(
     const closest = replayStore.closestMatch(request, config);
     const miss: Miss = { method: request.method, url: request.url, closest };
     misses.push(miss);
+    log(`miss ${describeRequest(request)}${closest ? ` - closest recording: ${closest.differences.join(', ')}` : ''}`);
     // 501, not 502: AWS and other SDKs retry 502s with backoff, which only delays the failure
     sendJson(res, 501, {
       error: 'no recording',
@@ -151,7 +182,8 @@ async function handleRecord(
   fakeStore: FakeValueStore,
   scrubCounts: Record<string, number>,
   stats: ProxyStats,
-  recordedEntries: HarEntry[]
+  recordedEntries: HarEntry[],
+  log: (line: string) => void
 ): Promise<void> {
   const startedAt = new Date();
   const upstream = await forwardRequest(captured);
@@ -160,9 +192,17 @@ async function handleRecord(
   const sanitized = sanitizeForRecording(captured, upstream, config, scrubber, fakeStore, scrubCounts);
   recordedEntries.push(toHarEntry(sanitized.req, sanitized.res, startedAt, durationMs));
   stats.recorded++;
+  log(`recorded ${describeRequest(sanitized.req)} -> ${upstream.status}`);
 
   // the plugin gets the real, unsanitized response - only the recording on disk is sanitized
   sendResponse(res, upstream);
+}
+
+/** Sanitized, so it's safe to log: e.g. "POST redshift-data.us-east-2.amazonaws.com/ RedshiftData.ExecuteStatement". */
+function describeRequest(req: CapturedRequest): string {
+  const url = new URL(req.url);
+  const target = req.headers['x-amz-target'];
+  return `${req.method} ${url.hostname}${url.pathname}${target ? ` ${target}` : ''}`;
 }
 
 async function finalizeRecording(
@@ -170,9 +210,16 @@ async function finalizeRecording(
   recordedEntries: HarEntry[],
   config: ProxyConfig,
   scrubber: SecretScrubber,
-  scrubbed: Record<string, number>
+  scrubbed: Record<string, number>,
+  state: { wroteHar: boolean }
 ): Promise<SaveSummary> {
-  const har: Har = { ...emptyHar(), log: { ...emptyHar().log, entries: recordedEntries } };
+  const summary = { entries: recordedEntries.length, scrubbed };
+  // nothing recorded (e.g. started and stopped by mistake): keep whatever recording is already there
+  if (recordedEntries.length === 0) {
+    return { ...summary, files: [], findings: [], quarantined: [] };
+  }
+
+  const har: Har = { ...emptyHar(), log: { ...emptyHar().log, entries: [...recordedEntries] } };
   const findings = scanHar(har, harPath, scrubber);
 
   if (findings.length > 0) {
@@ -180,11 +227,17 @@ async function finalizeRecording(
     // "refuses to write" that leaves nothing to inspect just makes the finding unactionable
     const quarantinePath = `${harPath}.quarantine.json`;
     await writeHar(quarantinePath, har, config);
-    return { files: [], entries: recordedEntries.length, scrubbed, findings, quarantined: [quarantinePath] };
+    // an earlier flush this session may have written a clean but partial recording; replaying it would hide the finding
+    if (state.wroteHar) {
+      await fs.rm(harPath, { force: true });
+      state.wroteHar = false;
+    }
+    return { ...summary, files: [], findings, quarantined: [quarantinePath] };
   }
 
   await writeHar(harPath, har, config);
-  return { files: [harPath], entries: recordedEntries.length, scrubbed, findings: [], quarantined: [] };
+  state.wroteHar = true;
+  return { ...summary, files: [harPath], findings: [], quarantined: [] };
 }
 
 async function handleConnect(

@@ -64,7 +64,7 @@ export async function runServe(options: Record<string, string>): Promise<void> {
   const knownSecrets = await resolveKnownSecrets(options.provisioning, config.secretEnvVars);
   const port = options.port ? Number(options.port) : 8080;
 
-  const proxy = await startProxyServer({ mode, config, harPath, ca, knownSecrets, port });
+  const proxy = await startProxyServer({ mode, config, harPath, ca, knownSecrets, port, log: console.log });
   console.log(`plugin-e2e-proxy listening on :${proxy.port} in ${mode} mode, CA at ${caDir}/ca.pem`);
 
   const shutdown = async (): Promise<void> => {
@@ -75,6 +75,8 @@ export async function runServe(options: Record<string, string>): Promise<void> {
           `refused to write ${harPath}: ${summary.findings.length} finding(s), quarantined at ${summary.quarantined.join(', ')}`
         );
         process.exitCode = 1;
+      } else if (summary.files.length === 0) {
+        console.log(`nothing recorded, left ${harPath} as it was`);
       } else {
         console.log(`wrote ${summary.entries} entr${summary.entries === 1 ? 'y' : 'ies'} to ${harPath}`);
       }
