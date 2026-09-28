@@ -7,8 +7,8 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const TIME_RE = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}|^\d{10}(\d{3})?$/;
 
 /**
- * What differs between a request that missed on replay and a recorded one with the same method,
- * host and path, field by field: `body field "Sql": got "...", recording has "..."`. Both sides are
+ * What differs between a request that missed on replay and a recorded one with the same method
+ * and host, field by field: `body field "Sql": got "...", recording has "..."`. Both sides are
  * sanitized requests, so the values are safe to log.
  */
 export function describeDifferences(current: MatchKey, recorded: MatchKey): string[] {
@@ -41,6 +41,7 @@ interface Comparison {
 
 function compare(current: MatchKey, recorded: MatchKey): Comparison {
   const parts = [
+    diffPath(current.path, recorded.path),
     diffPairs('query param', queryPairs(current.query), queryPairs(recorded.query)),
     diffPairs('header', headerPairs(current.headers), headerPairs(recorded.headers)),
     diffBodies(current.body, recorded.body),
@@ -49,6 +50,26 @@ function compare(current: MatchKey, recorded: MatchKey): Comparison {
     differences: parts.flatMap((part) => part.differences),
     sharedPrefix: parts.reduce((sum, part) => sum + part.sharedPrefix, 0),
   };
+}
+
+function diffPath(current: string, recorded: string): Comparison {
+  if (current === recorded) {
+    return { differences: [], sharedPrefix: 0 };
+  }
+  const [gotExcerpt, hadExcerpt] = excerpts(current, recorded);
+  return {
+    differences: [`path: got "${gotExcerpt}", recording has "${hadExcerpt}"${pathHint(current, recorded)}`],
+    sharedPrefix: commonPrefixLength(current, recorded),
+  };
+}
+
+function pathHint(current: string, recorded: string): string {
+  const a = current.split('/');
+  const b = recorded.split('/');
+  const onlyOneSegmentDiffers = a.length === b.length && a.filter((segment, i) => segment !== b[i]).length === 1;
+  return onlyOneSegmentDiffers
+    ? ' - if that segment is an ID the client made up, list the field it was sent in under ignoreFields so replay can correlate it'
+    : '';
 }
 
 function queryPairs(query: string): Map<string, string> {

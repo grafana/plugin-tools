@@ -3,7 +3,8 @@ import http from 'node:http';
 import net from 'node:net';
 import tls from 'node:tls';
 import { hostIsRecorded } from './config.js';
-import { emptyHar, readHar, ReplayStore, toHarEntry, writeHar } from './har.js';
+import { Correlator } from './correlation.js';
+import { emptyHar, harEntryToCaptured, readHar, ReplayStore, toHarEntry, writeHar } from './har.js';
 import { captureRequest, forwardRequest, sendJson, sendResponse } from './httpUtil.js';
 import { sanitizeForRecording, sanitizeRequest } from './pipeline.js';
 import { FakeValueStore, SecretScrubber } from './redact.js';
@@ -50,6 +51,7 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
   const misses: Miss[] = [];
   const recordedEntries: HarEntry[] = [];
   const log = options.log ?? (() => undefined);
+  const correlator = new Correlator();
 
   // written shortly after each new entry, not only on shutdown, so a SIGKILL loses at most the last moments
   const flushDelayMs = options.flushDelayMs ?? 500;
@@ -93,7 +95,7 @@ export async function startProxyServer(options: ProxyServerOptions): Promise<Pro
       }
 
       if (mode === 'replay') {
-        handleReplay(captured, res, replayStore!, config, scrubber, stats, misses, log);
+        handleReplay(captured, res, replayStore!, correlator, config, scrubber, stats, misses, log);
         return;
       }
 
@@ -154,6 +156,7 @@ function handleReplay(
   captured: CapturedRequest,
   res: http.ServerResponse,
   replayStore: ReplayStore,
+  correlator: Correlator,
   config: ProxyConfig,
   scrubber: SecretScrubber,
   stats: ProxyStats,
@@ -161,8 +164,11 @@ function handleReplay(
   log: (line: string) => void
 ): void {
   // recordings were keyed on sanitized requests, so the live one has to be sanitized the same way
-  const request = sanitizeRequest(captured, config, scrubber, {});
+  const request = correlator.rewrite(sanitizeRequest(captured, config, scrubber, {}));
   const entry = replayStore.next(request, config);
+  if (entry) {
+    correlator.learn(request, harEntryToCaptured(entry).req, config);
+  }
   if (!entry) {
     stats.missed++;
     const closest = replayStore.closestMatch(request, config);

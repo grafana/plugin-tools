@@ -124,3 +124,14 @@ describe('ReplayStore.closestMatch tie-breaking', () => {
     expect(closest?.differences[0]).toContain('recording has "select * from sales where t > \'2008-01-01\'"');
   });
 });
+
+describe('describeDifferences for a different path', () => {
+  it('names the path and hints at correlation when a single segment differs', () => {
+    const [difference] = diff(
+      req({ method: 'GET', url: 'https://bigquery.googleapis.com/bigquery/v2/projects/p/queries/job_live_0002' }),
+      req({ method: 'GET', url: 'https://bigquery.googleapis.com/bigquery/v2/projects/p/queries/job_recorded_0001' })
+    );
+    expect(difference).toContain('path: got');
+    expect(difference).toContain('ignoreFields so replay can correlate it');
+  });
+});

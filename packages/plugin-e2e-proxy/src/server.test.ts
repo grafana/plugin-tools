@@ -9,6 +9,7 @@ import { join } from 'path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { mergeConfig } from './config.js';
 import { readHar } from './har.js';
+import { collectBody } from './httpUtil.js';
 import { startProxyServer, type ProxyServerHandle } from './server.js';
 import { loadOrCreateCA, signLeafCertificate } from './tls.js';
 
@@ -485,5 +486,60 @@ describe('startProxyServer: host discovery', () => {
     expect(proxy.passthroughHosts).toEqual(['localhost', '127.0.0.1']);
     expect(proxy.stats.passthrough).toBe(3);
     expect(lines.filter((line) => line.startsWith('passthrough'))).toHaveLength(2);
+  });
+});
+
+describe('startProxyServer: correlation through a running proxy', () => {
+  let dir: string;
+  let api: http.Server;
+  let proxy: ProxyServerHandle | undefined;
+
+  beforeEach(async () => {
+    dir = await mkdtemp(join(tmpdir(), 'plugin-e2e-proxy-correlate-'));
+    api = http.createServer((req, res) => {
+      void collectBody(req).then((body) => {
+        res.writeHead(200, { 'content-type': 'application/json' });
+        res.end(req.method === 'POST' ? body : JSON.stringify({ rows: req.url }));
+      });
+    });
+    await new Promise<void>((resolve) => api.listen(0, resolve));
+  });
+
+  afterEach(async () => {
+    await proxy?.close().catch(() => undefined);
+    proxy = undefined;
+    await new Promise((resolve) => api.close(resolve));
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  function send(proxyPort: number, method: string, url: string, body?: string): Promise<number> {
+    return new Promise((resolve, reject) => {
+      const headers = body ? { 'content-type': 'application/json', 'content-length': Buffer.byteLength(body) } : {};
+      const req = http.request({ host: '127.0.0.1', port: proxyPort, method, path: url, headers }, (res) => {
+        res.resume();
+        res.on('end', () => resolve(res.statusCode ?? 0));
+      });
+      req.on('error', reject);
+      req.end(body);
+    });
+  }
+
+  it('replays a follow-up that reuses a client-generated ID in its path', async () => {
+    const address = api.address();
+    const base = `http://localhost:${typeof address === 'object' && address ? address.port : 0}/projects/p`;
+    const harPath = join(dir, 'api.har');
+    const ca = await loadOrCreateCA(join(dir, 'ca'));
+    const config = mergeConfig({ hosts: ['localhost'], ignoreFields: ['jobId'] });
+    const insertBody = (jobId: string) => JSON.stringify({ jobReference: { jobId } });
+
+    proxy = await startProxyServer({ mode: 'record', config, harPath, ca, knownSecrets: {} });
+    await send(proxy.port, 'POST', `${base}/jobs`, insertBody('job_recorded_0001'));
+    await send(proxy.port, 'GET', `${base}/queries/job_recorded_0001`);
+    await proxy.close();
+
+    proxy = await startProxyServer({ mode: 'replay', config, harPath, ca, knownSecrets: {} });
+    expect(await send(proxy.port, 'POST', `${base}/jobs`, insertBody('job_live_0002'))).toBe(200);
+    expect(await send(proxy.port, 'GET', `${base}/queries/job_live_0002`)).toBe(200);
+    expect(proxy.stats.matched).toBe(2);
   });
 });

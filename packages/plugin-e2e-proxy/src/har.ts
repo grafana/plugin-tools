@@ -175,15 +175,15 @@ export class ReplayStore {
   }
 
   /**
-   * On a miss, finds the recorded request with the same method, host and path that differs the
-   * least, and reports field by field what differs. Returns undefined when nothing with that
-   * method/host/path was ever recorded.
+   * On a miss, finds the recorded request with the same method and host that differs the least,
+   * and reports field by field what differs, the path included. Returns undefined when nothing
+   * with that method and host was ever recorded.
    */
   closestMatch(req: CapturedRequest, config: ProxyConfig): { url: string; differences: string[] } | undefined {
     const current = buildMatchKey(req, config);
     let closest: { key: string; candidate: MatchKey; rank: [number, number] } | undefined;
     for (const [key, candidate] of this.structuredKeys) {
-      if (candidate.method !== current.method || candidate.host !== current.host || candidate.path !== current.path) {
+      if (candidate.method !== current.method || candidate.host !== current.host) {
         continue;
       }
       const rank = closenessRank(current, candidate);
