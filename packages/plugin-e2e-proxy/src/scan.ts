@@ -6,9 +6,19 @@ import type { SecretScrubber } from './redact.js';
  * weren't in provisioning and weren't learned (a hardcoded key, a webhook signing secret, ...).
  * This is a backstop, not the primary control - the primary control is scrubbing known values.
  */
-const SECRET_SHAPE_PATTERNS: Array<{ rule: string; pattern: RegExp }> = [
+/** A 40-char lowercase-hex string is a git SHA-1, not a base64 secret - ubiquitous in GitHub API data. */
+const isGitSha = (match: string): boolean => /^[0-9a-f]{40}$/.test(match);
+
+interface SecretShapePattern {
+  rule: string;
+  pattern: RegExp;
+  /** Excludes a match that's a known benign shape sharing the same regex (e.g. a git SHA). */
+  isFalsePositive?: (match: string) => boolean;
+}
+
+const SECRET_SHAPE_PATTERNS: SecretShapePattern[] = [
   { rule: 'aws-access-key-id', pattern: /\bAKIA[0-9A-Z]{16}\b/ },
-  { rule: 'aws-secret-key-like', pattern: /\b[A-Za-z0-9/+=]{40}\b/ },
+  { rule: 'aws-secret-key-like', pattern: /\b[A-Za-z0-9/+=]{40}\b/, isFalsePositive: isGitSha },
   { rule: 'github-token', pattern: /\bgh[pousr]_[A-Za-z0-9]{36,}\b/ },
   { rule: 'bearer-jwt', pattern: /\bBearer\s+eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/ },
   { rule: 'generic-api-key', pattern: /"(?:api[_-]?key|apikey)"\s*:\s*"(?!REDACTED)[^"]{12,}"/i },
@@ -38,9 +48,9 @@ export function scanHar(har: Har, filePath: string, scrubber: SecretScrubber): F
   har.log.entries.forEach((entry, index) => {
     const requestText = JSON.stringify(entry.request);
     const responseText = JSON.stringify(entry.response);
-    for (const { rule, pattern } of SECRET_SHAPE_PATTERNS) {
-      checkText(requestText, 'request', index, rule, pattern, findings, filePath);
-      checkText(responseText, 'response', index, rule, pattern, findings, filePath);
+    for (const shapePattern of SECRET_SHAPE_PATTERNS) {
+      checkText(requestText, 'request', index, shapePattern, findings, filePath);
+      checkText(responseText, 'response', index, shapePattern, findings, filePath);
     }
   });
 
@@ -51,13 +61,15 @@ function checkText(
   text: string,
   location: 'request' | 'response',
   entryIndex: number,
-  rule: string,
-  pattern: RegExp,
+  { rule, pattern, isFalsePositive }: SecretShapePattern,
   findings: Finding[],
   filePath: string
 ): void {
-  const match = text.match(pattern);
-  if (match) {
+  const globalPattern = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : `${pattern.flags}g`);
+  for (const match of text.matchAll(globalPattern)) {
+    if (isFalsePositive?.(match[0])) {
+      continue;
+    }
     findings.push({
       file: filePath,
       entry: entryIndex,
@@ -65,6 +77,7 @@ function checkText(
       rule,
       preview: maskPreview(match[0]),
     });
+    return;
   }
 }
 

@@ -42,4 +42,35 @@ describe('scanHar', () => {
     const finding = findings.find((f) => f.rule === 'aws-access-key-id');
     expect(finding?.preview).not.toContain('AKIAFAKEFAKEFAKE99Z');
   });
+
+  it('does not flag a git commit SHA as an AWS-secret-shaped value', () => {
+    const har = emptyHar();
+    har.log.entries.push(
+      toHarEntry(
+        req(),
+        res(
+          '{"body":"bumps foo from 58bff37c8947f690ace498be413a9b78d6f30f93 to 06749dd8c0b54f350bc69c8752456cee498808a3"}'
+        ),
+        new Date(),
+        1
+      )
+    );
+    const findings = scanHar(har, 'e2e/recordings/api.har', new SecretScrubber({}));
+    expect(findings).toEqual([]);
+  });
+
+  it('still flags a real secret-shaped value next to a git SHA in the same response', () => {
+    const har = emptyHar();
+    const realSecret = 'aB3xY9zQwErTyUiOpAsDfGhJkLzXcVbNmFAKE999';
+    har.log.entries.push(
+      toHarEntry(
+        req(),
+        res(JSON.stringify({ sha: '58bff37c8947f690ace498be413a9b78d6f30f93', secret: realSecret })),
+        new Date(),
+        1
+      )
+    );
+    const findings = scanHar(har, 'e2e/recordings/api.har', new SecretScrubber({}));
+    expect(findings.some((f) => f.rule === 'aws-secret-key-like')).toBe(true);
+  });
 });
