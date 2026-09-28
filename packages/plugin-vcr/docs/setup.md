@@ -2,7 +2,25 @@
 
 This guide adds record and replay to a plugin that uses the `docker-compose.yaml` created by `@grafana/create-plugin`. The same setup serves e2e tests, [demos](./demos.md) and local development.
 
-## Install
+## The fast way: `create-plugin add vcr`
+
+A `create-plugin` addition does everything in [Manual setup](#manual-setup) for you: it detects the hosts your plugin calls from `go.mod`, finds the secret environment variables your provisioning file references, and scaffolds the config, the compose file, the `server:record`/`server:replay` scripts and the CI wiring.
+
+It isn't released yet either, so run it from a preview build:
+
+```shell
+npx https://pkg.pr.new/grafana/plugin-tools/@grafana/create-plugin@<commit-sha> add vcr
+```
+
+For example, `https://pkg.pr.new/grafana/plugin-tools/@grafana/create-plugin@be1efea` is the preview for the PR that adds this addition. Check the PR for a newer commit SHA once one lands.
+
+Read what it prints when it finishes: it tells you which hosts to add if none were detected, whether it found and wired your CI workflow, and anything else specific to your plugin. Then skip to [Record](#4-record).
+
+If you'd rather wire it up by hand, or want to see exactly what the addition does, read on.
+
+## Manual setup
+
+### Install
 
 plugin-vcr isn't released yet. You can get it in one of two ways, and neither needs anything merged to `main`.
 
@@ -56,7 +74,7 @@ npx https://pkg.pr.new/grafana/plugin-tools/@grafana/plugin-vcr@<commit-sha> fie
 
 The rest of these docs use `npx @grafana/plugin-vcr` and `image: plugin-vcr` as they will look after release. Swap in one of the options above until then.
 
-## 1. Add the config
+### 1. Add the config
 
 Create `e2e/recordings/vcr.json` and list the hosts your plugin calls:
 
@@ -88,7 +106,7 @@ Create `e2e/recordings/.gitignore`:
 *.tmp
 ```
 
-## 2. Add the compose overlay
+### 2. Add the compose overlay
 
 Create `e2e/docker-compose.vcr.yaml`. It adds the proxy and points Grafana at it:
 
@@ -150,7 +168,7 @@ In your provisioning file, reference secrets as `$API_TOKEN`. Don't use `${API_T
 
 If your plugin signs its own token requests with a private key, as Google service accounts do, also add a replay key. Refer to [Plugins that sign requests locally](./configuration.md#plugins-that-sign-requests-locally).
 
-## 3. Add scripts
+### 3. Add scripts
 
 Add these to `package.json`:
 
@@ -163,7 +181,7 @@ Add these to `package.json`:
 }
 ```
 
-## 4. Record
+### 4. Record
 
 With real credentials in your environment, start the stack and then use the plugin. For e2e tests that means running the suite. For a demo it means clicking through the dashboard.
 
@@ -176,11 +194,11 @@ Stop the stack with Ctrl+C. The proxy prints how many entries it wrote, what it 
 
 A recording session replaces the whole HAR file, so do everything you want replayed in one session. Use a dedicated test account with synthetic data if you can, and rotate the credentials after recording.
 
-## 5. Review the recording
+### 5. Review the recording
 
 Read every recording before you commit it. The proxy removes credentials it knows about, but it can't tell that a name or an email address in a response is sensitive. [Secrets and personal data](./secrets.md) explains what's removed automatically and how to redact the rest.
 
-## 6. Replay
+### 6. Replay
 
 Without credentials:
 

@@ -4,9 +4,9 @@
 
 - **Only HTTP and HTTPS.** Databases that use their own TCP protocol don't work: PostgreSQL, MySQL, Microsoft SQL Server, Oracle, SAP HANA, MongoDB, Aurora, CockroachDB and ClickHouse in native mode. For self-hosted engines, run a real container with seed data instead.
 - **No gRPC, WebSocket or long-lived streams.** Examples are the BigQuery Storage Read API, Loki live tailing, Tempo streaming search and InfluxDB Flight SQL. The HTTP paths of those plugins still work.
-- **The plugin must honour `HTTPS_PROXY`.** A plugin that builds its own HTTP transport without a proxy skips the proxy. Examples are Infinity when its proxy setting isn't `env`, and IoT SiteWise in Edge mode. Go never proxies `localhost`, so an API running on localhost is also skipped.
+- **Whoever makes the call must honour `HTTPS_PROXY`.** A backend plugin that builds its own HTTP transport without a proxy skips it. Examples are Infinity when its proxy setting isn't `env`, and IoT SiteWise in Edge mode. Go never proxies `localhost`, so an API running on localhost is also skipped.
 - **Custom CAs and mutual TLS break interception.** If a datasource is configured with its own CA certificate or a client certificate, it no longer trusts the proxy's CA. Leave these settings off in the provisioning you record with.
-- **Frontend-only datasources don't need it.** If the browser makes the call, mock it in Playwright instead.
+- **A direct-from-browser call skips it.** If the datasource is set to `access: direct` and the browser calls the third-party API itself, mock it in Playwright instead. A frontend plugin using `access: proxy` still works: Grafana makes the call on the plugin's behalf, through the same proxy Grafana itself is configured with.
 
 ## Replay
 
