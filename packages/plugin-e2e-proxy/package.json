@@ -33,7 +33,8 @@
     "node": ">=20"
   },
   "dependencies": {
-    "node-forge": "1.4.0"
+    "node-forge": "1.4.0",
+    "yaml": "2.9.0"
   },
   "devDependencies": {
     "@types/node-forge": "1.3.14"
