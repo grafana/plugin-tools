@@ -12,7 +12,7 @@ plugin-vcr is inspired by the [VCR](https://github.com/vcr/vcr) library for Ruby
 ## What you can do with it
 
 - **Run e2e tests without secrets.** Test the whole plugin, backend included, on every pull request. Forks too.
-- **Demo a dashboard.** Show real-looking data to people who have no account for the service.
+- **Demo a dashboard.** Show real-looking data to people who have no account for the service. The dashboard needs an [absolute time range](./docs/demos.md#demo-a-dashboard).
 - **Develop without access.** Work on a plugin whose API you can't reach, using a teammate's recordings.
 
 ## How it works
