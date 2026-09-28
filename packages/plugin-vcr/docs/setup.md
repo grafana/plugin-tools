@@ -9,10 +9,10 @@ A `create-plugin` addition does everything in [Manual setup](#manual-setup) for 
 It isn't released yet either, so run it from a preview build:
 
 ```shell
-npx https://pkg.pr.new/grafana/plugin-tools/@grafana/create-plugin@<commit-sha> add vcr
+npx https://pkg.pr.new/grafana/plugin-tools/@grafana/create-plugin@be1efea add vcr
 ```
 
-For example, `https://pkg.pr.new/grafana/plugin-tools/@grafana/create-plugin@be1efea` is the preview for the PR that adds this addition. Check the PR for a newer commit SHA once one lands.
+That URL is pinned to the commit that adds this addition. Check its pull request for a newer commit SHA once one lands.
 
 Read what it prints when it finishes: it tells you which hosts to add if none were detected, whether it found and wired your CI workflow, and anything else specific to your plugin. Then skip to [Record](#4-record).
 

@@ -38,10 +38,10 @@ It works with anything whose call to the third-party API passes through Grafana 
 
 ## Quick start
 
-A `create-plugin` addition wires plugin-vcr into a backend plugin's compose file, provisioning and CI:
+A `create-plugin` addition wires plugin-vcr into a backend plugin's compose file, provisioning and CI. It isn't released yet, so run it from a preview build:
 
 ```shell
-npx create-plugin add vcr
+npx https://pkg.pr.new/grafana/plugin-tools/@grafana/create-plugin@be1efea add vcr
 ```
 
 Then:
