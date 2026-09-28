@@ -48,7 +48,7 @@ Here’s the brief overview of the steps you need to take to add PDC to the data
 - Enable PDC for the data source in Grafana Cloud
 - Update public documentation
 
-### Frontend Changes
+### Frontend changes
 
 On the frontend, we need to add a feature toggle to enable or disable PDC.
 
