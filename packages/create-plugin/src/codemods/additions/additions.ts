@@ -44,6 +44,12 @@ const additions: Addition[] = [
     scriptPath: import.meta.resolve('./scripts/externalize-jsx-runtime.js'),
   },
   {
+    name: 'rspack',
+    description: 'Migrates the plugin frontend build from webpack or experimental rspack to rspack 2',
+    scriptPath: import.meta.resolve('./scripts/rspack.js'),
+    prompt: import.meta.resolve('./prompts/rspack.md'),
+  },
+  {
     name: 'experimental-app-sdk',
     description: 'Adds grafana-app-sdk CUE kind code generation to an app plugin',
     scriptPath: import.meta.resolve('./scripts/experimental-app-sdk.js'),

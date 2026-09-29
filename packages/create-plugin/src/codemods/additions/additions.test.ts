@@ -56,6 +56,14 @@ describe('additions json', () => {
     expect(defaultAdditions.length).toBeGreaterThan(0);
   });
 
+  it('should register rspack as a hybrid addition', () => {
+    const rspack = defaultAdditions.find((addition) => addition.name === 'rspack');
+
+    expect(rspack).toBeDefined();
+    expect(isScriptAddition(rspack!)).toBe(true);
+    expect(hasPromptStep(rspack!)).toBe(true);
+  });
+
   defaultAdditions.forEach((addition) => {
     it(`should declare a script path or a prompt for ${addition.name}`, () => {
       expect(isScriptAddition(addition) || hasPromptStep(addition)).toBe(true);
