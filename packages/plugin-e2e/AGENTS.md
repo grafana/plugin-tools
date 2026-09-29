@@ -46,7 +46,7 @@ The full public API is defined in `src/index.ts`. The package exports four main 
 
 - Always use selectors defined in Grafana's [`@grafana/e2e-selectors`](https://github.com/grafana/grafana/tree/main/packages/grafana-e2e-selectors) package. If the selector you need doesn't exist there, add it upstream first, then run `npm run sync-selectors -w @grafana/plugin-e2e` once it's merged.
 - `src/selectors/vendored` is a copy of that package written by the sync script. Never edit it by hand.
-- Never import from `src/selectors/vendored` in models or tests. Always use the `selectors` fixture - it resolves version-specific selectors at runtime.
+- Never import from `src/selectors/vendored` in models or consumer-facing tests. Internal tests for the vendored implementation may import it directly; all other tests should use the `selectors` fixture - it resolves version-specific selectors at runtime.
 - Always locate elements via `getByGrafanaSelector(selectors.components.Foo.bar)`. See the [selecting elements guide](https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/selecting-elements#grafana-end-to-end-selectors) for usage.
 - If a magic string is unavoidable (e.g. a selector not suited for `@grafana/e2e-selectors`), define it in `src/selectors/versionedConstants.ts` so it can be made version-specific.
 - API paths are not part of `@grafana/e2e-selectors` - define them in `src/selectors/versionedAPIs.ts` instead.
