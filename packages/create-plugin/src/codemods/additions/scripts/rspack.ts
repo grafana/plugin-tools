@@ -68,9 +68,9 @@ export default function rspack(context: Context): Context {
   renderTemplateFiles(context, BUNDLER_FILES);
   updateCprcConfig(context);
 
-  const hasCustomConfig = handleCustomWebpackConfig(context);
+  handleCustomWebpackConfig(context);
 
-  followUps.push(...updatePackageJson(context, hasCustomConfig));
+  followUps.push(...updatePackageJson(context));
   followUps.push(...deleteWebpackTemplateFiles(context));
   reportFollowUps(context, followUps);
 
@@ -136,11 +136,11 @@ function handleCustomWebpackConfig(context: Context): boolean {
 }
 
 interface PackageJson {
-  scripts: Record<string, string>;
+  scripts?: Record<string, string>;
   [key: string]: unknown;
 }
 
-function updatePackageJson(context: Context, hasCustomConfig: boolean): string[] {
+function updatePackageJson(context: Context): string[] {
   if (!context.doesFileExist('package.json')) {
     additionsDebug('No package.json found. Skipping dependency and script updates.');
     return [];
@@ -165,20 +165,51 @@ function updatePackageJson(context: Context, hasCustomConfig: boolean): string[]
   }
 
   const packageJson = readJsonFile<PackageJson>(context, 'package.json');
-  const configPath = hasCustomConfig ? './rspack.config.ts' : './.config/rspack/rspack.config.ts';
-  const updatedScripts = {
-    ...packageJson.scripts,
-    build: `rspack -c ${configPath} --env production`,
-    dev: `rspack -w -c ${configPath} --env development`,
-  };
-  const updatedPackageJson = {
-    ...packageJson,
-    scripts: updatedScripts,
-  };
+  const { scripts, unparsedScripts } = rewriteWebpackScripts(packageJson.scripts ?? {});
 
-  context.updateFile('package.json', JSON.stringify(updatedPackageJson, null, 2));
+  if (packageJson.scripts) {
+    context.updateFile('package.json', JSON.stringify({ ...packageJson, scripts }, null, 2));
+  }
+
+  if (unparsedScripts.length > 0) {
+    followUps.push(
+      'These scripts still call webpack in a way the addition could not rewrite. Change them to call rspack with ./rspack.config.ts or ./.config/rspack/rspack.config.ts:',
+      ...unparsedScripts.map(([name, command]) => `  ${name}: ${command}`)
+    );
+  }
 
   return followUps;
+}
+
+// a webpack or webpack-cli command at the start of a script, after a shell separator, after env
+// assignments or after npx. the lookbehind keeps the separator and prefixes out of the match
+const WEBPACK_COMMAND_PATTERN = /(?<=(?:^|&&|\|\||;|\|)\s*(?:\w+=\S*\s+)*(?:npx\s+)?)webpack(?:-cli)?(?=\s|$)/g;
+const ROOT_WEBPACK_CONFIG_ARG_PATTERN =
+  /((?:^|\s)(?:-c|--config)(?:\s+|=))(?:\.\/)?webpack\.config\.[cm]?[jt]s(?=\s|$)/g;
+const TEMPLATE_WEBPACK_CONFIG_ARG_PATTERN =
+  /((?:^|\s)(?:-c|--config)(?:\s+|=))(?:\.\/)?\.config\/webpack\/webpack\.config\.ts(?=\s|$)/g;
+// anything that still runs webpack after the rewrite, e.g. node_modules/webpack-cli/bin/cli.js
+const REMAINING_WEBPACK_PATTERN = /(?:^|[\s/])webpack(?:-cli)?(?:[\s/]|$)|\.config\/webpack\//;
+
+function rewriteWebpackScripts(scripts: Record<string, string>) {
+  const unparsedScripts: Array<[string, string]> = [];
+  const rewrittenScripts = Object.fromEntries(
+    Object.entries(scripts).map(([name, command]) => {
+      const rewritten = command
+        .replace(WEBPACK_COMMAND_PATTERN, 'rspack')
+        .replace(ROOT_WEBPACK_CONFIG_ARG_PATTERN, '$1./rspack.config.ts')
+        .replace(TEMPLATE_WEBPACK_CONFIG_ARG_PATTERN, '$1./.config/rspack/rspack.config.ts');
+
+      if (REMAINING_WEBPACK_PATTERN.test(rewritten)) {
+        unparsedScripts.push([name, command]);
+        return [name, command];
+      }
+
+      return [name, rewritten];
+    })
+  );
+
+  return { scripts: rewrittenScripts, unparsedScripts };
 }
 
 // root level webpack.* and rspack.* files, e.g. webpack.config.ts and helpers like webpack.config.utils.ts
