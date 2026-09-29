@@ -147,7 +147,7 @@ export const eq = (a: string, b: string): boolean => cmp(a, b) === 0;
 export const compare = (a: string, b: string): -1 | 0 | 1 => Math.sign(cmp(a, b)) as -1 | 0 | 1;
 
 const SEMVER_REGEX =
-  /^v?((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+  /^v?((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?)(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
 /**
  * Returns the normalized version when `version` is a valid semantic version, otherwise `null`.
