@@ -6,7 +6,13 @@ import { Addition, PromptOnlyAddition } from '../additions/additions.js';
 import { Context } from '../context.js';
 import { selectPrompt } from '../../utils/utils.console.js';
 import { AGENT_RUNS_DIR } from './handoff.js';
-import { ABORT_CHOICE, CONTINUE_CHOICE, prepareAgenticAddition, runAgenticStep } from './index.js';
+import {
+  ABORT_CHOICE,
+  buildAdditionTodosWarning,
+  CONTINUE_CHOICE,
+  prepareAgenticAddition,
+  runAgenticStep,
+} from './index.js';
 import { resolveAgenticMode } from './resolve.js';
 import { runAgentSession } from './runner.js';
 import { AgentSessionResult, InstalledAgent } from './types.js';
@@ -250,5 +256,32 @@ describe('runAgenticStep', () => {
 
       await expect(runStep()).rejects.toThrow(/aborted/);
     });
+  });
+});
+
+describe('buildAdditionTodosWarning', () => {
+  it('should return nothing when the addition left no markers', () => {
+    expect(buildAdditionTodosWarning('rspack', [])).toBeUndefined();
+  });
+
+  it('should list each marker with its location', () => {
+    const warning = buildAdditionTodosWarning('rspack', [
+      { file: 'rspack.config.ts', line: 12, text: '// TODO(rspack): port CorsWorkerPlugin' },
+      { file: 'build/utils.ts', line: 3, text: '// TODO(rspack): swc plugin ABI mismatch' },
+    ]);
+
+    expect(warning).toEqual({
+      title: 'rspack left 2 items that need your attention.',
+      body: [
+        'rspack.config.ts:12  // TODO(rspack): port CorsWorkerPlugin',
+        'build/utils.ts:3  // TODO(rspack): swc plugin ABI mismatch',
+      ],
+    });
+  });
+
+  it('should use the singular for one marker', () => {
+    const warning = buildAdditionTodosWarning('rspack', [{ file: 'a.ts', line: 1, text: '// TODO(rspack): x' }]);
+
+    expect(warning?.title).toBe('rspack left 1 item that needs your attention.');
   });
 });
