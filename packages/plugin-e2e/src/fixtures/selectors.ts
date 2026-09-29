@@ -1,10 +1,10 @@
 import { APIRequestContext, TestFixture } from '@playwright/test';
-import { gte, valid } from 'semver';
+import { gte, valid } from '../utils/version';
 import {
   resolveSelectors,
   versionedComponents as bundledVersionedComponents,
   versionedPages as bundledVersionedPages,
-} from '@grafana/e2e-selectors';
+} from '../selectors/vendored';
 import { E2ESelectorGroups, PlaywrightArgs } from '../types';
 import { versionedConstants } from '../selectors/versionedConstants';
 import { versionedAPIs } from '../selectors/versionedAPIs';

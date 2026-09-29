@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // identity resolveSelectors so we can assert which tree flowed through; tagged bundled data so we
-// can tell the bundled dependency apart from the fetched, reconstructed data
-vi.mock('@grafana/e2e-selectors', () => ({
+// can tell the vendored selectors apart from the fetched, reconstructed data
+vi.mock('../selectors/vendored', () => ({
   resolveSelectors: vi.fn((versioned: unknown) => versioned),
   versionedComponents: { __source: 'dep-components' },
   versionedPages: { __source: 'dep-pages' },

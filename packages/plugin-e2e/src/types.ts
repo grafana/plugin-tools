@@ -8,7 +8,7 @@ import {
   TestInfo,
 } from '@playwright/test';
 import type { AxeResults, RunOptions as AxeRunOptions, SerialFrameSelector } from 'axe-core';
-import { SelectorsOf, versionedComponents, versionedPages } from '@grafana/e2e-selectors';
+import { SelectorsOf, versionedComponents, versionedPages } from './selectors/vendored';
 
 import { AlertRuleEditPage } from './models/pages/AlertRuleEditPage';
 import { AnnotationEditPage } from './models/pages/AnnotationEditPage';
