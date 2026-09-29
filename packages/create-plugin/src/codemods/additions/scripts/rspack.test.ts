@@ -86,24 +86,43 @@ function createBaseContext(): Context {
 }
 
 describe('rspack', () => {
-  describe('guard clauses', () => {
-    it('should return unchanged context when rspack config already exists', () => {
+  describe('start states', () => {
+    it('should make no changes and explain why when there is no create-plugin bundler setup', () => {
       const context = new Context('/virtual');
-      context.addFile('.config/rspack/rspack.config.ts', 'rspack config');
-      context.addFile('.config/webpack/webpack.config.ts', 'webpack config');
-      const changesBefore = Object.keys(context.listChanges()).length;
 
       const result = addRspack(context);
 
-      expect(Object.keys(result.listChanges()).length).toBe(changesBefore);
+      expect(result.hasChanges()).toBe(false);
+      expect(result.getMessage()).toEqual(
+        expect.objectContaining({ level: 'warning', title: expect.stringContaining('bundler configuration') })
+      );
     });
 
-    it('should return unchanged context when no webpack config exists', () => {
-      const context = new Context('/virtual');
+    it('should re-render a stale .config/rspack left behind on a webpack plugin', () => {
+      const context = createBaseContext();
+      context.addFile('.config/rspack/rspack.config.ts', 'stale rspack config');
 
       const result = addRspack(context);
 
-      expect(result.hasChanges()).toBeFalsy();
+      expect(result.getFile('.config/rspack/rspack.config.ts')).toBe('// rendered template stub');
+      expect(result.doesFileExist('.config/webpack/webpack.config.ts')).toBe(false);
+    });
+
+    it('should replace an experimental rspack setup with the current rspack templates', () => {
+      const context = new Context('/virtual');
+      context.addFile('.config/rspack/rspack.config.ts', 'experimental rspack config');
+      context.addFile('.config/rspack/BuildModeRspackPlugin.ts', 'experimental build mode plugin');
+      context.addFile('.config/rspack/liveReloadPlugin.ts', 'experimental live reload plugin');
+      context.addFile(
+        '.config/.cprc.json',
+        JSON.stringify({ version: '7.9.0', features: { useExperimentalRspack: true } }, null, 2)
+      );
+
+      const result = addRspack(context);
+
+      expect(result.getFile('.config/rspack/rspack.config.ts')).toBe('// rendered template stub');
+      expect(result.getFile('.config/rspack/BuildModeRspackPlugin.ts')).toBe('// rendered template stub');
+      expect(result.getFile('.config/rspack/liveReloadPlugin.ts')).toBe('// rendered template stub');
     });
   });
 
@@ -250,13 +269,29 @@ describe('rspack', () => {
   });
 
   describe('webpack cleanup', () => {
-    it('should delete webpack config files from .config/webpack/', () => {
+    it('should delete the create-plugin webpack files from .config/webpack/', () => {
       const context = createBaseContext();
+      context.addFile('.config/webpack/utils.ts', '');
+      context.addFile('.config/webpack/constants.ts', '');
+      context.addFile('.config/webpack/tsconfig.webpack.json', '');
 
       const result = addRspack(context);
 
       expect(result.doesFileExist('.config/webpack/webpack.config.ts')).toBe(false);
       expect(result.doesFileExist('.config/webpack/BuildModeWebpackPlugin.ts')).toBe(false);
+      expect(result.doesFileExist('.config/webpack/utils.ts')).toBe(false);
+      expect(result.doesFileExist('.config/webpack/constants.ts')).toBe(false);
+      expect(result.doesFileExist('.config/webpack/tsconfig.webpack.json')).toBe(false);
+    });
+
+    it('should keep files the plugin added to .config/webpack/ and report them', () => {
+      const context = createBaseContext();
+      context.addFile('.config/webpack/CorsWorkerPlugin.ts', 'export class CorsWorkerPlugin {}');
+
+      const result = addRspack(context);
+
+      expect(result.getFile('.config/webpack/CorsWorkerPlugin.ts')).toBe('export class CorsWorkerPlugin {}');
+      expect(result.getMessage()?.body?.join('\n')).toContain('.config/webpack/CorsWorkerPlugin.ts');
     });
   });
 
