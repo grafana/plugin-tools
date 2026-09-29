@@ -1,11 +1,11 @@
 import defaultAdditions, { hasPromptStep, isScriptAddition } from '../codemods/additions/additions.js';
-import { prepareAgenticAddition, runAgenticStep } from '../codemods/agentic/index.js';
+import { buildAdditionTodosWarning, prepareAgenticAddition, runAgenticStep } from '../codemods/agentic/index.js';
 import { buildDirectiveBlock, buildNextStepsLine, getPromptPath } from '../codemods/agentic/prompts.js';
 import { Context } from '../codemods/context.js';
 import { runCodemod } from '../codemods/runner.js';
 import { getPackageManagerExecCmd, getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
 import { performPreCodemodChecks } from '../utils/utils.checks.js';
-import { isGitDirectoryClean } from '../utils/utils.git.js';
+import { findAdditionTodos, isGitDirectoryClean } from '../utils/utils.git.js';
 import minimist from 'minimist';
 import { output } from '../utils/utils.console.js';
 
@@ -68,6 +68,14 @@ export const add = async (argv: minimist.ParsedArgs) => {
         title: `Successfully added ${addition.name} to your plugin.`,
         body: result.kind === 'applied' ? [result.summary] : undefined,
       });
+
+      const todosWarning = buildAdditionTodosWarning(
+        addition.name,
+        await findAdditionTodos(addition.name, process.cwd())
+      );
+      if (todosWarning) {
+        output.warning(todosWarning);
+      }
       return;
     }
 

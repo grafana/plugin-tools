@@ -18,6 +18,7 @@ import {
 import { resolveAgenticMode } from './resolve.js';
 import { runAgentSession } from './runner.js';
 import { AgenticResolution, AgenticStepResult, AgentSessionResult, InstalledAgent } from './types.js';
+import type { AdditionTodo } from '../../utils/utils.git.js';
 
 export const ABORT_CHOICE = 'Abort the addition';
 export const CONTINUE_CHOICE = 'Treat the agent step as completed';
@@ -173,4 +174,27 @@ async function safeSelect(message: string, choices: string[]): Promise<string> {
     // enquirer rejects when the prompt is cancelled (ctrl+c) — treat as an abort
     return ABORT_CHOICE;
   }
+}
+
+export interface AdditionTodosWarning {
+  title: string;
+  body: string[];
+}
+
+// the handoff summary is the agent's own account. the markers are read from the tree, so anything
+// the agent could not apply is reported even when its summary leaves it out
+export function buildAdditionTodosWarning(
+  additionName: string,
+  todos: AdditionTodo[]
+): AdditionTodosWarning | undefined {
+  if (todos.length === 0) {
+    return undefined;
+  }
+
+  const itemsNeed = todos.length === 1 ? 'item that needs' : 'items that need';
+
+  return {
+    title: `${additionName} left ${todos.length} ${itemsNeed} your attention.`,
+    body: todos.map(({ file, line, text }) => `${file}:${line}  ${text}`),
+  };
 }
