@@ -1,5 +1,10 @@
 import { Context } from '../../context.js';
-import addRspack from './rspack.js';
+import addRspack, {
+  BASE_CONFIG_DEV_DEPENDENCIES,
+  getTemplateDevDependencyVersions,
+  RSPACK_DEV_DEPENDENCIES,
+  WEBPACK_ONLY_DEV_DEPENDENCIES,
+} from './rspack.js';
 
 vi.mock(import('../../../utils/utils.plugin.js'), async (importOriginal) => {
   const originalModule = await importOriginal();
@@ -25,12 +30,12 @@ vi.mock(import('../../../utils/utils.config.js'), async (importOriginal) => {
 vi.mock(import('../../utils.js'), async (importOriginal) => {
   const originalModule = await importOriginal();
 
-  // Only render externals.ts and _package.json from the real templates since we assert on their content.
+  // Only render externals.ts from the real template since we assert on its content.
   // All other templates just need a non-empty stub.
   return {
     ...originalModule,
     renderTemplate: (path: string, includeWarning?: boolean, templateDataOverrides?: Record<string, unknown>) => {
-      if (path.includes('.config/bundler/externals.ts') || path.endsWith('_package.json')) {
+      if (path.includes('.config/bundler/externals.ts')) {
         return originalModule.renderTemplate(path, includeWarning, templateDataOverrides);
       }
       return '// rendered template stub';
@@ -86,6 +91,38 @@ function createBaseContext(): Context {
 }
 
 describe('rspack', () => {
+  // guards the explicit package lists against the template: fails when the rspack template gains,
+  // loses or renames a package the addition should manage. version bumps do not fail it
+  describe('package lists', () => {
+    it('should find a template version for every package the addition installs', async () => {
+      const rspackDeps = await getTemplateDevDependencies(RSPACK_TEMPLATE_DATA);
+
+      for (const name of [...RSPACK_DEV_DEPENDENCIES, ...BASE_CONFIG_DEV_DEPENDENCIES]) {
+        expect(rspackDeps[name], name).toBeDefined();
+      }
+    });
+
+    it('should list every package only the rspack template has', async () => {
+      const rspackDeps = await getTemplateDevDependencies(RSPACK_TEMPLATE_DATA);
+      const webpackDeps = await getTemplateDevDependencies(WEBPACK_TEMPLATE_DATA);
+      const rspackOnly = Object.keys(rspackDeps).filter((name) => !(name in webpackDeps));
+
+      expect(RSPACK_DEV_DEPENDENCIES).toEqual(expect.arrayContaining(rspackOnly));
+    });
+
+    it('should list every package only the webpack template has', async () => {
+      const rspackDeps = await getTemplateDevDependencies(RSPACK_TEMPLATE_DATA);
+      const webpackDeps = await getTemplateDevDependencies(WEBPACK_TEMPLATE_DATA);
+      const webpackOnly = Object.keys(webpackDeps).filter((name) => !(name in rspackDeps));
+
+      expect(WEBPACK_ONLY_DEV_DEPENDENCIES).toEqual(expect.arrayContaining(webpackOnly));
+    });
+
+    it('should read the same versions as a render with the plugin template data', async () => {
+      expect(getTemplateDevDependencyVersions()).toEqual(await getTemplateDevDependencies(RSPACK_TEMPLATE_DATA));
+    });
+  });
+
   describe('start states', () => {
     it('should make no changes and explain why when there is no create-plugin bundler setup', () => {
       const context = new Context('/virtual');
