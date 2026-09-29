@@ -68,8 +68,7 @@ export default function rspack(context: Context): Context {
   renderTemplateFiles(context, BUNDLER_FILES);
   updateCprcConfig(context);
 
-  handleCustomWebpackConfig(context);
-
+  followUps.push(...addRootRspackConfigStub(context));
   followUps.push(...updatePackageJson(context));
   followUps.push(...deleteWebpackTemplateFiles(context));
   reportFollowUps(context, followUps);
@@ -121,18 +120,33 @@ function renderTemplateFiles(context: Context, filePaths: string[]): void {
   }
 }
 
-function handleCustomWebpackConfig(context: Context): boolean {
-  const hasCustomConfig = context.doesFileExist('webpack.config.ts');
+const ROOT_CONFIG_EXTENSIONS = ['ts', 'js', 'cjs', 'mjs', 'cts', 'mts'];
 
-  if (!hasCustomConfig) {
-    return false;
+// a root webpack config means the plugin extends the build. the stub makes the build fail loudly
+// until that config is ported, so a plugin cannot ship without the build features it relies on
+function addRootRspackConfigStub(context: Context): string[] {
+  const rootWebpackConfig = ROOT_CONFIG_EXTENSIONS.map((extension) => `webpack.config.${extension}`).find((filePath) =>
+    context.doesFileExist(filePath)
+  );
+  if (!rootWebpackConfig) {
+    return [];
   }
 
-  additionsDebug('Custom root webpack.config.ts detected. Creating rspack.config.ts stub with migration instructions.');
+  const existingRootRspackConfig = ROOT_CONFIG_EXTENSIONS.map((extension) => `rspack.config.${extension}`).find(
+    (filePath) => context.doesFileExist(filePath)
+  );
+  if (existingRootRspackConfig) {
+    return [
+      `${existingRootRspackConfig} already exists, so it was left as is. Check that it includes everything from ${rootWebpackConfig}.`,
+    ];
+  }
 
-  context.addFile('rspack.config.ts', ROOT_RSPACK_CONFIG_TEMPLATE);
+  additionsDebug(`Custom ${rootWebpackConfig} detected. Adding a rspack.config.ts stub that fails until it is ported.`);
+  context.addFile('rspack.config.ts', getRootRspackConfigStub(rootWebpackConfig));
 
-  return true;
+  return [
+    `rspack.config.ts was added and fails the build until the customisations in ${rootWebpackConfig} are ported to it.`,
+  ];
 }
 
 interface PackageJson {
@@ -270,29 +284,28 @@ function deleteWebpackTemplateFiles(context: Context): string[] {
   ];
 }
 
-const ROOT_RSPACK_CONFIG_TEMPLATE = `import type { Configuration } from '@rspack/core';
-import grafanaConfig from './.config/rspack/rspack.config';
+function getRootRspackConfigStub(rootWebpackConfig: string): string {
+  return `import type { Configuration } from '@rspack/core';
+import { merge } from 'rspack-merge';
 
-// TODO: Your plugin extends the default bundler configuration.
-// The custom webpack overrides in ./webpack.config.ts need to be
-// migrated to this rspack configuration file.
-//
-// 1. Review your customizations in ./webpack.config.ts
-// 2. Apply equivalent rspack configuration below using webpack-merge
-// 3. Remove the error below once migration is complete
-// 4. Delete ./webpack.config.ts
-//
-// See: https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations
+import grafanaConfig, { type Env } from './.config/rspack/rspack.config.ts';
 
+// TODO(rspack): port the customisations in ./${rootWebpackConfig} to this file, then delete it.
+// Run \`npx @grafana/create-plugin@latest add rspack --agent\` to have an AI agent do the port,
+// or follow https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations
+// This file is loaded as native ESM, so CommonJS globals are not available. Use import.meta.dirname,
+// createRequire(import.meta.url) and .ts extensions on relative imports.
 throw new Error(
-  '[add-rspack] This plugin has a custom webpack configuration that needs ' +
-    'manual migration to rspack. See the comments in this file for instructions.'
+  '[rspack] ${rootWebpackConfig} has not been ported to rspack.config.ts yet. ' +
+    'Run \`npx @grafana/create-plugin@latest add rspack --agent\` or port it by hand, then remove this error.'
 );
 
-const config = async (env: Record<string, unknown>): Promise<Configuration> => {
+const config = async (env: Env): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
-  return baseConfig;
+
+  return merge(baseConfig, {});
 };
 
 export default config;
 `;
+}
