@@ -407,60 +407,46 @@ describe('rspack', () => {
     });
   });
 
-  describe('custom webpack config extension', () => {
-    it('should create root rspack.config.ts when root webpack.config.ts exists', () => {
-      const context = createBaseContext();
-      context.addFile('webpack.config.ts', 'import grafanaConfig from "./.config/webpack/webpack.config";');
+  describe('root config stub', () => {
+    it.each(['webpack.config.ts', 'webpack.config.js', 'webpack.config.cjs', 'webpack.config.mjs'])(
+      'should add a root rspack.config.ts stub when %s exists',
+      (rootConfig) => {
+        const context = createBaseContext();
+        context.addFile(rootConfig, 'custom webpack config');
 
-      const result = addRspack(context);
+        const result = addRspack(context);
 
-      expect(result.doesFileExist('rspack.config.ts')).toBe(true);
-    });
+        expect(result.doesFileExist('rspack.config.ts')).toBe(true);
+      }
+    );
 
-    it('should include throw Error in root rspack.config.ts', () => {
-      const context = createBaseContext();
-      context.addFile('webpack.config.ts', 'custom webpack config');
-
-      const result = addRspack(context);
-      const rspackConfig = result.getFile('rspack.config.ts')!;
-
-      expect(rspackConfig).toContain('throw new Error');
-      expect(rspackConfig).toContain('[add-rspack]');
-    });
-
-    it('should reference webpack-merge in migration instructions', () => {
+    it('should make the stub fail the build until the config is ported', () => {
       const context = createBaseContext();
       context.addFile('webpack.config.ts', 'custom webpack config');
 
       const result = addRspack(context);
-      const rspackConfig = result.getFile('rspack.config.ts')!;
+      const stub = result.getFile('rspack.config.ts')!;
 
-      expect(rspackConfig).toContain('webpack-merge');
+      expect(stub).toContain('throw new Error(');
+      expect(stub).toContain('[rspack]');
+      expect(stub).toContain('add rspack --agent');
+      expect(stub).toContain('TODO(rspack)');
     });
 
-    it('should include migration instructions in root rspack.config.ts', () => {
+    it('should write the stub as an ESM safe rspack-merge config', () => {
       const context = createBaseContext();
       context.addFile('webpack.config.ts', 'custom webpack config');
 
       const result = addRspack(context);
-      const rspackConfig = result.getFile('rspack.config.ts')!;
+      const stub = result.getFile('rspack.config.ts')!;
 
-      expect(rspackConfig).toContain('TODO');
-      expect(rspackConfig).toContain('webpack.config.ts');
-      expect(rspackConfig).toContain('.config/rspack/rspack.config');
+      expect(stub).toContain("import { merge } from 'rspack-merge';");
+      expect(stub).toContain("import grafanaConfig, { type Env } from './.config/rspack/rspack.config.ts';");
+      expect(stub).not.toContain('__dirname');
+      expect(stub).not.toContain('webpack-merge');
     });
 
-    it('should import from .config/rspack/rspack.config in root rspack.config.ts', () => {
-      const context = createBaseContext();
-      context.addFile('webpack.config.ts', 'custom webpack config');
-
-      const result = addRspack(context);
-      const rspackConfig = result.getFile('rspack.config.ts')!;
-
-      expect(rspackConfig).toContain("import grafanaConfig from './.config/rspack/rspack.config'");
-    });
-
-    it('should leave root webpack.config.ts untouched', () => {
+    it('should leave the root webpack config untouched', () => {
       const context = createBaseContext();
       const originalContent = 'import grafanaConfig from "./.config/webpack/webpack.config";';
       context.addFile('webpack.config.ts', originalContent);
@@ -470,7 +456,18 @@ describe('rspack', () => {
       expect(result.getFile('webpack.config.ts')).toBe(originalContent);
     });
 
-    it('should not create root rspack.config.ts when no root webpack.config.ts exists', () => {
+    it('should not overwrite an existing root rspack config and should report it', () => {
+      const context = createBaseContext();
+      context.addFile('webpack.config.ts', 'custom webpack config');
+      context.addFile('rspack.config.ts', 'my rspack config');
+
+      const result = addRspack(context);
+
+      expect(result.getFile('rspack.config.ts')).toBe('my rspack config');
+      expect(result.getMessage()?.body?.join('\n')).toContain('rspack.config.ts');
+    });
+
+    it('should not add a stub when there is no root webpack config', () => {
       const context = createBaseContext();
 
       const result = addRspack(context);
