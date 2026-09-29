@@ -70,7 +70,7 @@ export default function rspack(context: Context): Context {
 
   const hasCustomConfig = handleCustomWebpackConfig(context);
 
-  updatePackageJson(context, hasCustomConfig);
+  followUps.push(...updatePackageJson(context, hasCustomConfig));
   followUps.push(...deleteWebpackTemplateFiles(context));
   reportFollowUps(context, followUps);
 
@@ -140,15 +140,29 @@ interface PackageJson {
   [key: string]: unknown;
 }
 
-function updatePackageJson(context: Context, hasCustomConfig: boolean): void {
+function updatePackageJson(context: Context, hasCustomConfig: boolean): string[] {
   if (!context.doesFileExist('package.json')) {
     additionsDebug('No package.json found. Skipping dependency and script updates.');
-    return;
+    return [];
   }
 
+  const followUps: string[] = [];
   const { rspackOnlyDevDependencies, webpackOnlyDevDependencies } = getBundlerDevDependencies();
+  const userBuildFileSources = readUserBuildFileSources(context);
+  const stillUsedDevDependencies = webpackOnlyDevDependencies.filter((name) =>
+    userBuildFileSources.some((source) => referencesPackage(source, name))
+  );
+  const unusedDevDependencies = webpackOnlyDevDependencies.filter((name) => !stillUsedDevDependencies.includes(name));
+
   addDependenciesToPackageJson(context, {}, rspackOnlyDevDependencies);
-  removeDependenciesFromPackageJson(context, [], webpackOnlyDevDependencies);
+  removeDependenciesFromPackageJson(context, [], unusedDevDependencies);
+
+  if (stillUsedDevDependencies.length > 0) {
+    followUps.push(
+      'These webpack packages were kept because your root build config still uses them. Remove them once the config is ported to rspack:',
+      ...stillUsedDevDependencies.map((name) => `  ${name}`)
+    );
+  }
 
   const packageJson = readJsonFile<PackageJson>(context, 'package.json');
   const configPath = hasCustomConfig ? './rspack.config.ts' : './.config/rspack/rspack.config.ts';
@@ -163,6 +177,24 @@ function updatePackageJson(context: Context, hasCustomConfig: boolean): void {
   };
 
   context.updateFile('package.json', JSON.stringify(updatedPackageJson, null, 2));
+
+  return followUps;
+}
+
+// root level webpack.* and rspack.* files, e.g. webpack.config.ts and helpers like webpack.config.utils.ts
+const USER_BUILD_FILE_PATTERN = /^(webpack|rspack)\.[\w.-]*\.[cm]?[jt]s$/;
+
+function readUserBuildFileSources(context: Context): string[] {
+  return context
+    .readDir('.')
+    .filter((filePath) => USER_BUILD_FILE_PATTERN.test(filePath))
+    .map((filePath) => context.getFile(filePath) ?? '');
+}
+
+// matches the package as a module specifier or loader string: 'name', "name", `name` or 'name/subpath'
+function referencesPackage(source: string, packageName: string): boolean {
+  const escapedName = packageName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`['"\`]${escapedName}(/[^'"\`]*)?['"\`]`).test(source);
 }
 
 // The rspack and webpack renders of the package.json template are the source of truth for which
