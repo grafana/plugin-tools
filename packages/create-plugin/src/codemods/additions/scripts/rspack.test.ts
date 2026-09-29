@@ -5,7 +5,12 @@ vi.mock(import('../../../utils/utils.plugin.js'), async (importOriginal) => {
   const originalModule = await importOriginal();
   return {
     ...originalModule,
-    getPluginJson: () => ({ id: 'my-plugin-id', type: 'panel', info: { author: { name: 'my-author' } } }),
+    getPluginJson: () => ({
+      id: 'my-plugin-id',
+      name: 'My Plugin',
+      type: 'panel',
+      info: { author: { name: 'my-author' } },
+    }),
   };
 });
 
@@ -19,24 +24,29 @@ vi.mock(import('../../../utils/utils.config.js'), async (importOriginal) => {
 
 vi.mock(import('../../utils.js'), async (importOriginal) => {
   const originalModule = await importOriginal();
-  const rspackOverrides = { useExperimentalRspack: true, frontendBundler: 'rspack' };
 
-  // Only render externals.ts from the real template since we assert on its content (RspackOptions).
+  // Only render externals.ts and _package.json from the real templates since we assert on their content.
   // All other templates just need a non-empty stub.
-  const externalsTemplatePath = new URL('../../../../templates/common/.config/bundler/externals.ts', import.meta.url)
-    .pathname;
-  const renderedExternals = originalModule.renderTemplate(externalsTemplatePath, true, rspackOverrides);
-
   return {
     ...originalModule,
-    renderTemplate: (path: string) => {
-      if (path.includes('.config/bundler/externals.ts')) {
-        return renderedExternals;
+    renderTemplate: (path: string, includeWarning?: boolean, templateDataOverrides?: Record<string, unknown>) => {
+      if (path.includes('.config/bundler/externals.ts') || path.endsWith('_package.json')) {
+        return originalModule.renderTemplate(path, includeWarning, templateDataOverrides);
       }
       return '// rendered template stub';
     },
   };
 });
+
+const RSPACK_TEMPLATE_DATA = { useExperimentalRspack: true, frontendBundler: 'rspack' };
+const WEBPACK_TEMPLATE_DATA = { useExperimentalRspack: false, frontendBundler: 'webpack' };
+
+async function getTemplateDevDependencies(templateData: Record<string, unknown>): Promise<Record<string, string>> {
+  const { renderTemplate } = await vi.importActual<typeof import('../../utils.js')>('../../utils.js');
+  const packageJsonTemplatePath = new URL('../../../../templates/common/_package.json', import.meta.url).pathname;
+  const { devDependencies } = JSON.parse(renderTemplate(packageJsonTemplatePath, false, templateData));
+  return devDependencies;
+}
 
 function createBaseContext(): Context {
   const context = new Context('/virtual');
@@ -168,33 +178,55 @@ describe('rspack', () => {
   });
 
   describe('package.json', () => {
-    it('should add rspack devDependencies', () => {
+    it('should add the rspack-only devDependencies from the template at the template versions', async () => {
+      const rspackDeps = await getTemplateDevDependencies(RSPACK_TEMPLATE_DATA);
+      const webpackDeps = await getTemplateDevDependencies(WEBPACK_TEMPLATE_DATA);
+      const rspackOnlyDeps = Object.keys(rspackDeps).filter((name) => !(name in webpackDeps));
       const context = createBaseContext();
 
       const result = addRspack(context);
       const pkg = JSON.parse(result.getFile('package.json')!);
 
-      expect(pkg.devDependencies['@rspack/core']).toBe('^1.6.0');
-      expect(pkg.devDependencies['@rspack/cli']).toBe('^1.6.0');
-      expect(pkg.devDependencies['ts-checker-rspack-plugin']).toBe('^1.2.0');
-      expect(pkg.devDependencies['rspack-plugin-virtual-module']).toBe('^1.0.0');
-      expect(pkg.devDependencies['@types/ws']).toBe('^8.18.1');
-      expect(pkg.devDependencies['ws']).toBe('^8.13.0');
+      expect(rspackOnlyDeps).toEqual(expect.arrayContaining(['@rspack/core', '@rspack/cli', 'eslint-rspack-plugin']));
+      for (const name of rspackOnlyDeps) {
+        expect(pkg.devDependencies[name], name).toBe(rspackDeps[name]);
+      }
+    });
+
+    it('should upgrade rspack devDependencies that are below the template version', async () => {
+      const rspackDeps = await getTemplateDevDependencies(RSPACK_TEMPLATE_DATA);
+      const context = createBaseContext();
+      const pkg = JSON.parse(context.getFile('package.json')!);
+      pkg.devDependencies['@rspack/core'] = '^1.6.0';
+      pkg.devDependencies['@rspack/cli'] = '^1.6.0';
+      pkg.devDependencies['ts-checker-rspack-plugin'] = '^1.2.0';
+      context.updateFile('package.json', JSON.stringify(pkg, null, 2));
+
+      const result = addRspack(context);
+      const updated = JSON.parse(result.getFile('package.json')!);
+
+      expect(updated.devDependencies['@rspack/core']).toBe(rspackDeps['@rspack/core']);
+      expect(updated.devDependencies['@rspack/cli']).toBe(rspackDeps['@rspack/cli']);
+      expect(updated.devDependencies['ts-checker-rspack-plugin']).toBe(rspackDeps['ts-checker-rspack-plugin']);
     });
 
     it('should remove webpack-only devDependencies', () => {
       const context = createBaseContext();
+      const pkg = JSON.parse(context.getFile('package.json')!);
+      pkg.devDependencies['eslint-webpack-plugin'] = '^5.0.0';
+      context.updateFile('package.json', JSON.stringify(pkg, null, 2));
 
       const result = addRspack(context);
-      const pkg = JSON.parse(result.getFile('package.json')!);
+      const updated = JSON.parse(result.getFile('package.json')!);
 
-      expect(pkg.devDependencies['copy-webpack-plugin']).toBeUndefined();
-      expect(pkg.devDependencies['fork-ts-checker-webpack-plugin']).toBeUndefined();
-      expect(pkg.devDependencies['swc-loader']).toBeUndefined();
-      expect(pkg.devDependencies['webpack-cli']).toBeUndefined();
-      expect(pkg.devDependencies['webpack-livereload-plugin']).toBeUndefined();
-      expect(pkg.devDependencies['webpack-subresource-integrity']).toBeUndefined();
-      expect(pkg.devDependencies['webpack-virtual-modules']).toBeUndefined();
+      expect(updated.devDependencies['copy-webpack-plugin']).toBeUndefined();
+      expect(updated.devDependencies['eslint-webpack-plugin']).toBeUndefined();
+      expect(updated.devDependencies['fork-ts-checker-webpack-plugin']).toBeUndefined();
+      expect(updated.devDependencies['swc-loader']).toBeUndefined();
+      expect(updated.devDependencies['webpack-cli']).toBeUndefined();
+      expect(updated.devDependencies['webpack-livereload-plugin']).toBeUndefined();
+      expect(updated.devDependencies['webpack-subresource-integrity']).toBeUndefined();
+      expect(updated.devDependencies['webpack-virtual-modules']).toBeUndefined();
     });
 
     it('should keep webpack package itself', () => {
