@@ -5,16 +5,23 @@
  * https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations#extend-the-webpack-config
  */
 
-import { BannerPlugin, CopyRspackPlugin, SubresourceIntegrityPlugin, type Configuration } from '@rspack/core';
+import {
+  BannerPlugin,
+  Compilation,
+  CopyRspackPlugin,
+  SubresourceIntegrityPlugin,
+  SwcJsMinimizerRspackPlugin,
+  type Configuration,
+} from '@rspack/core';
 import ESLintPlugin from 'eslint-rspack-plugin';
 import { TsCheckerRspackPlugin } from 'ts-checker-rspack-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
 import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
 
 import RspackLiveReloadPlugin from './liveReloadPlugin.ts';
 import { BuildModeRspackPlugin } from './BuildModeRspackPlugin.ts';
+import { LicenseRspackPlugin } from './LicenseRspackPlugin.ts';
 import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, isWSL } from '../bundler/utils.ts';
 import { externals } from '../bundler/externals.ts';
@@ -122,19 +129,12 @@ const config = async (env: Env): Promise<Configuration> => {
     optimization: {
       minimize: Boolean(env.production),
       minimizer: [
-        new TerserPlugin({
-          // Emit a single LICENSE.txt file for all comments.
-          extractComments: {
-            banner: false,
-            filename: 'LICENSE.txt',
-          },
-          terserOptions: {
-            format: {
-              comments: (_, { type, value }) => type === 'comment2' && value.trim().startsWith('[create-plugin]'),
-            },
-            compress: {
-              drop_console: ['log', 'info'],
-            },
+        new SwcJsMinimizerRspackPlugin({
+          // Extract license comments (LicenseRspackPlugin merges them into one LICENSE.txt) and strip the rest.
+          extractComments: { banner: false },
+          minimizerOptions: {
+            format: { comments: false },
+            compress: { pure_funcs: ['console.log', 'console.info'] },
           },
         }),
       ],
@@ -157,13 +157,20 @@ const config = async (env: Env): Promise<Configuration> => {
 
     plugins: [
       new BuildModeRspackPlugin(),
+      new LicenseRspackPlugin(),
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new BannerPlugin({
-        banner: `/* [create-plugin] version: ${cpVersion} */
-          /* [create-plugin] plugin: ${pluginId}@${pluginVersion} */`,
+        // Pipelines read these lines from the top of module.js, so keep their format exactly.
+        banner: [
+          `/* [create-plugin] version: ${cpVersion} */`,
+          `/* [create-plugin] plugin: ${pluginId}@${pluginVersion} */`,
+        ].join('\n'),
         raw: true,
         entryOnly: true,
+        // Added straight after minification so the minimizer cannot strip or move the banner,
+        // and before source maps and hashes are generated so they include it.
+        stage: Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
       }),
       new CopyRspackPlugin({
         patterns: copyFilePatterns,

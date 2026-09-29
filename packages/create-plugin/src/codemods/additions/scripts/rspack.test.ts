@@ -192,6 +192,7 @@ describe('rspack', () => {
       expect(result.doesFileExist('.config/rspack/rspack.config.ts')).toBe(true);
       expect(result.doesFileExist('.config/rspack/BuildModeRspackPlugin.ts')).toBe(true);
       expect(result.doesFileExist('.config/rspack/liveReloadPlugin.ts')).toBe(true);
+      expect(result.doesFileExist('.config/rspack/LicenseRspackPlugin.ts')).toBe(true);
     });
   });
 
@@ -297,6 +298,7 @@ describe('rspack', () => {
       const context = createBaseContext();
       const pkg = JSON.parse(context.getFile('package.json')!);
       pkg.devDependencies['eslint-webpack-plugin'] = '^5.0.0';
+      pkg.devDependencies['terser-webpack-plugin'] = '^5.3.0';
       context.updateFile('package.json', JSON.stringify(pkg, null, 2));
 
       const result = addRspack(context);
@@ -306,6 +308,7 @@ describe('rspack', () => {
       expect(updated.devDependencies['eslint-webpack-plugin']).toBeUndefined();
       expect(updated.devDependencies['fork-ts-checker-webpack-plugin']).toBeUndefined();
       expect(updated.devDependencies['swc-loader']).toBeUndefined();
+      expect(updated.devDependencies['terser-webpack-plugin']).toBeUndefined();
       expect(updated.devDependencies['webpack-cli']).toBeUndefined();
       expect(updated.devDependencies['webpack-livereload-plugin']).toBeUndefined();
       expect(updated.devDependencies['webpack-subresource-integrity']).toBeUndefined();
