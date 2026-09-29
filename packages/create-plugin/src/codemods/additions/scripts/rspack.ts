@@ -1,6 +1,8 @@
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { lt, major, minVersion, validRange } from 'semver';
 import type { Context } from '../../context.js';
+import { renderHandlebarsTemplate } from '../../../utils/utils.handlebars.js';
 import {
   additionsDebug,
   addDependenciesToPackageJson,
@@ -12,11 +14,6 @@ import {
 const RSPACK_TEMPLATE_DATA_OVERRIDES = {
   useExperimentalRspack: true,
   frontendBundler: 'rspack',
-};
-
-const WEBPACK_TEMPLATE_DATA_OVERRIDES = {
-  useExperimentalRspack: false,
-  frontendBundler: 'webpack',
 };
 
 const RSPACK_CONFIG_FILES = [
@@ -165,19 +162,21 @@ function updatePackageJson(context: Context): string[] {
   }
 
   const followUps: string[] = [];
-  const { rspackDevDependencies, rspackOnlyDevDependencies, webpackOnlyDevDependencies } = getBundlerDevDependencies();
+  const templateVersions = getTemplateDevDependencyVersions();
   const userBuildFileSources = readUserBuildFileSources(context);
-  const stillUsedDevDependencies = webpackOnlyDevDependencies.filter((name) =>
+  const stillUsedDevDependencies = WEBPACK_ONLY_DEV_DEPENDENCIES.filter((name) =>
     userBuildFileSources.some((source) => referencesPackage(source, name))
   );
-  const unusedDevDependencies = webpackOnlyDevDependencies.filter((name) => !stillUsedDevDependencies.includes(name));
+  const unusedDevDependencies = WEBPACK_ONLY_DEV_DEPENDENCIES.filter(
+    (name) => !stillUsedDevDependencies.includes(name)
+  );
 
   addDependenciesToPackageJson(
     context,
     {},
     {
-      ...getMissingBaseConfigDevDependencies(context, rspackDevDependencies),
-      ...rspackOnlyDevDependencies,
+      ...pickVersions(getMissingPackages(context, BASE_CONFIG_DEV_DEPENDENCIES), templateVersions),
+      ...pickVersions(RSPACK_DEV_DEPENDENCIES, templateVersions),
     }
   );
   removeDependenciesFromPackageJson(context, [], unusedDevDependencies);
@@ -298,10 +297,34 @@ function referencesPackage(source: string, packageName: string): boolean {
   return new RegExp(`['"\`]${escapedName}(/[^'"\`]*)?['"\`]`).test(source);
 }
 
-// packages the rendered .config/rspack and .config/bundler files load at build time that both bundlers
-// scaffold, so they are not in the rspack-only set. older plugins may have removed some of them.
+// packages the rspack base config and its helpers need that webpack plugins do not
+export const RSPACK_DEV_DEPENDENCIES = [
+  '@rspack/cli',
+  '@rspack/core',
+  '@types/ws',
+  'eslint-rspack-plugin',
+  'rspack-merge',
+  'rspack-plugin-virtual-module',
+  'ts-checker-rspack-plugin',
+  'ws',
+];
+
+// packages only the webpack base config uses. removed unless a root build file still imports them
+export const WEBPACK_ONLY_DEV_DEPENDENCIES = [
+  'copy-webpack-plugin',
+  'eslint-webpack-plugin',
+  'fork-ts-checker-webpack-plugin',
+  'swc-loader',
+  'webpack-cli',
+  'webpack-livereload-plugin',
+  'webpack-subresource-integrity',
+  'webpack-virtual-modules',
+];
+
+// packages the rendered .config/rspack and .config/bundler files load at build time that every
+// scaffold gets, so older plugins may have removed some of them. added only when missing.
 // @swc/helpers is needed because builtin:swc-loader runs with externalHelpers, which webpack did not
-const BASE_CONFIG_PACKAGES = [
+export const BASE_CONFIG_DEV_DEPENDENCIES = [
   '@swc/helpers',
   'css-loader',
   'glob',
@@ -313,44 +336,46 @@ const BASE_CONFIG_PACKAGES = [
   'terser-webpack-plugin',
 ];
 
-// only adds what is missing. a plugin that already has one of these keeps its version
-function getMissingBaseConfigDevDependencies(
-  context: Context,
-  rspackDevDependencies: Record<string, string>
-): Record<string, string> {
-  const packageJson = readJsonFile<PackageJson>(context, 'package.json');
-  const installed = { ...packageJson.dependencies, ...packageJson.devDependencies };
+// the lists above say which packages the addition manages. their versions come from the package.json
+// template, so they always match the .config files rendered from that same template. the template is
+// rendered with fixed data, since only devDependencies are read and they do not depend on the plugin
+const PACKAGE_JSON_TEMPLATE_DATA = {
+  ...RSPACK_TEMPLATE_DATA_OVERRIDES,
+  pluginName: 'plugin',
+  orgName: 'org',
+  pluginType: 'panel',
+  packageManagerName: 'npm',
+  packageManagerVersion: '10.0.0',
+  scenesVersion: '*',
+  isAppType: false,
+  isNPM: true,
+};
 
-  return Object.fromEntries(
-    BASE_CONFIG_PACKAGES.filter((name) => !(name in installed) && name in rspackDevDependencies).map((name) => [
-      name,
-      rspackDevDependencies[name],
-    ])
-  );
-}
-
-// The rspack and webpack renders of the package.json template are the source of truth for which
-// dev dependencies each bundler needs, so the addition never drifts from what `generate` scaffolds
-function getBundlerDevDependencies() {
-  const templatePath = resolveTemplatePath('_package.json');
-  const rspackDevDependencies = renderDevDependencies(templatePath, RSPACK_TEMPLATE_DATA_OVERRIDES);
-  const webpackDevDependencies = renderDevDependencies(templatePath, WEBPACK_TEMPLATE_DATA_OVERRIDES);
-
-  const rspackOnlyDevDependencies = Object.fromEntries(
-    Object.entries(rspackDevDependencies).filter(([name]) => !(name in webpackDevDependencies))
-  );
-  const webpackOnlyDevDependencies = Object.keys(webpackDevDependencies).filter(
-    (name) => !(name in rspackDevDependencies)
-  );
-
-  return { rspackDevDependencies, rspackOnlyDevDependencies, webpackOnlyDevDependencies };
-}
-
-function renderDevDependencies(templatePath: string, templateData: Record<string, unknown>): Record<string, string> {
+export function getTemplateDevDependencyVersions(): Record<string, string> {
+  const template = readFileSync(resolveTemplatePath('_package.json'), 'utf-8');
   const rendered: { devDependencies?: Record<string, string> } = JSON.parse(
-    renderTemplate(templatePath, false, templateData)
+    renderHandlebarsTemplate(template, PACKAGE_JSON_TEMPLATE_DATA)
   );
   return rendered.devDependencies ?? {};
+}
+
+function pickVersions(names: string[], templateVersions: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(
+    names.map((name) => {
+      const version = templateVersions[name];
+      if (!version) {
+        throw new Error(`The package.json template has no version for ${name}, which the rspack addition installs.`);
+      }
+      return [name, version];
+    })
+  );
+}
+
+// a plugin that already has one of these keeps its version
+function getMissingPackages(context: Context, names: string[]): string[] {
+  const packageJson = readJsonFile<PackageJson>(context, 'package.json');
+  const installed = { ...packageJson.dependencies, ...packageJson.devDependencies };
+  return names.filter((name) => !(name in installed));
 }
 
 function deleteWebpackTemplateFiles(context: Context): string[] {
