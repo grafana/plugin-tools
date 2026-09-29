@@ -151,6 +151,8 @@ function addRootRspackConfigStub(context: Context): string[] {
 }
 
 interface PackageJson {
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
   scripts?: Record<string, string>;
   engines?: Record<string, string>;
   [key: string]: unknown;
@@ -163,14 +165,21 @@ function updatePackageJson(context: Context): string[] {
   }
 
   const followUps: string[] = [];
-  const { rspackOnlyDevDependencies, webpackOnlyDevDependencies } = getBundlerDevDependencies();
+  const { rspackDevDependencies, rspackOnlyDevDependencies, webpackOnlyDevDependencies } = getBundlerDevDependencies();
   const userBuildFileSources = readUserBuildFileSources(context);
   const stillUsedDevDependencies = webpackOnlyDevDependencies.filter((name) =>
     userBuildFileSources.some((source) => referencesPackage(source, name))
   );
   const unusedDevDependencies = webpackOnlyDevDependencies.filter((name) => !stillUsedDevDependencies.includes(name));
 
-  addDependenciesToPackageJson(context, {}, rspackOnlyDevDependencies);
+  addDependenciesToPackageJson(
+    context,
+    {},
+    {
+      ...getMissingBaseConfigDevDependencies(context, rspackDevDependencies),
+      ...rspackOnlyDevDependencies,
+    }
+  );
   removeDependenciesFromPackageJson(context, [], unusedDevDependencies);
 
   if (stillUsedDevDependencies.length > 0) {
@@ -289,6 +298,37 @@ function referencesPackage(source: string, packageName: string): boolean {
   return new RegExp(`['"\`]${escapedName}(/[^'"\`]*)?['"\`]`).test(source);
 }
 
+// packages the rendered .config/rspack and .config/bundler files load at build time that both bundlers
+// scaffold, so they are not in the rspack-only set. older plugins may have removed some of them.
+// @swc/helpers is needed because builtin:swc-loader runs with externalHelpers, which webpack did not
+const BASE_CONFIG_PACKAGES = [
+  '@swc/helpers',
+  'css-loader',
+  'glob',
+  'imports-loader',
+  'replace-in-file-webpack-plugin',
+  'sass',
+  'sass-loader',
+  'style-loader',
+  'terser-webpack-plugin',
+];
+
+// only adds what is missing. a plugin that already has one of these keeps its version
+function getMissingBaseConfigDevDependencies(
+  context: Context,
+  rspackDevDependencies: Record<string, string>
+): Record<string, string> {
+  const packageJson = readJsonFile<PackageJson>(context, 'package.json');
+  const installed = { ...packageJson.dependencies, ...packageJson.devDependencies };
+
+  return Object.fromEntries(
+    BASE_CONFIG_PACKAGES.filter((name) => !(name in installed) && name in rspackDevDependencies).map((name) => [
+      name,
+      rspackDevDependencies[name],
+    ])
+  );
+}
+
 // The rspack and webpack renders of the package.json template are the source of truth for which
 // dev dependencies each bundler needs, so the addition never drifts from what `generate` scaffolds
 function getBundlerDevDependencies() {
@@ -303,7 +343,7 @@ function getBundlerDevDependencies() {
     (name) => !(name in rspackDevDependencies)
   );
 
-  return { rspackOnlyDevDependencies, webpackOnlyDevDependencies };
+  return { rspackDevDependencies, rspackOnlyDevDependencies, webpackOnlyDevDependencies };
 }
 
 function renderDevDependencies(templatePath: string, templateData: Record<string, unknown>): Record<string, string> {
