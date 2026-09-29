@@ -5,7 +5,7 @@
  * https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations#extend-the-webpack-config
  */
 
-import rspack, { type Configuration } from '@rspack/core';
+import { BannerPlugin, CopyRspackPlugin, SubresourceIntegrityPlugin, type Configuration } from '@rspack/core';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import { TsCheckerRspackPlugin } from 'ts-checker-rspack-plugin';
 import path from 'path';
@@ -20,7 +20,6 @@ import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, isWSL } 
 import { externals } from '../bundler/externals.ts';
 import { copyFilePatterns } from '../bundler/copyFiles.ts';
 
-const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
 const virtualPublicPath = new RspackVirtualModulePlugin({
@@ -154,12 +153,12 @@ const config = async (env): Promise<Configuration> => {
       new BuildModeRspackPlugin(),
       virtualPublicPath,
       // Insert create plugin version information into the bundle
-      new rspack.BannerPlugin({
+      new BannerPlugin({
         banner: '/* [create-plugin] version: ' + cpVersion + ' */',
         raw: true,
         entryOnly: true,
       }),
-      new rspack.CopyRspackPlugin({
+      new CopyRspackPlugin({
         patterns: copyFilePatterns,
       }),
       // Replace certain template-variables in the README and plugin.json
