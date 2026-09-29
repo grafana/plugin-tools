@@ -42,6 +42,7 @@ function buildGroups(
 
 // fall back to the selectors bundled with the installed @grafana/plugin-e2e release
 function bundledGroups(grafanaVersion: string): E2ESelectorGroups {
+  console.log(`@grafana/plugin-e2e: using vendored selectors for Grafana ${grafanaVersion}.`);
   return buildGroups(bundledVersionedComponents, bundledVersionedPages, grafanaVersion);
 }
 
@@ -95,6 +96,7 @@ async function fetchRuntimeGroups(
     }
     const components = reconstructSelectorTree(data.versionedComponents) as VersionedComponents;
     const pages = reconstructSelectorTree(data.versionedPages) as VersionedPages;
+    console.log(`@grafana/plugin-e2e: using runtime selectors from ${selectorsUrl}.`);
     return buildGroups(components, pages, grafanaVersion);
   } catch (error) {
     // reachable but unreadable (bad schema, malformed JSON) is a real problem, so make it loud
