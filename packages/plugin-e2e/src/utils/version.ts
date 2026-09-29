@@ -146,8 +146,50 @@ export const eq = (a: string, b: string): boolean => cmp(a, b) === 0;
  */
 export const compare = (a: string, b: string): -1 | 0 | 1 => Math.sign(cmp(a, b)) as -1 | 0 | 1;
 
-const SEMVER_REGEX =
-  /^v?((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?)(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+function isNumericIdentifier(id: string): boolean {
+  if (!id) {
+    return false;
+  }
+  if (!/^\d+$/.test(id)) {
+    return false;
+  }
+  return id === '0' || id[0] !== '0';
+}
+
+function isNonNumericIdentifier(id: string): boolean {
+  return !!id && /^[0-9A-Za-z-]+$/.test(id) && /[A-Za-z-]/.test(id);
+}
+
+function normalizeIfValidSemver(input: string): string | null {
+  const trimmed = input.trim();
+  const withoutV = trimmed.startsWith('v') ? trimmed.slice(1) : trimmed;
+  const core = withoutV.split('+')[0];
+
+  const dashIndex = core.indexOf('-');
+  const base = dashIndex === -1 ? core : core.slice(0, dashIndex);
+  const pre = dashIndex === -1 ? null : core.slice(dashIndex + 1);
+
+  const baseParts = base.split('.');
+  if (baseParts.length !== 3) {
+    return null;
+  }
+
+  if (!baseParts.every((p) => isNumericIdentifier(p))) {
+    return null;
+  }
+
+  if (pre !== null) {
+    if (!pre) {
+      return null;
+    }
+    const ids = pre.split('.');
+    if (ids.some((id) => !(isNumericIdentifier(id) || isNonNumericIdentifier(id)))) {
+      return null;
+    }
+  }
+
+  return core;
+}
 
 /**
  * Returns the normalized version when `version` is a valid semantic version, otherwise `null`.
@@ -158,7 +200,7 @@ const SEMVER_REGEX =
  * @param version - The string to validate.
  */
 export const valid = (version: string | null | undefined): string | null =>
-  typeof version === 'string' ? (version.trim().match(SEMVER_REGEX)?.[1] ?? null) : null;
+  typeof version === 'string' ? normalizeIfValidSemver(version) : null;
 
 /**
  * Returns true when `version` satisfies the given range expression.
