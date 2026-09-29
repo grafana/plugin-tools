@@ -31,27 +31,62 @@ const BUNDLER_FILES = [
   '.config/bundler/utils.ts',
 ];
 
-export default function addRspack(context: Context): Context {
-  if (context.doesFileExist('.config/rspack/rspack.config.ts')) {
-    additionsDebug('Rspack config already exists. Skipping add-rspack addition.');
+const WEBPACK_CONFIG_PATH = '.config/webpack/webpack.config.ts';
+const RSPACK_CONFIG_PATH = '.config/rspack/rspack.config.ts';
+
+// every file create-plugin has scaffolded into .config/webpack over time. anything else in there
+// was added by the plugin author, so it is kept and reported instead of deleted
+const WEBPACK_TEMPLATE_FILES = [
+  '.config/webpack/BuildModeWebpackPlugin.ts',
+  '.config/webpack/PluginSchemaWebpackPlugin.ts',
+  '.config/webpack/constants.ts',
+  '.config/webpack/generateCode.ts',
+  '.config/webpack/publicPath.ts',
+  '.config/webpack/tsconfig.webpack.json',
+  '.config/webpack/utils.ts',
+  '.config/webpack/watchPluginJson.ts',
+  '.config/webpack/webpack.config.ts',
+  '.config/webpack/webpack.parts.ts',
+];
+
+export default function rspack(context: Context): Context {
+  const hasWebpackSetup = context.doesFileExist(WEBPACK_CONFIG_PATH);
+  const hasRspackSetup = context.doesFileExist(RSPACK_CONFIG_PATH);
+
+  if (!hasWebpackSetup && !hasRspackSetup) {
+    context.setMessage({
+      level: 'warning',
+      title: 'No create-plugin bundler configuration found, so nothing was changed.',
+      body: [`The rspack addition expects ${WEBPACK_CONFIG_PATH} or ${RSPACK_CONFIG_PATH} to exist.`],
+    });
     return context;
   }
 
-  if (!context.doesFileExist('.config/webpack/webpack.config.ts')) {
-    additionsDebug('No webpack config found at .config/webpack/webpack.config.ts. Skipping.');
-    return context;
-  }
+  const followUps: string[] = [];
 
-  addRspackConfigFiles(context);
-  updateBundlerFiles(context);
+  renderTemplateFiles(context, RSPACK_CONFIG_FILES);
+  renderTemplateFiles(context, BUNDLER_FILES);
   updateCprcConfig(context);
 
   const hasCustomConfig = handleCustomWebpackConfig(context);
 
   updatePackageJson(context, hasCustomConfig);
-  deleteWebpackConfigFiles(context);
+  followUps.push(...deleteWebpackTemplateFiles(context));
+  reportFollowUps(context, followUps);
 
   return context;
+}
+
+function reportFollowUps(context: Context, followUps: string[]): void {
+  if (followUps.length === 0) {
+    return;
+  }
+
+  context.setMessage({
+    level: 'warning',
+    title: 'The rspack addition left some things for you to review.',
+    body: followUps,
+  });
 }
 
 function updateCprcConfig(context: Context): void {
@@ -74,17 +109,15 @@ function updateCprcConfig(context: Context): void {
 const resolveTemplatePath = (relativePath: string) =>
   fileURLToPath(new URL(`../../../../templates/common/${relativePath}`, import.meta.url));
 
-function addRspackConfigFiles(context: Context): void {
-  for (const filePath of RSPACK_CONFIG_FILES) {
+// updateFile is a no-op for identical content, so re-rendering on every run keeps the addition idempotent
+function renderTemplateFiles(context: Context, filePaths: string[]): void {
+  for (const filePath of filePaths) {
     const rendered = renderTemplate(resolveTemplatePath(filePath), true, RSPACK_TEMPLATE_DATA_OVERRIDES);
-    context.addFile(filePath, rendered);
-  }
-}
-
-function updateBundlerFiles(context: Context): void {
-  for (const filePath of BUNDLER_FILES) {
-    const rendered = renderTemplate(resolveTemplatePath(filePath), true, RSPACK_TEMPLATE_DATA_OVERRIDES);
-    context.doesFileExist(filePath) ? context.updateFile(filePath, rendered) : context.addFile(filePath, rendered);
+    if (context.doesFileExist(filePath)) {
+      context.updateFile(filePath, rendered);
+    } else {
+      context.addFile(filePath, rendered);
+    }
   }
 }
 
@@ -156,12 +189,22 @@ function renderDevDependencies(templatePath: string, templateData: Record<string
   return rendered.devDependencies ?? {};
 }
 
-function deleteWebpackConfigFiles(context: Context): void {
-  const webpackFiles = context.readDir('.config/webpack');
-
-  for (const filePath of webpackFiles) {
-    context.deleteFile(filePath);
+function deleteWebpackTemplateFiles(context: Context): string[] {
+  for (const filePath of WEBPACK_TEMPLATE_FILES) {
+    if (context.doesFileExist(filePath)) {
+      context.deleteFile(filePath);
+    }
   }
+
+  const leftoverFiles = context.readDir('.config/webpack');
+  if (leftoverFiles.length === 0) {
+    return [];
+  }
+
+  return [
+    'These files in .config/webpack were not created by create-plugin, so they were kept. Move anything you still need out of .config and port it to rspack:',
+    ...leftoverFiles.map((filePath) => `  ${filePath}`),
+  ];
 }
 
 const ROOT_RSPACK_CONFIG_TEMPLATE = `import type { Configuration } from '@rspack/core';
