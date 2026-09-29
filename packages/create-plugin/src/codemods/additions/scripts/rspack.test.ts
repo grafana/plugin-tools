@@ -297,6 +297,89 @@ describe('rspack', () => {
     });
   });
 
+  describe('scripts', () => {
+    function runWithScripts(scripts: Record<string, string>, rootConfig = true) {
+      const context = createBaseContext();
+      const pkg = JSON.parse(context.getFile('package.json')!);
+      pkg.scripts = scripts;
+      context.updateFile('package.json', JSON.stringify(pkg, null, 2));
+      if (rootConfig) {
+        context.addFile('webpack.config.ts', 'custom webpack config');
+      }
+      const result = addRspack(context);
+      return {
+        scripts: JSON.parse(result.getFile('package.json')!).scripts,
+        report: result.getMessage()?.body?.join('\n') ?? '',
+      };
+    }
+
+    it('should point scripts that use the root webpack config at the root rspack config', () => {
+      const { scripts } = runWithScripts({
+        build: 'webpack -c webpack.config.ts --env production',
+        dev: 'webpack -w --config=./webpack.config.ts --env development',
+      });
+
+      expect(scripts.build).toBe('rspack -c ./rspack.config.ts --env production');
+      expect(scripts.dev).toBe('rspack -w --config=./rspack.config.ts --env development');
+    });
+
+    it('should keep chained commands, env assignments and extra flags', () => {
+      const { scripts } = runWithScripts({
+        build:
+          'pnpm run build:deps && NODE_ENV=production npx webpack -c ./webpack.config.ts --env production --stats-error-details',
+      });
+
+      expect(scripts.build).toBe(
+        'pnpm run build:deps && NODE_ENV=production npx rspack -c ./rspack.config.ts --env production --stats-error-details'
+      );
+    });
+
+    it('should rewrite sub scripts and leave script runners alone', () => {
+      const { scripts } = runWithScripts({
+        build: 'run-s "build:*"',
+        'build:compile': 'webpack -c ./webpack.config.ts --env production',
+      });
+
+      expect(scripts.build).toBe('run-s "build:*"');
+      expect(scripts['build:compile']).toBe('rspack -c ./rspack.config.ts --env production');
+    });
+
+    it('should rewrite webpack calls that rely on the default config lookup', () => {
+      const { scripts } = runWithScripts({ build: 'webpack --env production' });
+
+      expect(scripts.build).toBe('rspack --env production');
+    });
+
+    it('should leave scripts it cannot rewrite unchanged and report them', () => {
+      const unparseable = 'tsx node_modules/webpack-cli/bin/cli.js -c ./webpack.config.ts --env production';
+      const { scripts, report } = runWithScripts({ build: unparseable });
+
+      expect(scripts.build).toBe(unparseable);
+      expect(report).toContain('build');
+      expect(report).toContain(unparseable);
+    });
+
+    it('should not touch or report scripts that only mention webpack tooling', () => {
+      const { scripts, report } = runWithScripts({ analyze: 'webpack-bundle-analyzer dist/stats.json' });
+
+      expect(scripts.analyze).toBe('webpack-bundle-analyzer dist/stats.json');
+      expect(report).not.toContain('webpack-bundle-analyzer');
+    });
+
+    it('should leave scripts that already call rspack unchanged', () => {
+      const { scripts } = runWithScripts(
+        {
+          build: 'rspack -c ./rspack.config.ts --env production',
+          dev: 'rspack -w -c ./rspack.config.ts --env development',
+        },
+        false
+      );
+
+      expect(scripts.build).toBe('rspack -c ./rspack.config.ts --env production');
+      expect(scripts.dev).toBe('rspack -w -c ./rspack.config.ts --env development');
+    });
+  });
+
   describe('webpack cleanup', () => {
     it('should delete the create-plugin webpack files from .config/webpack/', () => {
       const context = createBaseContext();
@@ -385,17 +468,6 @@ describe('rspack', () => {
       const result = addRspack(context);
 
       expect(result.getFile('webpack.config.ts')).toBe(originalContent);
-    });
-
-    it('should point build/dev scripts to root rspack.config.ts when custom config exists', () => {
-      const context = createBaseContext();
-      context.addFile('webpack.config.ts', 'custom webpack config');
-
-      const result = addRspack(context);
-      const pkg = JSON.parse(result.getFile('package.json')!);
-
-      expect(pkg.scripts.build).toBe('rspack -c ./rspack.config.ts --env production');
-      expect(pkg.scripts.dev).toBe('rspack -w -c ./rspack.config.ts --env development');
     });
 
     it('should not create root rspack.config.ts when no root webpack.config.ts exists', () => {
