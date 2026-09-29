@@ -20,6 +20,7 @@ const RSPACK_CONFIG_FILES = [
   '.config/rspack/rspack.config.ts',
   '.config/rspack/BuildModeRspackPlugin.ts',
   '.config/rspack/liveReloadPlugin.ts',
+  '.config/rspack/LicenseRspackPlugin.ts',
 ];
 
 const BUNDLER_FILES = [
@@ -315,6 +316,7 @@ export const WEBPACK_ONLY_DEV_DEPENDENCIES = [
   'eslint-webpack-plugin',
   'fork-ts-checker-webpack-plugin',
   'swc-loader',
+  'terser-webpack-plugin',
   'webpack-cli',
   'webpack-livereload-plugin',
   'webpack-subresource-integrity',
@@ -333,7 +335,6 @@ export const BASE_CONFIG_DEV_DEPENDENCIES = [
   'sass',
   'sass-loader',
   'style-loader',
-  'terser-webpack-plugin',
 ];
 
 // the lists above say which packages the addition manages. their versions come from the package.json

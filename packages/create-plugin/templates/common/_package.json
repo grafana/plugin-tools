@@ -59,8 +59,8 @@
     "sass-loader": "^16.0.0",
     "semver": "^7.7.0",
     "style-loader": "^4.0.0",{{#unless useExperimentalRspack}}
-    "swc-loader": "^0.2.0",{{/unless}}
-    "terser-webpack-plugin": "^5.3.0",
+    "swc-loader": "^0.2.0",
+    "terser-webpack-plugin": "^5.3.0",{{/unless}}
     "ts-node": "^10.9.0",{{#if useExperimentalRspack}}
     "ts-checker-rspack-plugin": "^1.4.0",{{/if}}
     "typescript": "5.9.2",
