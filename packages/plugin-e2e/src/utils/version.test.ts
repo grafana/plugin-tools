@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { gte, lt, lte, gt, eq, satisfies } from './version';
+import { gte, lt, lte, gt, eq, satisfies, compare, valid } from './version';
 
 describe('version', () => {
   describe('gte', () => {
@@ -170,6 +170,44 @@ describe('version', () => {
       expect(satisfies('3.1.0', '>=1.0.0 <2.0.0 || >=3.0.0')).toBe(true);
       expect(satisfies('2.5.0', '>=1.0.0 <2.0.0 || >=3.0.0')).toBe(false);
     });
+  });
+
+  describe('compare', () => {
+    it('sorts versions in ascending semver order', () => {
+      expect(['10.0.0', '9.1.0', '9.1.0-pre', '8.5.0'].sort(compare)).toEqual([
+        '8.5.0',
+        '9.1.0-pre',
+        '9.1.0',
+        '10.0.0',
+      ]);
+    });
+
+    it('returns -1, 0 and 1', () => {
+      expect(compare('1.2.3', '1.2.4')).toBe(-1);
+      expect(compare('1.2.3', '1.2.3')).toBe(0);
+      expect(compare('1.2.4', '1.2.3')).toBe(1);
+    });
+  });
+
+  describe('valid', () => {
+    it.each([
+      ['1.2.3', '1.2.3'],
+      ['v1.2.3', '1.2.3'],
+      [' 1.2.3 ', '1.2.3'],
+      ['13.3.0-24547284055', '13.3.0-24547284055'],
+      ['1.2.3-beta.1+build.5', '1.2.3-beta.1'],
+    ])('normalizes %s to %s', (version, expected) => {
+      expect(valid(version)).toBe(expected);
+    });
+
+    it.each(['', 'latest', '1.2', '1.2.3.4', '01.2.3', '1.2.3-', undefined, null])('returns null for %s', (version) => {
+      expect(valid(version)).toBeNull();
+    });
+  });
+
+  it('accepts a leading v when comparing, like semver', () => {
+    expect(gte('v11.0.0', '10.4.0')).toBe(true);
+    expect(compare('v11.0.0', '11.0.0')).toBe(0);
   });
 
   describe('edge cases', () => {

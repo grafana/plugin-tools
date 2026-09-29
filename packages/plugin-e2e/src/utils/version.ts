@@ -9,7 +9,7 @@ function parseVer(v: string): ParsedVer {
   // split MAJOR.MINOR.PATCH from an optional dash-suffixed pre-release.
   // Grafana dev/nightly builds use this form (e.g. `10.4.0-25389005429`).
   // Build metadata after a `+` is stripped per semver.
-  const cleaned = v.split('+')[0];
+  const cleaned = v.trim().replace(/^v/, '').split('+')[0];
   const dash = cleaned.indexOf('-');
   const base = dash === -1 ? cleaned : cleaned.slice(0, dash);
   const preStr = dash === -1 ? '' : cleaned.slice(dash + 1);
@@ -136,6 +136,29 @@ export const gt = (a: string, b: string): boolean => cmp(a, b) > 0;
  * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
  */
 export const eq = (a: string, b: string): boolean => cmp(a, b) === 0;
+
+/**
+ * Compares two versions per semver precedence, for use with `Array.prototype.sort`.
+ *
+ * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
+ * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
+ * @returns `-1` when `a` is lower, `1` when `a` is greater and `0` when they are equal.
+ */
+export const compare = (a: string, b: string): -1 | 0 | 1 => Math.sign(cmp(a, b)) as -1 | 0 | 1;
+
+const SEMVER_REGEX =
+  /^v?((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+
+/**
+ * Returns the normalized version when `version` is a valid semantic version, otherwise `null`.
+ *
+ * Like the `semver` package, a leading `v` is accepted, build metadata is dropped
+ * (`v1.2.3+build.1` becomes `1.2.3`) and a missing value returns `null` rather than throwing.
+ *
+ * @param version - The string to validate.
+ */
+export const valid = (version: string | null | undefined): string | null =>
+  typeof version === 'string' ? (version.trim().match(SEMVER_REGEX)?.[1] ?? null) : null;
 
 /**
  * Returns true when `version` satisfies the given range expression.
