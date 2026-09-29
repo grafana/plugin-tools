@@ -509,6 +509,42 @@ describe('rspack', () => {
     });
   });
 
+  describe('idempotency', () => {
+    const run = async (context: Context) => addRspack(context);
+
+    it('should be idempotent for a webpack plugin', async () => {
+      await expect(run).toBeIdempotent(createBaseContext());
+    });
+
+    it('should be idempotent for a webpack plugin with a root config, helpers and a lockfile', async () => {
+      const context = createBaseContext();
+      const pkg = JSON.parse(context.getFile('package.json')!);
+      pkg.scripts = { build: 'pnpm run prebuild && webpack -c ./webpack.config.ts --env production' };
+      pkg.engines = { node: '>=22' };
+      context.updateFile('package.json', JSON.stringify(pkg, null, 2));
+      context.addFile('webpack.config.ts', "import CopyWebpackPlugin from 'copy-webpack-plugin';");
+      context.addFile('.config/webpack/CorsWorkerPlugin.ts', 'export class CorsWorkerPlugin {}');
+      context.addFile(
+        'package-lock.json',
+        JSON.stringify({ packages: { 'node_modules/@rspack/core': { version: '1.7.12' } } }, null, 2)
+      );
+
+      await expect(run).toBeIdempotent(context);
+    });
+
+    it('should be idempotent for an experimental rspack plugin', async () => {
+      const context = new Context('/virtual');
+      context.addFile('.config/rspack/rspack.config.ts', 'experimental rspack config');
+      context.addFile('rspack.config.ts', 'my rspack config');
+      context.addFile(
+        'package.json',
+        JSON.stringify({ scripts: { build: 'rspack -c ./rspack.config.ts' }, devDependencies: {} }, null, 2)
+      );
+
+      await expect(run).toBeIdempotent(context);
+    });
+  });
+
   describe('webpack cleanup', () => {
     it('should delete the create-plugin webpack files from .config/webpack/', () => {
       const context = createBaseContext();
