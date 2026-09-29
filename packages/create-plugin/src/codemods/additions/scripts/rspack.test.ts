@@ -248,6 +248,35 @@ describe('rspack', () => {
       expect(updated.devDependencies['webpack-virtual-modules']).toBeUndefined();
     });
 
+    it('should keep webpack-only devDependencies that root build files still use and report them', () => {
+      const context = createBaseContext();
+      context.addFile(
+        'webpack.config.ts',
+        "import CopyWebpackPlugin from 'copy-webpack-plugin';\nimport { getAlias } from './webpack.config.utils';"
+      );
+      context.addFile('webpack.config.utils.ts', "export const rule = { use: { loader: 'swc-loader' } };");
+
+      const result = addRspack(context);
+      const pkg = JSON.parse(result.getFile('package.json')!);
+
+      expect(pkg.devDependencies['copy-webpack-plugin']).toBe('^12.0.0');
+      expect(pkg.devDependencies['swc-loader']).toBe('^0.2.0');
+      expect(pkg.devDependencies['webpack-livereload-plugin']).toBeUndefined();
+      const report = result.getMessage()?.body?.join('\n');
+      expect(report).toContain('copy-webpack-plugin');
+      expect(report).toContain('swc-loader');
+    });
+
+    it('should not treat source files as build files when deciding which dependencies to keep', () => {
+      const context = createBaseContext();
+      context.addFile('src/module.ts', "import 'copy-webpack-plugin';");
+
+      const result = addRspack(context);
+      const pkg = JSON.parse(result.getFile('package.json')!);
+
+      expect(pkg.devDependencies['copy-webpack-plugin']).toBeUndefined();
+    });
+
     it('should keep webpack package itself', () => {
       const context = createBaseContext();
 
