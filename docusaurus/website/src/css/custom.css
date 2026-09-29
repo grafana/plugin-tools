@@ -302,3 +302,23 @@ html[data-theme='dark'] .algolia-autocomplete .ds-with-1.ds-dropdown-menu:before
 .algolia-autocomplete.algolia-autocomplete .algolia-docsearch-suggestion--content:before {
   background: var(--ifm-toc-border-color);
 }
+
+.markdown h1:has(+ .doc-actions) {
+  margin-bottom: 0.5rem;
+}
+
+.doc-actions {
+  margin-bottom: var(--ifm-spacing-vertical);
+  font-size: 0.875rem;
+}
+
+.doc-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.doc-actions a:hover {
+  color: var(--ifm-link-color);
+}
