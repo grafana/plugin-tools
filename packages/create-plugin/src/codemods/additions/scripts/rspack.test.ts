@@ -212,6 +212,33 @@ describe('rspack', () => {
       }
     });
 
+    it('should add packages the rspack base config needs when the plugin has dropped them', async () => {
+      const rspackDeps = await getTemplateDevDependencies(RSPACK_TEMPLATE_DATA);
+      const context = createBaseContext();
+
+      const result = addRspack(context);
+      const pkg = JSON.parse(result.getFile('package.json')!);
+
+      // builtin:swc-loader runs with externalHelpers, so builds import @swc/helpers
+      expect(pkg.devDependencies['@swc/helpers']).toBe(rspackDeps['@swc/helpers']);
+      expect(pkg.devDependencies['imports-loader']).toBe(rspackDeps['imports-loader']);
+    });
+
+    it('should not change the versions of base config packages the plugin already has', () => {
+      const context = createBaseContext();
+      const pkg = JSON.parse(context.getFile('package.json')!);
+      pkg.devDependencies['sass-loader'] = '^13.0.0';
+      pkg.dependencies = { '@swc/helpers': '0.4.14' };
+      context.updateFile('package.json', JSON.stringify(pkg, null, 2));
+
+      const result = addRspack(context);
+      const updated = JSON.parse(result.getFile('package.json')!);
+
+      expect(updated.devDependencies['sass-loader']).toBe('^13.0.0');
+      expect(updated.dependencies['@swc/helpers']).toBe('0.4.14');
+      expect(updated.devDependencies['@swc/helpers']).toBeUndefined();
+    });
+
     it('should upgrade rspack devDependencies that are below the template version', async () => {
       const rspackDeps = await getTemplateDevDependencies(RSPACK_TEMPLATE_DATA);
       const context = createBaseContext();
