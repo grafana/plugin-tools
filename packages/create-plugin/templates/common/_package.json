@@ -21,8 +21,8 @@
     "@grafana/sign-plugin": "^3.3.3",
     "@grafana/tsconfig": "^2.2.0",
     "@playwright/test": "^1.62.1",{{#if useExperimentalRspack}}
-    "@rspack/core": "^1.6.0",
-    "@rspack/cli": "^1.6.0",{{/if}}
+    "@rspack/core": "^2.2.0",
+    "@rspack/cli": "^2.2.0",{{/if}}
     "@stylistic/eslint-plugin": "^5.10.0",
     "@swc/core": "^1.15.0",
     "@swc/helpers": "^0.5.0",
@@ -52,6 +52,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.6.0",
     "replace-in-file-webpack-plugin": "^1.0.0",{{#if useExperimentalRspack}}
+    "rspack-merge": "^1.0.1",
     "rspack-plugin-virtual-module": "^1.0.0",{{/if}}
     "sass": "^1.89.0",
     "sass-loader": "^16.0.0",
@@ -60,7 +61,7 @@
     "swc-loader": "^0.2.0",{{/unless}}
     "terser-webpack-plugin": "^5.3.0",
     "ts-node": "^10.9.0",{{#if useExperimentalRspack}}
-    "ts-checker-rspack-plugin": "^1.2.0",{{/if}}
+    "ts-checker-rspack-plugin": "^1.4.0",{{/if}}
     "typescript": "5.9.2",
     "webpack": "^5.101.0"{{#unless useExperimentalRspack}},
     "webpack-cli": "^6.0.0",
