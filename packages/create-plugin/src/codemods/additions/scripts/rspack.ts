@@ -13,24 +13,10 @@ const RSPACK_TEMPLATE_DATA_OVERRIDES = {
   frontendBundler: 'rspack',
 };
 
-const RSPACK_DEV_DEPENDENCIES = {
-  '@rspack/core': '^1.6.0',
-  '@rspack/cli': '^1.6.0',
-  'ts-checker-rspack-plugin': '^1.2.0',
-  'rspack-plugin-virtual-module': '^1.0.0',
-  '@types/ws': '^8.18.1',
-  ws: '^8.13.0',
+const WEBPACK_TEMPLATE_DATA_OVERRIDES = {
+  useExperimentalRspack: false,
+  frontendBundler: 'webpack',
 };
-
-const WEBPACK_ONLY_DEV_DEPENDENCIES = [
-  'copy-webpack-plugin',
-  'fork-ts-checker-webpack-plugin',
-  'swc-loader',
-  'webpack-livereload-plugin',
-  'webpack-subresource-integrity',
-  'webpack-virtual-modules',
-  'webpack-cli',
-];
 
 const RSPACK_CONFIG_FILES = [
   '.config/rspack/rspack.config.ts',
@@ -127,8 +113,9 @@ function updatePackageJson(context: Context, hasCustomConfig: boolean): void {
     return;
   }
 
-  addDependenciesToPackageJson(context, {}, RSPACK_DEV_DEPENDENCIES);
-  removeDependenciesFromPackageJson(context, [], WEBPACK_ONLY_DEV_DEPENDENCIES);
+  const { rspackOnlyDevDependencies, webpackOnlyDevDependencies } = getBundlerDevDependencies();
+  addDependenciesToPackageJson(context, {}, rspackOnlyDevDependencies);
+  removeDependenciesFromPackageJson(context, [], webpackOnlyDevDependencies);
 
   const packageJson = readJsonFile<PackageJson>(context, 'package.json');
   const configPath = hasCustomConfig ? './rspack.config.ts' : './.config/rspack/rspack.config.ts';
@@ -143,6 +130,30 @@ function updatePackageJson(context: Context, hasCustomConfig: boolean): void {
   };
 
   context.updateFile('package.json', JSON.stringify(updatedPackageJson, null, 2));
+}
+
+// The rspack and webpack renders of the package.json template are the source of truth for which
+// dev dependencies each bundler needs, so the addition never drifts from what `generate` scaffolds
+function getBundlerDevDependencies() {
+  const templatePath = resolveTemplatePath('_package.json');
+  const rspackDevDependencies = renderDevDependencies(templatePath, RSPACK_TEMPLATE_DATA_OVERRIDES);
+  const webpackDevDependencies = renderDevDependencies(templatePath, WEBPACK_TEMPLATE_DATA_OVERRIDES);
+
+  const rspackOnlyDevDependencies = Object.fromEntries(
+    Object.entries(rspackDevDependencies).filter(([name]) => !(name in webpackDevDependencies))
+  );
+  const webpackOnlyDevDependencies = Object.keys(webpackDevDependencies).filter(
+    (name) => !(name in rspackDevDependencies)
+  );
+
+  return { rspackOnlyDevDependencies, webpackOnlyDevDependencies };
+}
+
+function renderDevDependencies(templatePath: string, templateData: Record<string, unknown>): Record<string, string> {
+  const rendered: { devDependencies?: Record<string, string> } = JSON.parse(
+    renderTemplate(templatePath, false, templateData)
+  );
+  return rendered.devDependencies ?? {};
 }
 
 function deleteWebpackConfigFiles(context: Context): void {
