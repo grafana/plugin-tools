@@ -1,4 +1,5 @@
 import { fileURLToPath } from 'node:url';
+import { lt, major, minVersion, validRange } from 'semver';
 import type { Context } from '../../context.js';
 import {
   additionsDebug,
@@ -151,6 +152,7 @@ function addRootRspackConfigStub(context: Context): string[] {
 
 interface PackageJson {
   scripts?: Record<string, string>;
+  engines?: Record<string, string>;
   [key: string]: unknown;
 }
 
@@ -185,6 +187,9 @@ function updatePackageJson(context: Context): string[] {
     context.updateFile('package.json', JSON.stringify({ ...packageJson, scripts }, null, 2));
   }
 
+  raiseNodeEngine(context);
+  dropLockedRspackOnePackages(context);
+
   if (unparsedScripts.length > 0) {
     followUps.push(
       'These scripts still call webpack in a way the addition could not rewrite. Change them to call rspack with ./rspack.config.ts or ./.config/rspack/rspack.config.ts:',
@@ -193,6 +198,48 @@ function updatePackageJson(context: Context): string[] {
   }
 
   return followUps;
+}
+
+// rspack 2 needs Node 22.12. 22.23 also has type stripping on by default, so the rspack CLI can
+// always load TypeScript configs natively. matches the engines range create-plugin scaffolds
+const MIN_NODE_VERSION = '22.23.0';
+
+function raiseNodeEngine(context: Context): void {
+  const packageJson = readJsonFile<PackageJson>(context, 'package.json');
+  const nodeRange = packageJson.engines?.node;
+  if (!nodeRange || !validRange(nodeRange)) {
+    return;
+  }
+
+  const lowestAllowedVersion = minVersion(nodeRange);
+  if (!lowestAllowedVersion || !lt(lowestAllowedVersion, MIN_NODE_VERSION)) {
+    return;
+  }
+
+  const engines = { ...packageJson.engines, node: '>=22.23' };
+  context.updateFile('package.json', JSON.stringify({ ...packageJson, engines }, null, 2));
+}
+
+// npm refuses to move @rspack/cli and @rspack/core from 1 to 2 in one install while the lockfile
+// still pins the old versions (ERESOLVE). dropping the locked @rspack packages lets npm resolve
+// them again from package.json. pnpm and yarn upgrade them without help
+const LOCKED_RSPACK_PACKAGE_PATTERN = /(^|\/)node_modules\/@rspack\//;
+
+function dropLockedRspackOnePackages(context: Context): void {
+  if (!context.doesFileExist('package-lock.json')) {
+    return;
+  }
+
+  const lockfile = readJsonFile<{ packages?: Record<string, { version?: string }> }>(context, 'package-lock.json');
+  const lockedCoreVersion = lockfile.packages?.['node_modules/@rspack/core']?.version;
+  if (!lockfile.packages || !lockedCoreVersion || major(lockedCoreVersion) >= 2) {
+    return;
+  }
+
+  const packages = Object.fromEntries(
+    Object.entries(lockfile.packages).filter(([path]) => !LOCKED_RSPACK_PACKAGE_PATTERN.test(path))
+  );
+  context.updateFile('package-lock.json', JSON.stringify({ ...lockfile, packages }, null, 2) + '\n');
 }
 
 // a webpack or webpack-cli command at the start of a script, after a shell separator, after env

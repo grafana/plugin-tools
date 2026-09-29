@@ -380,6 +380,135 @@ describe('rspack', () => {
     });
   });
 
+  describe('experimental rspack start', () => {
+    function createExperimentalRspackContext(devDependencies: Record<string, string>) {
+      const context = new Context('/virtual');
+      context.addFile('.config/rspack/rspack.config.ts', 'experimental rspack config');
+      context.addFile(
+        '.config/.cprc.json',
+        JSON.stringify({ version: '7.9.0', features: { useExperimentalRspack: true } }, null, 2)
+      );
+      context.addFile('rspack.config.ts', 'my rspack config');
+      context.addFile(
+        'package.json',
+        JSON.stringify(
+          {
+            scripts: { build: 'rspack -c ./rspack.config.ts --env production' },
+            devDependencies: { 'eslint-webpack-plugin': '^5.0.0', webpack: '^5.94.0', ...devDependencies },
+          },
+          null,
+          2
+        )
+      );
+      return context;
+    }
+
+    it('should hand the root rspack config to the user untouched and not add a stub', () => {
+      const context = createExperimentalRspackContext({ '@rspack/core': '^1.6.0', '@rspack/cli': '^1.6.0' });
+
+      const result = addRspack(context);
+
+      expect(result.getFile('rspack.config.ts')).toBe('my rspack config');
+    });
+
+    it('should swap eslint-webpack-plugin for eslint-rspack-plugin', () => {
+      const context = createExperimentalRspackContext({ '@rspack/core': '^1.6.0', '@rspack/cli': '^1.6.0' });
+
+      const result = addRspack(context);
+      const pkg = JSON.parse(result.getFile('package.json')!);
+
+      expect(pkg.devDependencies['eslint-webpack-plugin']).toBeUndefined();
+      expect(pkg.devDependencies['eslint-rspack-plugin']).toBeDefined();
+    });
+
+    it('should keep rspack versions the plugin already pinned at or above the template', () => {
+      const context = createExperimentalRspackContext({ '@rspack/core': '2.2.6', '@rspack/cli': '2.2.6' });
+
+      const result = addRspack(context);
+      const pkg = JSON.parse(result.getFile('package.json')!);
+
+      expect(pkg.devDependencies['@rspack/core']).toBe('2.2.6');
+      expect(pkg.devDependencies['@rspack/cli']).toBe('2.2.6');
+    });
+  });
+
+  describe('engines', () => {
+    function runWithEngines(engines?: Record<string, string>) {
+      const context = createBaseContext();
+      const pkg = JSON.parse(context.getFile('package.json')!);
+      if (engines) {
+        pkg.engines = engines;
+      }
+      context.updateFile('package.json', JSON.stringify(pkg, null, 2));
+      return JSON.parse(addRspack(context).getFile('package.json')!).engines;
+    }
+
+    it('should raise engines.node when it allows versions rspack 2 cannot run on', () => {
+      expect(runWithEngines({ node: '>=22' })).toEqual({ node: '>=22.23' });
+      expect(runWithEngines({ node: '>=20', npm: '>=10' })).toEqual({ node: '>=22.23', npm: '>=10' });
+    });
+
+    it('should keep engines.node when it already requires a newer Node', () => {
+      expect(runWithEngines({ node: '>=24' })).toEqual({ node: '>=24' });
+      expect(runWithEngines({ node: '>=22.23.3' })).toEqual({ node: '>=22.23.3' });
+    });
+
+    it('should not add engines when the plugin has none', () => {
+      expect(runWithEngines()).toBeUndefined();
+    });
+  });
+
+  describe('npm lockfile', () => {
+    function createLockfile(rspackCoreVersion: string) {
+      return JSON.stringify(
+        {
+          name: 'my-plugin',
+          lockfileVersion: 3,
+          packages: {
+            '': { name: 'my-plugin' },
+            'node_modules/@rspack/core': { version: rspackCoreVersion },
+            'node_modules/@rspack/cli': { version: rspackCoreVersion },
+            'node_modules/@rspack/cli/node_modules/@rspack/dev-server': { version: '1.1.5' },
+            'node_modules/react': { version: '18.3.1' },
+          },
+        },
+        null,
+        2
+      );
+    }
+
+    it('should drop locked rspack 1 packages so npm can resolve rspack 2', () => {
+      const context = createBaseContext();
+      context.addFile('package-lock.json', createLockfile('1.7.12'));
+
+      const result = addRspack(context);
+      const packages = Object.keys(JSON.parse(result.getFile('package-lock.json')!).packages);
+
+      expect(packages).toEqual(['', 'node_modules/react']);
+    });
+
+    it('should leave the lockfile alone when rspack 2 is already locked', () => {
+      const context = createBaseContext();
+      const lockfile = createLockfile('2.2.8');
+      context.addFile('package-lock.json', lockfile);
+
+      const result = addRspack(context);
+
+      expect(result.getFile('package-lock.json')).toBe(lockfile);
+    });
+
+    it('should not touch other package managers lockfiles', () => {
+      const context = createBaseContext();
+      context.addFile('pnpm-lock.yaml', "lockfileVersion: '9.0'\n");
+      context.addFile('yarn.lock', '# yarn lockfile v1\n');
+
+      const result = addRspack(context);
+
+      expect(result.getFile('pnpm-lock.yaml')).toBe("lockfileVersion: '9.0'\n");
+      expect(result.getFile('yarn.lock')).toBe('# yarn lockfile v1\n');
+    });
+  });
+
   describe('webpack cleanup', () => {
     it('should delete the create-plugin webpack files from .config/webpack/', () => {
       const context = createBaseContext();
