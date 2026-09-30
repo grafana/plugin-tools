@@ -2,7 +2,7 @@
 import { stat } from 'node:fs/promises';
 import minimist from 'minimist';
 import createDebug from 'debug';
-import { resolveDocsPath } from '../utils/utils.plugin.js';
+import { resolvePluginJson } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
 import { buildDocs } from '../commands/build.command.js';
 import { validateCommand } from '../commands/validate.command.js';
@@ -27,10 +27,11 @@ async function main() {
     process.exit(1);
   }
 
-  // resolve docs path once for all commands.
+  // resolve docs path and plugin type once for all commands.
   let docsPath: string;
+  let pluginType: string | undefined;
   try {
-    docsPath = await resolveDocsPath();
+    ({ docsPath, pluginType } = await resolvePluginJson());
   } catch (error) {
     console.error(`Error: ${error instanceof Error ? error.message : error}`);
     process.exit(1);
@@ -68,7 +69,7 @@ async function main() {
           reload: false,
         },
       });
-      await serve(serveArgv, docsPath);
+      await serve(serveArgv, docsPath, pluginType);
       break;
     }
     case 'build': {
@@ -88,6 +89,7 @@ async function main() {
         strict: validateArgv.strict,
         json: validateArgv.json,
         allowUnfilledStubs: validateArgv['allow-unfilled-stubs'],
+        pluginType,
       });
       break;
     }

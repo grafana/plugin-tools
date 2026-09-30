@@ -5,11 +5,13 @@ import { checkFilesystem } from './filesystem.js';
 import { checkFrontmatter } from './frontmatter.js';
 import { checkManifest } from './manifest.js';
 import { checkMarkdown } from './markdown.js';
+import { checkRequiredPages } from './required-pages.js';
 import { checkStubContent } from './stub-content.js';
 import { checkWritingStyle } from './style.js';
 
 export const allRules: RuleRunner[] = [
   checkFilesystem,
+  checkRequiredPages,
   checkFrontmatter,
   checkAssets,
   checkMarkdown,

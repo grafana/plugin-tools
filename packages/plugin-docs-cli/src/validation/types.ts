@@ -14,6 +14,8 @@ export const Rule = {
   DocsPathExists: 'docs-path-exists',
   MaxTotalDocsSize: 'max-total-docs-size',
   MaxTotalPages: 'max-total-pages',
+  // plugin-type rules
+  RequiredPages: 'required-pages',
   // frontmatter rules
   BlockExists: 'frontmatter-block-exists',
   ValidYaml: 'frontmatter-valid-yaml',
@@ -85,6 +87,11 @@ export interface Diagnostic {
 export interface ValidationInput {
   docsPath: string;
   strict: boolean;
+  /**
+   * The plugin's `type` from `plugin.json`, such as `panel` or `datasource`. Drives the
+   * `required-pages` rule, which reports nothing when this is unset.
+   */
+  pluginType?: string;
   /**
    * Treat leftover `section-brief` scaffolding as progress rather than a defect.
    *

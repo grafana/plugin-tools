@@ -4,14 +4,19 @@ import createDebug from 'debug';
 
 const debug = createDebug('plugin-docs-cli:utils:plugin');
 
+export interface PluginJson {
+  docsPath: string;
+  pluginType?: string;
+}
+
 /**
- * Resolves the docs path by reading docsPath from src/plugin.json.
+ * Resolves the docs path and plugin type by reading src/plugin.json.
  *
  * @param projectRoot - The root directory of the plugin project (defaults to cwd)
- * @returns The resolved absolute path to the docs directory
+ * @returns The resolved absolute path to the docs directory, and the plugin's type
  * @throws {Error} If plugin.json is missing or lacks docsPath
  */
-export async function resolveDocsPath(projectRoot?: string): Promise<string> {
+export async function resolvePluginJson(projectRoot?: string): Promise<PluginJson> {
   const root = projectRoot || process.cwd();
   const pluginJsonPath = join(root, 'src', 'plugin.json');
   debug('Looking for plugin.json at: %s', pluginJsonPath);
@@ -23,7 +28,7 @@ export async function resolveDocsPath(projectRoot?: string): Promise<string> {
     throw new Error(`Could not find src/plugin.json in ${root}`);
   }
 
-  let pluginJson: { docsPath?: string };
+  let pluginJson: { docsPath?: string; type?: string };
   try {
     pluginJson = JSON.parse(raw);
   } catch (error) {
@@ -36,5 +41,5 @@ export async function resolveDocsPath(projectRoot?: string): Promise<string> {
 
   const docsPath = resolve(root, pluginJson.docsPath);
   debug('Resolved docsPath from plugin.json: %s -> %s', pluginJson.docsPath, docsPath);
-  return docsPath;
+  return { docsPath, pluginType: pluginJson.type };
 }
