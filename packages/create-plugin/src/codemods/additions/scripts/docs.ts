@@ -111,9 +111,9 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   };
 
   // step 3: add @grafana/plugin-docs-cli as a devDependency
-  addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': '^0.2.1' });
+  addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': '^0.3.0' });
 
-  // step 4: add docs:serve and docs:validate npm scripts
+  // step 4: add docs:serve, docs:validate and docs:validate:release npm scripts
   addDocsScripts(context);
 
   // step 5: copy template files to docs folder (includes README.md)
@@ -162,7 +162,8 @@ function printNextSteps(opts: {
   const body: string[] = [
     `Fill in the stub pages under ${docsPath}/ - each section carries a note saying what belongs there`,
     `Read ${docsPath}/README.md for the four catalog tabs and what belongs on each`,
-    `\`${packageManagerName} run docs:validate\` counts the stubs left to fill, and must reach zero before you release`,
+    `\`${packageManagerName} run docs:validate\` counts the stubs left to fill`,
+    `Before you release, run \`${packageManagerName} run docs:validate:release\` - it fails on any stub left unfilled, like the release check does`,
   ];
 
   if (agentAssistanceAdded) {
@@ -386,6 +387,13 @@ function addDocsScripts(context: Context): void {
     changed = true;
   } else {
     additionsDebug('docs:validate already exists in package.json scripts, skipping');
+  }
+
+  if (!scripts['docs:validate:release']) {
+    scripts['docs:validate:release'] = 'plugin-docs-cli validate --strict';
+    changed = true;
+  } else {
+    additionsDebug('docs:validate:release already exists in package.json scripts, skipping');
   }
 
   if (changed) {

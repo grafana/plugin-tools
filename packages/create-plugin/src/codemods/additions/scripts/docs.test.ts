@@ -131,15 +131,29 @@ describe('docs scaffolding', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
-      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.2.1');
+      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.3.0');
     });
 
-    it('adds docs:serve and docs:validate scripts', () => {
+    it('adds docs:serve, docs:validate and docs:validate:release scripts', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
       expect(pkg.scripts?.['docs:serve']).toBe('plugin-docs-cli serve --port 3001 --reload');
       expect(pkg.scripts?.['docs:validate']).toBe('plugin-docs-cli validate --strict --allow-unfilled-stubs');
+      expect(pkg.scripts?.['docs:validate:release']).toBe('plugin-docs-cli validate --strict');
+    });
+
+    it('skips docs:validate:release if already present', () => {
+      const context = new Context('/virtual');
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'My Plugin' }));
+      context.addFile(
+        'package.json',
+        JSON.stringify({ scripts: { 'docs:validate:release': 'custom-command' }, devDependencies: {} })
+      );
+      context.addFile('.github/workflows/release.yml', 'uses: grafana/plugin-actions/build-plugin@v1.0.2\n');
+      call(context);
+      const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
+      expect(pkg.scripts?.['docs:validate:release']).toBe('custom-command');
     });
 
     it('skips docs:serve if already present', () => {

@@ -139,8 +139,9 @@ Validation cannot catch any of these, so they are on you.
 ## Validation
 
 ```bash
-{{packageManagerName}} run docs:validate            # runs in strict mode; fails on any error
+{{packageManagerName}} run docs:validate            # while writing; unfilled briefs are notes
 {{packageManagerName}} run docs:validate -- --json  # machine-readable output
+{{packageManagerName}} run docs:validate:release    # ready to publish; unfilled briefs are errors
 {{packageManagerName}} run docs:serve               # local preview on port 3001
 ```
 
@@ -149,4 +150,5 @@ notes rather than errors, so the count is a to-do list: `✓ Documentation is va
 else - frontmatter, links, images - is checked normally the whole time, so fix those as they appear.
 
 Leftover briefs do block publishing. Strip every one before release: the marker is removed when the page is
-rendered, but the `📝 Fill this in` text is not, so a leftover brief ships to the catalog verbatim.
+rendered, but the `📝 Fill this in` text is not, so a leftover brief ships to the catalog verbatim. When you
+finish a docs task, run `docs:validate:release` - a pass from `docs:validate` alone doesn't mean the docs are done.
