@@ -160,10 +160,21 @@ function isNonNumericIdentifier(id: string): boolean {
   return !!id && /^[0-9A-Za-z-]+$/.test(id) && /[A-Za-z-]/.test(id);
 }
 
+// build metadata identifiers allow leading zeroes, unlike numeric prerelease identifiers
+function isBuildIdentifier(id: string): boolean {
+  return !!id && /^[0-9A-Za-z-]+$/.test(id);
+}
+
 function normalizeIfValidSemver(input: string): string | null {
   const trimmed = input.trim();
   const withoutV = trimmed.startsWith('v') ? trimmed.slice(1) : trimmed;
-  const core = withoutV.split('+')[0];
+  const plusIndex = withoutV.indexOf('+');
+  const core = plusIndex === -1 ? withoutV : withoutV.slice(0, plusIndex);
+  const build = plusIndex === -1 ? null : withoutV.slice(plusIndex + 1);
+
+  if (build !== null && (!build || build.split('.').some((id) => !isBuildIdentifier(id)))) {
+    return null;
+  }
 
   const dashIndex = core.indexOf('-');
   const base = dashIndex === -1 ? core : core.slice(0, dashIndex);

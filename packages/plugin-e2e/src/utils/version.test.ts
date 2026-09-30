@@ -200,9 +200,32 @@ describe('version', () => {
       expect(valid(version)).toBe(expected);
     });
 
-    it.each(['', 'latest', '1.2', '1.2.3.4', '01.2.3', '1.2.3-', undefined, null])('returns null for %s', (version) => {
+    it.each([
+      '',
+      'latest',
+      '1.2',
+      '1.2.3.4',
+      '01.2.3',
+      '1.2.3-',
+      '1.2.3+',
+      '1.2.3+.',
+      '1.2.3+build..1',
+      '1.2.3+build_1',
+      undefined,
+      null,
+    ])('returns null for %s', (version) => {
       expect(valid(version)).toBeNull();
     });
+
+    it.each([
+      ['1.2.3+01', '1.2.3'],
+      ['1.2.3+build.01', '1.2.3'],
+    ])(
+      'accepts leading zeroes in build metadata, unlike prerelease identifiers, normalizing %s to %s',
+      (version, expected) => {
+        expect(valid(version)).toBe(expected);
+      }
+    );
   });
 
   it('accepts a leading v when comparing, like semver', () => {
