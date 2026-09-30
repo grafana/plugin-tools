@@ -9,8 +9,8 @@ import { isMetaFile } from './utils.js';
  * users and agents find the same information in the same place across every plugin.
  */
 const REQUIRED_PAGES: Record<string, string[]> = {
-  panel: ['options', 'data-formats', 'troubleshooting'],
-  datasource: ['query-editor', 'configuration', 'troubleshooting'],
+  panel: ['options', 'data-formats'],
+  datasource: ['query-editor', 'configuration'],
 };
 
 export async function checkRequiredPages(input: ValidationInput): Promise<Diagnostic[]> {

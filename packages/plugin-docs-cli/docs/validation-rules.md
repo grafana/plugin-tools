@@ -41,8 +41,8 @@ find the same information in the same place across every plugin. Each topic can 
 (`options.md`) or a folder (`options/`) with at least one page inside it, at the root of your
 docs folder.
 
-- **Panel:** `options`, `data-formats` and `troubleshooting`
-- **Data source:** `query-editor`, `configuration` and `troubleshooting`
+- **Panel:** `options` and `data-formats`
+- **Data source:** `query-editor` and `configuration`
 
 | Rule             | What it checks                                                                   | Severity |
 | ---------------- | -------------------------------------------------------------------------------- | -------- |
