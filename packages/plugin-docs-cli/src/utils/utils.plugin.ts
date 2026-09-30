@@ -4,7 +4,7 @@ import createDebug from 'debug';
 
 const debug = createDebug('plugin-docs-cli:utils:plugin');
 
-export interface PluginConfig {
+export interface PluginJson {
   docsPath: string;
   pluginType?: string;
 }
@@ -16,7 +16,7 @@ export interface PluginConfig {
  * @returns The resolved absolute path to the docs directory, and the plugin's type
  * @throws {Error} If plugin.json is missing or lacks docsPath
  */
-export async function resolvePluginConfig(projectRoot?: string): Promise<PluginConfig> {
+export async function resolvePluginJson(projectRoot?: string): Promise<PluginJson> {
   const root = projectRoot || process.cwd();
   const pluginJsonPath = join(root, 'src', 'plugin.json');
   debug('Looking for plugin.json at: %s', pluginJsonPath);

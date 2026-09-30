@@ -2,7 +2,7 @@
 import { stat } from 'node:fs/promises';
 import minimist from 'minimist';
 import createDebug from 'debug';
-import { resolvePluginConfig } from '../utils/utils.plugin.js';
+import { resolvePluginJson } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
 import { buildDocs } from '../commands/build.command.js';
 import { validateCommand } from '../commands/validate.command.js';
@@ -31,7 +31,7 @@ async function main() {
   let docsPath: string;
   let pluginType: string | undefined;
   try {
-    ({ docsPath, pluginType } = await resolvePluginConfig());
+    ({ docsPath, pluginType } = await resolvePluginJson());
   } catch (error) {
     console.error(`Error: ${error instanceof Error ? error.message : error}`);
     process.exit(1);
