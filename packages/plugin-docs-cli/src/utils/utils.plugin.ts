@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import createDebug from 'debug';
 
@@ -37,4 +37,24 @@ export async function resolveDocsPath(projectRoot?: string): Promise<string> {
   const docsPath = resolve(root, pluginJson.docsPath);
   debug('Resolved docsPath from plugin.json: %s -> %s', pluginJson.docsPath, docsPath);
   return docsPath;
+}
+
+/**
+ * Resolves the plugin's README, matching create-plugin's copyFiles rule: `src/README.md` when
+ * it exists, otherwise the repo-root `README.md`. Returns undefined when neither exists.
+ */
+export async function resolveReadmePath(projectRoot?: string): Promise<string | undefined> {
+  const root = projectRoot || process.cwd();
+  const candidates = [join(root, 'src', 'README.md'), join(root, 'README.md')];
+  for (const candidate of candidates) {
+    try {
+      const st = await stat(candidate);
+      if (st.isFile()) {
+        debug('Resolved README path: %s', candidate);
+        return candidate;
+      }
+    } catch {}
+  }
+  debug('No README found under %s', root);
+  return undefined;
 }
