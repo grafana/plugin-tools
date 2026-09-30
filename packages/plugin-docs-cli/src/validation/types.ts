@@ -22,6 +22,7 @@ export const Rule = {
   RequiredFields: 'frontmatter-required-fields',
   FieldTypes: 'frontmatter-field-types',
   ValidSlug: 'frontmatter-valid-slug',
+  RootIndexSlug: 'root-index-no-custom-slug',
   NoH1: 'no-h1-heading',
   DuplicatePosition: 'no-duplicate-sidebar-position',
   DuplicateSlug: 'no-duplicate-slugs',
