@@ -55,7 +55,8 @@
     "gray-matter": "^4.0.3",
     "hast-util-to-html": "^9.0.0",
     "marked": "^16.3.0",
-    "minimist": "^1.2.8"
+    "minimist": "^1.2.8",
+    "xss": "^1.0.15"
   },
   "devDependencies": {
     "@types/debug": "^4.1.12",

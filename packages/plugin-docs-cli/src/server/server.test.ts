@@ -226,6 +226,27 @@ describe('startServer', () => {
 
     expect(response.status).toBe(200);
     expect(response.text).toMatch(/class="docs-toc-link docs-toc-link-h2">Getting started with grafana-cli</);
+    expect(response.text).toContain('<h2 id="getting-started-with-grafana-cli">');
+  });
+
+  it('should strip scripts, event handlers and javascript: links from the README like gcom', async () => {
+    const readmeDir = await mkdtemp(join(tmpdir(), 'readme-unsafe-'));
+    const unsafeReadmePath = join(readmeDir, 'README.md');
+    await writeFile(
+      unsafeReadmePath,
+      '# Plugin\n\n<script>alert(1)</script>\n\n<a href="javascript:alert(1)" onclick="alert(1)">x</a>\n\n- [x] done\n'
+    );
+    const result = await startServer({ docsPath: testDocsPath, readmePath: unsafeReadmePath, port: 0 });
+    server = result;
+    app = result.app;
+
+    const response = await request(app).get('/');
+
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain('<script>alert(1)</script>');
+    expect(response.text).not.toContain('onclick=');
+    expect(response.text).not.toContain('javascript:alert');
+    expect(response.text).toContain('<input checked="" disabled="" type="checkbox">');
   });
 
   it('should wrap tables in a horizontal scroll container', async () => {

@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
 import { marked } from 'marked';
+import xss, { whiteList } from 'xss';
 import Slugger from 'github-slugger';
 import { parseMarkdown, type Manifest, type Page } from '@grafana/plugin-docs-parser';
 import { toHtml } from 'hast-util-to-html';
@@ -331,12 +332,27 @@ function renderReadme(source: string): ReadmeResult {
   };
 
   const raw = marked.parse(source, { renderer, async: false, gfm: true, breaks: false }) as string;
-  // wrap top-level tables so a wide table can scroll horizontally without pushing the column
-  const html = raw.replace(
+  // wrap top-level tables so a wide table can scroll horizontally without pushing the column.
+  // runs after sanitizing, which would otherwise strip the wrapper's class and tabindex.
+  const html = sanitizeReadme(raw).replace(
     /<table(\s[^>]*)?>([\s\S]*?)<\/table>/g,
     '<div class="table-scroll" tabindex="0"><table$1>$2</table></div>'
   );
   return { html, headings };
+}
+
+// mirrors gcom's readme sanitizing (plugin-version.model.ts markdown2Html) so the preview strips what
+// grafana.com strips. h2/h3 also keep their id, which the "on this page" rail links to.
+function sanitizeReadme(html: string): string {
+  return xss(html, {
+    whiteList: { ...whiteList, code: ['class'], h2: ['id'], h3: ['id'] },
+    onIgnoreTag: (tag, tagHtml) => {
+      if (tag === 'input' && tagHtml.includes('disabled=""') && tagHtml.includes('type="checkbox"')) {
+        return tagHtml;
+      }
+      return undefined;
+    },
+  });
 }
 
 function escapeAttr(input: string): string {
