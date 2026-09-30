@@ -81,8 +81,9 @@ Your agent already has the conventions, so no special command is needed.
 ## Preview and validate locally
 
 ```bash
-{{packageManagerName}} run docs:serve     # local preview at http://localhost:3001 with live reload
-{{packageManagerName}} run docs:validate  # check for issues before pushing (strict mode)
+{{packageManagerName}} run docs:serve             # local preview at http://localhost:3001 with live reload
+{{packageManagerName}} run docs:validate          # check for issues while you write
+{{packageManagerName}} run docs:validate:release  # check the docs are ready to publish
 ```
 
 `docs:validate` checks structure, frontmatter, images and links. It does not check your prose - for that,
@@ -94,7 +95,8 @@ frontmatter, links, images - is checked from the start, and CI stays green while
 
 Leftover briefs do block publishing, and for good reason: the marker itself is stripped when the page is
 rendered, but the `📝 Fill this in` text is not. A brief you forget to remove ships to grafana.com as
-visible text. Strip every one before you release.
+visible text. Before you release, run `docs:validate:release`: it runs the same check as the release
+pipeline, so any brief still left is an error.
 
 ## How docs are published
 
@@ -102,7 +104,7 @@ Multi-page docs are only published when `docsPath` is set in `src/plugin.json`. 
 
 When `docsPath` is set:
 
-1. The `validate-docs.yml` workflow runs on every PR that touches `docs/**` or `src/plugin.json` — it runs `plugin-docs-cli validate --strict`.
+1. The `validate-docs.yml` workflow runs `docs:validate` on every PR that touches `docs/**` or `src/plugin.json`. Unfilled briefs don't fail it, so you can merge docs in progress.
 2. On tag push (release), the docs validator runs again as part of the plugin-validator step. Errors at this stage fail the release.
 3. On successful validation, `plugin-docs-cli` builds the docs and writes `dist/docs/` — the manifest plus all markdown and image files.
 4. `dist/docs/` rides along inside the plugin archive (`.zip`) uploaded to GCS.

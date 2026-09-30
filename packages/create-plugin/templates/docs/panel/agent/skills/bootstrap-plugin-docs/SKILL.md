@@ -31,7 +31,7 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
 2. **Build a working understanding from the `PanelPlugin` builder. This step is mandatory; do not skip even when README is rich.** Locate `new PanelPlugin(...)` in `src/module.ts` (or wherever the default export lives). Walk the chained methods and extract:
    - **Panel purpose** (one sentence). Combine `plugin.json.info.description`, the React component's leading docstring and any descriptive `description:` strings inside `setPanelOptions` calls.
 
-   - **Panel options** (`setPanelOptions((builder) => ...)`). For each `.add*({...})` call on the builder, capture the literal values of these object properties: `name`, `description`, `defaultValue`, `category`. Record the builder method name so you can derive a Type label using the table below.
+   - **Panel options** (`setPanelOptions((builder) => ...)`). For each `.add*({...})` call on the builder, capture the literal values of these object properties: `name`, `description`, `defaultValue`, `category`. For `defaultValue`, also resolve what it evaluates to (see the Default rule in step 6) - the literal is for your working notes, the resolved value is what gets published. Record the builder method name so you can derive a Type label using the table below.
 
      | Builder method     | Type label   |
      | ------------------ | ------------ |
@@ -103,12 +103,12 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
 
    **Panel purpose.** Check whether step 2 (source) or step 3 (README) already yields a clear one-sentence statement of what problem the panel solves. If so, state that sentence back to the author for a quick confirm rather than an open question, for example: "I read the purpose as: '<sentence>' (from README.md). Confirm or correct?" Only ask the open question - "In one sentence, what problem does this panel solve for users?" - when neither source nor README gives a usable answer.
 
-   **Always ask, regardless of source/README:**
+   **Ask only what source and README can't answer.** Candidates:
 
-   > "What data shape does the panel expect, and what kinds of queries produce it (time series, table, traces, logs)?"
+   > "What data shape does the panel expect, and what kinds of queries produce it (time series, table, traces, logs)?" - only when the panel reads query data and source doesn't make the shape clear. Skip it for panels that don't read data at all.
    > "Are there topics that don't map to source - prerequisites, conceptual overviews, troubleshooting scenarios, FAQs? List them and I'll scaffold them as new pages."
 
-   If the author skips or has no answer, scaffold what source supports and flag the gaps in the final summary. Each named topic becomes a new page.
+   Questions never block the work. Ask them once, then keep writing. If no answer arrives, go with what source supports, write down each assumption you made and list them in the final summary so the author can correct them. Each topic the author names becomes a new page.
 
 6. For every page in the resulting list (scaffolded stubs + new pages):
    - Write the page following the conventions in `.config/AGENTS/plugin-docs.md`.
@@ -118,8 +118,8 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
    - For the `## Panel options` section, emit a markdown table with columns `Option | Type | Default | Description` and one row per `setPanelOptions` `.add*` call. Match the Grafana built-in panel docs style (see https://grafana.com/docs/grafana/latest/visualizations/panels-visualizations/visualizations/logs/#logs-options for the reference shape).
      - `Option`: the `name` value, verbatim.
      - `Type`: the friendly Type label from the builder method table above.
-     - `Default`: the `defaultValue` rendered as inline code (`` `false` ``, `` `100` ``, `` `"foo"` ``). Empty cell when no default. For computed expressions (function calls, identifiers), use the source text verbatim inside backticks.
-     - `Description`: the `description` value, verbatim. Leave blank if source has none.
+     - `Default`: the value a reader sees in the panel editor, as inline code (`` `false` ``, `` `100` ``, `` `Time` ``). Resolve source expressions before publishing: an enum member such as `ClockMode.time` becomes the label of the matching `options` entry (`Time`), a constant becomes its value and a translation call such as `t('panel.mode.time', 'Time')` becomes its default string. Keep the source expression only when you can't resolve it, and list that row in the gaps summary. Empty cell when no default.
+     - `Description`: the `description` value, verbatim. When source has none, write one short sentence describing what the option does, based on how the panel component uses it. Stay within what the code shows, and list the rows you wrote in the summary so the author can review them.
      - Escape pipes (`|`) inside any cell value as `\|`.
 
    - For the `## Standard field options` section, emit a bulleted list of the friendly labels. When the panel enables all standard options, prefix the list with a sentence noting that.
@@ -132,7 +132,7 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
 
    **Special case: `{{docsPath}}/data-formats.md`.** For every query-backed data shape described on the page, immediately after the prose description add a `#### Example` subsection containing a Markdown table. The table headers must be the actual field names the panel reads - draw them from query field pickers in source (look for `queryField`, `fieldName`, or `FieldNamePicker` in `setPanelOptions` / component props) and from `queryField` values in any provisioning JSON. Populate 3-5 rows with realistic sample values that match the declared types. This is the minimal artifact that lets a dashboard author write a working query or a test datasource payload - without it the page is descriptive but not actionable. If source contains no field-name evidence, flag the gap in the summary rather than omitting the subsection silently.
 
-   **Special case: `{{docsPath}}/examples.md`.** If `provisioning/dashboards/*.json` exists, lift example configurations from there before falling back to invented ones. For each dashboard, extract panels of this plugin type (match by `type` field against `plugin.json.id`) and use the panel JSON as the example. Pair each example with a one-paragraph explanation of which features it exercises and what data shape it expects. If the provisioning directory is missing or has no relevant panels, only then construct examples from the source understanding plus author input.
+   **Special case: `{{docsPath}}/examples.md`.** If `provisioning/dashboards/*.json` exists, lift example configurations from there before falling back to invented ones. Find panels of this plugin type (match the `type` field against `plugin.json.id`) and choose 1-3 representative ones - the basic setup plus the variations that show distinct features. Don't include every matching panel. Publish an excerpt of each, not the full panel object: keep `type` and `options`, plus `fieldConfig` and `targets` when the example depends on them. Drop `id`, `gridPos`, `pluginVersion`, datasource UIDs, timestamps and options left at their defaults. Link to the full dashboard file in the plugin's repository for readers who want the complete JSON - use its `https://` URL, since relative links can't point outside the docs folder. Pair each example with a one-paragraph explanation of which features it exercises and what data shape it expects. If the provisioning directory is missing or has no relevant panels, only then construct examples from the source understanding plus author input.
 
    **Estimate per-page length.** Project the final size based on the content the page will absorb. If any threshold will be exceeded, plan to split the page into a folder:
    - More than 6 H2 sections, or
@@ -153,7 +153,7 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
 
    Never invent a pitch. If the README has no clear statement of purpose and step 2 could not derive one from source, ask the author rather than writing marketing copy for them. Preserve any existing badges, licence text and links verbatim.
 
-8. After all pages are written, run `{{packageManagerName}} run docs:validate` and fix what it reports. Repeat until clean.
+8. After all pages are written, run `{{packageManagerName}} run docs:validate:release` and fix what it reports. Repeat until it passes. Use this script, not `docs:validate`: `docs:validate` reports unfilled section briefs as notes and still passes, so it can't tell you the work is finished. `docs:validate:release` runs the same check the plugin validator runs at release, where a leftover brief is an error.
 
 9. Report a summary to the user:
    - Pages drafted from source-only understanding (note when source was thin).
@@ -164,12 +164,14 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
    - Screenshots copied from `src/img/screenshots/` (or similar) into `{{docsPath}}/img/`. List which pages they landed on. Flag pages that would benefit from screenshots but where none exist in the repo.
    - Gaps flagged for the author:
      - Description-vs-source contradictions kept verbatim per the verbatim-and-flag rule (cite file and line).
-     - Computed defaults not expressible inline.
+     - Option descriptions you wrote because source had none, so the author can review them.
+     - Defaults you couldn't resolve and left as source expressions.
+     - Assumptions you made where an author question went unanswered.
      - Purpose unclear from source.
      - README content that did not get routed to any page.
      - README sections you removed, and which page each moved to, so the author can spot-check the migration.
      - Pages that would benefit from a screenshot but the repo has none.
-   - Final validation status.
+   - Final `docs:validate:release` result.
 
 ## Notes
 
@@ -177,6 +179,6 @@ This is a one-shot bootstrap. Ongoing per-page updates are routine work - edit t
 - The skill works on greenfield panels (no existing docs) and brownfield panels (a README full of documentation to migrate). Greenfield runs lean on source code and author prompts and leave the README alone beyond the pitch. Brownfield runs move README content onto pages and then trim the README. Both paths are first-class.
 - **Edge cases when walking the builder chain:**
   - **Multi-file builder chains.** If `setPanelOptions(builder => buildOptions(builder))` delegates to a helper function in another file, follow the import and walk the helper too. If you can't reasonably resolve the chain, document the source location and flag the gap in the summary.
-  - **Computed defaults.** When `defaultValue: getDefaultThreshold()` references a function, render the source text verbatim in backticks (`` `getDefaultThreshold()` ``) and flag the row so the author can replace it with the resolved value.
+  - **Computed defaults.** Resolve enum members, constants and translation calls to the value the reader sees. When `defaultValue: getDefaultThreshold()` calls a function you can't evaluate from source, render the source text in backticks (`` `getDefaultThreshold()` ``) and flag the row so the author can replace it with the resolved value.
   - **`useFieldConfig()` with no arguments.** Treat as `kind: 'all'`; list the standard options in the Standard field options section.
 - The bootstrap workflow is one-shot. Subsequent doc updates are ordinary edits against the conventions in `.config/AGENTS/plugin-docs.md`.
