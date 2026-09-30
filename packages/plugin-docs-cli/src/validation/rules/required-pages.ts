@@ -55,8 +55,8 @@ export async function checkRequiredPages(input: ValidationInput): Promise<Diagno
         e.isFile() &&
         e.name.endsWith('.md') &&
         !isMetaFile(e.name) &&
-        !e.parentPath.includes('node_modules') &&
-        !e.parentPath.includes('dist') &&
+        !e.parentPath.split(sep).includes('node_modules') &&
+        !e.parentPath.split(sep).includes('dist') &&
         (e.parentPath === dirPath || e.parentPath.startsWith(dirPath + sep))
     );
     if (!dirHasPage) {
