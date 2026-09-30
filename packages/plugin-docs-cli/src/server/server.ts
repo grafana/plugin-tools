@@ -1,5 +1,4 @@
 import express, { type Express, type Request, type Response } from 'express';
-import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
@@ -13,6 +12,7 @@ import { scanDocsFolder } from '../scanner.js';
 import { validate } from '../validation/engine.js';
 import { formatResult } from '../validation/format.js';
 import { allRules } from '../validation/rules/index.js';
+import { readFirstReadme } from '../utils/utils.plugin.js';
 import {
   docPageHref,
   docsBasePath,
@@ -35,7 +35,8 @@ const debug = createDebug('plugin-docs-cli:server');
 
 export interface ServerOptions {
   docsPath: string;
-  readmePath?: string;
+  /** README locations in priority order. Re-read on every request, so adding or removing one needs no restart. */
+  readmePaths?: string[];
   port: number;
   liveReload?: boolean;
   pluginType?: string;
@@ -70,7 +71,7 @@ interface RenderNavItem extends NavItem {
  * the active page's h2/h3 nested underneath.
  */
 export async function startServer(options: ServerOptions): Promise<Server> {
-  const { docsPath, readmePath, port = 3001, liveReload = false, pluginType } = options;
+  const { docsPath, readmePaths = [], port = 3001, liveReload = false, pluginType } = options;
 
   debug('Starting server with options: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
 
@@ -119,11 +120,8 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // validate on startup
   await runValidation();
 
-  // watch markdown files under docsPath and, if present, the README, so both trigger reloads
-  const watchPaths = [join(docsPath, '**/*.md')];
-  if (readmePath) {
-    watchPaths.push(readmePath);
-  }
+  // watch the README candidates too, even ones that don't exist yet, so adding one triggers a reload
+  const watchPaths = [join(docsPath, '**/*.md'), ...readmePaths];
   const watcher = watch(watchPaths, {
     ignoreInitial: true,
   });
@@ -173,7 +171,8 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // Overview tab: render the plugin README with marked, matching how gcom stores it.
   app.get('/', async (_req: Request, res: Response) => {
     try {
-      if (!readmePath) {
+      const raw = await readFirstReadme(readmePaths);
+      if (raw === undefined) {
         res.status(200).render(
           'docs-layout',
           baseLayoutContext('Overview', 'overview', manifest, liveReload, {
@@ -185,7 +184,6 @@ export async function startServer(options: ServerOptions): Promise<Server> {
         return;
       }
 
-      const raw = await readFile(readmePath, 'utf-8');
       const { html, headings } = renderReadme(raw);
       res.render(
         'docs-layout',

@@ -1,4 +1,4 @@
-import { readFile, stat } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import createDebug from 'debug';
 
@@ -45,21 +45,26 @@ export async function resolvePluginJson(projectRoot?: string): Promise<PluginJso
 }
 
 /**
- * Resolves the plugin's README, matching create-plugin's copyFiles rule: `src/README.md` when
- * it exists, otherwise the repo-root `README.md`. Returns undefined when neither exists.
+ * README locations in priority order, matching create-plugin's copyFiles rule: `src/README.md`
+ * wins over the repo-root `README.md`.
  */
-export async function resolveReadmePath(projectRoot?: string): Promise<string | undefined> {
+export function readmeCandidates(projectRoot?: string): string[] {
   const root = projectRoot || process.cwd();
-  const candidates = [join(root, 'src', 'README.md'), join(root, 'README.md')];
+  return [join(root, 'src', 'README.md'), join(root, 'README.md')];
+}
+
+/** Reads the first README candidate that exists. Returns undefined when none does. */
+export async function readFirstReadme(candidates: string[]): Promise<string | undefined> {
   for (const candidate of candidates) {
     try {
-      const st = await stat(candidate);
-      if (st.isFile()) {
-        debug('Resolved README path: %s', candidate);
-        return candidate;
+      return await readFile(candidate, 'utf-8');
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (code !== 'ENOENT' && code !== 'EISDIR') {
+        throw error;
       }
-    } catch {}
+    }
   }
-  debug('No README found under %s', root);
+  debug('No README found in %O', candidates);
   return undefined;
 }

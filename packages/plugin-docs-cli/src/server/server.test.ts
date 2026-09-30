@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import request from 'supertest';
 import { join } from 'node:path';
-import { mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdtemp, unlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import type { Express } from 'express';
 import { startServer, type Server } from './server.js';
@@ -23,7 +23,7 @@ describe('startServer', () => {
   });
 
   it('should render the README on the Overview tab (/)', async () => {
-    const result = await startServer({ docsPath: testDocsPath, readmePath: testReadmePath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, readmePaths: [testReadmePath], port: 0 });
     server = result;
     app = result.app;
 
@@ -33,6 +33,28 @@ describe('startServer', () => {
     expect(response.text).toContain('<title>Overview - Plugin Documentation (local preview)</title>');
     expect(response.text).toContain('<h1>Test Plugin</h1>');
     expect(response.text).toContain('This is the plugin readme');
+  });
+
+  it('should pick up README changes without a restart, preferring the first candidate', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'readme-live-'));
+    const srcReadme = join(root, 'src-README.md');
+    const rootReadme = join(root, 'README.md');
+    const result = await startServer({ docsPath: testDocsPath, readmePaths: [srcReadme, rootReadme], port: 0 });
+    server = result;
+    app = result.app;
+
+    expect((await request(app).get('/')).text).toContain('No README found');
+
+    await writeFile(rootReadme, '# Root readme\n');
+    expect((await request(app).get('/')).text).toContain('<h1>Root readme</h1>');
+
+    await writeFile(srcReadme, '# Src readme\n');
+    expect((await request(app).get('/')).text).toContain('<h1>Src readme</h1>');
+
+    await unlink(srcReadme);
+    const afterDelete = await request(app).get('/');
+    expect(afterDelete.status).toBe(200);
+    expect(afterDelete.text).toContain('<h1>Root readme</h1>');
   });
 
   it('should show a placeholder when no README is configured', async () => {
@@ -106,7 +128,7 @@ describe('startServer', () => {
   it('should hide the Documentation tab when the manifest has no landing page', async () => {
     const noIndexDocsPath = await mkdtemp(join(tmpdir(), 'docs-no-index-'));
     await writeFile(join(noIndexDocsPath, 'guide.md'), '---\ntitle: Guide\ndescription: A guide\n---\n\nGuide body.\n');
-    const result = await startServer({ docsPath: noIndexDocsPath, readmePath: testReadmePath, port: 0 });
+    const result = await startServer({ docsPath: noIndexDocsPath, readmePaths: [testReadmePath], port: 0 });
     server = result;
     app = result.app;
 
@@ -218,7 +240,7 @@ describe('startServer', () => {
   });
 
   it('should use plain heading text for README "On this page" labels', async () => {
-    const result = await startServer({ docsPath: testDocsPath, readmePath: testReadmePath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, readmePaths: [testReadmePath], port: 0 });
     server = result;
     app = result.app;
 
@@ -236,7 +258,7 @@ describe('startServer', () => {
       unsafeReadmePath,
       '# Plugin\n\n<script>alert(1)</script>\n\n<a href="javascript:alert(1)" onclick="alert(1)">x</a>\n\n- [x] done\n'
     );
-    const result = await startServer({ docsPath: testDocsPath, readmePath: unsafeReadmePath, port: 0 });
+    const result = await startServer({ docsPath: testDocsPath, readmePaths: [unsafeReadmePath], port: 0 });
     server = result;
     app = result.app;
 
