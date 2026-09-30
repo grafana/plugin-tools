@@ -21,9 +21,11 @@ What is left is the plugin's own build customisation, which needs judgement to p
    - There is no root `webpack.config.*` file.
    - Root `rspack.config.ts`, if present, does not contain the `[rspack]` error.
    - No script in `package.json` calls `webpack`.
+   - No plugin code builds a runtime URL to a file the new base config no longer copies into `dist` (see step 6).
 3. Otherwise, work out the starting point:
    - **From webpack**: there is a root `webpack.config.*`, or `rspack.config.ts` contains the `[rspack]` error. Follow all the steps below.
-   - **From experimental rspack**: there is a root `rspack.config.ts` without the `[rspack]` error, and there is no root `webpack.config.*`. The config is already rspack but may use rspack 1 APIs. Skip step 2 and upgrade that file in place using steps 3 to 6.
+   - **From experimental rspack**: there is a root `rspack.config.ts` without the `[rspack]` error, and there is no root `webpack.config.*`. The config is already rspack but may use rspack 1 APIs. Skip step 2 and upgrade that file in place using steps 3 to 7.
+   - **No custom config**: there is neither a root `webpack.config.*` nor a root `rspack.config.ts`. Only step 6 applies.
 
 With a custom config, the build is expected to fail at this point with the `[rspack]` error. Do not chase build errors one by one; the steps below drive the work.
 
@@ -77,34 +79,40 @@ With a custom config, the build is expected to fail at this point with the `[rsp
    - If you cannot tell, keep the rule with a `TODO(rspack):` comment above it explaining that it duplicates the base transpiler.
    - Either way, name the rule in your report.
 
-6. If something has no rspack equivalent, for example a monkey-patch of webpack internals, a custom `RuntimeModule` plugin, or an SWC Wasm plugin whose ABI does not match rspack's built-in SWC:
+6. Check for files the old base config copied into `dist` that the new one does not. The old base copied every `img/**`, `**/*.svg`, `**/*.png`, `**/*.html`, `libs/**` and `static/**` file; compare `git show HEAD:.config/webpack/webpack.config.ts` with `.config/bundler/copyFiles.ts`. The new base copies only `plugin.json` and other JSON files, the README, CHANGELOG and LICENSE, `query_help.md`, and the logos and screenshots listed in `plugin.json`. Code that builds a URL to one of the other files at runtime, for example `public/plugins/<plugin-id>/img/…` or `` `${pluginPublicPath}/img/how-it-works.svg` ``, now gets a 404. The build still passes, so nothing flags it.
+   - Where the path is a literal, import the file and use the imported URL, for example `import howItWorks from '../img/how-it-works.svg';` and `src={howItWorks}`. rspack then hashes the file and resolves its public path, including when the plugin is served from a CDN.
+   - Check what an import returns before converting. If the config sends `.svg` imports to `@svgr/webpack` or another loader, the import is a React component, not a URL. Use that loader's URL form if it has one, such as a `?url` resource query, or copy the file instead.
+   - The base asset rules only cover `png`, `jpg`, `jpeg`, `gif`, `svg` and font files. For other types, such as `webp`, add an `asset/resource` rule in `rspack.config.ts`.
+   - Copy the file instead of importing it when the path is built at runtime, for example `` `${base}/img/${name}.svg` ``, or when something outside the bundle refers to it, such as the README, documentation or another plugin. Add a `CopyRspackPlugin` to `rspack.config.ts` for just those files, with a comment saying why they are copied. Do not copy whole folders to be safe: every copied file ends up in the plugin archive.
+
+7. If something has no rspack equivalent, for example a monkey-patch of webpack internals, a custom `RuntimeModule` plugin, or an SWC Wasm plugin whose ABI does not match rspack's built-in SWC:
    - Port what you can.
    - Comment out the rest, keeping the original code in the comment, so it does not run and the build does not fail.
    - Put a `TODO(rspack):` comment above it that says what the code did, why it has no direct equivalent, and a suggested approach.
    - Never drop it silently.
 
-7. Fix any script the codemod reported as not rewritten so it calls `rspack` with `./rspack.config.ts` or `./.config/rspack/rspack.config.ts`, keeping its other commands and flags. Remove the CLI flags rspack does not support: `--progress`, `--color`, `--bail`, `--output-pathinfo`.
+8. Fix any script the codemod reported as not rewritten so it calls `rspack` with `./rspack.config.ts` or `./.config/rspack/rspack.config.ts`, keeping its other commands and flags. Remove the CLI flags rspack does not support: `--progress`, `--color`, `--bail`, `--output-pathinfo`.
 
-8. For each file the codemod kept in `.config/webpack/`, copy what is still needed to a folder outside `.config/` (for example `build/`), port it to rspack, and update the imports. Do not delete the originals; list them so the user can delete them.
+9. For each file the codemod kept in `.config/webpack/`, copy what is still needed to a folder outside `.config/` (for example `build/`), port it to rspack, and update the imports. Do not delete the originals; list them so the user can delete them.
 
-9. Remove the webpack packages the codemod kept, once nothing imports them. Keep `webpack` itself if anything still imports it.
+10. Remove the webpack packages the codemod kept, once nothing imports them. Keep `webpack` itself if anything still imports it.
 
-10. Delete the root `webpack.config.*` and its helper files once everything in them is ported or commented with `TODO(rspack):`.
+11. Delete the root `webpack.config.*` and its helper files once everything in them is ported or commented with `TODO(rspack):`.
 
 ## Verify
 
 1. Install dependencies, then run the `typecheck` and `build` scripts. Both must pass, with any unportable code commented out.
-2. Check that `dist/` contains `module.js`, `plugin.json`, and the images and other assets the webpack build produced.
+2. Check that `dist/` contains `module.js`, `plugin.json`, and every file that plugin code or `plugin.json` refers to by path at runtime. Imported images are hashed, so their names change.
 3. Run the `dev` script briefly and check that it compiles and keeps watching.
 4. Fix only breakage caused by this migration.
 
 ## Report
 
-End with a list of every `TODO(rspack):` comment you added (file, line, one-line reason), every file the user should delete, any duplicate transpiler rule you removed or kept (step 5), and any `exportsPresence` errors you left for the user.
+End with a list of every `TODO(rspack):` comment you added (file, line, one-line reason), every file the user should delete, any duplicate transpiler rule you removed or kept (step 5), every image reference you changed to an import or kept as a copy (step 6), and any `exportsPresence` errors you left for the user.
 
 ## Out of scope
 
 - Do not modify anything under `.config/`. It is managed by create-plugin and is overwritten by `create-plugin update`.
 - Do not change the plugin id or type in `src/plugin.json`.
 - Do not upgrade unrelated dependencies, and do not reformat files you did not change.
-- Do not refactor plugin source code, unless the build fails because of the bundler change.
+- Do not refactor plugin source code, unless the build fails because of the bundler change or step 6 needs an image import.
