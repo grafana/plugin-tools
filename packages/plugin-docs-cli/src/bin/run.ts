@@ -2,7 +2,7 @@
 import { stat } from 'node:fs/promises';
 import minimist from 'minimist';
 import createDebug from 'debug';
-import { resolveDocsPath } from '../utils/utils.plugin.js';
+import { resolveDocsPath, resolveReadmePath } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
 import { buildDocs } from '../commands/build.command.js';
 import { validateCommand } from '../commands/validate.command.js';
@@ -68,7 +68,8 @@ async function main() {
           reload: false,
         },
       });
-      await serve(serveArgv, docsPath);
+      const readmePath = await resolveReadmePath();
+      await serve(serveArgv, docsPath, readmePath);
       break;
     }
     case 'build': {

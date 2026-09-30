@@ -1,14 +1,31 @@
 import express, { type Express, type Request, type Response } from 'express';
+import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
+import { marked } from 'marked';
+import Slugger from 'github-slugger';
 import { parseMarkdown, type Manifest, type Page } from '@grafana/plugin-docs-parser';
 import { toHtml } from 'hast-util-to-html';
 import { scanDocsFolder } from '../scanner.js';
 import { validate } from '../validation/engine.js';
 import { formatResult } from '../validation/format.js';
 import { allRules } from '../validation/rules/index.js';
+import {
+  docPageHref,
+  docsBasePath,
+  docsLandingPage,
+  findDocAncestors,
+  findDocPage,
+  firstRenderablePage,
+  resolveDocHref,
+  stripTrailingSlash,
+  toDocsNav,
+  DOCS_INDEX_SLUG,
+  type NavHeading,
+  type NavItem,
+} from './nav.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,6 +34,7 @@ const debug = createDebug('plugin-docs-cli:server');
 
 export interface ServerOptions {
   docsPath: string;
+  readmePath?: string;
   port: number;
   liveReload?: boolean;
 }
@@ -26,14 +44,31 @@ export interface Server {
   close: () => Promise<void>;
 }
 
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface RenderNavItem extends NavItem {
+  isActive: boolean;
+  descendantActive: boolean;
+  headings: NavHeading[];
+  children?: RenderNavItem[];
+}
+
 /**
  * Starts a development server for previewing plugin documentation.
  *
  * @param options - Server configuration options
  * @returns Server instance with app and close method
+ *
+ * The layout mirrors catalog-website: an Overview tab renders the plugin README, a Documentation
+ * tab renders the multi-page docs (`<docsPath>/index.md` at `/docs`, other pages at
+ * `/docs/<slug>`), and the right rail shows either the README's headings or the docs nav tree with
+ * the active page's h2/h3 nested underneath.
  */
 export async function startServer(options: ServerOptions): Promise<Server> {
-  const { docsPath, port = 3001, liveReload = false } = options;
+  const { docsPath, readmePath, port = 3001, liveReload = false } = options;
 
   debug('Starting server with options: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
 
@@ -82,11 +117,15 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // validate on startup
   await runValidation();
 
-  // setup file watcher for markdown files
-  const watcher = watch(join(docsPath, '**/*.md'), {
+  // watch markdown files under docsPath and, if present, the README, so both trigger reloads
+  const watchPaths = [join(docsPath, '**/*.md')];
+  if (readmePath) {
+    watchPaths.push(readmePath);
+  }
+  const watcher = watch(watchPaths, {
     ignoreInitial: true,
   });
-  debug('File watcher initialized for %s', docsPath);
+  debug('File watcher initialized for %O', watchPaths);
 
   const rescan = async (event: string, path: string) => {
     debug('File %s: %s', event, path);
@@ -106,10 +145,10 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   watcher.on('add', (p) => rescan('added', p));
   watcher.on('unlink', (p) => rescan('removed', p));
 
-  // serve static assets (images, etc.) from the docs folder at root level
-  // skip .md files so they're handled by the page route, not served raw
+  // serve docs assets (images) under /docs so they line up with the /docs/... page urls.
+  // skip .md files so they're handled by the page route, not served raw.
   const docsStatic = express.static(docsPath, { index: false, redirect: false, dotfiles: 'ignore', extensions: [] });
-  app.use((req, res, next) => {
+  app.use('/docs', (req, res, next) => {
     if (req.path.endsWith('.md')) {
       return next();
     }
@@ -129,68 +168,92 @@ export async function startServer(options: ServerOptions): Promise<Server> {
     });
   }
 
-  // helper to find page by slug in manifest
-  function findPageBySlug(slug: string, pages: Page[]): Page | null {
-    for (const page of pages) {
-      if (page.slug === slug) {
-        return page;
-      }
-      if (page.children) {
-        const found = findPageBySlug(slug, page.children);
-        if (found) {
-          return found;
-        }
-      }
-    }
-    return null;
-  }
-
-  // serve documentation pages (matches single and nested paths)
-  app.get('/{*splat}', async (req: Request, res: Response) => {
+  // Overview tab: render the plugin README with marked, matching how gcom stores it.
+  app.get('/', async (_req: Request, res: Response) => {
     try {
-      // extract slug from path (remove leading/trailing slashes)
-      const slug = req.path === '/' ? manifest.pages[0]?.slug || '' : req.path.replace(/^\/|\/$/g, '');
-
-      if (!slug) {
-        debug('No pages found in manifest');
-        res.status(404).send('No pages found in manifest');
+      if (!readmePath) {
+        res.status(200).render(
+          'docs-layout',
+          baseLayoutContext('Overview', 'overview', manifest, liveReload, {
+            content:
+              '<p class="preview-empty">No README found. Add <code>src/README.md</code> or <code>README.md</code> to the plugin project.</p>',
+            onThisPage: [],
+          })
+        );
         return;
       }
 
-      debug('Request for slug: %s', slug);
+      const raw = await readFile(readmePath, 'utf-8');
+      const { html, headings } = renderReadme(raw);
+      res.render(
+        'docs-layout',
+        baseLayoutContext('Overview', 'overview', manifest, liveReload, {
+          content: html,
+          onThisPage: headings,
+        })
+      );
+    } catch (error) {
+      console.error('Error rendering README:', error);
+      res.status(500).send('Internal server error');
+    }
+  });
 
-      // find the page for this slug
-      const page = findPageBySlug(slug, manifest.pages);
-      if (!page) {
-        debug('Page not found for slug: %s', slug);
+  // Documentation tab: /docs is the landing page (index.md); /docs/<slug> is any other page.
+  app.get(['/docs', '/docs/{*splat}'], async (req: Request, res: Response) => {
+    try {
+      const landing = docsLandingPage(manifest.pages);
+      if (!landing) {
+        res.status(404).send('No documentation available (missing root index.md).');
+        return;
+      }
+
+      const splat = (req.params.splat as string[] | undefined) ?? [];
+      const rawSlug = splat.join('/');
+      const trimmed = rawSlug.replace(/^\/|\/$/g, '');
+
+      // /docs/index has no url of its own; the landing lives at /docs.
+      if (trimmed === DOCS_INDEX_SLUG) {
+        res.status(404).send('Page not found');
+        return;
+      }
+
+      const page = trimmed ? findDocPage(manifest.pages, trimmed) : landing;
+      if (!page || !page.file) {
         res.status(404).send('Page not found');
         return;
       }
 
       // === undefined, not falsy: a frontmatter-only page has content '', which is real
       if (page.content === undefined) {
-        debug('No content on page for: %s', page.file);
         res.status(404).send('File content not found');
         return;
       }
-      const fileContent = page.content;
 
       // route through the parser's asset rewriting so local preview exercises the same
-      // code path as production. assetBaseUrl '/' produces root-relative srcs which the
-      // express.static handler at the docs root serves unchanged.
-      const parsed = parseMarkdown(fileContent, {
-        assetBaseUrl: '/',
+      // code path as production. assetBaseUrl '/docs/' produces srcs that the docs
+      // express.static handler mounted at /docs serves unchanged.
+      const docsBase = docsBasePath();
+      const parsed = parseMarkdown(page.content, {
+        assetBaseUrl: `${docsBase}/`,
         file: page.file,
       });
-      const title = page.title || slug;
+      rewriteHast(parsed.hast, page.file, manifest.pages, docsBase);
+
+      const nav = toDocsNav(manifest.pages, docsBase);
+      const activeHref = docPageHref(page.slug, docsBase);
+      const renderNav = decorateNav(nav.items, activeHref, nav.headingsByHref);
+
+      const breadcrumb = buildBreadcrumb(manifest.pages, page.slug, docsBase);
 
       res.render('docs-layout', {
-        title,
-        content: toHtml(parsed.hast),
-        manifest,
-        currentPath: slug,
-        headings: parsed.headings,
-        liveReload,
+        ...baseLayoutContext(page.title || page.slug, 'documentation', manifest, liveReload, {
+          content: toHtml(parsed.hast),
+          onThisPage: [],
+        }),
+        docsNav: renderNav,
+        docsNavTitle: 'Documentation',
+        breadcrumb,
+        pageTitle: page.title || page.slug,
       });
     } catch (error) {
       console.error('Error serving page:', error);
@@ -217,4 +280,144 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   };
 
   return { app, close };
+}
+
+function baseLayoutContext(
+  title: string,
+  activeTab: 'overview' | 'documentation',
+  manifest: Manifest,
+  liveReload: boolean,
+  extras: { content: string; onThisPage: NavHeading[] }
+) {
+  const hasDocs = docsLandingPage(manifest.pages) !== null;
+  return {
+    title,
+    activeTab,
+    manifest,
+    hasDocs,
+    liveReload,
+    docsNav: null as RenderNavItem[] | null,
+    docsNavTitle: 'Documentation',
+    breadcrumb: [] as Crumb[],
+    pageTitle: '',
+    ...extras,
+  };
+}
+
+interface ReadmeResult {
+  html: string;
+  headings: NavHeading[];
+}
+
+// renderer that slugs h2/h3 ids like the docs parser does and collects them for the "on this
+// page" rail. we skip h1 since the readme's title heading isn't a real on-page section.
+function renderReadme(source: string): ReadmeResult {
+  const slugger = new Slugger();
+  const headings: NavHeading[] = [];
+
+  const renderer = new marked.Renderer();
+  const textParser = new marked.Parser();
+  renderer.heading = ({ tokens, depth }): string => {
+    const inner = marked.Parser.parseInline(tokens);
+    // plain text from the tokens, so `code` or **bold** in a heading doesn't leak markdown into the rail
+    const label = textParser.parseInline(tokens, textParser.textRenderer);
+    if (depth === 2 || depth === 3) {
+      const id = slugger.slug(label);
+      headings.push({ id, text: label, level: depth });
+      return `<h${depth} id="${escapeAttr(id)}">${inner}</h${depth}>\n`;
+    }
+    return `<h${depth}>${inner}</h${depth}>\n`;
+  };
+
+  const raw = marked.parse(source, { renderer, async: false, gfm: true, breaks: false }) as string;
+  // wrap top-level tables so a wide table can scroll horizontally without pushing the column
+  const html = raw.replace(
+    /<table(\s[^>]*)?>([\s\S]*?)<\/table>/g,
+    '<div class="table-scroll" tabindex="0"><table$1>$2</table></div>'
+  );
+  return { html, headings };
+}
+
+function escapeAttr(input: string): string {
+  return input.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// walk the parsed hast, resolving relative link hrefs to preview urls and wrapping tables in a
+// horizontal scroll container so a wide table cannot push the content column past its track.
+// no new dependency: hast trees are plain data.
+function rewriteHast(node: unknown, currentFile: string, pages: Page[], docsBase: string): void {
+  if (!node || typeof node !== 'object') {
+    return;
+  }
+  const el = node as {
+    type?: string;
+    tagName?: string;
+    properties?: Record<string, unknown>;
+    children?: unknown[];
+  };
+  if (el.type === 'element' && el.tagName === 'a' && el.properties && typeof el.properties.href === 'string') {
+    const rewritten = resolveDocHref(el.properties.href, currentFile, pages, docsBase);
+    el.properties.href = rewritten;
+    if (/^https?:/i.test(rewritten) || rewritten.startsWith('//')) {
+      el.properties.target = '_blank';
+      el.properties.rel = 'noopener noreferrer';
+    }
+  }
+  if (Array.isArray(el.children)) {
+    for (let i = 0; i < el.children.length; i++) {
+      const child = el.children[i] as { type?: string; tagName?: string } | null;
+      if (child && child.type === 'element' && child.tagName === 'table') {
+        el.children[i] = {
+          type: 'element',
+          tagName: 'div',
+          properties: { className: ['table-scroll'], tabIndex: 0 },
+          children: [child],
+        };
+        rewriteHast(child, currentFile, pages, docsBase);
+      } else {
+        rewriteHast(el.children[i], currentFile, pages, docsBase);
+      }
+    }
+  }
+}
+
+function decorateNav(
+  items: NavItem[],
+  activeHref: string,
+  headingsByHref: Record<string, NavHeading[]>
+): RenderNavItem[] {
+  const walk = (nodes: NavItem[]): RenderNavItem[] =>
+    nodes.map((item) => {
+      const normalHref = stripTrailingSlash(item.href);
+      const isActive = normalHref === activeHref;
+      const children = item.children ? walk(item.children) : undefined;
+      const descendantActive = children?.some((c) => c.isActive || c.descendantActive) ?? false;
+      return {
+        ...item,
+        children,
+        isActive,
+        descendantActive,
+        headings: isActive ? (headingsByHref[normalHref] ?? []) : [],
+      };
+    });
+  return walk(items);
+}
+
+function buildBreadcrumb(pages: Page[], pageSlug: string, docsBase: string): Crumb[] {
+  const items: Crumb[] = [{ label: 'Documentation', href: docsBase }];
+  const ancestors = findDocAncestors(pages, pageSlug).filter((node) => node.slug !== DOCS_INDEX_SLUG);
+  for (const node of ancestors) {
+    const target = node.file ? node : firstRenderablePage(node);
+    items.push({
+      label: node.title,
+      href: target ? docPageHref(target.slug, docsBase) : undefined,
+    });
+  }
+
+  // one-crumb trail (the landing page) reads as noise beneath the Documentation tab, so drop it
+  if (items.length < 2) {
+    return [];
+  }
+  // last crumb is the current page and must not link to itself
+  return items.map((item, index) => (index === items.length - 1 ? { label: item.label } : item));
 }
