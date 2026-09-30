@@ -23,7 +23,7 @@ What is left is the plugin's own build customisation, which needs judgement to p
    - No script in `package.json` calls `webpack`.
 3. Otherwise, work out the starting point:
    - **From webpack**: there is a root `webpack.config.*`, or `rspack.config.ts` contains the `[rspack]` error. Follow all the steps below.
-   - **From experimental rspack**: there is a root `rspack.config.ts` without the `[rspack]` error, and there is no root `webpack.config.*`. The config is already rspack but may use rspack 1 APIs. Skip step 2 and upgrade that file in place using steps 3 to 5.
+   - **From experimental rspack**: there is a root `rspack.config.ts` without the `[rspack]` error, and there is no root `webpack.config.*`. The config is already rspack but may use rspack 1 APIs. Skip step 2 and upgrade that file in place using steps 3 to 6.
 
 With a custom config, the build is expected to fail at this point with the `[rspack]` error. Do not chase build errors one by one; the steps below drive the work.
 
@@ -70,19 +70,26 @@ With a custom config, the build is expected to fail at this point with the `[rsp
    - **rspack 2 option moves**: `experiments.cache`, `experiments.incremental` and `experiments.lazyCompilation` are now top level. `experiments.css` is replaced by `module.rules[].type: 'css' | 'css/module' | 'css/auto'`. `experiments.outputModule` is `output.module`. `output.libraryTarget`, `libraryExport` and `umdNamedDefine` move under `output.library`. `SubresourceIntegrityPlugin` is no longer under `experiments`.
    - **Persistent cache**: the base config has none. If the webpack config set `cache.type: 'filesystem'`, drop it unless the plugin clearly needs it.
 
-5. If something has no rspack equivalent, for example a monkey-patch of webpack internals, a custom `RuntimeModule` plugin, or an SWC Wasm plugin whose ABI does not match rspack's built-in SWC:
+5. Check whether the config adds a second transpiler for the plugin's own code. A rule that runs `esbuild-loader`, `babel-loader` or `ts-loader` on `.ts`, `.tsx`, `.js` or `.jsx` files outside `node_modules` overlaps with the base `builtin:swc-loader` rule. Every matching rule applies, so each file is transpiled twice, and the build still passes, so nothing flags it.
+   - Do not port the extra rule as it is.
+   - If the base `builtin:swc-loader` settings cover what the rule did, leave the rule out of `rspack.config.ts` and remove its loader package once nothing else uses it.
+   - If the rule does something the base config does not, for example a different JSX runtime or decorator support, move that setting into the `builtin:swc-loader` rule (see step 4) and leave the extra rule out.
+   - If you cannot tell, keep the rule with a `TODO(rspack):` comment above it explaining that it duplicates the base transpiler.
+   - Either way, name the rule in your report.
+
+6. If something has no rspack equivalent, for example a monkey-patch of webpack internals, a custom `RuntimeModule` plugin, or an SWC Wasm plugin whose ABI does not match rspack's built-in SWC:
    - Port what you can.
    - Comment out the rest, keeping the original code in the comment, so it does not run and the build does not fail.
    - Put a `TODO(rspack):` comment above it that says what the code did, why it has no direct equivalent, and a suggested approach.
    - Never drop it silently.
 
-6. Fix any script the codemod reported as not rewritten so it calls `rspack` with `./rspack.config.ts` or `./.config/rspack/rspack.config.ts`, keeping its other commands and flags. Remove the CLI flags rspack does not support: `--progress`, `--color`, `--bail`, `--output-pathinfo`.
+7. Fix any script the codemod reported as not rewritten so it calls `rspack` with `./rspack.config.ts` or `./.config/rspack/rspack.config.ts`, keeping its other commands and flags. Remove the CLI flags rspack does not support: `--progress`, `--color`, `--bail`, `--output-pathinfo`.
 
-7. For each file the codemod kept in `.config/webpack/`, copy what is still needed to a folder outside `.config/` (for example `build/`), port it to rspack, and update the imports. Do not delete the originals; list them so the user can delete them.
+8. For each file the codemod kept in `.config/webpack/`, copy what is still needed to a folder outside `.config/` (for example `build/`), port it to rspack, and update the imports. Do not delete the originals; list them so the user can delete them.
 
-8. Remove the webpack packages the codemod kept, once nothing imports them. Keep `webpack` itself if anything still imports it.
+9. Remove the webpack packages the codemod kept, once nothing imports them. Keep `webpack` itself if anything still imports it.
 
-9. Delete the root `webpack.config.*` and its helper files once everything in them is ported or commented with `TODO(rspack):`.
+10. Delete the root `webpack.config.*` and its helper files once everything in them is ported or commented with `TODO(rspack):`.
 
 ## Verify
 
@@ -93,7 +100,7 @@ With a custom config, the build is expected to fail at this point with the `[rsp
 
 ## Report
 
-End with a list of every `TODO(rspack):` comment you added (file, line, one-line reason), every file the user should delete, and any `exportsPresence` errors you left for the user.
+End with a list of every `TODO(rspack):` comment you added (file, line, one-line reason), every file the user should delete, any duplicate transpiler rule you removed or kept (step 5), and any `exportsPresence` errors you left for the user.
 
 ## Out of scope
 
