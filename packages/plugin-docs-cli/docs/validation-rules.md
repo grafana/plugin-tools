@@ -39,7 +39,7 @@ it before you submit your plugin, since it will block publishing.
 Panel and data source plugins must document a few fixed topics, so authors, users and agents
 find the same information in the same place across every plugin. Each topic can be a single page
 (`options.md`) or a folder (`options/`) with at least one page inside it, at the root of your
-docs folder. Pages scaffolded by `create-plugin add docs` already use these names.
+docs folder.
 
 - **Panel:** `options`, `data-formats` and `troubleshooting`
 - **Data source:** `query-editor`, `configuration` and `troubleshooting`
