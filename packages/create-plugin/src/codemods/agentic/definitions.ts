@@ -11,9 +11,12 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       args: [
         '--system-prompt',
         invocationContext.systemPrompt,
-        // pre-authorize the handoff write so the session cannot stall on a permission prompt
+        // pre-authorize the handoff write so the session cannot stall on a permission prompt.
+        // claude-code matches file permissions against Edit(...) rules only; they cover Write too
         '--allowedTools',
-        `Write(${invocationContext.handoffDir}/**)`,
+        `Edit(${invocationContext.handoffDir}/**)`,
+        // --allowedTools takes a list, so end the options or the prompt is read as more rules
+        '--',
         invocationContext.userPrompt,
       ],
     }),

@@ -40,7 +40,15 @@ describe('AGENT_DEFINITIONS', () => {
     const invocation = getDefinition('claude-code').buildInteractive(invocationContext);
     const allowedToolsIndex = invocation.args.indexOf('--allowedTools');
     expect(allowedToolsIndex).toBeGreaterThan(-1);
-    expect(invocation.args[allowedToolsIndex + 1]).toBe(`Write(${invocationContext.handoffDir}/**)`);
+    // claude-code only honours Edit(...) rules for file permission checks, and they cover Write too
+    expect(invocation.args[allowedToolsIndex + 1]).toBe(`Edit(${invocationContext.handoffDir}/**)`);
+  });
+
+  it('should end claude-code options before the user prompt', () => {
+    const invocation = getDefinition('claude-code').buildInteractive(invocationContext);
+
+    // --allowedTools takes a list, so without `--` the prompt is read as more rules and never sent
+    expect(invocation.args.slice(-2)).toEqual(['--', invocationContext.userPrompt]);
   });
 
   it('should pass the system prompt as developer instructions for codex', () => {
