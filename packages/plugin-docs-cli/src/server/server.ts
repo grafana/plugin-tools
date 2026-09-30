@@ -345,7 +345,7 @@ function sanitizeReadme(html: string): string {
   return xss(html, {
     whiteList: { ...whiteList, code: ['class'], h2: ['id'], h3: ['id'] },
     onIgnoreTag: (tag, tagHtml) => {
-      if (tag === 'input' && tagHtml.includes('disabled=""') && tagHtml.includes('type="checkbox"')) {
+      if (tag === 'input' && /^<input(?: checked="")? disabled="" type="checkbox">$/i.test(tagHtml)) {
         return tagHtml;
       }
       return undefined;
