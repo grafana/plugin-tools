@@ -34,6 +34,20 @@ it before you submit your plugin, since it will block publishing.
 | `max-total-pages`      | A docs folder shouldn't have more than 50 pages. Consolidate related pages, or move the long tail to an external resource.                  | Suggestion † |
 | `max-total-docs-size`  | The whole docs folder should stay under 10MB, including images - it ships inside the plugin archive.                                        | Warning      |
 
+## Required pages
+
+Panel and data source plugins must document a few fixed topics, so authors, users and agents
+find the same information in the same place across every plugin. Each topic can be a single page
+(`options.md`) or a folder (`options/`) with at least one page inside it, at the root of your
+docs folder. Pages scaffolded by `create-plugin add docs` already use these names.
+
+- **Panel:** `options`, `data-formats` and `troubleshooting`
+- **Data source:** `query-editor`, `configuration` and `troubleshooting`
+
+| Rule             | What it checks                                                                   | Severity |
+| ---------------- | -------------------------------------------------------------------------------- | -------- |
+| `required-pages` | Every required page for your plugin type exists at the root of your docs folder. | Error    |
+
 ## Page frontmatter
 
 Every page needs a frontmatter block (the `---`-delimited section at the top of the file).
