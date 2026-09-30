@@ -186,8 +186,8 @@ export function resolveDocHref(href: string, currentFile: string, pages: Page[],
   return `${base}${suffix}`;
 }
 
-function resolveRelativePath(path: string, currentFile: string): string | null {
-  const dir = currentFile.includes('/') ? currentFile.replace(/\/[^/]*$/, '/') : '';
+  const normalizedFile = currentFile.replace(/\\/g, '/');
+  const dir = normalizedFile.includes('/') ? normalizedFile.replace(/\/[^/]*$/, '/') : '';
   try {
     const url = new URL(path, new URL(dir, RESOLVER_ORIGIN));
     const decoded = decodeURIComponent(url.pathname).replace(/^\//, '').replace(/\/$/, '');
