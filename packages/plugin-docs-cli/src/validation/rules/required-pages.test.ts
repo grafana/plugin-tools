@@ -123,6 +123,34 @@ describe('checkRequiredPages', () => {
     expect(findings[0].title).toContain('options');
   });
 
+  it('reports an error when the folder only has a page under node_modules or dist', async () => {
+    const docsPath = await makeDocsDir();
+    await mkdir(join(docsPath, 'options', 'node_modules', 'pkg'), { recursive: true });
+    await writeFile(join(docsPath, 'options', 'node_modules', 'pkg', 'readme.md'), '# readme');
+    await mkdir(join(docsPath, 'options', 'dist'));
+    await writeFile(join(docsPath, 'options', 'dist', 'page.md'), '---\ntitle: X\n---\n');
+    await writeFile(join(docsPath, 'data-formats.md'), '---\ntitle: X\n---\n');
+    await writeFile(join(docsPath, 'troubleshooting.md'), '---\ntitle: X\n---\n');
+
+    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0].title).toContain('options');
+  });
+
+  it('reports an error when the folder only has an uppercase .MD file', async () => {
+    const docsPath = await makeDocsDir();
+    await mkdir(join(docsPath, 'options'));
+    await writeFile(join(docsPath, 'options', 'GUIDE.MD'), '---\ntitle: X\n---\n');
+    await writeFile(join(docsPath, 'data-formats.md'), '---\ntitle: X\n---\n');
+    await writeFile(join(docsPath, 'troubleshooting.md'), '---\ntitle: X\n---\n');
+
+    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0].title).toContain('options');
+  });
+
   it('reports an error when the folder only has a meta file', async () => {
     const docsPath = await makeDocsDir();
     await mkdir(join(docsPath, 'options'));

@@ -1,6 +1,6 @@
 import { readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
-import { extname, join, sep } from 'node:path';
+import { join, sep } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { isMetaFile } from './utils.js';
 
@@ -53,8 +53,10 @@ export async function checkRequiredPages(input: ValidationInput): Promise<Diagno
     const dirHasPage = entries.some(
       (e) =>
         e.isFile() &&
-        extname(e.name).toLowerCase() === '.md' &&
+        e.name.endsWith('.md') &&
         !isMetaFile(e.name) &&
+        !e.parentPath.includes('node_modules') &&
+        !e.parentPath.includes('dist') &&
         (e.parentPath === dirPath || e.parentPath.startsWith(dirPath + sep))
     );
     if (!dirHasPage) {
