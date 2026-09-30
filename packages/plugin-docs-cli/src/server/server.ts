@@ -37,6 +37,7 @@ export interface ServerOptions {
   readmePath?: string;
   port: number;
   liveReload?: boolean;
+  pluginType?: string;
 }
 
 export interface Server {
@@ -68,7 +69,7 @@ interface RenderNavItem extends NavItem {
  * the active page's h2/h3 nested underneath.
  */
 export async function startServer(options: ServerOptions): Promise<Server> {
-  const { docsPath, readmePath, port = 3001, liveReload = false } = options;
+  const { docsPath, readmePath, port = 3001, liveReload = false, pluginType } = options;
 
   debug('Starting server with options: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
 
@@ -84,7 +85,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // bury the structural problems the author actually has to fix.
   const runValidation = async () => {
     try {
-      const result = await validate({ docsPath, strict: false }, allRules);
+      const result = await validate({ docsPath, strict: false, pluginType }, allRules);
       const styleFindings = result.diagnostics.filter((d) => d.rule.startsWith('style-'));
       const rest = { ...result, diagnostics: result.diagnostics.filter((d) => !d.rule.startsWith('style-')) };
 
