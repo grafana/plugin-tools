@@ -27,7 +27,7 @@
     "lint:fix": "npm run lint -- --fix",
     "lint:package": "publint",
     "server": "docker compose up --build",
-    "sync-selectors": "node scripts/sync-e2e-selectors.mts",
+    "sync-selectors": "tsx scripts/sync-e2e-selectors.mts",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "test": "vitest --passWithNoTests",
     "playwright:test": "npx playwright test"
@@ -49,7 +49,8 @@
     "@playwright/test": "^1.58.1",
     "@types/semver": "^7.8.0",
     "dotenv": "^17.2.4",
-    "semver": "^7.8.5"
+    "semver": "^7.8.5",
+    "tsx": "^4.23.15"
   },
   "dependencies": {
     "yaml": "^2.3.4"
