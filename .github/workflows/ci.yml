@@ -85,9 +85,9 @@ jobs:
       fail-fast: false
       matrix:
         node-version:
-          - 20
           - 22
           - 24
+          - 26
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
