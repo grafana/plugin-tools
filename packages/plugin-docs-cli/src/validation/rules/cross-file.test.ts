@@ -26,6 +26,33 @@ describe('checkCrossFile', () => {
   // --- internal-links-resolve ---
 
   describe('internal-links-resolve', () => {
+    it('should resolve ../ links from a nested page', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'examples.md'), md('## Examples'));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('[examples](../examples.md)'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(0);
+    });
+
+    it('should report a broken ../ link from a nested page', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('[missing](../missing.md)'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(1);
+    });
+
+    it('should leave links that escape the docs folder to no-path-traversal', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[readme](../README.md)'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(0);
+    });
+
     it('should not report when linked file exists', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
       await writeFile(join(tmp, 'index.md'), md('[other](other.md)'));

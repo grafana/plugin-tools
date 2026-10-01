@@ -1,3 +1,5 @@
+import { posix } from 'node:path';
+
 /**
  * Repo-meta filenames that may live alongside docs pages but are never
  * themselves published as pages. Scanner and validation rules skip them so
@@ -46,6 +48,32 @@ export function maskInlineCode(line: string): string {
   return line.replace(/(`+)(.*?)\1(?!`)/g, (_match, delim: string, inner: string) => {
     return `${delim}${'#'.repeat(inner.length)}${delim}`;
   });
+}
+
+/**
+ * Returns true when a relative link or image reference, resolved against the directory of the page
+ * it appears in, lands outside the docs root. `../` that stays inside the docs folder is fine.
+ *
+ * The reference is percent-decoded first so `..%2F` cannot slip through. Root-relative (`/foo`)
+ * references are not traversal; they have their own rules.
+ */
+export function escapesDocsRoot(ref: string, pageRelPath: string): boolean {
+  const pathPart = ref.split(/[?#]/)[0];
+  let decoded = pathPart;
+  try {
+    decoded = decodeURIComponent(pathPart);
+  } catch {
+    // malformed escape: judge the raw text instead
+  }
+
+  const target = decoded.replace(/\\/g, '/');
+  if (target.startsWith('/')) {
+    return false;
+  }
+
+  const pageDir = posix.dirname(pageRelPath.replace(/\\/g, '/'));
+  const resolved = posix.normalize(posix.join(pageDir, target));
+  return resolved === '..' || resolved.startsWith('../');
 }
 
 /**

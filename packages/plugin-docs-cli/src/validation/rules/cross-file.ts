@@ -3,7 +3,7 @@ import type { Dirent } from 'node:fs';
 import { join, relative, dirname, normalize } from 'node:path';
 import GithubSlugger from 'github-slugger';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { getCodeBlockLines, isMetaFile } from './utils.js';
+import { escapesDocsRoot, getCodeBlockLines, isMetaFile } from './utils.js';
 
 // matches markdown links: [text](url)
 const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
@@ -137,8 +137,9 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
         continue;
       }
 
-      // skip non-file references (absolute paths handled by internal-links-relative)
-      if (pathPart.startsWith('/') || /^\.\.\//.test(pathPart)) {
+      // skip non-file references: absolute paths are handled by internal-links-relative and
+      // links leaving the docs folder by no-path-traversal
+      if (pathPart.startsWith('/') || escapesDocsRoot(pathPart, relPath)) {
         continue;
       }
 

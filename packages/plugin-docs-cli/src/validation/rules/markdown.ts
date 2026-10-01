@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { getCodeBlockLines, isMetaFile, matchOutsideCode } from './utils.js';
+import { escapesDocsRoot, getCodeBlockLines, isMetaFile, matchOutsideCode } from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
@@ -30,9 +30,6 @@ const BASE64_IMAGE_RE = /^data:image\/[^;]+;base64,/i;
 
 // matches external URLs (http:// or https://)
 const EXTERNAL_URL_RE = /^https?:\/\//i;
-
-// matches path traversal
-const PATH_TRAVERSAL_RE = /(?:^|\/)\.\.\//;
 
 export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
@@ -152,15 +149,15 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
         continue;
       }
 
-      // no-path-traversal: no ../ in image refs
-      if (PATH_TRAVERSAL_RE.test(ref)) {
+      // no-path-traversal: image refs must stay inside the docs folder
+      if (escapesDocsRoot(ref, relPath)) {
         diagnostics.push({
           rule: Rule.NoPathTraversal,
           severity: 'error',
           file: relPath,
           line,
           title: 'Path traversal in image reference',
-          detail: `"${ref}" contains path traversal. Image references must not use "../".`,
+          detail: `"${ref}" points outside the docs folder. Image references must stay inside it.`,
         });
         continue;
       }
@@ -207,15 +204,15 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
         continue;
       }
 
-      // no-path-traversal: no ../ in links
-      if (PATH_TRAVERSAL_RE.test(ref)) {
+      // no-path-traversal: links must stay inside the docs folder
+      if (escapesDocsRoot(ref, relPath)) {
         diagnostics.push({
           rule: Rule.NoPathTraversal,
           severity: 'error',
           file: relPath,
           line,
           title: 'Path traversal in link',
-          detail: `"${ref}" contains path traversal. Links must not use "../".`,
+          detail: `"${ref}" points outside the docs folder. Links must stay inside it.`,
         });
         continue;
       }
