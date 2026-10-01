@@ -15,7 +15,7 @@ import { allRules } from '../validation/rules/index.js';
 import { readFirstReadme } from '../utils/utils.plugin.js';
 import {
   docPageHref,
-  docsBasePath,
+  DOCS_BASE,
   docsLandingPage,
   findDocAncestors,
   findDocPage,
@@ -150,7 +150,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // serve docs assets (images) under /docs so they line up with the /docs/... page urls.
   // skip .md files so they're handled by the page route, not served raw.
   const docsStatic = express.static(docsPath, { index: false, redirect: false, dotfiles: 'ignore', extensions: [] });
-  app.use('/docs', (req, res, next) => {
+  app.use(DOCS_BASE, (req, res, next) => {
     if (req.path.endsWith('.md')) {
       return next();
     }
@@ -201,7 +201,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   });
 
   // Documentation tab: /docs is the landing page (index.md); /docs/<slug> is any other page.
-  app.get(['/docs', '/docs/{*splat}'], async (req: Request, res: Response) => {
+  app.get([DOCS_BASE, `${DOCS_BASE}/{*splat}`], async (req: Request, res: Response) => {
     try {
       const landing = docsLandingPage(manifest.pages);
       if (!landing) {
@@ -234,18 +234,17 @@ export async function startServer(options: ServerOptions): Promise<Server> {
       // route through the parser's asset rewriting so local preview exercises the same
       // code path as production. assetBaseUrl '/docs/' produces srcs that the docs
       // express.static handler mounted at /docs serves unchanged.
-      const docsBase = docsBasePath();
       const parsed = parseMarkdown(page.content, {
-        assetBaseUrl: `${docsBase}/`,
+        assetBaseUrl: `${DOCS_BASE}/`,
         file: page.file,
       });
-      rewriteHast(parsed.hast, page.file, manifest.pages, docsBase);
+      rewriteHast(parsed.hast, page.file, manifest.pages, DOCS_BASE);
 
-      const nav = toDocsNav(manifest.pages, docsBase);
-      const activeHref = docPageHref(page.slug, docsBase);
+      const nav = toDocsNav(manifest.pages, DOCS_BASE);
+      const activeHref = docPageHref(page.slug, DOCS_BASE);
       const renderNav = decorateNav(nav.items, activeHref, nav.headingsByHref);
 
-      const breadcrumb = buildBreadcrumb(manifest.pages, page.slug, docsBase);
+      const breadcrumb = buildBreadcrumb(manifest.pages, page.slug, DOCS_BASE);
 
       res.render('docs-layout', {
         ...baseLayoutContext(page.title || page.slug, 'documentation', manifest, liveReload, {

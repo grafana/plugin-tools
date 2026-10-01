@@ -11,12 +11,10 @@ const SCHEME_RE = /^[a-z][a-z0-9+.-]*:/i;
 const RESOLVER_ORIGIN = 'https://resolver.invalid/';
 
 /** The docs root path (base for all doc urls). */
-export function docsBasePath(): string {
-  return '/docs';
-}
+export const DOCS_BASE = '/docs';
 
 /** Preview href for a manifest page. The index page lives at the docs root, not at `/docs/index`. */
-export function docPageHref(pageSlug: string, docsBase: string = docsBasePath()): string {
+export function docPageHref(pageSlug: string, docsBase: string = DOCS_BASE): string {
   if (pageSlug === DOCS_INDEX_SLUG) {
     return docsBase;
   }
@@ -117,7 +115,7 @@ export interface DocsNav {
  * A category node (a directory without an `index.md`) borrows its first renderable descendant's
  * href, and that descendant is pruned from the category's children so nothing appears twice.
  */
-export function toDocsNav(pages: Page[], docsBase: string = docsBasePath()): DocsNav {
+export function toDocsNav(pages: Page[], docsBase: string = DOCS_BASE): DocsNav {
   const headingsByHref: Record<string, NavHeading[]> = {};
 
   const toItems = (nodes: Page[]): NavItem[] =>
