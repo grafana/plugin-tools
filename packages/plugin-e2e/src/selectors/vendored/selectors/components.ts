@@ -1,4 +1,4 @@
-// Vendored from grafana/grafana@54499e9f86199e96f7638442f0ac57432853a0c9/packages/grafana-e2e-selectors/src/selectors/components.ts. Do not edit - run `npm run sync-selectors`.
+// Vendored from grafana/grafana@655af3aa6da50e3de90c8e9012458c9c351f3f32/packages/grafana-e2e-selectors/src/selectors/components.ts. Do not edit - run `npm run sync-selectors`.
 // NOTE: by default Component string selectors are set up to be aria-labels,
 // however there are many cases where your component may not need an aria-label
 // (a <button> with clear text, for example, does not need an aria-label as it's already labeled)

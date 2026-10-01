@@ -1,4 +1,4 @@
-// Vendored from grafana/grafana@54499e9f86199e96f7638442f0ac57432853a0c9/packages/grafana-e2e-selectors/src/selectors/pages.ts. Do not edit - run `npm run sync-selectors`.
+// Vendored from grafana/grafana@655af3aa6da50e3de90c8e9012458c9c351f3f32/packages/grafana-e2e-selectors/src/selectors/pages.ts. Do not edit - run `npm run sync-selectors`.
 import { type VersionedSelectorGroup } from '../types';
 
 import { MIN_GRAFANA_VERSION } from './constants';
@@ -1284,6 +1284,55 @@ export const versionedPages = {
       },
       moveButton: {
         '13.2.0': 'data-testid browse dashboards move button',
+      },
+    },
+  },
+  Notebooks: {
+    List: {
+      newButton: {
+        '13.3.0': 'data-testid notebooks list new-button',
+      },
+      searchInput: {
+        '13.3.0': 'data-testid notebooks list search-input',
+      },
+      createdByMeCheckbox: {
+        '13.3.0': 'data-testid notebooks list created-by-me-checkbox',
+      },
+      table: {
+        row: {
+          '13.3.0': (uid: string) => `data-testid notebooks list row ${uid}`,
+        },
+        rowMenuButton: {
+          '13.3.0': (uid: string) => `data-testid notebooks list row-menu-button ${uid}`,
+        },
+      },
+      RowMenu: {
+        copyLink: {
+          '13.3.0': 'data-testid notebooks list row-menu copy-link',
+        },
+        delete: {
+          '13.3.0': 'data-testid notebooks list row-menu delete',
+        },
+      },
+    },
+    Item: {
+      titleEditorTrigger: {
+        '13.3.0': 'data-testid notebooks item title-editor-trigger',
+      },
+      editModeToggle: {
+        '13.3.0': 'data-testid notebooks item edit-mode-toggle',
+      },
+      toolbarKebabButton: {
+        '13.3.0': 'data-testid notebooks item toolbar-kebab-button',
+      },
+      footerAddCellButton: {
+        '13.3.0': (type: string) => `data-testid notebooks item footer-add-cell-button ${type}`,
+      },
+      panelCell: {
+        '13.3.0': (elementName: string) => `data-testid notebooks item panel-cell ${elementName}`,
+      },
+      controls: {
+        '13.3.0': 'data-testid notebooks item controls',
       },
     },
   },
