@@ -19,7 +19,7 @@ import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
 import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
 
-import RspackLiveReloadPlugin from './liveReloadPlugin.ts';
+import RspackLiveReloadPlugin from './LiveReloadRspackPlugin.ts';
 import { BuildModeRspackPlugin } from './BuildModeRspackPlugin.ts';
 import { LicenseRspackPlugin } from './LicenseRspackPlugin.ts';
 import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
