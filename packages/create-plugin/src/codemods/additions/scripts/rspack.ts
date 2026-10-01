@@ -19,9 +19,12 @@ const RSPACK_TEMPLATE_DATA_OVERRIDES = {
 const RSPACK_CONFIG_FILES = [
   '.config/rspack/rspack.config.ts',
   '.config/rspack/BuildModeRspackPlugin.ts',
-  '.config/rspack/liveReloadPlugin.ts',
+  '.config/rspack/LiveReloadRspackPlugin.ts',
   '.config/rspack/LicenseRspackPlugin.ts',
 ];
+
+// files the rspack template used to ship under another name. removed so they do not linger
+const RETIRED_RSPACK_FILES = ['.config/rspack/liveReloadPlugin.ts'];
 
 const BUNDLER_FILES = [
   '.config/bundler/constants.ts',
@@ -63,6 +66,7 @@ export default function rspack(context: Context): Context {
 
   const followUps: string[] = [];
 
+  deleteRetiredRspackFiles(context);
   renderTemplateFiles(context, RSPACK_CONFIG_FILES);
   renderTemplateFiles(context, BUNDLER_FILES);
   updateCprcConfig(context);
@@ -73,6 +77,14 @@ export default function rspack(context: Context): Context {
   reportFollowUps(context, followUps);
 
   return context;
+}
+
+function deleteRetiredRspackFiles(context: Context): void {
+  for (const filePath of RETIRED_RSPACK_FILES) {
+    if (context.doesFileExist(filePath)) {
+      context.deleteFile(filePath);
+    }
+  }
 }
 
 function reportFollowUps(context: Context, followUps: string[]): void {

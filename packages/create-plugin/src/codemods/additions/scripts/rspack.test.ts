@@ -159,7 +159,9 @@ describe('rspack', () => {
 
       expect(result.getFile('.config/rspack/rspack.config.ts')).toBe('// rendered template stub');
       expect(result.getFile('.config/rspack/BuildModeRspackPlugin.ts')).toBe('// rendered template stub');
-      expect(result.getFile('.config/rspack/liveReloadPlugin.ts')).toBe('// rendered template stub');
+      expect(result.getFile('.config/rspack/LiveReloadRspackPlugin.ts')).toBe('// rendered template stub');
+      // renamed in the template, so the experimental setup's copy is removed
+      expect(result.doesFileExist('.config/rspack/liveReloadPlugin.ts')).toBe(false);
     });
   });
 
@@ -191,7 +193,8 @@ describe('rspack', () => {
 
       expect(result.doesFileExist('.config/rspack/rspack.config.ts')).toBe(true);
       expect(result.doesFileExist('.config/rspack/BuildModeRspackPlugin.ts')).toBe(true);
-      expect(result.doesFileExist('.config/rspack/liveReloadPlugin.ts')).toBe(true);
+      expect(result.doesFileExist('.config/rspack/LiveReloadRspackPlugin.ts')).toBe(true);
+      expect(result.doesFileExist('.config/rspack/liveReloadPlugin.ts')).toBe(false);
       expect(result.doesFileExist('.config/rspack/LicenseRspackPlugin.ts')).toBe(true);
     });
   });

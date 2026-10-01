@@ -14,13 +14,15 @@ class RspackLiveReloadPlugin {
   options: RspackLiveReloadPluginOptions;
   httpServer: ReturnType<typeof createServer> | null = null;
   server: WebSocketServer | null = null;
+  // each rebuild retries the port, so live reload starts by itself once the port is free again
+  hasWarnedDisabled = false;
   constructor(options = {}) {
     this.options = Object.assign(
       {
         port: 35729,
         delay: 0,
         appendScriptTag: true,
-        protocol: 'http',
+        protocol: 'ws',
       },
       options
     );
@@ -62,6 +64,23 @@ class RspackLiveReloadPlugin {
     });
 
     this.server = new WebSocketServer({ server: this.httpServer });
+    // live reload is a convenience, so a port that is already taken must not take the watch build down.
+    // ws re-emits the http server's errors on the WebSocketServer, so both need a listener
+    const disableLiveReload = (error: NodeJS.ErrnoException) => {
+      if (!this.httpServer) {
+        return;
+      }
+      if (!this.hasWarnedDisabled) {
+        this.hasWarnedDisabled = true;
+        const reason = error.code === 'EADDRINUSE' ? `port ${port} is already in use` : error.message;
+        console.warn(`LiveReload disabled: ${reason}. The build keeps watching without reloading the browser.`);
+      }
+      this.server?.close();
+      this.server = null;
+      this.httpServer = null;
+    };
+    this.httpServer.on('error', disableLiveReload);
+    this.server.on('error', disableLiveReload);
     this.httpServer.listen(port, () => {
       console.log(`LiveReload server started on http://localhost:${port}`);
     });
