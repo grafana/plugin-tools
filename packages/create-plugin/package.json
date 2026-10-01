@@ -26,7 +26,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@babel/parser": "7.29.0",
+    "@babel/parser": "7.29.9",
     "@ivanmaxlogiudice/gitignore": "0.0.2",
     "change-case": "5.4.4",
     "debug": "4.4.3",
@@ -40,7 +40,7 @@
     "title-case": "4.3.2",
     "valibot": "1.4.2",
     "which": "7.0.0",
-    "yaml": "2.9.0"
+    "yaml": "2.9.1"
   },
   "devDependencies": {
     "@libs/find-up": "1.0.0",
