@@ -486,6 +486,22 @@ describe('checkMarkdown', () => {
       expect(findings.filter((f) => f.rule === Rule.NoPathTraversal)).toHaveLength(2);
     });
 
+    it('should report traversal when another escape in the reference is malformed', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[x](..%2Fsecret%ZZ.md)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeDefined();
+    });
+
+    it('should report backslash-rooted references', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[x](\\outside.md)\n\n![y](\\outside.png)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.NoPathTraversal)).toHaveLength(2);
+    });
+
     it('should not report ./ prefix', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('![alt](./img/pic.png)'));
