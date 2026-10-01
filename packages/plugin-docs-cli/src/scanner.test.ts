@@ -168,6 +168,7 @@ describe('scanDocsFolder', () => {
 
       expect(children[0].file).toBe('config/settings.md');
       expect(children[1].file).toBe('config/database.md');
+      expect(Object.keys(result.files).filter((file) => file.includes('\\'))).toHaveLength(0);
     });
   });
 });
