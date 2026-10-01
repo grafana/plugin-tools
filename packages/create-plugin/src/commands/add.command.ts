@@ -1,9 +1,14 @@
 import defaultAdditions, { hasPromptStep, isScriptAddition } from '../codemods/additions/additions.js';
 import { buildAdditionTodosWarning, prepareAgenticAddition, runAgenticStep } from '../codemods/agentic/index.js';
 import { buildDirectiveBlock, buildNextStepsLine, getPromptPath } from '../codemods/agentic/prompts.js';
+import { buildVerifyWarning, runVerifyScripts } from '../codemods/agentic/verify.js';
 import { Context } from '../codemods/context.js';
 import { runCodemod } from '../codemods/runner.js';
-import { getPackageManagerExecCmd, getPackageManagerFromUserAgent } from '../utils/utils.packageManager.js';
+import {
+  getPackageManagerExecCmd,
+  getPackageManagerFromUserAgent,
+  getPackageManagerWithFallback,
+} from '../utils/utils.packageManager.js';
 import { performPreCodemodChecks } from '../utils/utils.checks.js';
 import { findAdditionTodos, isGitDirectoryClean } from '../utils/utils.git.js';
 import minimist from 'minimist';
@@ -64,10 +69,22 @@ export const add = async (argv: minimist.ParsedArgs) => {
         treeWasDirty,
       });
 
-      output.success({
-        title: `Successfully added ${addition.name} to your plugin.`,
-        body: result.kind === 'applied' ? [result.summary] : undefined,
-      });
+      const summaryBody = result.kind === 'applied' ? [result.summary] : [];
+      const { packageManagerName } = getPackageManagerWithFallback();
+      const verifyWarning = buildVerifyWarning(
+        addition.name,
+        packageManagerName,
+        runVerifyScripts({ scripts: addition.verify ?? [], cwd: process.cwd(), packageManagerName })
+      );
+
+      if (verifyWarning) {
+        output.warning({ title: verifyWarning.title, body: [...summaryBody, ...verifyWarning.body] });
+      } else {
+        output.success({
+          title: `Successfully added ${addition.name} to your plugin.`,
+          body: summaryBody.length > 0 ? summaryBody : undefined,
+        });
+      }
 
       const todosWarning = buildAdditionTodosWarning(
         addition.name,
@@ -84,6 +101,7 @@ export const add = async (argv: minimist.ParsedArgs) => {
       name: addition.name,
       description: addition.description,
       instructionsPath: getPromptPath(addition.prompt),
+      verifyScripts: addition.verify ?? [],
     };
 
     if (resolution.mode === 'inside-agent') {

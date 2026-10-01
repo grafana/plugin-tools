@@ -1,6 +1,9 @@
 interface AdditionBase {
   name: string;
   description: string;
+  // package.json scripts create-plugin runs itself after an agent step, e.g. ['typecheck', 'build'].
+  // only used by additions with a prompt
+  verify?: string[];
 }
 
 export interface ScriptAddition extends AdditionBase {

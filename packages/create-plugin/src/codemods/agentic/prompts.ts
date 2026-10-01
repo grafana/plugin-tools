@@ -35,6 +35,8 @@ export interface DeferredAddition {
   name: string;
   description: string;
   instructionsPath: string;
+  // package.json scripts that prove the addition worked; create-plugin cannot run them after an outer agent
+  verifyScripts?: string[];
 }
 
 // escape user/file-derived content embedded in XML-sectioned prompts so it cannot
@@ -112,8 +114,18 @@ export function buildDirectiveBlock(deferredAddition: DeferredAddition): string 
 This \`create-plugin add\` run deferred its agent step to you, the AI agent driving this session. Read the instructions file and apply it to this workspace. No handoff file is required in this mode.
 <addition name="${deferredAddition.name}" instructions_file="${deferredAddition.instructionsPath}">
 ${escapeXmlBody(deferredAddition.description)}
-</addition>
+</addition>${buildDirectiveVerifySection(deferredAddition.verifyScripts ?? [])}
 </create_plugin_agent_directive>`;
+}
+
+function buildDirectiveVerifySection(verifyScripts: string[]): string {
+  if (verifyScripts.length === 0) {
+    return '';
+  }
+  return `
+<verify>
+When you are done, run these package.json scripts and fix any failure this addition caused: ${verifyScripts.map(escapeXmlBody).join(', ')}.
+</verify>`;
 }
 
 export function buildNextStepsLine(deferredAddition: DeferredAddition): string {
