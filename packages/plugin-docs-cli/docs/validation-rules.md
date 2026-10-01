@@ -59,6 +59,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `frontmatter-required-fields`    | `title` and `description` must be present.                                                                                                                     | Error        |
 | `frontmatter-field-types`        | `title` and `description` must be strings, and `sidebar_position` (if set) must be a number.                                                                   | Error        |
 | `frontmatter-valid-slug`         | A custom `slug` field must only use letters, digits, underscores, hyphens and forward slashes.                                                                 | Warning      |
+| `root-index-no-custom-slug`      | Your root `index.md` can't set a custom `slug`. It's your documentation landing page, and renaming it hides the Documentation tab on grafana.com.              | Error        |
 | `no-h1-heading`                  | Don't add a `# Heading` in the page body - the page title already comes from frontmatter, and any h1 you add will be stripped and replaced. Use `##` or lower. | Warning      |
 | `no-duplicate-sidebar-position`  | Pages in the same folder can't share a `sidebar_position` - each needs a unique value to control its order.                                                    | Warning †    |
 | `no-duplicate-slugs`             | A custom `slug` must be unique across all of your pages.                                                                                                       | Error        |
