@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
 import { marked } from 'marked';
-import xss, { whiteList } from 'xss';
+import xss, { type IWhiteList } from 'xss';
 import Slugger from 'github-slugger';
 import { parseMarkdown, type Manifest, type Page } from '@grafana/plugin-docs-parser';
 import { toHtml } from 'hast-util-to-html';
@@ -343,6 +343,9 @@ function renderReadme(source: string): ReadmeResult {
 
 // mirrors gcom's readme sanitizing (plugin-version.model.ts markdown2Html) so the preview strips what
 // grafana.com strips. h2/h3 also keep their id, which the "on this page" rail links to.
+// xss is CommonJS and Node's ESM loader can't see its named exports, so read whiteList off the default
+const { whiteList } = xss as typeof xss & { whiteList: IWhiteList };
+
 function sanitizeReadme(html: string): string {
   return xss(html, {
     whiteList: { ...whiteList, code: ['class'], h2: ['id'], h3: ['id'] },
