@@ -207,6 +207,13 @@ describe('deferred addition output', () => {
     expect(directive).toContain('instructions_file="/a/rspack-overrides.md"');
     expect(directive).toContain('Port custom webpack &lt;overrides&gt; &amp; loaders.');
     expect(directive).toContain('No handoff file is required');
+    expect(directive).not.toContain('<verify>');
+  });
+
+  it('should ask the outer agent to run the verify scripts when the addition has any', () => {
+    const directive = buildDirectiveBlock({ ...deferredAddition, verifyScripts: ['typecheck', 'build'] });
+
+    expect(directive).toMatch(/<verify>\n.*typecheck, build\.\n<\/verify>\n<\/create_plugin_agent_directive>/);
   });
 
   it('should render a manual next-steps line', () => {
