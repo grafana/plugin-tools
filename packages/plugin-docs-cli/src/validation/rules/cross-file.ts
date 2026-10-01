@@ -117,7 +117,9 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
       }
 
       // split ref into path and optional anchor: "page.md#section" -> ["page.md", "section"]
-      const [pathPart, anchor] = ref.split('#', 2);
+      const [rawPath, anchor] = ref.split('#', 2);
+      // a query string is not part of the file path
+      const pathPart = rawPath.split('?')[0];
 
       // anchor-links-resolve: same-file anchor (#section)
       if (!pathPart) {

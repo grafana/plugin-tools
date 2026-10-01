@@ -36,6 +36,19 @@ describe('checkCrossFile', () => {
       expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(0);
     });
 
+    it('should ignore a query string when resolving a link', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'examples.md'), md('## Examples'));
+      await writeFile(
+        join(tmp, 'options', 'legend.md'),
+        md('[up](../examples.md?preview=1) [side](./legend.md?x=1#top)')
+      );
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(0);
+    });
+
     it('should report a broken ../ link from a nested page', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
       await mkdir(join(tmp, 'options'));
