@@ -49,6 +49,17 @@ describe('checkCrossFile', () => {
       expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(0);
     });
 
+    it('should resolve percent-encoded links to the decoded file', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'examples.md'), md('## Examples'));
+      await writeFile(join(tmp, 'my page.md'), md('## Page'));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('[a](../examples%2Emd) [b](../my%20page.md)'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(0);
+    });
+
     it('should report a broken ../ link from a nested page', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
       await mkdir(join(tmp, 'options'));
