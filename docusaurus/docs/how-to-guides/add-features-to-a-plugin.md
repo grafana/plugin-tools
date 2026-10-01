@@ -95,6 +95,10 @@ If you ask your own coding agent to add a feature to your plugin, `create-plugin
 
 To prevent this and get the instructions yourself, use the `--no-agent` flag.
 
+### Review what the agent couldn't apply
+
+Instructions ask the agent to mark anything it couldn't apply with a `TODO(<addition>):` comment, and to keep the build passing. When an agent that `create-plugin` started finishes, `create-plugin` searches your repository for these comments and lists them, so that you can follow them up.
+
 ## Reference
 
 For the full list of flags, refer to [CLI commands](../reference/cli-commands.mdx).
