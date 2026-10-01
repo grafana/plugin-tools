@@ -61,6 +61,10 @@ An addition can take one of three forms:
 
 If an addition includes instructions and you have a supported agent CLI installed, `create-plugin` asks whether to use it. Supported agents are Claude Code and OpenAI Codex.
 
+Before it asks, `create-plugin` names each agent it found and the path of the program it runs. The agent runs on your own account, and it can edit files and run commands in your repository.
+
+`create-plugin` finds agents on your `PATH`, so it can't see a shell function or alias that wraps one. If the path isn't the program you expect, pass the right one with the `--agent` flag.
+
 The agent runs in your terminal, so you can watch what it does and redirect it. It reports a summary when it finishes.
 
 To select an agent without the question, use the `--agent` flag:
@@ -98,6 +102,8 @@ To prevent this and get the instructions yourself, use the `--no-agent` flag.
 ### Review what the agent couldn't apply
 
 Instructions ask the agent to mark anything it couldn't apply with a `TODO(<addition>):` comment, and to keep the build passing. When an agent that `create-plugin` started finishes, `create-plugin` searches your repository for these comments and lists them, so that you can follow them up.
+
+Some additions also list checks, such as your `typecheck` and `build` scripts. When the agent finishes, `create-plugin` runs these checks itself, so the result doesn't depend only on the agent's own report. If a check fails, or your `package.json` doesn't have the script, `create-plugin` shows a warning instead of a success message.
 
 ## Reference
 
