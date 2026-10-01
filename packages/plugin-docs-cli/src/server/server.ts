@@ -120,10 +120,12 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // validate on startup
   await runValidation();
 
-  // watch the README candidates too, even ones that don't exist yet, so adding one triggers a reload
-  const watchPaths = [join(docsPath, '**/*.md'), ...readmePaths];
+  // chokidar has no glob support, so watch the docs folder and skip non-markdown files. the README
+  // candidates are watched too, even ones that don't exist yet, so adding one triggers a reload.
+  const watchPaths = [docsPath, ...readmePaths];
   const watcher = watch(watchPaths, {
     ignoreInitial: true,
+    ignored: (path, stats) => Boolean(stats?.isFile() && !path.endsWith('.md')),
   });
   debug('File watcher initialized for %O', watchPaths);
 

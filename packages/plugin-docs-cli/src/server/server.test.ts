@@ -311,6 +311,27 @@ describe('startServer', () => {
     expect(response.text).toContain('location.reload()');
   });
 
+  it('should signal a reload when a docs page changes', async () => {
+    const liveDocsPath = await mkdtemp(join(tmpdir(), 'docs-live-'));
+    const pagePath = join(liveDocsPath, 'index.md');
+    await writeFile(pagePath, '---\ntitle: Overview\ndescription: Live page\n---\n\nFirst version.\n');
+    const result = await startServer({ docsPath: liveDocsPath, port: 0, liveReload: true });
+    server = result;
+    app = result.app;
+
+    const since = Date.now();
+    let status = 0;
+    // the watcher can still be starting up, so keep editing until a change is picked up
+    for (let attempt = 0; attempt < 20 && status !== 205; attempt++) {
+      await writeFile(pagePath, `---\ntitle: Overview\ndescription: Live page\n---\n\nVersion ${attempt}.\n`);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      status = (await request(app).get(`/__reload__?t=${since}`)).status;
+    }
+
+    expect(status).toBe(205);
+    expect((await request(app).get('/docs')).text).toContain('Version');
+  });
+
   it('should have a live reload endpoint when enabled', async () => {
     const result = await startServer({ docsPath: testDocsPath, port: 0, liveReload: true });
     server = result;
