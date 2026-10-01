@@ -199,6 +199,19 @@ describe('rspack', () => {
     });
   });
 
+  describe('docs for agents and developers', () => {
+    it('should re-render the agent instructions and .config README for rspack', () => {
+      const context = createBaseContext();
+      context.addFile('.config/AGENTS/instructions.md', '**You must use webpack**');
+      context.addFile('.config/README.md', '### Extending the Webpack config');
+
+      const result = addRspack(context);
+
+      expect(result.getFile('.config/AGENTS/instructions.md')).toBe('// rendered template stub');
+      expect(result.getFile('.config/README.md')).toBe('// rendered template stub');
+    });
+  });
+
   describe('bundler files', () => {
     it('should update externals.ts with rspack imports', () => {
       const context = createBaseContext();

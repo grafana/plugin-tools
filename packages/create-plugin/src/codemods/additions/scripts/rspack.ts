@@ -26,6 +26,9 @@ const RSPACK_CONFIG_FILES = [
 // files the rspack template used to ship under another name. removed so they do not linger
 const RETIRED_RSPACK_FILES = ['.config/rspack/liveReloadPlugin.ts'];
 
+// markdown in .config that describes the bundler, for agents and for developers
+const DOC_FILES = ['.config/AGENTS/instructions.md', '.config/README.md'];
+
 const BUNDLER_FILES = [
   '.config/bundler/constants.ts',
   '.config/bundler/copyFiles.ts',
@@ -69,6 +72,7 @@ export default function rspack(context: Context): Context {
   deleteRetiredRspackFiles(context);
   renderTemplateFiles(context, RSPACK_CONFIG_FILES);
   renderTemplateFiles(context, BUNDLER_FILES);
+  renderTemplateFiles(context, DOC_FILES, false);
   updateCprcConfig(context);
 
   followUps.push(...addRootRspackConfigStub(context));
@@ -120,9 +124,9 @@ const resolveTemplatePath = (relativePath: string) =>
   fileURLToPath(new URL(`../../../../templates/common/${relativePath}`, import.meta.url));
 
 // updateFile is a no-op for identical content, so re-rendering on every run keeps the addition idempotent
-function renderTemplateFiles(context: Context, filePaths: string[]): void {
+function renderTemplateFiles(context: Context, filePaths: string[], includeWarning = true): void {
   for (const filePath of filePaths) {
-    const rendered = renderTemplate(resolveTemplatePath(filePath), true, RSPACK_TEMPLATE_DATA_OVERRIDES);
+    const rendered = renderTemplate(resolveTemplatePath(filePath), includeWarning, RSPACK_TEMPLATE_DATA_OVERRIDES);
     if (context.doesFileExist(filePath)) {
       context.updateFile(filePath, rendered);
     } else {
