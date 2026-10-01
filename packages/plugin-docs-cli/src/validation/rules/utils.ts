@@ -63,7 +63,9 @@ export function escapesDocsRoot(ref: string, pageRelPath: string): boolean {
   try {
     decoded = decodeURIComponent(pathPart);
   } catch {
-    // malformed escape: judge the raw text instead
+    decoded = pathPart.replace(/%([0-9a-f]{2})/gi, (_match, hex: string) =>
+      String.fromCharCode(Number.parseInt(hex, 16))
+    );
   }
 
   const target = decoded.replace(/\\/g, '/');
