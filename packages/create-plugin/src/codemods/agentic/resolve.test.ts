@@ -1,6 +1,6 @@
 import { confirmPrompt, output, selectPrompt } from '../../utils/utils.console.js';
 import { resolveAgentFromPath } from './detect.js';
-import { resolveAgenticMode } from './resolve.js';
+import { NO_AGENT_CHOICE, resolveAgenticMode } from './resolve.js';
 import { AgentId, InstalledAgent } from './types.js';
 
 vi.mock('./detect.js', async (importOriginal) => ({
@@ -20,6 +20,7 @@ vi.mock('../../utils/utils.console.js', () => ({
 const confirmPromptMock = vi.mocked(confirmPrompt);
 const selectPromptMock = vi.mocked(selectPrompt);
 const outputWarningMock = vi.mocked(output.warning);
+const outputLogMock = vi.mocked(output.log);
 const resolveAgentFromPathMock = vi.mocked(resolveAgentFromPath);
 
 function createInstalledAgent(id: AgentId, displayName: string): InstalledAgent {
@@ -129,33 +130,54 @@ describe('resolveAgenticMode', () => {
     expect(confirmPromptMock).not.toHaveBeenCalled();
   });
 
-  it('should enable after the user opts in via the confirm prompt', async () => {
+  it('should name the only installed agent in the confirm prompt', async () => {
     confirmPromptMock.mockResolvedValue(true);
     const resolution = await resolveAgenticMode(createOptions({ detect: vi.fn().mockResolvedValue([claude]) }));
+    expect(confirmPromptMock).toHaveBeenCalledWith('Apply the instructions with Claude Code?');
+    expect(selectPromptMock).not.toHaveBeenCalled();
     expect(resolution).toEqual({ mode: 'enabled', agent: claude });
+  });
+
+  it('should warn what the agent can do and which binary runs before asking', async () => {
+    confirmPromptMock.mockResolvedValue(true);
+    await resolveAgenticMode(createOptions({ detect: vi.fn().mockResolvedValue([claude]) }));
+    const [logged] = outputLogMock.mock.calls[0];
+    expect(logged.body).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/your own account.*edit files and run commands/),
+        'Claude Code: /usr/local/bin/claude-code',
+      ])
+    );
+    expect(outputLogMock.mock.invocationCallOrder[0]).toBeLessThan(confirmPromptMock.mock.invocationCallOrder[0]);
   });
 
   it('should resolve to opted-out when the user declines the confirm prompt', async () => {
     confirmPromptMock.mockResolvedValue(false);
-    const resolution = await resolveAgenticMode(createOptions());
+    const resolution = await resolveAgenticMode(createOptions({ detect: vi.fn().mockResolvedValue([claude]) }));
     expect(resolution).toEqual({ mode: 'opted-out', reason: 'declined' });
   });
 
   it('should treat a cancelled confirm prompt as declined', async () => {
     confirmPromptMock.mockRejectedValue(new Error(''));
+    const resolution = await resolveAgenticMode(createOptions({ detect: vi.fn().mockResolvedValue([claude]) }));
+    expect(resolution).toEqual({ mode: 'opted-out', reason: 'declined' });
+  });
+
+  it('should ask once with every installed agent and a decline choice when several are installed', async () => {
+    selectPromptMock.mockResolvedValue('OpenAI Codex');
+    const resolution = await resolveAgenticMode(createOptions());
+    expect(confirmPromptMock).not.toHaveBeenCalled();
+    expect(selectPromptMock).toHaveBeenCalledWith(expect.any(String), ['Claude Code', 'OpenAI Codex', NO_AGENT_CHOICE]);
+    expect(resolution).toEqual({ mode: 'enabled', agent: codex });
+  });
+
+  it('should resolve to opted-out when the user picks the decline choice', async () => {
+    selectPromptMock.mockResolvedValue(NO_AGENT_CHOICE);
     const resolution = await resolveAgenticMode(createOptions());
     expect(resolution).toEqual({ mode: 'opted-out', reason: 'declined' });
   });
 
-  it('should show the picker after opt-in when multiple agents are installed', async () => {
-    confirmPromptMock.mockResolvedValue(true);
-    selectPromptMock.mockResolvedValue('Claude Code');
-    const resolution = await resolveAgenticMode(createOptions());
-    expect(resolution).toEqual({ mode: 'enabled', agent: claude });
-  });
-
   it('should treat a cancelled picker as declined', async () => {
-    confirmPromptMock.mockResolvedValue(true);
     selectPromptMock.mockRejectedValue(new Error(''));
     const resolution = await resolveAgenticMode(createOptions());
     expect(resolution).toEqual({ mode: 'opted-out', reason: 'declined' });

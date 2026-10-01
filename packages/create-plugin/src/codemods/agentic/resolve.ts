@@ -60,12 +60,37 @@ export async function resolveAgenticMode(options: ResolveAgenticOptions): Promis
     return { mode: 'unavailable', reason: 'no-agents' };
   }
 
-  const optedIn = await safeConfirm('This addition includes AI-agent instructions. Apply them with an agent?');
-  if (!optedIn) {
-    return { mode: 'opted-out', reason: 'declined' };
+  return optInInteractively(installedAgents);
+}
+
+export const NO_AGENT_CHOICE = "Don't use an agent";
+
+// names the agent and its binary before asking, so the user knows exactly what will run on their behalf
+async function optInInteractively(installedAgents: InstalledAgent[]): Promise<AgenticResolution> {
+  output.log({
+    title: 'This addition includes instructions for an AI agent.',
+    body: [
+      'The agent runs on your own account and can edit files and run commands in this repository.',
+      ...installedAgents.map((agent) => `${agent.definition.displayName}: ${agent.binaryPath}`),
+    ],
+  });
+
+  if (installedAgents.length === 1) {
+    const [installedAgent] = installedAgents;
+    const optedIn = await safeConfirm(`Apply the instructions with ${installedAgent.definition.displayName}?`);
+    if (!optedIn) {
+      return { mode: 'opted-out', reason: 'declined' };
+    }
+    return { mode: 'enabled', agent: installedAgent };
   }
 
-  return resolveFromPick(installedAgents);
+  const pickedAgent = await safeSelectAgent('Which agent should apply the instructions?', installedAgents, [
+    NO_AGENT_CHOICE,
+  ]);
+  if (!pickedAgent) {
+    return { mode: 'opted-out', reason: 'declined' };
+  }
+  return { mode: 'enabled', agent: pickedAgent };
 }
 
 function looksLikePath(agentFlag: string): boolean {
@@ -106,12 +131,20 @@ async function pickAgent(installedAgents: InstalledAgent[]): Promise<InstalledAg
     return installedAgents[0];
   }
 
+  return safeSelectAgent('Multiple agents are installed. Which one should apply this addition?', installedAgents);
+}
+
+async function safeSelectAgent(
+  message: string,
+  installedAgents: InstalledAgent[],
+  extraChoices: string[] = []
+): Promise<InstalledAgent | undefined> {
   try {
-    const displayName = await selectPrompt(
-      'Multiple agents are installed. Which one should apply this addition?',
-      installedAgents.map((agent) => agent.definition.displayName)
-    );
-    return installedAgents.find((agent) => agent.definition.displayName === displayName);
+    const choice = await selectPrompt(message, [
+      ...installedAgents.map((agent) => agent.definition.displayName),
+      ...extraChoices,
+    ]);
+    return installedAgents.find((agent) => agent.definition.displayName === choice);
   } catch {
     // enquirer rejects when the prompt is cancelled (ctrl+c) — treat as a decline
     return undefined;

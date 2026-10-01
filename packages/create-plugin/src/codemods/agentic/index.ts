@@ -83,7 +83,7 @@ export async function runAgenticStep(options: AgenticStepOptions): Promise<Agent
     : buildPromptOnlyUserPrompt(userPromptOptions);
 
   output.log({
-    title: `Handing ${addition.name} to ${agent.definition.displayName}.`,
+    title: `Handing ${addition.name} to ${agent.definition.displayName} (${agent.binaryPath}).`,
     body: [
       'The session is interactive: you can watch and redirect the agent.',
       'It ends automatically once the agent reports completion.',
