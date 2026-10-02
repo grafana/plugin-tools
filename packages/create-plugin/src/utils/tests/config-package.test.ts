@@ -109,6 +109,26 @@ describe('.config workspace package', () => {
     });
   });
 
+  describe('eslint config', () => {
+    const render = (file: string) =>
+      renderTemplateFromFile(path.join(TEMPLATE_PATHS.common, file), templateData('npm', '10.9.0'));
+
+    it('ignores tooling output once, in the shared config', () => {
+      const sharedConfig = render('.config/eslint.config.mjs');
+
+      expect(sharedConfig).toContain('globalIgnores([');
+      expect(sharedConfig).toContain("'**/dist/'");
+      expect(sharedConfig).toContain("'playwright-report/'");
+    });
+
+    it("keeps the plugin's eslint config to the shared config and its own additions", () => {
+      const pluginConfig = render('eslint.config.mjs');
+
+      expect(pluginConfig).toContain(`import baseConfig from '${CONFIG_PACKAGE}/eslint';`);
+      expect(pluginConfig).not.toContain("'**/dist/'");
+    });
+  });
+
   describe('config package manifest', () => {
     it('exports every config a plugin wrapper imports', () => {
       const manifest = JSON.parse(
