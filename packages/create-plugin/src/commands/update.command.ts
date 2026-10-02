@@ -17,7 +17,7 @@ import { resolveProject } from '../utils/utils.project.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
   const project = resolveProject();
-  await performPreCodemodChecks(argv, project.root);
+  await performPreCodemodChecks(argv, project);
   const { version } = getConfig(project.root);
 
   if (lt(version, LEGACY_UPDATE_CUTOFF_VERSION)) {
@@ -78,7 +78,7 @@ function preparePluginForMigrations(argv: minimist.ParsedArgs, rootPath: string)
     installCmd,
   ];
   const gitCmdList = [
-    'git add -A',
+    'git add -A -- .',
     `git commit -m 'chore: run create-plugin@${LEGACY_UPDATE_CUTOFF_VERSION} update' --no-verify`,
   ];
 

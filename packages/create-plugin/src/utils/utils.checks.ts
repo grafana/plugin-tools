@@ -1,12 +1,16 @@
 import minimist from 'minimist';
-import { isGitDirectory, isGitDirectoryClean } from './utils.git.js';
+import { getProjectGitPaths, isGitDirectory, isGitDirectoryClean } from './utils.git.js';
+import { ProjectLayout, resolveProject } from './utils.project.js';
 import { isPluginDirectory } from './utils.plugin.js';
 import { output } from './utils.console.js';
 
 /**
  * Ensures git directory exists, is clean, and we're in a plugin directory
  */
-export async function performPreCodemodChecks(argv: minimist.ParsedArgs, rootPath = process.cwd()): Promise<void> {
+export async function performPreCodemodChecks(
+  argv: minimist.ParsedArgs,
+  project: ProjectLayout = resolveProject()
+): Promise<void> {
   if (!(await isGitDirectory()) && !argv.force) {
     output.error({
       title: 'You are not inside a git directory',
@@ -20,7 +24,7 @@ export async function performPreCodemodChecks(argv: minimist.ParsedArgs, rootPat
     process.exit(1);
   }
 
-  if (!(await isGitDirectoryClean()) && !argv.force) {
+  if (!(await isGitDirectoryClean({ cwd: project.root, paths: getProjectGitPaths(project) })) && !argv.force) {
     output.error({
       title: 'Please clean your repository working tree before making changes.',
       body: [
@@ -33,7 +37,7 @@ export async function performPreCodemodChecks(argv: minimist.ParsedArgs, rootPat
     process.exit(1);
   }
 
-  if (!isPluginDirectory(rootPath) && !argv.force) {
+  if (!isPluginDirectory(project.root) && !argv.force) {
     output.error({
       title: 'Are you inside a plugin directory?',
       body: [
