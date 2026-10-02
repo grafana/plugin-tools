@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    # One lockfile at the repository root covers every plugin and shared package.
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+{{#if hasBackend}}
+  - package-ecosystem: 'gomod'
+    # Each backend plugin has its own go.mod.
+    directories:
+      - '/plugins/*'
+    schedule:
+      interval: 'weekly'
+{{/if}}

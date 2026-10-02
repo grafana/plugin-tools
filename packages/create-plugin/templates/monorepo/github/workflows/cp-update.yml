@@ -1,0 +1,23 @@
+{{!-- /* 🚨 The `${{ }}` Github workflow expressions need to be escaped so they are not being interpreted by Handlebars. (this comment is going to be removed after scaffolding) 🚨 */ --}}
+name: Create Plugin Update
+
+# Runs `create-plugin update` from the repository root, which updates the shared .config and every plugin.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *' # run once a month on the 1st day
+
+# To use this workflow please create a fine-grained personal access token (https://github.com/settings/personal-access-tokens/new)
+# with "Contents" and "Pull requests" repository permissions set to "Read and write", then add it as a GH_PAT_TOKEN
+# secret (https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: grafana/plugin-actions/create-plugin-update@create-plugin-update/v2.0.2
+        with:
+          token: $\{{ secrets.GH_PAT_TOKEN }}
