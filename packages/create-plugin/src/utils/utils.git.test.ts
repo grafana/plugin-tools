@@ -1,23 +1,28 @@
-import { exec } from 'node:child_process';
+import { execFile } from 'node:child_process';
 import { findAdditionTodos } from './utils.git.js';
 
-vi.mock('node:child_process', () => ({ exec: vi.fn() }));
+vi.mock('node:child_process', () => ({ execFile: vi.fn() }));
 
-type ExecCallback = (error: Error | null, result?: { stdout: string; stderr: string }) => void;
+type ExecFileCallback = (error: Error | null, result?: { stdout: string; stderr: string }) => void;
 
 function mockExec(outcome: { stdout: string } | { error: Error }) {
-  vi.mocked(exec).mockImplementation(((_command: string, _options: unknown, callback: ExecCallback) => {
+  vi.mocked(execFile).mockImplementation(((
+    _file: string,
+    _args: string[],
+    _options: unknown,
+    callback: ExecFileCallback
+  ) => {
     if ('error' in outcome) {
       callback(outcome.error);
     } else {
       callback(null, { stdout: outcome.stdout, stderr: '' });
     }
-  }) as unknown as typeof exec);
+  }) as unknown as typeof execFile);
 }
 
 describe('findAdditionTodos', () => {
   afterEach(() => {
-    vi.mocked(exec).mockReset();
+    vi.mocked(execFile).mockReset();
   });
 
   it('should search tracked and untracked files for the addition marker', async () => {
@@ -25,8 +30,9 @@ describe('findAdditionTodos', () => {
 
     await findAdditionTodos('rspack', '/plugin');
 
-    expect(exec).toHaveBeenCalledWith(
-      'git grep -n --untracked -F "TODO(rspack)"',
+    expect(execFile).toHaveBeenCalledWith(
+      'git',
+      ['grep', '-n', '--untracked', '-F', 'TODO(rspack)'],
       { cwd: '/plugin' },
       expect.any(Function)
     );
