@@ -4,7 +4,7 @@ import path from 'path';
 import { vi } from 'vitest';
 
 import { CURRENT_APP_VERSION } from '../utils.version.js';
-import { getConfig, UserConfig, CreatePluginConfig } from '../utils.config.js';
+import { getConfig, setRootConfig, UserConfig, CreatePluginConfig } from '../utils.config.js';
 import { DEFAULT_FEATURE_FLAGS } from '../../constants.js';
 
 const mocks = vi.hoisted(() => {
@@ -129,5 +129,24 @@ describe('getConfig', () => {
 
       expect(config).toEqual({ ...rootConfig, ...userConfig });
     });
+  });
+});
+
+describe('setRootConfig', () => {
+  beforeEach(async () => {
+    mocks.commandName = 'update';
+    mocks.argv = {};
+    await fs.rm(tmpDir, { recursive: true, force: true });
+    await fs.mkdir(path.join(tmpDir, '.config'), { recursive: true });
+  });
+
+  it('should write the root config to the given directory', async () => {
+    const rootConfigPath = path.join(tmpDir, '.config', '.cprc.json');
+    await fs.writeFile(rootConfigPath, JSON.stringify({ version: '1.0.0', features: { bundleGrafanaUI: true } }));
+
+    await setRootConfig({ version: '2.0.0' }, tmpDir);
+
+    const written = JSON.parse(await fs.readFile(rootConfigPath, 'utf-8'));
+    expect(written).toEqual({ version: '2.0.0', features: { bundleGrafanaUI: true } });
   });
 });

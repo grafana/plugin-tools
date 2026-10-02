@@ -53,7 +53,7 @@ export default function appSdk(context: Context): Context {
 
   // Only guide the user when we actually scaffolded something; a re-run should stay quiet.
   if (Object.keys(context.listChanges()).length > changesBefore) {
-    context.setMessage(buildNextStepsMessage(hasGoBackend(context)));
+    context.setMessage(buildNextStepsMessage(hasGoBackend(context), context.basePath));
   }
 
   return context;
@@ -105,7 +105,7 @@ function addTemplateFiles(context: Context) {
       continue;
     }
 
-    context.addFile(file, renderTemplate(templatePath(file), includeWarning));
+    context.addFile(file, renderTemplate(templatePath(file), includeWarning, context.basePath));
   }
 }
 
@@ -130,7 +130,7 @@ function referenceAgentInstructions(context: Context) {
   }
 
   if (!context.doesFileExist(APP_SDK_MD)) {
-    context.addFile(APP_SDK_MD, renderTemplate(templatePath(APP_SDK_MD), false));
+    context.addFile(APP_SDK_MD, renderTemplate(templatePath(APP_SDK_MD), false, context.basePath));
   }
 
   if (instructions.includes(APP_SDK_MD)) {
@@ -280,7 +280,7 @@ function addAppProvider(context: Context) {
     return;
   }
 
-  context.addFile(path, renderTemplate(templatePath(path), false));
+  context.addFile(path, renderTemplate(templatePath(path), false, context.basePath));
 }
 
 // Stub doc.go files under pkg/generated/. Both are real packages `generate:kinds` fills in; they
@@ -302,7 +302,7 @@ function addGeneratedStubs(context: Context) {
       continue;
     }
 
-    context.addFile(path, renderTemplate(templatePath(path), false));
+    context.addFile(path, renderTemplate(templatePath(path), false, context.basePath));
   }
 }
 
@@ -398,8 +398,8 @@ ${errorBody}\t}`
 }
 
 /** Builds the message telling the user what to run next. */
-function buildNextStepsMessage(hasGoBackend: boolean): ContextMessage {
-  const { packageManagerName } = getTemplateData();
+function buildNextStepsMessage(hasGoBackend: boolean, rootPath: string): ContextMessage {
+  const { packageManagerName } = getTemplateData(undefined, rootPath);
   const versionBadge = styleText(['reset', 'inverse', 'bold', 'cyan'], ` grafana-app-sdk@${GRAFANA_APP_SDK_VERSION} `);
 
   const commands = output.bulletList([
