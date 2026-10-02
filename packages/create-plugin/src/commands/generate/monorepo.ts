@@ -105,6 +105,10 @@ export function createPluginPackageJson(pluginPackageJson: PackageJson, template
       isYarnBerry(templateData) ? useTopLevelBins(script) : script,
     ])
   );
+  // Plugins in a monorepo share the Grafana defined at the repository root.
+  if (scripts.server) {
+    scripts.server = 'docker compose -f ../../docker-compose.yaml up --build';
+  }
 
   return {
     ...rest,
