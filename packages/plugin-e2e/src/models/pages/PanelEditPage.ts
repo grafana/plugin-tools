@@ -8,6 +8,7 @@ import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
 import { DashboardPage } from './DashboardPage';
 import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
+import { GetPanelDataOptions, PanelData } from '../components/panelData';
 
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
@@ -246,9 +247,16 @@ export class PanelEditPage extends GrafanaPage {
     options?: RequestOptions & Pick<GetPanelDataOptions, 'states'>
   ): Promise<{ response: Response; body: T | null; data: PanelData }> {
     const revision = await this.panel.getDataRevision();
-    const matchesResponse =
-      options?.waitForResponsePredicateCallback ??
-      ((resp: Response) => resp.url().includes(this.ctx.selectors.apis.DataSource.query));
+    const predicate = options?.waitForResponsePredicateCallback ?? this.ctx.selectors.apis.DataSource.query;
+    const matchesResponse = (resp: Response) => {
+      if (typeof predicate === 'string') {
+        return resp.url().includes(predicate);
+      }
+      if (predicate instanceof RegExp) {
+        return predicate.test(resp.url());
+      }
+      return predicate(resp);
+    };
     let body: T | null = null;
 
     const response = await this.refreshPanel({

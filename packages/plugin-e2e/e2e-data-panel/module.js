@@ -8,14 +8,14 @@
 define(['react', '@grafana/data'], function (React, grafanaData) {
   'use strict';
 
-  var SCHEMA_VERSION = 1;
-  var META_KEYS = ['type', 'preferredVisualisationType', 'notices', 'custom'];
-  var CONFIG_KEYS = ['unit', 'displayName', 'displayNameFromDS', 'decimals', 'min', 'max', 'interval'];
-  var ERROR_KEYS = ['refId', 'message', 'status'];
-  var h = React.createElement;
+  let SCHEMA_VERSION = 1;
+  let META_KEYS = ['type', 'preferredVisualisationType', 'notices', 'custom'];
+  let CONFIG_KEYS = ['unit', 'displayName', 'displayNameFromDS', 'decimals', 'min', 'max', 'interval'];
+  let ERROR_KEYS = ['refId', 'message', 'status'];
+  let h = React.createElement;
 
   function pick(source, keys) {
-    var result = {};
+    let result = {};
     keys.forEach(function (key) {
       if (source && source[key] !== undefined) {
         result[key] = source[key];
@@ -25,7 +25,9 @@ define(['react', '@grafana/data'], function (React, grafanaData) {
   }
 
   function isDataFrame(value) {
-    return Boolean(value) && typeof value === 'object' && Array.isArray(value.fields) && typeof value.length === 'number';
+    return (
+      Boolean(value) && typeof value === 'object' && Array.isArray(value.fields) && typeof value.length === 'number'
+    );
   }
 
   // grafana < 10 stores field values in a Vector, not a plain array
@@ -54,7 +56,7 @@ define(['react', '@grafana/data'], function (React, grafanaData) {
 
   function serializeLinks(links) {
     return links.map(function (link) {
-      var result = pick(link, ['title', 'url']);
+      let result = pick(link, ['title', 'url']);
       if (link.internal) {
         result.internal = pick(link.internal, ['datasourceUid']);
       }
@@ -71,7 +73,7 @@ define(['react', '@grafana/data'], function (React, grafanaData) {
   }
 
   function serializeField(field, frame, frames) {
-    var config = pick(field.config, CONFIG_KEYS);
+    let config = pick(field.config, CONFIG_KEYS);
     if (field.config && Array.isArray(field.config.links) && field.config.links.length > 0) {
       config.links = serializeLinks(field.config.links);
     }
@@ -86,7 +88,7 @@ define(['react', '@grafana/data'], function (React, grafanaData) {
   }
 
   function serializeFrame(frame, frames) {
-    var meta = pick(frame.meta, META_KEYS);
+    let meta = pick(frame.meta, META_KEYS);
     return {
       refId: frame.refId,
       name: frame.name,
@@ -99,8 +101,8 @@ define(['react', '@grafana/data'], function (React, grafanaData) {
   }
 
   function serializePanelData(data) {
-    var series = (data && data.series) || [];
-    var errors = (data && data.errors) || (data && data.error ? [data.error] : []);
+    let series = (data && data.series) || [];
+    let errors = (data && data.errors) || (data && data.error ? [data.error] : []);
     return {
       schemaVersion: SCHEMA_VERSION,
       requestId: data && data.request ? data.request.requestId : undefined,
@@ -115,8 +117,8 @@ define(['react', '@grafana/data'], function (React, grafanaData) {
   }
 
   function summarizeFrame(frame) {
-    var type = frame.meta && frame.meta.type ? ' ' + frame.meta.type : '';
-    var fields = frame.fields
+    let type = frame.meta && frame.meta.type ? ' ' + frame.meta.type : '';
+    let fields = frame.fields
       .map(function (field) {
         return field.name + ':' + field.type;
       })
@@ -125,13 +127,13 @@ define(['react', '@grafana/data'], function (React, grafanaData) {
   }
 
   function DataPanel(props) {
-    var data = props.data;
-    var revisionRef = React.useRef({ data: null, revision: 0 });
+    let data = props.data;
+    let revisionRef = React.useRef({ data: null, revision: 0 });
     if (revisionRef.current.data !== data) {
       revisionRef.current = { data: data, revision: revisionRef.current.revision + 1 };
     }
-    var revision = revisionRef.current.revision;
-    var payload = React.useMemo(
+    let revision = revisionRef.current.revision;
+    let payload = React.useMemo(
       function () {
         return serializePanelData(data);
       },

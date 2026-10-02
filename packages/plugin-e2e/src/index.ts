@@ -61,6 +61,8 @@ import { toHaveColor } from './matchers/toHaveColor';
 import { ColorPicker } from './models/components/ColorPicker';
 import { toHavePanelErrors } from './matchers/toHavePanelErrors';
 import { DashboardPage } from './models/pages/DashboardPage';
+import { toMatchDataSnapshot, MatchDataSnapshotOptions } from './matchers/toMatchDataSnapshot';
+import { Panel } from './models/components/Panel';
 
 // models
 export { Components } from './models/Components';
@@ -89,6 +91,17 @@ export { AppPage } from './models/pages/AppPage';
 
 // types
 export * from './types';
+export type {
+  PanelData,
+  PanelDataFrame,
+  PanelDataField,
+  PanelDataFieldConfig,
+  PanelDataFrameMeta,
+  PanelDataError,
+  PanelDataLink,
+  GetPanelDataOptions,
+} from './models/components/panelData';
+export type { MatchDataSnapshotOptions } from './matchers/toMatchDataSnapshot';
 
 // helper functions
 export { isLegacyFeatureEnabled, isFeatureEnabled } from './fixtures/isFeatureToggleEnabled';
@@ -149,6 +162,7 @@ export const expect = baseExpect.extend({
   toHaveColor,
   toHaveNoA11yViolations,
   toHavePanelErrors,
+  toMatchDataSnapshot,
 });
 
 export { selectors } from '@playwright/test';
@@ -247,6 +261,20 @@ declare global {
        * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
        */
       toHavePanelErrors(this: Matchers<unknown, DashboardPage>, count?: number): Promise<R>;
+
+      /**
+       * Asserts that the data a panel received matches a JSON snapshot. The panel must use the
+       * `grafana-e2edata-panel` visualization. The snapshot is written on the first run, or with `--update-snapshots`.
+       *
+       * Snapshots are stored in `__data-snapshots__/<test file>/<test title>/<name>.json` next to the test file.
+       *
+       * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
+       */
+      toMatchDataSnapshot(
+        this: Matchers<unknown, Panel>,
+        nameOrOptions?: string | MatchDataSnapshotOptions,
+        options?: MatchDataSnapshotOptions
+      ): Promise<R>;
     }
   }
 }
