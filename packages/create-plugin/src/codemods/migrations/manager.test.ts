@@ -300,6 +300,26 @@ describe('Migrations', () => {
       expect(gitCommitNoVerify).toHaveBeenCalledTimes(3);
     });
 
+    it("should commit only each migration's changes and the version file from the project root", async () => {
+      const project = { root: '/projects/my-plugin', kind: 'single' as const, plugins: [{ dir: '.' }] };
+
+      await runMigrations(migrations, { commitEachMigration: true, project });
+
+      expect(gitCommitNoVerify).toHaveBeenNthCalledWith(1, expect.stringContaining('migration-one'), {
+        cwd: project.root,
+        paths: ['one.ts'],
+      });
+      expect(gitCommitNoVerify).toHaveBeenNthCalledWith(2, expect.stringContaining('migration-two'), {
+        cwd: project.root,
+        paths: ['two.ts'],
+      });
+      expect(isGitDirectoryClean).toHaveBeenCalledWith({ cwd: project.root, paths: ['.config/.cprc.json'] });
+      expect(gitCommitNoVerify).toHaveBeenNthCalledWith(3, expect.stringContaining('.cprc.json'), {
+        cwd: project.root,
+        paths: ['.config/.cprc.json'],
+      });
+    });
+
     it('should not create a commit for a migration that has no changes', async () => {
       migrationTwoFn.mockImplementation(async (context: Context) => context);
 

@@ -15,7 +15,7 @@ export const add = async (argv: minimist.ParsedArgs) => {
   }
 
   const project = resolveProject();
-  await performPreCodemodChecks(argv, project.root);
+  await performPreCodemodChecks(argv, project);
 
   try {
     const addition = defaultAdditions.find((addition) => addition.name === subCommand);

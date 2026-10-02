@@ -5,6 +5,8 @@ import { CURRENT_APP_VERSION } from '../../utils/utils.version.js';
 import { gitCommitNoVerify, isGitDirectoryClean } from '../../utils/utils.git.js';
 import { output } from '../../utils/utils.console.js';
 import { setRootConfig } from '../../utils/utils.config.js';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { UNRELEASED } from '../../constants.js';
 import { ProjectLayout, resolveProject } from '../../utils/utils.project.js';
 
@@ -46,6 +48,23 @@ export function getMigrationsToRun(
     });
 }
 
+const ROOT_CONFIG_PATH = '.config/.cprc.json';
+const LOCKFILES = ['package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'];
+
+// A migration's commit holds the files it changed plus the lockfile the dependency install may have updated.
+// Only lockfiles git reports as changed are added: staging an ignored or untouched lockfile would fail the commit.
+async function getMigrationCommitPaths(changedPaths: string[], root: string) {
+  const changedLockfiles: string[] = [];
+
+  for (const lockfile of LOCKFILES) {
+    if (existsSync(join(root, lockfile)) && !(await isGitDirectoryClean({ cwd: root, paths: [lockfile] }))) {
+      changedLockfiles.push(lockfile);
+    }
+  }
+
+  return [...new Set([...changedPaths, ...changedLockfiles])];
+}
+
 type RunMigrationsOptions = {
   commitEachMigration?: boolean;
   codemodOptions?: Record<string, any>;
@@ -72,14 +91,18 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
 
     if (shouldCommit) {
       // for conventional commits we need to add a newline between the title and the description
-      await gitCommitNoVerify(`chore: run create-plugin migration - ${migration.name}\n\n${migration.description}`);
+      await gitCommitNoVerify(`chore: run create-plugin migration - ${migration.name}\n\n${migration.description}`, {
+        cwd: project.root,
+        paths: await getMigrationCommitPaths(Object.keys(context.listChanges()), project.root),
+      });
     }
   }
 
   await setRootConfig({ version: CURRENT_APP_VERSION }, project.root);
 
   // Nothing to commit when only unreleased migrations re-ran on a plugin already on this version.
-  if (options.commitEachMigration && !(await isGitDirectoryClean())) {
-    await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`);
+  const versionScope = { cwd: project.root, paths: [ROOT_CONFIG_PATH] };
+  if (options.commitEachMigration && !(await isGitDirectoryClean(versionScope))) {
+    await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`, versionScope);
   }
 }
