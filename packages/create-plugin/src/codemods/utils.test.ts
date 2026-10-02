@@ -5,6 +5,7 @@ import {
   removeDependenciesFromPackageJson,
   flushChanges,
   formatFiles,
+  installNPMDependencies,
   readJsonFile,
   isVersionGreater,
   printChanges,
@@ -167,6 +168,45 @@ describe('utils', () => {
       runGoModTidy(context);
 
       expect(execSync).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('installNPMDependencies', () => {
+    beforeEach(async () => {
+      vi.mocked(execSync).mockClear();
+      await mkdir(join(tmpDir, 'plugins', 'a'), { recursive: true });
+      await mkdir(join(tmpDir, 'plugins', 'b'), { recursive: true });
+      await writeFile(join(tmpDir, 'package.json'), '{}');
+      await writeFile(join(tmpDir, 'plugins', 'a', 'package.json'), '{}');
+      await writeFile(join(tmpDir, 'plugins', 'b', 'package.json'), '{}');
+    });
+
+    function createMonorepoContext() {
+      return new Context(tmpDir, {
+        root: tmpDir,
+        kind: 'monorepo',
+        plugins: [{ dir: 'plugins/a' }, { dir: 'plugins/b' }],
+      });
+    }
+
+    it("installs from the project root when a plugin's package.json changes", () => {
+      const context = createMonorepoContext();
+      context.updateFile('plugins/a/package.json', '{ "dependencies": { "a": "1.0.0" } }');
+
+      installNPMDependencies(context);
+
+      expect(execSync).toHaveBeenCalledTimes(1);
+      expect(execSync).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({ cwd: tmpDir }));
+    });
+
+    it('installs once when several package.json files change', () => {
+      const context = createMonorepoContext();
+      context.updateFile('plugins/a/package.json', '{ "dependencies": { "a": "2.0.0" } }');
+      context.updateFile('plugins/b/package.json', '{ "dependencies": { "b": "2.0.0" } }');
+
+      installNPMDependencies(context);
+
+      expect(execSync).toHaveBeenCalledTimes(1);
     });
   });
 
