@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  decodeRefPath,
+  escapesDocsRoot,
   formatBytes,
   getCodeBlockLines,
   getNonProseLines,
@@ -215,5 +217,54 @@ describe('matchOutsideCode', () => {
 
   it('should not loop forever on a zero-length match', () => {
     expect(matchOutsideCode('abc', /x*/g, new Set()).length).toBeGreaterThan(0);
+  });
+});
+
+describe('decodeRefPath', () => {
+  it('drops the query and fragment', () => {
+    expect(decodeRefPath('page.md?x=1#top')).toBe('page.md');
+  });
+
+  it('decodes percent escapes', () => {
+    expect(decodeRefPath('..%2fimg/my%20pic.png')).toBe('../img/my pic.png');
+  });
+
+  it('keeps decoding after a malformed escape', () => {
+    expect(decodeRefPath('a%ZZ/%2e%2e/x.png')).toBe('a%ZZ/../x.png');
+  });
+
+  it('leaves a plain path unchanged', () => {
+    expect(decodeRefPath('./img/x.png')).toBe('./img/x.png');
+  });
+});
+
+describe('escapesDocsRoot', () => {
+  it('flags ../ from a page at the docs root', () => {
+    expect(escapesDocsRoot('../x.md', 'index.md')).toBe(true);
+  });
+
+  it('allows ../ that stays inside the docs folder', () => {
+    expect(escapesDocsRoot('../x.md', 'a/b.md')).toBe(false);
+  });
+
+  it('flags ../ that climbs past the docs root from a nested page', () => {
+    expect(escapesDocsRoot('../../x.md', 'a/b.md')).toBe(true);
+  });
+
+  it('flags a percent-encoded ../', () => {
+    expect(escapesDocsRoot('..%2fx.md', 'index.md')).toBe(true);
+  });
+
+  it('flags a backslash-rooted reference', () => {
+    expect(escapesDocsRoot('\\x.png', 'index.md')).toBe(true);
+  });
+
+  it('reads a backslash page path like a forward-slash one', () => {
+    expect(escapesDocsRoot('../x.md', 'a\\b.md')).toBe(false);
+    expect(escapesDocsRoot('../../x.md', 'a\\b.md')).toBe(true);
+  });
+
+  it('leaves root-relative references to their own rules', () => {
+    expect(escapesDocsRoot('/img/../../secret.png', 'index.md')).toBe(false);
   });
 });

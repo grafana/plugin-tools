@@ -84,7 +84,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-raw-html`        | Raw HTML tags aren't allowed in the page body (except `br`, `wbr`, `hr`, `details` and `summary`) - use markdown syntax instead.      | Warning † |
 | `no-script-tags`     | `<script>` tags and inline event handlers (`onclick`, `onerror`, etc.) aren't allowed anywhere in a page - they're a security risk.   | Error     |
 | `no-dangerous-urls`  | Links and images can't use a `javascript:`, `vbscript:` or `data:` URL scheme.                                                        | Error     |
-| `no-path-traversal`  | Links and image references can't contain `../` to escape the docs folder.                                                             | Error     |
+| `no-path-traversal`  | Links and image references must stay inside your docs folder. `../` is fine as long as it doesn't go above the docs root.             | Error     |
 | `no-base64-images`   | Images can't be embedded as base64 data - save them as a file in your `img/` folder instead.                                          | Error     |
 | `no-external-images` | Images must be hosted in your docs folder, not linked from an external `http(s)://` URL. Download the image and reference it locally. | Warning † |
 

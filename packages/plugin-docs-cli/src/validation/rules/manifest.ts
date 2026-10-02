@@ -1,5 +1,5 @@
 import { readdir } from 'node:fs/promises';
-import { relative, join } from 'node:path';
+import { relative, join, sep } from 'node:path';
 import type { Dirent } from 'node:fs';
 import type { Page } from '@grafana/plugin-docs-parser';
 import { scanDocsFolder } from '../../scanner.js';
@@ -107,7 +107,10 @@ export async function checkManifest(input: ValidationInput): Promise<Diagnostic[
   }
 
   const allFiles = new Set(
-    entries.filter((e) => e.isFile()).map((e) => relative(input.docsPath, join(e.parentPath, e.name)))
+    // `/` on every platform, matching the paths the scanner stores in Page.file
+    entries
+      .filter((e) => e.isFile())
+      .map((e) => relative(input.docsPath, join(e.parentPath, e.name)).split(sep).join('/'))
   );
 
   const pageFiles = collectPageFiles(manifest.pages);

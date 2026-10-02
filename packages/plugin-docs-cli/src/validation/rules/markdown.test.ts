@@ -441,6 +441,77 @@ describe('checkMarkdown', () => {
       expect(finding).toBeDefined();
     });
 
+    it('should allow ../ in links and images that stay inside the docs folder', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('[examples](../examples.md)\n\n![legend](../img/x.png)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeUndefined();
+    });
+
+    it('should leave root-relative refs with ../ to the relative-path rules', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![x](/img/../../secret.png)\n\n[y](/img/../../secret.md)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeUndefined();
+      expect(findings.find((f) => f.rule === Rule.ImageRefsRelative)).toBeDefined();
+      expect(findings.find((f) => f.rule === Rule.InternalLinksRelative)).toBeDefined();
+    });
+
+    it('should report ../ from a nested page that leaves the docs folder', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('[outside](../../outside.md)\n\n![x](../../img/x.png)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.NoPathTraversal)).toHaveLength(2);
+    });
+
+    it('should report ../ from the root index.md', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[readme](../README.md)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeDefined();
+    });
+
+    it('should resolve ../ depth against the page location', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await mkdir(join(tmp, 'a', 'b'), { recursive: true });
+      await writeFile(join(tmp, 'a', 'b', 'c.md'), md('![ok](../../img/x.png)\n\n![bad](../../../x.png)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      const traversal = findings.filter((f) => f.rule === Rule.NoPathTraversal);
+      expect(traversal).toHaveLength(1);
+      expect(traversal[0].title).toBe('Path traversal in image reference');
+    });
+
+    it('should report percent-encoded traversal', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[x](..%2Fsecret.md) [y](%2e%2e/secret.md)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.NoPathTraversal)).toHaveLength(2);
+    });
+
+    it('should report traversal when another escape in the reference is malformed', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[x](..%2Fsecret%ZZ.md)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeDefined();
+    });
+
+    it('should report backslash-rooted references', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[x](\\outside.md)\n\n![y](\\outside.png)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.NoPathTraversal)).toHaveLength(2);
+    });
+
     it('should not report ./ prefix', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('![alt](./img/pic.png)'));
