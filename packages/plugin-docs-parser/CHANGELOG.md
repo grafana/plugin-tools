@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.3.0...@grafana/plugin-docs-parser@0.3.1) (2026-10-02)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency js-yaml to v5 [SECURITY] ([#2909](https://github.com/grafana/plugin-tools/issues/2909)) ([806559f](https://github.com/grafana/plugin-tools/commit/806559f2ff16ac312d5e6e395d6c1868aaa4428a))
+
 ## [0.3.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.2.0...@grafana/plugin-docs-parser@0.3.0) (2026-09-16)
 
 
