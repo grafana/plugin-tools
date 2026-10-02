@@ -1,7 +1,17 @@
-import { Locator } from '@playwright/test';
+import { expect, Locator } from '@playwright/test';
 import { lt } from '../../utils/version';
 import { PluginTestCtx } from '../../types';
 import { GrafanaPage } from '../pages/GrafanaPage';
+import {
+  E2E_DATA_PANEL_ID,
+  E2E_DATA_PANEL_JSON_TESTID,
+  E2E_DATA_PANEL_TESTID,
+  GetPanelDataOptions,
+  PanelData,
+  parsePanelData,
+} from './panelData';
+
+const DEFAULT_PANEL_DATA_STATES = ['Done', 'Error'];
 
 const ERROR_STATUS = 'error';
 
@@ -99,6 +109,44 @@ export class Panel extends GrafanaPage {
     }
     // element has mounted but may be above the current scroll position — bring it precisely into view
     await this.locator.scrollIntoViewIfNeeded({ timeout: 5000 }).catch(() => {});
+  }
+
+  /**
+   * Returns the data the panel received, as serialised by the `grafana-e2edata-panel` panel plugin.
+   * The panel must use that visualization.
+   *
+   * Waits until the panel's loading state is one of `options.states` (default `Done` or `Error`).
+   *
+   * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
+   */
+  async getData(options?: GetPanelDataOptions): Promise<PanelData> {
+    const states = options?.states ?? DEFAULT_PANEL_DATA_STATES;
+    const root = this.getDataPanelLocator();
+
+    await this.scrollIntoView();
+    await expect(root, `Expected the panel to use the ${E2E_DATA_PANEL_ID} visualization`).toBeAttached({
+      timeout: options?.timeout,
+    });
+
+    let json: string | null = null;
+    await expect(async () => {
+      // read attributes and payload in one go so they come from the same render
+      const snapshot = await root.evaluate(
+        (el, jsonTestId) => ({
+          state: el.getAttribute('data-state'),
+          json: el.querySelector(`[data-testid="${jsonTestId}"]`)?.textContent ?? null,
+        }),
+        E2E_DATA_PANEL_JSON_TESTID
+      );
+      expect(states, 'panel loading state').toContain(snapshot.state);
+      json = snapshot.json;
+    }).toPass({ timeout: options?.timeout });
+
+    return parsePanelData(json, 'the panel');
+  }
+
+  private getDataPanelLocator(): Locator {
+    return this.locator.locator(`[data-testid="${E2E_DATA_PANEL_TESTID}"]`);
   }
 
   /**

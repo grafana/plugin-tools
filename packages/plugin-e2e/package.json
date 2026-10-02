@@ -5,6 +5,7 @@
   "types": "./dist/index.d.ts",
   "files": [
     "./dist",
+    "./e2e-data-panel",
     "./package.json"
   ],
   "repository": {

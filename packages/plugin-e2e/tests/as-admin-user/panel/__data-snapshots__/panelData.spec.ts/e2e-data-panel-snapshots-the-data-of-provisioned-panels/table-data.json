@@ -1,0 +1,42 @@
+{
+  "errors": [],
+  "schemaVersion": 1,
+  "series": [
+    {
+      "fields": [
+        {
+          "config": {},
+          "displayName": "time",
+          "name": "time",
+          "type": "time",
+          "values": [1672531200000, 1675209600000, 1677628800000, 1680307200000, 1682899200000]
+        },
+        {
+          "config": {},
+          "displayName": "temperature",
+          "name": "temperature",
+          "type": "number",
+          "values": [22.2, 26, 30, 32, 35]
+        },
+        {
+          "config": {},
+          "displayName": "humidity",
+          "name": "humidity",
+          "type": "number",
+          "values": [70, 2, 80, 85, 90]
+        },
+        {
+          "config": {},
+          "displayName": "environment",
+          "name": "environment",
+          "type": "string",
+          "values": ["Staging", "Test", "Production", "Development", "QA"]
+        }
+      ],
+      "length": 5,
+      "name": "response",
+      "refId": "A"
+    }
+  ],
+  "state": "Done"
+}

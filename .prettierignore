@@ -10,3 +10,6 @@
 /.github/renovate.json
 
 /packages/plugin-docs-cli/src/validation/rules/style.ts
+
+# plugin-e2e data snapshots are written by the matcher
+**/__data-snapshots__/
