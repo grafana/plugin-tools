@@ -92,8 +92,8 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
 
-export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
-  const { features } = getConfig();
+export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cwd()): TemplateData {
+  const { features } = getConfig(rootPath);
   const currentVersion = CURRENT_APP_VERSION;
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
@@ -128,8 +128,8 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
   } else {
-    const pluginJson = getPluginJson();
-    const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
+    const pluginJson = getPluginJson(path.join(rootPath, 'src'));
+    const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback(rootPath);
 
     templateData = {
       ...EXTRA_TEMPLATE_VARIABLES,

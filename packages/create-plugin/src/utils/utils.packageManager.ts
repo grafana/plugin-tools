@@ -60,13 +60,13 @@ export function getPackageManagerFromUserAgent(): PackageManager {
   return DEFAULT_PACKAGE_MANAGER;
 }
 
-export function getPackageManagerWithFallback() {
-  const packageManagerFromPackageJson = getPackageManagerFromPackageJson();
+export function getPackageManagerWithFallback(cwd = process.cwd()) {
+  const packageManagerFromPackageJson = getPackageManagerFromPackageJson(cwd);
   if (packageManagerFromPackageJson) {
     return packageManagerFromPackageJson;
   }
 
-  const packageManagerFromLockFile = getPackageManagerFromLockFile();
+  const packageManagerFromLockFile = getPackageManagerFromLockFile(cwd);
   if (packageManagerFromLockFile) {
     return packageManagerFromLockFile;
   }
@@ -125,8 +125,8 @@ export function getPackageManagerSilentInstallCmd(packageManagerName: string, pa
   }
 }
 
-function getPackageManagerFromLockFile(): PackageManager | undefined {
-  const closestLockfilePath = findUpSync([YARN_LOCKFILE, PNPM_LOCKFILE, NPM_LOCKFILE]);
+function getPackageManagerFromLockFile(cwd: string): PackageManager | undefined {
+  const closestLockfilePath = findUpSync([YARN_LOCKFILE, PNPM_LOCKFILE, NPM_LOCKFILE], { cwd });
   if (!Boolean(closestLockfilePath)) {
     return undefined;
   }
@@ -168,8 +168,8 @@ function getPackageManagerFromLockFile(): PackageManager | undefined {
   }
 }
 
-function getPackageManagerFromPackageJson(): PackageManager | undefined {
-  const packageJson = getPackageJson();
+function getPackageManagerFromPackageJson(cwd: string): PackageManager | undefined {
+  const packageJson = getPackageJson(cwd);
   if (packageJson?.packageManager) {
     const [packageManagerName, packageManagerVersion] = packageJson.packageManager.split('@');
     return { packageManagerName, packageManagerVersion };
