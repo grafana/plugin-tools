@@ -121,6 +121,23 @@ describe('.config workspace package', () => {
       expect(sharedConfig).toContain("'playwright-report/'");
     });
 
+    it('enforces module boundaries between plugins in a monorepo', () => {
+      const monorepoConfig = renderTemplateFromFile(path.join(TEMPLATE_PATHS.common, '.config', 'eslint.config.mjs'), {
+        ...templateData('npm', '10.9.0'),
+        isMonorepo: true,
+      });
+
+      expect(monorepoConfig).toContain("import grafanaPluginsPlugin from '@grafana/eslint-plugin-plugins';");
+      expect(monorepoConfig).toContain("'@grafana/plugins/no-cross-plugin-imports': 'error'");
+    });
+
+    it('leaves the module boundary rule out of single plugins', () => {
+      const sharedConfig = render('.config/eslint.config.mjs');
+
+      expect(sharedConfig).not.toContain('no-cross-plugin-imports');
+      expect(sharedConfig).not.toContain('@grafana/eslint-plugin-plugins');
+    });
+
     it("keeps the plugin's eslint config to the shared config and its own additions", () => {
       const pluginConfig = render('eslint.config.mjs');
 
