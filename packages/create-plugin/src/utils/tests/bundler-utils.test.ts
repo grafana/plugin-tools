@@ -29,9 +29,14 @@ describe('templates / .config/bundler/utils.ts', () => {
     tmpObj.removeCallback();
   });
 
+  // Import a copy so the transform doesn't pick up the template's own tsconfig.json, which extends a package
+  // that only exists in generated plugins.
   async function importBundlerUtils() {
-    const bundlerUtilsUrl = pathToFileURL(path.join(TEMPLATE_PATHS.common, '.config', 'bundler', 'utils.ts')).href;
-    return import(bundlerUtilsUrl);
+    const bundlerDir = fs.mkdtempSync(path.join(tmpObj.name, 'bundler-'));
+    for (const file of ['utils.ts', 'constants.ts']) {
+      fs.copyFileSync(path.join(TEMPLATE_PATHS.common, '.config', 'bundler', file), path.join(bundlerDir, file));
+    }
+    return import(pathToFileURL(path.join(bundlerDir, 'utils.ts')).href);
   }
 
   it('reads .cprc.json from the plugin root', async () => {

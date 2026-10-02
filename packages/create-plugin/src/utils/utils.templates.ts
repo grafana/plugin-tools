@@ -15,6 +15,7 @@ import { getConfig } from './utils.config.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import { getPluginJson } from './utils.plugin.js';
 import { glob } from 'glob';
+import { gte } from 'semver';
 import path from 'node:path';
 
 const templatesDebugger = debug.extend('templates');
@@ -102,6 +103,8 @@ export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cw
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
   const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
+  const supportsWorkspaceProtocol = (packageManagerName: string, packageManagerVersion: string) =>
+    packageManagerName === 'pnpm' || (packageManagerName === 'yarn' && gte(packageManagerVersion, '2.0.0'));
   const frontendBundler = features.useExperimentalRspack ? 'rspack' : 'webpack';
 
   let templateData: TemplateData;
@@ -123,6 +126,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cw
       packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName, packageManagerVersion),
       isAppType: isAppType(cliArgs.pluginType),
       isNPM: isNPM(packageManagerName),
+      supportsWorkspaceProtocol: supportsWorkspaceProtocol(packageManagerName, packageManagerVersion),
       version: currentVersion,
       bundleGrafanaUI,
       scenesVersion: '^8.17.0',
@@ -147,6 +151,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cw
       packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName, packageManagerVersion),
       isAppType: isAppType(pluginJson.type),
       isNPM: isNPM(packageManagerName),
+      supportsWorkspaceProtocol: supportsWorkspaceProtocol(packageManagerName, packageManagerVersion),
       version: currentVersion,
       bundleGrafanaUI,
       scenesVersion: '^8.17.0',

@@ -1,0 +1,16 @@
+{
+  "name": "@grafana/create-plugin-configs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Plugin configuration scaffolded by @grafana/create-plugin. Do not edit these files directly, extend them from the files in the plugin root instead.",
+  "exports": {
+    "./tsconfig.json": "./tsconfig.json",
+    "./jest": "./jest.config.js",
+    "./jest-setup": "./jest-setup.js",
+    "./eslint": "./eslint.config.mjs",
+    "./prettier": "./.prettierrc.js",
+    "./playwright": "./playwright.config.ts",
+    "./{{frontendBundler}}": "./{{frontendBundler}}/{{frontendBundler}}.config.ts",
+    "./*": "./*"
+  }
+}
