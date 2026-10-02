@@ -23,6 +23,8 @@ Instead of changing the files directly, follow the instructions on this page to 
 
 :::
 
+The configuration files in the project root import the `.config/` files by package name, for example `@grafana/create-plugin-configs/jest`. `.config/` is a workspace package with this name, so the same imports work in a single plugin and in a [plugin monorepo](./monorepos.md). Plugins scaffolded with an earlier version of `create-plugin` import the files by relative path instead, for example `./.config/jest.config`, which keeps working.
+
 ### Extend the ESLint config
 
 Edit the `eslint.config.mjs` file in the project root to extend the ESLint configuration. The following example disables deprecation notices for source files.
@@ -31,7 +33,7 @@ Edit the `eslint.config.mjs` file in the project root to extend the ESLint confi
 
 ```javascript title="eslint.config.mjs"
 import { defineConfig } from 'eslint/config';
-import baseConfig from './.config/eslint.config.mjs';
+import baseConfig from '@grafana/create-plugin-configs/eslint';
 
 export default defineConfig([
   {
@@ -84,7 +86,7 @@ To extend the TS configuration, edit the `tsconfig.json` file in the project roo
 ```json title="tsconfig.json"
 {
   // TypeScript configuration provided by @grafana/create-plugin
-  "extends": "./.config/tsconfig.json",
+  "extends": "@grafana/create-plugin-configs/tsconfig.json",
   "compilerOptions": {
     "preserveConstEnums": true
   }
@@ -98,7 +100,7 @@ Edit the `playwright.config.ts` file in the project root to extend the Playwrigh
 ```ts title="playwright.config.ts"
 import type { PluginOptions } from '@grafana/plugin-e2e';
 import { defineConfig, devices } from '@playwright/test';
-import baseConfig from './.config/playwright.config';
+import baseConfig from '@grafana/create-plugin-configs/playwright';
 
 export default defineConfig<PluginOptions>(baseConfig, {
   projects: [
@@ -116,20 +118,23 @@ export default defineConfig<PluginOptions>(baseConfig, {
 
 ### Extend the Webpack config
 
-Follow these steps to extend the Webpack configuration that lives in `.config/`:
+Edit the `webpack.config.ts` file in the project root to extend the Webpack configuration that lives in `.config/`. The `build` and `dev` scripts use this file.
 
-#### 1. Create a new Webpack configuration file
+If your plugin doesn't have a `webpack.config.ts` file in the project root, create one, then update the `build` and `dev` scripts in `package.json` to use it:
 
-Create a `webpack.config.ts` file in the project root. This file extends the Webpack config provided by `create-plugin`.
-
-#### 2. Merge the Grafana config with your custom config
+```diff title="package.json"
+-"build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
++"build": "webpack -c ./webpack.config.ts --env production",
+-"dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
++"dev": "webpack -w -c ./webpack.config.ts --env development",
+```
 
 Use the [webpack-merge](https://github.com/survivejs/webpack-merge) package to extend the `create-plugin` configuration:
 
 ```ts title="webpack.config.ts"
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
-import grafanaConfig, { Env } from './.config/webpack/webpack.config';
+import grafanaConfig, { Env } from '@grafana/create-plugin-configs/webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 const config = async (env: Env): Promise<Configuration> => {
@@ -144,17 +149,6 @@ const config = async (env: Env): Promise<Configuration> => {
 export default config;
 ```
 
-#### 3. Update the `package.json` to use the new Webpack config
-
-Update the `scripts` in the `package.json` to use the extended Webpack configuration:
-
-```diff title="package.json"
--"build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
-+"build": "webpack -c ./webpack.config.ts --env production",
--"dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
-+"dev": "webpack -w -c ./webpack.config.ts --env development",
-```
-
 #### Custom Webpack config examples
 
 The following example excludes a "libs" directory from typescript/javascript compilation preventing build or runtime failures when importing bundled libraries directly in source code.
@@ -162,7 +156,7 @@ The following example excludes a "libs" directory from typescript/javascript com
 ```ts title="webpack.config.ts"
 import type { Configuration } from 'webpack';
 import { mergeWithRules } from 'webpack-merge';
-import grafanaConfig, { Env } from './.config/webpack/webpack.config';
+import grafanaConfig, { Env } from '@grafana/create-plugin-configs/webpack';
 
 const config = async (env: Env): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
@@ -193,7 +187,7 @@ Webpack 5 does not polyfill [Node.js core modules](https://webpack.js.org/config
 ```ts title="webpack.config.ts"
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
-import grafanaConfig, { Env } from './.config/webpack/webpack.config';
+import grafanaConfig, { Env } from '@grafana/create-plugin-configs/webpack';
 
 const config = async (env: Env): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);

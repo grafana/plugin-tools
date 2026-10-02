@@ -74,11 +74,11 @@ If need be, this can be extended in the following way:
 
 ```javascript
 process.env.TZ = 'UTC';
-const { grafanaESModules, nodeModulesToTransform } = require('./.config/jest/utils');
+const { grafanaESModules, nodeModulesToTransform } = require('@grafana/create-plugin-configs/jest/utils.js');
 
 module.exports = {
   // Jest configuration provided by @grafana/create-plugin
-  ...require('./.config/jest.config'),
+  ...require('@grafana/create-plugin-configs/jest'),
   // Inform Jest to only transform specific node_module packages.
   transformIgnorePatterns: [nodeModulesToTransform([...grafanaESModules, 'packageName'])],
 };
