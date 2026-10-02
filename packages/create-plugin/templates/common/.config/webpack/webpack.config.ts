@@ -21,6 +21,7 @@ import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
 import { getConfigDir, getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from '../bundler/utils.ts';
 import { externals } from '../bundler/externals.ts';
 import { copyFilePatterns } from '../bundler/copyFiles.ts';
+import { PluginScopePlugin } from '../bundler/pluginScope.ts';
 
 const pluginJson = getPluginJson();
 const cpVersion = getCPConfigVersion();
@@ -164,6 +165,8 @@ const config = async (env: Env): Promise<Configuration> => {
 
     plugins: [
       new BuildModeWebpackPlugin(),
+      // Fail the build when the plugin imports another plugin's code
+      new PluginScopePlugin(),
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new webpack.BannerPlugin({
