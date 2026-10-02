@@ -13,5 +13,10 @@ describe('additions json', () => {
       const sourceFilePath = filePath.replace('.js', '.ts');
       expect(existsSync(sourceFilePath)).toBe(true);
     });
+
+    it(`should declare how ${addition.name} applies in a monorepo`, () => {
+      expect(['repo', 'plugin']).toContain(addition.scope);
+      expect(typeof addition.supportsMonorepo).toBe('boolean');
+    });
   });
 });
