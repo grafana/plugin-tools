@@ -30,7 +30,7 @@ export const update = async (argv: minimist.ParsedArgs) => {
         title: 'Nothing to update, exiting.',
       });
 
-      process.exit(0);
+      return;
     }
 
     const migrations = getMigrationsToRun(version, CURRENT_APP_VERSION);
@@ -40,7 +40,7 @@ export const update = async (argv: minimist.ParsedArgs) => {
         title: 'No migrations to run, exiting.',
       });
 
-      process.exit(0);
+      return;
     }
 
     // filter out minimist internal properties (_ and $0) before passing to codemod
