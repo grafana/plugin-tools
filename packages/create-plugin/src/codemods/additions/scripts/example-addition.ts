@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 import type { Context } from '../../context.js';
-import { addDependenciesToPackageJson } from '../../utils.js';
+import { addToolingDependencies, forEachPlugin } from '../../utils.project.js';
 
 /**
  * Example addition demonstrating Valibot schema with type inference
@@ -26,18 +26,22 @@ export default function exampleAddition(context: Context, options: ExampleOption
   // These options have been validated by the framework
   const { featureName, enabled, port, frameworks } = options;
 
-  const rawPkgJson = context.getFile('./package.json') ?? '{}';
-  const packageJson = JSON.parse(rawPkgJson);
+  // Tooling dependencies live in the root package.json, shared by every plugin in a monorepo.
+  addToolingDependencies(context, { '@types/node': '^20.0.0' });
 
-  if (packageJson.scripts && !packageJson.scripts['example-script']) {
-    packageJson.scripts['example-script'] = `echo "Running ${featureName}"`;
-    context.updateFile('./package.json', JSON.stringify(packageJson, null, 2));
-  }
+  // Per-plugin files go through forEachPlugin so the addition works for a single plugin and in a monorepo.
+  forEachPlugin(context, (_plugin, resolvePath) => {
+    const packageJsonPath = resolvePath('package.json');
+    const packageJson = JSON.parse(context.getFile(packageJsonPath) ?? '{}');
 
-  addDependenciesToPackageJson(context, {}, { '@types/node': '^20.0.0' });
+    if (packageJson.scripts && !packageJson.scripts['example-script']) {
+      packageJson.scripts['example-script'] = `echo "Running ${featureName}"`;
+      context.updateFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    }
 
-  if (!context.doesFileExist(`./src/features/${featureName}.ts`)) {
-    const featureCode = `export const ${featureName} = {
+    const featurePath = resolvePath(`src/features/${featureName}.ts`);
+    if (!context.doesFileExist(featurePath)) {
+      const featureCode = `export const ${featureName} = {
   name: '${featureName}',
   enabled: ${enabled},
   port: ${port ?? 3000},
@@ -47,16 +51,17 @@ export default function exampleAddition(context: Context, options: ExampleOption
   },
 };
 `;
-    context.addFile(`./src/features/${featureName}.ts`, featureCode);
-  }
+      context.addFile(featurePath, featureCode);
+    }
 
-  if (context.doesFileExist('./src/deprecated.ts')) {
-    context.deleteFile('./src/deprecated.ts');
-  }
+    if (context.doesFileExist(resolvePath('src/deprecated.ts'))) {
+      context.deleteFile(resolvePath('src/deprecated.ts'));
+    }
 
-  if (context.doesFileExist('./src/old-config.json')) {
-    context.renameFile('./src/old-config.json', './src/new-config.json');
-  }
+    if (context.doesFileExist(resolvePath('src/old-config.json'))) {
+      context.renameFile(resolvePath('src/old-config.json'), resolvePath('src/new-config.json'));
+    }
+  });
 
   return context;
 }
