@@ -165,7 +165,7 @@ export type PluginOptions = {
    *   },
    * });
    *
-   * // for tests in a specific file or describe block
+   * // for tests in a specific file
    * test.use({ dataSnapshot: { ignorePaths: ['series.*.meta.notices'] } });
    * ```
    *
