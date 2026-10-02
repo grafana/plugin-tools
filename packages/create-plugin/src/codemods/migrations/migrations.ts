@@ -106,6 +106,13 @@ export default [
       'Resolve .config/tsconfig.json paths from the extending tsconfig with ${configDir} and drop the typeRoots override so hoisted @types are found.',
     scriptPath: import.meta.resolve('./scripts/015-tsconfig-config-dir.js'),
   },
+  {
+    name: '016-config-workspace-package',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description:
+      'Make .config the @grafana/create-plugin-configs workspace package: root config files import it by name instead of by relative path, so they keep working when .config moves (for example into a monorepo root).',
+    scriptPath: import.meta.resolve('./scripts/016-config-workspace-package.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
