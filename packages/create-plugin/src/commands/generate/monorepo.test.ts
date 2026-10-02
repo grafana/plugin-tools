@@ -106,7 +106,13 @@ describe('monorepo generation', () => {
       expect(result.scripts?.['lint:fix']).toBe(
         'yarn run lint --fix && yarn run -T prettier --write --list-different .'
       );
-      expect(result.scripts?.server).toBe('docker compose up --build');
+      expect(result.scripts?.server).toBe('docker compose -f ../../docker-compose.yaml up --build');
+    });
+
+    it("starts the shared Grafana from a plugin's server script", () => {
+      const result = createPluginPackageJson(pluginPackageJson, templateData('npm', '11.12.1'));
+
+      expect(result.scripts?.server).toBe('docker compose -f ../../docker-compose.yaml up --build');
     });
 
     it('only prefixes known tooling binaries', () => {
