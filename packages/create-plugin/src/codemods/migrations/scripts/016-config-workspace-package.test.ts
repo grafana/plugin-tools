@@ -149,7 +149,8 @@ describe('016-config-workspace-package', () => {
       expect(context.getFile('jest.config.js')).toContain("process.env.TZ = 'UTC';");
       expect(context.getFile('jest-setup.js')).toContain(`import '${CONFIG_PACKAGE}/jest-setup';`);
       expect(context.getFile('eslint.config.mjs')).toContain(`import baseConfig from '${CONFIG_PACKAGE}/eslint';`);
-      expect(context.getFile('.prettierrc.js')).toContain(`...require('${CONFIG_PACKAGE}/prettier'),`);
+      // Prettier runs before install when scaffolding, so its config keeps the relative import.
+      expect(context.getFile('.prettierrc.js')).toBe(LEGACY_WRAPPERS['.prettierrc.js']);
       expect(context.getFile('playwright.config.ts')).toContain(
         `import baseConfig from '${CONFIG_PACKAGE}/playwright';`
       );

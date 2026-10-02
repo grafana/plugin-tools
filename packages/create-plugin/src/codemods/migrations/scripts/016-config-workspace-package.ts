@@ -16,7 +16,9 @@ const PNPM_WORKSPACE = 'pnpm-workspace.yaml';
 const CONFIG_WORKSPACES = ['.config'];
 
 // Relative specifiers the scaffolded root config files used, mapped to the config package's exports.
-// Other .config imports are left alone: they keep working because the files don't move.
+// Other .config imports are left alone: they keep working because the files don't move. .prettierrc.js keeps its
+// relative import because prettier runs right after scaffolding, before the workspace package is installed, and the
+// file always sits next to .config at the project root.
 const SPECIFIERS: Record<string, string> = {
   './.config/tsconfig.json': `${CONFIG_PACKAGE}/tsconfig.json`,
   './.config/jest.config': `${CONFIG_PACKAGE}/jest`,
@@ -24,7 +26,6 @@ const SPECIFIERS: Record<string, string> = {
   './.config/jest-setup': `${CONFIG_PACKAGE}/jest-setup`,
   './.config/jest-setup.js': `${CONFIG_PACKAGE}/jest-setup`,
   './.config/eslint.config.mjs': `${CONFIG_PACKAGE}/eslint`,
-  './.config/.prettierrc.js': `${CONFIG_PACKAGE}/prettier`,
   './.config/playwright.config': `${CONFIG_PACKAGE}/playwright`,
   './.config/playwright.config.ts': `${CONFIG_PACKAGE}/playwright`,
   './.config/webpack/webpack.config': `${CONFIG_PACKAGE}/webpack`,
@@ -37,7 +38,6 @@ const SOURCE_WRAPPERS = [
   'jest.config.js',
   'jest-setup.js',
   'eslint.config.mjs',
-  '.prettierrc.js',
   'playwright.config.ts',
   'webpack.config.ts',
   'rspack.config.ts',

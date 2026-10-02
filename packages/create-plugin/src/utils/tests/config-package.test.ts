@@ -96,6 +96,19 @@ describe('.config workspace package', () => {
     });
   });
 
+  describe('files read before install', () => {
+    // generate runs prettier straight after scaffolding, before the workspace package is linked.
+    it('keeps the prettier config importing .config by relative path', () => {
+      const prettierConfig = renderTemplateFromFile(
+        path.join(TEMPLATE_PATHS.common, '.prettierrc.js'),
+        templateData('npm', '10.9.0')
+      );
+
+      expect(prettierConfig).toContain("require('./.config/.prettierrc.js')");
+      expect(prettierConfig).not.toContain(CONFIG_PACKAGE);
+    });
+  });
+
   describe('config package manifest', () => {
     it('exports every config a plugin wrapper imports', () => {
       const manifest = JSON.parse(

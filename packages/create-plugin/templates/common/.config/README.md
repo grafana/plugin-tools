@@ -51,7 +51,7 @@ Edit the `.prettierrc.js` file in the project root in order to extend the Pretti
 ```javascript
 module.exports = {
   // Prettier configuration provided by Grafana scaffolding
-  ...require('@grafana/create-plugin-configs/prettier'),
+  ...require('./.config/.prettierrc.js'),
 
   semi: false,
 };
