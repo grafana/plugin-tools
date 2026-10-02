@@ -1,3 +1,3 @@
 {
-  "extends": "./.config/tsconfig.json"
+  "extends": "@grafana/create-plugin-configs/tsconfig.json"
 }

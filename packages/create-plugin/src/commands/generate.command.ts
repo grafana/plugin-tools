@@ -124,7 +124,7 @@ function getTemplateActions({ exportPath, templateData }: { exportPath: string; 
   return [...pluginActions, ...ciWorkflowActions];
 }
 
-function getActionsForTemplateFolder({
+export function getActionsForTemplateFolder({
   folderPath,
   exportPath,
   templateData,
@@ -138,6 +138,11 @@ function getActionsForTemplateFolder({
   // If the user selected yarn as their package manager, filter out npmrc file from templates since it's only needed for npm/pnpm.
   if (templateData.packageManagerName === 'yarn') {
     files = files.filter((file) => path.basename(file) !== 'npmrc');
+  }
+
+  // pnpm declares workspaces in pnpm-workspace.yaml, npm and yarn use the "workspaces" field in package.json.
+  if (templateData.packageManagerName !== 'pnpm') {
+    files = files.filter((file) => path.basename(file) !== 'pnpm-workspace.yaml');
   }
 
   // filter out frontend bundler based on user choice

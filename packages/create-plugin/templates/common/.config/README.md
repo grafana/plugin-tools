@@ -6,6 +6,10 @@ The `.config/` directory holds basic configuration for the different tools
 that are used to develop, test and build the project. In order to make it updates easier we ask you to
 not edit files in this folder to extend configuration.
 
+`.config/` is a workspace package named `@grafana/create-plugin-configs`. The configuration files in the
+project root import it by name (for example `@grafana/create-plugin-configs/jest`), so they work the same
+wherever `.config/` lives.
+
 ## How to extend the basic configs?
 
 Bear in mind that you are doing it at your own risk, and that extending any of the basic configuration can lead
@@ -19,7 +23,7 @@ Edit the `eslint.config.mjs` file in the project root to extend the ESLint confi
 
 ```javascript
 import { defineConfig } from 'eslint/config';
-import baseConfig from './.config/eslint.config.mjs';
+import baseConfig from '@grafana/create-plugin-configs/eslint';
 
 export default defineConfig([
   {
@@ -70,11 +74,11 @@ A common issue with the current jest config involves importing an npm package th
 
 ```javascript
 process.env.TZ = 'UTC';
-const { grafanaESModules, nodeModulesToTransform } = require('./config/jest/utils');
+const { grafanaESModules, nodeModulesToTransform } = require('@grafana/create-plugin-configs/jest/utils.js');
 
 module.exports = {
   // Jest configuration provided by Grafana
-  ...require('./.config/jest.config'),
+  ...require('@grafana/create-plugin-configs/jest'),
   // Inform jest to only transform specific node_module packages.
   transformIgnorePatterns: [nodeModulesToTransform([...grafanaESModules, 'packageName'])],
 };
@@ -90,7 +94,7 @@ Edit the `tsconfig.json` file in the project root in order to extend the TypeScr
 
 ```json
 {
-  "extends": "./.config/tsconfig.json",
+  "extends": "@grafana/create-plugin-configs/tsconfig.json",
   "compilerOptions": {
     "preserveConstEnums": true
   }
@@ -101,14 +105,8 @@ Edit the `tsconfig.json` file in the project root in order to extend the TypeScr
 
 ### Extending the Webpack config
 
-Follow these steps to extend the basic Webpack configuration that lives under `.config/`:
-
-#### 1. Create a new Webpack configuration file
-
-Create a new config file that is going to extend the basic one provided by Grafana.
-It can live in the project root, e.g. `webpack.config.ts`.
-
-#### 2. Merge the basic config provided by Grafana and your custom setup
+Edit the `webpack.config.ts` file in the project root to extend the basic Webpack configuration that lives under `.config/`.
+The `build` and `dev` scripts already use it.
 
 We are going to use [`webpack-merge`](https://github.com/survivejs/webpack-merge) for this.
 
@@ -116,7 +114,7 @@ We are going to use [`webpack-merge`](https://github.com/survivejs/webpack-merge
 // webpack.config.ts
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
-import grafanaConfig, { type Env } from './.config/webpack/webpack.config';
+import grafanaConfig, { type Env } from '@grafana/create-plugin-configs/webpack';
 
 const config = async (env: Env): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
@@ -130,24 +128,6 @@ const config = async (env: Env): Promise<Configuration> => {
 };
 
 export default config;
-```
-
-#### 3. Update the `package.json` to use the new Webpack config
-
-We need to update the `scripts` in the `package.json` to use the extended Webpack configuration.
-
-**Update for `build`:**
-
-```diff
--"build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
-+"build": "webpack -c ./webpack.config.ts --env production",
-```
-
-**Update for `dev`:**
-
-```diff
--"dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
-+"dev": "webpack -w -c ./webpack.config.ts --env development",
 ```
 
 ### Configure grafana image to use when running docker

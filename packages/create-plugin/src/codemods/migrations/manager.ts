@@ -63,6 +63,11 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
   // run migrations sequentially in version order where lowest version runs first
   for (const migration of migrations) {
     const context = await runCodemod(migration, options.codemodOptions, project);
+    const message = context.getMessage();
+
+    if (message) {
+      output[message.level]({ title: message.title, body: message.body });
+    }
     const shouldCommit = options.commitEachMigration && context.hasChanges();
 
     if (shouldCommit) {

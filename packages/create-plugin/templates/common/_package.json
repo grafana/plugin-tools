@@ -1,9 +1,14 @@
 {
   "name": "{{ kebabCase pluginName }}",
   "version": "1.0.0",
+  "private": true,
+{{#if_eq packageManagerName "pnpm"}}
+{{else}}
+  "workspaces": [".config"],
+{{/if_eq}}
   "scripts": {
-    "build": "{{frontendBundler}} -c ./.config/{{frontendBundler}}/{{frontendBundler}}.config.ts --env production",
-    "dev": "{{frontendBundler}} -w -c ./.config/{{frontendBundler}}/{{frontendBundler}}.config.ts --env development",
+    "build": "{{frontendBundler}} -c ./{{frontendBundler}}.config.ts --env production",
+    "dev": "{{frontendBundler}} -w -c ./{{frontendBundler}}.config.ts --env development",
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
@@ -16,6 +21,9 @@
   "author": "{{ sentenceCase orgName }}",
   "license": "Apache-2.0",
   "devDependencies": {
+{{#if supportsWorkspaceProtocol}}
+    "@grafana/create-plugin-configs": "workspace:*",
+{{/if}}
     "@grafana/eslint-config": "^10.0.0",
     "@grafana/plugin-e2e": "^3.14.0",
     "@grafana/sign-plugin": "^3.3.3",
