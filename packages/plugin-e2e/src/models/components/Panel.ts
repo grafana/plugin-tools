@@ -150,6 +150,9 @@ export class Panel extends GrafanaPage {
           isMatchingRequestId(snapshot.requestId, responseRequestId),
           `panel request id "${snapshot.requestId}" to match response request id "${responseRequestId}"`
         ).toBe(true);
+      } else if (options?.afterRequestId) {
+        expect(snapshot.requestId, 'panel request id').not.toBe('');
+        expect(snapshot.requestId, 'panel request id').not.toBe(options.afterRequestId);
       } else if (options?.afterRevision !== undefined) {
         expect(snapshot.revision, 'panel data revision').not.toBe(options.afterRevision);
       }

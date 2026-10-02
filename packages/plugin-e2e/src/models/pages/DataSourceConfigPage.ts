@@ -3,7 +3,10 @@ import { DataSourceSettings, NavigateOptions, PluginTestCtx, TriggerRequestOptio
 import { GrafanaPage } from './GrafanaPage';
 
 export class DataSourceConfigPage extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, public datasource: DataSourceSettings) {
+  constructor(
+    ctx: PluginTestCtx,
+    public datasource: DataSourceSettings
+  ) {
     super(ctx);
   }
   async deleteDataSource() {

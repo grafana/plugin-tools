@@ -5,7 +5,10 @@ import { Locator } from '@playwright/test';
 
 export class AlertRuleQuery extends GrafanaPage {
   datasource: DataSourcePicker;
-  constructor(readonly ctx: PluginTestCtx, public readonly locator: Locator) {
+  constructor(
+    readonly ctx: PluginTestCtx,
+    public readonly locator: Locator
+  ) {
     super(ctx);
     this.datasource = new DataSourcePicker(ctx, locator);
   }

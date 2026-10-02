@@ -77,6 +77,11 @@ export interface GetPanelDataOptions {
    */
   response?: Response;
   /**
+   * Waits until the panel shows data for a different request than this id. Preferred over `afterRevision`, since
+   * the revision can restart when the panel is re-created.
+   */
+  afterRequestId?: string;
+  /**
    * Waits until the panel's revision differs from this value. Used when there is no request id to match on.
    */
   afterRevision?: string;

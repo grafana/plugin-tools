@@ -3,7 +3,10 @@ import { PluginPageArgs, PluginTestCtx } from '../../types';
 import { PluginConfigPage } from './PluginConfigPage';
 
 export class AppConfigPage extends PluginConfigPage {
-  constructor(readonly ctx: PluginTestCtx, readonly args: PluginPageArgs) {
+  constructor(
+    readonly ctx: PluginTestCtx,
+    readonly args: PluginPageArgs
+  ) {
     super(ctx, args);
   }
 

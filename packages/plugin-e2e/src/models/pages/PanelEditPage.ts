@@ -251,9 +251,7 @@ export class PanelEditPage extends GrafanaPage {
   ): Promise<{ response: Response; body: T | null; data: PanelData }> {
     const revision = await this.panel.getDataRevision();
     // let a query that's already running (e.g. from page load) finish before clicking
-    if (revision !== undefined) {
-      await this.panel.getData({ timeout: options?.timeout });
-    }
+    const previous = revision === undefined ? undefined : await this.panel.getData({ timeout: options?.timeout });
 
     const queryUrl = this.ctx.selectors.apis.DataSource.query;
     const seen: Array<{ response: Response; requestId?: string; body: Promise<T | null> }> = [];
@@ -275,7 +273,8 @@ export class PanelEditPage extends GrafanaPage {
     try {
       const clicked = await this.refreshPanel(options);
       const data = await this.panel.getData({
-        afterRevision: revision,
+        afterRequestId: previous?.requestId,
+        afterRevision: previous?.requestId ? undefined : revision,
         states: options?.states,
         timeout: options?.timeout,
       });
