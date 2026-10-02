@@ -325,7 +325,16 @@ describe('Migrations', () => {
 
       // The latest version in the migrations
       // (For `runMigrations()` this means the last key in the object according to `getMigrationsToRun()`)
-      expect(setRootConfig).toHaveBeenCalledWith({ version: '2.0.0' });
+      expect(setRootConfig).toHaveBeenCalledWith({ version: '2.0.0' }, process.cwd());
+    });
+
+    it('should run migrations against the given project root', async () => {
+      const project = { root: '/projects/my-plugin', kind: 'single' as const, plugins: [{ dir: '.' }] };
+
+      await runMigrations(migrations, { project });
+
+      expect(migrationOneFn).toHaveBeenCalledWith(expect.objectContaining({ basePath: project.root, project }), {});
+      expect(setRootConfig).toHaveBeenCalledWith({ version: '2.0.0' }, project.root);
     });
 
     it('should NOT update version in ".config/.cprc.json" if any of the migrations fail', async () => {

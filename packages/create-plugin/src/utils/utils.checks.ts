@@ -6,7 +6,7 @@ import { output } from './utils.console.js';
 /**
  * Ensures git directory exists, is clean, and we're in a plugin directory
  */
-export async function performPreCodemodChecks(argv: minimist.ParsedArgs): Promise<void> {
+export async function performPreCodemodChecks(argv: minimist.ParsedArgs, rootPath = process.cwd()): Promise<void> {
   if (!(await isGitDirectory()) && !argv.force) {
     output.error({
       title: 'You are not inside a git directory',
@@ -33,7 +33,7 @@ export async function performPreCodemodChecks(argv: minimist.ParsedArgs): Promis
     process.exit(1);
   }
 
-  if (!isPluginDirectory() && !argv.force) {
+  if (!isPluginDirectory(rootPath) && !argv.force) {
     output.error({
       title: 'Are you inside a plugin directory?',
       body: [

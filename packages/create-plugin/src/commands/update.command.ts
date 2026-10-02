@@ -13,13 +13,15 @@ import { getConfig } from '../utils/utils.config.js';
 import minimist from 'minimist';
 import { output } from '../utils/utils.console.js';
 import { spawnSync } from 'node:child_process';
+import { resolveProject } from '../utils/utils.project.js';
 
 export const update = async (argv: minimist.ParsedArgs) => {
-  await performPreCodemodChecks(argv);
-  const { version } = getConfig();
+  const project = resolveProject();
+  await performPreCodemodChecks(argv, project.root);
+  const { version } = getConfig(project.root);
 
   if (lt(version, LEGACY_UPDATE_CUTOFF_VERSION)) {
-    preparePluginForMigrations(argv);
+    preparePluginForMigrations(argv, project.root);
   }
 
   try {
@@ -46,6 +48,7 @@ export const update = async (argv: minimist.ParsedArgs) => {
     const didMigrationsChangeFiles = await runMigrations(migrations, {
       commitEachMigration: !!argv.commit,
       codemodOptions,
+      project,
     });
 
     if (!didMigrationsChangeFiles) {
@@ -73,8 +76,8 @@ export const update = async (argv: minimist.ParsedArgs) => {
  * Prepares a plugin for migrations by running the legacy update command and installing dependencies.
  * This is a one time operation that ensures the plugin configs are "as expected" by the new migration system.
  */
-function preparePluginForMigrations(argv: minimist.ParsedArgs) {
-  const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
+function preparePluginForMigrations(argv: minimist.ParsedArgs, rootPath: string) {
+  const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback(rootPath);
   const packageManagerExecCmd = getPackageManagerExecCmd(packageManagerName, packageManagerVersion);
   const installCmd = getPackageManagerSilentInstallCmd(packageManagerName, packageManagerVersion);
 
@@ -97,7 +100,7 @@ function preparePluginForMigrations(argv: minimist.ParsedArgs) {
       output.log({
         title: `Running ${output.formatCode(cmd)}`,
       });
-      const spawn = spawnSync(cmd, { shell: true, stdio: 'inherit', cwd: process.cwd() });
+      const spawn = spawnSync(cmd, { shell: true, stdio: 'inherit', cwd: rootPath });
       if (spawn.status !== 0) {
         throw new Error(spawn.stderr.toString());
       }
@@ -108,7 +111,7 @@ function preparePluginForMigrations(argv: minimist.ParsedArgs) {
         output.log({
           title: `Running ${output.formatCode(cmd)}`,
         });
-        const spawn = spawnSync(cmd, { shell: true, cwd: process.cwd() });
+        const spawn = spawnSync(cmd, { shell: true, cwd: rootPath });
         if (spawn.status !== 0) {
           throw new Error(spawn.stderr.toString());
         }

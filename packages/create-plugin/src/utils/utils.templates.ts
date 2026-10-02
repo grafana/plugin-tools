@@ -174,28 +174,11 @@ export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cw
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
   } else {
-    const pluginJson = getPluginJson(path.join(rootPath, 'src'));
-    const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback(rootPath);
-
-    templateData = {
-      ...EXTRA_TEMPLATE_VARIABLES,
-      pluginId: pluginJson.id,
-      pluginName: pluginJson.name,
-      hasBackend: pluginJson.backend,
-      orgName: pluginJson.info.author.name,
-      pluginType: pluginJson.type,
-      packageManagerName: packageManagerName,
-      packageManagerVersion: packageManagerVersion,
-      packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName, packageManagerVersion),
-      isAppType: isAppType(pluginJson.type),
-      isNPM: isNPM(packageManagerName),
-      version: currentVersion,
-      bundleGrafanaUI,
-      scenesVersion: '^8.17.0',
-      pluginExecutable: pluginJson.executable,
-      useExperimentalRspack: Boolean(features.useExperimentalRspack),
-      frontendBundler,
-    };
+    templateData = buildTemplateData({
+      pluginJson: getPluginJson(path.join(rootPath, 'src')),
+      packageManager: getPackageManagerWithFallback(rootPath),
+      features,
+    });
   }
 
   templatesDebugger('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));

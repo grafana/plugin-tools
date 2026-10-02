@@ -13,6 +13,7 @@ import { performPreCodemodChecks } from '../utils/utils.checks.js';
 import { findAdditionTodos, isGitDirectoryClean } from '../utils/utils.git.js';
 import minimist from 'minimist';
 import { output } from '../utils/utils.console.js';
+import { resolveProject } from '../utils/utils.project.js';
 
 const ADD_FEATURES_DOCS_URL = 'https://grafana.com/developers/plugin-tools/how-to-guides/add-features-to-a-plugin';
 
@@ -24,7 +25,8 @@ export const add = async (argv: minimist.ParsedArgs) => {
     process.exit(1);
   }
 
-  await performPreCodemodChecks(argv);
+  const project = resolveProject();
+  await performPreCodemodChecks(argv, project.root);
 
   try {
     const addition = defaultAdditions.find((addition) => addition.name === subCommand);
@@ -45,7 +47,7 @@ export const add = async (argv: minimist.ParsedArgs) => {
 
     let context: Context | undefined;
     if (isScriptAddition(addition)) {
-      context = await runCodemod(addition, codemodOptions);
+      context = await runCodemod(addition, codemodOptions, project);
     }
 
     const message = context?.getMessage();
@@ -67,16 +69,16 @@ export const add = async (argv: minimist.ParsedArgs) => {
         addition,
         agent: resolution.agent,
         context,
-        basePath: process.cwd(),
+        basePath: project.root,
         treeWasDirty,
       });
 
       const summaryBody = result.kind === 'applied' ? [result.summary] : [];
-      const { packageManagerName } = getPackageManagerWithFallback();
+      const { packageManagerName } = getPackageManagerWithFallback(project.root);
       const verifyWarning = buildVerifyWarning(
         addition.name,
         packageManagerName,
-        runVerifyScripts({ scripts: addition.verify ?? [], cwd: process.cwd(), packageManagerName })
+        runVerifyScripts({ scripts: addition.verify ?? [], cwd: project.root, packageManagerName })
       );
 
       if (verifyWarning) {
@@ -90,7 +92,7 @@ export const add = async (argv: minimist.ParsedArgs) => {
 
       const todosWarning = buildAdditionTodosWarning(
         addition.name,
-        await findAdditionTodos(addition.name, process.cwd())
+        await findAdditionTodos(addition.name, project.root)
       );
       if (todosWarning) {
         output.warning(todosWarning);
