@@ -7,6 +7,7 @@ import {
   createComposeFile,
   createPluginPackageJson,
   createRootPackageJson,
+  ESLINT_PLUGIN_PLUGINS_VERSION,
   mergeProvisioning,
   planMonorepoGeneration,
   renderMonorepoTemplates,
@@ -130,7 +131,11 @@ describe('monorepo generation', () => {
         const result = createRootPackageJson(pluginPackageJson, templateData(name, version), 'my-plugins');
 
         expect(result.scripts?.build).toBe(buildScript);
-        expect(result.devDependencies).toEqual({ webpack: '^5.0.0', jest: '^29.0.0' });
+        expect(result.devDependencies).toEqual({
+          webpack: '^5.0.0',
+          jest: '^29.0.0',
+          '@grafana/eslint-plugin-plugins': ESLINT_PLUGIN_PLUGINS_VERSION,
+        });
         expect(result.packageManager).toBe(`${name}@${version}`);
         expect('workspaces' in result).toBe(hasWorkspaces);
       }

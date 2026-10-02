@@ -7,6 +7,9 @@
 
 import { defineConfig, globalIgnores } from 'eslint/config';
 import grafanaConfig from '@grafana/eslint-config';
+{{#if isMonorepo}}
+import grafanaPluginsPlugin from '@grafana/eslint-plugin-plugins';
+{{/if}}
 
 export default defineConfig([
   // Tooling output and caches. Patterns resolve from the plugin's eslint.config.mjs, which imports this file.
@@ -67,4 +70,15 @@ export default defineConfig([
       'react-hooks/rules-of-hooks': 'off',
     },
   },
+{{#if isMonorepo}}
+  {
+    // Each plugin is bundled and shipped on its own, so plugins must not import each other's code.
+    // Share code through a workspace package in packages/ instead.
+    files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
+    plugins: { '@grafana/plugins': grafanaPluginsPlugin },
+    rules: {
+      '@grafana/plugins/no-cross-plugin-imports': 'error',
+    },
+  },
+{{/if}}
 ]);
