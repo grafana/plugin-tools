@@ -5,13 +5,20 @@ import { GetPanelDataOptions } from '../models/components/panelData';
 import {
   compareDataSnapshot,
   DataSnapshotOptions,
+  getDataSnapshotDefaults,
   getDataSnapshotPath,
+  mergeDataSnapshotOptions,
   prettyPrintJson,
   serializeDataSnapshot,
 } from './dataSnapshot';
 
-export interface MatchDataSnapshotOptions
-  extends DataSnapshotOptions, Pick<GetPanelDataOptions, 'states' | 'timeout'> {}
+export interface MatchDataSnapshotOptions extends DataSnapshotOptions, Pick<GetPanelDataOptions, 'states' | 'timeout'> {
+  /**
+   * Set to `false` to ignore the `dataSnapshot` defaults from the Playwright config or `test.use` for this
+   * assertion. By default, the options passed here are added to those defaults.
+   */
+  inheritDefaults?: boolean;
+}
 
 const snapshotCounts = new WeakMap<TestInfo, Map<string, number>>();
 
@@ -33,10 +40,11 @@ export async function toMatchDataSnapshot(
   maybeOptions?: MatchDataSnapshotOptions
 ) {
   const name = typeof nameOrOptions === 'string' ? nameOrOptions : 'panel-data';
-  const options = (typeof nameOrOptions === 'string' ? maybeOptions : nameOrOptions) ?? {};
+  const { states, timeout, ...perCall } = (typeof nameOrOptions === 'string' ? maybeOptions : nameOrOptions) ?? {};
   const testInfo = test.info();
+  const options = mergeDataSnapshotOptions(getDataSnapshotDefaults(testInfo), perCall);
 
-  const data = await panel.getData({ states: options.states, timeout: options.timeout });
+  const data = await panel.getData({ states, timeout });
   const actual = serializeDataSnapshot(data, options);
   const path = getDataSnapshotPath(testInfo.file, testInfo.titlePath.slice(1), getUniqueName(testInfo, name));
   const result = compareDataSnapshot(path, actual, testInfo.config.updateSnapshots);

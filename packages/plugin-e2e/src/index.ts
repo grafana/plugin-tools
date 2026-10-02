@@ -31,6 +31,7 @@ import { readProvisionedAlertRule } from './fixtures/commands/readProvisionedAle
 import { dashboardPage } from './fixtures/dashboardPage';
 import { explorePage } from './fixtures/explorePage';
 import { bootData } from './fixtures/bootData';
+import { dataSnapshotDefaults } from './fixtures/dataSnapshotDefaults';
 import { grafanaVersion } from './fixtures/grafanaVersion';
 import { namespace } from './fixtures/namespace';
 import { isFeatureToggleEnabled, isLegacyFeatureToggleEnabled } from './fixtures/isFeatureToggleEnabled';
@@ -102,6 +103,7 @@ export type {
   GetPanelDataOptions,
 } from './models/components/panelData';
 export type { MatchDataSnapshotOptions } from './matchers/toMatchDataSnapshot';
+export type { DataSnapshotOptions, RedactRule } from './matchers/dataSnapshot';
 
 // helper functions
 export { isLegacyFeatureEnabled, isFeatureEnabled } from './fixtures/isFeatureToggleEnabled';
@@ -115,7 +117,7 @@ const testWithInternal = base.extend<InternalFixtures>({
 });
 
 // then extend with public fixtures
-export const test = testWithInternal.extend<PluginFixture, PluginOptions>({
+const testWithPublic = testWithInternal.extend<PluginFixture, PluginOptions>({
   selectors: e2eSelectors,
   grafanaVersion,
   namespace,
@@ -150,6 +152,11 @@ export const test = testWithInternal.extend<PluginFixture, PluginOptions>({
   gotoAppPage,
   scanForA11yViolations,
   ...options,
+});
+
+// internal auto fixtures that depend on public options
+export const test = testWithPublic.extend<{ _dataSnapshotDefaults: void }>({
+  _dataSnapshotDefaults: [dataSnapshotDefaults, { auto: true }],
 });
 
 export const expect = baseExpect.extend({
@@ -267,6 +274,14 @@ declare global {
        * `grafana-e2edata-panel` visualization. The snapshot is written on the first run, or with `--update-snapshots`.
        *
        * Snapshots are stored in `__data-snapshots__/<test file>/<test title>/<name>.json` next to the test file.
+       *
+       * Options are added to the `dataSnapshot` defaults from the Playwright config or `test.use`, e.g. to redact
+       * values that shouldn't be committed:
+       * ```typescript
+       * await expect(panel).toMatchDataSnapshot('metric-math', {
+       *   redact: [{ pattern: /i-([0-9a-f]{2})[0-9a-f]+/g, replacement: 'i-$1...' }],
+       * });
+       * ```
        *
        * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
        */
