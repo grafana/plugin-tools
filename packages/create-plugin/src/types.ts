@@ -22,6 +22,8 @@ export type TemplateData = {
   isNPM: boolean;
   // pnpm and yarn berry link workspace packages through the `workspace:` protocol, npm and yarn 1 link them automatically.
   supportsWorkspaceProtocol: boolean;
+  // Set when rendering files for a plugin monorepo, where the shared .config enforces module boundaries.
+  isMonorepo?: boolean;
   version: string;
   bundleGrafanaUI: boolean;
   scenesVersion: string;

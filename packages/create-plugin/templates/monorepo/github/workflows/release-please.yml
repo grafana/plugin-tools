@@ -1,0 +1,116 @@
+{{!-- /* 🚨 The `${{ }}` Github workflow expressions need to be escaped so they are not being interpreted by Handlebars. (this comment is going to be removed after scaffolding) 🚨 */ --}}
+name: Release
+
+# release-please opens a release PR for every plugin with unreleased changes, based on conventional commit
+# messages. Merging that PR tags each released plugin as <plugin-id>-v<version>, then this workflow builds,
+# signs and attaches the plugin archive to its GitHub release.
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  release-please:
+    name: Release please
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      paths-released: $\{{ steps.release.outputs.paths_released }}
+    steps:
+      - id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish:
+    name: Publish $\{{ matrix.plugin-dir }}
+    needs: release-please
+    if: $\{{ needs.release-please.outputs.paths-released != '[]' && needs.release-please.outputs.paths-released != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        plugin-dir: $\{{ fromJson(needs.release-please.outputs.paths-released) }}
+    defaults:
+      run:
+        working-directory: $\{{ matrix.plugin-dir }}
+    env:
+      GRAFANA_ACCESS_POLICY_TOKEN: $\{{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+{{#if_eq packageManagerName "pnpm"}}
+      - uses: pnpm/action-setup@v6
+{{/if_eq}}
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: '{{ packageManagerName }}'
+
+      - name: Install dependencies
+        working-directory: .
+        run: {{ packageManagerInstallCmd }}
+
+      - name: Build frontend
+        run: {{ packageManagerName }} run build
+
+      - name: Check for backend
+        id: check-for-backend
+        run: |
+          if [ -f "Magefile.go" ]
+          then
+            echo "has-backend=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Go environment
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: $\{{ matrix.plugin-dir }}/go.mod
+
+      - name: Build backend
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        run: |
+          go install github.com/magefile/mage@latest
+          mage -v buildAll
+
+      - name: Sign plugin
+        if: $\{{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
+        run: {{ packageManagerName }} run sign
+
+      - name: Package plugin
+        id: package
+        run: |
+          PLUGIN_ID=$(jq -r .id dist/plugin.json)
+          PLUGIN_VERSION=$(jq -r .info.version dist/plugin.json)
+          ARCHIVE="${PLUGIN_ID}-${PLUGIN_VERSION}.zip"
+          cp -r dist "${PLUGIN_ID}"
+          zip -r "${ARCHIVE}" "${PLUGIN_ID}"
+          sha1sum "${ARCHIVE}" | cut -f1 -d' ' > "${ARCHIVE}.sha1"
+          echo "archive=${ARCHIVE}" >> $GITHUB_OUTPUT
+          echo "tag=${PLUGIN_ID}-v${PLUGIN_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Validate plugin
+        run: |
+          docker run --pull=always \
+            -v $PWD/${ARCHIVE}:/archive.zip \
+            grafana/plugin-validator-cli -analyzer=metadatavalid /archive.zip
+        env:
+          ARCHIVE: $\{{ steps.package.outputs.archive }}
+
+      - name: Upload plugin archive to the release
+        run: gh release upload "${TAG}" "${ARCHIVE}" "${ARCHIVE}.sha1" --clobber
+        env:
+          GH_TOKEN: $\{{ github.token }}
+          TAG: $\{{ steps.package.outputs.tag }}
+          ARCHIVE: $\{{ steps.package.outputs.archive }}
