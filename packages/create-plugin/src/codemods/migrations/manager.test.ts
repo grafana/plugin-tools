@@ -7,6 +7,7 @@ import { Migration } from './migrations.js';
 import { gitCommitNoVerify, isGitDirectoryClean } from '../../utils/utils.git.js';
 import migrationFixtures from './fixtures/migrations.js';
 import { setRootConfig } from '../../utils/utils.config.js';
+import { output } from '../../utils/utils.console.js';
 import { vi } from 'vitest';
 
 vi.mock('../utils.js', async (importOriginal) => {
@@ -24,6 +25,7 @@ vi.mock('../utils.js', async (importOriginal) => {
 vi.mock('../../utils/utils.console.js', () => ({
   output: {
     log: vi.fn(),
+    warning: vi.fn(),
     addHorizontalLine: vi.fn(),
     logSingleLine: vi.fn(),
     bulletList: vi.fn().mockReturnValue(['']),
@@ -326,6 +328,17 @@ describe('Migrations', () => {
       // The latest version in the migrations
       // (For `runMigrations()` this means the last key in the object according to `getMigrationsToRun()`)
       expect(setRootConfig).toHaveBeenCalledWith({ version: '2.0.0' }, process.cwd());
+    });
+
+    it("should print a migration's message", async () => {
+      migrationOneFn.mockImplementation(async (context: Context) => {
+        context.setMessage({ level: 'warning', title: 'Skipped a step.', body: ['Because reasons.'] });
+        return context;
+      });
+
+      await runMigrations(migrations);
+
+      expect(output.warning).toHaveBeenCalledWith({ title: 'Skipped a step.', body: ['Because reasons.'] });
     });
 
     it('should run migrations against the given project root', async () => {
