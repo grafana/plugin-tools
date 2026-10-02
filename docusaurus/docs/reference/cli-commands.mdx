@@ -91,13 +91,13 @@ Refer to the following table for the full list of prompt bypass options:
 
 ### Create a plugin monorepo
 
-To create a repository for several plugins, add the `--monorepo` flag. `create-plugin` creates an `<organization>-plugins` directory with the plugin in `plugins/<plugin-id>`. To choose the directory name, pass `--monorepo-name`.
+To create a repository for several plugins, add the `--monorepo` flag. `create-plugin` creates the monorepo's root, with the shared configuration and CI workflows but no plugins. Pass the directory name with `--monorepo-name`, or `create-plugin` asks for one.
 
 ```
 npx @grafana/create-plugin --monorepo --monorepo-name="my-plugins"
 ```
 
-To add another plugin, run `create-plugin` from the root of the monorepo. Refer to [Develop several plugins in one repository](../how-to-guides/monorepos.md).
+To add a plugin, run `create-plugin` from the root of the monorepo. It creates the plugin in `plugins/<plugin-id>`. Refer to [Develop several plugins in one repository](../how-to-guides/monorepos.md).
 
 `create-plugin` stops with an error if you run it inside a plugin, or inside a workspace that it didn't create.
 
