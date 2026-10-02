@@ -89,6 +89,15 @@ describe('compareDataSnapshot', () => {
     expect(compareDataSnapshot(path, 'same', 'none')).toMatchObject({ pass: true, written: false });
   });
 
+  it('should pass when only the formatting of the snapshot differs', () => {
+    const path = join(tempDir(), 'a.json');
+    writeFileSync(path, '{ "values": [1, 2, 3] }');
+    expect(compareDataSnapshot(path, '{\n  "values": [\n    1,\n    2,\n    3\n  ]\n}\n', 'none')).toMatchObject({
+      pass: true,
+      written: false,
+    });
+  });
+
   it('should fail on a mismatch without updating', () => {
     const path = join(tempDir(), 'a.json');
     writeFileSync(path, 'expected');

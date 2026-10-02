@@ -115,6 +115,23 @@ export function getDataSnapshotPath(testFile: string, titlePath: string[], name:
   );
 }
 
+// compare parsed JSON so a formatter or editor reflowing the file doesn't fail the test
+function normalizeJson(text: string): string {
+  try {
+    return JSON.stringify(JSON.parse(text));
+  } catch {
+    return text;
+  }
+}
+
+export function prettyPrintJson(text: string): string {
+  try {
+    return `${JSON.stringify(JSON.parse(text), null, 2)}\n`;
+  } catch {
+    return text;
+  }
+}
+
 function writeSnapshot(path: string, actual: string) {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, actual);
@@ -138,7 +155,7 @@ export function compareDataSnapshot(path: string, actual: string, mode: UpdateSn
   }
 
   const expected = readFileSync(path, 'utf-8');
-  if (expected === actual) {
+  if (normalizeJson(expected) === normalizeJson(actual)) {
     return { pass: true, written: false, expected, message: `Data matches the snapshot at ${path}.` };
   }
   if (mode === 'all' || mode === 'changed') {

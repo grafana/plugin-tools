@@ -2,7 +2,13 @@ import { ExpectMatcherState, test, TestInfo } from '@playwright/test';
 
 import { Panel } from '../models/components/Panel';
 import { GetPanelDataOptions } from '../models/components/panelData';
-import { compareDataSnapshot, DataSnapshotOptions, getDataSnapshotPath, serializeDataSnapshot } from './dataSnapshot';
+import {
+  compareDataSnapshot,
+  DataSnapshotOptions,
+  getDataSnapshotPath,
+  prettyPrintJson,
+  serializeDataSnapshot,
+} from './dataSnapshot';
 
 export interface MatchDataSnapshotOptions
   extends DataSnapshotOptions, Pick<GetPanelDataOptions, 'states' | 'timeout'> {}
@@ -48,7 +54,7 @@ export async function toMatchDataSnapshot(
       if (result.expected === undefined || result.pass) {
         return result.message;
       }
-      const diff = this.utils.diff(result.expected, actual);
+      const diff = this.utils.diff(prettyPrintJson(result.expected), actual);
       return `${result.message}\n\n${diff ?? ''}\n\nRun with --update-snapshots (-u) if this change is expected.`;
     },
   };
