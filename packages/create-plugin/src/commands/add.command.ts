@@ -4,6 +4,7 @@ import { getPackageManagerExecCmd, getPackageManagerFromUserAgent } from '../uti
 import { performPreCodemodChecks } from '../utils/utils.checks.js';
 import minimist from 'minimist';
 import { output } from '../utils/utils.console.js';
+import { resolveProject } from '../utils/utils.project.js';
 
 export const add = async (argv: minimist.ParsedArgs) => {
   const subCommand = argv._[1];
@@ -13,7 +14,8 @@ export const add = async (argv: minimist.ParsedArgs) => {
     process.exit(1);
   }
 
-  await performPreCodemodChecks(argv);
+  const project = resolveProject();
+  await performPreCodemodChecks(argv, project.root);
 
   try {
     const addition = defaultAdditions.find((addition) => addition.name === subCommand);
@@ -24,7 +26,7 @@ export const add = async (argv: minimist.ParsedArgs) => {
 
     // filter out minimist internal properties (_ and $0) before passing to codemod
     const { _, $0, ...codemodOptions } = argv;
-    const context = await runCodemod(addition, codemodOptions);
+    const context = await runCodemod(addition, codemodOptions, project);
 
     const message = context.getMessage();
     if (message) {

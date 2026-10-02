@@ -62,10 +62,10 @@ export function flushChanges(context: Context) {
 export async function formatFiles(context: Context) {
   let prettier;
   const require = createRequire(import.meta.url);
-  // import.meta.resolve parent arg doesn't change base path for bare specifiers so need to use require.resolve
-  const localPrettierPath = require.resolve('prettier', { paths: [process.cwd()] });
-
   try {
+    // import.meta.resolve parent arg doesn't change base path for bare specifiers so need to use require.resolve
+    // Fall back to cwd so a codemod run outside an installed project still formats its changes.
+    const localPrettierPath = require.resolve('prettier', { paths: [context.basePath, process.cwd()] });
     prettier = await import(localPrettierPath);
   } catch (error) {
     // don't do anything if prettier is not installed
@@ -82,8 +82,10 @@ export async function formatFiles(context: Context) {
   const files = context.listChanges();
   for (const [filePath, { content, changeType }] of Object.entries(files)) {
     if (changeType !== 'delete' && content) {
-      const prettierOptions = await prettier.resolveConfig(filePath);
-      const supported = await prettier.getFileInfo(filePath, prettierOptions as any);
+      const absoluteFilePath = join(context.basePath, filePath);
+      const prettierOptions = await prettier.resolveConfig(absoluteFilePath);
+      // resolveConfig returns null when no prettier config exists above the file.
+      const supported = await prettier.getFileInfo(absoluteFilePath, (prettierOptions ?? {}) as any);
 
       if (filePath.endsWith('.eslintrc')) {
         supported.inferredParser = 'json';
@@ -125,7 +127,7 @@ export function installNPMDependencies(context: Context) {
   if (packageJsonContents !== packageJsonInstallCache) {
     packageJsonInstallCache = packageJsonContents;
     output.logSingleLine('Installing NPM dependencies...');
-    const packageManager = getPackageManagerWithFallback();
+    const packageManager = getPackageManagerWithFallback(context.basePath);
     const installCmd = getPackageManagerSilentInstallCmd(
       packageManager.packageManagerName,
       packageManager.packageManagerVersion

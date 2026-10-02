@@ -1,6 +1,7 @@
 import { gte, lt } from 'semver';
 
-import { basename } from 'node:path';
+import { basename, join } from 'node:path';
+import { existsSync } from 'node:fs';
 import { findUpSync } from '@libs/find-up';
 import { getPackageJson } from './utils.packagejson.js';
 import { spawnSync } from 'node:child_process';
@@ -169,6 +170,10 @@ function getPackageManagerFromLockFile(cwd: string): PackageManager | undefined 
 }
 
 function getPackageManagerFromPackageJson(cwd: string): PackageManager | undefined {
+  if (!existsSync(join(cwd, 'package.json'))) {
+    return undefined;
+  }
+
   const packageJson = getPackageJson(cwd);
   if (packageJson?.packageManager) {
     const [packageManagerName, packageManagerVersion] = packageJson.packageManager.split('@');

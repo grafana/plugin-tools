@@ -16,7 +16,7 @@ export default function externalizeJSXRuntime(context: Context): Context {
   const hasExternalsFile = context.doesFileExist('.config/bundler/externals.ts');
 
   if (!hasExternalsFile) {
-    const rendered = renderExternalsTemplate();
+    const rendered = renderExternalsTemplate(context.basePath);
 
     context.addFile('.config/bundler/externals.ts', rendered);
 
@@ -67,7 +67,7 @@ export default function externalizeJSXRuntime(context: Context): Context {
       additionsDebug('Could not find a bundler config in `./config` to update with externals import.');
     }
   } else {
-    const rendered = renderExternalsTemplate();
+    const rendered = renderExternalsTemplate(context.basePath);
     context.updateFile('.config/bundler/externals.ts', rendered);
   }
 
@@ -123,10 +123,10 @@ export default function externalizeJSXRuntime(context: Context): Context {
   return context;
 }
 
-function renderExternalsTemplate() {
+function renderExternalsTemplate(rootPath: string) {
   const externalsPath = fileURLToPath(
     new URL('../../../../templates/common/.config/bundler/externals.ts', import.meta.url)
   );
-  const rendered = renderTemplate(externalsPath, true);
+  const rendered = renderTemplate(externalsPath, true, rootPath);
   return rendered;
 }
