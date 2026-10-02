@@ -13,8 +13,19 @@ import { getExportPath } from '../utils/utils.path.js';
 import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 import { checkGenerateLocation } from '../utils/utils.project.js';
 import { getTemplateData, renderTemplateFromFile } from '../utils/utils.templates.js';
-import { printGenerateSuccessMessage, printMonorepoSuccessMessage } from './generate/print-success-message.js';
-import { getDefaultMonorepoName, planMonorepoGeneration, writeFiles } from './generate/monorepo.js';
+import {
+  printGenerateSuccessMessage,
+  printMonorepoCreatedMessage,
+  printMonorepoSuccessMessage,
+} from './generate/print-success-message.js';
+import {
+  DEFAULT_MONOREPO_NAME,
+  getMonorepoTemplateData,
+  planMonorepoGeneration,
+  planMonorepoRoot,
+  writeFiles,
+} from './generate/monorepo.js';
+import Enquirer from 'enquirer';
 import { lt } from 'semver';
 import { promptUser } from './generate/prompt-user.js';
 
@@ -25,11 +36,17 @@ export const generate = async (argv: minimist.ParsedArgs) => {
     process.exit(1);
   }
 
+  // --monorepo creates an empty monorepo; plugins are added by running create-plugin inside it.
+  if (argv.monorepo && !location.monorepoRoot) {
+    await generateMonorepoRoot(argv);
+    return;
+  }
+
   const answers = await promptUser(argv);
   const templateData = getTemplateData(answers);
 
-  if (location.monorepoRoot || argv.monorepo) {
-    await generateMonorepoPlugin({ argv, templateData, monorepoRoot: location.monorepoRoot });
+  if (location.monorepoRoot) {
+    await generateMonorepoPlugin({ templateData, monorepoRoot: location.monorepoRoot });
     return;
   }
 
@@ -87,19 +104,7 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   printGenerateSuccessMessage(templateData);
 };
 
-/**
- * Generates a plugin into a monorepo: a new one created in the current directory, or the existing one the
- * command runs in. Plugins live in plugins/<plugin-id>, sharing the root .config, CI and Grafana.
- */
-async function generateMonorepoPlugin({
-  argv,
-  templateData,
-  monorepoRoot,
-}: {
-  argv: minimist.ParsedArgs;
-  templateData: TemplateData;
-  monorepoRoot?: string;
-}) {
+function exitIfYarnClassic(templateData: TemplateData) {
   if (templateData.packageManagerName === 'yarn' && lt(templateData.packageManagerVersion, '2.0.0')) {
     output.error({
       title: 'Yarn 1 is not supported in plugin monorepos.',
@@ -107,9 +112,84 @@ async function generateMonorepoPlugin({
     });
     process.exit(1);
   }
+}
 
-  const monorepoName =
-    typeof argv['monorepo-name'] === 'string' ? argv['monorepo-name'] : getDefaultMonorepoName(templateData.orgName);
+async function promptMonorepoName(): Promise<string> {
+  const answer: unknown = await new Enquirer().prompt({
+    type: 'input',
+    name: 'monorepoName',
+    message: 'Enter a name for your plugin monorepo',
+    initial: DEFAULT_MONOREPO_NAME,
+    validate: (value: string) => (value.trim() === '' ? 'Enter a directory name' : true),
+  });
+
+  return typeof answer === 'object' &&
+    answer !== null &&
+    'monorepoName' in answer &&
+    typeof answer.monorepoName === 'string'
+    ? answer.monorepoName.trim()
+    : DEFAULT_MONOREPO_NAME;
+}
+
+/**
+ * Creates an empty plugin monorepo in the current directory: the shared .config, root package.json, CI and
+ * agent files. Plugins are added afterwards by running create-plugin inside it.
+ */
+async function generateMonorepoRoot(argv: minimist.ParsedArgs) {
+  // The root belongs to no plugin, so render the shared files from neutral plugin answers.
+  const templateData = getMonorepoTemplateData(
+    getTemplateData({ pluginName: 'plugin', orgName: 'org', pluginType: PLUGIN_TYPES.panel, hasBackend: false })
+  );
+  exitIfYarnClassic(templateData);
+
+  const monorepoName = typeof argv['monorepo-name'] === 'string' ? argv['monorepo-name'] : await promptMonorepoName();
+  const root = path.join(process.cwd(), monorepoName);
+
+  let files;
+  try {
+    files = planMonorepoRoot({ templateData, actions: getTemplateActions({ templateData, exportPath: '' }), root });
+  } catch (error) {
+    output.error({
+      title: 'Aborting monorepo scaffold.',
+      body: [error instanceof Error ? error.message : String(error)],
+    });
+    process.exit(1);
+  }
+
+  await writeFiles(root, files);
+
+  output.success({
+    title: 'Creating plugin monorepo...',
+    body: output.statusList('success', [
+      `Created plugin monorepo ${monorepoName}`,
+      'Added the shared configuration for every plugin (.config)',
+      'Added GitHub actions for CI, e2e tests and releases',
+    ]),
+  });
+
+  if (templateData.packageManagerName === 'yarn') {
+    await execPostScaffoldFunction(configureYarn, root, templateData.packageManagerVersion);
+  }
+
+  await execPostScaffoldFunction(prettifyFiles, { targetPath: root });
+
+  output.addHorizontalLine('gray');
+
+  printMonorepoCreatedMessage({ templateData, root });
+}
+
+/**
+ * Adds a plugin to the monorepo the command runs in. Plugins live in plugins/<plugin-id>, sharing the root
+ * .config, CI and Grafana.
+ */
+async function generateMonorepoPlugin({
+  templateData,
+  monorepoRoot,
+}: {
+  templateData: TemplateData;
+  monorepoRoot: string;
+}) {
+  exitIfYarnClassic(templateData);
 
   let generation;
   try {
@@ -119,7 +199,6 @@ async function generateMonorepoPlugin({
       // Rendered relative to the plugin root, then placed into the monorepo.
       actions: getTemplateActions({ templateData: monorepoTemplateData, exportPath: '' }),
       monorepoRoot,
-      newMonorepoPath: path.join(process.cwd(), monorepoName),
     });
   } catch (error) {
     output.error({
@@ -129,25 +208,19 @@ async function generateMonorepoPlugin({
     process.exit(1);
   }
 
-  const { root, pluginDir, isNewMonorepo, files } = generation;
+  const { root, pluginDir, files } = generation;
   await writeFiles(root, files);
 
   output.success({
     title: 'Scaffolding plugin...',
     body: output.statusList('success', [
-      ...(isNewMonorepo ? [`Created plugin monorepo ${path.basename(root)}`] : []),
       `Scaffolded ${templateData.pluginId} ${templateData.pluginType} plugin in ${pluginDir} ${
         templateData.hasBackend ? '(with Go backend)' : ''
       }`,
       'Added provisioning and the plugin to the shared Grafana development server (Docker)',
       'Registered the plugin with release-please',
-      ...(isNewMonorepo ? ['Added GitHub actions for CI, e2e tests and releases'] : []),
     ]),
   });
-
-  if (isNewMonorepo && templateData.packageManagerName === 'yarn') {
-    await execPostScaffoldFunction(configureYarn, root, templateData.packageManagerVersion);
-  }
 
   if (templateData.hasBackend) {
     await execPostScaffoldFunction(updateGoSdkAndModules, path.join(root, pluginDir));
@@ -157,7 +230,7 @@ async function generateMonorepoPlugin({
 
   output.addHorizontalLine('gray');
 
-  printMonorepoSuccessMessage({ templateData, root, pluginDir, isNewMonorepo });
+  printMonorepoSuccessMessage({ templateData, root, pluginDir });
 }
 
 type TemplateAction = {
