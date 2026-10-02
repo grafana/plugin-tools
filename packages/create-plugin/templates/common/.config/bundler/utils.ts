@@ -34,8 +34,29 @@ export function getPluginJson() {
   return loadJson(path.resolve(process.cwd(), `${SOURCE_DIR}/plugin.json`));
 }
 
+// Plugin files resolve from process.cwd() (the plugin being built). The .config directory can live in the
+// plugin or above it (a monorepo root), so walk up to find it. Avoid __dirname and import.meta here: the
+// config loads as CommonJS through ts-node, or as an ES module through Node's type stripping.
+export function getConfigDir() {
+  const startDir = process.cwd();
+  let currentDir = startDir;
+
+  while (true) {
+    const configDir = path.join(currentDir, '.config');
+    if (fs.existsSync(path.join(configDir, '.cprc.json'))) {
+      return configDir;
+    }
+
+    const parentDir = path.dirname(currentDir);
+    if (parentDir === currentDir) {
+      return path.join(startDir, '.config');
+    }
+    currentDir = parentDir;
+  }
+}
+
 export function getCPConfigVersion() {
-  const cprcJson = path.resolve(process.cwd(), './.config', '.cprc.json');
+  const cprcJson = path.join(getConfigDir(), '.cprc.json');
   return fs.existsSync(cprcJson) ? loadJson(cprcJson).version : { version: 'unknown' };
 }
 
