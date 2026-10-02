@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.5.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.4.0...@grafana/plugin-docs-cli@0.5.0) (2026-10-02)
+
+
+### Features
+
+* **plugin-docs-cli:** align preview with catalog-website layout ([#2913](https://github.com/grafana/plugin-tools/issues/2913)) ([c78f171](https://github.com/grafana/plugin-tools/commit/c78f171baf8d065f9dd24fd2e643d4d210dab500))
+* **plugin-docs-cli:** reject a custom slug on the root index.md ([#2915](https://github.com/grafana/plugin-tools/issues/2915)) ([752f68e](https://github.com/grafana/plugin-tools/commit/752f68ebca197dfaa434e33da7f97b78465a14f1))
+* **plugin-docs-cli:** require typed pages per plugin type ([#2910](https://github.com/grafana/plugin-tools/issues/2910)) ([ab8d63c](https://github.com/grafana/plugin-tools/commit/ab8d63cf55b1dc6d244d66c27566b5d13185728d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from ^0.3.0 to ^0.3.1
+
 ## [0.4.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.3.0...@grafana/plugin-docs-cli@0.4.0) (2026-09-22)
 
 
