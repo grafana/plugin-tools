@@ -68,6 +68,8 @@ beforeEach(() => {
     name: 'rspack-overrides',
     description: 'Port custom things.',
     prompt: pathToFileURL(promptPath).href,
+    scope: 'plugin',
+    supportsMonorepo: true,
   };
 });
 
@@ -80,6 +82,8 @@ describe('prepareAgenticAddition', () => {
     name: 'externalize-jsx-runtime',
     description: 'No prompt here.',
     scriptPath: 'file:///virtual/externalize-jsx-runtime.js',
+    scope: 'repo',
+    supportsMonorepo: true,
   };
 
   it('should return undefined for an addition with no prompt', async () => {

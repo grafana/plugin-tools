@@ -6,12 +6,16 @@ const scriptOnly = {
   name: 'script-only-fixture',
   description: 'A script-only addition',
   scriptPath: 'file:///tmp/script-only-fixture.js',
+  scope: 'plugin',
+  supportsMonorepo: true,
 } satisfies Addition;
 
 const promptOnly = {
   name: 'prompt-only-fixture',
   description: 'A prompt-only addition',
   prompt: 'file:///tmp/prompt-only-fixture.md',
+  scope: 'plugin',
+  supportsMonorepo: true,
 } satisfies Addition;
 
 const hybrid = {
@@ -19,6 +23,8 @@ const hybrid = {
   description: 'A hybrid addition',
   scriptPath: 'file:///tmp/hybrid-fixture.js',
   prompt: 'file:///tmp/hybrid-fixture.md',
+  scope: 'plugin',
+  supportsMonorepo: true,
 } satisfies Addition;
 
 describe('addition type guards', () => {
@@ -80,6 +86,11 @@ describe('additions json', () => {
       const filePath = fileURLToPath(addition.scriptPath);
       const sourceFilePath = filePath.replace('.js', '.ts');
       expect(existsSync(sourceFilePath)).toBe(true);
+    });
+
+    it(`should declare how ${addition.name} applies in a monorepo`, () => {
+      expect(['repo', 'plugin']).toContain(addition.scope);
+      expect(typeof addition.supportsMonorepo).toBe('boolean');
     });
   });
 
