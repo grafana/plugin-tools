@@ -9,6 +9,7 @@
 /packages/plugin-e2e/ @grafana/grafana-catalog
 /packages/plugin-meta-extractor/ @grafana/grafana-catalog
 /packages/plugin-types-bundler/ @grafana/grafana-frontend-platform
+/packages/plugin-vcr/ @grafana/grafana-catalog
 /packages/react-detect/ @grafana/grafana-frontend-platform
 /packages/sign-plugin/ @grafana/grafana-catalog
 /packages/tsconfig/ @grafana/grafana-frontend-platform
