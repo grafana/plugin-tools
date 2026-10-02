@@ -1,6 +1,8 @@
 import { findUpSync } from '@libs/find-up';
+import { glob } from 'glob';
 import fs from 'node:fs';
 import path from 'node:path';
+import { parse as parseYaml } from 'yaml';
 
 // Every project scaffolded by create-plugin has a root config file holding the create-plugin version.
 const PROJECT_ROOT_MARKER = path.join('.config', '.cprc.json');
@@ -8,6 +10,8 @@ const PROJECT_ROOT_MARKER = path.join('.config', '.cprc.json');
 export interface PluginEntry {
   // Path of the plugin directory relative to the project root ('.' for a single plugin).
   dir: string;
+  // The plugin id from src/plugin.json, when it can be read.
+  id?: string;
 }
 
 export interface ProjectLayout {
@@ -29,17 +33,90 @@ export function findProjectRoot(cwd: string = process.cwd()): string | undefined
   return path.dirname(path.dirname(markerPath));
 }
 
+function readJson(filePath: string): unknown {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  } catch {
+    return undefined;
+  }
+}
+
+function readPluginId(pluginDir: string): string | undefined {
+  const pluginJson = readJson(path.join(pluginDir, 'src', 'plugin.json'));
+  if (pluginJson && typeof pluginJson === 'object' && 'id' in pluginJson && typeof pluginJson.id === 'string') {
+    return pluginJson.id;
+  }
+  return undefined;
+}
+
+function toGlobList(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === 'string') : [];
+}
+
+/**
+ * Reads the workspace globs declared at `root`: the package.json "workspaces" field (array or yarn's
+ * `{ packages }` form), or the "packages" list in pnpm-workspace.yaml.
+ */
+export function getWorkspaceGlobs(root: string): string[] {
+  const packageJson = readJson(path.join(root, 'package.json'));
+  if (packageJson && typeof packageJson === 'object' && 'workspaces' in packageJson) {
+    const { workspaces } = packageJson;
+    if (workspaces && typeof workspaces === 'object' && 'packages' in workspaces) {
+      return toGlobList(workspaces.packages);
+    }
+    return toGlobList(workspaces);
+  }
+
+  const pnpmWorkspacePath = path.join(root, 'pnpm-workspace.yaml');
+  if (fs.existsSync(pnpmWorkspacePath)) {
+    try {
+      const pnpmWorkspace: unknown = parseYaml(fs.readFileSync(pnpmWorkspacePath, 'utf-8'));
+      if (pnpmWorkspace && typeof pnpmWorkspace === 'object' && 'packages' in pnpmWorkspace) {
+        return toGlobList(pnpmWorkspace.packages);
+      }
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+}
+
+// Workspaces that hold a plugin (a src/plugin.json), relative to `root` and sorted for a stable order.
+function findWorkspacePlugins(root: string): PluginEntry[] {
+  const patterns = getWorkspaceGlobs(root).filter((pattern) => !pattern.startsWith('!'));
+  if (patterns.length === 0) {
+    return [];
+  }
+
+  const workspaceDirs = glob.sync(patterns, { cwd: root, ignore: ['**/node_modules/**'] });
+
+  return [...new Set(workspaceDirs)]
+    .map((dir) => path.normalize(dir))
+    .filter((dir) => fs.existsSync(path.join(root, dir, 'src', 'plugin.json')))
+    .sort()
+    .map((dir) => ({ dir, id: readPluginId(path.join(root, dir)) }));
+}
+
 /**
  * Resolves the layout of the project `cwd` belongs to.
+ * A project root without its own src/plugin.json whose workspaces contain plugins is a monorepo.
  * Falls back to `cwd` as the project root for plugins that predate `.config/.cprc.json`.
  */
 export function resolveProject(cwd: string = process.cwd()): ProjectLayout {
   const root = findProjectRoot(cwd) ?? cwd;
 
+  if (!fs.existsSync(path.join(root, 'src', 'plugin.json'))) {
+    const plugins = findWorkspacePlugins(root);
+    if (plugins.length > 0) {
+      return { root, kind: 'monorepo', plugins };
+    }
+  }
+
   return {
     root,
     kind: 'single',
-    plugins: [{ dir: '.' }],
+    plugins: [{ dir: '.', id: readPluginId(root) }],
   };
 }
 
