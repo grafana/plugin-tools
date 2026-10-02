@@ -13,7 +13,9 @@ import { getExportPath } from '../utils/utils.path.js';
 import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
 import { checkGenerateLocation } from '../utils/utils.project.js';
 import { getTemplateData, renderTemplateFromFile } from '../utils/utils.templates.js';
-import { printGenerateSuccessMessage } from './generate/print-success-message.js';
+import { printGenerateSuccessMessage, printMonorepoSuccessMessage } from './generate/print-success-message.js';
+import { getDefaultMonorepoName, planMonorepoGeneration, writeFiles } from './generate/monorepo.js';
+import { lt } from 'semver';
 import { promptUser } from './generate/prompt-user.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
@@ -25,6 +27,12 @@ export const generate = async (argv: minimist.ParsedArgs) => {
 
   const answers = await promptUser(argv);
   const templateData = getTemplateData(answers);
+
+  if (location.monorepoRoot || argv.monorepo) {
+    await generateMonorepoPlugin({ argv, templateData, monorepoRoot: location.monorepoRoot });
+    return;
+  }
+
   const exportPath = getExportPath(templateData.pluginName, templateData.orgName, templateData.pluginType);
   const exportPathExists = await directoryExists(exportPath);
   const exportPathIsPopulated = exportPathExists ? (await readdir(exportPath)).length > 0 : false;
@@ -79,13 +87,85 @@ export const generate = async (argv: minimist.ParsedArgs) => {
   printGenerateSuccessMessage(templateData);
 };
 
+/**
+ * Generates a plugin into a monorepo: a new one created in the current directory, or the existing one the
+ * command runs in. Plugins live in plugins/<plugin-id>, sharing the root .config, CI and Grafana.
+ */
+async function generateMonorepoPlugin({
+  argv,
+  templateData,
+  monorepoRoot,
+}: {
+  argv: minimist.ParsedArgs;
+  templateData: TemplateData;
+  monorepoRoot?: string;
+}) {
+  if (templateData.packageManagerName === 'yarn' && lt(templateData.packageManagerVersion, '2.0.0')) {
+    output.error({
+      title: 'Yarn 1 is not supported in plugin monorepos.',
+      body: ['Use npm, pnpm, or yarn 2 or later instead.'],
+    });
+    process.exit(1);
+  }
+
+  const monorepoName =
+    typeof argv['monorepo-name'] === 'string' ? argv['monorepo-name'] : getDefaultMonorepoName(templateData.orgName);
+
+  let generation;
+  try {
+    generation = planMonorepoGeneration({
+      templateData,
+      // Rendered relative to the plugin root, then placed into the monorepo.
+      actions: getTemplateActions({ templateData, exportPath: '' }),
+      monorepoRoot,
+      newMonorepoPath: path.join(process.cwd(), monorepoName),
+    });
+  } catch (error) {
+    output.error({
+      title: 'Aborting plugin scaffold.',
+      body: [error instanceof Error ? error.message : String(error)],
+    });
+    process.exit(1);
+  }
+
+  const { root, pluginDir, isNewMonorepo, files } = generation;
+  await writeFiles(root, files);
+
+  output.success({
+    title: 'Scaffolding plugin...',
+    body: output.statusList('success', [
+      ...(isNewMonorepo ? [`Created plugin monorepo ${path.basename(root)}`] : []),
+      `Scaffolded ${templateData.pluginId} ${templateData.pluginType} plugin in ${pluginDir} ${
+        templateData.hasBackend ? '(with Go backend)' : ''
+      }`,
+      'Added provisioning and the plugin to the shared Grafana development server (Docker)',
+      'Registered the plugin with release-please',
+      ...(isNewMonorepo ? ['Added GitHub actions for CI, e2e tests and releases'] : []),
+    ]),
+  });
+
+  if (isNewMonorepo && templateData.packageManagerName === 'yarn') {
+    await execPostScaffoldFunction(configureYarn, root, templateData.packageManagerVersion);
+  }
+
+  if (templateData.hasBackend) {
+    await execPostScaffoldFunction(updateGoSdkAndModules, path.join(root, pluginDir));
+  }
+
+  await execPostScaffoldFunction(prettifyFiles, { targetPath: root });
+
+  output.addHorizontalLine('gray');
+
+  printMonorepoSuccessMessage({ templateData, root, pluginDir, isNewMonorepo });
+}
+
 type TemplateAction = {
   templateFile: string;
   path: string;
   data: TemplateData;
 };
 
-function getTemplateActions({ exportPath, templateData }: { exportPath: string; templateData: any }) {
+export function getTemplateActions({ exportPath, templateData }: { exportPath: string; templateData: any }) {
   const commonActions = getActionsForTemplateFolder({
     folderPath: TEMPLATE_PATHS.common,
     exportPath,
