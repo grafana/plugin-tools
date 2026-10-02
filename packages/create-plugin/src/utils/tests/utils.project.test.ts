@@ -129,7 +129,7 @@ describe('utils.project', () => {
       const result = checkGenerateLocation(projectDir);
 
       expect(result.error).toBeUndefined();
-      expect(result.project?.root).toBe(projectDir);
+      expect(result.monorepoRoot).toBe(projectDir);
     });
   });
 
