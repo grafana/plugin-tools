@@ -68,8 +68,7 @@
   // Ordering matters for `commitMessagePrefix` - see the prod-deps catch-all comment.
   "packageRules": [
     // Grafana libs ship inside our published packages, so their bumps must release. Patch bumps are
-    // batched into one PR (groupSlug = branch name). e2e-selectors is separate (own nightly rule);
-    // Skips zero major due to !/^0/.
+    // batched into one PR (groupSlug = branch name). Skips zero major due to !/^0/.
     {
       "automerge": false,
       "groupName": "grafana patch dependencies",
@@ -79,8 +78,7 @@
       "matchUpdateTypes": ["patch"],
       "matchPackageNames": [
         "/@grafana/*/",
-        "/grafana/grafana-enterprise/",
-        "!@grafana/e2e-selectors"
+        "/grafana/grafana-enterprise/"
       ],
       "minimumReleaseAge": null,
       "commitMessagePrefix": "fix(deps):"
@@ -95,8 +93,7 @@
         "/@grafana/*/",
         "/grafana/grafana-enterprise/",
         "!@grafana/eslint-config",
-        "!@grafana/scenes",
-        "!@grafana/e2e-selectors"
+        "!@grafana/scenes"
       ],
       "minimumReleaseAge": null,
       "commitMessagePrefix": "fix(deps):"
@@ -173,26 +170,6 @@
       "matchManagers": ["github-actions"],
       "matchFileNames": [".github/workflows/**"],
       "commitMessagePrefix": "chore(ci):"
-    },
-    // @grafana/e2e-selectors tracks nightly builds (13.x-<run-id> prereleases published above the
-    // `latest` dist-tag, hence ignoreUnstable/respectLatest false). followTag: "nightly" could never
-    // pass the org-forced 3-day minimumReleaseAge (the tag always points at a <1 day old build),
-    // which froze the branch entirely (#2672). Version-based tracking lets Renovate pick the newest
-    // nightly that clears the age gate instead. Bumps here should release so fix(deps).
-    {
-      "automerge": true,
-      "groupName": "e2e-selectors nightly",
-      "groupSlug": "plugin-e2e-selectors",
-      "labels": ["dependencies", "javascript"],
-      "matchPackageNames": ["@grafana/e2e-selectors"],
-      "ignoreUnstable": false,
-      "respectLatest": false,
-      "rangeStrategy": "bump",
-      "matchFileNames": [
-        "packages/plugin-e2e/package.json",
-        "package-lock.json"
-      ],
-      "commitMessagePrefix": "fix(deps):"
     }
   ],
   "vulnerabilityAlerts": {

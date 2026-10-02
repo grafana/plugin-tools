@@ -26,7 +26,7 @@ export abstract class GrafanaPage {
   }
 
   /**
-   * Get a locator based on a Grafana E2E selector. A grafana E2E selector is defined in @grafana/e2e-selectors or in plugin-e2e/src/e2e-selectors.
+   * Get a locator based on a Grafana E2E selector. A grafana E2E selector is defined in Grafana's @grafana/e2e-selectors package or in plugin-e2e/src/selectors.
    * An E2E selector is a string that identifies a specific element in the Grafana UI. The element referencing the E2E selector use the data-testid or aria-label attribute.
    */
   getByGrafanaSelector(selector: string, options?: getByGrafanaSelectorOptions): Locator {
