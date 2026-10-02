@@ -19,7 +19,6 @@ import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, isWSL } from '../bundler/utils.ts';
 import { externals } from '../bundler/externals.ts';
 import { copyFilePatterns } from '../bundler/copyFiles.ts';
-import { PluginScopePlugin } from '../bundler/pluginScope.ts';
 
 const { SubresourceIntegrityPlugin } = rspack.experiments;
 const pluginJson = getPluginJson();
@@ -153,8 +152,6 @@ const config = async (env): Promise<Configuration> => {
 
     plugins: [
       new BuildModeRspackPlugin(),
-      // Fail the build when the plugin imports another plugin's code
-      new PluginScopePlugin(),
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new rspack.BannerPlugin({
