@@ -11,7 +11,7 @@ import { SecretScrubber } from './redact.js';
 import { scanHar } from './scan.js';
 import { startProxyServer } from './server.js';
 import { loadOrCreateCA } from './tls.js';
-import type { ProxyMode } from './types.js';
+import type { Finding, ProxyMode } from './types.js';
 
 export interface CliArgs {
   command: string;
@@ -78,6 +78,10 @@ export async function runServe(options: Record<string, string>): Promise<void> {
         console.error(
           `refused to write ${harPath}: ${summary.findings.length} finding(s), quarantined at ${summary.quarantined.join(', ')}`
         );
+        // without these the only record of what tripped the scan is inside the quarantine file
+        for (const finding of summary.findings) {
+          console.error(describeFinding(finding));
+        }
         process.exitCode = 1;
       } else if (summary.files.length === 0) {
         console.log(`nothing recorded, left ${harPath} as it was`);
@@ -114,9 +118,13 @@ export async function runScan(options: Record<string, string>): Promise<void> {
     return;
   }
   for (const finding of findings) {
-    console.log(`${finding.file} entry ${finding.entry} [${finding.location}] ${finding.rule}: ${finding.preview}`);
+    console.log(describeFinding(finding));
   }
   process.exitCode = 1;
+}
+
+function describeFinding(finding: Finding): string {
+  return `${finding.file} entry ${finding.entry} [${finding.location}] ${finding.rule}: ${finding.preview}`;
 }
 
 export async function runFields(options: Record<string, string>): Promise<void> {

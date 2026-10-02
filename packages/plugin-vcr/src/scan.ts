@@ -9,6 +9,12 @@ interface SecretShapePattern {
   pattern: RegExp;
   /** Excludes a match that's a known benign shape sharing the same regex (e.g. a git SHA). */
   isFalsePositive?: (match: string) => boolean;
+  /**
+   * The pattern has no distinctive literal to anchor on, so it's really a character-class
+   * heuristic. Those are only meaningful in text: a long enough run of arbitrary bytes contains
+   * a match for almost any such pattern, so they're skipped on binary bodies.
+   */
+  unanchored?: boolean;
 }
 
 /**
@@ -18,7 +24,7 @@ interface SecretShapePattern {
  */
 const SECRET_SHAPE_PATTERNS: SecretShapePattern[] = [
   { rule: 'aws-access-key-id', pattern: /\bAKIA[0-9A-Z]{16}\b/ },
-  { rule: 'aws-secret-key-like', pattern: /\b[A-Za-z0-9/+=]{40}\b/, isFalsePositive: isGitSha },
+  { rule: 'aws-secret-key-like', pattern: /\b[A-Za-z0-9/+=]{40}\b/, isFalsePositive: isGitSha, unanchored: true },
   { rule: 'github-token', pattern: /\bgh[pousr]_[A-Za-z0-9]{36,}\b/ },
   // any JWT, not just a Bearer header: a form-encoded OAuth assertion is exchangeable for an access token
   { rule: 'jwt', pattern: /\beyJ[A-Za-z0-9_-]{8,}\.eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}/ },
@@ -36,11 +42,12 @@ export function scanHar(har: Har, filePath: string, scrubber: SecretScrubber): F
   const findings: Finding[] = [];
 
   har.log.entries.forEach((entry, index) => {
-    for (const [location, text] of scannableParts(entry)) {
+    for (const { location, text, isBinary } of scannableParts(entry)) {
       if (text === '') {
         continue;
       }
-      // scrub() has no side effects; any change means a known or learned secret is still present
+      // scrub() has no side effects; any change means a known or learned secret is still present.
+      // this is an exact-value match, so it runs on binary too
       if (scrubber.scrub(text, {}) !== text) {
         findings.push({
           file: filePath,
@@ -51,6 +58,9 @@ export function scanHar(har: Har, filePath: string, scrubber: SecretScrubber): F
         });
       }
       for (const shapePattern of SECRET_SHAPE_PATTERNS) {
+        if (shapePattern.unanchored && isBinary) {
+          continue;
+        }
         const match = firstRealMatch(text, shapePattern);
         if (match) {
           findings.push({
@@ -68,17 +78,24 @@ export function scanHar(har: Har, filePath: string, scrubber: SecretScrubber): F
   return findings;
 }
 
-function scannableParts(entry: HarEntry): Array<[string, string]> {
+interface ScannablePart {
+  location: string;
+  text: string;
+  /** The body wasn't valid UTF-8, so it's stored as base64 and read back a byte per char. */
+  isBinary: boolean;
+}
+
+function scannableParts(entry: HarEntry): ScannablePart[] {
   const { content } = entry.response;
   // binary bodies are stored as base64; latin1 maps each byte to one char, so an ASCII secret stays findable
-  const responseBody =
-    content.encoding === 'base64' ? Buffer.from(content.text, 'base64').toString('latin1') : content.text;
+  const isBinary = content.encoding === 'base64';
+  const responseBody = isBinary ? Buffer.from(content.text, 'base64').toString('latin1') : content.text;
   return [
-    ['request.url', entry.request.url],
-    ['request.headers', headerText(entry.request.headers)],
-    ['request.body', entry.request.postData?.text ?? ''],
-    ['response.headers', headerText(entry.response.headers)],
-    ['response.body', responseBody],
+    { location: 'request.url', text: entry.request.url, isBinary: false },
+    { location: 'request.headers', text: headerText(entry.request.headers), isBinary: false },
+    { location: 'request.body', text: entry.request.postData?.text ?? '', isBinary: false },
+    { location: 'response.headers', text: headerText(entry.response.headers), isBinary: false },
+    { location: 'response.body', text: responseBody, isBinary },
   ];
 }
 

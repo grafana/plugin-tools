@@ -105,6 +105,38 @@ describe('scanHar locations', () => {
     const findings = scanHar(har, 'e2e/recordings/api.har', new SecretScrubber({ API_KEY: 'sekret-value-123' }));
     expect(findings).toContainEqual(expect.objectContaining({ rule: 'known-secret-value', location: 'response.body' }));
   });
+
+  // a zip or an image contains a run of 40 base64-ish bytes almost by definition, so the
+  // character-class rules would refuse every recording that captured one
+  it('does not flag a run of arbitrary bytes in a binary body as AWS-secret-shaped', () => {
+    const har = emptyHar();
+    const noise = Buffer.from('pageDataSjQ2kLmNpQrStUvWxYz0123456789AbCdEfGhIjKlMnOpQrS/UT', 'latin1');
+    const binary = Buffer.concat([Buffer.from([0x50, 0x4b, 0x03, 0x04, 0xff, 0xfe]), noise]);
+    har.log.entries.push(
+      toHarEntry(req(), { status: 200, statusText: 'OK', headers: {}, body: binary }, new Date(), 1)
+    );
+    expect(har.log.entries[0].response.content.encoding).toBe('base64');
+    const findings = scanHar(har, 'e2e/recordings/api.har', new SecretScrubber({}));
+    expect(findings).toEqual([]);
+  });
+
+  it('still flags an anchored secret shape in a binary body', () => {
+    const har = emptyHar();
+    const binary = Buffer.concat([Buffer.from([0xff, 0xfe, 0x00]), Buffer.from(fakeAwsAccessKeyId)]);
+    har.log.entries.push(
+      toHarEntry(req(), { status: 200, statusText: 'OK', headers: {}, body: binary }, new Date(), 1)
+    );
+    expect(har.log.entries[0].response.content.encoding).toBe('base64');
+    const findings = scanHar(har, 'e2e/recordings/api.har', new SecretScrubber({}));
+    expect(findings).toContainEqual(expect.objectContaining({ rule: 'aws-access-key-id', location: 'response.body' }));
+  });
+
+  it('still flags an AWS-secret-shaped value in a text body', () => {
+    const har = emptyHar();
+    har.log.entries.push(toHarEntry(req(), res(JSON.stringify({ secret: fakeAwsSecretKeyLike })), new Date(), 1));
+    const findings = scanHar(har, 'e2e/recordings/api.har', new SecretScrubber({}));
+    expect(findings).toContainEqual(expect.objectContaining({ rule: 'aws-secret-key-like' }));
+  });
 });
 
 describe('scanHar JWT rule', () => {
