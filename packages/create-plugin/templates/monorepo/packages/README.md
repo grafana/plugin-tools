@@ -2,7 +2,7 @@
 
 Put code that several plugins use in a workspace package in this directory, for example `packages/shared-utils`.
 
-Plugins can't import code from each other directly. Each plugin is bundled, signed and shipped on its own, so the build fails if a plugin reaches into another plugin, or outside its own directory by relative path. Shared code goes through a workspace package instead:
+Plugins can't import code from each other directly. Each plugin is bundled, signed and shipped on its own, so the `@grafana/plugins/no-cross-plugin-imports` ESLint rule reports an error if a plugin reaches into another plugin, or outside its own directory by relative path. Shared code goes through a workspace package instead:
 
 1. Create the package, for example `packages/shared-utils/package.json`:
 
