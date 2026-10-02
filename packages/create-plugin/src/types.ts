@@ -20,6 +20,8 @@ export type TemplateData = {
   packageManagerVersion: string;
   isAppType: boolean;
   isNPM: boolean;
+  // pnpm and yarn berry link workspace packages through the `workspace:` protocol, npm and yarn 1 link them automatically.
+  supportsWorkspaceProtocol: boolean;
   version: string;
   bundleGrafanaUI: boolean;
   scenesVersion: string;

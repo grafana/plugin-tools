@@ -7,6 +7,8 @@
 
 This `.config/` directory holds the default configuration files for the tooling used to develop, test and build grafana plugins.
 
+`.config/` is a workspace package named `@grafana/create-plugin-configs`. The configuration files in the project root import it by name (for example `@grafana/create-plugin-configs/jest`), so they work the same wherever `.config/` lives.
+
 ## How to extend tooling configuration
 If you need to extend these configurations do not edit them directly, instead refer to the [Extend default configurations guide](https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations).
 
