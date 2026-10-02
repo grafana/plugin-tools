@@ -1,6 +1,9 @@
 # eslint-plugin-plugins
 
-`eslint-plugin-plugins` contains an ESLint rule that checks whether imports from any of the Grafana packages (`@grafana/ui`, `@grafana/data` and `@grafana/runtime`) from within a Grafana plugin source code exist in all the Grafana runtimes that the plugin is supposed to support (as specified in the `grafanaDependency` in `plugin.json`).
+`eslint-plugin-plugins` contains ESLint rules for Grafana plugins:
+
+- `import-is-compatible` checks whether imports from any of the Grafana packages (`@grafana/ui`, `@grafana/data` and `@grafana/runtime`) from within a Grafana plugin source code exist in all the Grafana runtimes that the plugin is supposed to support (as specified in the `grafanaDependency` in `plugin.json`).
+- `no-cross-plugin-imports` stops a plugin importing code from another plugin in the same repository.
 
 ## How to install
 
@@ -65,12 +68,36 @@ When the ESlint plugin is loaded the first time, it will check the `grafanaDepen
 
 The `import-is-compatible` rule only checks backwards compatibility. If a member has been removed in an upcoming release of the Grafana packages, it will not be detected.
 
+## No cross-plugin imports
+
+Each plugin is bundled, signed and shipped on its own, so in a repository with several plugins one plugin must not import another plugin's code. The `no-cross-plugin-imports` rule reports:
+
+- relative imports that resolve into another plugin's directory
+- imports of another plugin's package name (workspace packages are followed through `node_modules`)
+- relative imports that reach outside the plugin, for example into a shared `packages/` directory. Depend on the shared workspace package by name instead.
+
+A plugin's root is the nearest directory with a `src/plugin.json`. Nested plugins inside an app plugin share the app's root, so they can import each other. Files outside a plugin are not checked. In a single-plugin repository the rule only flags relative imports that leave the plugin.
+
+```js
+const grafanaPlugins = require('@grafana/eslint-plugin-plugins');
+
+module.exports = [
+  {
+    plugins: { '@grafana/plugins': grafanaPlugins },
+    rules: {
+      '@grafana/plugins/no-cross-plugin-imports': 'error',
+    },
+  },
+];
+```
+
 ## Contributing
 
 Refer to the [contributing guidelines](./CONTRIBUTING.md).
 
 ### Rules
 
-| Name                 | Description                                                                                                          |
-| :------------------- | :------------------------------------------------------------------------------------------------------------------- |
-| import-is-compatible | A rule that checks if the imported member is available in all Grafana runtime environments that the plugin supports. |
+| Name                    | Description                                                                                                          |
+| :---------------------- | :------------------------------------------------------------------------------------------------------------------- |
+| import-is-compatible    | A rule that checks if the imported member is available in all Grafana runtime environments that the plugin supports. |
+| no-cross-plugin-imports | A rule that stops a plugin importing code from another plugin, or from outside the plugin by relative path.          |
