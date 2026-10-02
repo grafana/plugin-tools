@@ -6,7 +6,9 @@ import { vi } from 'vitest';
 import { getPackageJson, writePackageJson } from '../utils.packagejson.js';
 import { getPackageManagerWithFallback } from '../utils.packageManager.js';
 import { isPluginDirectory } from '../utils.plugin.js';
-import { getTemplateData } from '../utils.templates.js';
+import { compileSingleTemplateFile, getTemplateData } from '../utils.templates.js';
+import { getOnlyExistingInCwd } from '../utils.files.js';
+import { PLUGIN_TYPES, TEMPLATE_PATHS } from '../../constants.js';
 
 const tmpObj = dirSync({ unsafeCleanup: true });
 
@@ -65,5 +67,17 @@ describe('Utils / explicit project root', () => {
     expect(templateData.pluginId).toBe(pluginJson.id);
     expect(templateData.orgName).toBe('Myorg');
     expect(templateData.packageManagerName).toBe('yarn');
+  });
+
+  test('compileSingleTemplateFile() writes to the given root', () => {
+    const templateFile = path.join(TEMPLATE_PATHS.common, 'docker-compose.yaml');
+
+    compileSingleTemplateFile(PLUGIN_TYPES.panel, templateFile, getTemplateData(undefined, projectRoot), projectRoot);
+
+    expect(fs.existsSync(path.join(projectRoot, 'docker-compose.yaml'))).toBe(true);
+  });
+
+  test('getOnlyExistingInCwd() checks files in the given root', () => {
+    expect(getOnlyExistingInCwd(['package.json', 'missing.json'], projectRoot)).toEqual(['package.json']);
   });
 });

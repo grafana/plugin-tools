@@ -46,17 +46,17 @@ export async function directoryExists(path: string) {
   }
 }
 
-export function getOnlyExistingInCwd(files: string[]) {
-  return files.filter((file) => fs.existsSync(path.join(process.cwd(), file)));
+export function getOnlyExistingInCwd(files: string[], rootPath = process.cwd()) {
+  return files.filter((file) => fs.existsSync(path.join(rootPath, file)));
 }
 
-export function getOnlyNotExistingInCwd(files: string[]) {
-  return files.filter((file) => !fs.existsSync(path.join(process.cwd(), file)));
+export function getOnlyNotExistingInCwd(files: string[], rootPath = process.cwd()) {
+  return files.filter((file) => !fs.existsSync(path.join(rootPath, file)));
 }
 
-export function removeFilesInCwd(files: string[]) {
+export function removeFilesInCwd(files: string[], rootPath = process.cwd()) {
   for (const file of files) {
-    fs.rmSync(path.join(process.cwd(), file), { recursive: true, force: true });
+    fs.rmSync(path.join(rootPath, file), { recursive: true, force: true });
   }
 }
 
