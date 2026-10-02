@@ -149,18 +149,16 @@ services:
       - /bin/sh
       - -c
       - |
-        mkdir -p /etc/ssl/certs/proxy
-        curl -sf http://vcr:8091/ca.pem -o /etc/ssl/certs/proxy/ca.pem
+        curl -sf http://vcr:8091/ca.pem -o /etc/ssl/certs/plugin-vcr-ca.pem
         exec /run.sh
     environment:
       API_TOKEN: ${API_TOKEN:-dummy-token}
       HTTPS_PROXY: http://vcr:8091
       HTTP_PROXY: http://vcr:8091
       NO_PROXY: localhost,127.0.0.1
-      SSL_CERT_DIR: /etc/ssl/certs/proxy
 ```
 
-Grafana trusts the proxy's CA through `SSL_CERT_DIR`, which adds to the system CA bundle. Don't use `SSL_CERT_FILE`: it replaces the bundle, and Grafana's own calls to grafana.com start failing.
+Grafana and its plugin processes trust the proxy's CA because Go reads every certificate file in `/etc/ssl/certs`, next to the system CA bundle. Don't point `SSL_CERT_DIR` or `SSL_CERT_FILE` at the CA instead: older Grafana versions don't forward either variable to plugin processes, so the plugin fails with `x509: certificate signed by unknown authority`. `SSL_CERT_FILE` also replaces the bundle, and Grafana's own calls to grafana.com start failing.
 
 Replace `API_TOKEN` with the environment variables your provisioning file uses. The dummy default lets replay start without the real value. Vendor SDKs often refuse to sign a request with an empty key.
 
