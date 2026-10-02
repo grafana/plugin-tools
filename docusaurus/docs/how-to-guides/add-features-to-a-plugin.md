@@ -120,7 +120,7 @@ It's a hybrid addition:
 
 If you run the addition with `--no-agent` and your plugin has its own webpack configuration, the root `rspack.config.ts` makes your build fail with an `[rspack]` error until you port your customizations. This stops you from releasing a build that's missing them.
 
-After the addition, check that your plugin still builds and runs:
+After the addition, check that your plugin still builds and runs. If `create-plugin` started the agent, it has already run your `typecheck` and `build` scripts.
 
 ```shell
 npm run typecheck

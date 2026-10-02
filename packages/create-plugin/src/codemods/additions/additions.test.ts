@@ -62,6 +62,7 @@ describe('additions json', () => {
     expect(rspack).toBeDefined();
     expect(isScriptAddition(rspack!)).toBe(true);
     expect(hasPromptStep(rspack!)).toBe(true);
+    expect(rspack!.verify).toEqual(['typecheck', 'build']);
   });
 
   defaultAdditions.forEach((addition) => {

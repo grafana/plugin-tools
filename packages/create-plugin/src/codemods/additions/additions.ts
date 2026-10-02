@@ -48,6 +48,7 @@ const additions: Addition[] = [
     description: 'Migrates the plugin frontend build from webpack or experimental rspack to rspack 2',
     scriptPath: import.meta.resolve('./scripts/rspack.js'),
     prompt: import.meta.resolve('./prompts/rspack.md'),
+    verify: ['typecheck', 'build'],
   },
   {
     name: 'experimental-app-sdk',
