@@ -113,10 +113,11 @@ async function generateMonorepoPlugin({
 
   let generation;
   try {
+    const monorepoTemplateData = { ...templateData, isMonorepo: true };
     generation = planMonorepoGeneration({
-      templateData,
+      templateData: monorepoTemplateData,
       // Rendered relative to the plugin root, then placed into the monorepo.
-      actions: getTemplateActions({ templateData, exportPath: '' }),
+      actions: getTemplateActions({ templateData: monorepoTemplateData, exportPath: '' }),
       monorepoRoot,
       newMonorepoPath: path.join(process.cwd(), monorepoName),
     });

@@ -14,6 +14,10 @@ export type FileMap = Map<string, string>;
 
 export const PLUGINS_DIR = 'plugins';
 const CONFIG_PACKAGE = '@grafana/create-plugin-configs';
+// Provides the no-cross-plugin-imports rule that enforces module boundaries between plugins.
+// TODO: swap the pkg.pr.new preview build for the published version once the rule is released.
+export const ESLINT_PLUGIN_PLUGINS_VERSION =
+  'https://pkg.pr.new/grafana/plugin-tools/@grafana/eslint-plugin-plugins@a59212e';
 
 // Shared by every plugin, so they live once at the monorepo root.
 const ROOT_FILES = ['.nvmrc', '.npmrc', '.prettierrc.js', '.cprc.json'];
@@ -151,7 +155,7 @@ export function createRootPackageJson(
       ? {}
       : { workspaces: ['.config', `${PLUGINS_DIR}/*`, 'packages/*'] }),
     scripts: { ...scripts, server: 'docker compose up --build' },
-    devDependencies: toolingDependencies,
+    devDependencies: { ...toolingDependencies, '@grafana/eslint-plugin-plugins': ESLINT_PLUGIN_PLUGINS_VERSION },
     packageManager: `${templateData.packageManagerName}@${templateData.packageManagerVersion}`,
   };
 }
