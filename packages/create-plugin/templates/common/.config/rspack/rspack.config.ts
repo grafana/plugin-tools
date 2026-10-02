@@ -28,6 +28,7 @@ import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, isWSL } from '../bundler/utils.ts';
 import { externals } from '../bundler/externals.ts';
 import { copyFilePatterns } from '../bundler/copyFiles.ts';
+import { PluginScopePlugin } from '../bundler/pluginScope.ts';
 
 const pluginJson = getPluginJson();
 const pluginId = pluginJson.id;
@@ -178,6 +179,8 @@ const config = async (env: Env): Promise<Configuration> => {
       new BuildModeRspackPlugin(),
       new LicenseRspackPlugin(),
       new PluginCssRspackPlugin({ pluginId, publicPath: `public/plugins/${pluginId}/` }),
+      // Fail the build when the plugin imports another plugin's code
+      new PluginScopePlugin(),
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new BannerPlugin({
