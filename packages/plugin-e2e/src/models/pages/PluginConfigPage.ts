@@ -2,10 +2,7 @@ import { PluginPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
 
 export class PluginConfigPage extends GrafanaPage {
-  constructor(
-    readonly ctx: PluginTestCtx,
-    readonly args: PluginPageArgs
-  ) {
+  constructor(readonly ctx: PluginTestCtx, readonly args: PluginPageArgs) {
     super(ctx, args);
   }
 
