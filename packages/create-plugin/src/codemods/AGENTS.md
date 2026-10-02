@@ -21,7 +21,10 @@ This guide provides specific instructions for working with migrations and additi
 - Test thoroughly using the provided utils in @./test-utils.ts where necessary
 - Each migration must be idempotent and must include a test case that uses the `.toBeIdempotent` custom matcher found in @../../vitest.setup.ts
 - Keep migrations focused on one task
-- Never attempt to read or write files outside the current working directory
+- Never attempt to read or write files outside the project root (`context.basePath`). Codemods run from the project root even when the command starts in a nested directory
+- Access per-plugin files (`src/plugin.json`, the plugin `package.json`, wrapper configs such as `tsconfig.json` and `jest.config.js`, `docker-compose.yaml`, `go.mod`) through `forEachPlugin` in @./utils.project.ts, so the codemod works for a single plugin and for every plugin in a monorepo
+- Add tooling dependencies (bundlers, test runners, linters) with `addToolingDependencies` and plugin dependencies with `addPluginDependencies` from @./utils.project.ts
+- Shared files (`.config/`, `.github/`, the root `package.json`) live at the project root, so use their paths as they are
 
 ## Naming Conventions
 
