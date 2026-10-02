@@ -1,27 +1,39 @@
 <%
-const isActive = page.slug === currentPath;
-const hasChildren = page.children && page.children.length > 0;
-const hasFile = page.file && page.file.length > 0;
-const href = '/' + page.slug;
+const hasChildren = item.children && item.children.length > 0;
+const isOpen = item.isActive || item.descendantActive;
+const baseIndent = depth * 12;
+// leaf items always reserve the chevron slot so they line up under sibling items that have one
+const headingIndent = baseIndent + 26;
 -%>
-<li class="docs-nav-item<%= hasChildren ? ' collapsible' : '' %>">
-  <% if (hasChildren) { %>
-  <button class="docs-nav-toggle" aria-label="Toggle section">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </button>
+<li class="docs-nav-item" data-open="<%= isOpen %>">
+  <div class="docs-nav-row" style="padding-left: <%= baseIndent %>px;">
+    <% if (hasChildren) { %>
+      <button type="button" class="docs-nav-toggle" aria-expanded="<%= isOpen %>" aria-label="Toggle section">
+        <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4.5 3L7.5 6L4.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    <% } else { %>
+      <span class="docs-nav-spacer" aria-hidden="true"></span>
+    <% } %>
+    <a href="<%= item.href %>" class="docs-nav-link<%= item.isActive ? ' active' : '' %>"<%= item.isActive ? ' aria-current="page"' : '' %>><%= item.label %></a>
+  </div>
+
+  <% if (item.isActive && item.headings && item.headings.length > 0) { %>
+    <ul class="docs-nav-headings" style="margin-left: <%= headingIndent %>px;">
+      <% item.headings.forEach((heading) => { %>
+        <li>
+          <a href="#<%= heading.id %>" class="docs-nav-heading docs-nav-heading-h<%= heading.level %>"><%= heading.text %></a>
+        </li>
+      <% }); %>
+    </ul>
   <% } %>
-  <% if (hasFile) { %>
-  <a href="<%= href %>" class="docs-nav-link<%= isActive ? ' active' : '' %>"><%= page.title %></a>
-  <% } else { %>
-  <span class="docs-nav-label"><%= page.title %></span>
-  <% } %>
+
   <% if (hasChildren) { %>
-  <ul class="docs-nav-list">
-    <% page.children.forEach(child => { %>
-    <%- include('navigation-item', { page: child, currentPath }) %>
-    <% }) %>
-  </ul>
+    <ul class="docs-nav-sublist">
+      <% item.children.forEach((child) => { %>
+        <%- include('navigation-item', { item: child, depth: depth + 1 }) %>
+      <% }); %>
+    </ul>
   <% } %>
 </li>

@@ -9,7 +9,10 @@ describe('checkFilesystem', () => {
   const testDocsPath = join(__dirname, '..', '..', '__fixtures__', 'test-docs');
 
   it('should report missing root index.md', async () => {
-    const findings = await checkFilesystem({ docsPath: testDocsPath, strict: true });
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-no-index-'));
+    await writeFile(join(tmp, 'guide.md'), '---\ntitle: Guide\ndescription: A guide\n---\n# Guide\n');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
 
     const finding = findings.find((f) => f.rule === Rule.RootIndex);
     expect(finding).toBeDefined();

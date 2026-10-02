@@ -43,3 +43,28 @@ export async function resolvePluginJson(projectRoot?: string): Promise<PluginJso
   debug('Resolved docsPath from plugin.json: %s -> %s', pluginJson.docsPath, docsPath);
   return { docsPath, pluginType: pluginJson.type };
 }
+
+/**
+ * README locations in priority order, matching create-plugin's copyFiles rule: `src/README.md`
+ * wins over the repo-root `README.md`.
+ */
+export function readmeCandidates(projectRoot?: string): string[] {
+  const root = projectRoot || process.cwd();
+  return [join(root, 'src', 'README.md'), join(root, 'README.md')];
+}
+
+/** Reads the first README candidate that exists. Returns undefined when none does. */
+export async function readFirstReadme(candidates: string[]): Promise<string | undefined> {
+  for (const candidate of candidates) {
+    try {
+      return await readFile(candidate, 'utf-8');
+    } catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (code !== 'ENOENT' && code !== 'EISDIR') {
+        throw error;
+      }
+    }
+  }
+  debug('No README found in %O', candidates);
+  return undefined;
+}

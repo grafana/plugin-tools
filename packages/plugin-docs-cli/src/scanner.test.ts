@@ -12,7 +12,7 @@ describe('scanDocsFolder', () => {
     expect(result.manifest).toBeDefined();
     expect(result.manifest.version).toBe('1');
     expect(result.manifest.title).toBe('Plugin Documentation');
-    expect(result.manifest.pages).toHaveLength(4); // home, guide, advanced, config
+    expect(result.manifest.pages).toHaveLength(5); // index, home, guide, advanced, config
   });
 
   it('should sort root index.md first even when sidebar_position is not set', async () => {
@@ -27,28 +27,30 @@ describe('scanDocsFolder', () => {
     const result = await scanDocsFolder(testDocsPath);
 
     const pages = result.manifest.pages;
-    expect(pages[0].title).toBe('Home Page');
-    expect(pages[0].slug).toBe('home');
-    expect(pages[1].title).toBe('User Guide');
-    expect(pages[1].slug).toBe('guide');
-    expect(pages[2].title).toBe('Advanced Topics');
-    expect(pages[2].slug).toBe('advanced');
+    expect(pages[0].slug).toBe('index');
+    expect(pages[1].title).toBe('Home Page');
+    expect(pages[1].slug).toBe('home');
+    expect(pages[2].title).toBe('User Guide');
+    expect(pages[2].slug).toBe('guide');
+    expect(pages[3].title).toBe('Advanced Topics');
+    expect(pages[3].slug).toBe('advanced');
   });
 
   it('should generate slugs from file paths', async () => {
     const result = await scanDocsFolder(testDocsPath);
 
     const pages = result.manifest.pages;
-    expect(pages[0].slug).toBe('home');
-    expect(pages[1].slug).toBe('guide');
-    expect(pages[2].slug).toBe('advanced');
+    expect(pages[0].slug).toBe('index');
+    expect(pages[1].slug).toBe('home');
+    expect(pages[2].slug).toBe('guide');
+    expect(pages[3].slug).toBe('advanced');
   });
 
   it('should load file contents into memory (frontmatter stripped)', async () => {
     const result = await scanDocsFolder(testDocsPath);
 
     expect(result.files).toBeDefined();
-    expect(Object.keys(result.files)).toHaveLength(6); // includes nested config files + index
+    expect(Object.keys(result.files)).toHaveLength(7); // index, home, guide, advanced, config/index, config/settings, config/database
     expect(result.files['home.md']).toContain('# Welcome');
     expect(result.files['home.md']).not.toContain('---');
   });
@@ -56,25 +58,26 @@ describe('scanDocsFolder', () => {
   it('should attach frontmatter and content to each page in the manifest', async () => {
     const result = await scanDocsFolder(testDocsPath);
 
-    const home = result.manifest.pages[0];
-    expect(home.frontmatter).toEqual({
+    const home = result.manifest.pages.find((p: Page) => p.slug === 'home');
+    expect(home?.frontmatter).toEqual({
       title: 'Home Page',
       description: 'Welcome to the test docs',
       sidebar_position: 1,
     });
-    expect(home.content).toContain('# Welcome');
-    expect(home.content).not.toContain('---');
+    expect(home?.content).toContain('# Welcome');
+    expect(home?.content).not.toContain('---');
     // page.content matches what the flat files map holds for the same file
-    expect(home.content).toBe(result.files[home.file]);
+    expect(home?.content).toBe(result.files[home!.file]);
   });
 
   it('should include file reference in page object', async () => {
     const result = await scanDocsFolder(testDocsPath);
 
     const pages = result.manifest.pages;
-    expect(pages[0].file).toBe('home.md');
-    expect(pages[1].file).toBe('guide.md');
-    expect(pages[2].file).toBe('advanced.md');
+    expect(pages[0].file).toBe('index.md');
+    expect(pages[1].file).toBe('home.md');
+    expect(pages[2].file).toBe('guide.md');
+    expect(pages[3].file).toBe('advanced.md');
   });
 
   it('should extract h2/h3 headings into page objects', async () => {
@@ -115,8 +118,8 @@ describe('scanDocsFolder', () => {
     const unsafeSlugPath = join(__dirname, '__fixtures__', 'unsafe-slug-docs');
     const result = await scanDocsFolder(unsafeSlugPath);
 
-    expect(result.manifest.pages).toHaveLength(1);
-    expect(result.manifest.pages[0].slug).toBe('home');
+    expect(result.manifest.pages).toHaveLength(2);
+    expect(result.manifest.pages.find((p: Page) => p.title === 'Unsafe Slug Test')?.slug).toBe('home');
   });
 
   describe('nested directories', () => {

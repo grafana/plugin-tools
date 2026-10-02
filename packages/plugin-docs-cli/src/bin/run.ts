@@ -2,7 +2,7 @@
 import { stat } from 'node:fs/promises';
 import minimist from 'minimist';
 import createDebug from 'debug';
-import { resolvePluginJson } from '../utils/utils.plugin.js';
+import { readmeCandidates, resolvePluginJson } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
 import { buildDocs } from '../commands/build.command.js';
 import { validateCommand } from '../commands/validate.command.js';
@@ -69,7 +69,7 @@ async function main() {
           reload: false,
         },
       });
-      await serve(serveArgv, docsPath, pluginType);
+      await serve(serveArgv, docsPath, pluginType, readmeCandidates());
       break;
     }
     case 'build': {
