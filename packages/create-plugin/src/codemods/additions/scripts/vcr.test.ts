@@ -237,6 +237,18 @@ datasources:
       expect(result.getFile('docker-compose.vcr.yaml')).toContain(PLUGIN_VCR_PACKAGE);
     });
 
+    it('installs the proxy CA where plugin processes find it without SSL_CERT_DIR', () => {
+      const context = createBackendContext();
+
+      const result = vcr(context);
+
+      const doc = parseDocument(result.getFile('docker-compose.vcr.yaml') ?? '');
+      expect(String(doc.getIn(['services', 'grafana', 'entrypoint', 2]))).toContain(
+        '-o /etc/ssl/certs/plugin-vcr-ca.pem'
+      );
+      expect(doc.hasIn(['services', 'grafana', 'environment', 'SSL_CERT_DIR'])).toBe(false);
+    });
+
     it('never overwrites an existing docker-compose.vcr.yaml', () => {
       const context = createBackendContext();
       context.addFile('docker-compose.vcr.yaml', 'services:\n  vcr:\n    image: my-own-image\n');

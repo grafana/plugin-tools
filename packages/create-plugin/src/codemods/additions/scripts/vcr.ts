@@ -256,16 +256,14 @@ services:
       - /bin/sh
       - -c
       - |
-        mkdir -p /etc/ssl/certs/proxy
-        curl -sf http://vcr:8091/ca.pem -o /etc/ssl/certs/proxy/ca.pem
+        # go reads every file in /etc/ssl/certs; older Grafana doesn't forward SSL_CERT_DIR to plugins
+        curl -sf http://vcr:8091/ca.pem -o /etc/ssl/certs/plugin-vcr-ca.pem
         if [ -x /entrypoint.sh ]; then exec /entrypoint.sh; fi
         exec /run.sh
     environment:
       HTTPS_PROXY: http://vcr:8091
       HTTP_PROXY: http://vcr:8091
       NO_PROXY: localhost,127.0.0.1
-      # adds the proxy CA next to the system bundle; SSL_CERT_FILE would replace the bundle
-      SSL_CERT_DIR: /etc/ssl/certs/proxy
 
 volumes:
   vcr-npm-cache:
