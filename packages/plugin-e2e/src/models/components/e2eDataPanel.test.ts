@@ -16,7 +16,14 @@ function loadPanelModule(): PanelModule {
     panelModule = factory(
       { createElement: () => null },
       {
-        PanelPlugin: class {},
+        PanelPlugin: class {
+          useFieldConfig() {
+            return this;
+          }
+          setPanelOptions() {
+            return this;
+          }
+        },
         getFieldDisplayName: (field: { name: string; config?: { displayName?: string } }) =>
           field.config?.displayName ?? field.name,
       }

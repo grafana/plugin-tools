@@ -8,7 +8,7 @@ import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
 import { DashboardPage } from './DashboardPage';
 import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
-import { GetPanelDataOptions, PanelData } from '../components/panelData';
+import { GetPanelDataOptions, getRequestIdFromUrl, isMatchingRequestId, PanelData } from '../components/panelData';
 
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
@@ -236,10 +236,13 @@ export class PanelEditPage extends GrafanaPage {
   }
 
   /**
-   * Clicks the "Refresh" button and returns the `/api/ds/query` response, its parsed body and the data the panel
-   * received for that same request. The panel must use the `grafana-e2edata-panel` visualization.
+   * Clicks the "Refresh" button and returns the data the panel received together with the `/api/ds/query` response
+   * and parsed body of that same request. The panel must use the `grafana-e2edata-panel` visualization.
    *
-   * `body` is the first matching response only, so for split or polling data sources prefer `data`.
+   * The panel decides which request counts: panel edit can start a query on load and the refresh can supersede it,
+   * so the first response after the click is not always the one that ends up in the panel. `response` is the one
+   * whose request id matches the panel's data. For split or polling data sources `body` is only that one response,
+   * so prefer `data`.
    *
    * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
    */
@@ -247,37 +250,52 @@ export class PanelEditPage extends GrafanaPage {
     options?: RequestOptions & Pick<GetPanelDataOptions, 'states'>
   ): Promise<{ response: Response; body: T | null; data: PanelData }> {
     const revision = await this.panel.getDataRevision();
-    const predicate = options?.waitForResponsePredicateCallback ?? this.ctx.selectors.apis.DataSource.query;
-    const matchesResponse = (resp: Response) => {
-      if (typeof predicate === 'string') {
-        return resp.url().includes(predicate);
+    // let a query that's already running (e.g. from page load) finish before clicking
+    if (revision !== undefined) {
+      await this.panel.getData({ timeout: options?.timeout });
+    }
+
+    const queryUrl = this.ctx.selectors.apis.DataSource.query;
+    const seen: Array<{ response: Response; requestId?: string; body: Promise<T | null> }> = [];
+    const onResponse = (response: Response) => {
+      if (response.url().includes(queryUrl)) {
+        // read the body right away, while the response is still live
+        seen.push({
+          response,
+          requestId: getRequestIdFromUrl(response.url()),
+          body: response.json().then(
+            (json) => json as T,
+            () => null
+          ),
+        });
       }
-      if (predicate instanceof RegExp) {
-        return predicate.test(resp.url());
-      }
-      return predicate(resp);
     };
-    let body: T | null = null;
 
-    const response = await this.refreshPanel({
-      ...options,
-      // read the body inside the predicate, while the response is still live
-      waitForResponsePredicateCallback: async (resp: Response) => {
-        if (!(await matchesResponse(resp))) {
-          return false;
-        }
-        body = (await resp.json().catch(() => null)) as T | null;
-        return true;
-      },
-    });
-    const data = await this.panel.getData({
-      response,
-      afterRevision: revision,
-      states: options?.states,
-      timeout: options?.timeout,
-    });
+    this.ctx.page.on('response', onResponse);
+    try {
+      const clicked = await this.refreshPanel(options);
+      const data = await this.panel.getData({
+        afterRevision: revision,
+        states: options?.states,
+        timeout: options?.timeout,
+      });
 
-    return { response, body, data };
+      const findMatch = () =>
+        seen.find((entry) => entry.requestId && data.requestId && isMatchingRequestId(data.requestId, entry.requestId));
+      await expect
+        .poll(() => Boolean(findMatch()), { timeout: options?.timeout ?? 5000 })
+        .toBe(true)
+        .catch(() => {});
+      const match = findMatch();
+
+      return {
+        response: match?.response ?? clicked,
+        body: match ? await match.body : null,
+        data,
+      };
+    } finally {
+      this.ctx.page.off('response', onResponse);
+    }
   }
 
   /** Return page object for the panel edit options group with the given label */

@@ -161,7 +161,7 @@ define(['react', '@grafana/data'], function (React, grafanaData) {
   }
 
   return {
-    plugin: new grafanaData.PanelPlugin(DataPanel),
+    plugin: new grafanaData.PanelPlugin(DataPanel).useFieldConfig().setPanelOptions(() => {}),
     serializePanelData: serializePanelData,
   };
 });
