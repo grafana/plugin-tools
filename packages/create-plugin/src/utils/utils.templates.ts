@@ -97,6 +97,14 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
 
+function readPluginJsonOrEmpty(srcDir: string) {
+  try {
+    return getPluginJson(srcDir);
+  } catch {
+    return {};
+  }
+}
+
 export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cwd()): TemplateData {
   const { features } = getConfig(rootPath);
   const currentVersion = CURRENT_APP_VERSION;
@@ -136,7 +144,8 @@ export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cw
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
   } else {
-    const pluginJson = getPluginJson(path.join(rootPath, 'src'));
+    // A monorepo root has no src/plugin.json, so templates rendered there only get project-wide data.
+    const pluginJson = readPluginJsonOrEmpty(path.join(rootPath, 'src'));
     const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback(rootPath);
 
     templateData = {
@@ -144,7 +153,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cw
       pluginId: pluginJson.id,
       pluginName: pluginJson.name,
       hasBackend: pluginJson.backend,
-      orgName: pluginJson.info.author.name,
+      orgName: pluginJson.info?.author?.name,
       pluginType: pluginJson.type,
       packageManagerName: packageManagerName,
       packageManagerVersion: packageManagerVersion,

@@ -43,6 +43,34 @@ describe('externalizeJSXRuntime', () => {
     context = new Context('/virtual');
   });
 
+  describe('monorepo', () => {
+    it("updates every plugin's grafanaDependency", () => {
+      const monorepoContext = new Context('/virtual', {
+        root: '/virtual',
+        kind: 'monorepo',
+        plugins: [{ dir: 'plugins/a' }, { dir: 'plugins/b' }],
+      });
+      monorepoContext.addFile('.config/webpack/webpack.config.ts', baseConfigContent);
+      monorepoContext.addFile(
+        'plugins/a/src/plugin.json',
+        JSON.stringify({ dependencies: { grafanaDependency: '>=11.0.0' } })
+      );
+      monorepoContext.addFile(
+        'plugins/b/src/plugin.json',
+        JSON.stringify({ dependencies: { grafanaDependency: '>=12.2.0' } })
+      );
+
+      const result = externalizeJSXRuntime(monorepoContext);
+      const readDependency = (file: string) => JSON.parse(result.getFile(file) || '{}').dependencies.grafanaDependency;
+
+      expect(readDependency('plugins/a/src/plugin.json')).toBe(
+        '>=11.6.11 <12 || >=12.0.10 <12.1 || >=12.1.7 <12.2 || >=12.2.5'
+      );
+      expect(readDependency('plugins/b/src/plugin.json')).toBe('>=12.2.5');
+      expect(result.doesFileExist('src/plugin.json')).toBe(false);
+    });
+  });
+
   describe('externals template', () => {
     it('renders the externals template if it does not exist', () => {
       context.addFile('.config/webpack/webpack.config.ts', baseConfigContent);

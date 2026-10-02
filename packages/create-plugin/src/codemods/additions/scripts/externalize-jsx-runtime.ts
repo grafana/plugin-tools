@@ -10,6 +10,7 @@ import {
   printAST,
 } from '../../utils.ast.js';
 import { additionsDebug, renderTemplate } from '../../utils.js';
+import { forEachPlugin } from '../../utils.project.js';
 import { fileURLToPath } from 'node:url';
 
 export default function externalizeJSXRuntime(context: Context): Context {
@@ -71,56 +72,66 @@ export default function externalizeJSXRuntime(context: Context): Context {
     context.updateFile('.config/bundler/externals.ts', rendered);
   }
 
-  const semverRanges = ['>=11.6.11 <12', '>=12.0.10 <12.1', '>=12.1.7 <12.2', '>=12.2.5'];
   const externalsHasJsxRuntime = context.getFile('.config/bundler/externals.ts')?.includes('react/jsx-runtime');
-  const pluginJsonContent = context.getFile('src/plugin.json');
-  if (pluginJsonContent && externalsHasJsxRuntime) {
-    let pluginJson;
-    try {
-      pluginJson = JSON.parse(pluginJsonContent);
-    } catch (error) {
-      additionsDebug(`Failed to parse src/plugin.json: ${error}`);
-      return context;
-    }
 
-    if (pluginJson.dependencies?.grafanaDependency === undefined) {
-      pluginJson.dependencies = {
-        ...pluginJson.dependencies,
-        grafanaDependency: '>=12.2.5',
-      };
-      context.updateFile('src/plugin.json', JSON.stringify(pluginJson, null, 2));
-    }
+  forEachPlugin(context, (_plugin, resolvePath) => {
+    updateGrafanaDependency(context, resolvePath('src/plugin.json'), Boolean(externalsHasJsxRuntime));
+  });
 
-    let pluginMinSupportedVersion = minVersion(pluginJson.dependencies.grafanaDependency);
+  return context;
+}
 
-    if (pluginMinSupportedVersion && pluginMinSupportedVersion.prerelease.length) {
-      pluginMinSupportedVersion = coerce(
-        `${pluginMinSupportedVersion.major}.${pluginMinSupportedVersion.minor}.${pluginMinSupportedVersion.patch}`
-      );
-    }
+const SEMVER_RANGES = ['>=11.6.11 <12', '>=12.0.10 <12.1', '>=12.1.7 <12.2', '>=12.2.5'];
 
-    if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.2.5')) {
-      return context;
-    }
-
-    if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.2.0')) {
-      pluginJson.dependencies.grafanaDependency = semverRanges.slice(3).join(' || ');
-    } else if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.1.0')) {
-      pluginJson.dependencies.grafanaDependency = semverRanges.slice(2).join(' || ');
-    } else if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.0.0')) {
-      pluginJson.dependencies.grafanaDependency = semverRanges.slice(1).join(' || ');
-    } else if (pluginMinSupportedVersion && lt(pluginMinSupportedVersion, '12.0.0')) {
-      pluginJson.dependencies.grafanaDependency = semverRanges.join(' || ');
-    }
-
-    context.updateFile('src/plugin.json', JSON.stringify(pluginJson, null, 2));
-  } else {
+// Widens a plugin's grafanaDependency to the Grafana versions that provide the react/jsx-runtime external.
+function updateGrafanaDependency(context: Context, pluginJsonPath: string, externalsHasJsxRuntime: boolean) {
+  const pluginJsonContent = context.getFile(pluginJsonPath);
+  if (!pluginJsonContent || !externalsHasJsxRuntime) {
     additionsDebug(
-      'Skipping updating plugin.json with new grafanaDependency range due to missing src/plugin.json or externals.ts does not include react/jsx-runtime.'
+      `Skipping updating ${pluginJsonPath} with new grafanaDependency range due to missing plugin.json or externals.ts does not include react/jsx-runtime.`
+    );
+    return;
+  }
+
+  let pluginJson;
+  try {
+    pluginJson = JSON.parse(pluginJsonContent);
+  } catch (error) {
+    additionsDebug(`Failed to parse ${pluginJsonPath}: ${error}`);
+    return;
+  }
+
+  if (pluginJson.dependencies?.grafanaDependency === undefined) {
+    pluginJson.dependencies = {
+      ...pluginJson.dependencies,
+      grafanaDependency: '>=12.2.5',
+    };
+    context.updateFile(pluginJsonPath, JSON.stringify(pluginJson, null, 2));
+  }
+
+  let pluginMinSupportedVersion = minVersion(pluginJson.dependencies.grafanaDependency);
+
+  if (pluginMinSupportedVersion && pluginMinSupportedVersion.prerelease.length) {
+    pluginMinSupportedVersion = coerce(
+      `${pluginMinSupportedVersion.major}.${pluginMinSupportedVersion.minor}.${pluginMinSupportedVersion.patch}`
     );
   }
 
-  return context;
+  if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.2.5')) {
+    return;
+  }
+
+  if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.2.0')) {
+    pluginJson.dependencies.grafanaDependency = SEMVER_RANGES.slice(3).join(' || ');
+  } else if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.1.0')) {
+    pluginJson.dependencies.grafanaDependency = SEMVER_RANGES.slice(2).join(' || ');
+  } else if (pluginMinSupportedVersion && gte(pluginMinSupportedVersion, '12.0.0')) {
+    pluginJson.dependencies.grafanaDependency = SEMVER_RANGES.slice(1).join(' || ');
+  } else if (pluginMinSupportedVersion && lt(pluginMinSupportedVersion, '12.0.0')) {
+    pluginJson.dependencies.grafanaDependency = SEMVER_RANGES.join(' || ');
+  }
+
+  context.updateFile(pluginJsonPath, JSON.stringify(pluginJson, null, 2));
 }
 
 function renderExternalsTemplate(rootPath: string) {

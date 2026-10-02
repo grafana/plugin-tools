@@ -4,6 +4,28 @@ import { Context } from '../../context.js';
 import migrate from './example-addition.js';
 
 describe('example-addition', () => {
+  it('should apply to each targeted plugin in a monorepo and add tooling to the root', () => {
+    const context = new Context('/virtual', {
+      root: '/virtual',
+      kind: 'monorepo',
+      plugins: [{ dir: 'plugins/a' }, { dir: 'plugins/b' }],
+    });
+    context.addFile('package.json', JSON.stringify({ private: true, devDependencies: {} }));
+    context.addFile('plugins/a/package.json', JSON.stringify({ scripts: {} }));
+    context.addFile('plugins/b/package.json', JSON.stringify({ scripts: {} }));
+
+    const result = migrate(context, { featureName: 'myFeature', enabled: true, frameworks: ['react'] });
+
+    for (const dir of ['plugins/a', 'plugins/b']) {
+      expect(JSON.parse(result.getFile(`${dir}/package.json`) || '{}').scripts['example-script']).toBe(
+        'echo "Running myFeature"'
+      );
+      expect(result.doesFileExist(`${dir}/src/features/myFeature.ts`)).toBe(true);
+    }
+    expect(JSON.parse(result.getFile('package.json') || '{}').devDependencies['@types/node']).toBe('^20.0.0');
+    expect(result.doesFileExist('src/features/myFeature.ts')).toBe(false);
+  });
+
   it('should add example script to package.json', () => {
     const context = new Context('/virtual');
 
