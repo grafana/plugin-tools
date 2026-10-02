@@ -209,6 +209,7 @@ const sidebars: SidebarsConfig = {
         },
         'how-to-guides/runtime-checks',
         'how-to-guides/updating-a-plugin',
+        'how-to-guides/monorepos',
         'how-to-guides/debugging-plugins',
       ],
     },

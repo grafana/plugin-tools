@@ -89,10 +89,22 @@ Refer to the following table for the full list of prompt bypass options:
 | **Name**         | `--plugin-name`              | string                                             |
 | **Organization** | `--org-name`                 | string                                             |
 
+### Create a plugin monorepo
+
+To create a repository for several plugins, add the `--monorepo` flag. `create-plugin` creates an `<organization>-plugins` directory with the plugin in `plugins/<plugin-id>`. To choose the directory name, pass `--monorepo-name`.
+
+```
+npx @grafana/create-plugin --monorepo --monorepo-name="my-plugins"
+```
+
+To add another plugin, run `create-plugin` from the root of the monorepo. Refer to [Develop several plugins in one repository](../how-to-guides/monorepos.md).
+
+`create-plugin` stops with an error if you run it inside a plugin, or inside a workspace that it didn't create.
+
 
 ## update
 
-To update an existing plugin to use the latest version of the `create-plugin` tool, run the following command from your plugin's root directory:
+To update an existing plugin to use the latest version of the `create-plugin` tool, run the following command from your plugin's directory. In a plugin monorepo, run it from the repository root or from any plugin to update every plugin:
 
 <UpdateNPM />
 
@@ -106,4 +118,20 @@ This command updates the following:
 By default, the `update` command will stop if there are any uncommitted changes in the repository. If you want to force the update, you can use the `--force` flag:
 
 <UpdateForceNPM />
+
+## add
+
+To add an optional feature to your plugin, run the `add` command with the name of the feature:
+
+```
+npx @grafana/create-plugin@latest add <addition-name>
+```
+
+Run the command without a name to list the available additions.
+
+In a plugin monorepo, some additions change the shared configuration and apply to every plugin. For the others, choose the plugins with `--plugin`, which takes a plugin ID or directory. You can repeat the flag. Without `--plugin`, `add` asks before it applies the addition to every plugin. Pass `--yes` to skip the question:
+
+```
+npx @grafana/create-plugin@latest add <addition-name> --plugin myorg-myapp-app
+```
 
