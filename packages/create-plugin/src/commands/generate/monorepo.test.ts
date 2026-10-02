@@ -8,8 +8,10 @@ import {
   createPluginPackageJson,
   createRootPackageJson,
   ESLINT_PLUGIN_PLUGINS_VERSION,
+  getMonorepoTemplateData,
   mergeProvisioning,
   planMonorepoGeneration,
+  planMonorepoRoot,
   renderMonorepoTemplates,
   splitPluginFiles,
   useTopLevelBins,
@@ -232,65 +234,98 @@ describe('monorepo generation', () => {
     });
   });
 
-  describe('planMonorepoGeneration', () => {
+  describe('creating a monorepo and adding plugins', () => {
     const tmpObj = dirSync({ unsafeCleanup: true });
 
     afterAll(() => {
       tmpObj.removeCallback();
     });
 
-    function plan(data: TemplateData, options: { monorepoRoot?: string; newMonorepoPath?: string }) {
-      return planMonorepoGeneration({
+    async function createRoot(name: string) {
+      const root = path.join(tmpObj.name, name);
+      const data = getMonorepoTemplateData(templateData('npm', '11.12.1'));
+      const files = planMonorepoRoot({
         templateData: data,
         actions: getTemplateActions({ templateData: data, exportPath: '' }),
-        monorepoRoot: options.monorepoRoot,
-        newMonorepoPath: options.newMonorepoPath ?? path.join(tmpObj.name, 'unused'),
+        root,
+      });
+      await writeFiles(root, files);
+      return { root, files };
+    }
+
+    function addPlugin(data: TemplateData, monorepoRoot: string) {
+      const monorepoData = { ...data, isMonorepo: true };
+      return planMonorepoGeneration({
+        templateData: monorepoData,
+        actions: getTemplateActions({ templateData: monorepoData, exportPath: '' }),
+        monorepoRoot,
       });
     }
 
-    it('creates a monorepo with the shared root and the first plugin', () => {
-      const newMonorepoPath = path.join(tmpObj.name, 'my-plugins');
-
-      const { files, pluginDir, isNewMonorepo } = plan(templateData('npm', '11.12.1'), { newMonorepoPath });
+    it('creates the workspace root without a plugin', async () => {
+      const { files } = await createRoot('my-plugins');
       const paths = [...files.keys()];
 
-      expect(isNewMonorepo).toBe(true);
-      expect(pluginDir).toBe('plugins/myorg-a-panel');
       expect(paths).toEqual(
         expect.arrayContaining([
           '.config/package.json',
           '.config/tsconfig.json',
+          '.config/eslint.config.mjs',
           'package.json',
-          'docker-compose.yaml',
           '.github/workflows/ci.yml',
-          'release-please-config.json',
+          'packages/README.md',
+          'AGENTS.md',
+        ])
+      );
+      expect(paths.some((filePath) => filePath.startsWith('plugins/'))).toBe(false);
+      expect(paths).not.toContain('docker-compose.yaml');
+      expect(paths).not.toContain('release-please-config.json');
+      expect(JSON.parse(files.get('package.json') ?? '{}').name).toBe('my-plugins');
+      expect(files.get('.config/eslint.config.mjs')).toContain('no-cross-plugin-imports');
+    });
+
+    it('refuses to create a monorepo in a directory that has files', async () => {
+      const { root } = await createRoot('not-empty');
+      const data = getMonorepoTemplateData(templateData('npm', '11.12.1'));
+
+      expect(() =>
+        planMonorepoRoot({
+          templateData: data,
+          actions: getTemplateActions({ templateData: data, exportPath: '' }),
+          root,
+        })
+      ).toThrow(/contains files/);
+    });
+
+    it('adds the first plugin with the development server and release configuration', async () => {
+      const { root } = await createRoot('first-plugin');
+
+      const { files, pluginDir } = addPlugin(templateData('npm', '11.12.1'), root);
+      const paths = [...files.keys()];
+
+      expect(pluginDir).toBe('plugins/myorg-a-panel');
+      expect(paths).toEqual(
+        expect.arrayContaining([
           'plugins/myorg-a-panel/package.json',
           'plugins/myorg-a-panel/src/plugin.json',
           'plugins/myorg-a-panel/webpack.config.ts',
+          'docker-compose.yaml',
+          'release-please-config.json',
         ])
       );
-      expect(paths.filter((filePath) => filePath.startsWith('plugins/myorg-a-panel/.config'))).toEqual([]);
-      expect(paths).not.toContain('plugins/myorg-a-panel/docker-compose.yaml');
-      expect(JSON.parse(files.get('package.json') ?? '{}').name).toBe('my-plugins');
-    });
-
-    it('adds a plugin to an existing monorepo without rewriting the shared root', async () => {
-      const root = path.join(tmpObj.name, 'existing');
-      const first = plan(templateData('npm', '11.12.1'), { newMonorepoPath: root });
-      await writeFiles(first.root, first.files);
-
-      const second = plan(
-        { ...templateData('npm', '11.12.1'), pluginId: 'myorg-b-panel', pluginName: 'b' },
-        {
-          monorepoRoot: root,
-        }
-      );
-      const paths = [...second.files.keys()];
-
-      expect(second.isNewMonorepo).toBe(false);
       expect(paths.some((filePath) => filePath.startsWith('.config/'))).toBe(false);
       expect(paths).not.toContain('package.json');
-      expect(paths).toContain('plugins/myorg-b-panel/package.json');
+      expect(paths).not.toContain('plugins/myorg-a-panel/docker-compose.yaml');
+      expect(files.get('docker-compose.yaml')).toContain('/var/lib/grafana/plugins/myorg-a-panel');
+    });
+
+    it('adds further plugins next to the existing ones', async () => {
+      const { root } = await createRoot('second-plugin');
+      const first = addPlugin(templateData('npm', '11.12.1'), root);
+      await writeFiles(root, first.files);
+
+      const second = addPlugin({ ...templateData('npm', '11.12.1'), pluginId: 'myorg-b-panel', pluginName: 'b' }, root);
+
       expect(JSON.parse(second.files.get('.release-please-manifest.json') ?? '{}')).toEqual({
         'plugins/myorg-a-panel': '1.0.0',
         'plugins/myorg-b-panel': '1.0.0',
@@ -300,11 +335,11 @@ describe('monorepo generation', () => {
     });
 
     it('refuses to overwrite an existing plugin directory', async () => {
-      const root = path.join(tmpObj.name, 'duplicate');
-      const first = plan(templateData('npm', '11.12.1'), { newMonorepoPath: root });
-      await writeFiles(first.root, first.files);
+      const { root } = await createRoot('duplicate');
+      const first = addPlugin(templateData('npm', '11.12.1'), root);
+      await writeFiles(root, first.files);
 
-      expect(() => plan(templateData('npm', '11.12.1'), { monorepoRoot: root })).toThrow(/already exists/);
+      expect(() => addPlugin(templateData('npm', '11.12.1'), root)).toThrow(/already exists/);
     });
   });
 
