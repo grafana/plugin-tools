@@ -99,6 +99,61 @@ Edit the `tsconfig.json` file in the project root in order to extend the TypeScr
 
 ---
 
+{{#if useExperimentalRspack}}
+### Extending the Rspack config
+
+Follow these steps to extend the basic Rspack configuration that lives under `.config/`:
+
+#### 1. Create a new Rspack configuration file
+
+Create a new config file that is going to extend the basic one provided by Grafana.
+It can live in the project root, e.g. `rspack.config.ts`.
+
+#### 2. Merge the basic config provided by Grafana and your custom setup
+
+We are going to use [`rspack-merge`](https://github.com/rstackjs/rspack-merge) for this.
+
+```typescript
+// rspack.config.ts
+import type { Configuration } from '@rspack/core';
+import { merge } from 'rspack-merge';
+import grafanaConfig, { type Env } from './.config/rspack/rspack.config.ts';
+
+const config = async (env: Env): Promise<Configuration> => {
+  const baseConfig = await grafanaConfig(env);
+
+  return merge(baseConfig, {
+    // Add custom config here...
+    output: {
+      asyncChunks: true,
+    },
+  });
+};
+
+export default config;
+```
+
+The Rspack CLI loads this file as native ESM, so use `import.meta.dirname` instead of `__dirname` and give relative imports a `.ts` extension.
+
+#### 3. Update the `package.json` to use the new Rspack config
+
+We need to update the `scripts` in the `package.json` to use the extended Rspack configuration.
+
+**Update for `build`:**
+
+```diff
+-"build": "rspack -c ./.config/rspack/rspack.config.ts --env production",
++"build": "rspack -c ./rspack.config.ts --env production",
+```
+
+**Update for `dev`:**
+
+```diff
+-"dev": "rspack -w -c ./.config/rspack/rspack.config.ts --env development",
++"dev": "rspack -w -c ./rspack.config.ts --env development",
+```
+
+{{else}}
 ### Extending the Webpack config
 
 Follow these steps to extend the basic Webpack configuration that lives under `.config/`:
@@ -150,6 +205,7 @@ We need to update the `scripts` in the `package.json` to use the extended Webpac
 +"dev": "webpack -w -c ./webpack.config.ts --env development",
 ```
 
+{{/if}}
 ### Configure grafana image to use when running docker
 
 By default, `grafana-enterprise` will be used as the docker image for all docker related commands. If you want to override this behavior, simply alter the `docker-compose.yaml` by adding the following build arg `grafana_image`.
