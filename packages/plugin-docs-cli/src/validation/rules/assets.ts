@@ -131,7 +131,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
       // root-relative paths (e.g. /img/foo.png) resolve against docs root
       // looked up by the decoded path, as the renderer reads it
       const refPath = decodeRefPath(ref);
-      const resolvedPath = ref.startsWith('/')
+      const resolvedPath = refPath.startsWith('/')
         ? normalize(refPath.slice(1))
         : normalize(join(dirname(mdRelPath), refPath));
       referencedPaths.add(resolvedPath);
