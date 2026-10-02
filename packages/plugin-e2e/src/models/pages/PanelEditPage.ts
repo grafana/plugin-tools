@@ -8,7 +8,6 @@ import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
 import { DashboardPage } from './DashboardPage';
 import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
-import { GetPanelDataOptions, getRequestIdFromUrl, isMatchingRequestId, PanelData } from '../components/panelData';
 
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
@@ -233,68 +232,6 @@ export class PanelEditPage extends GrafanaPage {
     }
 
     return responsePromise;
-  }
-
-  /**
-   * Clicks the "Refresh" button and returns the data the panel received together with the `/api/ds/query` response
-   * and parsed body of that same request. The panel must use the `grafana-e2edata-panel` visualization.
-   *
-   * The panel decides which request counts: panel edit can start a query on load and the refresh can supersede it,
-   * so the first response after the click is not always the one that ends up in the panel. `response` is the one
-   * whose request id matches the panel's data. For split or polling data sources `body` is only that one response,
-   * so prefer `data`.
-   *
-   * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
-   */
-  async refreshPanelWithData<T = unknown>(
-    options?: RequestOptions & Pick<GetPanelDataOptions, 'states'>
-  ): Promise<{ response: Response; body: T | null; data: PanelData }> {
-    const revision = await this.panel.getDataRevision();
-    // let a query that's already running (e.g. from page load) finish before clicking
-    const previous = revision === undefined ? undefined : await this.panel.getData({ timeout: options?.timeout });
-
-    const queryUrl = this.ctx.selectors.apis.DataSource.query;
-    const seen: Array<{ response: Response; requestId?: string; body: Promise<T | null> }> = [];
-    const onResponse = (response: Response) => {
-      if (response.url().includes(queryUrl)) {
-        // read the body right away, while the response is still live
-        seen.push({
-          response,
-          requestId: getRequestIdFromUrl(response.url()),
-          body: response.json().then(
-            (json) => json as T,
-            () => null
-          ),
-        });
-      }
-    };
-
-    this.ctx.page.on('response', onResponse);
-    try {
-      const clicked = await this.refreshPanel(options);
-      const data = await this.panel.getData({
-        afterRequestId: previous?.requestId,
-        afterRevision: previous?.requestId ? undefined : revision,
-        states: options?.states,
-        timeout: options?.timeout,
-      });
-
-      const findMatch = () =>
-        seen.find((entry) => entry.requestId && data.requestId && isMatchingRequestId(data.requestId, entry.requestId));
-      await expect
-        .poll(() => Boolean(findMatch()), { timeout: options?.timeout ?? 5000 })
-        .toBe(true)
-        .catch(() => {});
-      const match = findMatch();
-
-      return {
-        response: match?.response ?? clicked,
-        body: match ? await match.body : null,
-        data,
-      };
-    } finally {
-      this.ctx.page.off('response', onResponse);
-    }
   }
 
   /** Return page object for the panel edit options group with the given label */

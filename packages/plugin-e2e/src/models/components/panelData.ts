@@ -1,5 +1,3 @@
-import { Response } from '@playwright/test';
-
 export const E2E_DATA_PANEL_ID = 'grafana-e2edata-panel';
 export const E2E_DATA_PANEL_TESTID = 'data-testid e2e-data-panel';
 export const E2E_DATA_PANEL_JSON_TESTID = 'data-testid e2e-data-panel-json';
@@ -71,46 +69,7 @@ export interface GetPanelDataOptions {
    * Pass `['Streaming']` for live or polling data sources.
    */
   states?: string[];
-  /**
-   * A `/api/ds/query` response, e.g. from `panelEditPage.refreshPanel()`. When given, waits until the panel shows
-   * the data for that request rather than data from an earlier run.
-   */
-  response?: Response;
-  /**
-   * Waits until the panel shows data for a different request than this id. Preferred over `afterRevision`, since
-   * the revision can restart when the panel is re-created.
-   */
-  afterRequestId?: string;
-  /**
-   * Waits until the panel's revision differs from this value. Used when there is no request id to match on.
-   */
-  afterRevision?: string;
   timeout?: number;
-}
-
-export function getRequestIdFromUrl(url: string): string | undefined {
-  try {
-    return new URL(url).searchParams.get('requestId') ?? undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-/**
- * Split and paging sources suffix the panel's request id with `_<n>`, and the mixed data source wraps it as
- * `mixed-<i>-<id>`. A plain prefix check is wrong because `SQR1` is a prefix of `SQR12`.
- */
-export function isMatchingRequestId(panelRequestId: string, responseRequestId: string): boolean {
-  if (!panelRequestId || !responseRequestId) {
-    return false;
-  }
-  if (panelRequestId === responseRequestId) {
-    return true;
-  }
-  if (responseRequestId.startsWith(`${panelRequestId}_`)) {
-    return true;
-  }
-  return responseRequestId.startsWith('mixed-') && responseRequestId.endsWith(`-${panelRequestId}`);
 }
 
 export function parsePanelData(json: string | null, panelDescription: string): PanelData {

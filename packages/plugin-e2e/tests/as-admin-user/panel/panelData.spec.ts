@@ -26,20 +26,4 @@ test.describe('e2e data panel', () => {
     ]);
     expect(data.series[0].length).toBe(5);
   });
-
-  test('returns the panel data for the refresh that triggered it', async ({
-    gotoPanelEditPage,
-    readProvisionedDashboard,
-  }) => {
-    const dashboard = await readProvisionedDashboard({ fileName: 'e2e-data-panel.json' });
-    const panelEditPage = await gotoPanelEditPage({ dashboard: { uid: dashboard.uid }, id: '1' });
-
-    const first = await panelEditPage.refreshPanelWithData();
-    const second = await panelEditPage.refreshPanelWithData();
-
-    expect(second.response.ok()).toBe(true);
-    expect(second.data.requestId).not.toBe(first.data.requestId);
-    expect(second.data.series[0].length).toBe(5);
-    expect(second.body).toHaveProperty('results.A.frames');
-  });
 });
