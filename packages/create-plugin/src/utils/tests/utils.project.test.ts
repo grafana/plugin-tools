@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { dirSync } from 'tmp';
 
-import { findProjectRoot, resolveProject } from '../utils.project.js';
+import { checkGenerateLocation, findProjectRoot, findWorkspaceRoot, resolveProject } from '../utils.project.js';
 
 const tmpObj = dirSync({ unsafeCleanup: true });
 
@@ -69,6 +69,61 @@ describe('utils.project', () => {
         kind: 'single',
         plugins: [{ dir: '.' }],
       });
+    });
+  });
+
+  describe('findWorkspaceRoot', () => {
+    it('finds a package.json that declares workspaces', () => {
+      writeFile(projectDir, 'package.json', JSON.stringify({ workspaces: ['packages/*'] }));
+      const nestedDir = path.join(projectDir, 'packages', 'a');
+      fs.mkdirSync(nestedDir, { recursive: true });
+      writeFile(nestedDir, 'package.json', JSON.stringify({ name: 'a' }));
+
+      expect(findWorkspaceRoot(nestedDir)).toBe(projectDir);
+    });
+
+    it('finds a pnpm-workspace.yaml', () => {
+      writeFile(projectDir, 'pnpm-workspace.yaml', 'packages:\n  - packages/*\n');
+
+      expect(findWorkspaceRoot(projectDir)).toBe(projectDir);
+    });
+
+    it('returns undefined outside a workspace', () => {
+      writeFile(projectDir, 'package.json', JSON.stringify({ name: 'not-a-workspace' }));
+
+      expect(findWorkspaceRoot(projectDir)).toBeUndefined();
+    });
+  });
+
+  describe('checkGenerateLocation', () => {
+    it('allows generating in a directory outside any project', () => {
+      expect(checkGenerateLocation(projectDir).error).toBeUndefined();
+    });
+
+    it('refuses to generate inside an existing plugin', () => {
+      writeFile(projectDir, '.config/.cprc.json');
+      writeFile(projectDir, 'src/plugin.json');
+      const nestedDir = path.join(projectDir, 'src', 'components');
+      fs.mkdirSync(nestedDir, { recursive: true });
+
+      expect(checkGenerateLocation(projectDir).error?.title).toMatch(/inside a plugin/i);
+      expect(checkGenerateLocation(nestedDir).error?.title).toMatch(/inside a plugin/i);
+    });
+
+    it('refuses to generate inside a workspace create-plugin did not scaffold', () => {
+      writeFile(projectDir, 'package.json', JSON.stringify({ private: true, workspaces: ['apps/*'] }));
+
+      expect(checkGenerateLocation(projectDir).error?.title).toMatch(/workspace/i);
+    });
+
+    it('allows generating in a create-plugin monorepo', () => {
+      writeFile(projectDir, 'package.json', JSON.stringify({ private: true, workspaces: ['.config', 'plugins/*'] }));
+      writeFile(projectDir, '.config/.cprc.json');
+
+      const result = checkGenerateLocation(projectDir);
+
+      expect(result.error).toBeUndefined();
+      expect(result.project?.root).toBe(projectDir);
     });
   });
 });

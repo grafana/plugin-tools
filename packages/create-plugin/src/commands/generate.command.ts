@@ -11,11 +11,18 @@ import { updateGoSdkAndModules } from '../utils/utils.goSdk.js';
 import { configureYarn } from '../utils/utils.packageManager.js';
 import { getExportPath } from '../utils/utils.path.js';
 import { prettifyFiles } from '../utils/utils.prettifyFiles.js';
+import { checkGenerateLocation } from '../utils/utils.project.js';
 import { getTemplateData, renderTemplateFromFile } from '../utils/utils.templates.js';
 import { printGenerateSuccessMessage } from './generate/print-success-message.js';
 import { promptUser } from './generate/prompt-user.js';
 
 export const generate = async (argv: minimist.ParsedArgs) => {
+  const location = checkGenerateLocation();
+  if (location.error) {
+    output.error(location.error);
+    process.exit(1);
+  }
+
   const answers = await promptUser(argv);
   const templateData = getTemplateData(answers);
   const exportPath = getExportPath(templateData.pluginName, templateData.orgName, templateData.pluginType);
