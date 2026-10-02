@@ -18,7 +18,7 @@ import VirtualModulesPlugin from 'webpack-virtual-modules';
 
 import { BuildModeWebpackPlugin } from './BuildModeWebpackPlugin.ts';
 import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
-import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from '../bundler/utils.ts';
+import { getConfigDir, getCPConfigVersion, getEntries, getPackageJson, getPluginJson, hasReadme, isWSL } from '../bundler/utils.ts';
 import { externals } from '../bundler/externals.ts';
 import { copyFilePatterns } from '../bundler/copyFiles.ts';
 
@@ -48,7 +48,7 @@ const config = async (env: Env): Promise<Configuration> => {
       type: 'filesystem',
       buildDependencies: {
         // __filename doesn't work in Node 24
-        config: [path.resolve(process.cwd(), '.config', 'webpack', 'webpack.config.ts')],
+        config: [path.join(getConfigDir(), 'webpack', 'webpack.config.ts')],
       },
     },
 

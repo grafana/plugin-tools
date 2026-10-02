@@ -99,6 +99,13 @@ export default [
       'Update @grafana/eslint-config to v10: drop the removed ./flat.js subpath import and swap @stylistic/eslint-plugin-ts for @stylistic/eslint-plugin.',
     scriptPath: import.meta.resolve('./scripts/014-eslint-config-v10.js'),
   },
+  {
+    name: '015-tsconfig-config-dir',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description:
+      'Resolve .config/tsconfig.json paths from the extending tsconfig with ${configDir} and drop the typeRoots override so hoisted @types are found.',
+    scriptPath: import.meta.resolve('./scripts/015-tsconfig-config-dir.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
