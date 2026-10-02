@@ -450,6 +450,16 @@ describe('checkMarkdown', () => {
       expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeUndefined();
     });
 
+    it('should leave root-relative refs with ../ to the relative-path rules', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![x](/img/../../secret.png)\n\n[y](/img/../../secret.md)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeUndefined();
+      expect(findings.find((f) => f.rule === Rule.ImageRefsRelative)).toBeDefined();
+      expect(findings.find((f) => f.rule === Rule.InternalLinksRelative)).toBeDefined();
+    });
+
     it('should report ../ from a nested page that leaves the docs folder', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await mkdir(join(tmp, 'options'));

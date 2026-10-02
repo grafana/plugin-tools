@@ -386,6 +386,18 @@ describe('checkAssets', () => {
       expect(findings.filter((f) => f.rule === Rule.NoOrphanedImages)).toHaveLength(0);
     });
 
+    it('should treat a percent-encoded leading slash as root-relative', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await mkdir(join(tmp, 'img'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'img', 'x.png'), bufferOfSize(100));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('![x](%2Fimg/x.png)'));
+
+      const findings = await checkAssets(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.ReferencedImagesExist)).toHaveLength(0);
+      expect(findings.filter((f) => f.rule === Rule.NoOrphanedImages)).toHaveLength(0);
+    });
+
     it('should handle image refs with title attributes', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await mkdir(join(tmp, 'img'));
