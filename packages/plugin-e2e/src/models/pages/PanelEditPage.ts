@@ -234,6 +234,44 @@ export class PanelEditPage extends GrafanaPage {
     return responsePromise;
   }
 
+  /**
+   * Clicks the "Refresh" button and returns the `/api/ds/query` response, its parsed body and the data the panel
+   * received for that same request. The panel must use the `grafana-e2edata-panel` visualization.
+   *
+   * `body` is the first matching response only, so for split or polling data sources prefer `data`.
+   *
+   * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
+   */
+  async refreshPanelWithData<T = unknown>(
+    options?: RequestOptions & Pick<GetPanelDataOptions, 'states'>
+  ): Promise<{ response: Response; body: T | null; data: PanelData }> {
+    const revision = await this.panel.getDataRevision();
+    const matchesResponse =
+      options?.waitForResponsePredicateCallback ??
+      ((resp: Response) => resp.url().includes(this.ctx.selectors.apis.DataSource.query));
+    let body: T | null = null;
+
+    const response = await this.refreshPanel({
+      ...options,
+      // read the body inside the predicate, while the response is still live
+      waitForResponsePredicateCallback: async (resp: Response) => {
+        if (!(await matchesResponse(resp))) {
+          return false;
+        }
+        body = (await resp.json().catch(() => null)) as T | null;
+        return true;
+      },
+    });
+    const data = await this.panel.getData({
+      response,
+      afterRevision: revision,
+      states: options?.states,
+      timeout: options?.timeout,
+    });
+
+    return { response, body, data };
+  }
+
   /** Return page object for the panel edit options group with the given label */
   getCustomOptions(label: string): PanelEditOptionsGroup {
     const locator = this.getOptionsGroupLocator(label);
