@@ -2,7 +2,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { dirSync } from 'tmp';
 
-import { checkGenerateLocation, findProjectRoot, findWorkspaceRoot, resolveProject } from '../utils.project.js';
+import {
+  checkGenerateLocation,
+  findProjectRoot,
+  findWorkspaceRoot,
+  getWorkspaceGlobs,
+  resolveProject,
+} from '../utils.project.js';
 
 const tmpObj = dirSync({ unsafeCleanup: true });
 
@@ -124,6 +130,80 @@ describe('utils.project', () => {
 
       expect(result.error).toBeUndefined();
       expect(result.project?.root).toBe(projectDir);
+    });
+  });
+
+  describe('getWorkspaceGlobs', () => {
+    it('reads the workspaces array from package.json', () => {
+      writeFile(projectDir, 'package.json', JSON.stringify({ workspaces: ['.config', 'plugins/*'] }));
+
+      expect(getWorkspaceGlobs(projectDir)).toEqual(['.config', 'plugins/*']);
+    });
+
+    it('reads the yarn workspaces object form', () => {
+      writeFile(projectDir, 'package.json', JSON.stringify({ workspaces: { packages: ['plugins/*'] } }));
+
+      expect(getWorkspaceGlobs(projectDir)).toEqual(['plugins/*']);
+    });
+
+    it('reads pnpm-workspace.yaml', () => {
+      writeFile(projectDir, 'package.json', JSON.stringify({ name: 'root' }));
+      writeFile(projectDir, 'pnpm-workspace.yaml', 'packages:\n  - .config\n  - plugins/*\n');
+
+      expect(getWorkspaceGlobs(projectDir)).toEqual(['.config', 'plugins/*']);
+    });
+
+    it('returns an empty list when nothing declares workspaces', () => {
+      writeFile(projectDir, 'package.json', JSON.stringify({ name: 'root' }));
+
+      expect(getWorkspaceGlobs(projectDir)).toEqual([]);
+    });
+  });
+
+  describe('resolveProject in a monorepo', () => {
+    function createMonorepo() {
+      writeFile(projectDir, 'package.json', JSON.stringify({ workspaces: ['.config', 'plugins/*', 'packages/*'] }));
+      writeFile(projectDir, '.config/.cprc.json');
+      writeFile(projectDir, '.config/package.json', JSON.stringify({ name: '@grafana/create-plugin-configs' }));
+      writeFile(projectDir, 'plugins/a/package.json');
+      writeFile(projectDir, 'plugins/a/src/plugin.json', JSON.stringify({ id: 'myorg-a-panel' }));
+      writeFile(projectDir, 'plugins/b/package.json');
+      writeFile(projectDir, 'plugins/b/src/plugin.json', JSON.stringify({ id: 'myorg-b-app' }));
+      writeFile(projectDir, 'packages/shared/package.json');
+    }
+
+    it('lists every workspace that contains a plugin', () => {
+      createMonorepo();
+
+      expect(resolveProject(projectDir)).toEqual({
+        root: projectDir,
+        kind: 'monorepo',
+        plugins: [
+          { dir: 'plugins/a', id: 'myorg-a-panel' },
+          { dir: 'plugins/b', id: 'myorg-b-app' },
+        ],
+      });
+    });
+
+    it('resolves the monorepo from inside a plugin', () => {
+      createMonorepo();
+
+      const project = resolveProject(path.join(projectDir, 'plugins', 'b', 'src'));
+
+      expect(project.root).toBe(projectDir);
+      expect(project.kind).toBe('monorepo');
+    });
+
+    it('treats a plugin whose only workspace is .config as a single plugin', () => {
+      writeFile(projectDir, 'package.json', JSON.stringify({ workspaces: ['.config'] }));
+      writeFile(projectDir, '.config/.cprc.json');
+      writeFile(projectDir, 'src/plugin.json', JSON.stringify({ id: 'myorg-single-panel' }));
+
+      expect(resolveProject(projectDir)).toEqual({
+        root: projectDir,
+        kind: 'single',
+        plugins: [{ dir: '.', id: 'myorg-single-panel' }],
+      });
     });
   });
 });
