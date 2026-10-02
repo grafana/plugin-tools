@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { kebabCase } from 'change-case';
 import { glob } from 'glob';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { TEMPLATE_PATHS } from '../../constants.js';
@@ -312,44 +311,76 @@ function readDirFiles(root: string, dir: string): FileMap {
 export interface MonorepoGeneration {
   root: string;
   pluginDir: string;
-  isNewMonorepo: boolean;
   files: FileMap;
 }
 
-export function getDefaultMonorepoName(orgName: string) {
-  return `${kebabCase(orgName)}-plugins`;
+export const DEFAULT_MONOREPO_NAME = 'grafana-plugins';
+
+/**
+ * Template data for the monorepo root, which belongs to no plugin. Plugin-specific values are blanked so the
+ * shared .config doesn't carry one plugin's id or name.
+ */
+export function getMonorepoTemplateData(templateData: TemplateData): TemplateData {
+  return { ...templateData, pluginId: '', pluginName: '', orgName: '', hasBackend: false, isMonorepo: true };
 }
 
 /**
- * Works out every file to write when generating a plugin into a monorepo: a new monorepo when `monorepoRoot`
- * is not given, otherwise the existing one.
+ * Works out the files of a new, empty monorepo: the shared .config, root package.json, CI and agent files.
+ * Plugins are added afterwards by running create-plugin inside it.
+ */
+export function planMonorepoRoot({
+  templateData,
+  actions,
+  root,
+}: {
+  templateData: TemplateData;
+  actions: PlacedTemplateAction[];
+  root: string;
+}): FileMap {
+  if (fs.existsSync(root) && fs.readdirSync(root).length > 0) {
+    throw new Error(`Directory ${root} exists and contains files.`);
+  }
+
+  const { rootFiles, pluginFiles } = splitPluginFiles(renderActions(actions));
+  // The plugin package.json template holds the tooling every plugin builds with, which lives at the root.
+  const pluginPackageJson: PackageJson = JSON.parse(pluginFiles.get('package.json') ?? '{}');
+  const files: FileMap = new Map([...rootFiles, ...renderMonorepoTemplates(templateData)]);
+
+  files.set(
+    'package.json',
+    `${JSON.stringify(createRootPackageJson(pluginPackageJson, templateData, path.basename(root)), null, 2)}\n`
+  );
+  if (templateData.packageManagerName === 'pnpm') {
+    files.set('pnpm-workspace.yaml', stringifyYaml({ packages: ['.config', `${PLUGINS_DIR}/*`, 'packages/*'] }));
+  }
+
+  return files;
+}
+
+/**
+ * Works out every file to write when adding a plugin to a monorepo: the plugin itself, its provisioning, and
+ * the shared docker compose and release-please files, which are created with the first plugin.
  */
 export function planMonorepoGeneration({
   templateData,
   actions,
   monorepoRoot,
-  newMonorepoPath,
 }: {
   templateData: TemplateData;
   actions: PlacedTemplateAction[];
-  monorepoRoot?: string;
-  newMonorepoPath: string;
+  monorepoRoot: string;
 }): MonorepoGeneration {
-  const isNewMonorepo = !monorepoRoot;
-  const root = monorepoRoot ?? newMonorepoPath;
-  const rootName = isNewMonorepo
-    ? path.basename(root)
-    : String(JSON.parse(readFileIfExists(path.join(root, 'package.json')) ?? '{}').name ?? path.basename(root));
+  const root = monorepoRoot;
+  const rootName = String(
+    JSON.parse(readFileIfExists(path.join(root, 'package.json')) ?? '{}').name ?? path.basename(root)
+  );
   const pluginDir = `${PLUGINS_DIR}/${templateData.pluginId}`;
 
-  if (isNewMonorepo && fs.existsSync(root) && fs.readdirSync(root).length > 0) {
-    throw new Error(`Directory ${root} exists and contains files.`);
-  }
   if (fs.existsSync(path.join(root, pluginDir))) {
     throw new Error(`Directory ${path.join(root, pluginDir)} already exists.`);
   }
 
-  const { rootFiles, pluginFiles, provisioningFiles } = splitPluginFiles(renderActions(actions));
+  const { pluginFiles, provisioningFiles } = splitPluginFiles(renderActions(actions));
   const files: FileMap = new Map();
 
   const pluginPackageJson: PackageJson = JSON.parse(pluginFiles.get('package.json') ?? '{}');
@@ -363,30 +394,17 @@ export function planMonorepoGeneration({
   files.set(`${pluginDir}/AGENTS.md`, PLUGIN_AGENTS);
   files.set(`${pluginDir}/CLAUDE.md`, PLUGIN_AGENTS);
 
-  if (isNewMonorepo) {
-    for (const [filePath, content] of [...rootFiles, ...renderMonorepoTemplates(templateData)]) {
-      files.set(filePath, content);
-    }
-    files.set(
-      'package.json',
-      `${JSON.stringify(createRootPackageJson(pluginPackageJson, templateData, rootName), null, 2)}\n`
-    );
-    if (templateData.packageManagerName === 'pnpm') {
-      files.set('pnpm-workspace.yaml', stringifyYaml({ packages: ['.config', `${PLUGINS_DIR}/*`, 'packages/*'] }));
-    }
-  }
-
-  const existingProvisioning = isNewMonorepo ? new Map() : readDirFiles(root, 'provisioning');
-  for (const [filePath, content] of mergeProvisioning(existingProvisioning, provisioningFiles, templateData.pluginId)) {
+  for (const [filePath, content] of mergeProvisioning(
+    readDirFiles(root, 'provisioning'),
+    provisioningFiles,
+    templateData.pluginId
+  )) {
     files.set(filePath, content);
   }
 
-  const existingPlugins = isNewMonorepo ? [] : resolveProject(root).plugins.filter((plugin) => plugin.dir !== '.');
+  const existingPlugins = resolveProject(root).plugins.filter((plugin) => plugin.dir !== '.');
   const plugins = [...existingPlugins, { dir: pluginDir, id: templateData.pluginId }];
-  const composeBase =
-    files.get('.config/docker-compose-base.yaml') ??
-    readFileIfExists(path.join(root, '.config/docker-compose-base.yaml')) ??
-    '';
+  const composeBase = readFileIfExists(path.join(root, '.config/docker-compose-base.yaml')) ?? '';
   files.set('docker-compose.yaml', createComposeFile(composeBase, plugins, rootName));
 
   const releasePlease = addToReleasePlease(
@@ -401,7 +419,7 @@ export function planMonorepoGeneration({
   files.set('release-please-config.json', releasePlease.config);
   files.set('.release-please-manifest.json', releasePlease.manifest);
 
-  return { root, pluginDir, isNewMonorepo, files };
+  return { root, pluginDir, files };
 }
 
 export async function writeFiles(root: string, files: FileMap) {
