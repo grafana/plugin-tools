@@ -1,4 +1,4 @@
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { createRequire } from 'node:module';
 import { Context } from './context.js';
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -110,17 +110,19 @@ export async function formatFiles(context: Context) {
 let packageJsonInstallCache: string;
 
 export function installNPMDependencies(context: Context) {
-  const hasPackageJsonChanges = Object.entries(context.listChanges()).some(
-    ([filePath, { changeType }]) => filePath === 'package.json' && changeType === 'update'
-  );
+  // In a monorepo a plugin's package.json can change too; one install from the project root covers them all.
+  const changedPackageJsonPaths = Object.entries(context.listChanges())
+    .filter(([filePath, { changeType }]) => basename(filePath) === 'package.json' && changeType === 'update')
+    .map(([filePath]) => filePath)
+    .sort();
 
-  if (!hasPackageJsonChanges) {
+  if (changedPackageJsonPaths.length === 0) {
     return;
   }
 
-  const packageJsonContents = context.getFile('package.json');
+  const packageJsonContents = changedPackageJsonPaths.map((filePath) => context.getFile(filePath) ?? '').join('\n');
 
-  if (!packageJsonContents) {
+  if (!packageJsonContents.trim()) {
     return;
   }
 
