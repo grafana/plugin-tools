@@ -48,7 +48,7 @@ The returned `OpenFeatureConfig` has these fields:
 
 What Grafana advertises depends on its configuration:
 
-- If the Grafana operator configures an OFREP endpoint for plugins, Grafana advertises that endpoint with the type `ofrep`.
+- If Grafana Cloud sets a separate OFREP endpoint for plugins, Grafana advertises that endpoint with the type `ofrep`.
 - Otherwise, with the `static` provider, which is the default, Grafana advertises its own URL. Grafana serves the flags from the `[feature_toggles]` section of its configuration file.
 - Otherwise, with a remote provider, `features-service` or `ofrep`, Grafana advertises the URL of that provider.
 - In all other cases, Grafana advertises nothing. `OpenFeature()` then returns an error that wraps `config.ErrOpenFeatureNotConfigured`.
