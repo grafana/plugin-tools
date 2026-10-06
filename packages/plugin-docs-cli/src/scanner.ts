@@ -69,7 +69,7 @@ function generateSlug(filePath: string): string {
   const parts: string[] = [];
 
   if (parsed.dir) {
-    parts.push(...parsed.dir.split(sep).map(slugSegment));
+    parts.push(...parsed.dir.split('/').map(slugSegment));
   }
 
   parts.push(slugSegment(parsed.name));
@@ -135,7 +135,8 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
   const scannedFiles: ScannedFile[] = [];
 
   for (const absolutePath of filePaths) {
-    const relativePath = relative(docsPath, absolutePath);
+    // stored with `/` on every platform: it ends up in the published manifest as `Page.file`
+    const relativePath = relative(docsPath, absolutePath).split(sep).join('/');
 
     // read and parse the file
     const fileContent = await readFile(absolutePath, 'utf-8');
@@ -172,7 +173,7 @@ function buildTree(scannedFiles: ScannedFile[]): TreeNode {
   const root: TreeNode = { name: '', children: new Map() };
 
   for (const file of scannedFiles) {
-    const parts = file.relativePath.split(sep);
+    const parts = file.relativePath.split('/');
     let current = root;
 
     // navigate/create tree structure

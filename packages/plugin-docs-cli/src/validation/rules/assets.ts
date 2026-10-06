@@ -3,7 +3,7 @@ import type { Dirent } from 'node:fs';
 import { join, extname, dirname, relative, normalize } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { ALLOWED_IMAGE_EXTENSIONS } from './filesystem.js';
-import { formatBytes, isMetaFile } from './utils.js';
+import { decodeRefPath, formatBytes, isMetaFile } from './utils.js';
 
 const IMAGE_FILE_NAME_RE = /^[a-zA-Z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
@@ -129,7 +129,11 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
       }
 
       // root-relative paths (e.g. /img/foo.png) resolve against docs root
-      const resolvedPath = ref.startsWith('/') ? normalize(ref.slice(1)) : normalize(join(dirname(mdRelPath), ref));
+      // looked up by the decoded path, as the renderer reads it
+      const refPath = decodeRefPath(ref);
+      const resolvedPath = refPath.startsWith('/')
+        ? normalize(refPath.slice(1))
+        : normalize(join(dirname(mdRelPath), refPath));
       referencedPaths.add(resolvedPath);
 
       // referenced-images-exist: check that the target file exists on disk

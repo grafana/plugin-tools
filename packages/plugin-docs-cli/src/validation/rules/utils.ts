@@ -1,3 +1,5 @@
+import { posix } from 'node:path';
+
 /**
  * Repo-meta filenames that may live alongside docs pages but are never
  * themselves published as pages. Scanner and validation rules skip them so
@@ -46,6 +48,47 @@ export function maskInlineCode(line: string): string {
   return line.replace(/(`+)(.*?)\1(?!`)/g, (_match, delim: string, inner: string) => {
     return `${delim}${'#'.repeat(inner.length)}${delim}`;
   });
+}
+
+/**
+ * The file path a link or image reference points at: `?query` and `#fragment` dropped and percent
+ * escapes decoded, which is how the renderer reads it. Each run of valid `%XX` escapes is decoded
+ * on its own, so one malformed escape (`%ZZ`) cannot switch off decoding for the rest.
+ */
+export function decodeRefPath(ref: string): string {
+  const pathPart = ref.split(/[?#]/)[0];
+  return pathPart.replace(/(?:%[0-9a-f]{2})+/gi, (escapes) => {
+    try {
+      return decodeURIComponent(escapes);
+    } catch {
+      return escapes;
+    }
+  });
+}
+
+/**
+ * Returns true when a relative link or image reference, resolved against the directory of the page
+ * it appears in, lands outside the docs root. `../` that stays inside the docs folder is fine.
+ *
+ * The reference is percent-decoded first so `..%2F` cannot slip through. Root-relative (`/foo`)
+ * references are not traversal; they have their own rules. A backslash-rooted reference (`\x.png`)
+ * is not left to those rules: browsers read it as root-relative, but their `startsWith('/')` checks
+ * would never see it.
+ */
+export function escapesDocsRoot(ref: string, pageRelPath: string): boolean {
+  const decoded = decodeRefPath(ref);
+  if (decoded.startsWith('\\')) {
+    return true;
+  }
+
+  const target = decoded.replace(/\\/g, '/');
+  if (target.startsWith('/')) {
+    return false;
+  }
+
+  const pageDir = posix.dirname(pageRelPath.replace(/\\/g, '/'));
+  const resolved = posix.normalize(posix.join(pageDir, target));
+  return resolved === '..' || resolved.startsWith('../');
 }
 
 /**
