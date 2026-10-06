@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.14.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.14.0...@grafana/plugin-e2e@3.14.1) (2026-10-06)
+
+
+### Bug Fixes
+
+* **docs:** redirect dead plugin-tools urls and fix two broken links ([#2931](https://github.com/grafana/plugin-tools/issues/2931)) ([d26d21c](https://github.com/grafana/plugin-tools/commit/d26d21c6d3be60ba7db7a4576f794e2fcddeb324))
+
 ## [3.14.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.13.0...@grafana/plugin-e2e@3.14.0) (2026-09-17)
 
 
