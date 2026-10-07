@@ -108,6 +108,8 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
+    const contentLines = content.split('\n');
+
     // no-hugo-shortcodes: no {{< >}} or {{% %}} shortcodes, reported once per opening tag
     for (const { match, line } of matchOutsideCode(content, HUGO_SHORTCODE_RE, codeLines, { maskInlineCode: true })) {
       if (match[1] === '/') {
@@ -120,7 +122,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
         file: relPath,
         line,
         title: 'Hugo shortcode detected',
-        detail: `"${match[0]}" is a Hugo shortcode, which plugin docs don't support. ${
+        detail: `The "${name}" Hugo shortcode isn't supported in plugin docs. ${
           SHORTCODE_REPLACEMENTS[name] ?? 'Write it in plain markdown instead.'
         }`,
       });
@@ -138,6 +140,15 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           title: 'Unknown callout type',
           detail: `"${marker}" isn't a callout type, so this renders as a plain quote. Use one of ${CALLOUT_TYPE_NAMES.join(', ')}.`,
         });
+      } else if (/^\s*>/.test(contentLines[line - 2] ?? '')) {
+        diagnostics.push({
+          rule: Rule.ValidCalloutMarker,
+          severity: 'warning',
+          file: relPath,
+          line,
+          title: 'Callout marker not at the start of the quote',
+          detail: `"${marker}" only works on the first line of a blockquote, so this renders as a plain quote. Start a new blockquote for the callout.`,
+        });
       } else if (match[2].trim() !== '') {
         diagnostics.push({
           rule: Rule.ValidCalloutMarker,
@@ -153,7 +164,6 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     // no-raw-html: no raw HTML tags (except allowed ones). Inline code spans
     // are masked first so placeholder text like `<slug>` inside backticks
     // isn't mistaken for a real tag.
-    const contentLines = content.split('\n');
     for (const { match, line } of matchOutsideCode(content, HTML_TAG_RE, codeLines, { maskInlineCode: true })) {
       const tagName = match[1].toLowerCase();
       // skip if it's a script tag (already handled above) or allowed tag
@@ -161,7 +171,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
         continue;
       }
       // skip the <name> inside a {{< name >}} shortcode, already reported by no-hugo-shortcodes
-      if (match.index > 0 && contentLines[line - 1][match.index - 1] === '{') {
+      if (contentLines[line - 1].slice(Math.max(0, match.index - 2), match.index) === '{{') {
         continue;
       }
       diagnostics.push({

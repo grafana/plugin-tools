@@ -372,6 +372,22 @@ describe('checkMarkdown', () => {
       expect(finding!.detail).toContain('Copy the shared content');
     });
 
+    it('should name the shortcode in the message', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{< figure src="x.png" >}}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.detail).toMatch(/^The "figure" Hugo shortcode/);
+    });
+
+    it('should still report raw HTML after a single brace', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Value: {<span>x</span>}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeDefined();
+    });
+
     it('should give a generic hint for an unknown shortcode', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('{{< card-grid key="cards" >}}\n'));
@@ -433,6 +449,18 @@ describe('checkMarkdown', () => {
       const finding = findings.find((f) => f.rule === Rule.ValidCalloutMarker);
       expect(finding).toBeDefined();
       expect(finding!.title).toBe('Callout text on the marker line');
+    });
+
+    it('should warn when a marker is not on the first line of the blockquote', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!NOTE]\n> Text.\n>\n> [!TIP]\n> More.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const markerFindings = findings.filter((f) => f.rule === Rule.ValidCalloutMarker);
+      expect(markerFindings).toHaveLength(1);
+      expect(markerFindings[0].line).toBe(8);
+      expect(markerFindings[0].title).toBe('Callout marker not at the start of the quote');
     });
 
     it('should not report markers inside code blocks', async () => {
