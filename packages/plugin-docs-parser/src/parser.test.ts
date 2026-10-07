@@ -177,6 +177,13 @@ Even more text.
       expect(result.headings).toHaveLength(1);
       expect(result.headings[0].text).toBe('Install the plugin package');
     });
+
+    it('should not list the generated footnotes heading', () => {
+      const markdown = '## Ports\n\nYugabyteDB listens on port 5433.[^1]\n\n[^1]: Unless you changed it.\n';
+      const result = parseMarkdown(markdown);
+
+      expect(result.headings).toEqual([{ level: 2, id: 'ports', text: 'Ports' }]);
+    });
   });
 
   describe('asset path rewriting', () => {
