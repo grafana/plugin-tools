@@ -3,7 +3,7 @@
 To write Plugin docs use plain markdown: [CommonMark](https://commonmark.org/) plus the
 [GitHub Flavored Markdown](https://github.github.com/gfm/) extensions. There is no MDX, no
 templating and no raw HTML. What you write is what gets rendered on grafana.com, in the `serve`
-preview and on GitHub, so your docs read well in all three.
+preview and on GitHub, so your docs read well in all three platforms.
 
 This page lists everything you can use and how to write it. For the checks that run against your
 docs folder, refer to [Validation rules](./validation-rules.md).
