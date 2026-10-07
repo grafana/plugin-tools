@@ -3,7 +3,14 @@ import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import { CALLOUT_TYPES } from '@grafana/plugin-docs-parser';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { escapesDocsRoot, getCodeBlockLines, getNonProseLines, isMetaFile, matchOutsideCode } from './utils.js';
+import {
+  escapesDocsRoot,
+  getCodeBlockLines,
+  getNonProseLines,
+  getReferenceDefinitions,
+  isMetaFile,
+  matchOutsideCode,
+} from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
@@ -200,10 +207,14 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
-    // process image references
-    for (const { match, line } of matchOutsideCode(content, IMAGE_REF_RE, codeLines)) {
-      const ref = match[2];
+    const definitions = getReferenceDefinitions(content, codeLines);
 
+    // process image references, inline ![alt](url) and reference definitions used by an image
+    const imageRefs = [
+      ...matchOutsideCode(content, IMAGE_REF_RE, codeLines).map(({ match, line }) => ({ ref: match[2], line })),
+      ...definitions.filter((definition) => definition.isImage),
+    ];
+    for (const { ref, line } of imageRefs) {
       // no-base64-images: no base64-encoded image data
       if (BASE64_IMAGE_RE.test(ref)) {
         diagnostics.push({
@@ -270,11 +281,13 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     }
 
     // no-url-placeholders: no unreplaced template placeholders like <GRAFANA_VERSION> in link or image URLs
-    for (const { match, line } of matchOutsideCode(content, LINK_RE, codeLines, {
-      maskInlineCode: true,
-      skipLines: nonProseLines,
-    })) {
-      const ref = match[2];
+    const placeholderRefs = [
+      ...matchOutsideCode(content, LINK_RE, codeLines, { maskInlineCode: true, skipLines: nonProseLines }).map(
+        ({ match, line }) => ({ ref: match[2], line })
+      ),
+      ...getReferenceDefinitions(content, new Set([...codeLines, ...nonProseLines])),
+    ];
+    for (const { ref, line } of placeholderRefs) {
       const placeholder = ref.match(URL_PLACEHOLDER_RE)?.[0];
       if (!placeholder) {
         continue;
@@ -291,16 +304,15 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
-    // process links (non-image)
-    for (const { match, line } of matchOutsideCode(content, LINK_RE, codeLines)) {
-      const ref = match[2];
-
-      // skip image links (already handled above) - LINK_RE also matches the [alt](url) part
-      // of ![alt](url), so check if the char before this match is !
-      if (match.index > 0 && contentLines[line - 1][match.index - 1] === '!') {
-        continue;
-      }
-
+    // process links (non-image), inline [text](url) and reference definitions not used by an image.
+    // LINK_RE also matches the [alt](url) part of ![alt](url), so skip a match preceded by !
+    const linkRefs = [
+      ...matchOutsideCode(content, LINK_RE, codeLines)
+        .filter(({ match, line }) => !(match.index > 0 && contentLines[line - 1][match.index - 1] === '!'))
+        .map(({ match, line }) => ({ ref: match[2], line })),
+      ...definitions.filter((definition) => !definition.isImage),
+    ];
+    for (const { ref, line } of linkRefs) {
       // skip anchor-only links like #section
       if (ref.startsWith('#')) {
         continue;

@@ -583,6 +583,47 @@ describe('checkMarkdown', () => {
     });
   });
 
+  // --- reference-style links ---
+
+  describe('reference-style links', () => {
+    it('should run link rules on reference definitions', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md(
+          '[Explore][explore], [bad][bad], [out][out]\n\n[explore]: https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/\n[bad]: javascript:alert(1)\n[out]: ../../outside.md\n'
+        )
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)?.line).toBe(7);
+      expect(findings.find((f) => f.rule === Rule.NoDangerousUrls)?.line).toBe(8);
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)?.line).toBe(9);
+    });
+
+    it('should run image rules on definitions used by an image', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![Logo][logo]\n\n[logo]: https://example.com/logo.png\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoExternalImages)).toBeDefined();
+      expect(findings.find((f) => f.rule === Rule.InternalLinksRelative)).toBeUndefined();
+    });
+
+    it('should not report footnote definitions or definitions in code', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('Text.[^1]\n\n[^1]: /absolute/looking.md\n\n```\n[bad]: javascript:alert(1)\n```\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoDangerousUrls)).toBeUndefined();
+      expect(findings.find((f) => f.rule === Rule.InternalLinksRelative)).toBeUndefined();
+    });
+  });
+
   // --- no-dangerous-urls ---
 
   describe('no-dangerous-urls', () => {

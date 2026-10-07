@@ -109,6 +109,14 @@ Refer to [Macros](./query-editor/macros.md).
 - Don't use absolute paths like `/docs/configuration`, and don't link to your own pages with a full
   `https://grafana.com/...` URL. Use relative paths, so the link keeps working when your docs move.
 
+Reference-style links work too, and are checked the same way:
+
+```markdown
+Refer to [Configure the data source][configure].
+
+[configure]: ./configuration.md
+```
+
 External links use the full URL. A bare URL such as `https://grafana.com` becomes a link
 automatically.
 

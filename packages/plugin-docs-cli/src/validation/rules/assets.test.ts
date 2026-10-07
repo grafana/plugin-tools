@@ -223,6 +223,14 @@ describe('checkAssets', () => {
   // --- referenced-images-exist ---
 
   describe('referenced-images-exist', () => {
+    it('should report a missing image used through a reference definition', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![Builder][builder]\n\n[builder]: img/missing.png\n'));
+
+      const findings = await checkAssets(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.ReferencedImagesExist)).toHaveLength(1);
+    });
+
     it('should not report data URIs', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       const largeB64 = base64OfSize(400 * 1024);
@@ -457,6 +465,16 @@ describe('checkAssets', () => {
   // --- no-orphaned-images ---
 
   describe('no-orphaned-images', () => {
+    it('should not report an image used through a reference definition', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await mkdir(join(tmp, 'img'));
+      await writeFile(join(tmp, 'img', 'used.png'), bufferOfSize(100));
+      await writeFile(join(tmp, 'index.md'), md('![Used][used]\n\n[used]: img/used.png\n'));
+
+      const findings = await checkAssets(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.NoOrphanedImages)).toHaveLength(0);
+    });
+
     it('should not report referenced images', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await mkdir(join(tmp, 'img'));

@@ -3,7 +3,7 @@ import type { Dirent } from 'node:fs';
 import { join, extname, dirname, relative, normalize } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { ALLOWED_IMAGE_EXTENSIONS } from './filesystem.js';
-import { decodeRefPath, formatBytes, isMetaFile } from './utils.js';
+import { decodeRefPath, formatBytes, getReferenceDefinitions, isMetaFile } from './utils.js';
 
 const IMAGE_FILE_NAME_RE = /^[a-zA-Z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
@@ -120,9 +120,13 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     }
 
     const imageRefRe = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
-    let match: RegExpExecArray | null;
-    while ((match = imageRefRe.exec(content)) !== null) {
-      const ref = match[2];
+    const imageRefs = [
+      ...Array.from(content.matchAll(imageRefRe), (match) => match[2]),
+      ...getReferenceDefinitions(content, new Set())
+        .filter((definition) => definition.isImage)
+        .map((definition) => definition.ref),
+    ];
+    for (const ref of imageRefs) {
       // skip refs that aren't local file paths; data URIs are rejected by no-base64-images and no-dangerous-urls
       if (/^https?:\/\//i.test(ref) || /^\/\//.test(ref) || /^blob:/i.test(ref) || /^data:/i.test(ref)) {
         continue;
