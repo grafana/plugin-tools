@@ -378,6 +378,7 @@ describe('checkMarkdown', () => {
 
       const findings = await checkMarkdown(input(tmp));
       expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.detail).toMatch(/^The "figure" Hugo shortcode/);
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.detail).toContain('"Caption"');
     });
 
     it('should still report raw HTML after a single brace', async () => {

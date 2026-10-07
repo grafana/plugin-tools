@@ -52,7 +52,8 @@ const CALLOUT_TYPE_NAMES = Object.keys(CALLOUT_TYPES).map((type) => type.toUpper
 
 const SHORTCODE_REPLACEMENTS: Record<string, string> = {
   admonition: 'Use a callout instead, for example a blockquote starting with > [!NOTE].',
-  figure: 'Use a markdown image instead, for example ![Alt text](img/screenshot.png).',
+  figure:
+    'Use a markdown image with the caption as its title instead, for example ![Alt text](img/screenshot.png "Caption").',
   youtube: 'Link to the video instead.',
   'video-embed': 'Link to the video instead.',
   vimeo: 'Link to the video instead.',

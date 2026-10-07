@@ -557,6 +557,20 @@ a:hover {
   border-radius: 12px;
 }
 
+.plugin-content figure {
+  margin: 16px 0;
+}
+
+.plugin-content figure img {
+  margin: 0;
+}
+
+.plugin-content figcaption {
+  margin-top: 8px;
+  color: var(--gray-600);
+  font-size: 14px;
+}
+
 .plugin-content a > img {
   display: inline;
   margin: 2px 4px 2px 0;

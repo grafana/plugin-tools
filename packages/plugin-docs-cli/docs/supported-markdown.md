@@ -137,6 +137,21 @@ relative path:
 - Static images can be up to 300KB, GIFs up to 1MB and all images together up to 5MB.
 - Always write alt text that describes the image. Screen readers read it out, and it's shown if
   the image fails to load.
+- Images are shown at their own size, up to the width of the page. Export screenshots at the
+  size you want them shown.
+
+### Captions
+
+To add a caption, give the image a title. The title is shown as a caption under the image:
+
+<!-- prettier-ignore -->
+```markdown
+![The query editor in builder mode](./img/query-builder.png "Build a query without writing SQL")
+```
+
+- The image must be alone in its paragraph. Put a blank line between two captioned images.
+- Write the alt text for screen readers and the caption for everyone. They usually differ.
+- On GitHub the title shows as a tooltip instead of a caption.
 
 ## Callouts
 
@@ -188,19 +203,19 @@ These are removed when your page is rendered, or shown as plain text:
 If your docs are published to `grafana.com/docs/plugins/` today, they're written for Hugo. This
 table shows what to use instead.
 
-| Hugo                                                        | Plugin docs                                                          |
-| ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| `docs/sources/` folder                                      | The folder set in `docsPath` in `src/plugin.json`                    |
-| `_index.md`                                                 | `index.md`                                                           |
-| `weight`                                                    | `sidebar_position`                                                   |
-| `menuTitle`                                                 | Not supported. The sidebar shows `title`                             |
-| `aliases`, `labels`, `keywords`, `review_date`              | Not supported. Remove them                                           |
-| `# Page title` in the body                                  | Remove it. The title comes from frontmatter                          |
-| `https://grafana.com/docs/plugins/<id>/latest/<page>/` link | A relative link: `./<page>.md`                                       |
-| `<GRAFANA_VERSION>` in a link                               | `latest`                                                             |
-| `{{< figure src="/media/..." >}}`                           | Download the image into your docs folder and use `![alt](./img/...)` |
-| `{{< admonition type="note" >}}`                            | A callout: `> [!NOTE]`                                               |
-| `{{< youtube >}}`, `{{< video-embed >}}`                    | Not supported. Link to the video                                     |
-| `{{< collapse >}}`                                          | Not supported                                                        |
-| `{{< docs/shared >}}`                                       | Not supported. Copy the content into your page                       |
-| `{{< tabs >}}`, `{{< card-grid >}}`, other shortcodes       | Not supported                                                        |
+| Hugo                                                        | Plugin docs                                                                    |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `docs/sources/` folder                                      | The folder set in `docsPath` in `src/plugin.json`                              |
+| `_index.md`                                                 | `index.md`                                                                     |
+| `weight`                                                    | `sidebar_position`                                                             |
+| `menuTitle`                                                 | Not supported. The sidebar shows `title`                                       |
+| `aliases`, `labels`, `keywords`, `review_date`              | Not supported. Remove them                                                     |
+| `# Page title` in the body                                  | Remove it. The title comes from frontmatter                                    |
+| `https://grafana.com/docs/plugins/<id>/latest/<page>/` link | A relative link: `./<page>.md`                                                 |
+| `<GRAFANA_VERSION>` in a link                               | `latest`                                                                       |
+| `{{< figure src="/media/..." caption="..." >}}`             | Download the image into your docs folder and use `![alt](./img/... "caption")` |
+| `{{< admonition type="note" >}}`                            | A callout: `> [!NOTE]`                                                         |
+| `{{< youtube >}}`, `{{< video-embed >}}`                    | Not supported. Link to the video                                               |
+| `{{< collapse >}}`                                          | Not supported                                                                  |
+| `{{< docs/shared >}}`                                       | Not supported. Copy the content into your page                                 |
+| `{{< tabs >}}`, `{{< card-grid >}}`, other shortcodes       | Not supported                                                                  |
