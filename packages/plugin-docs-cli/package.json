@@ -43,7 +43,7 @@
     "url": "https://github.com/grafana/plugin-tools/issues"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=22"
   },
   "dependencies": {
     "@grafana/plugin-docs-parser": "^0.3.1",
