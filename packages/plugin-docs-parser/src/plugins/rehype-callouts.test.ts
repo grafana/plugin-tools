@@ -60,6 +60,20 @@ describe('rehypeCallouts', () => {
     expect(html).not.toContain('callout');
   });
 
+  it('should leave a blockquote alone when formatted text follows the marker on the same line', () => {
+    const html = render('> [!NOTE] **Same line.**');
+
+    expect(html).toContain('<blockquote>');
+    expect(html).not.toContain('callout');
+  });
+
+  it('should still convert a callout whose content starts with formatting on the next line', () => {
+    const html = render('> [!NOTE]\n> **Bold** start.');
+
+    expect(html).toContain('callout-note');
+    expect(html).toContain('<p><strong>Bold</strong> start.</p>');
+  });
+
   it('should leave a plain blockquote alone', () => {
     expect(render('> Just a quote.')).toContain('<blockquote>\n<p>Just a quote.</p>\n</blockquote>');
   });

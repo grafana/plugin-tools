@@ -49,6 +49,12 @@ export function rehypeCallouts() {
         return;
       }
 
+      // inline markup splits the text node, so a marker that ends its node may still have text after it on the line
+      const endsLine = /\n$/.test(match[0]) || firstParagraph.children.length === 1;
+      if (!endsLine) {
+        return;
+      }
+
       firstText.value = firstText.value.slice(match[0].length);
       if (firstText.value === '') {
         firstParagraph.children.shift();
