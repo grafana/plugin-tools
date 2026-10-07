@@ -388,6 +388,17 @@ describe('checkMarkdown', () => {
       expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeDefined();
     });
 
+    it('should not report shortcodes in indented code blocks or HTML comments', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('Hugo example:\n\n    {{< admonition type="note" >}}\n\n<!-- {{< youtube id="abc" >}} -->\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)).toBeUndefined();
+    });
+
     it('should give a generic hint for an unknown shortcode', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('{{< card-grid key="cards" >}}\n'));
@@ -461,6 +472,14 @@ describe('checkMarkdown', () => {
       expect(markerFindings).toHaveLength(1);
       expect(markerFindings[0].line).toBe(8);
       expect(markerFindings[0].title).toBe('Callout marker not at the start of the quote');
+    });
+
+    it('should not report markers inside indented code blocks', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Example:\n\n    > [!DANGER] text\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
     });
 
     it('should not report markers inside code blocks', async () => {

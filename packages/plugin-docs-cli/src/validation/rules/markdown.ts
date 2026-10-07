@@ -3,7 +3,7 @@ import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import { CALLOUT_TYPES } from '@grafana/plugin-docs-parser';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { escapesDocsRoot, getCodeBlockLines, isMetaFile, matchOutsideCode } from './utils.js';
+import { escapesDocsRoot, getCodeBlockLines, getNonProseLines, isMetaFile, matchOutsideCode } from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
@@ -83,6 +83,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     }
 
     const codeLines = getCodeBlockLines(content);
+    const nonProseLines = getNonProseLines(content);
 
     // no-script-tags: no <script> tags
     for (const { match, line } of matchOutsideCode(content, SCRIPT_TAG_RE, codeLines, { maskInlineCode: true })) {
@@ -111,7 +112,10 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     const contentLines = content.split('\n');
 
     // no-hugo-shortcodes: no {{< >}} or {{% %}} shortcodes, reported once per opening tag
-    for (const { match, line } of matchOutsideCode(content, HUGO_SHORTCODE_RE, codeLines, { maskInlineCode: true })) {
+    for (const { match, line } of matchOutsideCode(content, HUGO_SHORTCODE_RE, codeLines, {
+      maskInlineCode: true,
+      skipLines: nonProseLines,
+    })) {
       if (match[1] === '/') {
         continue;
       }
@@ -129,7 +133,9 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     }
 
     // valid-callout-marker: a [!TYPE] marker that would silently render as a plain quote
-    for (const { match, line } of matchOutsideCode(content, CALLOUT_MARKER_RE, codeLines)) {
+    for (const { match, line } of matchOutsideCode(content, CALLOUT_MARKER_RE, codeLines, {
+      skipLines: nonProseLines,
+    })) {
       const marker = `[!${match[1]}]`;
       if (!CALLOUT_TYPE_NAMES.includes(match[1].toUpperCase())) {
         diagnostics.push({
