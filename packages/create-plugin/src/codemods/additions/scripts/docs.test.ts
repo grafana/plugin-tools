@@ -80,10 +80,27 @@ describe('docs scaffolding', () => {
 
   describe('early exit', () => {
     it('throws if docs directory already exists on disk', () => {
-      vi.mocked(existsSync).mockReturnValueOnce(true);
-      const context = makeContext();
+      const root = mkdtempSync(join(tmpdir(), 'docs-exists-'));
+      tempDirs.push(root);
+      mkdirSync(join(root, 'docs'), { recursive: true });
+      const context = new Context(root);
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'My Plugin' }));
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
       expect(() => call(context)).toThrow("A directory already exists at 'docs'");
     });
+  });
+
+  it('is idempotent', async () => {
+    const context = makeContext();
+    // template dirs must stay fixed across both runs - call() mints a fresh temp dir per
+    // invocation, and two different (if equal-content) dirs would make every re-run look
+    // like a first run instead of exercising the skip-existing-file branches.
+    const templateDir = makeTemplateDir({ 'index.md': '# {{pluginName}}\n' });
+    const commonTemplateDir = makeCommonTemplateDir();
+    const migrate = async (ctx: Context) =>
+      setupDocsScaffolding({ context: ctx, docsPath: 'docs', templateDir, commonTemplateDir });
+
+    await expect(migrate).toBeIdempotent(context);
   });
 
   describe('plugin.json step', () => {
@@ -202,7 +219,9 @@ describe('docs scaffolding', () => {
     });
 
     it('skips a file already present in the context', () => {
-      const context = makeContext();
+      // docsPath already set, so this docs/ folder is ours from a previous run, not a
+      // foreign one - the folder-exists guard must fall through rather than refuse.
+      const context = makeContext({ type: 'panel', name: 'My Plugin', docsPath: 'docs' });
       context.addFile('docs/index.md', '# Existing\n');
       call(context, { templates: { 'index.md': '# Replacement\n' } });
       expect(context.getFile('docs/index.md')).toBe('# Existing\n');
@@ -306,15 +325,28 @@ describe('docs scaffolding', () => {
       );
     });
 
-    it('normalizes an unparseable ref (e.g. a branch name) to the required tag', () => {
+    it('leaves an unparseable ref (e.g. a branch name or a SHA pin) untouched', () => {
       const context = makeContext();
-      context.updateFile(
-        '.github/workflows/release.yml',
-        'uses: grafana/plugin-actions/build-plugin@some-feature-branch\n'
-      );
+      const original = 'uses: grafana/plugin-actions/build-plugin@some-feature-branch\n';
+      context.updateFile('.github/workflows/release.yml', original);
+      call(context);
+      expect(context.getFile('.github/workflows/release.yml')).toBe(original);
+    });
+
+    it('leaves a SHA-pinned ref untouched rather than downgrading it to a mutable tag', () => {
+      const context = makeContext();
+      const original = 'uses: grafana/plugin-actions/build-plugin@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n';
+      context.updateFile('.github/workflows/release.yml', original);
+      call(context);
+      expect(context.getFile('.github/workflows/release.yml')).toBe(original);
+    });
+
+    it('bumps a quoted ref the same as an unquoted one', () => {
+      const context = makeContext();
+      context.updateFile('.github/workflows/release.yml', "uses: 'grafana/plugin-actions/build-plugin@v1.0.0'\n");
       call(context);
       expect(context.getFile('.github/workflows/release.yml')).toBe(
-        'uses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\n'
+        "uses: 'grafana/plugin-actions/build-plugin@build-plugin/v1.2.0'\n"
       );
     });
 
@@ -500,6 +532,26 @@ describe('docs codemod', () => {
 
     it('accepts a valid custom docsPath', () => {
       expect(v.parse(schema, { docsPath: 'documentation' })).toEqual({ docsPath: 'documentation' });
+    });
+
+    it('accepts a nested docsPath', () => {
+      expect(v.parse(schema, { docsPath: 'docs/plugin' })).toEqual({ docsPath: 'docs/plugin' });
+    });
+
+    it('rejects a leading "./"', () => {
+      expect(() => v.parse(schema, { docsPath: './docs' })).toThrow();
+    });
+
+    it('rejects a trailing slash', () => {
+      expect(() => v.parse(schema, { docsPath: 'docs/' })).toThrow();
+    });
+
+    it('rejects a backslash', () => {
+      expect(() => v.parse(schema, { docsPath: 'C:\\docs' })).toThrow();
+    });
+
+    it('rejects a quote character', () => {
+      expect(() => v.parse(schema, { docsPath: "docs'" })).toThrow();
     });
 
     it('ignores unrelated CLI flags that always ride along in argv', () => {
