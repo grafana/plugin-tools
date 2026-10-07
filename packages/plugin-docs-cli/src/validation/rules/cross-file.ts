@@ -3,7 +3,7 @@ import type { Dirent } from 'node:fs';
 import { join, relative, dirname, normalize } from 'node:path';
 import GithubSlugger from 'github-slugger';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { decodeRefPath, escapesDocsRoot, getCodeBlockLines, isMetaFile } from './utils.js';
+import { decodeRefPath, escapesDocsRoot, getCodeBlockLines, getReferenceDefinitions, isMetaFile } from './utils.js';
 
 // matches markdown links: [text](url)
 const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
@@ -108,7 +108,10 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
   // check links in each markdown file
   for (const [relPath, content] of fileContents) {
     const codeLines = getCodeBlockLines(content);
-    const links = extractLinks(content, codeLines);
+    const links = [
+      ...extractLinks(content, codeLines),
+      ...getReferenceDefinitions(content, codeLines).filter((definition) => !definition.isImage),
+    ];
 
     for (const { ref, line } of links) {
       // skip external and special URLs

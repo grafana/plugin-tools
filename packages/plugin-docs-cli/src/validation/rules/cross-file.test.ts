@@ -26,6 +26,25 @@ describe('checkCrossFile', () => {
   // --- internal-links-resolve ---
 
   describe('internal-links-resolve', () => {
+    it('should report an unresolved link through a reference definition', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'cross-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Refer to [Setup][setup].\n\n[setup]: ./missing.md\n'));
+
+      const findings = await checkCrossFile(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.InternalLinksResolve);
+      expect(finding).toBeDefined();
+      expect(finding!.line).toBe(7);
+    });
+
+    it('should not treat an image reference definition as a page link', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'cross-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![Shot][shot]\n\n[shot]: img/shot.png\n'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.InternalLinksResolve)).toBeUndefined();
+    });
+
     it('should resolve ../ links from a nested page', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
       await mkdir(join(tmp, 'options'));

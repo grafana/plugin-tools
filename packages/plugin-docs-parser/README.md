@@ -17,4 +17,6 @@ const result = parseMarkdown(markdownContent, {
 });
 ```
 
+For the markdown this parser supports, see [Supported markdown](../plugin-docs-cli/docs/supported-markdown.md).
+
 For the CLI dev server, see [@grafana/plugin-docs-cli](../plugin-docs-cli).

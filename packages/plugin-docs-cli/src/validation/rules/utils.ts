@@ -225,6 +225,45 @@ export function getNonProseLines(content: string): Set<number> {
   return skip;
 }
 
+// matches a reference definition, [label]: url "title", but not a footnote definition [^1]: text
+const REFERENCE_DEFINITION_RE = /^ {0,3}\[([^\]^][^\]]*)\]:\s*(?:<([^>]*)>|(\S+))/;
+
+// matches an image that uses a reference: ![alt][label], ![label][] or ![label]
+const IMAGE_REFERENCE_RE = /!\[([^\]]*)\](?:\[([^\]]*)\])?(?![(:])/g;
+
+function normalizeLabel(label: string): string {
+  return label.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+/**
+ * Reference definitions (`[label]: url`) in a page, with the line they're on. A definition is an
+ * image when some `![alt][label]` uses its label, otherwise a link. Lines in `skipLines` are ignored.
+ */
+export function getReferenceDefinitions(
+  content: string,
+  skipLines: ReadonlySet<number>
+): Array<{ ref: string; line: number; isImage: boolean }> {
+  const lines = content.split('\n');
+  const imageLabels = new Set<string>();
+  const definitions: Array<{ label: string; ref: string; line: number }> = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    if (skipLines.has(i + 1)) {
+      continue;
+    }
+    const definition = REFERENCE_DEFINITION_RE.exec(lines[i]);
+    if (definition) {
+      definitions.push({ label: normalizeLabel(definition[1]), ref: definition[2] ?? definition[3], line: i + 1 });
+      continue;
+    }
+    for (const image of lines[i].matchAll(IMAGE_REFERENCE_RE)) {
+      imageLabels.add(normalizeLabel(image[2] || image[1]));
+    }
+  }
+
+  return definitions.map(({ label, ref, line }) => ({ ref, line, isImage: imageLabels.has(label) }));
+}
+
 /**
  * Tests a regex against content lines, skipping code blocks.
  * Returns all matches with their line numbers.

@@ -1,8 +1,16 @@
 import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
+import { CALLOUT_TYPES } from '@grafana/plugin-docs-parser';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { escapesDocsRoot, getCodeBlockLines, isMetaFile, matchOutsideCode } from './utils.js';
+import {
+  escapesDocsRoot,
+  getCodeBlockLines,
+  getNonProseLines,
+  getReferenceDefinitions,
+  isMetaFile,
+  matchOutsideCode,
+} from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
@@ -30,6 +38,36 @@ const BASE64_IMAGE_RE = /^data:image\/[^;]+;base64,/i;
 
 // matches external URLs (http:// or https://)
 const EXTERNAL_URL_RE = /^https?:\/\//i;
+
+// matches the opening of a Hugo shortcode, {{< name ... >}} or {{% name ... %}}, capturing the closing slash and name
+const HUGO_SHORTCODE_RE = /\{\{[<%]\s*(\/?)\s*([a-zA-Z][\w./-]*)/g;
+
+// matches template placeholders like <GRAFANA_VERSION> left in a URL
+const URL_PLACEHOLDER_RE = /<[A-Z][A-Z0-9_]*>/;
+
+// matches a callout marker opening a blockquote line, like > [!NOTE], capturing the type and any text after it
+const CALLOUT_MARKER_RE = /^\s*>\s*\[!([a-zA-Z]+)\](.*)$/;
+
+const CALLOUT_TYPE_NAMES = Object.keys(CALLOUT_TYPES).map((type) => type.toUpperCase());
+
+const SHORTCODE_REPLACEMENTS: Record<string, string> = {
+  admonition: 'Use a callout instead, for example a blockquote starting with > [!NOTE].',
+  figure: 'Use a markdown image instead, for example ![Alt text](img/screenshot.png).',
+  youtube: 'Link to the video instead.',
+  'video-embed': 'Link to the video instead.',
+  vimeo: 'Link to the video instead.',
+  'docs/shared': 'Copy the shared content into this page instead.',
+};
+
+// true when an earlier line of the same block is quoted, including across lazy continuation lines
+function isInsideBlockquote(lines: string[], index: number): boolean {
+  for (let i = index - 1; i >= 0 && lines[i].trim() !== ''; i--) {
+    if (/^\s*>/.test(lines[i])) {
+      return true;
+    }
+  }
+  return false;
+}
 
 export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
@@ -62,6 +100,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     }
 
     const codeLines = getCodeBlockLines(content);
+    const nonProseLines = getNonProseLines(content);
 
     // no-script-tags: no <script> tags
     for (const { match, line } of matchOutsideCode(content, SCRIPT_TAG_RE, codeLines, { maskInlineCode: true })) {
@@ -87,6 +126,64 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
+    const contentLines = content.split('\n');
+
+    // no-hugo-shortcodes: no {{< >}} or {{% %}} shortcodes, reported once per opening tag
+    for (const { match, line } of matchOutsideCode(content, HUGO_SHORTCODE_RE, codeLines, {
+      maskInlineCode: true,
+      skipLines: nonProseLines,
+    })) {
+      if (match[1] === '/') {
+        continue;
+      }
+      const name = match[2];
+      diagnostics.push({
+        rule: Rule.NoHugoShortcodes,
+        severity: input.strict ? 'error' : 'warning',
+        file: relPath,
+        line,
+        title: 'Hugo shortcode detected',
+        detail: `The "${name}" Hugo shortcode isn't supported in plugin docs. ${
+          SHORTCODE_REPLACEMENTS[name] ?? 'Write it in plain markdown instead.'
+        }`,
+      });
+    }
+
+    // valid-callout-marker: a [!TYPE] marker that would silently render as a plain quote
+    for (const { match, line } of matchOutsideCode(content, CALLOUT_MARKER_RE, codeLines, {
+      skipLines: nonProseLines,
+    })) {
+      const marker = `[!${match[1]}]`;
+      if (!CALLOUT_TYPE_NAMES.includes(match[1].toUpperCase())) {
+        diagnostics.push({
+          rule: Rule.ValidCalloutMarker,
+          severity: 'warning',
+          file: relPath,
+          line,
+          title: 'Unknown callout type',
+          detail: `"${marker}" isn't a callout type, so this renders as a plain quote. Use one of ${CALLOUT_TYPE_NAMES.join(', ')}.`,
+        });
+      } else if (isInsideBlockquote(contentLines, line - 1)) {
+        diagnostics.push({
+          rule: Rule.ValidCalloutMarker,
+          severity: 'warning',
+          file: relPath,
+          line,
+          title: 'Callout marker not at the start of the quote',
+          detail: `"${marker}" only works on the first line of a blockquote, so this renders as a plain quote. Start a new blockquote for the callout.`,
+        });
+      } else if (match[2].trim() !== '') {
+        diagnostics.push({
+          rule: Rule.ValidCalloutMarker,
+          severity: 'warning',
+          file: relPath,
+          line,
+          title: 'Callout text on the marker line',
+          detail: `Move the text after "${marker}" to the next line. With text on the same line, this renders as a plain quote.`,
+        });
+      }
+    }
+
     // no-raw-html: no raw HTML tags (except allowed ones). Inline code spans
     // are masked first so placeholder text like `<slug>` inside backticks
     // isn't mistaken for a real tag.
@@ -94,6 +191,10 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       const tagName = match[1].toLowerCase();
       // skip if it's a script tag (already handled above) or allowed tag
       if (tagName === 'script' || ALLOWED_HTML_TAGS.has(tagName)) {
+        continue;
+      }
+      // skip the <name> inside a {{< name >}} shortcode, already reported by no-hugo-shortcodes
+      if (contentLines[line - 1].slice(Math.max(0, match.index - 2), match.index) === '{{') {
         continue;
       }
       diagnostics.push({
@@ -106,10 +207,14 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
-    // process image references
-    for (const { match, line } of matchOutsideCode(content, IMAGE_REF_RE, codeLines)) {
-      const ref = match[2];
+    const definitions = getReferenceDefinitions(content, codeLines);
 
+    // process image references, inline ![alt](url) and reference definitions used by an image
+    const imageRefs = [
+      ...matchOutsideCode(content, IMAGE_REF_RE, codeLines).map(({ match, line }) => ({ ref: match[2], line })),
+      ...definitions.filter((definition) => definition.isImage),
+    ];
+    for (const { ref, line } of imageRefs) {
       // no-base64-images: no base64-encoded image data
       if (BASE64_IMAGE_RE.test(ref)) {
         diagnostics.push({
@@ -175,17 +280,39 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       }
     }
 
-    // process links (non-image)
-    const contentLines = content.split('\n');
-    for (const { match, line } of matchOutsideCode(content, LINK_RE, codeLines)) {
-      const ref = match[2];
-
-      // skip image links (already handled above) - LINK_RE also matches the [alt](url) part
-      // of ![alt](url), so check if the char before this match is !
-      if (match.index > 0 && contentLines[line - 1][match.index - 1] === '!') {
+    // no-url-placeholders: no unreplaced template placeholders like <GRAFANA_VERSION> in link or image URLs
+    const placeholderRefs = [
+      ...matchOutsideCode(content, LINK_RE, codeLines, { maskInlineCode: true, skipLines: nonProseLines }).map(
+        ({ match, line }) => ({ ref: match[2], line })
+      ),
+      ...getReferenceDefinitions(content, new Set([...codeLines, ...nonProseLines])),
+    ];
+    for (const { ref, line } of placeholderRefs) {
+      const placeholder = ref.match(URL_PLACEHOLDER_RE)?.[0];
+      if (!placeholder) {
         continue;
       }
+      diagnostics.push({
+        rule: Rule.NoUrlPlaceholders,
+        severity: input.strict ? 'error' : 'warning',
+        file: relPath,
+        line,
+        title: 'Placeholder in link URL',
+        detail: `"${ref}" contains the placeholder ${placeholder}, which isn't replaced in plugin docs and breaks the link. Write the real value instead${
+          placeholder.endsWith('VERSION>') ? ', for example "latest"' : ''
+        }.`,
+      });
+    }
 
+    // process links (non-image), inline [text](url) and reference definitions not used by an image.
+    // LINK_RE also matches the [alt](url) part of ![alt](url), so skip a match preceded by !
+    const linkRefs = [
+      ...matchOutsideCode(content, LINK_RE, codeLines)
+        .filter(({ match, line }) => !(match.index > 0 && contentLines[line - 1][match.index - 1] === '!'))
+        .map(({ match, line }) => ({ ref: match[2], line })),
+      ...definitions.filter((definition) => !definition.isImage),
+    ];
+    for (const { ref, line } of linkRefs) {
       // skip anchor-only links like #section
       if (ref.startsWith('#')) {
         continue;

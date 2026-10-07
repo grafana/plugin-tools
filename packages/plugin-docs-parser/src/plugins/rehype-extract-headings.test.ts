@@ -106,6 +106,19 @@ describe('rehypeExtractHeadings', () => {
     expect(vfile.data.headings).toEqual([{ level: 2, id: 'install', text: 'Install the plugin package' }]);
   });
 
+  it('should skip the heading inside a generated footnotes section', () => {
+    const vfile = new VFile();
+    const footnotes: Element = {
+      type: 'element',
+      tagName: 'section',
+      properties: { dataFootnotes: true, className: ['footnotes'] },
+      children: [heading(2, 'footnote-label', 'Footnotes')],
+    };
+    transform(tree(heading(2, 'intro', 'Introduction'), footnotes), vfile);
+
+    expect(vfile.data.headings).toEqual([{ level: 2, id: 'intro', text: 'Introduction' }]);
+  });
+
   it('should return empty array when no headings exist', () => {
     const p: Element = {
       type: 'element',

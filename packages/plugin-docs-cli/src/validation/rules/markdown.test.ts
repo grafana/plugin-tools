@@ -332,6 +332,298 @@ describe('checkMarkdown', () => {
     });
   });
 
+  // --- no-hugo-shortcodes ---
+
+  describe('no-hugo-shortcodes', () => {
+    it('should report a paired shortcode once, with a replacement hint', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{< admonition type="note" >}}\nA note.\n{{< /admonition >}}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const shortcodeFindings = findings.filter((f) => f.rule === Rule.NoHugoShortcodes);
+      expect(shortcodeFindings).toHaveLength(1);
+      expect(shortcodeFindings[0].severity).toBe('error');
+      expect(shortcodeFindings[0].line).toBe(5);
+      expect(shortcodeFindings[0].detail).toContain('> [!NOTE]');
+    });
+
+    it('should not also report a shortcode as raw HTML', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md(
+          '{{< figure src="/media/docs/x.png" caption="X" >}}\n\n{{< admonition type="note" >}}\nA note.\n{{< /admonition >}}\n'
+        )
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeUndefined();
+    });
+
+    it('should report {{% %}} shortcodes', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{% docs/shared lookup="x.md" source="grafana" %}}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.NoHugoShortcodes);
+      expect(finding).toBeDefined();
+      expect(finding!.detail).toContain('Copy the shared content');
+    });
+
+    it('should name the shortcode in the message', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{< figure src="x.png" >}}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.detail).toMatch(/^The "figure" Hugo shortcode/);
+    });
+
+    it('should still report raw HTML after a single brace', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Value: {<span>x</span>}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeDefined();
+    });
+
+    it('should not report shortcodes in indented code blocks or HTML comments', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('Hugo example:\n\n    {{< admonition type="note" >}}\n\n<!-- {{< youtube id="abc" >}} -->\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)).toBeUndefined();
+    });
+
+    it('should give a generic hint for an unknown shortcode', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{< card-grid key="cards" >}}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.detail).toContain('plain markdown');
+    });
+
+    it('should report as warning in non-strict mode', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{< youtube id="abc" >}}\n'));
+
+      const findings = await checkMarkdown(input(tmp, false));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.severity).toBe('warning');
+    });
+
+    it('should not report shortcodes inside code blocks or inline code', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('```\n{{< admonition type="note" >}}\n```\n\nHugo uses `{{< figure >}}` for images.\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)).toBeUndefined();
+    });
+  });
+
+  // --- valid-callout-marker ---
+
+  describe('valid-callout-marker', () => {
+    it('should not report valid callouts in any case', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!NOTE]\n> Text.\n\n> [!caution]\n> Text.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
+    });
+
+    it('should warn about an unknown callout type', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!DANGER]\n> Text.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.ValidCalloutMarker);
+      expect(finding).toBeDefined();
+      expect(finding!.severity).toBe('warning');
+      expect(finding!.line).toBe(5);
+      expect(finding!.detail).toContain('NOTE, TIP, IMPORTANT, WARNING, CAUTION');
+    });
+
+    it('should warn when text follows the marker on the same line', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!WARNING] This deletes data.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.ValidCalloutMarker);
+      expect(finding).toBeDefined();
+      expect(finding!.title).toBe('Callout text on the marker line');
+    });
+
+    it('should warn when a marker is not on the first line of the blockquote', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!NOTE]\n> Text.\n>\n> [!TIP]\n> More.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const markerFindings = findings.filter((f) => f.rule === Rule.ValidCalloutMarker);
+      expect(markerFindings).toHaveLength(1);
+      expect(markerFindings[0].line).toBe(8);
+      expect(markerFindings[0].title).toBe('Callout marker not at the start of the quote');
+    });
+
+    it('should warn when a lazy continuation line comes before the marker', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> Intro.\ncontinued\n> [!NOTE]\n> More.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)?.title).toBe(
+        'Callout marker not at the start of the quote'
+      );
+    });
+
+    it('should not warn when a callout directly follows a paragraph', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Some paragraph.\n> [!NOTE]\n> Text.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
+    });
+
+    it('should not report markers inside indented code blocks', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Example:\n\n    > [!DANGER] text\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
+    });
+
+    it('should not report markers inside code blocks', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('```markdown\n> [!DANGER] text\n```\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
+    });
+  });
+
+  // --- no-url-placeholders ---
+
+  describe('no-url-placeholders', () => {
+    it('should report a version placeholder in a link URL and suggest latest', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('Use [Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/).\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.NoUrlPlaceholders);
+      expect(finding).toBeDefined();
+      expect(finding!.severity).toBe('error');
+      expect(finding!.detail).toContain('<GRAFANA_VERSION>');
+      expect(finding!.detail).toContain('"latest"');
+    });
+
+    it('should report other placeholders without the version hint', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Open [your stack](https://<STACK_NAME>.grafana.net/).\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.NoUrlPlaceholders);
+      expect(finding).toBeDefined();
+      expect(finding!.detail).not.toContain('latest');
+    });
+
+    it('should report as warning in non-strict mode', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('[Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/)\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp, false));
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)!.severity).toBe('warning');
+    });
+
+    it('should not report links in inline code or indented code blocks', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md(
+          'Hugo writes `[Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/)`.\n\n    [Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/)\n'
+        )
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)).toBeUndefined();
+    });
+
+    it('should report a placeholder in an image URL', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![Diagram](img/<IMAGE_NAME>.png)\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)).toBeDefined();
+    });
+
+    it('should not report placeholders outside link URLs', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('Replace `<PASSWORD>` with your password.\n\n```yaml\nurl: <HOST>:5433\n```\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)).toBeUndefined();
+    });
+  });
+
+  // --- reference-style links ---
+
+  describe('reference-style links', () => {
+    it('should run link rules on reference definitions', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md(
+          '[Explore][explore], [bad][bad], [out][out]\n\n[explore]: https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/\n[bad]: javascript:alert(1)\n[out]: ../../outside.md\n'
+        )
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)?.line).toBe(7);
+      expect(findings.find((f) => f.rule === Rule.NoDangerousUrls)?.line).toBe(8);
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)?.line).toBe(9);
+    });
+
+    it('should run image rules on definitions used by an image', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![Logo][logo]\n\n[logo]: https://example.com/logo.png\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoExternalImages)).toBeDefined();
+      expect(findings.find((f) => f.rule === Rule.InternalLinksRelative)).toBeUndefined();
+    });
+
+    it('should not report footnote definitions or definitions in code', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('Text.[^1]\n\n[^1]: /absolute/looking.md\n\n```\n[bad]: javascript:alert(1)\n```\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoDangerousUrls)).toBeUndefined();
+      expect(findings.find((f) => f.rule === Rule.InternalLinksRelative)).toBeUndefined();
+    });
+  });
+
   // --- no-dangerous-urls ---
 
   describe('no-dangerous-urls', () => {

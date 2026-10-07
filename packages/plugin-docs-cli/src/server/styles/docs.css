@@ -482,6 +482,44 @@ a:hover {
   font-style: italic;
 }
 
+.plugin-content .callout {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 4px solid var(--callout-color);
+  border-radius: 4px;
+  background: var(--gray-100);
+}
+
+.plugin-content .callout > :last-child {
+  margin-bottom: 0;
+}
+
+.plugin-content .callout-title {
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: var(--callout-color);
+}
+
+.plugin-content .callout-note {
+  --callout-color: #1b55f5;
+}
+
+.plugin-content .callout-tip {
+  --callout-color: #1a7f37;
+}
+
+.plugin-content .callout-important {
+  --callout-color: #8250df;
+}
+
+.plugin-content .callout-warning {
+  --callout-color: #9a6700;
+}
+
+.plugin-content .callout-caution {
+  --callout-color: #cf222e;
+}
+
 .plugin-content .table-scroll {
   margin: 16px 0;
   overflow-x: auto;

@@ -5,6 +5,7 @@ import {
   formatBytes,
   getCodeBlockLines,
   getNonProseLines,
+  getReferenceDefinitions,
   isMetaFile,
   maskInlineCode,
   maskLinkTargets,
@@ -193,6 +194,36 @@ describe('getNonProseLines', () => {
   it('should mark an indented code block but not a list continuation', () => {
     expect(getNonProseLines('Text.\n\n    const a = 1;\n').has(3)).toBe(true);
     expect(getNonProseLines('Text.\n\n    - a nested list item\n').has(3)).toBe(false);
+  });
+});
+
+describe('getReferenceDefinitions', () => {
+  it('should return link definitions with their line', () => {
+    const content = 'See [Explore][docs].\n\n[docs]: https://grafana.com/docs/explore/ "Explore"\n';
+
+    expect(getReferenceDefinitions(content, new Set())).toEqual([
+      { ref: 'https://grafana.com/docs/explore/', line: 3, isImage: false },
+    ]);
+  });
+
+  it('should mark a definition used by an image as an image, matching labels case-insensitively', () => {
+    const content =
+      '![Query builder][Builder Shot]\n![shot]\n\n[builder   shot]: img/builder.png\n[shot]: img/shot.png\n';
+
+    expect(getReferenceDefinitions(content, new Set())).toEqual([
+      { ref: 'img/builder.png', line: 4, isImage: true },
+      { ref: 'img/shot.png', line: 5, isImage: true },
+    ]);
+  });
+
+  it('should read an angle-bracket destination', () => {
+    expect(getReferenceDefinitions('[a]: <./page with space.md>\n', new Set())[0].ref).toBe('./page with space.md');
+  });
+
+  it('should skip footnote definitions and skipped lines', () => {
+    const content = '[^1]: A footnote.\n```\n[docs]: https://example.com\n```\n';
+
+    expect(getReferenceDefinitions(content, getCodeBlockLines(content))).toEqual([]);
   });
 });
 

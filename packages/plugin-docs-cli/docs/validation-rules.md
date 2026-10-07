@@ -11,6 +11,8 @@ Most rules behave the same in both. A few are only warnings/suggestions in `serv
 blocking errors in `validate` - marked with † below. If you see one of those while writing, fix
 it before you submit your plugin, since it will block publishing.
 
+For what you can write in a page, refer to [Supported markdown](./supported-markdown.md).
+
 **Severity:**
 
 - **Error** - blocks validation. Fix this before your docs will pass.
@@ -79,14 +81,17 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 
 ## Markdown content & security
 
-| Rule                 | What it checks                                                                                                                        | Severity  |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| `no-raw-html`        | Raw HTML tags aren't allowed in the page body (except `br`, `wbr`, `hr`, `details` and `summary`) - use markdown syntax instead.      | Warning † |
-| `no-script-tags`     | `<script>` tags and inline event handlers (`onclick`, `onerror`, etc.) aren't allowed anywhere in a page - they're a security risk.   | Error     |
-| `no-dangerous-urls`  | Links and images can't use a `javascript:`, `vbscript:` or `data:` URL scheme.                                                        | Error     |
-| `no-path-traversal`  | Links and image references must stay inside your docs folder. `../` is fine as long as it doesn't go above the docs root.             | Error     |
-| `no-base64-images`   | Images can't be embedded as base64 data - save them as a file in your `img/` folder instead.                                          | Error     |
-| `no-external-images` | Images must be hosted in your docs folder, not linked from an external `http(s)://` URL. Download the image and reference it locally. | Warning † |
+| Rule                   | What it checks                                                                                                                                                                                                         | Severity  |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `no-raw-html`          | Raw HTML tags aren't allowed in the page body (except `br`, `wbr`, `hr`, `details` and `summary`) - use markdown syntax instead. The allowed tags pass validation but are currently removed when the page is rendered. | Warning † |
+| `no-script-tags`       | `<script>` tags and inline event handlers (`onclick`, `onerror`, etc.) aren't allowed anywhere in a page - they're a security risk.                                                                                    | Error     |
+| `no-dangerous-urls`    | Links and images can't use a `javascript:`, `vbscript:` or `data:` URL scheme.                                                                                                                                         | Error     |
+| `no-path-traversal`    | Links and image references must stay inside your docs folder. `../` is fine as long as it doesn't go above the docs root.                                                                                              | Error     |
+| `no-base64-images`     | Images can't be embedded as base64 data - save them as a file in your `img/` folder instead.                                                                                                                           | Error     |
+| `no-external-images`   | Images must be hosted in your docs folder, not linked from an external `http(s)://` URL. Download the image and reference it locally.                                                                                  | Warning † |
+| `no-hugo-shortcodes`   | Hugo shortcodes like `{{< admonition >}}` or `{{% docs/shared %}}` aren't supported and show up as plain text. Use the markdown equivalent from [Supported markdown](./supported-markdown.md#coming-from-hugo).        | Warning † |
+| `no-url-placeholders`  | A link or image URL can't contain a placeholder like `<GRAFANA_VERSION>` - nothing replaces it, so the link breaks. Write the real value, such as `latest`.                                                            | Warning † |
+| `valid-callout-marker` | A callout marker like `> [!NOTE]` must use a known type (`NOTE`, `TIP`, `IMPORTANT`, `WARNING` or `CAUTION`) and sit alone on the first line of the blockquote. Otherwise the callout renders as a plain quote.        | Warning   |
 
 ## Links between pages
 
