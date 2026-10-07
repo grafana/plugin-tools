@@ -474,6 +474,24 @@ describe('checkMarkdown', () => {
       expect(markerFindings[0].title).toBe('Callout marker not at the start of the quote');
     });
 
+    it('should warn when a lazy continuation line comes before the marker', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> Intro.\ncontinued\n> [!NOTE]\n> More.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)?.title).toBe(
+        'Callout marker not at the start of the quote'
+      );
+    });
+
+    it('should not warn when a callout directly follows a paragraph', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Some paragraph.\n> [!NOTE]\n> Text.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
+    });
+
     it('should not report markers inside indented code blocks', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('Example:\n\n    > [!DANGER] text\n'));

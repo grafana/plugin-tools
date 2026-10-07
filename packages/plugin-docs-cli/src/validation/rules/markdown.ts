@@ -52,6 +52,16 @@ const SHORTCODE_REPLACEMENTS: Record<string, string> = {
   'docs/shared': 'Copy the shared content into this page instead.',
 };
 
+// true when an earlier line of the same block is quoted, including across lazy continuation lines
+function isInsideBlockquote(lines: string[], index: number): boolean {
+  for (let i = index - 1; i >= 0 && lines[i].trim() !== ''; i--) {
+    if (/^\s*>/.test(lines[i])) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
 
@@ -146,7 +156,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           title: 'Unknown callout type',
           detail: `"${marker}" isn't a callout type, so this renders as a plain quote. Use one of ${CALLOUT_TYPE_NAMES.join(', ')}.`,
         });
-      } else if (/^\s*>/.test(contentLines[line - 2] ?? '')) {
+      } else if (isInsideBlockquote(contentLines, line - 1)) {
         diagnostics.push({
           rule: Rule.ValidCalloutMarker,
           severity: 'warning',
