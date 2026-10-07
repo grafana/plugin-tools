@@ -6,6 +6,7 @@ import npm2yarn from '@docusaurus/remark-plugin-npm2yarn';
 import { resolve } from 'node:path';
 import { themes, type PrismTheme } from 'prism-react-renderer';
 import redirects from './websiteRedirects.json';
+import rehypeRemoveDocActions from './plugins/rehype-remove-doc-actions';
 
 const gitHash = process.env.GITHUB_SHA || 'local';
 const envFile = process.env.DEV_PORTAL_ENV === 'dev' ? '.env.development' : '.env.production';
@@ -96,6 +97,7 @@ const config: Config = {
           includeBlog: false,
           includePages: false,
           includeDocs: true,
+          beforeDefaultRehypePlugins: [rehypeRemoveDocActions],
         },
         llmsTxt: {
           enableLlmsFullTxt: true,
