@@ -259,6 +259,28 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       }
     }
 
+    // no-url-placeholders: no unreplaced template placeholders like <GRAFANA_VERSION> in link or image URLs
+    for (const { match, line } of matchOutsideCode(content, LINK_RE, codeLines, {
+      maskInlineCode: true,
+      skipLines: nonProseLines,
+    })) {
+      const ref = match[2];
+      const placeholder = ref.match(URL_PLACEHOLDER_RE)?.[0];
+      if (!placeholder) {
+        continue;
+      }
+      diagnostics.push({
+        rule: Rule.NoUrlPlaceholders,
+        severity: input.strict ? 'error' : 'warning',
+        file: relPath,
+        line,
+        title: 'Placeholder in link URL',
+        detail: `"${ref}" contains the placeholder ${placeholder}, which isn't replaced in plugin docs and breaks the link. Write the real value instead${
+          placeholder.endsWith('VERSION>') ? ', for example "latest"' : ''
+        }.`,
+      });
+    }
+
     // process links (non-image)
     for (const { match, line } of matchOutsideCode(content, LINK_RE, codeLines)) {
       const ref = match[2];
@@ -272,21 +294,6 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       // skip anchor-only links like #section
       if (ref.startsWith('#')) {
         continue;
-      }
-
-      // no-url-placeholders: no unreplaced template placeholders like <GRAFANA_VERSION>
-      const placeholder = ref.match(URL_PLACEHOLDER_RE)?.[0];
-      if (placeholder) {
-        diagnostics.push({
-          rule: Rule.NoUrlPlaceholders,
-          severity: input.strict ? 'error' : 'warning',
-          file: relPath,
-          line,
-          title: 'Placeholder in link URL',
-          detail: `"${ref}" contains the placeholder ${placeholder}, which isn't replaced in plugin docs and breaks the link. Write the real value instead${
-            placeholder.endsWith('VERSION>') ? ', for example "latest"' : ''
-          }.`,
-        });
       }
 
       // no-dangerous-urls: no javascript: or data: URIs

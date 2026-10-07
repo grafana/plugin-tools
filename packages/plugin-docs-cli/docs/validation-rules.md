@@ -90,7 +90,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-base64-images`     | Images can't be embedded as base64 data - save them as a file in your `img/` folder instead.                                                                                                                    | Error     |
 | `no-external-images`   | Images must be hosted in your docs folder, not linked from an external `http(s)://` URL. Download the image and reference it locally.                                                                           | Warning † |
 | `no-hugo-shortcodes`   | Hugo shortcodes like `{{< admonition >}}` or `{{% docs/shared %}}` aren't supported and show up as plain text. Use the markdown equivalent from [Supported markdown](./supported-markdown.md#coming-from-hugo). | Warning † |
-| `no-url-placeholders`  | A link URL can't contain a placeholder like `<GRAFANA_VERSION>` - nothing replaces it, so the link breaks. Write the real value, such as `latest`.                                                              | Warning † |
+| `no-url-placeholders`  | A link or image URL can't contain a placeholder like `<GRAFANA_VERSION>` - nothing replaces it, so the link breaks. Write the real value, such as `latest`.                                                     | Warning † |
 | `valid-callout-marker` | A callout marker like `> [!NOTE]` must use a known type (`NOTE`, `TIP`, `IMPORTANT`, `WARNING` or `CAUTION`) and sit alone on the first line of the blockquote. Otherwise the callout renders as a plain quote. | Warning   |
 
 ## Links between pages

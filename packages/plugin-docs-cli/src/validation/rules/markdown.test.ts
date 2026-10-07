@@ -532,6 +532,27 @@ describe('checkMarkdown', () => {
       expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)!.severity).toBe('warning');
     });
 
+    it('should not report links in inline code or indented code blocks', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md(
+          'Hugo writes `[Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/)`.\n\n    [Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/)\n'
+        )
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)).toBeUndefined();
+    });
+
+    it('should report a placeholder in an image URL', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![Diagram](img/<IMAGE_NAME>.png)\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)).toBeDefined();
+    });
+
     it('should not report placeholders outside link URLs', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(
