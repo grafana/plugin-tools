@@ -31,6 +31,21 @@ const BASE64_IMAGE_RE = /^data:image\/[^;]+;base64,/i;
 // matches external URLs (http:// or https://)
 const EXTERNAL_URL_RE = /^https?:\/\//i;
 
+// matches the opening of a Hugo shortcode, {{< name ... >}} or {{% name ... %}}, capturing the closing slash and name
+const HUGO_SHORTCODE_RE = /\{\{[<%]\s*(\/?)\s*([a-zA-Z][\w./-]*)/g;
+
+// matches template placeholders like <GRAFANA_VERSION> left in a URL
+const URL_PLACEHOLDER_RE = /<[A-Z][A-Z0-9_]*>/;
+
+const SHORTCODE_REPLACEMENTS: Record<string, string> = {
+  admonition: 'Use a blockquote instead.',
+  figure: 'Use a markdown image instead, for example ![Alt text](img/screenshot.png).',
+  youtube: 'Link to the video instead.',
+  'video-embed': 'Link to the video instead.',
+  vimeo: 'Link to the video instead.',
+  'docs/shared': 'Copy the shared content into this page instead.',
+};
+
 export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
 
@@ -87,13 +102,36 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
+    // no-hugo-shortcodes: no {{< >}} or {{% %}} shortcodes, reported once per opening tag
+    for (const { match, line } of matchOutsideCode(content, HUGO_SHORTCODE_RE, codeLines, { maskInlineCode: true })) {
+      if (match[1] === '/') {
+        continue;
+      }
+      const name = match[2];
+      diagnostics.push({
+        rule: Rule.NoHugoShortcodes,
+        severity: input.strict ? 'error' : 'warning',
+        file: relPath,
+        line,
+        title: 'Hugo shortcode detected',
+        detail: `"${match[0]}" is a Hugo shortcode, which plugin docs don't support. ${
+          SHORTCODE_REPLACEMENTS[name] ?? 'Write it in plain markdown instead.'
+        }`,
+      });
+    }
+
     // no-raw-html: no raw HTML tags (except allowed ones). Inline code spans
     // are masked first so placeholder text like `<slug>` inside backticks
     // isn't mistaken for a real tag.
+    const contentLines = content.split('\n');
     for (const { match, line } of matchOutsideCode(content, HTML_TAG_RE, codeLines, { maskInlineCode: true })) {
       const tagName = match[1].toLowerCase();
       // skip if it's a script tag (already handled above) or allowed tag
       if (tagName === 'script' || ALLOWED_HTML_TAGS.has(tagName)) {
+        continue;
+      }
+      // skip the <name> inside a {{< name >}} shortcode, already reported by no-hugo-shortcodes
+      if (match.index > 0 && contentLines[line - 1][match.index - 1] === '{') {
         continue;
       }
       diagnostics.push({
@@ -176,7 +214,6 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     }
 
     // process links (non-image)
-    const contentLines = content.split('\n');
     for (const { match, line } of matchOutsideCode(content, LINK_RE, codeLines)) {
       const ref = match[2];
 
@@ -189,6 +226,21 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       // skip anchor-only links like #section
       if (ref.startsWith('#')) {
         continue;
+      }
+
+      // no-url-placeholders: no unreplaced template placeholders like <GRAFANA_VERSION>
+      const placeholder = ref.match(URL_PLACEHOLDER_RE)?.[0];
+      if (placeholder) {
+        diagnostics.push({
+          rule: Rule.NoUrlPlaceholders,
+          severity: input.strict ? 'error' : 'warning',
+          file: relPath,
+          line,
+          title: 'Placeholder in link URL',
+          detail: `"${ref}" contains the placeholder ${placeholder}, which isn't replaced in plugin docs and breaks the link. Write the real value instead${
+            placeholder.endsWith('VERSION>') ? ', for example "latest"' : ''
+          }.`,
+        });
       }
 
       // no-dangerous-urls: no javascript: or data: URIs
