@@ -11,6 +11,7 @@ import { rehypeRewriteAssetPaths } from './plugins/rehype-rewrite-asset-paths.js
 import { rehypeRewriteDocLinks } from './plugins/rehype-rewrite-doc-links.js';
 import { rehypeExtractHeadings } from './plugins/rehype-extract-headings.js';
 import { rehypeStripH1 } from './plugins/rehype-strip-h1.js';
+import { rehypeCallouts } from './plugins/rehype-callouts.js';
 import type { Heading } from './types.js';
 export type { Heading } from './types.js';
 
@@ -117,6 +118,9 @@ export function parseMarkdown(content: string, options?: ParseOptions): ParsedMa
 
   // sanitize to prevent XSS
   processor.use(rehypeSanitize, sanitizeSchema);
+
+  // our own markup runs after sanitization, so its classes survive and authors can't forge them
+  processor.use(rehypeCallouts);
 
   // extract headings after sanitization (matches actual rendered content)
   processor.use(rehypeExtractHeadings);
