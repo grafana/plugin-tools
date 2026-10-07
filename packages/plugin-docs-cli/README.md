@@ -13,6 +13,11 @@ npx @grafana/plugin-docs-cli serve --port 3001 --reload
 
 For the core parsing library, see [@grafana/plugin-docs-parser](../plugin-docs-parser).
 
+## Writing docs
+
+Pages are plain markdown. See [docs/supported-markdown.md](./docs/supported-markdown.md) for
+everything you can use and how to write it.
+
 ## Validation rules
 
 `validate` and `serve` check your docs folder against a set of rules covering file structure,

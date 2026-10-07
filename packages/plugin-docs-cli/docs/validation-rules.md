@@ -11,6 +11,8 @@ Most rules behave the same in both. A few are only warnings/suggestions in `serv
 blocking errors in `validate` - marked with † below. If you see one of those while writing, fix
 it before you submit your plugin, since it will block publishing.
 
+For what you can write in a page, refer to [Supported markdown](./supported-markdown.md).
+
 **Severity:**
 
 - **Error** - blocks validation. Fix this before your docs will pass.
