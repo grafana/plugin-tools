@@ -1,6 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
+import { CALLOUT_TYPES } from '@grafana/plugin-docs-parser';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { escapesDocsRoot, getCodeBlockLines, isMetaFile, matchOutsideCode } from './utils.js';
 
@@ -37,8 +38,13 @@ const HUGO_SHORTCODE_RE = /\{\{[<%]\s*(\/?)\s*([a-zA-Z][\w./-]*)/g;
 // matches template placeholders like <GRAFANA_VERSION> left in a URL
 const URL_PLACEHOLDER_RE = /<[A-Z][A-Z0-9_]*>/;
 
+// matches a callout marker opening a blockquote line, like > [!NOTE], capturing the type and any text after it
+const CALLOUT_MARKER_RE = /^\s*>\s*\[!([a-zA-Z]+)\](.*)$/;
+
+const CALLOUT_TYPE_NAMES = Object.keys(CALLOUT_TYPES).map((type) => type.toUpperCase());
+
 const SHORTCODE_REPLACEMENTS: Record<string, string> = {
-  admonition: 'Use a blockquote instead.',
+  admonition: 'Use a callout instead, for example a blockquote starting with > [!NOTE].',
   figure: 'Use a markdown image instead, for example ![Alt text](img/screenshot.png).',
   youtube: 'Link to the video instead.',
   'video-embed': 'Link to the video instead.',
@@ -118,6 +124,30 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           SHORTCODE_REPLACEMENTS[name] ?? 'Write it in plain markdown instead.'
         }`,
       });
+    }
+
+    // valid-callout-marker: a [!TYPE] marker that would silently render as a plain quote
+    for (const { match, line } of matchOutsideCode(content, CALLOUT_MARKER_RE, codeLines)) {
+      const marker = `[!${match[1]}]`;
+      if (!CALLOUT_TYPE_NAMES.includes(match[1].toUpperCase())) {
+        diagnostics.push({
+          rule: Rule.ValidCalloutMarker,
+          severity: 'warning',
+          file: relPath,
+          line,
+          title: 'Unknown callout type',
+          detail: `"${marker}" isn't a callout type, so this renders as a plain quote. Use one of ${CALLOUT_TYPE_NAMES.join(', ')}.`,
+        });
+      } else if (match[2].trim() !== '') {
+        diagnostics.push({
+          rule: Rule.ValidCalloutMarker,
+          severity: 'warning',
+          file: relPath,
+          line,
+          title: 'Callout text on the marker line',
+          detail: `Move the text after "${marker}" to the next line. With text on the same line, this renders as a plain quote.`,
+        });
+      }
     }
 
     // no-raw-html: no raw HTML tags (except allowed ones). Inline code spans

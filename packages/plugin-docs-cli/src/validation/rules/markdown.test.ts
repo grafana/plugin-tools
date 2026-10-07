@@ -345,7 +345,7 @@ describe('checkMarkdown', () => {
       expect(shortcodeFindings).toHaveLength(1);
       expect(shortcodeFindings[0].severity).toBe('error');
       expect(shortcodeFindings[0].line).toBe(5);
-      expect(shortcodeFindings[0].detail).toContain('blockquote');
+      expect(shortcodeFindings[0].detail).toContain('> [!NOTE]');
     });
 
     it('should not also report a shortcode as raw HTML', async () => {
@@ -397,6 +397,50 @@ describe('checkMarkdown', () => {
 
       const findings = await checkMarkdown(input(tmp));
       expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)).toBeUndefined();
+    });
+  });
+
+  // --- valid-callout-marker ---
+
+  describe('valid-callout-marker', () => {
+    it('should not report valid callouts in any case', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!NOTE]\n> Text.\n\n> [!caution]\n> Text.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
+    });
+
+    it('should warn about an unknown callout type', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!DANGER]\n> Text.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.ValidCalloutMarker);
+      expect(finding).toBeDefined();
+      expect(finding!.severity).toBe('warning');
+      expect(finding!.line).toBe(5);
+      expect(finding!.detail).toContain('NOTE, TIP, IMPORTANT, WARNING, CAUTION');
+    });
+
+    it('should warn when text follows the marker on the same line', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!WARNING] This deletes data.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.ValidCalloutMarker);
+      expect(finding).toBeDefined();
+      expect(finding!.title).toBe('Callout text on the marker line');
+    });
+
+    it('should not report markers inside code blocks', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('```markdown\n> [!DANGER] text\n```\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
     });
   });
 

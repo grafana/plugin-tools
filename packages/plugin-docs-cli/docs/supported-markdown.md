@@ -130,6 +130,31 @@ relative path:
 - Always write alt text that describes the image. Screen readers read it out, and it's shown if
   the image fails to load.
 
+## Callouts
+
+Use a callout to make a note, tip or warning stand out from the text around it. Start a blockquote
+with a callout marker on its own line:
+
+```markdown
+> [!NOTE]
+> Private data source connect (PDC) is only available in Grafana Cloud.
+```
+
+There are five types:
+
+| Marker         | Use it for                                                     |
+| -------------- | -------------------------------------------------------------- |
+| `[!NOTE]`      | Information the reader should notice, even when skimming.      |
+| `[!TIP]`       | Optional advice that helps the reader do something better.     |
+| `[!IMPORTANT]` | Information the reader needs to succeed.                       |
+| `[!WARNING]`   | Something that needs the reader's attention to avoid problems. |
+| `[!CAUTION]`   | A risk, such as losing data or a security issue.               |
+
+- A callout can hold several paragraphs, lists and code blocks. Start every line with `>`.
+- The marker must be alone on the first line. `> [!NOTE] Some text` renders as a plain quote.
+- An unknown type, such as `[!DANGER]`, renders as a plain quote.
+- GitHub uses the same syntax, so callouts look right there too.
+
 ## Footnotes
 
 ```markdown
@@ -145,7 +170,7 @@ Footnotes are collected at the end of the page.
 These are removed when your page is rendered, or shown as plain text:
 
 - **Raw HTML**, for example `<div>`, `<br>`, `<details>` or `<iframe>`. Write it in markdown instead.
-- **Hugo shortcodes** such as `{{< admonition >}}` or `{{< figure >}}`.
+- **Hugo shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`.
 - **MDX and JSX components.**
 - **Embedded videos.** Link to the video instead.
 - **SVG images, external images and base64 images.** Save a PNG or WebP file in your docs folder.
@@ -166,7 +191,7 @@ table shows what to use instead.
 | `https://grafana.com/docs/plugins/<id>/latest/<page>/` link | A relative link: `./<page>.md`                                       |
 | `<GRAFANA_VERSION>` in a link                               | `latest`                                                             |
 | `{{< figure src="/media/..." >}}`                           | Download the image into your docs folder and use `![alt](./img/...)` |
-| `{{< admonition >}}`                                        | Not supported                                                        |
+| `{{< admonition type="note" >}}`                            | A callout: `> [!NOTE]`                                               |
 | `{{< youtube >}}`, `{{< video-embed >}}`                    | Not supported. Link to the video                                     |
 | `{{< collapse >}}`                                          | Not supported                                                        |
 | `{{< docs/shared >}}`                                       | Not supported. Copy the content into your page                       |

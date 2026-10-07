@@ -49,6 +49,7 @@ export const Rule = {
   NoExternalImages: 'no-external-images',
   NoHugoShortcodes: 'no-hugo-shortcodes',
   NoUrlPlaceholders: 'no-url-placeholders',
+  ValidCalloutMarker: 'valid-callout-marker',
   // cross-file rules
   InternalLinksResolve: 'internal-links-resolve',
   AnchorLinksResolve: 'anchor-links-resolve',
