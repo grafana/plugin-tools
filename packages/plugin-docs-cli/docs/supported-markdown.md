@@ -1,6 +1,6 @@
 # Supported markdown
 
-Plugin docs are written in plain markdown: [CommonMark](https://commonmark.org/) plus the
+To write Plugin docs use plain markdown: [CommonMark](https://commonmark.org/) plus the
 [GitHub Flavored Markdown](https://github.github.com/gfm/) extensions. There is no MDX, no
 templating and no raw HTML. What you write is what gets rendered on grafana.com, in the `serve`
 preview and on GitHub, so your docs read well in all three.
