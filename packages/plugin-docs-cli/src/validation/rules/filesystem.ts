@@ -19,8 +19,11 @@ const MAX_TOTAL_PAGES = 50;
 // permitted image formats shared across filesystem and asset rules
 export const ALLOWED_IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif']);
 
-// allowed file extensions in the docs folder (.md + permitted image formats)
-export const ALLOWED_EXTENSIONS = new Set(['.md', ...ALLOWED_IMAGE_EXTENSIONS]);
+// permitted video formats
+export const ALLOWED_VIDEO_EXTENSIONS = new Set(['.mp4', '.webm']);
+
+// allowed file extensions in the docs folder (.md + permitted image and video formats)
+export const ALLOWED_EXTENSIONS = new Set(['.md', ...ALLOWED_IMAGE_EXTENSIONS, ...ALLOWED_VIDEO_EXTENSIONS]);
 
 export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
@@ -88,7 +91,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     }
   }
 
-  // allowed-file-types: non-.md files must be permitted image formats
+  // allowed-file-types: non-.md files must be permitted image or video formats
   for (const file of nonMdFiles) {
     const ext = extname(file.name).toLowerCase();
     if (!ALLOWED_EXTENSIONS.has(ext)) {
@@ -97,7 +100,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
         severity: input.strict ? 'error' : 'info',
         file: join(file.parentPath, file.name),
         title: 'File type not allowed',
-        detail: `"${file.name}" is not an allowed file type. Only .md and image files (png, jpg, jpeg, webp, gif) are permitted in the docs folder.`,
+        detail: `"${file.name}" is not an allowed file type. Only .md, image (png, jpg, jpeg, webp, gif) and video (mp4, webm) files are permitted in the docs folder.`,
       });
     }
   }
@@ -142,7 +145,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
         rule: Rule.MaxTotalDocsSize,
         severity: 'warning',
         title: `Docs folder exceeds ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit`,
-        detail: `The docs folder is ${formatBytes(totalSize)} in total, which exceeds the ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit. Reduce the number or size of pages and images.`,
+        detail: `The docs folder is ${formatBytes(totalSize)} in total, which exceeds the ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit. Reduce the number or size of pages, images and videos.`,
       });
     }
   }
@@ -175,7 +178,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
         severity: input.strict ? 'error' : 'warning',
         file: dirPath,
         title: 'Directory contains no documentation files',
-        detail: `"${dir.name}" contains no .md or image files and serves no purpose in the documentation structure. Remove it or add documentation files.`,
+        detail: `"${dir.name}" contains no .md, image or video files and serves no purpose in the documentation structure. Remove it or add documentation files.`,
       });
       continue;
     }

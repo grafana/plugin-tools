@@ -583,6 +583,68 @@ describe('checkMarkdown', () => {
     });
   });
 
+  // --- valid-youtube-link ---
+
+  describe('valid-youtube-link', () => {
+    async function youtubeFindings(body: string) {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md(body));
+      const findings = await checkMarkdown(input(tmp));
+      return findings.filter((f) => f.rule === Rule.ValidYoutubeLink);
+    }
+
+    it('should not report a valid embed link', async () => {
+      expect(await youtubeFindings('[Demo](https://www.youtube.com/watch?v=Qc83dSVe0vQ)\n')).toEqual([]);
+      expect(await youtubeFindings('https://youtu.be/Qc83dSVe0vQ\n')).toEqual([]);
+    });
+
+    it('should warn when the video id is invalid', async () => {
+      const findings = await youtubeFindings('Intro.\n\n[Demo](https://www.youtube.com/watch?v=short)\n\nOutro.\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].severity).toBe('warning');
+      expect(findings[0].line).toBe(7);
+    });
+
+    it('should warn when a watch link has no id', async () => {
+      expect(await youtubeFindings('[Demo](https://www.youtube.com/watch)\n')).toHaveLength(1);
+    });
+
+    it('should not report a link inside a sentence or a list', async () => {
+      expect(await youtubeFindings('Watch [it](https://youtu.be/short) now.\n')).toEqual([]);
+      expect(await youtubeFindings('- [Demo](https://youtu.be/short)\n')).toEqual([]);
+    });
+
+    it('should warn about a reference-style link with an invalid id', async () => {
+      const findings = await youtubeFindings('[Demo][video]\n\n[video]: https://youtu.be/short\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(5);
+    });
+
+    it('should not report a valid reference-style link', async () => {
+      expect(await youtubeFindings('[video]\n\n[video]: https://youtu.be/Qc83dSVe0vQ\n')).toEqual([]);
+    });
+
+    it('should warn about a bare www link with an invalid id', async () => {
+      expect(await youtubeFindings('www.youtube.com/watch?v=short\n')).toHaveLength(1);
+      expect(await youtubeFindings('www.youtube.com/watch?v=Qc83dSVe0vQ\n')).toEqual([]);
+    });
+
+    it('should warn about a Shorts link with an invalid id', async () => {
+      expect(await youtubeFindings('[Demo](https://www.youtube.com/shorts/short)\n')).toHaveLength(1);
+    });
+
+    it('should warn about a link with a single-quoted title', async () => {
+      expect(await youtubeFindings("[Demo](https://youtu.be/short 'Title')\n")).toHaveLength(1);
+    });
+
+    it('should not report a channel link or a code block', async () => {
+      expect(await youtubeFindings('[Channel](https://www.youtube.com/@grafana)\n')).toEqual([]);
+      expect(await youtubeFindings('```md\n\n[Demo](https://youtu.be/short)\n\n```\n')).toEqual([]);
+    });
+  });
+
   // --- reference-style links ---
 
   describe('reference-style links', () => {
@@ -896,6 +958,38 @@ describe('checkMarkdown', () => {
       const finding = findings.find((f) => f.rule === Rule.NoExternalImages);
       expect(finding).toBeDefined();
       expect(finding!.severity).toBe('error');
+    });
+
+    it('should report an external image with a single-quoted title', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md("![logo](https://example.com/logo.png 'Logo')"));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      expect(findings.find((f) => f.rule === Rule.NoExternalImages)).toBeDefined();
+    });
+
+    it('should word the external video message for videos', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![demo](https://example.com/demo.mp4)'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.NoExternalImages);
+      expect(finding!.title).toBe('External video URL detected');
+      expect(finding!.detail).toContain('Download the video');
+      expect(finding!.detail).not.toContain('img/');
+    });
+
+    it('should word the absolute path message for videos', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![demo](/video/demo.mp4)'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.ImageRefsRelative);
+      expect(finding!.detail).toContain('video/filename.mp4');
+      expect(finding!.detail).not.toContain('img/');
     });
 
     it('should report http:// image URLs', async () => {

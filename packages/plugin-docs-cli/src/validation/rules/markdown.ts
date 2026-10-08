@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
-import { CALLOUT_TYPES } from '@grafana/plugin-docs-parser';
+import { CALLOUT_TYPES, getYouTubeVideoId } from '@grafana/plugin-docs-parser';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import {
   escapesDocsRoot,
@@ -10,6 +10,7 @@ import {
   getReferenceDefinitions,
   isMetaFile,
   matchOutsideCode,
+  normalizeLabel,
 } from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
@@ -25,10 +26,10 @@ const SCRIPT_TAG_RE = /<script\b[^>]*>/gi;
 const EVENT_HANDLER_RE = /\bon[a-z]+\s*=\s*(?:["'][^"']*["']|[^\s>]+)/gi;
 
 // matches markdown image references: ![alt](url)
-const IMAGE_REF_RE = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+const IMAGE_REF_RE = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
 
 // matches markdown links: [text](url)
-const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
 
 // matches dangerous URI schemes
 const DANGEROUS_URL_RE = /^(javascript|vbscript|data):/i;
@@ -48,13 +49,23 @@ const URL_PLACEHOLDER_RE = /<[A-Z][A-Z0-9_]*>/;
 // matches a callout marker opening a blockquote line, like > [!NOTE], capturing the type and any text after it
 const CALLOUT_MARKER_RE = /^\s*>\s*\[!([a-zA-Z]+)\](.*)$/;
 
+// matches a line holding only a link, [text](url) or a bare URL, capturing the url
+const LONE_LINK_RE = /^\s*(?:\[[^\]]*\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)|((?:https?:\/\/|www\.)\S+))\s*$/;
+
+// matches a line holding only a reference link, [text][label], [label][] or [label], capturing text and label
+const LONE_REFERENCE_LINK_RE = /^\s*\[([^\]]+)\](?:\[([^\]]*)\])?\s*$/;
+
+const VIDEO_REF_RE = /\.(?:mp4|webm)(?:[?#].*)?$/i;
+
+const YOUTUBE_HOSTS = ['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be'];
+
 const CALLOUT_TYPE_NAMES = Object.keys(CALLOUT_TYPES).map((type) => type.toUpperCase());
 
 const SHORTCODE_REPLACEMENTS: Record<string, string> = {
   admonition: 'Use a callout instead, for example a blockquote starting with > [!NOTE].',
   figure: 'Use a markdown image instead, for example ![Alt text](img/screenshot.png).',
-  youtube: 'Link to the video instead.',
-  'video-embed': 'Link to the video instead.',
+  youtube: 'Put a YouTube link alone in its own paragraph to embed the video.',
+  'video-embed': 'Use a markdown image with an mp4 or webm file instead, for example ![Demo](video/demo.mp4).',
   vimeo: 'Link to the video instead.',
   'docs/shared': 'Copy the shared content into this page instead.',
 };
@@ -67,6 +78,19 @@ function isInsideBlockquote(lines: string[], index: number): boolean {
     }
   }
   return false;
+}
+
+// true for a YouTube video-style URL, so a channel or playlist link isn't mistaken for a broken embed
+function looksLikeYouTubeVideo(href: string): boolean {
+  try {
+    const url = new URL(href);
+    if (!YOUTUBE_HOSTS.includes(url.hostname)) {
+      return false;
+    }
+    return url.hostname === 'youtu.be' || url.pathname === '/watch' || /^\/(?:embed|shorts)\//.test(url.pathname);
+  } catch {
+    return false;
+  }
 }
 
 export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[]> {
@@ -184,6 +208,35 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       }
     }
 
+    const definitions = getReferenceDefinitions(content, codeLines);
+    const definitionsByLabel = new Map(definitions.map((definition) => [definition.label, definition.ref]));
+
+    // valid-youtube-link: a YouTube link alone in a paragraph that would silently not embed
+    contentLines.forEach((text, index) => {
+      const lineNumber = index + 1;
+      const reference = text.match(LONE_REFERENCE_LINK_RE);
+      const referenceLabel = reference && normalizeLabel(reference[2] || reference[1]);
+      const rawHref =
+        text.match(LONE_LINK_RE)?.slice(1).find(Boolean) ??
+        (referenceLabel ? definitionsByLabel.get(referenceLabel) : undefined);
+      const href = rawHref?.startsWith('www.') ? `https://${rawHref}` : rawHref;
+      const startsParagraph = (contentLines[index - 1]?.trim() ?? '') === '' || nonProseLines.has(lineNumber - 1);
+      const isAlone = startsParagraph && (contentLines[index + 1]?.trim() ?? '') === '';
+      if (!href || !isAlone || nonProseLines.has(lineNumber) || codeLines.has(lineNumber)) {
+        return;
+      }
+      if (looksLikeYouTubeVideo(href) && !getYouTubeVideoId(href)) {
+        diagnostics.push({
+          rule: Rule.ValidYoutubeLink,
+          severity: 'warning',
+          file: relPath,
+          line: lineNumber,
+          title: 'YouTube link is not embedded',
+          detail: `"${href}" has no valid 11-character video id, so it renders as a plain link. Check the id, or use a watch, youtu.be, embed or Shorts URL.`,
+        });
+      }
+    });
+
     // no-raw-html: no raw HTML tags (except allowed ones). Inline code spans
     // are masked first so placeholder text like `<slug>` inside backticks
     // isn't mistaken for a real tag.
@@ -207,14 +260,16 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
-    const definitions = getReferenceDefinitions(content, codeLines);
-
     // process image references, inline ![alt](url) and reference definitions used by an image
     const imageRefs = [
       ...matchOutsideCode(content, IMAGE_REF_RE, codeLines).map(({ match, line }) => ({ ref: match[2], line })),
       ...definitions.filter((definition) => definition.isImage),
     ];
     for (const { ref, line } of imageRefs) {
+      const isVideo = VIDEO_REF_RE.test(ref);
+      const kind = isVideo ? 'video' : 'image';
+      const folder = isVideo ? 'docs folder' : 'img/ directory';
+
       // no-base64-images: no base64-encoded image data
       if (BASE64_IMAGE_RE.test(ref)) {
         diagnostics.push({
@@ -235,8 +290,8 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: input.strict ? 'error' : 'warning',
           file: relPath,
           line,
-          title: 'External image URL detected',
-          detail: `"${ref}" is an external URL. Download the image and place it in the img/ directory.`,
+          title: `External ${kind} URL detected`,
+          detail: `"${ref}" is an external URL. Download the ${kind} and place it in the ${folder}.`,
         });
         continue;
       }
@@ -248,7 +303,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: 'error',
           file: relPath,
           line,
-          title: 'Dangerous URI scheme in image reference',
+          title: `Dangerous URI scheme in ${kind} reference`,
           detail: `"${ref}" uses a dangerous URI scheme. Only relative file paths are allowed.`,
         });
         continue;
@@ -261,8 +316,8 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: 'error',
           file: relPath,
           line,
-          title: 'Path traversal in image reference',
-          detail: `"${ref}" points outside the docs folder. Image references must stay inside it.`,
+          title: `Path traversal in ${kind} reference`,
+          detail: `"${ref}" points outside the docs folder. ${isVideo ? 'Video' : 'Image'} references must stay inside it.`,
         });
         continue;
       }
@@ -274,8 +329,8 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: 'error',
           file: relPath,
           line,
-          title: 'Image reference is not a relative path',
-          detail: `"${ref}" is an absolute path. Use a relative path like "img/filename.png" instead.`,
+          title: `${isVideo ? 'Video' : 'Image'} reference is not a relative path`,
+          detail: `"${ref}" is an absolute path. Use a relative path like "${isVideo ? 'video/filename.mp4' : 'img/filename.png'}" instead.`,
         });
       }
     }

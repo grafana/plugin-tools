@@ -38,6 +38,7 @@ export const Rule = {
   MaxTotalImagesSize: 'max-total-images-size',
   ImageFileNaming: 'image-file-naming',
   NoOrphanedImages: 'no-orphaned-images',
+  MaxVideoSize: 'max-video-size',
   // markdown + security rules
   NoRawHtml: 'no-raw-html',
   ImageRefsRelative: 'image-refs-relative',
@@ -50,6 +51,7 @@ export const Rule = {
   NoHugoShortcodes: 'no-hugo-shortcodes',
   NoUrlPlaceholders: 'no-url-placeholders',
   ValidCalloutMarker: 'valid-callout-marker',
+  ValidYoutubeLink: 'valid-youtube-link',
   // cross-file rules
   InternalLinksResolve: 'internal-links-resolve',
   AnchorLinksResolve: 'anchor-links-resolve',

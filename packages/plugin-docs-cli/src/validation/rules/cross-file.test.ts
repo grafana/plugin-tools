@@ -37,6 +37,15 @@ describe('checkCrossFile', () => {
       expect(finding!.line).toBe(7);
     });
 
+    it('should report an unresolved link with a single-quoted title', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'cross-test-'));
+      await writeFile(join(tmp, 'index.md'), md("Refer to [Setup](./missing.md 'The setup page')."));
+
+      const findings = await checkCrossFile(input(tmp));
+
+      expect(findings.find((f) => f.rule === Rule.InternalLinksResolve)).toBeDefined();
+    });
+
     it('should not treat an image reference definition as a page link', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'cross-test-'));
       await writeFile(join(tmp, 'index.md'), md('![Shot][shot]\n\n[shot]: img/shot.png\n'));

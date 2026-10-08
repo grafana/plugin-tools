@@ -202,7 +202,7 @@ describe('getReferenceDefinitions', () => {
     const content = 'See [Explore][docs].\n\n[docs]: https://grafana.com/docs/explore/ "Explore"\n';
 
     expect(getReferenceDefinitions(content, new Set())).toEqual([
-      { ref: 'https://grafana.com/docs/explore/', line: 3, isImage: false },
+      { label: 'docs', ref: 'https://grafana.com/docs/explore/', line: 3, isImage: false },
     ]);
   });
 
@@ -211,8 +211,8 @@ describe('getReferenceDefinitions', () => {
       '![Query builder][Builder Shot]\n![shot]\n\n[builder   shot]: img/builder.png\n[shot]: img/shot.png\n';
 
     expect(getReferenceDefinitions(content, new Set())).toEqual([
-      { ref: 'img/builder.png', line: 4, isImage: true },
-      { ref: 'img/shot.png', line: 5, isImage: true },
+      { label: 'builder shot', ref: 'img/builder.png', line: 4, isImage: true },
+      { label: 'shot', ref: 'img/shot.png', line: 5, isImage: true },
     ]);
   });
 

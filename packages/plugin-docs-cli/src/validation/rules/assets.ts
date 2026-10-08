@@ -2,13 +2,14 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, extname, dirname, relative, normalize } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { ALLOWED_IMAGE_EXTENSIONS } from './filesystem.js';
+import { ALLOWED_IMAGE_EXTENSIONS, ALLOWED_VIDEO_EXTENSIONS } from './filesystem.js';
 import { decodeRefPath, formatBytes, getReferenceDefinitions, isMetaFile } from './utils.js';
 
 const IMAGE_FILE_NAME_RE = /^[a-zA-Z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
 const MAX_GIF_SIZE = 1024 * 1024; // 1MB
 const MAX_TOTAL_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_VIDEO_SIZE = 3 * 1024 * 1024; // 3MB
 
 /**
  * Finds the 1-based line number of the first occurrence of a string in content.
@@ -35,6 +36,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
 
   const allFiles = entries.filter((e) => e.isFile());
   const imageFiles = allFiles.filter((e) => ALLOWED_IMAGE_EXTENSIONS.has(extname(e.name).toLowerCase()));
+  const videoFiles = allFiles.filter((e) => ALLOWED_VIDEO_EXTENSIONS.has(extname(e.name).toLowerCase()));
   const svgFiles = allFiles.filter((e) => extname(e.name).toLowerCase() === '.svg');
   const mdFiles = allFiles.filter((e) => e.name.endsWith('.md') && !isMetaFile(e.name));
 
@@ -54,14 +56,14 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     });
   }
 
-  // image-file-naming: image filenames must use only [a-zA-Z0-9-_.]
-  for (const img of imageFiles) {
+  // image-file-naming: image and video filenames must use only [a-zA-Z0-9-_.]
+  for (const img of [...imageFiles, ...videoFiles]) {
     if (!IMAGE_FILE_NAME_RE.test(img.name)) {
       diagnostics.push({
         rule: Rule.ImageFileNaming,
         severity: input.strict ? 'error' : 'info',
         file: rel(img),
-        title: 'Image filename contains invalid characters',
+        title: `${ALLOWED_VIDEO_EXTENSIONS.has(extname(img.name).toLowerCase()) ? 'Video' : 'Image'} filename contains invalid characters`,
         detail: `"${img.name}" should use only letters, digits, hyphens, underscores and dots.`,
       });
     }
@@ -95,6 +97,25 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     }
   }
 
+  // max-video-size: videos ship inside every plugin download, so they stay small
+  for (const video of videoFiles) {
+    let size: number;
+    try {
+      size = (await stat(join(video.parentPath, video.name))).size;
+    } catch {
+      continue;
+    }
+    if (size > MAX_VIDEO_SIZE) {
+      diagnostics.push({
+        rule: Rule.MaxVideoSize,
+        severity: input.strict ? 'error' : 'info',
+        file: rel(video),
+        title: 'Video exceeds 3MB limit',
+        detail: `"${video.name}" is ${formatBytes(size)} which exceeds the 3MB limit for videos. Shorten or compress the video, or upload it to YouTube and link to it.`,
+      });
+    }
+  }
+
   // max-total-images-size: only checked under `validate` (not `serve`)
   if (input.strict && totalSize > MAX_TOTAL_SIZE) {
     diagnostics.push({
@@ -119,7 +140,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
       continue;
     }
 
-    const imageRefRe = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+    const imageRefRe = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
     const imageRefs = [
       ...Array.from(content.matchAll(imageRefRe), (match) => match[2]),
       ...getReferenceDefinitions(content, new Set())
@@ -142,13 +163,14 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
 
       // referenced-images-exist: check that the target file exists on disk
       if (!allFilePaths.has(resolvedPath)) {
+        const kind = ALLOWED_VIDEO_EXTENSIONS.has(extname(resolvedPath).toLowerCase()) ? 'video' : 'image';
         diagnostics.push({
           rule: Rule.ReferencedImagesExist,
           severity: 'error',
           file: mdRelPath,
           line: findRefLine(content, ref),
-          title: 'Referenced image does not exist',
-          detail: `Image "${ref}" referenced in markdown does not exist on disk.`,
+          title: `Referenced ${kind} does not exist`,
+          detail: `${kind === 'video' ? 'Video' : 'Image'} "${ref}" referenced in markdown does not exist on disk.`,
         });
       }
     }
@@ -156,14 +178,15 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
 
   // no-orphaned-images: only checked under `validate` (not `serve`)
   if (input.strict) {
-    for (const img of imageFiles) {
+    for (const img of [...imageFiles, ...videoFiles]) {
       const relPath = rel(img);
       if (!referencedPaths.has(relPath)) {
+        const kind = ALLOWED_VIDEO_EXTENSIONS.has(extname(img.name).toLowerCase()) ? 'video' : 'image';
         diagnostics.push({
           rule: Rule.NoOrphanedImages,
           severity: 'info',
           file: relPath,
-          title: 'Unreferenced image',
+          title: `Unreferenced ${kind}`,
           detail: `"${img.name}" is not referenced by any markdown file. Remove it if it is no longer needed.`,
         });
       }

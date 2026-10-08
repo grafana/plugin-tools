@@ -416,6 +416,18 @@ describe('checkAssets', () => {
       expect(findings.filter((f) => f.rule === Rule.ReferencedImagesExist)).toHaveLength(0);
     });
 
+    it('should handle a single-quoted video title', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await mkdir(join(tmp, 'video'));
+      await writeFile(join(tmp, 'video', 'agenda.mp4'), bufferOfSize(100));
+      await writeFile(join(tmp, 'index.md'), md("![Agenda](./video/agenda.mp4 'Optional title')"));
+
+      const findings = await checkAssets(input(tmp));
+
+      expect(findings.filter((f) => f.rule === Rule.ReferencedImagesExist)).toHaveLength(0);
+      expect(findings.filter((f) => f.rule === Rule.NoOrphanedImages)).toHaveLength(0);
+    });
+
     it('should report broken ref with title attribute', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await writeFile(join(tmp, 'index.md'), md('![chart](img/missing.png "A chart")'));
@@ -543,6 +555,69 @@ describe('checkAssets', () => {
 
       const findings = await checkAssets(input(tmp));
       expect(findings.filter((f) => f.rule === Rule.NoOrphanedImages)).toHaveLength(0);
+    });
+  });
+
+  // --- videos ---
+
+  describe('videos', () => {
+    async function docsWithVideo(name: string, bytes: number, body: string, strict = true) {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await mkdir(join(tmp, 'video'));
+      await writeFile(join(tmp, 'video', name), bufferOfSize(bytes));
+      await writeFile(join(tmp, 'index.md'), md(body));
+      return checkAssets(input(tmp, strict));
+    }
+
+    it('should accept a referenced video under 3MB', async () => {
+      const findings = await docsWithVideo('demo.mp4', 1024 * 1024, '![Demo](video/demo.mp4)');
+
+      expect(findings).toHaveLength(0);
+    });
+
+    it('should report a video over 3MB', async () => {
+      const findings = await docsWithVideo('demo.webm', 4 * 1024 * 1024, '![Demo](video/demo.webm)');
+
+      const size = findings.filter((f) => f.rule === Rule.MaxVideoSize);
+      expect(size).toHaveLength(1);
+      expect(size[0].severity).toBe('error');
+      expect(size[0].title).toContain('3MB');
+    });
+
+    it('should downgrade an oversized video to info outside strict mode', async () => {
+      const findings = await docsWithVideo('demo.mp4', 4 * 1024 * 1024, '![Demo](video/demo.mp4)', false);
+
+      expect(findings.find((f) => f.rule === Rule.MaxVideoSize)?.severity).toBe('info');
+    });
+
+    it('should report a missing video', async () => {
+      const findings = await docsWithVideo('demo.mp4', 100, '![Demo](video/other.mp4)');
+
+      const missing = findings.filter((f) => f.rule === Rule.ReferencedImagesExist);
+      expect(missing).toHaveLength(1);
+      expect(missing[0].title).toBe('Referenced video does not exist');
+    });
+
+    it('should report an unreferenced video', async () => {
+      const findings = await docsWithVideo('demo.mp4', 100, '## Home');
+
+      const orphan = findings.find((f) => f.rule === Rule.NoOrphanedImages);
+      expect(orphan?.file).toContain('demo.mp4');
+      expect(orphan?.title).toBe('Unreferenced video');
+    });
+
+    it('should report an invalid video filename', async () => {
+      const findings = await docsWithVideo('my demo.mp4', 100, '![Demo](video/my%20demo.mp4)');
+
+      expect(findings.find((f) => f.rule === Rule.ImageFileNaming)?.title).toBe(
+        'Video filename contains invalid characters'
+      );
+    });
+
+    it('should not count videos toward the total image size', async () => {
+      const findings = await docsWithVideo('demo.mp4', 1024 * 1024, '![Demo](video/demo.mp4)');
+
+      expect(findings.find((f) => f.rule === Rule.MaxTotalImagesSize)).toBeUndefined();
     });
   });
 });
