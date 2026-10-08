@@ -50,7 +50,7 @@ const URL_PLACEHOLDER_RE = /<[A-Z][A-Z0-9_]*>/;
 const CALLOUT_MARKER_RE = /^\s*>\s*\[!([a-zA-Z]+)\](.*)$/;
 
 // matches a line holding only a link, [text](url) or a bare URL, capturing the url
-const LONE_LINK_RE = /^\s*(?:\[[^\]]*\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)|(https?:\/\/\S+))\s*$/;
+const LONE_LINK_RE = /^\s*(?:\[[^\]]*\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)|((?:https?:\/\/|www\.)\S+))\s*$/;
 
 // matches a line holding only a reference link, [text][label], [label][] or [label], capturing text and label
 const LONE_REFERENCE_LINK_RE = /^\s*\[([^\]]+)\](?:\[([^\]]*)\])?\s*$/;
@@ -216,9 +216,10 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       const lineNumber = index + 1;
       const reference = text.match(LONE_REFERENCE_LINK_RE);
       const referenceLabel = reference && normalizeLabel(reference[2] || reference[1]);
-      const href =
+      const rawHref =
         text.match(LONE_LINK_RE)?.slice(1).find(Boolean) ??
         (referenceLabel ? definitionsByLabel.get(referenceLabel) : undefined);
+      const href = rawHref?.startsWith('www.') ? `https://${rawHref}` : rawHref;
       const startsParagraph = (contentLines[index - 1]?.trim() ?? '') === '' || nonProseLines.has(lineNumber - 1);
       const isAlone = startsParagraph && (contentLines[index + 1]?.trim() ?? '') === '';
       if (!href || !isAlone || nonProseLines.has(lineNumber) || codeLines.has(lineNumber)) {

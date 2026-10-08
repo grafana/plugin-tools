@@ -626,6 +626,11 @@ describe('checkMarkdown', () => {
       expect(await youtubeFindings('[video]\n\n[video]: https://youtu.be/Qc83dSVe0vQ\n')).toEqual([]);
     });
 
+    it('should warn about a bare www link with an invalid id', async () => {
+      expect(await youtubeFindings('www.youtube.com/watch?v=short\n')).toHaveLength(1);
+      expect(await youtubeFindings('www.youtube.com/watch?v=Qc83dSVe0vQ\n')).toEqual([]);
+    });
+
     it('should warn about a Shorts link with an invalid id', async () => {
       expect(await youtubeFindings('[Demo](https://www.youtube.com/shorts/short)\n')).toHaveLength(1);
     });
