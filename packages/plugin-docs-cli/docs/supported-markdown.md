@@ -94,6 +94,15 @@ SELECT id, name FROM users ORDER BY created_at DESC
 ```
 ````
 
+Code is highlighted for common languages, including `bash`, `c`, `cpp`, `csharp`, `css`, `diff`, `go`,
+`graphql`, `ini`, `java`, `javascript`, `json`, `kotlin`, `less`, `lua`, `makefile`, `markdown`,
+`perl`, `php`, `python`, `r`, `ruby`, `rust`, `scss`, `shell`, `sql`, `swift`, `typescript`,
+`xml` and `yaml`. Common short names work too, such as `js`, `ts`, `sh`, `yml`, `html` and `toml`.
+
+A block in any other language, such as `hcl`, `promql` or `dockerfile`, shows as plain code. Name the
+language anyway, or use `text` for output and other plain content. A block with no language is
+never highlighted.
+
 ## Links
 
 Link to another page with a relative path to its `.md` file. Add `#anchor` to link to a heading:
