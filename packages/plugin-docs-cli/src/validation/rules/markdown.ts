@@ -9,6 +9,7 @@ import {
   getNonProseLines,
   getReferenceDefinitions,
   isMetaFile,
+  maskInlineCode,
   matchOutsideCode,
   normalizeLabel,
 } from './utils.js';
@@ -244,12 +245,14 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     // valid-details-block: markdown right after </summary> is raw HTML text, so it isn't formatted
     contentLines.forEach((text, index) => {
       const lineNumber = index + 1;
-      const closeIndex = text.indexOf('</summary>');
+      const masked = maskInlineCode(text);
+      const closeIndex = masked.indexOf('</summary>');
       if (closeIndex === -1 || codeLines.has(lineNumber) || nonProseLines.has(lineNumber)) {
         return;
       }
-      const rest = text.slice(closeIndex + '</summary>'.length).trim();
-      const next = rest || (contentLines[index + 1]?.trim() ?? '');
+      const rest = masked.slice(closeIndex + '</summary>'.length).trim();
+      // a blank line inside a blockquote is just its > markers
+      const next = rest || (contentLines[index + 1] ?? '').replace(/^[\s>]*/, '');
       if (next !== '' && !next.startsWith('</details>')) {
         diagnostics.push({
           rule: Rule.ValidDetailsBlock,

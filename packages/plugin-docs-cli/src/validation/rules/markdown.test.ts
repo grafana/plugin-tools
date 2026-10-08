@@ -641,6 +641,16 @@ describe('checkMarkdown', () => {
       ).toEqual([]);
     });
 
+    it('should accept a details block inside a blockquote', async () => {
+      expect(
+        await detailsFindings('> <details>\n> <summary>More</summary>\n>\n> Some **markdown**.\n>\n> </details>\n')
+      ).toEqual([]);
+    });
+
+    it('should ignore </summary> in inline code', async () => {
+      expect(await detailsFindings('Close it with `</summary>` and then\nkeep writing.\n')).toEqual([]);
+    });
+
     it('should ignore details in code', async () => {
       expect(
         await detailsFindings(
