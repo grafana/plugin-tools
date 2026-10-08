@@ -198,7 +198,7 @@ Use image syntax with an `.mp4` or `.webm` file inside your docs folder:
 ![Switching to the agenda view](./video/agenda.mp4 'Optional title')
 ```
 
-- Videos are limited to 2MB each, because docs ship inside every plugin download. Use YouTube for
+- Videos are limited to 3MB each, because docs ship inside every plugin download. Use YouTube for
   anything longer.
 - The player has controls, starts muted and never plays by itself. The alt text labels the video
   for screen readers.

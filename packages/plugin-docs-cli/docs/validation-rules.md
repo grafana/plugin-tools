@@ -75,7 +75,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-svg-files`            | SVG images aren't allowed - they can contain embedded scripts, which is a security risk. Use PNG or WebP instead.                   | Error                         |
 | `referenced-images-exist` | An image referenced in a page (`![alt](img/foo.png)`) must actually exist in your docs folder.                                      | Error                         |
 | `max-image-size`          | Static images (png/jpg/webp) must be 300KB or smaller; GIFs must be 1MB or smaller. Compress or resize oversized images.            | Suggestion †                  |
-| `max-video-size`          | Videos (mp4/webm) must be 2MB or smaller. Shorten or compress the video, or upload it to YouTube and link to it.                    | Suggestion †                  |
+| `max-video-size`          | Videos (mp4/webm) must be 3MB or smaller. Shorten or compress the video, or upload it to YouTube and link to it.                    | Suggestion †                  |
 | `max-total-images-size`   | The total size of all images in your docs folder must stay under 5MB. Only checked in strict mode (`validate`), not during `serve`. | Warning (strict mode only)    |
 | `image-file-naming`       | Image and video filenames should use only letters, digits, hyphens, underscores and dots.                                           | Suggestion †                  |
 | `no-orphaned-images`      | An image or video that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.   | Suggestion (strict mode only) |

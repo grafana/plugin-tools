@@ -9,7 +9,7 @@ const IMAGE_FILE_NAME_RE = /^[a-zA-Z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
 const MAX_GIF_SIZE = 1024 * 1024; // 1MB
 const MAX_TOTAL_SIZE = 5 * 1024 * 1024; // 5MB
-const MAX_VIDEO_SIZE = 2 * 1024 * 1024; // 2MB
+const MAX_VIDEO_SIZE = 3 * 1024 * 1024; // 3MB
 
 /**
  * Finds the 1-based line number of the first occurrence of a string in content.
@@ -110,8 +110,8 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
         rule: Rule.MaxVideoSize,
         severity: input.strict ? 'error' : 'info',
         file: rel(video),
-        title: 'Video exceeds 2MB limit',
-        detail: `"${video.name}" is ${formatBytes(size)} which exceeds the 2MB limit for videos. Shorten or compress the video, or upload it to YouTube and link to it.`,
+        title: 'Video exceeds 3MB limit',
+        detail: `"${video.name}" is ${formatBytes(size)} which exceeds the 3MB limit for videos. Shorten or compress the video, or upload it to YouTube and link to it.`,
       });
     }
   }

@@ -557,23 +557,23 @@ describe('checkAssets', () => {
       return checkAssets(input(tmp, strict));
     }
 
-    it('should accept a referenced video under 2MB', async () => {
+    it('should accept a referenced video under 3MB', async () => {
       const findings = await docsWithVideo('demo.mp4', 1024 * 1024, '![Demo](video/demo.mp4)');
 
       expect(findings).toHaveLength(0);
     });
 
-    it('should report a video over 2MB', async () => {
-      const findings = await docsWithVideo('demo.webm', 3 * 1024 * 1024, '![Demo](video/demo.webm)');
+    it('should report a video over 3MB', async () => {
+      const findings = await docsWithVideo('demo.webm', 4 * 1024 * 1024, '![Demo](video/demo.webm)');
 
       const size = findings.filter((f) => f.rule === Rule.MaxVideoSize);
       expect(size).toHaveLength(1);
       expect(size[0].severity).toBe('error');
-      expect(size[0].title).toContain('2MB');
+      expect(size[0].title).toContain('3MB');
     });
 
     it('should downgrade an oversized video to info outside strict mode', async () => {
-      const findings = await docsWithVideo('demo.mp4', 3 * 1024 * 1024, '![Demo](video/demo.mp4)', false);
+      const findings = await docsWithVideo('demo.mp4', 4 * 1024 * 1024, '![Demo](video/demo.mp4)', false);
 
       expect(findings.find((f) => f.rule === Rule.MaxVideoSize)?.severity).toBe('info');
     });
