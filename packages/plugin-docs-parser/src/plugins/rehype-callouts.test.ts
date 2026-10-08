@@ -34,7 +34,7 @@ describe('rehypeCallouts', () => {
 
     expect(html).toContain('<p>Only in <strong>Grafana Cloud</strong>.</p>');
     expect(html).toContain('<li>First</li>');
-    expect(html).toContain('<code class="language-sql">SELECT 1');
+    expect(html).toContain('<code class="hljs language-sql">');
   });
 
   it('should drop the marker paragraph when the content starts in the next paragraph', () => {

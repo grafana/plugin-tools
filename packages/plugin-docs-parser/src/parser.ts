@@ -3,6 +3,7 @@ import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+import rehypeHighlight from 'rehype-highlight';
 import * as yaml from 'js-yaml';
 import { VFile } from 'vfile';
 import { rehypeSlug } from './plugins/rehype-slug.js';
@@ -121,6 +122,7 @@ export function parseMarkdown(content: string, options?: ParseOptions): ParsedMa
 
   // our own markup runs after sanitization, so its classes survive and authors can't forge them
   processor.use(rehypeCallouts);
+  processor.use(rehypeHighlight);
 
   // extract headings after sanitization (matches actual rendered content)
   processor.use(rehypeExtractHeadings);
