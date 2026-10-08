@@ -3,7 +3,7 @@ import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeRaw from 'rehype-raw';
-import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+import rehypeSanitize, { defaultSchema, type Options as SanitizeSchema } from 'rehype-sanitize';
 import rehypeHighlight from 'rehype-highlight';
 import * as yaml from 'js-yaml';
 import { VFile } from 'vfile';
@@ -63,12 +63,24 @@ export interface ParsedMarkdown {
   headings: Heading[];
 }
 
+const defaultAttributes = defaultSchema.attributes ?? {};
+
 // raw HTML is parsed, so only the tags markdown produces survive, plus details, summary and br.
-// disable the `user-content-` prefix that rehype-sanitize adds to id attributes by default.
-// the default schema already allows id (via clobber) and className on code (for language-* classes).
-const sanitizeSchema = {
+// id and name are only kept where markdown sets them, so raw HTML can't clobber page globals.
+// clobberPrefix is off so heading ids match their slugs.
+const sanitizeSchema: SanitizeSchema = {
   ...defaultSchema,
   clobberPrefix: '',
+  ancestors: { ...defaultSchema.ancestors, summary: ['details'] },
+  attributes: {
+    ...defaultAttributes,
+    '*': (defaultAttributes['*'] ?? []).filter((name) => name !== 'id' && name !== 'name'),
+    a: [...(defaultAttributes.a ?? []), ['id', /^user-content-fnref-/]],
+    li: [...(defaultAttributes.li ?? []), ['id', /^user-content-fn-/]],
+    ...Object.fromEntries(
+      ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].map((tagName) => [tagName, [...(defaultAttributes[tagName] ?? []), 'id']])
+    ),
+  },
   strip: ['script', 'style'],
   tagNames: [
     'a',

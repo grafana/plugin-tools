@@ -161,6 +161,27 @@ It works by parsing **markdown**.
       expect(html).not.toContain('alert');
     });
 
+    it('should remove id and name from raw HTML so it cannot clobber page globals', () => {
+      const html = render(
+        '<details id="dataLayer" name="x">\n<summary id="s" name="n">Title</summary>\n\nText<br id="b">\n\n</details>'
+      );
+
+      expect(html).not.toMatch(/\bid=|\bname=/);
+    });
+
+    it('should keep ids on headings and footnotes', () => {
+      const html = render('## Setup\n\nText.[^1]\n\n[^1]: A note.');
+
+      expect(html).toContain('<h2 id="setup">');
+      expect(html).toContain('id="user-content-fnref-1"');
+      expect(html).toContain('<li id="user-content-fn-1">');
+      expect(html).toContain('id="footnote-label"');
+    });
+
+    it('should remove a summary outside details', () => {
+      expect(render('<summary>Alone</summary>\n\nText')).not.toContain('<summary>');
+    });
+
     it.each([
       ['a script with its content', '<script>alert(1)</script>'],
       ['a style with its content', '<style>body { display: none }</style>'],
