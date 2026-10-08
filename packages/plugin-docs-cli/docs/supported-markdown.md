@@ -1,8 +1,8 @@
 # Supported markdown
 
 To write Plugin docs use plain markdown: [CommonMark](https://commonmark.org/) plus the
-[GitHub Flavored Markdown](https://github.github.com/gfm/) extensions. There is no MDX, no
-templating and no raw HTML. What you write is what gets rendered on grafana.com, in the `serve`
+[GitHub Flavored Markdown](https://github.github.com/gfm/) extensions. There is no MDX and no
+templating, and the only HTML you can use is for collapsible sections and line breaks. What you write is what gets rendered on grafana.com, in the `serve`
 preview and on GitHub, so your docs read well in all three platforms.
 
 This page lists everything you can use and how to write it. For the checks that run against your
@@ -83,6 +83,14 @@ number added: `#permissions-1`.
 ```
 
 Use `:---`, `:---:` and `---:` in the separator row to align a column left, center or right.
+
+To break a line inside a cell, use `<br>`:
+
+```markdown
+| Setting  | Values                                 |
+| -------- | -------------------------------------- |
+| **Mode** | `table` for rows<br>`series` for lines |
+```
 
 ## Code blocks
 
@@ -204,6 +212,28 @@ Use image syntax with an `.mp4` or `.webm` file inside your docs folder:
   for screen readers.
 - Name the file with letters, digits, hyphens, underscores and dots only, as for images.
 
+## Collapsible sections
+
+Use a `<details>` block to hide content that most readers don't need, such as a long example. The
+`<summary>` is the text the reader clicks to open it:
+
+```markdown
+<details>
+<summary>Show the full provisioning file</summary>
+
+Any **markdown** works here, including code blocks.
+
+</details>
+```
+
+- Leave a blank line after `</summary>`. Without it, the content shows as plain text and its
+  markdown isn't formatted.
+- Write `<details open>` to show the section open when the page loads.
+- The summary is plain text. Markdown inside `<summary>` isn't formatted.
+- Headings inside a collapsible section aren't listed in the table of contents.
+- Other attributes, such as `class` or `style`, are removed.
+- GitHub shows collapsible sections the same way.
+
 ## Footnotes
 
 ```markdown
@@ -218,7 +248,8 @@ Footnotes are collected at the end of the page.
 
 These are removed when your page is rendered, or shown as plain text:
 
-- **Raw HTML**, for example `<div>`, `<br>`, `<details>` or `<iframe>`. Write it in markdown instead.
+- **Raw HTML** other than `<details>`, `<summary>` and `<br>`, for example `<div>`, `<span>` or
+  `<iframe>`. Write it in markdown instead. HTML comments are removed too.
 - **Hugo shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`.
 - **MDX and JSX components.**
 - **Video players other than YouTube**, such as Vimeo. Link to the video instead.
