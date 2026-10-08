@@ -9,7 +9,7 @@ function parseVer(v: string): ParsedVer {
   // split MAJOR.MINOR.PATCH from an optional dash-suffixed pre-release.
   // Grafana dev/nightly builds use this form (e.g. `10.4.0-25389005429`).
   // Build metadata after a `+` is stripped per semver.
-  const cleaned = v.split('+')[0];
+  const cleaned = v.trim().replace(/^v/, '').split('+')[0];
   const dash = cleaned.indexOf('-');
   const base = dash === -1 ? cleaned : cleaned.slice(0, dash);
   const preStr = dash === -1 ? '' : cleaned.slice(dash + 1);
@@ -136,6 +136,82 @@ export const gt = (a: string, b: string): boolean => cmp(a, b) > 0;
  * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
  */
 export const eq = (a: string, b: string): boolean => cmp(a, b) === 0;
+
+/**
+ * Compares two versions per semver precedence, for use with `Array.prototype.sort`.
+ *
+ * @param a - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
+ * @param b - A semantic version string in the form `MAJOR.MINOR.PATCH[-PRE]`.
+ * @returns `-1` when `a` is lower, `1` when `a` is greater and `0` when they are equal.
+ */
+export const compare = (a: string, b: string): -1 | 0 | 1 => Math.sign(cmp(a, b)) as -1 | 0 | 1;
+
+function isNumericIdentifier(id: string): boolean {
+  if (!id) {
+    return false;
+  }
+  if (!/^\d+$/.test(id)) {
+    return false;
+  }
+  return id === '0' || id[0] !== '0';
+}
+
+function isNonNumericIdentifier(id: string): boolean {
+  return !!id && /^[0-9A-Za-z-]+$/.test(id) && /[A-Za-z-]/.test(id);
+}
+
+// build metadata identifiers allow leading zeroes, unlike numeric prerelease identifiers
+function isBuildIdentifier(id: string): boolean {
+  return !!id && /^[0-9A-Za-z-]+$/.test(id);
+}
+
+function normalizeIfValidSemver(input: string): string | null {
+  const trimmed = input.trim();
+  const withoutV = trimmed.startsWith('v') ? trimmed.slice(1) : trimmed;
+  const plusIndex = withoutV.indexOf('+');
+  const core = plusIndex === -1 ? withoutV : withoutV.slice(0, plusIndex);
+  const build = plusIndex === -1 ? null : withoutV.slice(plusIndex + 1);
+
+  if (build !== null && (!build || build.split('.').some((id) => !isBuildIdentifier(id)))) {
+    return null;
+  }
+
+  const dashIndex = core.indexOf('-');
+  const base = dashIndex === -1 ? core : core.slice(0, dashIndex);
+  const pre = dashIndex === -1 ? null : core.slice(dashIndex + 1);
+
+  const baseParts = base.split('.');
+  if (baseParts.length !== 3) {
+    return null;
+  }
+
+  if (!baseParts.every((p) => isNumericIdentifier(p))) {
+    return null;
+  }
+
+  if (pre !== null) {
+    if (!pre) {
+      return null;
+    }
+    const ids = pre.split('.');
+    if (ids.some((id) => !(isNumericIdentifier(id) || isNonNumericIdentifier(id)))) {
+      return null;
+    }
+  }
+
+  return core;
+}
+
+/**
+ * Returns the normalized version when `version` is a valid semantic version, otherwise `null`.
+ *
+ * Like the `semver` package, a leading `v` is accepted, build metadata is dropped
+ * (`v1.2.3+build.1` becomes `1.2.3`) and a missing value returns `null` rather than throwing.
+ *
+ * @param version - The string to validate.
+ */
+export const valid = (version: string | null | undefined): string | null =>
+  typeof version === 'string' ? normalizeIfValidSemver(version) : null;
 
 /**
  * Returns true when `version` satisfies the given range expression.

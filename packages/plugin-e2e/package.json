@@ -27,6 +27,7 @@
     "lint:fix": "npm run lint -- --fix",
     "lint:package": "publint",
     "server": "docker compose up --build",
+    "sync-selectors": "tsx scripts/sync-e2e-selectors.mts",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit",
     "test": "vitest --passWithNoTests",
     "playwright:test": "npx playwright test"
@@ -46,10 +47,12 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.58.1",
-    "dotenv": "^17.2.4"
+    "@types/semver": "^7.8.0",
+    "dotenv": "^17.2.4",
+    "semver": "^7.8.5",
+    "tsx": "^4.23.15"
   },
   "dependencies": {
-    "@grafana/e2e-selectors": "13.2.0-30594044109",
     "yaml": "^2.3.4"
   }
 }

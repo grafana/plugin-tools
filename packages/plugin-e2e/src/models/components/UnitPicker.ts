@@ -1,5 +1,5 @@
 import { Locator } from '@playwright/test';
-import { gte } from 'semver';
+import { gte } from '../../utils/version';
 import { PluginTestCtx } from '../../types';
 import { SelectOptionsType } from './types';
 import { ComponentBase } from './ComponentBase';
