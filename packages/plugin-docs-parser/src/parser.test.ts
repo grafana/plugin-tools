@@ -169,11 +169,11 @@ It works by parsing **markdown**.
       expect(html).not.toMatch(/\bid=|\bname=/);
     });
 
-    it('should replace an id on a raw HTML heading with its slug', () => {
+    it('should remove a raw HTML heading', () => {
       const result = parseMarkdown('<h2 id="dataLayer">Setup</h2>\n\nText');
 
-      expect(toHtml(result.hast)).toContain('<h2 id="setup">');
-      expect(result.headings).toEqual([{ level: 2, id: 'setup', text: 'Setup' }]);
+      expect(toHtml(result.hast)).not.toContain('<h2');
+      expect(result.headings).toEqual([]);
     });
 
     it('should keep ids on headings and footnotes', () => {
