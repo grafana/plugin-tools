@@ -231,7 +231,7 @@ Any **markdown** works here, including code blocks.
 - Write `<details open>` to show the section open when the page loads.
 - The summary is plain text. Markdown inside `<summary>` isn't formatted.
 - Headings inside a collapsible section aren't listed in the table of contents.
-- Other attributes, such as `class` or `style`, are removed.
+- Attributes such as `class`, `style` and `id` are removed.
 - GitHub shows collapsible sections the same way.
 
 ## Footnotes
@@ -249,7 +249,8 @@ Footnotes are collected at the end of the page.
 These are removed when your page is rendered, or shown as plain text:
 
 - **Raw HTML** other than `<details>`, `<summary>` and `<br>`, for example `<div>`, `<span>` or
-  `<iframe>`. Write it in markdown instead. HTML comments are removed too.
+  `<iframe>`. Validation reports it as an error. Write it in markdown instead. HTML comments don't
+  show on the page.
 - **Hugo shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`.
 - **MDX and JSX components.**
 - **Video players other than YouTube**, such as Vimeo. Link to the video instead.
