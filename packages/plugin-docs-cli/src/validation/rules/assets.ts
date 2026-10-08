@@ -163,13 +163,14 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
 
       // referenced-images-exist: check that the target file exists on disk
       if (!allFilePaths.has(resolvedPath)) {
+        const kind = ALLOWED_VIDEO_EXTENSIONS.has(extname(resolvedPath).toLowerCase()) ? 'video' : 'image';
         diagnostics.push({
           rule: Rule.ReferencedImagesExist,
           severity: 'error',
           file: mdRelPath,
           line: findRefLine(content, ref),
-          title: 'Referenced image does not exist',
-          detail: `Image "${ref}" referenced in markdown does not exist on disk.`,
+          title: `Referenced ${kind} does not exist`,
+          detail: `${kind === 'video' ? 'Video' : 'Image'} "${ref}" referenced in markdown does not exist on disk.`,
         });
       }
     }

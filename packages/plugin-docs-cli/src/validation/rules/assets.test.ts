@@ -581,7 +581,9 @@ describe('checkAssets', () => {
     it('should report a missing video', async () => {
       const findings = await docsWithVideo('demo.mp4', 100, '![Demo](video/other.mp4)');
 
-      expect(findings.filter((f) => f.rule === Rule.ReferencedImagesExist)).toHaveLength(1);
+      const missing = findings.filter((f) => f.rule === Rule.ReferencedImagesExist);
+      expect(missing).toHaveLength(1);
+      expect(missing[0].title).toBe('Referenced video does not exist');
     });
 
     it('should report an unreferenced video', async () => {

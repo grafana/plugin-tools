@@ -10,6 +10,7 @@ import {
   getReferenceDefinitions,
   isMetaFile,
   matchOutsideCode,
+  normalizeLabel,
 } from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
@@ -51,6 +52,11 @@ const CALLOUT_MARKER_RE = /^\s*>\s*\[!([a-zA-Z]+)\](.*)$/;
 // matches a line holding only a link, [text](url) or a bare URL, capturing the url
 const LONE_LINK_RE = /^\s*(?:\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)|(https?:\/\/\S+))\s*$/;
 
+// matches a line holding only a reference link, [text][label], [label][] or [label], capturing text and label
+const LONE_REFERENCE_LINK_RE = /^\s*\[([^\]]+)\](?:\[([^\]]*)\])?\s*$/;
+
+const VIDEO_REF_RE = /\.(?:mp4|webm)(?:[?#].*)?$/i;
+
 const YOUTUBE_HOSTS = ['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be'];
 
 const CALLOUT_TYPE_NAMES = Object.keys(CALLOUT_TYPES).map((type) => type.toUpperCase());
@@ -58,8 +64,8 @@ const CALLOUT_TYPE_NAMES = Object.keys(CALLOUT_TYPES).map((type) => type.toUpper
 const SHORTCODE_REPLACEMENTS: Record<string, string> = {
   admonition: 'Use a callout instead, for example a blockquote starting with > [!NOTE].',
   figure: 'Use a markdown image instead, for example ![Alt text](img/screenshot.png).',
-  youtube: 'Put the video link alone in its own paragraph instead and it is embedded.',
-  'video-embed': 'Link to the video instead.',
+  youtube: 'Put a YouTube link alone in its own paragraph to embed the video.',
+  'video-embed': 'Use a markdown image with an mp4 or webm file instead, for example ![Demo](video/demo.mp4).',
   vimeo: 'Link to the video instead.',
   'docs/shared': 'Copy the shared content into this page instead.',
 };
@@ -81,7 +87,7 @@ function looksLikeYouTubeVideo(href: string): boolean {
     if (!YOUTUBE_HOSTS.includes(url.hostname)) {
       return false;
     }
-    return url.hostname === 'youtu.be' || url.pathname === '/watch' || url.pathname.startsWith('/embed/');
+    return url.hostname === 'youtu.be' || url.pathname === '/watch' || /^\/(?:embed|shorts)\//.test(url.pathname);
   } catch {
     return false;
   }
@@ -202,10 +208,17 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       }
     }
 
+    const definitions = getReferenceDefinitions(content, codeLines);
+    const definitionsByLabel = new Map(definitions.map((definition) => [definition.label, definition.ref]));
+
     // valid-youtube-link: a YouTube link alone in a paragraph that would silently not embed
     contentLines.forEach((text, index) => {
       const lineNumber = index + 1;
-      const href = text.match(LONE_LINK_RE)?.slice(1).find(Boolean);
+      const reference = text.match(LONE_REFERENCE_LINK_RE);
+      const referenceLabel = reference && normalizeLabel(reference[2] || reference[1]);
+      const href =
+        text.match(LONE_LINK_RE)?.slice(1).find(Boolean) ??
+        (referenceLabel ? definitionsByLabel.get(referenceLabel) : undefined);
       const startsParagraph = (contentLines[index - 1]?.trim() ?? '') === '' || nonProseLines.has(lineNumber - 1);
       const isAlone = startsParagraph && (contentLines[index + 1]?.trim() ?? '') === '';
       if (!href || !isAlone || nonProseLines.has(lineNumber) || codeLines.has(lineNumber)) {
@@ -218,7 +231,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           file: relPath,
           line: lineNumber,
           title: 'YouTube link is not embedded',
-          detail: `"${href}" has no valid 11-character video id, so it renders as a plain link. Check the id, or use a watch, youtu.be or embed URL.`,
+          detail: `"${href}" has no valid 11-character video id, so it renders as a plain link. Check the id, or use a watch, youtu.be, embed or Shorts URL.`,
         });
       }
     });
@@ -246,8 +259,6 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
-    const definitions = getReferenceDefinitions(content, codeLines);
-
     // process image references, inline ![alt](url) and reference definitions used by an image
     const imageRefs = [
       ...matchOutsideCode(content, IMAGE_REF_RE, codeLines).map(({ match, line }) => ({ ref: match[2], line })),
@@ -274,7 +285,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: input.strict ? 'error' : 'warning',
           file: relPath,
           line,
-          title: 'External image URL detected',
+          title: `External ${VIDEO_REF_RE.test(ref) ? 'video' : 'image'} URL detected`,
           detail: `"${ref}" is an external URL. Download the image and place it in the img/ directory.`,
         });
         continue;
@@ -313,7 +324,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: 'error',
           file: relPath,
           line,
-          title: 'Image reference is not a relative path',
+          title: `${VIDEO_REF_RE.test(ref) ? 'Video' : 'Image'} reference is not a relative path`,
           detail: `"${ref}" is an absolute path. Use a relative path like "img/filename.png" instead.`,
         });
       }

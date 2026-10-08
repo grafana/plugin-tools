@@ -615,6 +615,21 @@ describe('checkMarkdown', () => {
       expect(await youtubeFindings('- [Demo](https://youtu.be/short)\n')).toEqual([]);
     });
 
+    it('should warn about a reference-style link with an invalid id', async () => {
+      const findings = await youtubeFindings('[Demo][video]\n\n[video]: https://youtu.be/short\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(5);
+    });
+
+    it('should not report a valid reference-style link', async () => {
+      expect(await youtubeFindings('[video]\n\n[video]: https://youtu.be/Qc83dSVe0vQ\n')).toEqual([]);
+    });
+
+    it('should warn about a Shorts link with an invalid id', async () => {
+      expect(await youtubeFindings('[Demo](https://www.youtube.com/shorts/short)\n')).toHaveLength(1);
+    });
+
     it('should not report a channel link or a code block', async () => {
       expect(await youtubeFindings('[Channel](https://www.youtube.com/@grafana)\n')).toEqual([]);
       expect(await youtubeFindings('```md\n\n[Demo](https://youtu.be/short)\n\n```\n')).toEqual([]);

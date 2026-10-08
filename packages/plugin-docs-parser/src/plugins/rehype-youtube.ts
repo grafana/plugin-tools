@@ -6,7 +6,7 @@ const VIDEO_ID_RE = /^[A-Za-z0-9_-]{11}$/;
 const YOUTUBE_HOSTS = new Set(['youtube.com', 'www.youtube.com', 'm.youtube.com']);
 
 /**
- * Returns the video id of a YouTube watch, short or embed URL, or undefined for any other URL
+ * Returns the video id of a YouTube watch, youtu.be, embed or Shorts URL, or undefined for any other URL
  * or an id that isn't 11 characters.
  */
 export function getYouTubeVideoId(href: string): string | undefined {
@@ -27,8 +27,8 @@ export function getYouTubeVideoId(href: string): string | undefined {
   } else if (YOUTUBE_HOSTS.has(url.hostname)) {
     if (url.pathname === '/watch') {
       id = url.searchParams.get('v');
-    } else if (url.pathname.startsWith('/embed/')) {
-      id = url.pathname.slice('/embed/'.length);
+    } else {
+      id = url.pathname.match(/^\/(?:embed|shorts)\/([^/]+)\/?$/)?.[1];
     }
   }
 
@@ -54,12 +54,13 @@ function isBlank(node: ElementContent): boolean {
  * Rehype plugin that turns a paragraph holding only a YouTube link into
  * `<div class="youtube-embed" data-video-id="ID"><a href="...">Title</a></div>`.
  * The link stays inside as the fallback for renderers that don't build a player. A link
- * inside a sentence, or to any other site, is left untouched.
+ * inside a sentence or a list, or to any other site, is left untouched.
  */
 export function rehypeYouTube() {
   return (tree: Root) => {
-    visit(tree, 'element', (node: Element) => {
-      if (node.tagName !== 'p') {
+    visit(tree, 'element', (node: Element, _index, parent) => {
+      // loose list items wrap their text in a paragraph, but links in a list should stay links
+      if (node.tagName !== 'p' || (parent?.type === 'element' && parent.tagName === 'li')) {
         return;
       }
 
@@ -80,7 +81,7 @@ export function rehypeYouTube() {
       }
 
       const text = getText(link).trim();
-      const title = text === '' || text === href ? 'Watch on YouTube' : text;
+      const title = text === '' || /^(?:https?:\/\/|www\.)/i.test(text) ? 'Watch on YouTube' : text;
 
       node.tagName = 'div';
       node.properties = { className: ['youtube-embed'], dataVideoId: id };

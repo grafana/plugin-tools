@@ -60,6 +60,13 @@ describe('rehypeVideo', () => {
     expect(render('<video src="./demo.mp4" autoplay></video>')).not.toContain('<video');
   });
 
+  it('should leave an image inside a link alone', () => {
+    const html = render('[![Demo](./demo.mp4)](https://example.com)');
+
+    expect(html).not.toContain('<video');
+    expect(html).toContain('<img src="./demo.mp4"');
+  });
+
   it('should leave a link to a video file as a link', () => {
     const html = render('[Download](./demo.mp4)');
 

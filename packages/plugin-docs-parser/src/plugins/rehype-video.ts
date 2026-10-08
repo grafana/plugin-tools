@@ -6,12 +6,14 @@ const VIDEO_SRC_RE = /\.(?:mp4|webm)(?:[?#].*)?$/i;
 /**
  * Rehype plugin that turns an image whose src is an mp4 or webm file into a `<video>` with
  * controls and no autoplay. The alt text becomes the label and the markdown title is kept.
- * A link to the file stays inside as the fallback for browsers that can't play it.
+ * A link to the file stays inside as the fallback for browsers that can't play it. Images
+ * inside a link are left untouched.
  */
 export function rehypeVideo() {
   return (tree: Root) => {
-    visit(tree, 'element', (node: Element) => {
-      if (node.tagName !== 'img') {
+    visit(tree, 'element', (node: Element, _index, parent) => {
+      // a video inside a link would nest interactive content, so images in links stay images
+      if (node.tagName !== 'img' || (parent?.type === 'element' && parent.tagName === 'a')) {
         return;
       }
 

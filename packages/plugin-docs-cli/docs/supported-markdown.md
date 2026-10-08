@@ -182,11 +182,12 @@ Put a YouTube link alone in its own paragraph to embed the video:
 [Getting started with Yugabyte](https://www.youtube.com/watch?v=Qc83dSVe0vQ)
 ```
 
-- Watch (`youtube.com/watch?v=`), short (`youtu.be/`) and embed (`youtube.com/embed/`) links work.
+- Watch (`youtube.com/watch?v=`), `youtu.be/`, embed (`youtube.com/embed/`) and Shorts
+  (`youtube.com/shorts/`) links work.
 - The video shows as a thumbnail with a play button. The player loads only when the reader clicks
   play, and uses the privacy-enhanced `youtube-nocookie.com` domain.
 - The link text becomes the video title for screen readers.
-- A link inside a sentence, or in a list, stays a normal link.
+- A link inside a sentence, in a list or in a table stays a normal link.
 - On GitHub this is a normal link, so the page still reads well there.
 
 ### Short videos

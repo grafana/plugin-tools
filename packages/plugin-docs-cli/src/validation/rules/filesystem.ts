@@ -145,7 +145,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
         rule: Rule.MaxTotalDocsSize,
         severity: 'warning',
         title: `Docs folder exceeds ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit`,
-        detail: `The docs folder is ${formatBytes(totalSize)} in total, which exceeds the ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit. Reduce the number or size of pages and images.`,
+        detail: `The docs folder is ${formatBytes(totalSize)} in total, which exceeds the ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit. Reduce the number or size of pages, images and videos.`,
       });
     }
   }

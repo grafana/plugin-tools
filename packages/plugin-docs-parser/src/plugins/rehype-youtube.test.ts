@@ -15,6 +15,7 @@ describe('rehypeYouTube', () => {
     ['watch without www', `https://youtube.com/watch?v=${ID}&t=30s`],
     ['short', `https://youtu.be/${ID}`],
     ['embed', `https://www.youtube.com/embed/${ID}`],
+    ['shorts', `https://www.youtube.com/shorts/${ID}`],
   ])('should embed a %s link alone in a paragraph', (_name, url) => {
     const html = render(`[Getting started](${url})`);
 
@@ -28,6 +29,16 @@ describe('rehypeYouTube', () => {
 
     expect(html).toContain(`data-video-id="${ID}"`);
     expect(html).toContain('>Watch on YouTube</a>');
+  });
+
+  it('should not use a www autolink as the title', () => {
+    expect(render(`www.youtube.com/watch?v=${ID}`)).toContain('>Watch on YouTube</a>');
+  });
+
+  it('should leave links in a loose list alone', () => {
+    const html = render(`- [A](https://youtu.be/${ID})\n\n- [B](https://youtu.be/${ID})`);
+
+    expect(html).not.toContain('youtube-embed');
   });
 
   it('should keep formatted link text as the title', () => {

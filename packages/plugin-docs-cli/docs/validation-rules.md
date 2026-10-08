@@ -93,7 +93,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-hugo-shortcodes`   | Hugo shortcodes like `{{< admonition >}}` or `{{% docs/shared %}}` aren't supported and show up as plain text. Write the content in plain markdown instead, as described in [Supported markdown](./supported-markdown.md). | Warning † |
 | `no-url-placeholders`  | A link or image URL can't contain a placeholder like `<GRAFANA_VERSION>` - nothing replaces it, so the link breaks. Write the real value, such as `latest`.                                                                | Warning † |
 | `valid-callout-marker` | A callout marker like `> [!NOTE]` must use a known type (`NOTE`, `TIP`, `IMPORTANT`, `WARNING` or `CAUTION`) and sit alone on the first line of the blockquote. Otherwise the callout renders as a plain quote.            | Warning   |
-| `valid-youtube-link`   | A YouTube link alone in its own paragraph must be a watch, `youtu.be` or embed URL with a valid 11-character video id. Otherwise the link is not embedded and renders as a plain link.                                     | Warning   |
+| `valid-youtube-link`   | A YouTube link alone in its own paragraph must be a watch, `youtu.be`, embed or Shorts URL with a valid 11-character video id. Otherwise the link is not embedded and renders as a plain link.                             | Warning   |
 
 ## Links between pages
 
