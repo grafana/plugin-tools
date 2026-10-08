@@ -65,12 +65,20 @@ describe('checkMarkdown', () => {
       expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeUndefined();
     });
 
-    it.each(['<hr>', '<wbr>'])('should report %s, which the parser removes', async (tag) => {
+    it('should report <wbr>, which the parser removes', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
-      await writeFile(join(tmp, 'index.md'), md(`Text${tag}more`));
+      await writeFile(join(tmp, 'index.md'), md('Text<wbr>more'));
 
       const findings = await checkMarkdown(input(tmp));
-      expect(findings.find((f) => f.rule === Rule.NoRawHtml)?.detail).toContain(tag);
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)?.detail).toContain('<wbr>');
+    });
+
+    it('should allow <hr> tags', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Text\n\n<hr>\n\nMore'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeUndefined();
     });
 
     it('should not report HTML inside fenced code blocks', async () => {

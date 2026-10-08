@@ -2,7 +2,7 @@
 
 To write Plugin docs use plain markdown: [CommonMark](https://commonmark.org/) plus the
 [GitHub Flavored Markdown](https://github.github.com/gfm/) extensions. There is no MDX and no
-templating, and the only HTML you can use is for collapsible sections and line breaks. What you write is what gets rendered on grafana.com, in the `serve`
+templating, and the only HTML you can use is for collapsible sections, line breaks and horizontal rules. What you write is what gets rendered on grafana.com, in the `serve`
 preview and on GitHub, so your docs read well in all three platforms.
 
 This page lists everything you can use and how to write it. For the checks that run against your
@@ -248,7 +248,7 @@ Footnotes are collected at the end of the page.
 
 These are removed when your page is rendered, or shown as plain text:
 
-- **Raw HTML** other than `<details>`, `<summary>` and `<br>`, for example `<div>`, `<span>` or
+- **Raw HTML** other than `<details>`, `<summary>`, `<br>` and `<hr>`, for example `<div>`, `<span>` or
   `<iframe>`. Validation reports it as an error. Write it in markdown instead. HTML comments don't
   show on the page.
 - **Hugo shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`.

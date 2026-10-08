@@ -17,8 +17,8 @@ import {
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
 
-// the only raw HTML tags the parser keeps
-const ALLOWED_HTML_TAGS = new Set(['br', 'details', 'summary']);
+// raw HTML tags allowed in docs, all of which the parser keeps
+const ALLOWED_HTML_TAGS = new Set(['br', 'details', 'hr', 'summary']);
 
 // matches an opening or closing <details> tag
 const DETAILS_TAG_RE = /<(\/?)details\b[^>]*>/gi;
