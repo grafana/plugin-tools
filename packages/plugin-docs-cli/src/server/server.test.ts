@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import request from 'supertest';
 import { join } from 'node:path';
-import { mkdtemp, unlink, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, unlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import type { Express } from 'express';
 import { startServer, type Server } from './server.js';
@@ -201,6 +201,27 @@ describe('startServer', () => {
 
     expect(response.status).toBe(200);
     expect(response.type).toBe('image/png');
+  });
+
+  it('should render a youtube embed and a video, and serve the video file', async () => {
+    const docsPath = await mkdtemp(join(tmpdir(), 'plugin-docs-media-'));
+    await mkdir(join(docsPath, 'video'));
+    await writeFile(join(docsPath, 'video', 'demo.mp4'), 'mp4');
+    await writeFile(
+      join(docsPath, 'index.md'),
+      '---\ntitle: Overview\ndescription: Media page\n---\n\n[Demo](https://youtu.be/Qc83dSVe0vQ)\n\n![Agenda](./video/demo.mp4)\n'
+    );
+    const result = await startServer({ docsPath, port: 0 });
+    server = result;
+    app = result.app;
+
+    const page = await request(app).get('/docs');
+    const file = await request(app).get('/docs/video/demo.mp4');
+
+    expect(page.text).toContain('<div class="youtube-embed" data-video-id="Qc83dSVe0vQ">');
+    expect(page.text).toContain('<video src="/docs/video/demo.mp4"');
+    expect(file.status).toBe(200);
+    expect(file.type).toBe('video/mp4');
   });
 
   it('should rewrite relative image srcs to /docs-scoped urls', async () => {

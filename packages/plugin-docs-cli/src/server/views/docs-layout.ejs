@@ -74,6 +74,28 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.youtube-embed').forEach((embed) => {
+        const id = embed.getAttribute('data-video-id');
+        const link = embed.querySelector('a');
+        if (!id || !link) return;
+        const title = link.textContent || 'YouTube video';
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'youtube-embed-play';
+        button.setAttribute('aria-label', 'Play video: ' + title);
+        button.style.backgroundImage = 'url(https://i.ytimg.com/vi/' + id + '/hqdefault.jpg)';
+        button.addEventListener('click', () => {
+          const iframe = document.createElement('iframe');
+          iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1';
+          iframe.title = title;
+          iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+          iframe.allowFullscreen = true;
+          button.replaceWith(iframe);
+          iframe.focus();
+        });
+        link.replaceWith(button);
+      });
+
       const toggles = document.querySelectorAll('.docs-nav-toggle');
       toggles.forEach((button) => {
         button.addEventListener('click', () => {
