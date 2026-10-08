@@ -610,6 +610,17 @@ describe('checkMarkdown', () => {
       expect(await detailsFindings('<details><summary>More</summary></details>\n')).toEqual([]);
     });
 
+    it('should accept an uppercase </DETAILS > right after the summary', async () => {
+      expect(await detailsFindings('<DETAILS>\n<SUMMARY>More</SUMMARY>\n</DETAILS >\n')).toEqual([]);
+    });
+
+    it('should warn about content in an uppercase details block', async () => {
+      const findings = await detailsFindings('<DETAILS><SUMMARY>x</SUMMARY>\nSome **markdown**\n</DETAILS>\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(5);
+    });
+
     it('should warn when content directly follows </summary>', async () => {
       const findings = await detailsFindings('<details>\n<summary>More</summary>\nSome **markdown**.\n</details>\n');
 
