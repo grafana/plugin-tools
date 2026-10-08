@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
-import { CALLOUT_TYPES, getYouTubeVideoId } from '@grafana/plugin-docs-parser';
+import { ALLOWED_HTML_TAGS, CALLOUT_TYPES, getYouTubeVideoId } from '@grafana/plugin-docs-parser';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import {
   escapesDocsRoot,
@@ -17,8 +17,7 @@ import {
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
 
-// raw HTML tags allowed in docs, all of which the parser keeps
-const ALLOWED_HTML_TAGS = new Set(['br', 'details', 'hr', 'summary']);
+const allowedHtmlTags = new Set(ALLOWED_HTML_TAGS);
 
 // matches an opening or closing <details> tag
 const DETAILS_TAG_RE = /<(\/?)details\b[^>]*>/gi;
@@ -301,7 +300,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     for (const { match, line } of matchOutsideCode(content, HTML_TAG_RE, codeLines, { maskInlineCode: true })) {
       const tagName = match[1].toLowerCase();
       // skip if it's a script tag (already handled above) or allowed tag
-      if (tagName === 'script' || ALLOWED_HTML_TAGS.has(tagName)) {
+      if (tagName === 'script' || allowedHtmlTags.has(tagName)) {
         continue;
       }
       // skip the <name> inside a {{< name >}} shortcode, already reported by no-hugo-shortcodes
