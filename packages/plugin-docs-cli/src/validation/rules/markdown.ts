@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
-import { CALLOUT_TYPES } from '@grafana/plugin-docs-parser';
+import { CALLOUT_TYPES, getYouTubeVideoId } from '@grafana/plugin-docs-parser';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import {
   escapesDocsRoot,
@@ -48,12 +48,17 @@ const URL_PLACEHOLDER_RE = /<[A-Z][A-Z0-9_]*>/;
 // matches a callout marker opening a blockquote line, like > [!NOTE], capturing the type and any text after it
 const CALLOUT_MARKER_RE = /^\s*>\s*\[!([a-zA-Z]+)\](.*)$/;
 
+// matches a line holding only a link, [text](url) or a bare URL, capturing the url
+const LONE_LINK_RE = /^\s*(?:\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)|(https?:\/\/\S+))\s*$/;
+
+const YOUTUBE_HOSTS = ['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be'];
+
 const CALLOUT_TYPE_NAMES = Object.keys(CALLOUT_TYPES).map((type) => type.toUpperCase());
 
 const SHORTCODE_REPLACEMENTS: Record<string, string> = {
   admonition: 'Use a callout instead, for example a blockquote starting with > [!NOTE].',
   figure: 'Use a markdown image instead, for example ![Alt text](img/screenshot.png).',
-  youtube: 'Link to the video instead.',
+  youtube: 'Put the video link alone in its own paragraph instead and it is embedded.',
   'video-embed': 'Link to the video instead.',
   vimeo: 'Link to the video instead.',
   'docs/shared': 'Copy the shared content into this page instead.',
@@ -67,6 +72,19 @@ function isInsideBlockquote(lines: string[], index: number): boolean {
     }
   }
   return false;
+}
+
+// true for a YouTube video-style URL, so a channel or playlist link isn't mistaken for a broken embed
+function looksLikeYouTubeVideo(href: string): boolean {
+  try {
+    const url = new URL(href);
+    if (!YOUTUBE_HOSTS.includes(url.hostname)) {
+      return false;
+    }
+    return url.hostname === 'youtu.be' || url.pathname === '/watch' || url.pathname.startsWith('/embed/');
+  } catch {
+    return false;
+  }
 }
 
 export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[]> {
@@ -183,6 +201,27 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
         });
       }
     }
+
+    // valid-youtube-link: a YouTube link alone in a paragraph that would silently not embed
+    contentLines.forEach((text, index) => {
+      const lineNumber = index + 1;
+      const href = text.match(LONE_LINK_RE)?.slice(1).find(Boolean);
+      const startsParagraph = (contentLines[index - 1]?.trim() ?? '') === '' || nonProseLines.has(lineNumber - 1);
+      const isAlone = startsParagraph && (contentLines[index + 1]?.trim() ?? '') === '';
+      if (!href || !isAlone || nonProseLines.has(lineNumber) || codeLines.has(lineNumber)) {
+        return;
+      }
+      if (looksLikeYouTubeVideo(href) && !getYouTubeVideoId(href)) {
+        diagnostics.push({
+          rule: Rule.ValidYoutubeLink,
+          severity: 'warning',
+          file: relPath,
+          line: lineNumber,
+          title: 'YouTube link is not embedded',
+          detail: `"${href}" has no valid 11-character video id, so it renders as a plain link. Check the id, or use a watch, youtu.be or embed URL.`,
+        });
+      }
+    });
 
     // no-raw-html: no raw HTML tags (except allowed ones). Inline code spans
     // are masked first so placeholder text like `<slug>` inside backticks

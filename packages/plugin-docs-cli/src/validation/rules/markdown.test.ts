@@ -583,6 +583,44 @@ describe('checkMarkdown', () => {
     });
   });
 
+  // --- valid-youtube-link ---
+
+  describe('valid-youtube-link', () => {
+    async function youtubeFindings(body: string) {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md(body));
+      const findings = await checkMarkdown(input(tmp));
+      return findings.filter((f) => f.rule === Rule.ValidYoutubeLink);
+    }
+
+    it('should not report a valid embed link', async () => {
+      expect(await youtubeFindings('[Demo](https://www.youtube.com/watch?v=Qc83dSVe0vQ)\n')).toEqual([]);
+      expect(await youtubeFindings('https://youtu.be/Qc83dSVe0vQ\n')).toEqual([]);
+    });
+
+    it('should warn when the video id is invalid', async () => {
+      const findings = await youtubeFindings('Intro.\n\n[Demo](https://www.youtube.com/watch?v=short)\n\nOutro.\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].severity).toBe('warning');
+      expect(findings[0].line).toBe(7);
+    });
+
+    it('should warn when a watch link has no id', async () => {
+      expect(await youtubeFindings('[Demo](https://www.youtube.com/watch)\n')).toHaveLength(1);
+    });
+
+    it('should not report a link inside a sentence or a list', async () => {
+      expect(await youtubeFindings('Watch [it](https://youtu.be/short) now.\n')).toEqual([]);
+      expect(await youtubeFindings('- [Demo](https://youtu.be/short)\n')).toEqual([]);
+    });
+
+    it('should not report a channel link or a code block', async () => {
+      expect(await youtubeFindings('[Channel](https://www.youtube.com/@grafana)\n')).toEqual([]);
+      expect(await youtubeFindings('```md\n\n[Demo](https://youtu.be/short)\n\n```\n')).toEqual([]);
+    });
+  });
+
   // --- reference-style links ---
 
   describe('reference-style links', () => {
