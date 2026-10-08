@@ -94,6 +94,15 @@ SELECT id, name FROM users ORDER BY created_at DESC
 ```
 ````
 
+Code is highlighted for common languages, including `bash`, `c`, `cpp`, `csharp`, `css`, `diff`, `go`,
+`graphql`, `ini`, `java`, `javascript`, `json`, `kotlin`, `less`, `lua`, `makefile`, `markdown`,
+`perl`, `php`, `python`, `r`, `ruby`, `rust`, `scss`, `shell`, `sql`, `swift`, `typescript`,
+`xml` and `yaml`. Common short names work too, such as `js`, `ts`, `sh`, `yml`, `html` and `toml`.
+
+A block in any other language, such as `hcl`, `promql` or `dockerfile`, shows as plain code. Name the
+language anyway, or use `text` for output and other plain content. A block with no language is
+never highlighted.
+
 ## Links
 
 Link to another page with a relative path to its `.md` file. Add `#anchor` to link to a heading:
@@ -182,25 +191,3 @@ These are removed when your page is rendered, or shown as plain text:
 - **MDX and JSX components.**
 - **Embedded videos.** Link to the video instead.
 - **SVG images, external images and base64 images.** Save a PNG or WebP file in your docs folder.
-
-## Coming from Hugo
-
-If your docs are published to `grafana.com/docs/plugins/` today, they're written for Hugo. This
-table shows what to use instead.
-
-| Hugo                                                        | Plugin docs                                                          |
-| ----------------------------------------------------------- | -------------------------------------------------------------------- |
-| `docs/sources/` folder                                      | The folder set in `docsPath` in `src/plugin.json`                    |
-| `_index.md`                                                 | `index.md`                                                           |
-| `weight`                                                    | `sidebar_position`                                                   |
-| `menuTitle`                                                 | Not supported. The sidebar shows `title`                             |
-| `aliases`, `labels`, `keywords`, `review_date`              | Not supported. Remove them                                           |
-| `# Page title` in the body                                  | Remove it. The title comes from frontmatter                          |
-| `https://grafana.com/docs/plugins/<id>/latest/<page>/` link | A relative link: `./<page>.md`                                       |
-| `<GRAFANA_VERSION>` in a link                               | `latest`                                                             |
-| `{{< figure src="/media/..." >}}`                           | Download the image into your docs folder and use `![alt](./img/...)` |
-| `{{< admonition type="note" >}}`                            | A callout: `> [!NOTE]`                                               |
-| `{{< youtube >}}`, `{{< video-embed >}}`                    | Not supported. Link to the video                                     |
-| `{{< collapse >}}`                                          | Not supported                                                        |
-| `{{< docs/shared >}}`                                       | Not supported. Copy the content into your page                       |
-| `{{< tabs >}}`, `{{< card-grid >}}`, other shortcodes       | Not supported                                                        |

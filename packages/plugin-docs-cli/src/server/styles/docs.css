@@ -474,6 +474,60 @@ a:hover {
   font-size: inherit;
 }
 
+.plugin-content .hljs-comment,
+.plugin-content .hljs-quote {
+  color: #9a9ab0;
+  font-style: italic;
+}
+
+.plugin-content .hljs-keyword,
+.plugin-content .hljs-selector-tag,
+.plugin-content .hljs-doctag,
+.plugin-content .hljs-meta .hljs-keyword {
+  color: #ff9d7a;
+}
+
+.plugin-content .hljs-string,
+.plugin-content .hljs-regexp,
+.plugin-content .hljs-addition {
+  color: #8fd6a3;
+}
+
+.plugin-content .hljs-number,
+.plugin-content .hljs-literal,
+.plugin-content .hljs-symbol,
+.plugin-content .hljs-bullet {
+  color: #f2c97d;
+}
+
+.plugin-content .hljs-title,
+.plugin-content .hljs-section,
+.plugin-content .hljs-built_in,
+.plugin-content .hljs-type {
+  color: #8db4ff;
+}
+
+.plugin-content .hljs-attr,
+.plugin-content .hljs-attribute,
+.plugin-content .hljs-variable,
+.plugin-content .hljs-template-variable,
+.plugin-content .hljs-name {
+  color: #d1a6ff;
+}
+
+.plugin-content .hljs-meta,
+.plugin-content .hljs-deletion {
+  color: #ff8f9d;
+}
+
+.plugin-content .hljs-emphasis {
+  font-style: italic;
+}
+
+.plugin-content .hljs-strong {
+  font-weight: 700;
+}
+
 .plugin-content blockquote {
   margin: 16px 0;
   padding-left: 16px;

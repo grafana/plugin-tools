@@ -70,8 +70,8 @@ Body text here.`;
     const result = parseMarkdown(markdown);
     const html = toHtml(result.hast);
 
-    expect(html).toContain('<code');
-    expect(html).toContain('const x = 42;');
+    expect(html).toContain('<code class="hljs language-typescript">');
+    expect(html).toContain('<span class="hljs-number">42</span>');
   });
 
   it('should handle empty frontmatter', () => {
@@ -183,6 +183,52 @@ Even more text.
       const result = parseMarkdown(markdown);
 
       expect(result.headings).toEqual([{ level: 2, id: 'ports', text: 'Ports' }]);
+    });
+  });
+
+  describe('syntax highlighting', () => {
+    const render = (markdown: string) => toHtml(parseMarkdown(markdown).hast);
+
+    it('should highlight a fenced block with a known language', () => {
+      const html = render('```sql\nSELECT 1\n```');
+
+      expect(html).toContain('class="hljs language-sql"');
+      expect(html).toContain('<span class="hljs-keyword">SELECT</span>');
+    });
+
+    it('should highlight a language alias', () => {
+      expect(render('```js\nconst a = 1\n```')).toContain('<span class="hljs-keyword">const</span>');
+    });
+
+    it('should leave a block with an unsupported language as plain text', () => {
+      const html = render('```hcl\nx = 1\n```');
+
+      expect(html).toContain('language-hcl');
+      expect(html).toContain('>x = 1\n</code>');
+      expect(html).not.toContain('hljs-');
+    });
+
+    it('should leave a block without a language and inline code alone', () => {
+      expect(render('```\nSELECT 1\n```')).toContain('<pre><code>SELECT 1\n</code></pre>');
+      expect(render('Use `SELECT 1` here.')).toContain('<code>SELECT 1</code>');
+    });
+
+    it('should highlight code inside a callout', () => {
+      const html = render('> [!NOTE]\n> ```yaml\n> enabled: true\n> ```');
+
+      expect(html).toContain('callout-note');
+      expect(html).toContain('<span class="hljs-attr">enabled:</span>');
+    });
+
+    it('should escape markup in code', () => {
+      const html = render('```html\n<script>alert(1)</script>\n```');
+
+      expect(html).not.toContain('<script>');
+      expect(html).toContain('&#x3C;');
+    });
+
+    it('should not let authors inject highlight classes', () => {
+      expect(render('<span class="hljs-keyword">SELECT</span>')).not.toContain('hljs');
     });
   });
 
