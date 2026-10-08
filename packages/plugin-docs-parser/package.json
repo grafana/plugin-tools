@@ -42,7 +42,7 @@
     "url": "https://github.com/grafana/plugin-tools/issues"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=22"
   },
   "dependencies": {
     "@types/hast": "^3.0.0",
