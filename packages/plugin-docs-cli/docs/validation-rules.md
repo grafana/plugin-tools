@@ -30,7 +30,7 @@ For what you can write in a page, refer to [Supported markdown](./supported-mark
 | `valid-file-naming`    | File and folder names should use only lowercase letters, digits and hyphens, for clean URLs.                                                | Warning †    |
 | `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it.                                                                       | Warning †    |
 | `no-symlinks`          | Symbolic links aren't allowed in the docs folder - use real files.                                                                          | Error        |
-| `allowed-file-types`   | Only markdown files and images (`png`, `jpg`, `jpeg`, `webp`, `gif`) are allowed in the docs folder.                                        | Suggestion † |
+| `allowed-file-types`   | Only markdown files, images (`png`, `jpg`, `jpeg`, `webp`, `gif`) and videos (`mp4`, `webm`) are allowed in the docs folder.                | Suggestion † |
 | `max-nesting-depth`    | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages.                | Suggestion † |
 | `docs-path-exists`     | The `docsPath` in `src/plugin.json` must point at a folder that exists.                                                                     | Error        |
 | `max-total-pages`      | A docs folder shouldn't have more than 50 pages. Consolidate related pages, or move the long tail to an external resource.                  | Suggestion † |
@@ -75,9 +75,10 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-svg-files`            | SVG images aren't allowed - they can contain embedded scripts, which is a security risk. Use PNG or WebP instead.                   | Error                         |
 | `referenced-images-exist` | An image referenced in a page (`![alt](img/foo.png)`) must actually exist in your docs folder.                                      | Error                         |
 | `max-image-size`          | Static images (png/jpg/webp) must be 300KB or smaller; GIFs must be 1MB or smaller. Compress or resize oversized images.            | Suggestion †                  |
+| `max-video-size`          | Videos (mp4/webm) must be 2MB or smaller. Shorten or compress the video, or upload it to YouTube and link to it.                    | Suggestion †                  |
 | `max-total-images-size`   | The total size of all images in your docs folder must stay under 5MB. Only checked in strict mode (`validate`), not during `serve`. | Warning (strict mode only)    |
-| `image-file-naming`       | Image filenames should use only letters, digits, hyphens, underscores and dots.                                                     | Suggestion †                  |
-| `no-orphaned-images`      | An image that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.            | Suggestion (strict mode only) |
+| `image-file-naming`       | Image and video filenames should use only letters, digits, hyphens, underscores and dots.                                           | Suggestion †                  |
+| `no-orphaned-images`      | An image or video that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.   | Suggestion (strict mode only) |
 
 ## Markdown content & security
 

@@ -257,6 +257,19 @@ describe('checkFilesystem', () => {
     expect(findings.find((f) => f.rule === Rule.AllowedFileTypes)).toBeUndefined();
   });
 
+  it('should not report allowed-file-types for permitted video formats', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await mkdir(join(tmp, 'video'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await writeFile(join(tmp, 'video', 'demo.mp4'), '');
+    await writeFile(join(tmp, 'video', 'demo.webm'), '');
+
+    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+
+    expect(findings.find((f) => f.rule === Rule.AllowedFileTypes)).toBeUndefined();
+    expect(findings.find((f) => f.rule === Rule.NoEmptyDir)).toBeUndefined();
+  });
+
   it('should not report max-nesting-depth for pages at depth 3 or shallower', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
