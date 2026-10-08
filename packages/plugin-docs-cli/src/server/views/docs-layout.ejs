@@ -75,9 +75,11 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.youtube-embed').forEach((embed) => {
-        const id = embed.getAttribute('data-video-id');
+        const rawId = embed.getAttribute('data-video-id');
         const link = embed.querySelector('a');
-        if (!id || !link) return;
+        if (!rawId || !link) return;
+        const id = /^[A-Za-z0-9_-]{11}$/.test(rawId) ? rawId : null;
+        if (!id) return;
         const title = link.textContent || 'YouTube video';
         const button = document.createElement('button');
         button.type = 'button';
