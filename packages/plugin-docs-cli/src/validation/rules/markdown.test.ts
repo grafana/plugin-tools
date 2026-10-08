@@ -630,6 +630,10 @@ describe('checkMarkdown', () => {
       expect(await youtubeFindings('[Demo](https://www.youtube.com/shorts/short)\n')).toHaveLength(1);
     });
 
+    it('should warn about a link with a single-quoted title', async () => {
+      expect(await youtubeFindings("[Demo](https://youtu.be/short 'Title')\n")).toHaveLength(1);
+    });
+
     it('should not report a channel link or a code block', async () => {
       expect(await youtubeFindings('[Channel](https://www.youtube.com/@grafana)\n')).toEqual([]);
       expect(await youtubeFindings('```md\n\n[Demo](https://youtu.be/short)\n\n```\n')).toEqual([]);
@@ -949,6 +953,15 @@ describe('checkMarkdown', () => {
       const finding = findings.find((f) => f.rule === Rule.NoExternalImages);
       expect(finding).toBeDefined();
       expect(finding!.severity).toBe('error');
+    });
+
+    it('should report an external image with a single-quoted title', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md("![logo](https://example.com/logo.png 'Logo')"));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      expect(findings.find((f) => f.rule === Rule.NoExternalImages)).toBeDefined();
     });
 
     it('should report http:// image URLs', async () => {

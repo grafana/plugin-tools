@@ -416,6 +416,18 @@ describe('checkAssets', () => {
       expect(findings.filter((f) => f.rule === Rule.ReferencedImagesExist)).toHaveLength(0);
     });
 
+    it('should handle a single-quoted video title', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
+      await mkdir(join(tmp, 'video'));
+      await writeFile(join(tmp, 'video', 'agenda.mp4'), bufferOfSize(100));
+      await writeFile(join(tmp, 'index.md'), md("![Agenda](./video/agenda.mp4 'Optional title')"));
+
+      const findings = await checkAssets(input(tmp));
+
+      expect(findings.filter((f) => f.rule === Rule.ReferencedImagesExist)).toHaveLength(0);
+      expect(findings.filter((f) => f.rule === Rule.NoOrphanedImages)).toHaveLength(0);
+    });
+
     it('should report broken ref with title attribute', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await writeFile(join(tmp, 'index.md'), md('![chart](img/missing.png "A chart")'));

@@ -6,7 +6,7 @@ import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { decodeRefPath, escapesDocsRoot, getCodeBlockLines, getReferenceDefinitions, isMetaFile } from './utils.js';
 
 // matches markdown links: [text](url)
-const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
 
 // matches external/special URLs to skip
 const SKIP_URL_RE = /^(https?:\/\/|mailto:|tel:|data:|javascript:|vbscript:)/i;

@@ -26,10 +26,10 @@ const SCRIPT_TAG_RE = /<script\b[^>]*>/gi;
 const EVENT_HANDLER_RE = /\bon[a-z]+\s*=\s*(?:["'][^"']*["']|[^\s>]+)/gi;
 
 // matches markdown image references: ![alt](url)
-const IMAGE_REF_RE = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+const IMAGE_REF_RE = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
 
 // matches markdown links: [text](url)
-const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
 
 // matches dangerous URI schemes
 const DANGEROUS_URL_RE = /^(javascript|vbscript|data):/i;
@@ -50,7 +50,7 @@ const URL_PLACEHOLDER_RE = /<[A-Z][A-Z0-9_]*>/;
 const CALLOUT_MARKER_RE = /^\s*>\s*\[!([a-zA-Z]+)\](.*)$/;
 
 // matches a line holding only a link, [text](url) or a bare URL, capturing the url
-const LONE_LINK_RE = /^\s*(?:\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)|(https?:\/\/\S+))\s*$/;
+const LONE_LINK_RE = /^\s*(?:\[[^\]]*\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)|(https?:\/\/\S+))\s*$/;
 
 // matches a line holding only a reference link, [text][label], [label][] or [label], capturing text and label
 const LONE_REFERENCE_LINK_RE = /^\s*\[([^\]]+)\](?:\[([^\]]*)\])?\s*$/;

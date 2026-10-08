@@ -140,7 +140,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
       continue;
     }
 
-    const imageRefRe = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+    const imageRefRe = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
     const imageRefs = [
       ...Array.from(content.matchAll(imageRefRe), (match) => match[2]),
       ...getReferenceDefinitions(content, new Set())
