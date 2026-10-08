@@ -84,7 +84,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 
 | Rule                   | What it checks                                                                                                                                                                                                             | Severity  |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| `no-raw-html`          | Raw HTML tags aren't allowed in the page body (except `br`, `wbr`, `hr`, `details` and `summary`) - use markdown syntax instead. The allowed tags pass validation but are currently removed when the page is rendered.     | Warning † |
+| `no-raw-html`          | Raw HTML tags aren't allowed in the page body, except `details`, `summary` and `br` - use markdown syntax instead. Any other tag is removed when the page is rendered.                                                     | Warning † |
 | `no-script-tags`       | `<script>` tags and inline event handlers (`onclick`, `onerror`, etc.) aren't allowed anywhere in a page - they're a security risk.                                                                                        | Error     |
 | `no-dangerous-urls`    | Links and images can't use a `javascript:`, `vbscript:` or `data:` URL scheme.                                                                                                                                             | Error     |
 | `no-path-traversal`    | Links and image references must stay inside your docs folder. `../` is fine as long as it doesn't go above the docs root.                                                                                                  | Error     |
@@ -94,6 +94,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-url-placeholders`  | A link or image URL can't contain a placeholder like `<GRAFANA_VERSION>` - nothing replaces it, so the link breaks. Write the real value, such as `latest`.                                                                | Warning † |
 | `valid-callout-marker` | A callout marker like `> [!NOTE]` must use a known type (`NOTE`, `TIP`, `IMPORTANT`, `WARNING` or `CAUTION`) and sit alone on the first line of the blockquote. Otherwise the callout renders as a plain quote.            | Warning   |
 | `valid-youtube-link`   | A YouTube link alone in its own paragraph must be a watch, `youtu.be`, embed or Shorts URL with a valid 11-character video id. Otherwise the link is not embedded and renders as a plain link.                             | Warning   |
+| `valid-details-block`  | A `<details>` block needs a blank line after `</summary>`, or its content shows as plain text, and must be closed with `</details>`, or the rest of the page is hidden inside it.                                          | Warning   |
 
 ## Links between pages
 

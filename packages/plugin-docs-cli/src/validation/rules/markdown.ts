@@ -16,8 +16,11 @@ import {
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
 
-// tags that are allowed in markdown (commonly used and safe)
-const ALLOWED_HTML_TAGS = new Set(['br', 'wbr', 'hr', 'details', 'summary']);
+// the only raw HTML tags the parser keeps
+const ALLOWED_HTML_TAGS = new Set(['br', 'details', 'summary']);
+
+// matches an opening or closing <details> tag
+const DETAILS_TAG_RE = /<(\/?)details\b[^>]*>/gi;
 
 // matches <script> tags (opening or self-closing)
 const SCRIPT_TAG_RE = /<script\b[^>]*>/gi;
@@ -67,6 +70,7 @@ const SHORTCODE_REPLACEMENTS: Record<string, string> = {
   youtube: 'Put a YouTube link alone in its own paragraph to embed the video.',
   'video-embed': 'Use a markdown image with an mp4 or webm file instead, for example ![Demo](video/demo.mp4).',
   vimeo: 'Link to the video instead.',
+  collapse: 'Use a <details> block with a <summary> instead.',
   'docs/shared': 'Copy the shared content into this page instead.',
 };
 
@@ -236,6 +240,51 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
         });
       }
     });
+
+    // valid-details-block: markdown right after </summary> is raw HTML text, so it isn't formatted
+    contentLines.forEach((text, index) => {
+      const lineNumber = index + 1;
+      const closeIndex = text.indexOf('</summary>');
+      if (closeIndex === -1 || codeLines.has(lineNumber) || nonProseLines.has(lineNumber)) {
+        return;
+      }
+      const rest = text.slice(closeIndex + '</summary>'.length).trim();
+      const next = rest || (contentLines[index + 1]?.trim() ?? '');
+      if (next !== '' && !next.startsWith('</details>')) {
+        diagnostics.push({
+          rule: Rule.ValidDetailsBlock,
+          severity: 'warning',
+          file: relPath,
+          line: lineNumber,
+          title: 'Missing blank line after </summary>',
+          detail:
+            'Add a blank line after </summary>. Without it, the content shows as plain text and its markdown is not formatted.',
+        });
+      }
+    });
+
+    // valid-details-block: an unclosed <details> hides the rest of the page inside it
+    const openDetails: number[] = [];
+    for (const { match, line } of matchOutsideCode(content, DETAILS_TAG_RE, codeLines, {
+      maskInlineCode: true,
+      skipLines: nonProseLines,
+    })) {
+      if (match[1] === '/') {
+        openDetails.pop();
+      } else {
+        openDetails.push(line);
+      }
+    }
+    for (const line of openDetails) {
+      diagnostics.push({
+        rule: Rule.ValidDetailsBlock,
+        severity: 'warning',
+        file: relPath,
+        line,
+        title: 'Unclosed <details>',
+        detail: 'Close this block with </details>. Otherwise the rest of the page is hidden inside it.',
+      });
+    }
 
     // no-raw-html: no raw HTML tags (except allowed ones). Inline code spans
     // are masked first so placeholder text like `<slug>` inside backticks

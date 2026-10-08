@@ -52,6 +52,7 @@ export const Rule = {
   NoUrlPlaceholders: 'no-url-placeholders',
   ValidCalloutMarker: 'valid-callout-marker',
   ValidYoutubeLink: 'valid-youtube-link',
+  ValidDetailsBlock: 'valid-details-block',
   // cross-file rules
   InternalLinksResolve: 'internal-links-resolve',
   AnchorLinksResolve: 'anchor-links-resolve',
