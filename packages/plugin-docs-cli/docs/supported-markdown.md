@@ -172,6 +172,37 @@ There are five types:
 - An unknown type, such as `[!DANGER]`, renders as a plain quote.
 - GitHub uses the same syntax, so callouts look right there too.
 
+## Videos
+
+### YouTube
+
+Put a YouTube link alone in its own paragraph to embed the video:
+
+```markdown
+[Getting started with Yugabyte](https://www.youtube.com/watch?v=Qc83dSVe0vQ)
+```
+
+- Watch (`youtube.com/watch?v=`), short (`youtu.be/`) and embed (`youtube.com/embed/`) links work.
+- The video shows as a thumbnail with a play button. The player loads only when the reader clicks
+  play, and uses the privacy-enhanced `youtube-nocookie.com` domain.
+- The link text becomes the video title for screen readers.
+- A link inside a sentence, or in a list, stays a normal link.
+- On GitHub this is a normal link, so the page still reads well there.
+
+### Short videos
+
+Use image syntax with an `.mp4` or `.webm` file inside your docs folder:
+
+```markdown
+![Switching to the agenda view](./video/agenda.mp4 'Optional title')
+```
+
+- Videos are limited to 2MB each, because docs ship inside every plugin download. Use YouTube for
+  anything longer.
+- The player has controls, starts muted and never plays by itself. The alt text labels the video
+  for screen readers.
+- Name the file with letters, digits, hyphens, underscores and dots only, as for images.
+
 ## Footnotes
 
 ```markdown
@@ -189,5 +220,5 @@ These are removed when your page is rendered, or shown as plain text:
 - **Raw HTML**, for example `<div>`, `<br>`, `<details>` or `<iframe>`. Write it in markdown instead.
 - **Hugo shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`.
 - **MDX and JSX components.**
-- **Embedded videos.** Link to the video instead.
+- **Video players other than YouTube**, such as Vimeo. Link to the video instead.
 - **SVG images, external images and base64 images.** Save a PNG or WebP file in your docs folder.
