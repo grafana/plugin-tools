@@ -23,6 +23,9 @@ const ALLOWED_HTML_TAGS = new Set(['br', 'details', 'summary']);
 // matches an opening or closing <details> tag
 const DETAILS_TAG_RE = /<(\/?)details\b[^>]*>/gi;
 
+// matches a closing </summary> tag
+const SUMMARY_CLOSE_RE = /<\/summary\s*>/i;
+
 // matches <script> tags (opening or self-closing)
 const SCRIPT_TAG_RE = /<script\b[^>]*>/gi;
 
@@ -246,11 +249,11 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     contentLines.forEach((text, index) => {
       const lineNumber = index + 1;
       const masked = maskInlineCode(text);
-      const closeIndex = masked.indexOf('</summary>');
-      if (closeIndex === -1 || codeLines.has(lineNumber) || nonProseLines.has(lineNumber)) {
+      const close = SUMMARY_CLOSE_RE.exec(masked);
+      if (!close || codeLines.has(lineNumber) || nonProseLines.has(lineNumber)) {
         return;
       }
-      const rest = masked.slice(closeIndex + '</summary>'.length).trim();
+      const rest = masked.slice(close.index + close[0].length).trim();
       // a blank line inside a blockquote is just its > markers
       const next = rest || (contentLines[index + 1] ?? '').replace(/^[\s>]*/, '');
       if (next !== '' && !next.startsWith('</details>')) {

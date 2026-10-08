@@ -624,6 +624,13 @@ describe('checkMarkdown', () => {
       expect(findings[0].line).toBe(5);
     });
 
+    it('should warn when content follows an uppercase </SUMMARY >', async () => {
+      const findings = await detailsFindings('<details>\n<summary>More</SUMMARY >\nSome **markdown**.\n</details>\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(6);
+    });
+
     it('should warn about an unclosed details block', async () => {
       const findings = await detailsFindings(
         '<details>\n<summary>One</summary>\n\nText\n\n</details>\n\n<details>\n<summary>Two</summary>\n\nText\n'
