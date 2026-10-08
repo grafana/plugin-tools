@@ -2,6 +2,7 @@ import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
+import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import rehypeHighlight from 'rehype-highlight';
 import * as yaml from 'js-yaml';
@@ -62,9 +63,47 @@ export interface ParsedMarkdown {
   headings: Heading[];
 }
 
+// raw HTML is parsed, so only the tags markdown produces survive, plus details, summary and br.
 // disable the `user-content-` prefix that rehype-sanitize adds to id attributes by default.
 // the default schema already allows id (via clobber) and className on code (for language-* classes).
-const sanitizeSchema = { ...defaultSchema, clobberPrefix: '' };
+const sanitizeSchema = {
+  ...defaultSchema,
+  clobberPrefix: '',
+  strip: ['script', 'style'],
+  tagNames: [
+    'a',
+    'blockquote',
+    'br',
+    'code',
+    'del',
+    'details',
+    'em',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'hr',
+    'img',
+    'input',
+    'li',
+    'ol',
+    'p',
+    'pre',
+    'section',
+    'strong',
+    'summary',
+    'sup',
+    'table',
+    'tbody',
+    'td',
+    'th',
+    'thead',
+    'tr',
+    'ul',
+  ],
+};
 
 const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)([\s\S]*)$/;
 
@@ -104,9 +143,14 @@ export function parseMarkdown(content: string, options?: ParseOptions): ParsedMa
   }
 
   // build the unified pipeline: markdown → mdast → hast.
-  // raw HTML in markdown is forbidden by the docs spec, so allowDangerousHtml
-  // is off and any inline HTML gets dropped by remark-rehype.
-  const processor = unified().use(remarkParse).use(remarkGfm).use(remarkRehype).use(rehypeStripH1).use(rehypeSlug);
+  // raw HTML is parsed so <details>, <summary> and <br> work; rehype-sanitize removes everything else.
+  const processor = unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeRaw)
+    .use(rehypeStripH1)
+    .use(rehypeSlug);
 
   // rewrite asset paths before sanitization so URLs are final
   if (options?.assetBaseUrl) {
