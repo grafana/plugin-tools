@@ -169,6 +169,13 @@ It works by parsing **markdown**.
       expect(html).not.toMatch(/\bid=|\bname=/);
     });
 
+    it('should replace an id on a raw HTML heading with its slug', () => {
+      const result = parseMarkdown('<h2 id="dataLayer">Setup</h2>\n\nText');
+
+      expect(toHtml(result.hast)).toContain('<h2 id="setup">');
+      expect(result.headings).toEqual([{ level: 2, id: 'setup', text: 'Setup' }]);
+    });
+
     it('should keep ids on headings and footnotes', () => {
       const html = render('## Setup\n\nText.[^1]\n\n[^1]: A note.');
 
