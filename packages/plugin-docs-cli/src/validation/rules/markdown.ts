@@ -266,6 +266,10 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       ...definitions.filter((definition) => definition.isImage),
     ];
     for (const { ref, line } of imageRefs) {
+      const isVideo = VIDEO_REF_RE.test(ref);
+      const kind = isVideo ? 'video' : 'image';
+      const folder = isVideo ? 'docs folder' : 'img/ directory';
+
       // no-base64-images: no base64-encoded image data
       if (BASE64_IMAGE_RE.test(ref)) {
         diagnostics.push({
@@ -286,8 +290,8 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: input.strict ? 'error' : 'warning',
           file: relPath,
           line,
-          title: `External ${VIDEO_REF_RE.test(ref) ? 'video' : 'image'} URL detected`,
-          detail: `"${ref}" is an external URL. Download the image and place it in the img/ directory.`,
+          title: `External ${kind} URL detected`,
+          detail: `"${ref}" is an external URL. Download the ${kind} and place it in the ${folder}.`,
         });
         continue;
       }
@@ -299,7 +303,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: 'error',
           file: relPath,
           line,
-          title: 'Dangerous URI scheme in image reference',
+          title: `Dangerous URI scheme in ${kind} reference`,
           detail: `"${ref}" uses a dangerous URI scheme. Only relative file paths are allowed.`,
         });
         continue;
@@ -312,8 +316,8 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: 'error',
           file: relPath,
           line,
-          title: 'Path traversal in image reference',
-          detail: `"${ref}" points outside the docs folder. Image references must stay inside it.`,
+          title: `Path traversal in ${kind} reference`,
+          detail: `"${ref}" points outside the docs folder. ${isVideo ? 'Video' : 'Image'} references must stay inside it.`,
         });
         continue;
       }
@@ -325,8 +329,8 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: 'error',
           file: relPath,
           line,
-          title: `${VIDEO_REF_RE.test(ref) ? 'Video' : 'Image'} reference is not a relative path`,
-          detail: `"${ref}" is an absolute path. Use a relative path like "img/filename.png" instead.`,
+          title: `${isVideo ? 'Video' : 'Image'} reference is not a relative path`,
+          detail: `"${ref}" is an absolute path. Use a relative path like "${isVideo ? 'video/filename.mp4' : 'img/filename.png'}" instead.`,
         });
       }
     }

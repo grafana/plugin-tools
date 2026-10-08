@@ -969,6 +969,29 @@ describe('checkMarkdown', () => {
       expect(findings.find((f) => f.rule === Rule.NoExternalImages)).toBeDefined();
     });
 
+    it('should word the external video message for videos', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![demo](https://example.com/demo.mp4)'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.NoExternalImages);
+      expect(finding!.title).toBe('External video URL detected');
+      expect(finding!.detail).toContain('Download the video');
+      expect(finding!.detail).not.toContain('img/');
+    });
+
+    it('should word the absolute path message for videos', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![demo](/video/demo.mp4)'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.ImageRefsRelative);
+      expect(finding!.detail).toContain('video/filename.mp4');
+      expect(finding!.detail).not.toContain('img/');
+    });
+
     it('should report http:// image URLs', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('![logo](http://example.com/logo.png)'));
