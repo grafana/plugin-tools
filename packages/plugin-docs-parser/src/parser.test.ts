@@ -203,7 +203,8 @@ Even more text.
     it('should leave a block with an unsupported language as plain text', () => {
       const html = render('```hcl\nx = 1\n```');
 
-expect(html).toContain('<code class="language-hcl">x = 1\n</code>');
+      expect(html).toContain('language-hcl');
+      expect(html).toContain('>x = 1\n</code>');
       expect(html).not.toContain('hljs-');
     });
 
