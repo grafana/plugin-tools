@@ -25,7 +25,7 @@ Grafana tells your plugin backend which [OpenFeature](https://openfeature.dev/) 
 
 ## Before you begin
 
-- Use version vX.Y.Z or later of the [Grafana plugin SDK for Go](https://github.com/grafana/grafana-plugin-sdk-go).
+- Use version v0.297.0 or later of the [Grafana plugin SDK for Go](https://github.com/grafana/grafana-plugin-sdk-go).
 - Run your plugin in Grafana X.Y or later. Earlier versions don't advertise an endpoint.
 - Add an OFREP provider for the OpenFeature Go SDK to your plugin, such as [`github.com/open-feature/go-sdk-contrib/providers/ofrep`](https://github.com/open-feature/go-sdk-contrib/tree/main/providers/ofrep).
 
