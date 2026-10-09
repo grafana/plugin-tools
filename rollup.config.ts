@@ -142,6 +142,13 @@ function copyAssets(): Plugin {
         const distStyles = join(projectRoot, 'dist', 'server', 'styles');
         await cp(srcStyles, distStyles, { recursive: true });
       }
+
+      if (pkg.name === '@grafana/create-plugin') {
+        // addition prompts are resolved at runtime with import.meta.resolve, so rollup never sees them
+        const srcPrompts = join(projectRoot, 'src', 'codemods', 'additions', 'prompts');
+        const distPrompts = join(projectRoot, 'dist', 'codemods', 'additions', 'prompts');
+        await cp(srcPrompts, distPrompts, { recursive: true });
+      }
     },
   };
 }
