@@ -54,11 +54,19 @@ you can link to. The anchor is the heading text in lowercase, with punctuation r
 turned into hyphens. `## Before you begin` becomes `#before-you-begin`. A repeated heading gets a
 number added: `#permissions-1`.
 
+Custom anchors such as `## Setup {#install}` aren't supported. The `{#install}` text shows in the
+heading.
+
 ## Text formatting
 
 ```markdown
 **bold**, _italic_, ~~strikethrough~~ and `inline code`
 ```
+
+Put placeholders such as `<your-api-key>` in inline code. Without backticks, the angle brackets
+make it an HTML tag, and it's removed from the page.
+
+Write `---` on its own line, with a blank line before and after it, for a horizontal rule.
 
 ## Lists
 
@@ -83,6 +91,7 @@ number added: `#permissions-1`.
 ```
 
 Use `:---`, `:---:` and `---:` in the separator row to align a column left, center or right.
+Write `\|` to use a `|` inside a cell.
 
 To break a line inside a cell, use `<br>`:
 
@@ -175,6 +184,7 @@ There are five types:
 | `[!WARNING]`   | Something that needs the reader's attention to avoid problems. |
 | `[!CAUTION]`   | A risk, such as losing data or a security issue.               |
 
+- A blockquote without a marker renders as a plain quote.
 - A callout can hold several paragraphs, lists and code blocks. Start every line with `>`.
 - The marker must be alone on the first line. `> [!NOTE] Some text` renders as a plain quote.
 - An unknown type, such as `[!DANGER]`, renders as a plain quote.
