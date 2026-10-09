@@ -3,66 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> - <%= manifest.title %></title>
+  <title><%= title %> - <%= manifest.title %> (local preview)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="/styles/docs.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="docs-header">
-    <div class="docs-header-content">
-      <p class="docs-header-title">📦 <%= manifest.title %></p>
-      <span class="docs-header-badge">Local Preview</span>
+  <div class="docs-page">
+    <div class="docs-badge-row">
+      <span class="docs-badge">Local preview</span>
     </div>
-  </header>
 
-  <!-- Three-column layout: nav | content | toc -->
-  <div class="docs-container">
-    <!-- Left: Docs navigation tree -->
-    <nav class="docs-nav">
-      <h2 class="docs-nav-title">Documentation</h2>
-      <%- include('partials/navigation', { pages: manifest.pages, currentPath }) %>
-    </nav>
+    <div class="docs-tabs-wrap">
+      <nav class="docs-tabs" aria-label="Plugin tabs">
+        <a href="/" class="docs-tab<%= activeTab === 'overview' ? ' active' : '' %>">Overview</a>
+        <span class="docs-tab disabled" aria-disabled="true">Installation</span>
+        <span class="docs-tab disabled" aria-disabled="true">Change log</span>
+        <% if (hasDocs) { %>
+          <a href="/docs" class="docs-tab<%= activeTab === 'documentation' ? ' active' : '' %>">Documentation</a>
+        <% } else { %>
+          <span class="docs-tab disabled" aria-disabled="true">Documentation</span>
+        <% } %>
+      </nav>
+    </div>
 
-    <!-- Center: Main content -->
-    <main class="docs-content">
-      <h1 class="docs-page-title"><%= title %></h1>
-      <%- content %>
-    </main>
+    <% if (activeTab === 'documentation' && docsNav) { %>
+      <details class="docs-mobile-nav">
+        <summary>Documentation pages</summary>
+        <%- include('partials/navigation', { items: docsNav }) %>
+      </details>
+    <% } %>
 
-    <!-- Right: Table of contents -->
-    <aside class="docs-toc">
-      <h3 class="docs-toc-title">On this page</h3>
-      <%- include('partials/toc', { headings }) %>
-    </aside>
+    <div class="docs-grid">
+      <main class="docs-content plugin-content" id="plugin-tab-content">
+        <% if (activeTab === 'documentation') { %>
+          <% if (breadcrumb && breadcrumb.length > 0) { %>
+            <nav class="docs-breadcrumb" aria-label="Breadcrumb">
+              <ol>
+                <% breadcrumb.forEach((crumb, index) => { %>
+                  <li>
+                    <% if (crumb.href) { %>
+                      <a href="<%= crumb.href %>"><%= crumb.label %></a>
+                    <% } else { %>
+                      <span aria-current="page"><%= crumb.label %></span>
+                    <% } %>
+                    <% if (index < breadcrumb.length - 1) { %><span class="docs-breadcrumb-sep" aria-hidden="true">/</span><% } %>
+                  </li>
+                <% }); %>
+              </ol>
+            </nav>
+          <% } %>
+          <h1><%= pageTitle %></h1>
+        <% } %>
+        <%- content %>
+      </main>
+
+      <aside class="docs-rail" aria-label="Page navigation">
+        <div class="docs-rail-sticky">
+          <% if (activeTab === 'documentation' && docsNav) { %>
+            <p class="docs-rail-title"><%= docsNavTitle %></p>
+            <%- include('partials/navigation', { items: docsNav }) %>
+          <% } else { %>
+            <%- include('partials/toc', { headings: onThisPage }) %>
+          <% } %>
+        </div>
+      </aside>
+    </div>
   </div>
 
   <script>
-    // collapsible navigation
     document.addEventListener('DOMContentLoaded', () => {
-      const toggleButtons = document.querySelectorAll('.docs-nav-toggle');
-
-      toggleButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-          e.preventDefault();
-          const navItem = button.closest('.docs-nav-item');
-          navItem.classList.toggle('expanded');
+      document.querySelectorAll('.youtube-embed').forEach((embed) => {
+        const rawId = embed.getAttribute('data-video-id');
+        const link = embed.querySelector('a');
+        if (!rawId || !link) return;
+        const id = /^[A-Za-z0-9_-]{11}$/.test(rawId) ? rawId : null;
+        if (!id) return;
+        const title = link.textContent || 'YouTube video';
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'youtube-embed-play';
+        button.setAttribute('aria-label', 'Play video: ' + title);
+        button.style.backgroundImage = 'url(https://i.ytimg.com/vi/' + id + '/hqdefault.jpg)';
+        button.addEventListener('click', () => {
+          const iframe = document.createElement('iframe');
+          iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1';
+          iframe.title = title;
+          iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+          iframe.allowFullscreen = true;
+          button.replaceWith(iframe);
+          iframe.focus();
         });
+        link.replaceWith(button);
       });
 
-      // expand active page's own section and all ancestor sections
-      const activeLink = document.querySelector('.docs-nav-link.active');
-      if (activeLink) {
-        const ownItem = activeLink.closest('.docs-nav-item');
-        if (ownItem) ownItem.classList.add('expanded');
-        let parent = activeLink.closest('.docs-nav-list');
-        while (parent) {
-          const parentItem = parent.closest('.docs-nav-item');
-          if (parentItem) {
-            parentItem.classList.add('expanded');
-          }
-          parent = parentItem?.parentElement.closest('.docs-nav-list');
-        }
-      }
+      const toggles = document.querySelectorAll('.docs-nav-toggle');
+      toggles.forEach((button) => {
+        button.addEventListener('click', () => {
+          const item = button.closest('.docs-nav-item');
+          if (!item) return;
+          const open = item.getAttribute('data-open') === 'true';
+          item.setAttribute('data-open', String(!open));
+          button.setAttribute('aria-expanded', String(!open));
+        });
+      });
     });
   </script>
 

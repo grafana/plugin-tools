@@ -1,7 +1,7 @@
 import type { Root, Element } from 'hast';
 import type { Node } from 'unist';
 import type { VFile } from 'vfile';
-import { visit } from 'unist-util-visit';
+import { CONTINUE, SKIP, visit } from 'unist-util-visit';
 import type { Heading } from '../types.js';
 
 function hastToString(node: Node): string {
@@ -29,20 +29,20 @@ export function rehypeExtractHeadings() {
     const headings: Heading[] = [];
 
     visit(tree, 'element', (node: Element) => {
-      if (node.tagName !== 'h2' && node.tagName !== 'h3') {
-        return;
+      // headings in collapsed content and the hidden "Footnotes" heading from remark-gfm aren't in the TOC
+      if (node.tagName === 'details' || (node.tagName === 'section' && node.properties?.dataFootnotes !== undefined)) {
+        return SKIP;
       }
 
       const id = node.properties?.id;
-      if (typeof id !== 'string') {
-        return;
+      if ((node.tagName === 'h2' || node.tagName === 'h3') && typeof id === 'string') {
+        headings.push({
+          level: node.tagName === 'h2' ? 2 : 3,
+          id,
+          text: hastToString(node),
+        });
       }
-
-      headings.push({
-        level: node.tagName === 'h2' ? 2 : 3,
-        id,
-        text: hastToString(node),
-      });
+      return CONTINUE;
     });
 
     vfile.data.headings = headings;

@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // identity resolveSelectors so we can assert which tree flowed through; tagged bundled data so we
-// can tell the bundled dependency apart from the fetched, reconstructed data
-vi.mock('@grafana/e2e-selectors', () => ({
+// can tell the vendored selectors apart from the fetched, reconstructed data
+vi.mock('../selectors/vendored', () => ({
   resolveSelectors: vi.fn((versioned: unknown) => versioned),
   versionedComponents: { __source: 'dep-components' },
   versionedPages: { __source: 'dep-pages' },
@@ -55,7 +55,7 @@ describe('selectors fixture', () => {
   it('uses the runtime selectors served by Grafana when present', async () => {
     const get = vi.fn().mockResolvedValue(mockResponse({ status: 200, body: VALID_BODY }));
 
-    const result = await runFixture({ grafanaVersion: '11.0.0-200', request: mockRequest(get) });
+    const result = await runFixture({ grafanaVersion: '13.4.0-200', request: mockRequest(get) });
 
     expect(get).toHaveBeenCalledWith(SELECTORS_URL, { maxRedirects: 0 });
     expect(result.components).toEqual({ __source: 'fetched-components' });
@@ -65,14 +65,10 @@ describe('selectors fixture', () => {
     expect(errorSpy).not.toHaveBeenCalled();
   });
 
-  it('falls back to the bundled dependency quietly when the URL cannot be derived from bootData', async () => {
+  it('skips the fetch and uses the vendored selectors quietly on Grafana older than 13.3.0', async () => {
     const get = vi.fn();
 
-    const result = await runFixture({
-      grafanaVersion: '11.0.0-nourl',
-      request: mockRequest(get),
-      selectorsUrl: undefined,
-    });
+    const result = await runFixture({ grafanaVersion: '13.2.2', request: mockRequest(get) });
 
     expect(get).not.toHaveBeenCalled();
     expect(result.components).toEqual({ __source: 'dep-components' });
@@ -80,14 +76,23 @@ describe('selectors fixture', () => {
     expect(errorSpy).not.toHaveBeenCalled();
   });
 
-  it('falls back to the bundled dependency quietly when Grafana does not serve the file (404)', async () => {
-    const get = vi.fn().mockResolvedValue(mockResponse({ status: 404 }));
+  it('skips the fetch on a non-semver Grafana version', async () => {
+    const get = vi.fn();
 
-    const result = await runFixture({ grafanaVersion: '11.0.0-404', request: mockRequest(get) });
+    const result = await runFixture({ grafanaVersion: 'latest', request: mockRequest(get) });
 
+    expect(get).not.toHaveBeenCalled();
     expect(result.components).toEqual({ __source: 'dep-components' });
-    expect(warnSpy).not.toHaveBeenCalled();
     expect(errorSpy).not.toHaveBeenCalled();
+  });
+
+  it('fetches on a 13.3.0 dev build even though it sorts below 13.3.0', async () => {
+    const get = vi.fn().mockResolvedValue(mockResponse({ status: 200, body: VALID_BODY }));
+
+    const result = await runFixture({ grafanaVersion: '13.3.0-24547284055', request: mockRequest(get) });
+
+    expect(get).toHaveBeenCalledWith(SELECTORS_URL, { maxRedirects: 0 });
+    expect(result.components).toEqual({ __source: 'fetched-components' });
   });
 
   it('falls back loudly when a Grafana that should serve the file returns 404', async () => {
@@ -116,7 +121,7 @@ describe('selectors fixture', () => {
   it('falls back loudly on a server error', async () => {
     const get = vi.fn().mockResolvedValue(mockResponse({ status: 503 }));
 
-    const result = await runFixture({ grafanaVersion: '11.0.0-503', request: mockRequest(get) });
+    const result = await runFixture({ grafanaVersion: '13.4.0-503', request: mockRequest(get) });
 
     expect(result.components).toEqual({ __source: 'dep-components' });
     expect(errorSpy).toHaveBeenCalled();
@@ -125,7 +130,7 @@ describe('selectors fixture', () => {
   it('falls back loudly on a network error', async () => {
     const get = vi.fn().mockRejectedValue(new Error('ECONNREFUSED'));
 
-    const result = await runFixture({ grafanaVersion: '11.0.0-net', request: mockRequest(get) });
+    const result = await runFixture({ grafanaVersion: '13.4.0-net', request: mockRequest(get) });
 
     expect(result.components).toEqual({ __source: 'dep-components' });
     expect(errorSpy).toHaveBeenCalled();
@@ -134,7 +139,7 @@ describe('selectors fixture', () => {
   it('falls back loudly on invalid JSON', async () => {
     const get = vi.fn().mockResolvedValue(mockResponse({ status: 200, body: 'not json' }));
 
-    const result = await runFixture({ grafanaVersion: '11.0.0-badjson', request: mockRequest(get) });
+    const result = await runFixture({ grafanaVersion: '13.4.0-badjson', request: mockRequest(get) });
 
     expect(result.components).toEqual({ __source: 'dep-components' });
     expect(errorSpy).toHaveBeenCalled();
@@ -144,7 +149,7 @@ describe('selectors fixture', () => {
     const body = JSON.stringify({ schemaVersion: 2, versionedComponents: {}, versionedPages: {} });
     const get = vi.fn().mockResolvedValue(mockResponse({ status: 200, body }));
 
-    const result = await runFixture({ grafanaVersion: '11.0.0-badschema', request: mockRequest(get) });
+    const result = await runFixture({ grafanaVersion: '13.4.0-badschema', request: mockRequest(get) });
 
     expect(result.components).toEqual({ __source: 'dep-components' });
     expect(errorSpy).toHaveBeenCalled();
@@ -155,8 +160,8 @@ describe('selectors fixture', () => {
     const request = mockRequest(get);
 
     const [a, b] = await Promise.all([
-      runFixture({ grafanaVersion: '11.0.0-cache', request }),
-      runFixture({ grafanaVersion: '11.0.0-cache', request }),
+      runFixture({ grafanaVersion: '13.4.0-cache', request }),
+      runFixture({ grafanaVersion: '13.4.0-cache', request }),
     ]);
 
     expect(get).toHaveBeenCalledTimes(1);

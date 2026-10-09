@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.6.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.5.0...@grafana/plugin-docs-cli@0.6.0) (2026-10-09)
+
+
+### Features
+
+* **plugin-docs-cli:** support Node 22 ([#2936](https://github.com/grafana/plugin-tools/issues/2936)) ([62aba57](https://github.com/grafana/plugin-tools/commit/62aba578f32edba6c71155ff8df4ca6960981d8b))
+* **plugin-docs:** add callouts and a supported markdown guide ([#2935](https://github.com/grafana/plugin-tools/issues/2935)) ([dea07b0](https://github.com/grafana/plugin-tools/commit/dea07b0f0f205ea9952870690e068a4d62a374f3))
+* **plugin-docs:** add collapsible sections and table line breaks ([#2942](https://github.com/grafana/plugin-tools/issues/2942)) ([8eed737](https://github.com/grafana/plugin-tools/commit/8eed73799134a6c32adc94193902fee0a94c6075))
+* **plugin-docs:** add syntax highlighting ([#2940](https://github.com/grafana/plugin-tools/issues/2940)) ([72c9a2c](https://github.com/grafana/plugin-tools/commit/72c9a2c9e6bc3575ccfa7b9a9941428fc201e3d3))
+* **plugin-docs:** add youtube embeds and short videos ([#2941](https://github.com/grafana/plugin-tools/issues/2941)) ([484c881](https://github.com/grafana/plugin-tools/commit/484c88129e774204f9c535e188f13213a295d16e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from ^0.3.1 to ^0.4.0
+
+## [0.5.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.4.0...@grafana/plugin-docs-cli@0.5.0) (2026-10-06)
+
+
+### Features
+
+* **plugin-docs-cli:** align preview with catalog-website layout ([#2913](https://github.com/grafana/plugin-tools/issues/2913)) ([c78f171](https://github.com/grafana/plugin-tools/commit/c78f171baf8d065f9dd24fd2e643d4d210dab500))
+* **plugin-docs-cli:** allow ../ links that stay in the docs folder ([#2917](https://github.com/grafana/plugin-tools/issues/2917)) ([0ccb386](https://github.com/grafana/plugin-tools/commit/0ccb386e80250a0ae684602c11062bb2167d1927))
+* **plugin-docs-cli:** reject a custom slug on the root index.md ([#2915](https://github.com/grafana/plugin-tools/issues/2915)) ([752f68e](https://github.com/grafana/plugin-tools/commit/752f68ebca197dfaa434e33da7f97b78465a14f1))
+* **plugin-docs-cli:** require typed pages per plugin type ([#2910](https://github.com/grafana/plugin-tools/issues/2910)) ([ab8d63c](https://github.com/grafana/plugin-tools/commit/ab8d63cf55b1dc6d244d66c27566b5d13185728d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from ^0.3.0 to ^0.3.1
+
 ## [0.4.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.3.0...@grafana/plugin-docs-cli@0.4.0) (2026-09-22)
 
 

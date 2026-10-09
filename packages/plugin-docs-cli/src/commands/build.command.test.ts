@@ -28,9 +28,10 @@ describe('build', () => {
     const manifest = JSON.parse(await readFile(manifestPath, 'utf-8'));
 
     expect(manifest.version).toBe('1');
-    expect(manifest.pages).toHaveLength(4);
-    expect(manifest.pages[0].title).toBe('Home Page');
-    expect(manifest.pages[0].slug).toBe('home');
+    expect(manifest.pages).toHaveLength(5);
+    expect(manifest.pages[0].slug).toBe('index');
+    expect(manifest.pages[1].title).toBe('Home Page');
+    expect(manifest.pages[1].slug).toBe('home');
   });
 
   it('should inline frontmatter and content into manifest.json, self-contained', async () => {
@@ -39,7 +40,7 @@ describe('build', () => {
     const manifestPath = join(tmpDir, 'dist', 'docs', 'manifest.json');
     const manifest = JSON.parse(await readFile(manifestPath, 'utf-8'));
 
-    const home = manifest.pages[0];
+    const home = manifest.pages.find((p: { slug: string }) => p.slug === 'home');
     expect(home.frontmatter).toEqual({
       title: 'Home Page',
       description: 'Welcome to the test docs',
@@ -69,6 +70,18 @@ describe('build', () => {
 
     const imgPath = join(tmpDir, 'dist', 'docs', 'img', 'test.png');
     await expect(access(imgPath)).resolves.toBeUndefined();
+  });
+
+  it('should copy mp4 and webm videos', async () => {
+    await mkdir(join(docsPath, 'video'));
+    await writeFile(join(docsPath, 'video', 'demo.mp4'), 'mp4');
+    await writeFile(join(docsPath, 'video', 'demo.webm'), 'webm');
+
+    await buildDocs(tmpDir, docsPath);
+
+    const videoDir = join(tmpDir, 'dist', 'docs', 'video');
+    await expect(access(join(videoDir, 'demo.mp4'))).resolves.toBeUndefined();
+    await expect(access(join(videoDir, 'demo.webm'))).resolves.toBeUndefined();
   });
 
   it('should clean the output directory before building', async () => {

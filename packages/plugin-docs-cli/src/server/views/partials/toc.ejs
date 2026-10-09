@@ -1,12 +1,11 @@
+<p class="docs-rail-title">On this page</p>
 <% if (!headings || headings.length === 0) { %>
-  <p style="color: var(--color-gray-500); font-size: var(--text-sm);">No headings found</p>
+  <p class="docs-rail-empty">No headings found</p>
 <% } else { %>
   <ul class="docs-toc-list">
-    <% headings.forEach(heading => { %>
-      <li class="docs-toc-item" <%= heading.level === 3 ? 'style="margin-left: var(--space-3);"' : '' %>>
-        <a href="#<%= heading.id %>" class="docs-toc-link">
-          <%= heading.text %>
-        </a>
+    <% headings.forEach((heading) => { %>
+      <li>
+        <a href="#<%= heading.id %>" class="docs-toc-link docs-toc-link-h<%= heading.level %>"><%= heading.text %></a>
       </li>
     <% }); %>
   </ul>

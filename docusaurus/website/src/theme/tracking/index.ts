@@ -93,6 +93,10 @@ export function startTracking(
   }
 }
 
+export function trackEvent(event: string, properties: Record<string, any>) {
+  rudderstack.track?.(event, properties);
+}
+
 export function trackPage() {
   // rudderstack automagically accesses all this but if it isn't loaded we need to
   // define it manually.

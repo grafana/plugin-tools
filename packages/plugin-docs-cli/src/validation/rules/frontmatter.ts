@@ -249,6 +249,24 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       });
     }
 
+    // the catalog finds the docs landing page by its `index` slug, so renaming it hides the
+    // Documentation tab. unsafe slugs are skipped: the scanner already falls back to `index`.
+    if (
+      relativePath === 'index.md' &&
+      typeof data.slug === 'string' &&
+      isSlugSafe(data.slug) &&
+      data.slug.trim().replace(/^\/+|\/+$/g, '') !== 'index'
+    ) {
+      diagnostics.push({
+        rule: Rule.RootIndexSlug,
+        severity: 'error',
+        file: relativePath,
+        line: findFieldLine(raw, 'slug'),
+        title: 'Root index.md cannot set a custom slug',
+        detail: `The root index.md is your documentation landing page and must keep the slug "index". Remove the slug "${data.slug}" from its frontmatter.`,
+      });
+    }
+
     // check for h1 headings in body - title comes from frontmatter
     for (const h1Line of findH1Lines(raw)) {
       diagnostics.push({

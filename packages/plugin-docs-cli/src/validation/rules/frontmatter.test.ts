@@ -50,6 +50,46 @@ describe('checkFrontmatter', () => {
     expect(slugWarning!.severity).toBe('warning');
   });
 
+  it('should report a custom slug on the root index.md', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(
+      join(tmp, 'index.md'),
+      `---\ntitle: Overview\ndescription: ${GOOD_DESCRIPTION}\nslug: overview\n---\n\n${LONG_BODY}\n`
+    );
+
+    const findings = await checkFrontmatter(input(tmp));
+
+    const finding = findings.find((f) => f.rule === Rule.RootIndexSlug);
+    expect(finding).toBeDefined();
+    expect(finding!.severity).toBe('error');
+    expect(finding!.line).toBe(4);
+  });
+
+  it('should not report a root index.md slug that is still index', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(
+      join(tmp, 'index.md'),
+      `---\ntitle: Overview\ndescription: ${GOOD_DESCRIPTION}\nslug: /index/\n---\n\n${LONG_BODY}\n`
+    );
+
+    const findings = await checkFrontmatter(input(tmp));
+
+    expect(findings.find((f) => f.rule === Rule.RootIndexSlug)).toBeUndefined();
+  });
+
+  it('should not report a custom slug on a nested index.md', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await mkdir(join(tmp, 'config'));
+    await writeFile(
+      join(tmp, 'config', 'index.md'),
+      `---\ntitle: Configuration\ndescription: ${GOOD_DESCRIPTION}\nslug: setup\n---\n\n${LONG_BODY}\n`
+    );
+
+    const findings = await checkFrontmatter(input(tmp));
+
+    expect(findings.find((f) => f.rule === Rule.RootIndexSlug)).toBeUndefined();
+  });
+
   it('should not report for valid frontmatter without h1', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     await writeFile(

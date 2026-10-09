@@ -1,14 +1,32 @@
 import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
+import { ALLOWED_HTML_TAGS, CALLOUT_TYPES, getYouTubeVideoId } from '@grafana/plugin-docs-parser';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { getCodeBlockLines, isMetaFile, matchOutsideCode } from './utils.js';
+import {
+  escapesDocsRoot,
+  getCodeBlockLines,
+  getNonProseLines,
+  getReferenceDefinitions,
+  isMetaFile,
+  maskInlineCode,
+  matchOutsideCode,
+  normalizeLabel,
+} from './utils.js';
 
 // matches HTML tags like <div>, <span class="x">, </p>, <br/>, <img src="..." />
 const HTML_TAG_RE = /< *\/?([a-zA-Z][a-zA-Z0-9]*)\b[^>]*\/?>/g;
 
-// tags that are allowed in markdown (commonly used and safe)
-const ALLOWED_HTML_TAGS = new Set(['br', 'wbr', 'hr', 'details', 'summary']);
+const allowedHtmlTags = new Set(ALLOWED_HTML_TAGS);
+
+// matches an opening or closing <details> tag
+const DETAILS_TAG_RE = /<(\/?)details\b[^>]*>/gi;
+
+// matches a closing </summary> tag
+const SUMMARY_CLOSE_RE = /<\/summary\s*>/i;
+
+// matches a closing </details> tag at the start of a line
+const DETAILS_CLOSE_RE = /^<\/details\s*>/i;
 
 // matches <script> tags (opening or self-closing)
 const SCRIPT_TAG_RE = /<script\b[^>]*>/gi;
@@ -17,10 +35,10 @@ const SCRIPT_TAG_RE = /<script\b[^>]*>/gi;
 const EVENT_HANDLER_RE = /\bon[a-z]+\s*=\s*(?:["'][^"']*["']|[^\s>]+)/gi;
 
 // matches markdown image references: ![alt](url)
-const IMAGE_REF_RE = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+const IMAGE_REF_RE = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
 
 // matches markdown links: [text](url)
-const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
 
 // matches dangerous URI schemes
 const DANGEROUS_URL_RE = /^(javascript|vbscript|data):/i;
@@ -31,8 +49,59 @@ const BASE64_IMAGE_RE = /^data:image\/[^;]+;base64,/i;
 // matches external URLs (http:// or https://)
 const EXTERNAL_URL_RE = /^https?:\/\//i;
 
-// matches path traversal
-const PATH_TRAVERSAL_RE = /(?:^|\/)\.\.\//;
+// matches the opening of a Hugo shortcode, {{< name ... >}} or {{% name ... %}}, capturing the closing slash and name
+const HUGO_SHORTCODE_RE = /\{\{[<%]\s*(\/?)\s*([a-zA-Z][\w./-]*)/g;
+
+// matches template placeholders like <GRAFANA_VERSION> left in a URL
+const URL_PLACEHOLDER_RE = /<[A-Z][A-Z0-9_]*>/;
+
+// matches a callout marker opening a blockquote line, like > [!NOTE], capturing the type and any text after it
+const CALLOUT_MARKER_RE = /^\s*>\s*\[!([a-zA-Z]+)\](.*)$/;
+
+// matches a line holding only a link, [text](url) or a bare URL, capturing the url
+const LONE_LINK_RE = /^\s*(?:\[[^\]]*\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)|((?:https?:\/\/|www\.)\S+))\s*$/;
+
+// matches a line holding only a reference link, [text][label], [label][] or [label], capturing text and label
+const LONE_REFERENCE_LINK_RE = /^\s*\[([^\]]+)\](?:\[([^\]]*)\])?\s*$/;
+
+const VIDEO_REF_RE = /\.(?:mp4|webm)(?:[?#].*)?$/i;
+
+const YOUTUBE_HOSTS = ['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtu.be'];
+
+const CALLOUT_TYPE_NAMES = Object.keys(CALLOUT_TYPES).map((type) => type.toUpperCase());
+
+const SHORTCODE_REPLACEMENTS: Record<string, string> = {
+  admonition: 'Use a callout instead, for example a blockquote starting with > [!NOTE].',
+  figure: 'Use a markdown image instead, for example ![Alt text](img/screenshot.png).',
+  youtube: 'Put a YouTube link alone in its own paragraph to embed the video.',
+  'video-embed': 'Use a markdown image with an mp4 or webm file instead, for example ![Demo](video/demo.mp4).',
+  vimeo: 'Link to the video instead.',
+  collapse: 'Use a <details> block with a <summary> instead.',
+  'docs/shared': 'Copy the shared content into this page instead.',
+};
+
+// true when an earlier line of the same block is quoted, including across lazy continuation lines
+function isInsideBlockquote(lines: string[], index: number): boolean {
+  for (let i = index - 1; i >= 0 && lines[i].trim() !== ''; i--) {
+    if (/^\s*>/.test(lines[i])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// true for a YouTube video-style URL, so a channel or playlist link isn't mistaken for a broken embed
+function looksLikeYouTubeVideo(href: string): boolean {
+  try {
+    const url = new URL(href);
+    if (!YOUTUBE_HOSTS.includes(url.hostname)) {
+      return false;
+    }
+    return url.hostname === 'youtu.be' || url.pathname === '/watch' || /^\/(?:embed|shorts)\//.test(url.pathname);
+  } catch {
+    return false;
+  }
+}
 
 export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
@@ -65,6 +134,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
     }
 
     const codeLines = getCodeBlockLines(content);
+    const nonProseLines = getNonProseLines(content);
 
     // no-script-tags: no <script> tags
     for (const { match, line } of matchOutsideCode(content, SCRIPT_TAG_RE, codeLines, { maskInlineCode: true })) {
@@ -90,13 +160,151 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
+    const contentLines = content.split('\n');
+
+    // no-hugo-shortcodes: no {{< >}} or {{% %}} shortcodes, reported once per opening tag
+    for (const { match, line } of matchOutsideCode(content, HUGO_SHORTCODE_RE, codeLines, {
+      maskInlineCode: true,
+      skipLines: nonProseLines,
+    })) {
+      if (match[1] === '/') {
+        continue;
+      }
+      const name = match[2];
+      diagnostics.push({
+        rule: Rule.NoHugoShortcodes,
+        severity: input.strict ? 'error' : 'warning',
+        file: relPath,
+        line,
+        title: 'Hugo shortcode detected',
+        detail: `The "${name}" Hugo shortcode isn't supported in plugin docs. ${
+          SHORTCODE_REPLACEMENTS[name] ?? 'Write it in plain markdown instead.'
+        }`,
+      });
+    }
+
+    // valid-callout-marker: a [!TYPE] marker that would silently render as a plain quote
+    for (const { match, line } of matchOutsideCode(content, CALLOUT_MARKER_RE, codeLines, {
+      skipLines: nonProseLines,
+    })) {
+      const marker = `[!${match[1]}]`;
+      if (!CALLOUT_TYPE_NAMES.includes(match[1].toUpperCase())) {
+        diagnostics.push({
+          rule: Rule.ValidCalloutMarker,
+          severity: 'warning',
+          file: relPath,
+          line,
+          title: 'Unknown callout type',
+          detail: `"${marker}" isn't a callout type, so this renders as a plain quote. Use one of ${CALLOUT_TYPE_NAMES.join(', ')}.`,
+        });
+      } else if (isInsideBlockquote(contentLines, line - 1)) {
+        diagnostics.push({
+          rule: Rule.ValidCalloutMarker,
+          severity: 'warning',
+          file: relPath,
+          line,
+          title: 'Callout marker not at the start of the quote',
+          detail: `"${marker}" only works on the first line of a blockquote, so this renders as a plain quote. Start a new blockquote for the callout.`,
+        });
+      } else if (match[2].trim() !== '') {
+        diagnostics.push({
+          rule: Rule.ValidCalloutMarker,
+          severity: 'warning',
+          file: relPath,
+          line,
+          title: 'Callout text on the marker line',
+          detail: `Move the text after "${marker}" to the next line. With text on the same line, this renders as a plain quote.`,
+        });
+      }
+    }
+
+    const definitions = getReferenceDefinitions(content, codeLines);
+    const definitionsByLabel = new Map(definitions.map((definition) => [definition.label, definition.ref]));
+
+    // valid-youtube-link: a YouTube link alone in a paragraph that would silently not embed
+    contentLines.forEach((text, index) => {
+      const lineNumber = index + 1;
+      const reference = text.match(LONE_REFERENCE_LINK_RE);
+      const referenceLabel = reference && normalizeLabel(reference[2] || reference[1]);
+      const rawHref =
+        text.match(LONE_LINK_RE)?.slice(1).find(Boolean) ??
+        (referenceLabel ? definitionsByLabel.get(referenceLabel) : undefined);
+      const href = rawHref?.startsWith('www.') ? `https://${rawHref}` : rawHref;
+      const startsParagraph = (contentLines[index - 1]?.trim() ?? '') === '' || nonProseLines.has(lineNumber - 1);
+      const isAlone = startsParagraph && (contentLines[index + 1]?.trim() ?? '') === '';
+      if (!href || !isAlone || nonProseLines.has(lineNumber) || codeLines.has(lineNumber)) {
+        return;
+      }
+      if (looksLikeYouTubeVideo(href) && !getYouTubeVideoId(href)) {
+        diagnostics.push({
+          rule: Rule.ValidYoutubeLink,
+          severity: 'warning',
+          file: relPath,
+          line: lineNumber,
+          title: 'YouTube link is not embedded',
+          detail: `"${href}" has no valid 11-character video id, so it renders as a plain link. Check the id, or use a watch, youtu.be, embed or Shorts URL.`,
+        });
+      }
+    });
+
+    // valid-details-block: markdown right after </summary> is raw HTML text, so it isn't formatted
+    contentLines.forEach((text, index) => {
+      const lineNumber = index + 1;
+      const masked = maskInlineCode(text);
+      const close = SUMMARY_CLOSE_RE.exec(masked);
+      if (!close || codeLines.has(lineNumber) || nonProseLines.has(lineNumber)) {
+        return;
+      }
+      const rest = masked.slice(close.index + close[0].length).trim();
+      // a blank line inside a blockquote is just its > markers
+      const next = rest || (contentLines[index + 1] ?? '').replace(/^[\s>]*/, '');
+      if (next !== '' && !DETAILS_CLOSE_RE.test(next)) {
+        diagnostics.push({
+          rule: Rule.ValidDetailsBlock,
+          severity: 'warning',
+          file: relPath,
+          line: lineNumber,
+          title: 'Missing blank line after </summary>',
+          detail:
+            'Add a blank line after </summary>. Without it, the content shows as plain text and its markdown is not formatted.',
+        });
+      }
+    });
+
+    // valid-details-block: an unclosed <details> hides the rest of the page inside it
+    const openDetails: number[] = [];
+    for (const { match, line } of matchOutsideCode(content, DETAILS_TAG_RE, codeLines, {
+      maskInlineCode: true,
+      skipLines: nonProseLines,
+    })) {
+      if (match[1] === '/') {
+        openDetails.pop();
+      } else {
+        openDetails.push(line);
+      }
+    }
+    for (const line of openDetails) {
+      diagnostics.push({
+        rule: Rule.ValidDetailsBlock,
+        severity: 'warning',
+        file: relPath,
+        line,
+        title: 'Unclosed <details>',
+        detail: 'Close this block with </details>. Otherwise the rest of the page is hidden inside it.',
+      });
+    }
+
     // no-raw-html: no raw HTML tags (except allowed ones). Inline code spans
     // are masked first so placeholder text like `<slug>` inside backticks
     // isn't mistaken for a real tag.
     for (const { match, line } of matchOutsideCode(content, HTML_TAG_RE, codeLines, { maskInlineCode: true })) {
       const tagName = match[1].toLowerCase();
       // skip if it's a script tag (already handled above) or allowed tag
-      if (tagName === 'script' || ALLOWED_HTML_TAGS.has(tagName)) {
+      if (tagName === 'script' || allowedHtmlTags.has(tagName)) {
+        continue;
+      }
+      // skip the <name> inside a {{< name >}} shortcode, already reported by no-hugo-shortcodes
+      if (contentLines[line - 1].slice(Math.max(0, match.index - 2), match.index) === '{{') {
         continue;
       }
       diagnostics.push({
@@ -109,9 +317,15 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       });
     }
 
-    // process image references
-    for (const { match, line } of matchOutsideCode(content, IMAGE_REF_RE, codeLines)) {
-      const ref = match[2];
+    // process image references, inline ![alt](url) and reference definitions used by an image
+    const imageRefs = [
+      ...matchOutsideCode(content, IMAGE_REF_RE, codeLines).map(({ match, line }) => ({ ref: match[2], line })),
+      ...definitions.filter((definition) => definition.isImage),
+    ];
+    for (const { ref, line } of imageRefs) {
+      const isVideo = VIDEO_REF_RE.test(ref);
+      const kind = isVideo ? 'video' : 'image';
+      const folder = isVideo ? 'docs folder' : 'img/ directory';
 
       // no-base64-images: no base64-encoded image data
       if (BASE64_IMAGE_RE.test(ref)) {
@@ -133,8 +347,8 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: input.strict ? 'error' : 'warning',
           file: relPath,
           line,
-          title: 'External image URL detected',
-          detail: `"${ref}" is an external URL. Download the image and place it in the img/ directory.`,
+          title: `External ${kind} URL detected`,
+          detail: `"${ref}" is an external URL. Download the ${kind} and place it in the ${folder}.`,
         });
         continue;
       }
@@ -146,21 +360,21 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: 'error',
           file: relPath,
           line,
-          title: 'Dangerous URI scheme in image reference',
+          title: `Dangerous URI scheme in ${kind} reference`,
           detail: `"${ref}" uses a dangerous URI scheme. Only relative file paths are allowed.`,
         });
         continue;
       }
 
-      // no-path-traversal: no ../ in image refs
-      if (PATH_TRAVERSAL_RE.test(ref)) {
+      // no-path-traversal: image refs must stay inside the docs folder
+      if (escapesDocsRoot(ref, relPath)) {
         diagnostics.push({
           rule: Rule.NoPathTraversal,
           severity: 'error',
           file: relPath,
           line,
-          title: 'Path traversal in image reference',
-          detail: `"${ref}" contains path traversal. Image references must not use "../".`,
+          title: `Path traversal in ${kind} reference`,
+          detail: `"${ref}" points outside the docs folder. ${isVideo ? 'Video' : 'Image'} references must stay inside it.`,
         });
         continue;
       }
@@ -172,23 +386,45 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
           severity: 'error',
           file: relPath,
           line,
-          title: 'Image reference is not a relative path',
-          detail: `"${ref}" is an absolute path. Use a relative path like "img/filename.png" instead.`,
+          title: `${isVideo ? 'Video' : 'Image'} reference is not a relative path`,
+          detail: `"${ref}" is an absolute path. Use a relative path like "${isVideo ? 'video/filename.mp4' : 'img/filename.png'}" instead.`,
         });
       }
     }
 
-    // process links (non-image)
-    const contentLines = content.split('\n');
-    for (const { match, line } of matchOutsideCode(content, LINK_RE, codeLines)) {
-      const ref = match[2];
-
-      // skip image links (already handled above) - LINK_RE also matches the [alt](url) part
-      // of ![alt](url), so check if the char before this match is !
-      if (match.index > 0 && contentLines[line - 1][match.index - 1] === '!') {
+    // no-url-placeholders: no unreplaced template placeholders like <GRAFANA_VERSION> in link or image URLs
+    const placeholderRefs = [
+      ...matchOutsideCode(content, LINK_RE, codeLines, { maskInlineCode: true, skipLines: nonProseLines }).map(
+        ({ match, line }) => ({ ref: match[2], line })
+      ),
+      ...getReferenceDefinitions(content, new Set([...codeLines, ...nonProseLines])),
+    ];
+    for (const { ref, line } of placeholderRefs) {
+      const placeholder = ref.match(URL_PLACEHOLDER_RE)?.[0];
+      if (!placeholder) {
         continue;
       }
+      diagnostics.push({
+        rule: Rule.NoUrlPlaceholders,
+        severity: input.strict ? 'error' : 'warning',
+        file: relPath,
+        line,
+        title: 'Placeholder in link URL',
+        detail: `"${ref}" contains the placeholder ${placeholder}, which isn't replaced in plugin docs and breaks the link. Write the real value instead${
+          placeholder.endsWith('VERSION>') ? ', for example "latest"' : ''
+        }.`,
+      });
+    }
 
+    // process links (non-image), inline [text](url) and reference definitions not used by an image.
+    // LINK_RE also matches the [alt](url) part of ![alt](url), so skip a match preceded by !
+    const linkRefs = [
+      ...matchOutsideCode(content, LINK_RE, codeLines)
+        .filter(({ match, line }) => !(match.index > 0 && contentLines[line - 1][match.index - 1] === '!'))
+        .map(({ match, line }) => ({ ref: match[2], line })),
+      ...definitions.filter((definition) => !definition.isImage),
+    ];
+    for (const { ref, line } of linkRefs) {
       // skip anchor-only links like #section
       if (ref.startsWith('#')) {
         continue;
@@ -207,15 +443,15 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
         continue;
       }
 
-      // no-path-traversal: no ../ in links
-      if (PATH_TRAVERSAL_RE.test(ref)) {
+      // no-path-traversal: links must stay inside the docs folder
+      if (escapesDocsRoot(ref, relPath)) {
         diagnostics.push({
           rule: Rule.NoPathTraversal,
           severity: 'error',
           file: relPath,
           line,
           title: 'Path traversal in link',
-          detail: `"${ref}" contains path traversal. Links must not use "../".`,
+          detail: `"${ref}" points outside the docs folder. Links must stay inside it.`,
         });
         continue;
       }

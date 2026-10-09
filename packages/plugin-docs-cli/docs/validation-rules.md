@@ -11,6 +11,8 @@ Most rules behave the same in both. A few are only warnings/suggestions in `serv
 blocking errors in `validate` - marked with † below. If you see one of those while writing, fix
 it before you submit your plugin, since it will block publishing.
 
+For what you can write in a page, refer to [Supported markdown](./supported-markdown.md).
+
 **Severity:**
 
 - **Error** - blocks validation. Fix this before your docs will pass.
@@ -28,11 +30,25 @@ it before you submit your plugin, since it will block publishing.
 | `valid-file-naming`    | File and folder names should use only lowercase letters, digits and hyphens, for clean URLs.                                                | Warning †    |
 | `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it.                                                                       | Warning †    |
 | `no-symlinks`          | Symbolic links aren't allowed in the docs folder - use real files.                                                                          | Error        |
-| `allowed-file-types`   | Only markdown files and images (`png`, `jpg`, `jpeg`, `webp`, `gif`) are allowed in the docs folder.                                        | Suggestion † |
+| `allowed-file-types`   | Only markdown files, images (`png`, `jpg`, `jpeg`, `webp`, `gif`) and videos (`mp4`, `webm`) are allowed in the docs folder.                | Suggestion † |
 | `max-nesting-depth`    | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages.                | Suggestion † |
 | `docs-path-exists`     | The `docsPath` in `src/plugin.json` must point at a folder that exists.                                                                     | Error        |
 | `max-total-pages`      | A docs folder shouldn't have more than 50 pages. Consolidate related pages, or move the long tail to an external resource.                  | Suggestion † |
 | `max-total-docs-size`  | The whole docs folder should stay under 10MB, including images - it ships inside the plugin archive.                                        | Warning      |
+
+## Required pages
+
+Panel and data source plugins must document a few fixed topics, so authors, users and agents
+find the same information in the same place across every plugin. Each topic can be a single page
+(`options.md`) or a folder (`options/`) with at least one page inside it, at the root of your
+docs folder.
+
+- **Panel:** `options` and `data-formats`
+- **Data source:** `query-editor` and `configuration`
+
+| Rule             | What it checks                                                                   | Severity |
+| ---------------- | -------------------------------------------------------------------------------- | -------- |
+| `required-pages` | Every required page for your plugin type exists at the root of your docs folder. | Error    |
 
 ## Page frontmatter
 
@@ -45,6 +61,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `frontmatter-required-fields`    | `title` and `description` must be present.                                                                                                                     | Error        |
 | `frontmatter-field-types`        | `title` and `description` must be strings, and `sidebar_position` (if set) must be a number.                                                                   | Error        |
 | `frontmatter-valid-slug`         | A custom `slug` field must only use letters, digits, underscores, hyphens and forward slashes.                                                                 | Warning      |
+| `root-index-no-custom-slug`      | Your root `index.md` can't set a custom `slug`. It's your documentation landing page, and renaming it hides the Documentation tab on grafana.com.              | Error        |
 | `no-h1-heading`                  | Don't add a `# Heading` in the page body - the page title already comes from frontmatter, and any h1 you add will be stripped and replaced. Use `##` or lower. | Warning      |
 | `no-duplicate-sidebar-position`  | Pages in the same folder can't share a `sidebar_position` - each needs a unique value to control its order.                                                    | Warning †    |
 | `no-duplicate-slugs`             | A custom `slug` must be unique across all of your pages.                                                                                                       | Error        |
@@ -58,20 +75,26 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-svg-files`            | SVG images aren't allowed - they can contain embedded scripts, which is a security risk. Use PNG or WebP instead.                   | Error                         |
 | `referenced-images-exist` | An image referenced in a page (`![alt](img/foo.png)`) must actually exist in your docs folder.                                      | Error                         |
 | `max-image-size`          | Static images (png/jpg/webp) must be 300KB or smaller; GIFs must be 1MB or smaller. Compress or resize oversized images.            | Suggestion †                  |
+| `max-video-size`          | Videos (mp4/webm) must be 3MB or smaller. Shorten or compress the video, or upload it to YouTube and link to it.                    | Suggestion †                  |
 | `max-total-images-size`   | The total size of all images in your docs folder must stay under 5MB. Only checked in strict mode (`validate`), not during `serve`. | Warning (strict mode only)    |
-| `image-file-naming`       | Image filenames should use only letters, digits, hyphens, underscores and dots.                                                     | Suggestion †                  |
-| `no-orphaned-images`      | An image that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.            | Suggestion (strict mode only) |
+| `image-file-naming`       | Image and video filenames should use only letters, digits, hyphens, underscores and dots.                                           | Suggestion †                  |
+| `no-orphaned-images`      | An image or video that no page links to is dead weight - remove it. Only checked in strict mode (`validate`), not during `serve`.   | Suggestion (strict mode only) |
 
 ## Markdown content & security
 
-| Rule                 | What it checks                                                                                                                        | Severity  |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | --------- |
-| `no-raw-html`        | Raw HTML tags aren't allowed in the page body (except `br`, `wbr`, `hr`, `details` and `summary`) - use markdown syntax instead.      | Warning † |
-| `no-script-tags`     | `<script>` tags and inline event handlers (`onclick`, `onerror`, etc.) aren't allowed anywhere in a page - they're a security risk.   | Error     |
-| `no-dangerous-urls`  | Links and images can't use a `javascript:`, `vbscript:` or `data:` URL scheme.                                                        | Error     |
-| `no-path-traversal`  | Links and image references can't contain `../` to escape the docs folder.                                                             | Error     |
-| `no-base64-images`   | Images can't be embedded as base64 data - save them as a file in your `img/` folder instead.                                          | Error     |
-| `no-external-images` | Images must be hosted in your docs folder, not linked from an external `http(s)://` URL. Download the image and reference it locally. | Warning † |
+| Rule                   | What it checks                                                                                                                                                                                                                     | Severity  |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `no-raw-html`          | Raw HTML tags aren't allowed in the page body, except `details`, `summary`, `br` and `hr` - use markdown syntax instead. Any other tag is removed when the page is rendered.                                                       | Warning † |
+| `no-script-tags`       | `<script>` tags and inline event handlers (`onclick`, `onerror`, etc.) aren't allowed anywhere in a page - they're a security risk.                                                                                                | Error     |
+| `no-dangerous-urls`    | Links and images can't use a `javascript:`, `vbscript:` or `data:` URL scheme.                                                                                                                                                     | Error     |
+| `no-path-traversal`    | Links and image references must stay inside your docs folder. `../` is fine as long as it doesn't go above the docs root.                                                                                                          | Error     |
+| `no-base64-images`     | Images can't be embedded as base64 data - save them as a file in your `img/` folder instead.                                                                                                                                       | Error     |
+| `no-external-images`   | Images must be hosted in your docs folder, not linked from an external `http(s)://` URL. Download the image and reference it locally.                                                                                              | Warning † |
+| `no-hugo-shortcodes`   | Docs website shortcodes like `{{< admonition >}}` or `{{% docs/shared %}}` aren't supported and show up as plain text. Write the content in plain markdown instead, as described in [Supported markdown](./supported-markdown.md). | Warning † |
+| `no-url-placeholders`  | A link or image URL can't contain a placeholder like `<GRAFANA_VERSION>` - nothing replaces it, so the link breaks. Write the real value, such as `latest`.                                                                        | Warning † |
+| `valid-callout-marker` | A callout marker like `> [!NOTE]` must use a known type (`NOTE`, `TIP`, `IMPORTANT`, `WARNING` or `CAUTION`) and sit alone on the first line of the blockquote. Otherwise the callout renders as a plain quote.                    | Warning   |
+| `valid-youtube-link`   | A YouTube link alone in its own paragraph must be a watch, `youtu.be`, embed or Shorts URL with a valid 11-character video id. Otherwise the link is not embedded and renders as a plain link.                                     | Warning   |
+| `valid-details-block`  | A `<details>` block needs a blank line after `</summary>`, or its content shows as plain text, and must be closed with `</details>`, or the rest of the page is hidden inside it.                                                  | Warning   |
 
 ## Links between pages
 

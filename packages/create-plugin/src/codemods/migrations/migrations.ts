@@ -99,6 +99,20 @@ export default [
       'Update @grafana/eslint-config to v10: drop the removed ./flat.js subpath import and swap @stylistic/eslint-plugin-ts for @stylistic/eslint-plugin.',
     scriptPath: import.meta.resolve('./scripts/014-eslint-config-v10.js'),
   },
+  {
+    name: '015-jest-canvas-mock',
+    version: '7.12.2',
+    description:
+      'Fix @grafana/ui Combobox crashing in Jest: replace the scaffolded no-op HTMLCanvasElement.getContext stub with jest-canvas-mock, which returns a spec-shaped CanvasRenderingContext2D (and TextMetrics) so measureText() no longer throws.',
+    scriptPath: import.meta.resolve('./scripts/015-jest-canvas-mock.js'),
+  },
+  {
+    name: '016-jest-intersection-observer',
+    version: '7.12.2',
+    description:
+      'Fix @grafana/ui Combobox dropdown crashing in Jest: add an IntersectionObserver polyfill stub so ScrollIndicators (mounted when the dropdown opens) no longer throws ReferenceError in jsdom.',
+    scriptPath: import.meta.resolve('./scripts/016-jest-intersection-observer.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //

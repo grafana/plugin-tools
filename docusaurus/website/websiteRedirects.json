@@ -158,5 +158,61 @@
   {
     "from": ["/migration-guides/angular-react/add-suggestion-supplier"],
     "to": "/how-to-guides/panel-plugins/add-suggestions-support"
+  },
+  {
+    "from": ["/migration-guides/migrate-angularjs-to-react"],
+    "to": "/migration-guides/angular-react"
+  },
+  {
+    "from": ["/publish-a-plugin/publishing-and-signing-criteria", "/publish-a-plugin/publish-or-update-a-plugin"],
+    "to": "/publish-a-plugin/publish-a-plugin"
+  },
+  {
+    "from": ["/create-a-plugin/set-up-github-workflows"],
+    "to": "/set-up/set-up-github"
+  },
+  {
+    "from": ["/e2e-test-a-plugin/introduction"],
+    "to": "/e2e-test-a-plugin"
+  },
+  {
+    "from": ["/create-a-plugin/extend-a-plugin/add-distributed-tracing-for-backend-plugins"],
+    "to": "/how-to-guides/data-source-plugins/add-logs-metrics-traces-for-backend-plugins"
+  },
+  {
+    "from": ["/reference/ui-extensions"],
+    "to": "/reference/ui-extensions-reference/ui-extensions"
+  },
+  {
+    "from": ["/introduction/backend-plugin"],
+    "to": "/key-concepts/backend-plugins"
+  },
+  {
+    "from": ["/get-started/set-up"],
+    "to": "/set-up/"
+  },
+  {
+    "from": ["/reference/plugin-jsonplugin-json", "/reference/metadata"],
+    "to": "/reference/plugin-json"
+  },
+  {
+    "from": ["/get-started/prompt-cli-reference"],
+    "to": "/reference/cli-commands/"
+  },
+  {
+    "from": ["/create-a-plugin", "/get-started"],
+    "to": "/"
+  },
+  {
+    "from": ["/migration-guides/update-from-grafana-versions/migrate-10-x-to-11-x"],
+    "to": "/migration-guides/update-from-grafana-versions/migrate-10_x-to-11_x"
+  },
+  {
+    "from": ["/key-concepts/manage-npm-dependencies"],
+    "to": "/key-concepts/npm-dependencies"
+  },
+  {
+    "from": ["/create-a-plugin/extend-a-plugin"],
+    "to": "/how-to-guides"
   }
 ]

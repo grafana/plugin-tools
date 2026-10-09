@@ -65,6 +65,22 @@ describe('checkMarkdown', () => {
       expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeUndefined();
     });
 
+    it('should report <wbr>, which the parser removes', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Text<wbr>more'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)?.detail).toContain('<wbr>');
+    });
+
+    it('should allow <hr> tags', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Text\n\n<hr>\n\nMore'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeUndefined();
+    });
+
     it('should not report HTML inside fenced code blocks', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('```html\n<div>example</div>\n```'));
@@ -332,6 +348,445 @@ describe('checkMarkdown', () => {
     });
   });
 
+  // --- no-hugo-shortcodes ---
+
+  describe('no-hugo-shortcodes', () => {
+    it('should report a paired shortcode once, with a replacement hint', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{< admonition type="note" >}}\nA note.\n{{< /admonition >}}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const shortcodeFindings = findings.filter((f) => f.rule === Rule.NoHugoShortcodes);
+      expect(shortcodeFindings).toHaveLength(1);
+      expect(shortcodeFindings[0].severity).toBe('error');
+      expect(shortcodeFindings[0].line).toBe(5);
+      expect(shortcodeFindings[0].detail).toContain('> [!NOTE]');
+    });
+
+    it('should not also report a shortcode as raw HTML', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md(
+          '{{< figure src="/media/docs/x.png" caption="X" >}}\n\n{{< admonition type="note" >}}\nA note.\n{{< /admonition >}}\n'
+        )
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeUndefined();
+    });
+
+    it('should report {{% %}} shortcodes', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{% docs/shared lookup="x.md" source="grafana" %}}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.NoHugoShortcodes);
+      expect(finding).toBeDefined();
+      expect(finding!.detail).toContain('Copy the shared content');
+    });
+
+    it('should name the shortcode in the message', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{< figure src="x.png" >}}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.detail).toMatch(/^The "figure" Hugo shortcode/);
+    });
+
+    it('should still report raw HTML after a single brace', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Value: {<span>x</span>}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeDefined();
+    });
+
+    it('should not report shortcodes in indented code blocks or HTML comments', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('Hugo example:\n\n    {{< admonition type="note" >}}\n\n<!-- {{< youtube id="abc" >}} -->\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)).toBeUndefined();
+    });
+
+    it('should give a generic hint for an unknown shortcode', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{< card-grid key="cards" >}}\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.detail).toContain('plain markdown');
+    });
+
+    it('should report as warning in non-strict mode', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('{{< youtube id="abc" >}}\n'));
+
+      const findings = await checkMarkdown(input(tmp, false));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.severity).toBe('warning');
+    });
+
+    it('should not report shortcodes inside code blocks or inline code', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('```\n{{< admonition type="note" >}}\n```\n\nHugo uses `{{< figure >}}` for images.\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)).toBeUndefined();
+    });
+  });
+
+  // --- valid-callout-marker ---
+
+  describe('valid-callout-marker', () => {
+    it('should not report valid callouts in any case', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!NOTE]\n> Text.\n\n> [!caution]\n> Text.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
+    });
+
+    it('should warn about an unknown callout type', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!DANGER]\n> Text.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.ValidCalloutMarker);
+      expect(finding).toBeDefined();
+      expect(finding!.severity).toBe('warning');
+      expect(finding!.line).toBe(5);
+      expect(finding!.detail).toContain('NOTE, TIP, IMPORTANT, WARNING, CAUTION');
+    });
+
+    it('should warn when text follows the marker on the same line', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!WARNING] This deletes data.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.ValidCalloutMarker);
+      expect(finding).toBeDefined();
+      expect(finding!.title).toBe('Callout text on the marker line');
+    });
+
+    it('should warn when a marker is not on the first line of the blockquote', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> [!NOTE]\n> Text.\n>\n> [!TIP]\n> More.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const markerFindings = findings.filter((f) => f.rule === Rule.ValidCalloutMarker);
+      expect(markerFindings).toHaveLength(1);
+      expect(markerFindings[0].line).toBe(8);
+      expect(markerFindings[0].title).toBe('Callout marker not at the start of the quote');
+    });
+
+    it('should warn when a lazy continuation line comes before the marker', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('> Intro.\ncontinued\n> [!NOTE]\n> More.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)?.title).toBe(
+        'Callout marker not at the start of the quote'
+      );
+    });
+
+    it('should not warn when a callout directly follows a paragraph', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Some paragraph.\n> [!NOTE]\n> Text.\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
+    });
+
+    it('should not report markers inside indented code blocks', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Example:\n\n    > [!DANGER] text\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
+    });
+
+    it('should not report markers inside code blocks', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('```markdown\n> [!DANGER] text\n```\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidCalloutMarker)).toBeUndefined();
+    });
+  });
+
+  // --- no-url-placeholders ---
+
+  describe('no-url-placeholders', () => {
+    it('should report a version placeholder in a link URL and suggest latest', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('Use [Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/).\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.NoUrlPlaceholders);
+      expect(finding).toBeDefined();
+      expect(finding!.severity).toBe('error');
+      expect(finding!.detail).toContain('<GRAFANA_VERSION>');
+      expect(finding!.detail).toContain('"latest"');
+    });
+
+    it('should report other placeholders without the version hint', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Open [your stack](https://<STACK_NAME>.grafana.net/).\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.NoUrlPlaceholders);
+      expect(finding).toBeDefined();
+      expect(finding!.detail).not.toContain('latest');
+    });
+
+    it('should report as warning in non-strict mode', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('[Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/)\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp, false));
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)!.severity).toBe('warning');
+    });
+
+    it('should not report links in inline code or indented code blocks', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md(
+          'Hugo writes `[Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/)`.\n\n    [Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/)\n'
+        )
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)).toBeUndefined();
+    });
+
+    it('should report a placeholder in an image URL', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![Diagram](img/<IMAGE_NAME>.png)\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)).toBeDefined();
+    });
+
+    it('should not report placeholders outside link URLs', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('Replace `<PASSWORD>` with your password.\n\n```yaml\nurl: <HOST>:5433\n```\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)).toBeUndefined();
+    });
+  });
+
+  // --- valid-youtube-link ---
+
+  describe('valid-details-block', () => {
+    const detailsFindings = async (body: string) => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md(body));
+      return (await checkMarkdown(input(tmp))).filter((f) => f.rule === Rule.ValidDetailsBlock);
+    };
+
+    it('should accept a details block with a blank line after the summary', async () => {
+      expect(await detailsFindings('<details>\n<summary>More</summary>\n\nSome **markdown**.\n\n</details>\n')).toEqual(
+        []
+      );
+    });
+
+    it('should accept an empty details block on one line', async () => {
+      expect(await detailsFindings('<details><summary>More</summary></details>\n')).toEqual([]);
+    });
+
+    it('should accept an uppercase </DETAILS > right after the summary', async () => {
+      expect(await detailsFindings('<DETAILS>\n<SUMMARY>More</SUMMARY>\n</DETAILS >\n')).toEqual([]);
+    });
+
+    it('should warn about content in an uppercase details block', async () => {
+      const findings = await detailsFindings('<DETAILS><SUMMARY>x</SUMMARY>\nSome **markdown**\n</DETAILS>\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(5);
+    });
+
+    it('should warn when content directly follows </summary>', async () => {
+      const findings = await detailsFindings('<details>\n<summary>More</summary>\nSome **markdown**.\n</details>\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0]).toMatchObject({ severity: 'warning', line: 6, title: 'Missing blank line after </summary>' });
+    });
+
+    it('should warn when content follows </summary> on the same line', async () => {
+      const findings = await detailsFindings('<details><summary>More</summary> Some **markdown**.\n\n</details>\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(5);
+    });
+
+    it('should warn when content follows an uppercase </SUMMARY >', async () => {
+      const findings = await detailsFindings('<details>\n<summary>More</SUMMARY >\nSome **markdown**.\n</details>\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(6);
+    });
+
+    it('should warn about an unclosed details block', async () => {
+      const findings = await detailsFindings(
+        '<details>\n<summary>One</summary>\n\nText\n\n</details>\n\n<details>\n<summary>Two</summary>\n\nText\n'
+      );
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0]).toMatchObject({ line: 12, title: 'Unclosed <details>' });
+    });
+
+    it('should accept nested details blocks', async () => {
+      expect(
+        await detailsFindings(
+          '<details>\n<summary>Outer</summary>\n\n<details>\n<summary>Inner</summary>\n\nText\n\n</details>\n\n</details>\n'
+        )
+      ).toEqual([]);
+    });
+
+    it('should accept a details block inside a blockquote', async () => {
+      expect(
+        await detailsFindings('> <details>\n> <summary>More</summary>\n>\n> Some **markdown**.\n>\n> </details>\n')
+      ).toEqual([]);
+    });
+
+    it('should ignore </summary> in inline code', async () => {
+      expect(await detailsFindings('Close it with `</summary>` and then\nkeep writing.\n')).toEqual([]);
+    });
+
+    it('should ignore details in code', async () => {
+      expect(
+        await detailsFindings(
+          '```html\n<details>\n<summary>More</summary>\nText\n```\n\nUse `<details>` to collapse.\n'
+        )
+      ).toEqual([]);
+    });
+  });
+
+  describe('valid-youtube-link', () => {
+    async function youtubeFindings(body: string) {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md(body));
+      const findings = await checkMarkdown(input(tmp));
+      return findings.filter((f) => f.rule === Rule.ValidYoutubeLink);
+    }
+
+    it('should not report a valid embed link', async () => {
+      expect(await youtubeFindings('[Demo](https://www.youtube.com/watch?v=Qc83dSVe0vQ)\n')).toEqual([]);
+      expect(await youtubeFindings('https://youtu.be/Qc83dSVe0vQ\n')).toEqual([]);
+    });
+
+    it('should warn when the video id is invalid', async () => {
+      const findings = await youtubeFindings('Intro.\n\n[Demo](https://www.youtube.com/watch?v=short)\n\nOutro.\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].severity).toBe('warning');
+      expect(findings[0].line).toBe(7);
+    });
+
+    it('should warn when a watch link has no id', async () => {
+      expect(await youtubeFindings('[Demo](https://www.youtube.com/watch)\n')).toHaveLength(1);
+    });
+
+    it('should not report a link inside a sentence or a list', async () => {
+      expect(await youtubeFindings('Watch [it](https://youtu.be/short) now.\n')).toEqual([]);
+      expect(await youtubeFindings('- [Demo](https://youtu.be/short)\n')).toEqual([]);
+    });
+
+    it('should warn about a reference-style link with an invalid id', async () => {
+      const findings = await youtubeFindings('[Demo][video]\n\n[video]: https://youtu.be/short\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(5);
+    });
+
+    it('should not report a valid reference-style link', async () => {
+      expect(await youtubeFindings('[video]\n\n[video]: https://youtu.be/Qc83dSVe0vQ\n')).toEqual([]);
+    });
+
+    it('should warn about a bare www link with an invalid id', async () => {
+      expect(await youtubeFindings('www.youtube.com/watch?v=short\n')).toHaveLength(1);
+      expect(await youtubeFindings('www.youtube.com/watch?v=Qc83dSVe0vQ\n')).toEqual([]);
+    });
+
+    it('should warn about a Shorts link with an invalid id', async () => {
+      expect(await youtubeFindings('[Demo](https://www.youtube.com/shorts/short)\n')).toHaveLength(1);
+    });
+
+    it('should warn about a link with a single-quoted title', async () => {
+      expect(await youtubeFindings("[Demo](https://youtu.be/short 'Title')\n")).toHaveLength(1);
+    });
+
+    it('should not report a channel link or a code block', async () => {
+      expect(await youtubeFindings('[Channel](https://www.youtube.com/@grafana)\n')).toEqual([]);
+      expect(await youtubeFindings('```md\n\n[Demo](https://youtu.be/short)\n\n```\n')).toEqual([]);
+    });
+  });
+
+  // --- reference-style links ---
+
+  describe('reference-style links', () => {
+    it('should run link rules on reference definitions', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md(
+          '[Explore][explore], [bad][bad], [out][out]\n\n[explore]: https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/\n[bad]: javascript:alert(1)\n[out]: ../../outside.md\n'
+        )
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+
+      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)?.line).toBe(7);
+      expect(findings.find((f) => f.rule === Rule.NoDangerousUrls)?.line).toBe(8);
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)?.line).toBe(9);
+    });
+
+    it('should run image rules on definitions used by an image', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![Logo][logo]\n\n[logo]: https://example.com/logo.png\n'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoExternalImages)).toBeDefined();
+      expect(findings.find((f) => f.rule === Rule.InternalLinksRelative)).toBeUndefined();
+    });
+
+    it('should not report footnote definitions or definitions in code', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(
+        join(tmp, 'index.md'),
+        md('Text.[^1]\n\n[^1]: /absolute/looking.md\n\n```\n[bad]: javascript:alert(1)\n```\n')
+      );
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoDangerousUrls)).toBeUndefined();
+      expect(findings.find((f) => f.rule === Rule.InternalLinksRelative)).toBeUndefined();
+    });
+  });
+
   // --- no-dangerous-urls ---
 
   describe('no-dangerous-urls', () => {
@@ -441,6 +896,77 @@ describe('checkMarkdown', () => {
       expect(finding).toBeDefined();
     });
 
+    it('should allow ../ in links and images that stay inside the docs folder', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('[examples](../examples.md)\n\n![legend](../img/x.png)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeUndefined();
+    });
+
+    it('should leave root-relative refs with ../ to the relative-path rules', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![x](/img/../../secret.png)\n\n[y](/img/../../secret.md)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeUndefined();
+      expect(findings.find((f) => f.rule === Rule.ImageRefsRelative)).toBeDefined();
+      expect(findings.find((f) => f.rule === Rule.InternalLinksRelative)).toBeDefined();
+    });
+
+    it('should report ../ from a nested page that leaves the docs folder', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('[outside](../../outside.md)\n\n![x](../../img/x.png)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.NoPathTraversal)).toHaveLength(2);
+    });
+
+    it('should report ../ from the root index.md', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[readme](../README.md)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeDefined();
+    });
+
+    it('should resolve ../ depth against the page location', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await mkdir(join(tmp, 'a', 'b'), { recursive: true });
+      await writeFile(join(tmp, 'a', 'b', 'c.md'), md('![ok](../../img/x.png)\n\n![bad](../../../x.png)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      const traversal = findings.filter((f) => f.rule === Rule.NoPathTraversal);
+      expect(traversal).toHaveLength(1);
+      expect(traversal[0].title).toBe('Path traversal in image reference');
+    });
+
+    it('should report percent-encoded traversal', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[x](..%2Fsecret.md) [y](%2e%2e/secret.md)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.NoPathTraversal)).toHaveLength(2);
+    });
+
+    it('should report traversal when another escape in the reference is malformed', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[x](..%2Fsecret%ZZ.md)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeDefined();
+    });
+
+    it('should report backslash-rooted references', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[x](\\outside.md)\n\n![y](\\outside.png)'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.NoPathTraversal)).toHaveLength(2);
+    });
+
     it('should not report ./ prefix', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('![alt](./img/pic.png)'));
@@ -533,6 +1059,38 @@ describe('checkMarkdown', () => {
       const finding = findings.find((f) => f.rule === Rule.NoExternalImages);
       expect(finding).toBeDefined();
       expect(finding!.severity).toBe('error');
+    });
+
+    it('should report an external image with a single-quoted title', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md("![logo](https://example.com/logo.png 'Logo')"));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      expect(findings.find((f) => f.rule === Rule.NoExternalImages)).toBeDefined();
+    });
+
+    it('should word the external video message for videos', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![demo](https://example.com/demo.mp4)'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.NoExternalImages);
+      expect(finding!.title).toBe('External video URL detected');
+      expect(finding!.detail).toContain('Download the video');
+      expect(finding!.detail).not.toContain('img/');
+    });
+
+    it('should word the absolute path message for videos', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![demo](/video/demo.mp4)'));
+
+      const findings = await checkMarkdown(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.ImageRefsRelative);
+      expect(finding!.detail).toContain('video/filename.mp4');
+      expect(finding!.detail).not.toContain('img/');
     });
 
     it('should report http:// image URLs', async () => {

@@ -14,12 +14,15 @@ export const Rule = {
   DocsPathExists: 'docs-path-exists',
   MaxTotalDocsSize: 'max-total-docs-size',
   MaxTotalPages: 'max-total-pages',
+  // plugin-type rules
+  RequiredPages: 'required-pages',
   // frontmatter rules
   BlockExists: 'frontmatter-block-exists',
   ValidYaml: 'frontmatter-valid-yaml',
   RequiredFields: 'frontmatter-required-fields',
   FieldTypes: 'frontmatter-field-types',
   ValidSlug: 'frontmatter-valid-slug',
+  RootIndexSlug: 'root-index-no-custom-slug',
   NoH1: 'no-h1-heading',
   DuplicatePosition: 'no-duplicate-sidebar-position',
   DuplicateSlug: 'no-duplicate-slugs',
@@ -35,6 +38,7 @@ export const Rule = {
   MaxTotalImagesSize: 'max-total-images-size',
   ImageFileNaming: 'image-file-naming',
   NoOrphanedImages: 'no-orphaned-images',
+  MaxVideoSize: 'max-video-size',
   // markdown + security rules
   NoRawHtml: 'no-raw-html',
   ImageRefsRelative: 'image-refs-relative',
@@ -44,6 +48,11 @@ export const Rule = {
   NoPathTraversal: 'no-path-traversal',
   NoBase64Images: 'no-base64-images',
   NoExternalImages: 'no-external-images',
+  NoHugoShortcodes: 'no-hugo-shortcodes',
+  NoUrlPlaceholders: 'no-url-placeholders',
+  ValidCalloutMarker: 'valid-callout-marker',
+  ValidYoutubeLink: 'valid-youtube-link',
+  ValidDetailsBlock: 'valid-details-block',
   // cross-file rules
   InternalLinksResolve: 'internal-links-resolve',
   AnchorLinksResolve: 'anchor-links-resolve',
@@ -85,6 +94,11 @@ export interface Diagnostic {
 export interface ValidationInput {
   docsPath: string;
   strict: boolean;
+  /**
+   * The plugin's `type` from `plugin.json`, such as `panel` or `datasource`. Drives the
+   * `required-pages` rule, which reports nothing when this is unset.
+   */
+  pluginType?: string;
   /**
    * Treat leftover `section-brief` scaffolding as progress rather than a defect.
    *

@@ -4,7 +4,12 @@ import { startServer } from '../server/server.js';
 
 const debug = createDebug('plugin-docs-cli:serve');
 
-export const serve = async (argv: minimist.ParsedArgs, docsPath: string) => {
+export const serve = async (
+  argv: minimist.ParsedArgs,
+  docsPath: string,
+  pluginType?: string,
+  readmePaths?: string[]
+) => {
   debug('Serve command invoked with args: %O', argv);
 
   // parse port
@@ -19,8 +24,10 @@ export const serve = async (argv: minimist.ParsedArgs, docsPath: string) => {
   try {
     await startServer({
       docsPath,
+      readmePaths,
       port,
       liveReload,
+      pluginType,
     });
   } catch (error) {
     debug('Failed to start server: %O', error);

@@ -71,5 +71,15 @@ describe('checkManifest', () => {
       const findings = await checkManifest(input(tmp));
       expect(findings.find((f) => f.rule === Rule.ManifestRefsExist)).toBeUndefined();
     });
+
+    it('should not report nested pages, whose manifest file refs use forward slashes', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'manifest-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Home'));
+      await mkdir(join(tmp, 'config'));
+      await writeFile(join(tmp, 'config', 'settings.md'), md('Settings'));
+
+      const findings = await checkManifest(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ManifestRefsExist)).toBeUndefined();
+    });
   });
 });

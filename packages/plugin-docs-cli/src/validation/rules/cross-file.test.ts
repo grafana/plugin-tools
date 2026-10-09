@@ -26,6 +26,85 @@ describe('checkCrossFile', () => {
   // --- internal-links-resolve ---
 
   describe('internal-links-resolve', () => {
+    it('should report an unresolved link through a reference definition', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'cross-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Refer to [Setup][setup].\n\n[setup]: ./missing.md\n'));
+
+      const findings = await checkCrossFile(input(tmp));
+
+      const finding = findings.find((f) => f.rule === Rule.InternalLinksResolve);
+      expect(finding).toBeDefined();
+      expect(finding!.line).toBe(7);
+    });
+
+    it('should report an unresolved link with a single-quoted title', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'cross-test-'));
+      await writeFile(join(tmp, 'index.md'), md("Refer to [Setup](./missing.md 'The setup page')."));
+
+      const findings = await checkCrossFile(input(tmp));
+
+      expect(findings.find((f) => f.rule === Rule.InternalLinksResolve)).toBeDefined();
+    });
+
+    it('should not treat an image reference definition as a page link', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'cross-test-'));
+      await writeFile(join(tmp, 'index.md'), md('![Shot][shot]\n\n[shot]: img/shot.png\n'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.InternalLinksResolve)).toBeUndefined();
+    });
+
+    it('should resolve ../ links from a nested page', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'examples.md'), md('## Examples'));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('[examples](../examples.md)'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(0);
+    });
+
+    it('should ignore a query string when resolving a link', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'examples.md'), md('## Examples'));
+      await writeFile(
+        join(tmp, 'options', 'legend.md'),
+        md('[up](../examples.md?preview=1) [side](./legend.md?x=1#top)')
+      );
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(0);
+    });
+
+    it('should resolve percent-encoded links to the decoded file', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'examples.md'), md('## Examples'));
+      await writeFile(join(tmp, 'my page.md'), md('## Page'));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('[a](../examples%2Emd) [b](../my%20page.md)'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(0);
+    });
+
+    it('should report a broken ../ link from a nested page', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      await mkdir(join(tmp, 'options'));
+      await writeFile(join(tmp, 'options', 'legend.md'), md('[missing](../missing.md)'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(1);
+    });
+
+    it('should leave links that escape the docs folder to no-path-traversal', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
+      await writeFile(join(tmp, 'index.md'), md('[readme](../README.md)'));
+
+      const findings = await checkCrossFile(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.InternalLinksResolve)).toHaveLength(0);
+    });
+
     it('should not report when linked file exists', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
       await writeFile(join(tmp, 'index.md'), md('[other](other.md)'));

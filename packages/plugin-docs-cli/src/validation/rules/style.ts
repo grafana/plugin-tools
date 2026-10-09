@@ -610,7 +610,7 @@ export const REJECTED_RULES: Readonly<Record<string, string>> = {
   Admonitions: 'Requires the Hugo admonition shortcode, which plugin docs forbid.',
   Relref: 'Checks Hugo relref shortcodes, which cannot appear in plugin docs.',
   Shortcodes: 'Checks Hugo shortcode syntax, which cannot appear in plugin docs.',
-  Paragraphs: 'Targets <br> in Hugo tables; no-raw-html already covers the concern.',
+  Paragraphs: 'Flags <br> in tables, which plugin docs support for line breaks in cells.',
 
   // Grafana-internal conventions with no meaning for a third-party plugin vendor.
   Admin: 'Grafana role naming.',

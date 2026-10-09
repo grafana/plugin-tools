@@ -1,5 +1,21 @@
 # Changelog
 
+## [7.12.2](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.12.1...@grafana/create-plugin@7.12.2) (2026-10-09)
+
+
+### Bug Fixes
+
+* **jest:** fill in unimplemented interfaces with jest-canvas-mock and intersection-observer ([#2933](https://github.com/grafana/plugin-tools/issues/2933)) ([a111afe](https://github.com/grafana/plugin-tools/commit/a111afe941b7cd3c4b3bc87c30a0c40853c65383))
+
+## [7.12.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.12.0...@grafana/create-plugin@7.12.1) (2026-10-06)
+
+
+### Bug Fixes
+
+* **create-plugin:** bump grafana-app-sdk to v0.60.3 in experimental-app-sdk ([#2899](https://github.com/grafana/plugin-tools/issues/2899)) ([f57e8a8](https://github.com/grafana/plugin-tools/commit/f57e8a837d36c1b5e566ad81cf8fe426337aca88))
+* **docs:** redirect dead plugin-tools urls and fix two broken links ([#2931](https://github.com/grafana/plugin-tools/issues/2931)) ([d26d21c](https://github.com/grafana/plugin-tools/commit/d26d21c6d3be60ba7db7a4576f794e2fcddeb324))
+* **templates:** Update dependency @grafana/plugin-e2e to v3.14.0 ([#2897](https://github.com/grafana/plugin-tools/issues/2897)) ([690dcf8](https://github.com/grafana/plugin-tools/commit/690dcf8f935c3ed741c6bb57ea82df83e5b29fa1))
+
 ## [7.12.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.11.0...@grafana/create-plugin@7.12.0) (2026-09-22)
 
 

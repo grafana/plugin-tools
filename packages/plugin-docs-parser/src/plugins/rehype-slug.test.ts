@@ -46,20 +46,26 @@ describe('rehypeSlug', () => {
     expect(getEl(root, 2).properties).toMatchObject({ id: 'setup-2' });
   });
 
-  it('should leave pre-existing ids untouched', () => {
-    const root = tree(el('h2', 'Setup', { id: 'custom-anchor' }));
+  it('should replace pre-existing ids', () => {
+    const root = tree(el('h2', 'Setup', { id: 'dataLayer' }), el('h2', 'Setup'));
     transform(root);
 
-    expect(getEl(root, 0).properties).toMatchObject({ id: 'custom-anchor' });
+    expect(getEl(root, 0).properties).toMatchObject({ id: 'setup' });
+    expect(getEl(root, 1).properties).toMatchObject({ id: 'setup-1' });
   });
 
-  it('should not count pre-existing ids toward dedupe', () => {
-    const root = tree(el('h2', 'Setup', { id: 'setup' }), el('h2', 'Setup'));
+  it('should remove a pre-existing id when the heading has no usable slug', () => {
+    const root = tree(el('h2', '🎉', { id: 'dataLayer' }));
     transform(root);
 
-    // the second heading still gets the unsuffixed slug because the visitor
-    // only tracks ids it has assigned itself
-    expect(getEl(root, 1).properties).toMatchObject({ id: 'setup' });
+    expect(getEl(root, 0).properties).not.toHaveProperty('id');
+  });
+
+  it('should keep the footnotes heading id', () => {
+    const root = tree(el('h2', 'Footnotes', { id: 'footnote-label' }));
+    transform(root);
+
+    expect(getEl(root, 0).properties).toMatchObject({ id: 'footnote-label' });
   });
 
   it('should skip headings that slugify to empty (emoji or punctuation only)', () => {

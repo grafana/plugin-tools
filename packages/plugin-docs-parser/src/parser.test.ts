@@ -70,8 +70,8 @@ Body text here.`;
     const result = parseMarkdown(markdown);
     const html = toHtml(result.hast);
 
-    expect(html).toContain('<code');
-    expect(html).toContain('const x = 42;');
+    expect(html).toContain('<code class="hljs language-typescript">');
+    expect(html).toContain('<span class="hljs-number">42</span>');
   });
 
   it('should handle empty frontmatter', () => {
@@ -84,26 +84,6 @@ Body text here.`;
 
     expect(result.frontmatter).toEqual({});
     expect(html).toContain('Title');
-  });
-
-  it('should drop raw HTML elements per the docs spec', () => {
-    const markdown = `## FAQ
-
-<details>
-<summary>How does it work?</summary>
-
-It works by parsing markdown.
-
-</details>`;
-
-    const result = parseMarkdown(markdown);
-    const html = toHtml(result.hast);
-
-    // raw HTML is forbidden by the docs spec, so <details>/<summary> get stripped
-    expect(html).not.toContain('<details>');
-    expect(html).not.toContain('<summary>');
-    // text content inside the raw block is preserved as a regular paragraph
-    expect(html).toContain('It works by parsing markdown.');
   });
 
   it('should sanitize potentially dangerous HTML', () => {
@@ -130,6 +110,106 @@ Regular content.
     // safe content should remain (h1 is stripped, paragraph is kept)
     expect(html).not.toContain('<h1');
     expect(html).toContain('<p>Regular content.</p>');
+  });
+
+  describe('raw HTML', () => {
+    const render = (markdown: string) => toHtml(parseMarkdown(markdown).hast);
+
+    it('should keep details and summary with markdown inside', () => {
+      const html = render(`<details>
+<summary>How does it work?</summary>
+
+It works by parsing **markdown**.
+
+</details>`);
+
+      expect(html).toBe(
+        '<details>\n<summary>How does it work?</summary>\n<p>It works by parsing <strong>markdown</strong>.</p>\n</details>'
+      );
+    });
+
+    it('should keep the open attribute on details', () => {
+      expect(render('<details open>\n<summary>Open</summary>\n\nText\n\n</details>')).toContain('<details open>');
+    });
+
+    it('should keep line breaks in table cells', () => {
+      const html = render('| Setting | Values |\n| --- | --- |\n| Mode | one<br>two |');
+
+      expect(html).toContain('<td>one<br>two</td>');
+    });
+
+    it('should remove other tags and keep their text', () => {
+      const html = render(
+        '<div class="note">\n\nPress <kbd>Enter</kbd> or <span style="color:red">Esc</span>.\n\n</div>'
+      );
+
+      expect(html).toBe('\n<p>Press Enter or Esc.</p>\n');
+    });
+
+    it('should remove comments', () => {
+      expect(render('<!-- vale off -->\n\nText')).toBe('\n<p>Text</p>');
+    });
+
+    it('should remove attributes other than open from details and summary', () => {
+      const html = render(
+        '<details class="x" style="color:red" ontoggle="alert(1)" open>\n<summary onclick="alert(1)" id="s">Title</summary>\n\nText\n\n</details>'
+      );
+
+      expect(html).toContain('<details open>');
+      expect(html).not.toContain('class=');
+      expect(html).not.toContain('style=');
+      expect(html).not.toContain('alert');
+    });
+
+    it('should remove id and name from raw HTML so it cannot clobber page globals', () => {
+      const html = render(
+        '<details id="dataLayer" name="x">\n<summary id="s" name="n">Title</summary>\n\nText<br id="b">\n\n</details>'
+      );
+
+      expect(html).not.toMatch(/\bid=|\bname=/);
+    });
+
+    it('should remove a raw HTML heading', () => {
+      const result = parseMarkdown('<h2 id="dataLayer">Setup</h2>\n\nText');
+
+      expect(toHtml(result.hast)).not.toContain('<h2');
+      expect(result.headings).toEqual([]);
+    });
+
+    it('should keep ids on headings and footnotes', () => {
+      const html = render('## Setup\n\nText.[^1]\n\n[^1]: A note.');
+
+      expect(html).toContain('<h2 id="setup">');
+      expect(html).toContain('id="user-content-fnref-1"');
+      expect(html).toContain('<li id="user-content-fn-1">');
+      expect(html).toContain('id="footnote-label"');
+    });
+
+    it('should remove a summary outside details', () => {
+      expect(render('<summary>Alone</summary>\n\nText')).not.toContain('<summary>');
+    });
+
+    it.each([
+      ['a script with its content', '<script>alert(1)</script>'],
+      ['a style with its content', '<style>body { display: none }</style>'],
+      ['an iframe', '<iframe src="https://example.com/alert(1)"></iframe>'],
+      ['an image error handler', '<img src="x" onerror="alert(1)">'],
+      ['a javascript link', '<a href="javascript:alert(1)">click</a>'],
+      ['an svg with a handler', '<svg onload="alert(1)"><circle /></svg>'],
+      ['a summary handler inside details', '<details><summary onmouseover="alert(1)">x</summary></details>'],
+    ])('should remove %s', (_name, markdown) => {
+      const html = render(`${markdown}\n\nAfter`);
+
+      expect(html).not.toMatch(/alert|display: none|<script|<style|<iframe|<svg|onerror|javascript:/);
+      expect(html).toContain('<p>After</p>');
+    });
+
+    it('should leave headings inside details out of the table of contents', () => {
+      const result = parseMarkdown('## Setup\n\n<details>\n<summary>More</summary>\n\n### Hidden step\n\n</details>');
+
+      expect(result.headings).toEqual([{ level: 2, id: 'setup', text: 'Setup' }]);
+      expect(toHtml(result.hast)).toContain('<h3 id="hidden-step">Hidden step</h3>');
+    });
   });
 
   describe('heading extraction', () => {
@@ -176,6 +256,59 @@ Even more text.
 
       expect(result.headings).toHaveLength(1);
       expect(result.headings[0].text).toBe('Install the plugin package');
+    });
+
+    it('should not list the generated footnotes heading', () => {
+      const markdown = '## Ports\n\nYugabyteDB listens on port 5433.[^1]\n\n[^1]: Unless you changed it.\n';
+      const result = parseMarkdown(markdown);
+
+      expect(result.headings).toEqual([{ level: 2, id: 'ports', text: 'Ports' }]);
+    });
+  });
+
+  describe('syntax highlighting', () => {
+    const render = (markdown: string) => toHtml(parseMarkdown(markdown).hast);
+
+    it('should highlight a fenced block with a known language', () => {
+      const html = render('```sql\nSELECT 1\n```');
+
+      expect(html).toContain('class="hljs language-sql"');
+      expect(html).toContain('<span class="hljs-keyword">SELECT</span>');
+    });
+
+    it('should highlight a language alias', () => {
+      expect(render('```js\nconst a = 1\n```')).toContain('<span class="hljs-keyword">const</span>');
+    });
+
+    it('should leave a block with an unsupported language as plain text', () => {
+      const html = render('```hcl\nx = 1\n```');
+
+      expect(html).toContain('language-hcl');
+      expect(html).toContain('>x = 1\n</code>');
+      expect(html).not.toContain('hljs-');
+    });
+
+    it('should leave a block without a language and inline code alone', () => {
+      expect(render('```\nSELECT 1\n```')).toContain('<pre><code>SELECT 1\n</code></pre>');
+      expect(render('Use `SELECT 1` here.')).toContain('<code>SELECT 1</code>');
+    });
+
+    it('should highlight code inside a callout', () => {
+      const html = render('> [!NOTE]\n> ```yaml\n> enabled: true\n> ```');
+
+      expect(html).toContain('callout-note');
+      expect(html).toContain('<span class="hljs-attr">enabled:</span>');
+    });
+
+    it('should escape markup in code', () => {
+      const html = render('```html\n<script>alert(1)</script>\n```');
+
+      expect(html).not.toContain('<script>');
+      expect(html).toContain('&#x3C;');
+    });
+
+    it('should not let authors inject highlight classes', () => {
+      expect(render('<span class="hljs-keyword">SELECT</span>')).not.toContain('hljs');
     });
   });
 

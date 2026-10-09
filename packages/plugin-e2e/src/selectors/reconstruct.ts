@@ -1,4 +1,4 @@
-import { VersionedSelectorGroup } from '@grafana/e2e-selectors';
+import { VersionedSelectorGroup } from './vendored';
 
 // Reconstructs the data-only selector tree served by Grafana (see grafana/grafana e2e-selectors
 // build) back into a versioned selector tree with functions, so it can be passed to resolveSelectors.

@@ -1,4 +1,4 @@
-import { VersionedSelectorGroup } from '@grafana/e2e-selectors';
+import { VersionedSelectorGroup } from './vendored';
 import { MIN_GRAFANA_VERSION } from './minGrafanaVersion';
 
 export const versionedConstants = {
