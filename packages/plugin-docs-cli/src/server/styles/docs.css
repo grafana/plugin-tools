@@ -574,6 +574,29 @@ a:hover {
   --callout-color: #cf222e;
 }
 
+.plugin-content details {
+  margin: 16px 0;
+  padding: 8px 16px;
+  border: 1px solid var(--gray-300);
+  border-radius: 4px;
+}
+
+.plugin-content summary {
+  margin: -8px -16px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.plugin-content details[open] > summary {
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--gray-300);
+}
+
+.plugin-content details > :last-child {
+  margin-bottom: 0;
+}
+
 .plugin-content .table-scroll {
   margin: 16px 0;
   overflow-x: auto;

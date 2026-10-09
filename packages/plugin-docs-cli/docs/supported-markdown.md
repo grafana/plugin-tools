@@ -1,12 +1,15 @@
 # Supported markdown
 
 To write Plugin docs use plain markdown: [CommonMark](https://commonmark.org/) plus the
-[GitHub Flavored Markdown](https://github.github.com/gfm/) extensions. There is no MDX, no
-templating and no raw HTML. What you write is what gets rendered on grafana.com, in the `serve`
-preview and on GitHub, so your docs read well in all three platforms.
+[GitHub Flavored Markdown](https://github.github.com/gfm/) extensions. There is no MDX and no
+templating, and the only HTML you can use is for collapsible sections, line breaks and horizontal
+rules. What you write is what gets rendered on grafana.com, in the `serve` preview and on GitHub,
+so your docs read well in all three platforms.
 
 This page lists everything you can use and how to write it. For the checks that run against your
-docs folder, refer to [Validation rules](./validation-rules.md).
+docs folder, refer to [Validation rules](./validation-rules.md). To move existing docs from the
+[docs website](https://grafana.com/docs/), refer to
+[Migrate from the docs website](./migrate-from-docs-website.md).
 
 ## Pages and frontmatter
 
@@ -54,11 +57,19 @@ you can link to. The anchor is the heading text in lowercase, with punctuation r
 turned into hyphens. `## Before you begin` becomes `#before-you-begin`. A repeated heading gets a
 number added: `#permissions-1`.
 
+Custom anchors such as `## Setup {#install}` aren't supported. The `{#install}` text shows in the
+heading.
+
 ## Text formatting
 
 ```markdown
 **bold**, _italic_, ~~strikethrough~~ and `inline code`
 ```
+
+Put placeholders such as `<your-api-key>` in inline code. Without backticks, the angle brackets
+make it an HTML tag, and it's removed from the page.
+
+Write `---` on its own line, with a blank line before and after it, for a horizontal rule.
 
 ## Lists
 
@@ -83,6 +94,15 @@ number added: `#permissions-1`.
 ```
 
 Use `:---`, `:---:` and `---:` in the separator row to align a column left, center or right.
+Write `\|` to use a `|` inside a cell.
+
+To break a line inside a cell, use `<br>`:
+
+```markdown
+| Setting  | Values                                 |
+| -------- | -------------------------------------- |
+| **Mode** | `table` for rows<br>`series` for lines |
+```
 
 ## Code blocks
 
@@ -142,6 +162,8 @@ relative path:
 ![The query editor in builder mode](./img/query-builder.png)
 ```
 
+- Images can be in any folder inside your docs folder, such as next to the page that uses them.
+  The path is relative to the page.
 - Supported formats are PNG, JPEG, WebP and GIF. SVG isn't allowed.
 - Static images can be up to 300KB, GIFs up to 1MB and all images together up to 5MB.
 - Always write alt text that describes the image. Screen readers read it out, and it's shown if
@@ -167,6 +189,7 @@ There are five types:
 | `[!WARNING]`   | Something that needs the reader's attention to avoid problems. |
 | `[!CAUTION]`   | A risk, such as losing data or a security issue.               |
 
+- A blockquote without a marker renders as a plain quote.
 - A callout can hold several paragraphs, lists and code blocks. Start every line with `>`.
 - The marker must be alone on the first line. `> [!NOTE] Some text` renders as a plain quote.
 - An unknown type, such as `[!DANGER]`, renders as a plain quote.
@@ -204,6 +227,28 @@ Use image syntax with an `.mp4` or `.webm` file inside your docs folder:
   for screen readers.
 - Name the file with letters, digits, hyphens, underscores and dots only, as for images.
 
+## Collapsible sections
+
+Use a `<details>` block to hide content that most readers don't need, such as a long example. The
+`<summary>` is the text the reader clicks to open it:
+
+```markdown
+<details>
+<summary>Show the full provisioning file</summary>
+
+Any **markdown** works here, including code blocks.
+
+</details>
+```
+
+- Leave a blank line after `</summary>`. Without it, the content shows as plain text and its
+  markdown isn't formatted.
+- Write `<details open>` to show the section open when the page loads.
+- The summary is plain text. Markdown inside `<summary>` isn't formatted.
+- Headings inside a collapsible section aren't listed in the table of contents.
+- Attributes other than `open` are removed.
+- GitHub shows collapsible sections the same way.
+
 ## Footnotes
 
 ```markdown
@@ -218,8 +263,11 @@ Footnotes are collected at the end of the page.
 
 These are removed when your page is rendered, or shown as plain text:
 
-- **Raw HTML**, for example `<div>`, `<br>`, `<details>` or `<iframe>`. Write it in markdown instead.
-- **Hugo shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`.
+- **Raw HTML** other than `<details>`, `<summary>`, `<br>` and `<hr>`, for example `<div>`, `<span>` or
+  `<iframe>`. `serve` reports it as a warning and `validate` as an error, and it's removed when the
+  page is rendered. Write it in markdown instead. HTML comments don't show on the page.
+- **Docs website shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`. To convert them, refer to
+  [Migrate from the docs website](./migrate-from-docs-website.md).
 - **MDX and JSX components.**
 - **Video players other than YouTube**, such as Vimeo. Link to the video instead.
 - **SVG images, external images and base64 images.** Save a PNG or WebP file in your docs folder.

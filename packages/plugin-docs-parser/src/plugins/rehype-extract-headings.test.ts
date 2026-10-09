@@ -119,6 +119,35 @@ describe('rehypeExtractHeadings', () => {
     expect(vfile.data.headings).toEqual([{ level: 2, id: 'intro', text: 'Introduction' }]);
   });
 
+  it('should skip the heading inside a footnotes section parsed from HTML', () => {
+    const vfile = new VFile();
+    const footnotes: Element = {
+      type: 'element',
+      tagName: 'section',
+      properties: { dataFootnotes: '' },
+      children: [heading(2, 'footnote-label', 'Footnotes')],
+    };
+    transform(tree(heading(2, 'intro', 'Introduction'), footnotes), vfile);
+
+    expect(vfile.data.headings).toEqual([{ level: 2, id: 'intro', text: 'Introduction' }]);
+  });
+
+  it('should skip headings inside a details element', () => {
+    const vfile = new VFile();
+    const details: Element = {
+      type: 'element',
+      tagName: 'details',
+      properties: {},
+      children: [heading(2, 'hidden', 'Hidden'), heading(3, 'nested', 'Nested')],
+    };
+    transform(tree(heading(2, 'intro', 'Introduction'), details, heading(2, 'after', 'After')), vfile);
+
+    expect(vfile.data.headings).toEqual([
+      { level: 2, id: 'intro', text: 'Introduction' },
+      { level: 2, id: 'after', text: 'After' },
+    ]);
+  });
+
   it('should return empty array when no headings exist', () => {
     const p: Element = {
       type: 'element',

@@ -65,6 +65,22 @@ describe('checkMarkdown', () => {
       expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeUndefined();
     });
 
+    it('should report <wbr>, which the parser removes', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Text<wbr>more'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)?.detail).toContain('<wbr>');
+    });
+
+    it('should allow <hr> tags', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md('Text\n\n<hr>\n\nMore'));
+
+      const findings = await checkMarkdown(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.NoRawHtml)).toBeUndefined();
+    });
+
     it('should not report HTML inside fenced code blocks', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('```html\n<div>example</div>\n```'));
@@ -584,6 +600,91 @@ describe('checkMarkdown', () => {
   });
 
   // --- valid-youtube-link ---
+
+  describe('valid-details-block', () => {
+    const detailsFindings = async (body: string) => {
+      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
+      await writeFile(join(tmp, 'index.md'), md(body));
+      return (await checkMarkdown(input(tmp))).filter((f) => f.rule === Rule.ValidDetailsBlock);
+    };
+
+    it('should accept a details block with a blank line after the summary', async () => {
+      expect(await detailsFindings('<details>\n<summary>More</summary>\n\nSome **markdown**.\n\n</details>\n')).toEqual(
+        []
+      );
+    });
+
+    it('should accept an empty details block on one line', async () => {
+      expect(await detailsFindings('<details><summary>More</summary></details>\n')).toEqual([]);
+    });
+
+    it('should accept an uppercase </DETAILS > right after the summary', async () => {
+      expect(await detailsFindings('<DETAILS>\n<SUMMARY>More</SUMMARY>\n</DETAILS >\n')).toEqual([]);
+    });
+
+    it('should warn about content in an uppercase details block', async () => {
+      const findings = await detailsFindings('<DETAILS><SUMMARY>x</SUMMARY>\nSome **markdown**\n</DETAILS>\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(5);
+    });
+
+    it('should warn when content directly follows </summary>', async () => {
+      const findings = await detailsFindings('<details>\n<summary>More</summary>\nSome **markdown**.\n</details>\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0]).toMatchObject({ severity: 'warning', line: 6, title: 'Missing blank line after </summary>' });
+    });
+
+    it('should warn when content follows </summary> on the same line', async () => {
+      const findings = await detailsFindings('<details><summary>More</summary> Some **markdown**.\n\n</details>\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(5);
+    });
+
+    it('should warn when content follows an uppercase </SUMMARY >', async () => {
+      const findings = await detailsFindings('<details>\n<summary>More</SUMMARY >\nSome **markdown**.\n</details>\n');
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].line).toBe(6);
+    });
+
+    it('should warn about an unclosed details block', async () => {
+      const findings = await detailsFindings(
+        '<details>\n<summary>One</summary>\n\nText\n\n</details>\n\n<details>\n<summary>Two</summary>\n\nText\n'
+      );
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0]).toMatchObject({ line: 12, title: 'Unclosed <details>' });
+    });
+
+    it('should accept nested details blocks', async () => {
+      expect(
+        await detailsFindings(
+          '<details>\n<summary>Outer</summary>\n\n<details>\n<summary>Inner</summary>\n\nText\n\n</details>\n\n</details>\n'
+        )
+      ).toEqual([]);
+    });
+
+    it('should accept a details block inside a blockquote', async () => {
+      expect(
+        await detailsFindings('> <details>\n> <summary>More</summary>\n>\n> Some **markdown**.\n>\n> </details>\n')
+      ).toEqual([]);
+    });
+
+    it('should ignore </summary> in inline code', async () => {
+      expect(await detailsFindings('Close it with `</summary>` and then\nkeep writing.\n')).toEqual([]);
+    });
+
+    it('should ignore details in code', async () => {
+      expect(
+        await detailsFindings(
+          '```html\n<details>\n<summary>More</summary>\nText\n```\n\nUse `<details>` to collapse.\n'
+        )
+      ).toEqual([]);
+    });
+  });
 
   describe('valid-youtube-link', () => {
     async function youtubeFindings(body: string) {

@@ -15,6 +15,7 @@ import { rehypeStripH1 } from './plugins/rehype-strip-h1.js';
 import { rehypeCallouts } from './plugins/rehype-callouts.js';
 import { rehypeYouTube } from './plugins/rehype-youtube.js';
 import { rehypeVideo } from './plugins/rehype-video.js';
+import { rehypeRawAllowlist } from './plugins/rehype-raw-allowlist.js';
 import type { Heading } from './types.js';
 export type { Heading } from './types.js';
 
@@ -104,9 +105,14 @@ export function parseMarkdown(content: string, options?: ParseOptions): ParsedMa
   }
 
   // build the unified pipeline: markdown → mdast → hast.
-  // raw HTML in markdown is forbidden by the docs spec, so allowDangerousHtml
-  // is off and any inline HTML gets dropped by remark-rehype.
-  const processor = unified().use(remarkParse).use(remarkGfm).use(remarkRehype).use(rehypeStripH1).use(rehypeSlug);
+  // raw HTML is parsed, but only the tags authors may write are kept from it
+  const processor = unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeRawAllowlist)
+    .use(rehypeStripH1)
+    .use(rehypeSlug);
 
   // rewrite asset paths before sanitization so URLs are final
   if (options?.assetBaseUrl) {
