@@ -26,7 +26,9 @@
     "@libs/version"
   ],
   "separateMajorMinor": false,
-  "skipInstalls": false,
+  // Lockfile-only installs. Full installs leave node_modules behind between branches, and lock file
+  // maintenance then rebuilds package-lock.json from it instead of resolving fresh versions.
+  "skipInstalls": true,
   // Required for release-please
   "semanticCommits": "enabled",
   // Default prefix: assume an update does not ship.
