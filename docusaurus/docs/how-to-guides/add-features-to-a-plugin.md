@@ -105,6 +105,29 @@ Instructions ask the agent to mark anything it couldn't apply with a `TODO(<addi
 
 Some additions also list checks, such as your `typecheck` and `build` scripts. When the agent finishes, `create-plugin` runs these checks itself, so the result doesn't depend only on the agent's own report. If a check fails, or your `package.json` doesn't have the script, `create-plugin` shows a warning instead of a success message.
 
+## Example: move your build to Rspack
+
+The `rspack` addition moves your plugin's frontend build from webpack to [Rspack](https://rspack.rs), a faster bundler with a webpack-compatible API. It also replaces the experimental Rspack setup, if your plugin uses it.
+
+```shell
+npx @grafana/create-plugin@latest add rspack
+```
+
+It's a hybrid addition:
+
+1. A codemod replaces the webpack configuration in `.config/` with the Rspack configuration, updates your dependencies and scripts, and raises the minimum Node.js version to 22.23 if your plugin allows a lower version.
+1. If your plugin extends the build configuration with its own `webpack.config.ts` or `rspack.config.ts`, an agent ports your customizations to a root `rspack.config.ts` for Rspack 2.
+
+If you run the addition with `--no-agent` and your plugin has its own webpack configuration, the root `rspack.config.ts` makes your build fail with an `[rspack]` error until you port your customizations. This stops you from releasing a build that's missing them.
+
+After the addition, check that your plugin still builds and runs. If `create-plugin` started the agent, it has already run your `typecheck` and `build` scripts.
+
+```shell
+npm run typecheck
+npm run build
+npm run dev
+```
+
 ## Reference
 
 For the full list of flags, refer to [CLI commands](../reference/cli-commands.mdx).
