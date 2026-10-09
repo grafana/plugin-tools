@@ -96,6 +96,10 @@ describe('rehypeRawAllowlist', () => {
     expect(html).toContain('<li id="user-content-fn-1">');
   });
 
+  it('should keep a task list, whose text has a position without a start', () => {
+    expect(render('- [x] done\n- [ ] open')).toContain('<input type="checkbox" checked disabled> done');
+  });
+
   it('should drop a raw node without a position', () => {
     const tree: Root = {
       type: 'root',

@@ -32,8 +32,8 @@ function takeRawRanges(node: Node, ranges: Range[]): void {
       takeRawRanges(child, ranges);
       return true;
     }
-    const start = child.position?.start.offset;
-    const end = child.position?.end.offset;
+    const start = child.position?.start?.offset;
+    const end = child.position?.end?.offset;
     if (start === undefined || end === undefined || RAW_TEXT_TAG_RE.test(String((child as Literal).value))) {
       return false;
     }
@@ -52,7 +52,7 @@ function filterNodes(
   return nodes.flatMap((node): RootContent[] => {
     if (node.type !== 'element') {
       // raw text always starts inside a raw node, and only shows from a kept tag
-      const offset = node.position?.start.offset;
+      const offset = node.position?.start?.offset;
       const isRaw = offset !== undefined && ranges.some(([start, end]) => offset >= start && offset < end);
       return !isRaw || context === 'kept' ? [node] : [];
     }
