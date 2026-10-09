@@ -66,7 +66,7 @@ interface RenderNavItem extends NavItem {
  * @returns Server instance with app and close method
  *
  * The layout mirrors catalog-website: an Overview tab renders the plugin README, a Documentation
- * tab renders the multi-page docs (`<docsPath>/index.md` at `/docs`, other pages at
+ * tab renders the plugin docs (`<docsPath>/index.md` at `/docs`, other pages at
  * `/docs/<slug>`), and the right rail shows either the README's headings or the docs nav tree with
  * the active page's h2/h3 nested underneath.
  */

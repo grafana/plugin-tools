@@ -13,9 +13,8 @@ For everything plugin docs support, refer to [Supported markdown](./supported-ma
    npx @grafana/create-plugin@latest add docs --docsPath catalogDocs
    ```
 
-   This creates the `catalogDocs/` folder with stub pages, sets `docsPath` in `src/plugin.json` and
-   adds `docs:serve` and `docs:validate` scripts. Use a new folder, because `docs/` usually still
-   holds the docs website sources.
+   Use a new folder, because `docs/` usually still holds the docs website sources. For what the codemod
+   adds, refer to [Get started](./README.md#get-started).
 
 2. Copy the pages from the docs website source folder, usually `docs/sources/`, into
    `catalogDocs/`, replacing the stubs. Copy only pages, not build files such as `Makefile`. Fill in
@@ -90,6 +89,6 @@ images to 5MB in total and videos to 3MB each. Convert SVG images to PNG or WebP
 
 ## 7. Check the result
 
-Run `npm run docs:validate`, or the yarn or pnpm equivalent, and fix every error. Most warnings mean something renders differently
-than you expect, so check those too. Then run `npm run docs:serve`, compare the pages with the docs
-website and check that images, videos, callouts and links work.
+Run `docs:validate` and fix every error. Most warnings mean something renders differently than you expect,
+so check those too. Then run `docs:serve`, compare the pages with the docs website and check that images,
+videos, callouts and links work. For the commands, refer to [Scripts](./README.md#scripts).

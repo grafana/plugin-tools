@@ -15,10 +15,15 @@ For the core parsing library, see [@grafana/plugin-docs-parser](../plugin-docs-p
 
 ## Writing docs
 
-Pages are plain markdown. See [docs/supported-markdown.md](./docs/supported-markdown.md) for
-everything you can use and how to write it.
+Start with the [plugin docs guides](./docs/README.md). The [authoring guide](./docs/authoring.md) covers
+page shape, style and keeping docs in sync with your plugin's source. Pages are plain markdown, see
+[docs/supported-markdown.md](./docs/supported-markdown.md) for everything you can use and how to write it.
 To move existing docs from the docs website, see
 [docs/migrate-from-docs-website.md](./docs/migrate-from-docs-website.md).
+
+The guides are published with the package, so AI agents and authors can read the version that matches their
+installed CLI from `node_modules/@grafana/plugin-docs-cli/docs/`. `validate` prints the path at the end of
+its output.
 
 ## Validation rules
 
