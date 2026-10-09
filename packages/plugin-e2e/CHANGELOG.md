@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.15.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.14.1...@grafana/plugin-e2e@3.15.0) (2026-10-09)
+
+
+### Features
+
+* **plugin-e2e:** vendor e2e-selectors instead of depending on it ([#2907](https://github.com/grafana/plugin-tools/issues/2907)) ([390ef30](https://github.com/grafana/plugin-tools/commit/390ef306602d278e4b01faf1c4df28bfd93f7a68))
+
 ## [3.14.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.14.0...@grafana/plugin-e2e@3.14.1) (2026-10-06)
 
 

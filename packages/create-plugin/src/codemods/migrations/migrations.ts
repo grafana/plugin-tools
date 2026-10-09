@@ -101,14 +101,14 @@ export default [
   },
   {
     name: '015-jest-canvas-mock',
-    version: '0.0.0-unreleased', // x-release-please-version
+    version: '7.12.2',
     description:
       'Fix @grafana/ui Combobox crashing in Jest: replace the scaffolded no-op HTMLCanvasElement.getContext stub with jest-canvas-mock, which returns a spec-shaped CanvasRenderingContext2D (and TextMetrics) so measureText() no longer throws.',
     scriptPath: import.meta.resolve('./scripts/015-jest-canvas-mock.js'),
   },
   {
     name: '016-jest-intersection-observer',
-    version: '0.0.0-unreleased', // x-release-please-version
+    version: '7.12.2',
     description:
       'Fix @grafana/ui Combobox dropdown crashing in Jest: add an IntersectionObserver polyfill stub so ScrollIndicators (mounted when the dropdown opens) no longer throws ReferenceError in jsdom.',
     scriptPath: import.meta.resolve('./scripts/016-jest-intersection-observer.js'),
