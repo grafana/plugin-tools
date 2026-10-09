@@ -38,7 +38,7 @@
     "recast": "0.24.0",
     "semver": "7.8.5",
     "title-case": "4.3.2",
-    "valibot": "1.4.2",
+    "valibot": "1.5.0",
     "which": "7.0.0",
     "yaml": "2.9.0"
   },
