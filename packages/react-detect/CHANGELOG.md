@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.4](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.3...@grafana/react-detect@0.7.4) (2026-10-09)
+
+
+### Bug Fixes
+
+* **deps:** Update security packages/create-plugin handlebars [SECURITY] ([#2943](https://github.com/grafana/plugin-tools/issues/2943)) ([0ae2680](https://github.com/grafana/plugin-tools/commit/0ae268087d835a9ef5c9099095a93465888abcf1))
+
 ## [0.7.3](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.2...@grafana/react-detect@0.7.3) (2026-09-16)
 
 

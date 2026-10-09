@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.12.3](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.12.2...@grafana/create-plugin@7.12.3) (2026-10-09)
+
+
+### Bug Fixes
+
+* **deps:** Update grafana patch dependencies to v13.2.3 ([#2939](https://github.com/grafana/plugin-tools/issues/2939)) ([f53ba95](https://github.com/grafana/plugin-tools/commit/f53ba95be182ec4a65a6a417a24b1b6a6df327bc))
+* **deps:** Update security packages/create-plugin handlebars [SECURITY] ([#2943](https://github.com/grafana/plugin-tools/issues/2943)) ([0ae2680](https://github.com/grafana/plugin-tools/commit/0ae268087d835a9ef5c9099095a93465888abcf1))
+
 ## [7.12.2](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.12.1...@grafana/create-plugin@7.12.2) (2026-10-09)
 
 
