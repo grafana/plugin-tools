@@ -249,8 +249,8 @@ Footnotes are collected at the end of the page.
 These are removed when your page is rendered, or shown as plain text:
 
 - **Raw HTML** other than `<details>`, `<summary>`, `<br>` and `<hr>`, for example `<div>`, `<span>` or
-  `<iframe>`. Validation reports it as an error, and it's removed when the page is rendered. Write
-  it in markdown instead. HTML comments don't show on the page.
+  `<iframe>`. `serve` reports it as a warning and `validate` as an error, and it's removed when the
+  page is rendered. Write it in markdown instead. HTML comments don't show on the page.
 - **Hugo shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`.
 - **MDX and JSX components.**
 - **Video players other than YouTube**, such as Vimeo. Link to the video instead.
