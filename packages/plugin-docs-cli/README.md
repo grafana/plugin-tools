@@ -17,6 +17,8 @@ For the core parsing library, see [@grafana/plugin-docs-parser](../plugin-docs-p
 
 Pages are plain markdown. See [docs/supported-markdown.md](./docs/supported-markdown.md) for
 everything you can use and how to write it.
+To move existing docs from the docs website, see
+[docs/migrate-from-docs-website.md](./docs/migrate-from-docs-website.md).
 
 ## Validation rules
 

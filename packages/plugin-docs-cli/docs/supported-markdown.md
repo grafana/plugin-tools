@@ -2,11 +2,14 @@
 
 To write Plugin docs use plain markdown: [CommonMark](https://commonmark.org/) plus the
 [GitHub Flavored Markdown](https://github.github.com/gfm/) extensions. There is no MDX and no
-templating, and the only HTML you can use is for collapsible sections, line breaks and horizontal rules. What you write is what gets rendered on grafana.com, in the `serve`
-preview and on GitHub, so your docs read well in all three platforms.
+templating, and the only HTML you can use is for collapsible sections, line breaks and horizontal
+rules. What you write is what gets rendered on grafana.com, in the `serve` preview and on GitHub,
+so your docs read well in all three platforms.
 
 This page lists everything you can use and how to write it. For the checks that run against your
-docs folder, refer to [Validation rules](./validation-rules.md).
+docs folder, refer to [Validation rules](./validation-rules.md). To move existing docs from the
+[docs website](https://grafana.com/docs/), refer to
+[Migrate from the docs website](./migrate-from-docs-website.md).
 
 ## Pages and frontmatter
 
@@ -261,7 +264,8 @@ These are removed when your page is rendered, or shown as plain text:
 - **Raw HTML** other than `<details>`, `<summary>`, `<br>` and `<hr>`, for example `<div>`, `<span>` or
   `<iframe>`. `serve` reports it as a warning and `validate` as an error, and it's removed when the
   page is rendered. Write it in markdown instead. HTML comments don't show on the page.
-- **Hugo shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`.
+- **Docs website shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`. To convert them, refer to
+  [Migrate from the docs website](./migrate-from-docs-website.md).
 - **MDX and JSX components.**
 - **Video players other than YouTube**, such as Vimeo. Link to the video instead.
 - **SVG images, external images and base64 images.** Save a PNG or WebP file in your docs folder.
