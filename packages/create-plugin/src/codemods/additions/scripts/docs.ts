@@ -129,7 +129,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   };
 
   // step 3: add @grafana/plugin-docs-cli as a devDependency
-  addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': '0.5.0' });
+  addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': '0.6.0' });
 
   // step 4: add docs:serve, docs:validate and docs:validate:release npm scripts
   addDocsScripts(context);
