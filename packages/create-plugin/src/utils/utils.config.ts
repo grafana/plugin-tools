@@ -119,9 +119,12 @@ function parseFeatureFlagsFromCliArgs() {
   }, {} as FeatureFlags);
 }
 
-export async function setRootConfig(configOverride: Partial<CreatePluginConfig> = {}): Promise<CreatePluginConfig> {
-  const rootConfig = getRootConfig();
-  const rootConfigPath = path.resolve(process.cwd(), '.config/.cprc.json');
+export async function setRootConfig(
+  configOverride: Partial<CreatePluginConfig> = {},
+  workDir = process.cwd()
+): Promise<CreatePluginConfig> {
+  const rootConfig = getRootConfig(workDir);
+  const rootConfigPath = path.resolve(workDir, '.config/.cprc.json');
   const updatedConfig = { ...rootConfig, ...configOverride };
 
   await writeFile(rootConfigPath, JSON.stringify(updatedConfig, null, 2) + EOL);

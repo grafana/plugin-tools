@@ -6,6 +6,7 @@ import { gitCommitNoVerify, isGitDirectoryClean } from '../../utils/utils.git.js
 import { output } from '../../utils/utils.console.js';
 import { setRootConfig } from '../../utils/utils.config.js';
 import { UNRELEASED } from '../../constants.js';
+import { ProjectLayout, resolveProject } from '../../utils/utils.project.js';
 
 // An unreleased migration has not shipped in any version a plugin can be on yet, so it resolves to the
 // version being updated to. That keeps it inside the range, and running it last.
@@ -48,9 +49,11 @@ export function getMigrationsToRun(
 type RunMigrationsOptions = {
   commitEachMigration?: boolean;
   codemodOptions?: Record<string, any>;
+  project?: ProjectLayout;
 };
 
 export async function runMigrations(migrations: Migration[], options: RunMigrationsOptions = {}) {
+  const project = options.project ?? resolveProject();
   const migrationList = migrations.map((meta) => `${meta.name} (${meta.description})`);
 
   const migrationListBody = migrationList.length > 0 ? output.bulletList(migrationList) : ['No migrations to run.'];
@@ -59,7 +62,7 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
 
   // run migrations sequentially in version order where lowest version runs first
   for (const migration of migrations) {
-    const context = await runCodemod(migration, options.codemodOptions);
+    const context = await runCodemod(migration, options.codemodOptions, project);
     const shouldCommit = options.commitEachMigration && context.hasChanges();
 
     if (shouldCommit) {
@@ -68,7 +71,7 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
     }
   }
 
-  await setRootConfig({ version: CURRENT_APP_VERSION });
+  await setRootConfig({ version: CURRENT_APP_VERSION }, project.root);
 
   // Nothing to commit when only unreleased migrations re-ran on a plugin already on this version.
   if (options.commitEachMigration && !(await isGitDirectoryClean())) {

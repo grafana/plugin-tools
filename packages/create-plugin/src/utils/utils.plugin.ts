@@ -10,10 +10,10 @@ export function getPluginJson(srcDir?: string) {
   return readJsonFile(pluginJsonPath);
 }
 
-// Checks if CWD is a valid root directory of a plugin
-export function isPluginDirectory() {
+// Checks if the given directory (defaults to CWD) is a valid root directory of a plugin
+export function isPluginDirectory(rootPath = process.cwd()) {
   try {
-    getPluginJson();
+    getPluginJson(path.join(rootPath, 'src'));
     return true;
   } catch (e) {
     return false;
