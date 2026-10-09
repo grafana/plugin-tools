@@ -113,6 +113,20 @@ export default [
       'Fix @grafana/ui Combobox dropdown crashing in Jest: add an IntersectionObserver polyfill stub so ScrollIndicators (mounted when the dropdown opens) no longer throws ReferenceError in jsdom.',
     scriptPath: import.meta.resolve('./scripts/016-jest-intersection-observer.js'),
   },
+  {
+    name: '017-jest-30',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description:
+      'Update Jest to v30, which replaces micromatch with picomatch and drops the braces dependency flagged by vulnerability scanners.',
+    scriptPath: import.meta.resolve('./scripts/017-jest-30.js'),
+  },
+  {
+    name: '018-remove-eslint-webpack-plugin',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description:
+      'Remove eslint-webpack-plugin from the bundler config. It depends on micromatch and braces, and only linted changed files in development, which `npm run lint` already covers.',
+    scriptPath: import.meta.resolve('./scripts/018-remove-eslint-webpack-plugin.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
