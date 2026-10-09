@@ -162,6 +162,8 @@ relative path:
 ![The query editor in builder mode](./img/query-builder.png)
 ```
 
+- Images can be in any folder inside your docs folder, such as next to the page that uses them.
+  The path is relative to the page.
 - Supported formats are PNG, JPEG, WebP and GIF. SVG isn't allowed.
 - Static images can be up to 300KB, GIFs up to 1MB and all images together up to 5MB.
 - Always write alt text that describes the image. Screen readers read it out, and it's shown if
