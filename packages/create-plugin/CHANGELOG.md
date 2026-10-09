@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.12.2](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.12.1...@grafana/create-plugin@7.12.2) (2026-10-09)
+
+
+### Bug Fixes
+
+* **jest:** fill in unimplemented interfaces with jest-canvas-mock and intersection-observer ([#2933](https://github.com/grafana/plugin-tools/issues/2933)) ([a111afe](https://github.com/grafana/plugin-tools/commit/a111afe941b7cd3c4b3bc87c30a0c40853c65383))
+
 ## [7.12.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.12.0...@grafana/create-plugin@7.12.1) (2026-10-06)
 
 
