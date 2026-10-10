@@ -1,4 +1,5 @@
 # AGENTS.md - Grafana Plugin Tools Guide
+- Security issues should be reported via [Grafana's security issue reporting page](https://grafana.com/legal/report-a-security-issue/) and not directly in this repository.
 
 This document is the single source of truth for how to work inside this monorepo. It covers commands, architecture, conventions, testing, and codebase-specific guidance so future AI agents and developers can be effective immediately.
 
