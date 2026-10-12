@@ -70,12 +70,27 @@ child gets its own `sidebar_position` to set its order within the folder.
 
 ## Section briefs
 
-Pages scaffolded by `create-plugin` contain brief blocks, which tell you what belongs in each section. A
-brief starts with `<!-- section-brief:start -->` and ends with `<!-- section-brief:end -->`. Once you have
-written the section, delete the whole block, markers included.
+Pages scaffolded by `create-plugin` contain section briefs, which tell you what belongs in each section. A
+brief is an HTML comment that starts with `section-brief`:
 
-Validation reports leftover briefs. The markers are removed when a page is rendered, but the
-`📝 Fill this in` text is not, so a leftover brief would ship to the catalog as it is.
+```markdown
+## Options
+
+<!-- section-brief
+Describe every option the plugin registers, one row per option.
+-->
+```
+
+Briefs aren't shown in the catalog or the preview. Write the section, then delete the whole comment.
+
+Validation warns about a section that only has its brief, and about a brief left in a section that has
+content. It also warns about any heading with no content before the next heading, so write the section or
+remove the heading. A heading followed directly by a deeper heading is fine. Finish with none of these
+warnings left.
+
+Pages scaffolded by an earlier version use `<!-- section-brief:start -->` and `<!-- section-brief:end -->`
+markers instead, with visible text between them. Validation warns about these too, but their text is shown
+in the catalog, so delete the whole block, markers included.
 
 ## Style
 
