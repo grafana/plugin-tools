@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { isMetaFile } from './utils.js';
+import { isMetaFile, maskInlineCode } from './utils.js';
 
 // the markers `create-plugin` used before briefs became comments. The text between them renders, so it is a stub
 const LEGACY_BRIEF_START_RE = /<!--\s*section-brief:start\s*-->/;
@@ -58,7 +58,8 @@ function parseSections(raw: string): Section[] {
         rest = rest.slice(end + 3);
         continue;
       }
-      const open = rest.indexOf('<!--');
+      // masking keeps the length, so the index still points into `rest`
+      const open = maskInlineCode(rest).indexOf('<!--');
       if (open === -1) {
         visible += rest;
         break;

@@ -177,6 +177,16 @@ describe('checkStubContent with comment briefs', () => {
     expect((await check('## One\n\n<!-- TODO -->\n')).map((f) => f.rule)).toEqual([Rule.EmptySection]);
   });
 
+  it('ignores a brief written inside inline code', async () => {
+    expect(await check('## Options\n\nWrite `<!-- section-brief -->` to add a brief.\n')).toEqual([]);
+  });
+
+  it('does not let a comment opener in inline code hide the sections after it', async () => {
+    const findings = await check(`## Options\n\nComments start with \`<!--\`.\n\n## Next\n\n${brief()}\n`);
+
+    expect(findings.map((f) => f.rule)).toEqual([Rule.EmptySection]);
+  });
+
   it('keeps the legacy markers a stub even though the text between them renders', async () => {
     const findings = await check(
       '## Options\n\n<!-- section-brief:start -->\n\n> Fill this in\n\n<!-- section-brief:end -->\n'
