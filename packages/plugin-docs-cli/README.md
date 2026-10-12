@@ -24,7 +24,8 @@ To move existing docs from the docs website, see
 
 The guides are published with the package, so AI agents and authors can read the version that matches their
 installed CLI from `node_modules/@grafana/plugin-docs-cli/docs/`, starting at `index.md`. `validate` prints
-the path at the end of its output.
+the path at the end of its output. Under Yarn PnP, where the package is zipped and can't be read from disk, it
+prints a GitHub URL pinned to the installed version instead.
 
 ## Validation rules
 
