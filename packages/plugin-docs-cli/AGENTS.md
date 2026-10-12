@@ -31,8 +31,8 @@ validation rule or the markdown the parser supports - update the matching guide 
 change. Which guide covers what:
 
 - **[validation-rules.md](./docs/validation-rules.md)** documents every rule in `src/validation/rules/*.ts`.
-  It is not auto-generated. When you add, remove or change a rule (including its severity, or whether it only
-  runs in `--strict` mode), update the matching row in the same change.
+  It is not auto-generated. When you add, remove or change a rule (including its severity), update the
+  matching row in the same change.
 - **[supported-markdown.md](./docs/supported-markdown.md)** lists what the parser renders. Update it when the
   supported syntax changes.
 - **[index.md](./docs/index.md)** is the map agents start from. Add a row when you add a guide.
