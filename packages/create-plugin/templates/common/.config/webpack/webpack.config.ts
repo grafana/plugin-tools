@@ -6,6 +6,7 @@
  */
 
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import DiagnosticsPlugin from 'diagnostics-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
@@ -206,6 +207,10 @@ const config = async (env: Env): Promise<Configuration> => {
             include: [{ file: '**/*.{ts,tsx}' }],
           },
           typescript: { configFile: path.join(process.cwd(), 'tsconfig.json') },
+        }),
+        new DiagnosticsPlugin({
+          lintOnStart: false, // don't lint on start, only lint changed files
+          checks: [{ use: 'eslint', extensions: ['ts', 'tsx'] }],
         }),
       ] : []),
     ],

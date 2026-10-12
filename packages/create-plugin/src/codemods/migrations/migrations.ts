@@ -121,11 +121,11 @@ export default [
     scriptPath: import.meta.resolve('./scripts/017-jest-30.js'),
   },
   {
-    name: '018-remove-eslint-webpack-plugin',
+    name: '018-replace-eslint-webpack-plugin',
     version: '0.0.0-unreleased', // x-release-please-version
     description:
-      'Remove eslint-webpack-plugin from the bundler config. It depends on micromatch and braces, and only linted changed files in development, which `npm run lint` already covers.',
-    scriptPath: import.meta.resolve('./scripts/018-remove-eslint-webpack-plugin.js'),
+      'Replace eslint-webpack-plugin with diagnostics-webpack-plugin in the webpack config. eslint-webpack-plugin depends on micromatch, which pulls in the braces dependency flagged by vulnerability scanners.',
+    scriptPath: import.meta.resolve('./scripts/018-replace-eslint-webpack-plugin.js'),
   },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
