@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { checkCrossFile } from './cross-file.js';
 import { Rule } from '../types.js';
 
-const input = (docsPath: string, strict = true) => ({ docsPath, strict });
+const input = (docsPath: string) => ({ docsPath });
 
 const md = (body = '') => `---\ntitle: Page\ndescription: A page\n---\n${body}`;
 
@@ -135,17 +135,6 @@ describe('checkCrossFile', () => {
       expect(finding!.detail).toContain('missing.md');
     });
 
-    it('should report as warning in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
-      await writeFile(join(tmp, 'index.md'), md('[missing](missing.md)'));
-
-      const findings = await checkCrossFile(input(tmp, false));
-
-      const finding = findings.find((f) => f.rule === Rule.InternalLinksResolve);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('warning');
-    });
-
     it('should resolve links relative to the source file', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
       await writeFile(join(tmp, 'index.md'), md('## Home'));
@@ -227,7 +216,7 @@ describe('checkCrossFile', () => {
       expect(findings.find((f) => f.rule === Rule.AnchorLinksResolve)).toBeUndefined();
     });
 
-    it('should report invalid same-file anchor in strict mode', async () => {
+    it('should report invalid same-file anchor', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
       await writeFile(join(tmp, 'index.md'), md('## Hello\n\n[jump](#nonexistent)'));
 
@@ -237,17 +226,6 @@ describe('checkCrossFile', () => {
       expect(finding).toBeDefined();
       expect(finding!.severity).toBe('error');
       expect(finding!.detail).toContain('#nonexistent');
-    });
-
-    it('should report anchor as warning in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'xfile-test-'));
-      await writeFile(join(tmp, 'index.md'), md('## Hello\n\n[jump](#nonexistent)'));
-
-      const findings = await checkCrossFile(input(tmp, false));
-
-      const finding = findings.find((f) => f.rule === Rule.AnchorLinksResolve);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('warning');
     });
 
     it('should not report valid cross-file anchor', async () => {

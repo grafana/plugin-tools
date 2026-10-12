@@ -77,14 +77,12 @@ async function main() {
     }
     case 'validate': {
       const validateArgv = minimist(process.argv.slice(3), {
-        boolean: ['strict', 'json'],
+        boolean: ['json'],
         default: {
-          strict: true,
           json: false,
         },
       });
       await validateCommand(docsPath, {
-        strict: validateArgv.strict,
         json: validateArgv.json,
         pluginType,
       });

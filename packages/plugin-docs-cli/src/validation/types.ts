@@ -94,7 +94,6 @@ export interface Diagnostic {
  */
 export interface ValidationInput {
   docsPath: string;
-  strict: boolean;
   /**
    * The plugin's `type` from `plugin.json`, such as `panel` or `datasource`. Drives the
    * `required-pages` rule, which reports nothing when this is unset.

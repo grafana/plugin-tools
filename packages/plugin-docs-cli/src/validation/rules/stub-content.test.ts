@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { checkStubContent } from './stub-content.js';
 import { Rule } from '../types.js';
 
-const input = (docsPath: string) => ({ docsPath, strict: true });
+const input = (docsPath: string) => ({ docsPath });
 
 // helper: valid frontmatter markdown file content
 const md = (body = '') => `---\ntitle: Page\ndescription: A page\n---\n${body}`;
@@ -86,7 +86,7 @@ describe('checkStubContent with comment briefs', () => {
   async function check(body: string) {
     const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
     await writeFile(join(tmp, 'index.md'), md(body));
-    return checkStubContent({ docsPath: tmp, strict: true });
+    return checkStubContent({ docsPath: tmp });
   }
 
   it('reports a section that only has its brief as empty, not as a leftover brief', async () => {
@@ -170,7 +170,7 @@ describe('checkStubContent with comment briefs', () => {
     const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Page\n# a yaml comment\n---\n\n## One\n\nText.\n');
 
-    expect(await checkStubContent({ docsPath: tmp, strict: true })).toEqual([]);
+    expect(await checkStubContent({ docsPath: tmp })).toEqual([]);
   });
 
   it('reports a section whose only content is an unrelated comment', async () => {

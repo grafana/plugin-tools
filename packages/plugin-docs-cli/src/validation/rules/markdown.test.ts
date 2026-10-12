@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { checkMarkdown } from './markdown.js';
 import { Rule } from '../types.js';
 
-const input = (docsPath: string, strict = true) => ({ docsPath, strict });
+const input = (docsPath: string) => ({ docsPath });
 
 // helper: valid frontmatter markdown file content
 const md = (body = '') => `---\ntitle: Page\ndescription: A page\n---\n${body}`;
@@ -36,17 +36,6 @@ describe('checkMarkdown', () => {
       const htmlFindings = findings.filter((f) => f.rule === Rule.NoRawHtml);
       expect(htmlFindings.length).toBeGreaterThanOrEqual(1);
       expect(htmlFindings[0].severity).toBe('error');
-    });
-
-    it('should report as warning in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
-      await writeFile(join(tmp, 'index.md'), md('<div>content</div>'));
-
-      const findings = await checkMarkdown(input(tmp, false));
-
-      const htmlFindings = findings.filter((f) => f.rule === Rule.NoRawHtml);
-      expect(htmlFindings.length).toBeGreaterThanOrEqual(1);
-      expect(htmlFindings[0].severity).toBe('warning');
     });
 
     it('should allow <br> tags', async () => {
@@ -202,17 +191,6 @@ describe('checkMarkdown', () => {
       expect(findings.find((f) => f.rule === Rule.NoScriptTags)).toBeUndefined();
     });
 
-    it('should report as error even in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
-      await writeFile(join(tmp, 'index.md'), md('<script>alert("xss")</script>'));
-
-      const findings = await checkMarkdown(input(tmp, false));
-
-      const scriptFindings = findings.filter((f) => f.rule === Rule.NoScriptTags);
-      expect(scriptFindings.length).toBeGreaterThanOrEqual(1);
-      expect(scriptFindings[0].severity).toBe('error');
-    });
-
     it('should not report a <script> tag mentioned inside inline code', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await writeFile(join(tmp, 'index.md'), md('Avoid adding a `<script>` tag directly to your page.'));
@@ -310,17 +288,6 @@ describe('checkMarkdown', () => {
       const finding = findings.find((f) => f.rule === Rule.InternalLinksRelative);
       expect(finding).toBeDefined();
       expect(finding!.severity).toBe('error');
-    });
-
-    it('should report as warning in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
-      await writeFile(join(tmp, 'index.md'), md('[other](/docs/other.md)'));
-
-      const findings = await checkMarkdown(input(tmp, false));
-
-      const finding = findings.find((f) => f.rule === Rule.InternalLinksRelative);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('warning');
     });
 
     it('should not report external links', async () => {
@@ -421,14 +388,6 @@ describe('checkMarkdown', () => {
 
       const findings = await checkMarkdown(input(tmp));
       expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.detail).toContain('plain markdown');
-    });
-
-    it('should report as warning in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
-      await writeFile(join(tmp, 'index.md'), md('{{< youtube id="abc" >}}\n'));
-
-      const findings = await checkMarkdown(input(tmp, false));
-      expect(findings.find((f) => f.rule === Rule.NoHugoShortcodes)!.severity).toBe('warning');
     });
 
     it('should not report shortcodes inside code blocks or inline code', async () => {
@@ -553,17 +512,6 @@ describe('checkMarkdown', () => {
       const finding = findings.find((f) => f.rule === Rule.NoUrlPlaceholders);
       expect(finding).toBeDefined();
       expect(finding!.detail).not.toContain('latest');
-    });
-
-    it('should report as warning in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
-      await writeFile(
-        join(tmp, 'index.md'),
-        md('[Explore](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/explore/)\n')
-      );
-
-      const findings = await checkMarkdown(input(tmp, false));
-      expect(findings.find((f) => f.rule === Rule.NoUrlPlaceholders)!.severity).toBe('warning');
     });
 
     it('should not report links in inline code or indented code blocks', async () => {
@@ -848,17 +796,6 @@ describe('checkMarkdown', () => {
       const findings = await checkMarkdown(input(tmp));
       expect(findings.find((f) => f.rule === Rule.NoDangerousUrls)).toBeUndefined();
     });
-
-    it('should report as error even in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
-      await writeFile(join(tmp, 'index.md'), md('[click](javascript:alert(1))'));
-
-      const findings = await checkMarkdown(input(tmp, false));
-
-      const finding = findings.find((f) => f.rule === Rule.NoDangerousUrls);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('error');
-    });
   });
 
   // --- no-path-traversal ---
@@ -982,17 +919,6 @@ describe('checkMarkdown', () => {
       const findings = await checkMarkdown(input(tmp));
       expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeUndefined();
     });
-
-    it('should report as error even in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
-      await writeFile(join(tmp, 'index.md'), md('![alt](../escape.png)'));
-
-      const findings = await checkMarkdown(input(tmp, false));
-
-      const finding = findings.find((f) => f.rule === Rule.NoPathTraversal);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('error');
-    });
   });
 
   // --- no-base64-images ---
@@ -1033,17 +959,6 @@ describe('checkMarkdown', () => {
 
       const findings = await checkMarkdown(input(tmp));
       expect(findings.find((f) => f.rule === Rule.NoBase64Images)).toBeUndefined();
-    });
-
-    it('should report as error even in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
-      await writeFile(join(tmp, 'index.md'), md('![pixel](data:image/png;base64,abc)'));
-
-      const findings = await checkMarkdown(input(tmp, false));
-
-      const finding = findings.find((f) => f.rule === Rule.NoBase64Images);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('error');
     });
   });
 
@@ -1101,17 +1016,6 @@ describe('checkMarkdown', () => {
 
       const finding = findings.find((f) => f.rule === Rule.NoExternalImages);
       expect(finding).toBeDefined();
-    });
-
-    it('should report as warning in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
-      await writeFile(join(tmp, 'index.md'), md('![logo](https://example.com/logo.png)'));
-
-      const findings = await checkMarkdown(input(tmp, false));
-
-      const finding = findings.find((f) => f.rule === Rule.NoExternalImages);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('warning');
     });
 
     it('should not report local image refs', async () => {
