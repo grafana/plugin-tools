@@ -31,7 +31,7 @@ This guide shows you how to set up plugin docs, preview and validate them and pu
 
 :::note
 
-Only panel plugins are supported so far.
+The `add docs` codemod only supports panel plugins so far.
 
 :::
 
