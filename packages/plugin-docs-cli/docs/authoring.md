@@ -27,8 +27,7 @@ reach it.
 
 ## Page shape
 
-Every page is a Markdown file with a frontmatter block. `title`, `description` and `sidebar_position`
-are required:
+Every page is a Markdown file with a frontmatter block. `title` and `description` are required; `sidebar_position` is optional and controls order within a folder.
 
 ```yaml
 ---
