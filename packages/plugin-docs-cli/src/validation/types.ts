@@ -100,16 +100,6 @@ export interface ValidationInput {
    * `required-pages` rule, which reports nothing when this is unset.
    */
   pluginType?: string;
-  /**
-   * Treat unfilled stubs as progress rather than a defect: sections with only a `section-brief`,
-   * or no content at all.
-   *
-   * Docs scaffolded by `create-plugin add docs` are all stub, by design - reporting that back as
-   * errors turns "you ran the command successfully" into a red build. Authoring tools pass this so
-   * the count is informational while the pages are being written. The publishing check never passes
-   * it, so half-written docs still cannot reach the catalog.
-   */
-  allowUnfilledStubs?: boolean;
 }
 
 /**

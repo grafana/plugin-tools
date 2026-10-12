@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { checkStubContent } from './stub-content.js';
 import { Rule } from '../types.js';
 
-const input = (docsPath: string, strict = true) => ({ docsPath, strict });
+const input = (docsPath: string) => ({ docsPath, strict: true });
 
 // helper: valid frontmatter markdown file content
 const md = (body = '') => `---\ntitle: Page\ndescription: A page\n---\n${body}`;
@@ -24,16 +24,6 @@ describe('checkStubContent', () => {
     );
 
     const findings = await checkStubContent(input(tmp));
-    const finding = findings.find((f) => f.rule === Rule.UnfilledSectionBrief);
-    expect(finding).toBeDefined();
-    expect(finding!.severity).toBe('error');
-  });
-
-  it('should report as warning in non-strict mode', async () => {
-    const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
-    await writeFile(join(tmp, 'index.md'), md('<!-- section-brief:start -->\n'));
-
-    const findings = await checkStubContent(input(tmp, false));
     const finding = findings.find((f) => f.rule === Rule.UnfilledSectionBrief);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('warning');
@@ -88,44 +78,15 @@ describe('checkStubContent', () => {
     expect(files).toContain('index.md');
     expect(files).toContain('options.md');
   });
-
-  it('treats stubs as informational when the author opts in, so a fresh scaffold validates clean', async () => {
-    const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
-    await writeFile(
-      join(tmp, 'index.md'),
-      md('<!-- section-brief:start -->\n\n> Fill me in\n\n<!-- section-brief:end -->')
-    );
-
-    const findings = await checkStubContent({ docsPath: tmp, strict: true, allowUnfilledStubs: true });
-
-    expect(findings).toHaveLength(1);
-    expect(findings[0].severity).toBe('info');
-  });
-
-  it('still errors for the publishing check, which never opts in', async () => {
-    const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
-    await writeFile(
-      join(tmp, 'index.md'),
-      md('<!-- section-brief:start -->\n\n> Fill me in\n\n<!-- section-brief:end -->')
-    );
-
-    const findings = await checkStubContent({ docsPath: tmp, strict: true });
-
-    expect(findings[0].severity).toBe('error');
-  });
 });
 
 describe('checkStubContent with comment briefs', () => {
   const brief = (text = 'Describe the options.') => `<!-- section-brief\n${text}\n-->`;
 
-  async function check(body: string, options: { strict?: boolean; allowUnfilledStubs?: boolean } = {}) {
+  async function check(body: string) {
     const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
     await writeFile(join(tmp, 'index.md'), md(body));
-    return checkStubContent({
-      docsPath: tmp,
-      strict: options.strict ?? true,
-      allowUnfilledStubs: options.allowUnfilledStubs,
-    });
+    return checkStubContent({ docsPath: tmp, strict: true });
   }
 
   it('reports a section that only has its brief as empty, not as a leftover brief', async () => {
@@ -134,7 +95,7 @@ describe('checkStubContent with comment briefs', () => {
     expect(findings).toHaveLength(1);
     expect(findings[0]).toMatchObject({
       rule: Rule.EmptySection,
-      severity: 'error',
+      severity: 'warning',
       line: 5,
       title: 'Unfilled documentation stub',
     });
@@ -148,24 +109,11 @@ describe('checkStubContent with comment briefs', () => {
     expect(findings.map((f) => f.rule)).toEqual([Rule.EmptySection]);
   });
 
-  it('is a warning in non-strict mode and informational when the author opts in', async () => {
-    const body = `## Options\n\n${brief()}\n`;
-
-    expect((await check(body, { strict: false }))[0].severity).toBe('warning');
-    expect((await check(body, { allowUnfilledStubs: true }))[0].severity).toBe('info');
-  });
-
   it('warns about a brief left in a section that has content', async () => {
     const findings = await check(`## Options\n\n${brief()}\n\nOne row per option.\n`);
 
     expect(findings).toHaveLength(1);
     expect(findings[0]).toMatchObject({ rule: Rule.UnfilledSectionBrief, severity: 'warning', line: 7 });
-  });
-
-  it('keeps the leftover warning when the author opts in, because it is not a stub', async () => {
-    const findings = await check(`## Options\n\n${brief()}\n\nOne row per option.\n`, { allowUnfilledStubs: true });
-
-    expect(findings[0].severity).toBe('warning');
   });
 
   it('reports one finding per empty section in a fresh scaffold', async () => {
@@ -235,6 +183,6 @@ describe('checkStubContent with comment briefs', () => {
     );
 
     expect(findings.map((f) => f.rule)).toEqual([Rule.UnfilledSectionBrief]);
-    expect(findings[0].severity).toBe('error');
+    expect(findings[0].severity).toBe('warning');
   });
 });

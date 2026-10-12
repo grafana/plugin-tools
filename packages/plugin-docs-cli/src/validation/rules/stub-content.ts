@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
-import { type Diagnostic, type Severity, type ValidationInput, Rule } from '../types.js';
+import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { isMetaFile } from './utils.js';
 
 // the markers `create-plugin` used before briefs became comments. The text between them renders, so it is a stub
@@ -10,18 +10,6 @@ const LEGACY_BRIEF_START_RE = /<!--\s*section-brief:start\s*-->/;
 const BRIEF_COMMENT_RE = /^<!--\s*section-brief(?![\w:-])/;
 const HEADING_RE = /^ {0,3}(#{1,6})\s+\S/;
 const FENCE_RE = /^ {0,3}(`{3,}|~{3,})/;
-
-/**
- * A stub is only a defect at the point of publishing. While the author is still writing, the count
- * is a to-do list, so `allowUnfilledStubs` keeps it out of the error and warning tallies entirely -
- * a freshly scaffolded docs folder should validate clean.
- */
-function stubSeverity(input: ValidationInput): Severity {
-  if (input.allowUnfilledStubs) {
-    return 'info';
-  }
-  return input.strict ? 'error' : 'warning';
-}
 
 interface Section {
   /** Absent for the text before the first heading. */
@@ -109,9 +97,10 @@ function parseSections(raw: string): Section[] {
  *
  * - `empty-section`: a heading with no content, or text before the first heading that is only a
  *   section brief. A heading is not empty when a deeper heading follows it directly.
- * - `unfilled-section-brief`: a brief left in a section that has content, a warning because
- *   comments are not rendered. The legacy `section-brief:start` marker is always a stub, because
- *   its text is rendered.
+ * - `unfilled-section-brief`: a brief left in a section that has content, or a legacy
+ *   `section-brief:start` marker block.
+ *
+ * Both are warnings, so a freshly scaffolded docs folder still passes `validate`.
  */
 export async function checkStubContent(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
@@ -149,7 +138,7 @@ export async function checkStubContent(input: ValidationInput): Promise<Diagnost
       }
       diagnostics.push({
         rule: Rule.UnfilledSectionBrief,
-        severity: stubSeverity(input),
+        severity: 'warning',
         file: relativePath,
         line: i + 1,
         title: 'Unfilled documentation stub',
@@ -169,7 +158,7 @@ export async function checkStubContent(input: ValidationInput): Promise<Diagnost
       if (isEmpty) {
         diagnostics.push({
           rule: Rule.EmptySection,
-          severity: stubSeverity(input),
+          severity: 'warning',
           file: relativePath,
           line: section.heading?.line ?? section.briefLines[0],
           title: hasBrief ? 'Unfilled documentation stub' : 'Empty section',
