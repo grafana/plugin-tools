@@ -107,10 +107,11 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 
 ## Content quality
 
-| Rule                     | What it checks                                                                                                                                                                                               | Severity                            |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
-| `min-content-length`     | A page's body should have at least 150 characters of real content. A heads-up, not a hard requirement - catches pages that are still effectively blank. Only checked as part of the pre-publish check.       | Suggestion (pre-publish check only) |
-| `unfilled-section-brief` | If you scaffolded your docs from a create-plugin template, remove the `<!-- section-brief:start -->` / `<!-- section-brief:end -->` placeholder block once you've written the real content for that section. | Warning †                           |
+| Rule                     | What it checks                                                                                                                                                                                                                                                                                            | Severity                            |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `min-content-length`     | A page's body should have at least 150 characters of real content. A heads-up, not a hard requirement - catches pages that are still effectively blank. Only checked as part of the pre-publish check.                                                                                                    | Suggestion (pre-publish check only) |
+| `empty-section`          | A heading needs content before the next heading. This also catches a section that still has only its `section-brief` comment, so write it or remove the heading. A heading followed directly by a deeper heading is fine.                                                                                 | Warning †                           |
+| `unfilled-section-brief` | A `section-brief` comment left in a section that already has content. It isn't shown in the catalog, so delete it to keep the page tidy. A page scaffolded earlier may use `<!-- section-brief:start -->` / `<!-- section-brief:end -->` markers instead. Their text is shown, so remove the whole block. | Warning (marker blocks: Warning †)  |
 
 ## Writing style
 

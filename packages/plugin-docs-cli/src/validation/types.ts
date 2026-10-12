@@ -31,6 +31,7 @@ export const Rule = {
   MinContentLength: 'min-content-length',
   // content-completeness rules
   UnfilledSectionBrief: 'unfilled-section-brief',
+  EmptySection: 'empty-section',
   // asset rules
   NoSvg: 'no-svg-files',
   ReferencedImagesExist: 'referenced-images-exist',
@@ -100,7 +101,8 @@ export interface ValidationInput {
    */
   pluginType?: string;
   /**
-   * Treat leftover `section-brief` scaffolding as progress rather than a defect.
+   * Treat unfilled stubs as progress rather than a defect: sections with only a `section-brief`,
+   * or no content at all.
    *
    * Docs scaffolded by `create-plugin add docs` are all stub, by design - reporting that back as
    * errors turns "you ran the command successfully" into a red build. Authoring tools pass this so
