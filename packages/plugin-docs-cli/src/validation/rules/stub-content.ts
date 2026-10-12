@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { isMetaFile, maskInlineCode } from './utils.js';
+import { getCodeBlockLines, isMetaFile, maskInlineCode } from './utils.js';
 
 // the markers `create-plugin` used before briefs became comments. The text between them renders, so it is a stub
 const LEGACY_BRIEF_START_RE = /<!--\s*section-brief:start\s*-->/;
@@ -133,8 +133,9 @@ export async function checkStubContent(input: ValidationInput): Promise<Diagnost
     }
 
     const lines = raw.split('\n');
+    const codeLines = getCodeBlockLines(raw);
     for (let i = 0; i < lines.length; i++) {
-      if (!LEGACY_BRIEF_START_RE.test(lines[i])) {
+      if (codeLines.has(i + 1) || !LEGACY_BRIEF_START_RE.test(maskInlineCode(lines[i]))) {
         continue;
       }
       diagnostics.push({

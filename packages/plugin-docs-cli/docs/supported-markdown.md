@@ -264,8 +264,8 @@ Footnotes are collected at the end of the page.
 These are removed when your page is rendered, or shown as plain text:
 
 - **Raw HTML** other than `<details>`, `<summary>`, `<br>` and `<hr>`, for example `<div>`, `<span>` or
-  `<iframe>`. `serve` reports it as a warning and `validate` as an error, and it's removed when the
-  page is rendered. Write it in markdown instead. HTML comments don't show on the page.
+  `<iframe>`. Validation reports it as an error, and it's removed when the page is rendered. Write
+  it in markdown instead. HTML comments don't show on the page.
 - **Docs website shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`. To convert them, refer to
   [Migrate from the docs website](./migrate-from-docs-website.md).
 - **MDX and JSX components.**

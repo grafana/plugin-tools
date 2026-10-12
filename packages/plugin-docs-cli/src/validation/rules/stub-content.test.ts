@@ -187,6 +187,13 @@ describe('checkStubContent with comment briefs', () => {
     expect(findings.map((f) => f.rule)).toEqual([Rule.EmptySection]);
   });
 
+  it('ignores legacy markers shown in a code block or inline code', async () => {
+    const body =
+      '## Options\n\nUse `<!-- section-brief:start -->` like this:\n\n```md\n<!-- section-brief:start -->\n```\n';
+
+    expect(await check(body)).toEqual([]);
+  });
+
   it('keeps the legacy markers a stub even though the text between them renders', async () => {
     const findings = await check(
       '## Options\n\n<!-- section-brief:start -->\n\n> Fill this in\n\n<!-- section-brief:end -->\n'
