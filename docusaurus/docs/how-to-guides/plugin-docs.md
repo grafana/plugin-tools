@@ -15,6 +15,12 @@ Plugin docs let you write your plugin's documentation in markdown, right next to
 
 This guide shows you how to set up plugin docs, preview and validate them and publish them with a release.
 
+:::important
+
+Plugin docs are an experimental feature. Breaking changes might happen without notice, such as renamed commands, changed validation rules or a different file structure. Panel plugins are the only supported plugin type so far.
+
+:::
+
 ## Why plugin docs
 
 - **Close to your code.** Docs change in the same pull request as the feature they describe, so reviewers see both together and the two don't drift apart.
