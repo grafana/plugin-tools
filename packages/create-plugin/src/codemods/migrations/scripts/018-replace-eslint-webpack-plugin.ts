@@ -3,6 +3,7 @@ import * as recast from 'recast';
 import type { Context } from '../../context.js';
 import { addDependenciesToPackageJson, migrationsDebug, removeDependenciesFromPackageJson } from '../../utils.js';
 import { parseAsTypescript } from '../../utils.ast.js';
+import { output } from '../../../utils/utils.console.js';
 
 const OLD_PACKAGE_NAME = 'eslint-webpack-plugin';
 const NEW_PACKAGE_NAME = 'diagnostics-webpack-plugin';
@@ -15,6 +16,12 @@ const CONFIG_PATHS = [
   join('.config', 'rspack', 'rspack.config.ts'),
   'webpack.config.ts',
   'rspack.config.ts',
+];
+
+// Options the template has scaffolded over time, with whitespace, comments and trailing commas stripped.
+const SCAFFOLDED_OPTIONS = [
+  "{extensions:['.ts','.tsx'],lintDirtyModulesOnly:Boolean(env.development)}",
+  "{extensions:['.ts','.tsx'],lintDirtyModulesOnly:Boolean(env.development),failOnError:Boolean(env.production)}",
 ];
 
 const NEW_IMPORT = `import DiagnosticsPlugin from '${NEW_PACKAGE_NAME}';`;
@@ -60,8 +67,16 @@ function replaceESLintPlugin(context: Context): boolean {
     return false;
   }
 
+  // Splice the source text rather than reprinting the AST, which would reformat the surrounding plugins array.
+  const lineOffsets = [0];
+  for (const line of source.split('\n')) {
+    lineOffsets.push(lineOffsets[lineOffsets.length - 1] + line.length + 1);
+  }
+  const toOffset = ({ line, column }: { line: number; column: number }) => lineOffsets[line - 1] + column;
+
   const localNames = new Set<string>();
   const replacements: Array<{ node: recast.types.namedTypes.Node; text: string }> = [];
+  let hasCustomOptions = false;
 
   recast.visit(parsed.ast, {
     visitImportDeclaration(path) {
@@ -82,6 +97,15 @@ function replaceESLintPlugin(context: Context): boolean {
     visitNewExpression(path) {
       const { node } = path;
       if (node.callee.type === 'Identifier' && localNames.has(node.callee.name)) {
+        const [options] = node.arguments;
+        const optionsText = options?.loc ? source.slice(toOffset(options.loc.start), toOffset(options.loc.end)) : '';
+        const normalized = optionsText
+          .replace(/\/\/.*$/gm, '')
+          .replace(/\s+/g, '')
+          .replace(/,}/g, '}');
+        if (node.arguments.length !== 1 || !SCAFFOLDED_OPTIONS.includes(normalized)) {
+          hasCustomOptions = true;
+        }
         replacements.push({ node, text: NEW_PLUGIN });
         return false;
       }
@@ -89,10 +113,15 @@ function replaceESLintPlugin(context: Context): boolean {
     },
   });
 
-  // Splice the source text rather than reprinting the AST, which would reformat the surrounding plugins array.
-  const lineOffsets = [0];
-  for (const line of source.split('\n')) {
-    lineOffsets.push(lineOffsets[lineOffsets.length - 1] + line.length + 1);
+  if (hasCustomOptions) {
+    output.warning({
+      title: `Skipping the ${OLD_PACKAGE_NAME} replacement in ${WEBPACK_CONFIG_PATH}`,
+      body: [
+        `The ${OLD_PACKAGE_NAME} options differ from the scaffolded defaults, so the config was left as is.`,
+        `${OLD_PACKAGE_NAME} depends on micromatch, which pulls in braces. To drop it, switch to ${NEW_PACKAGE_NAME} by hand.`,
+      ],
+    });
+    return false;
   }
 
   let updated = source;
@@ -104,9 +133,7 @@ function replaceESLintPlugin(context: Context): boolean {
   for (const { node, text } of sorted) {
     const { start, end } = node.loc!;
     const indent = ' '.repeat(start.column);
-    const from = lineOffsets[start.line - 1] + start.column;
-    const to = lineOffsets[end.line - 1] + end.column;
-    updated = updated.slice(0, from) + text.replaceAll('\n', `\n${indent}`) + updated.slice(to);
+    updated = updated.slice(0, toOffset(start)) + text.replaceAll('\n', `\n${indent}`) + updated.slice(toOffset(end));
   }
 
   context.updateFile(WEBPACK_CONFIG_PATH, updated);

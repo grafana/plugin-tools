@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import migrate from './017-jest-30.js';
 import { Context } from '../../context.js';
+import { output } from '../../../utils/utils.console.js';
 
 function setupContext(devDependencies: Record<string, string>) {
   const context = new Context('/virtual');
@@ -9,6 +10,14 @@ function setupContext(devDependencies: Record<string, string>) {
 }
 
 describe('017-jest-30', () => {
+  beforeEach(() => {
+    vi.spyOn(output, 'warning').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should bump jest, jest-environment-jsdom and @types/jest to v30', () => {
     const result = migrate(
       setupContext({ jest: '^29.7.0', 'jest-environment-jsdom': '^29.7.0', '@types/jest': '^29.5.0' })
@@ -41,6 +50,18 @@ describe('017-jest-30', () => {
     const packageJson = JSON.parse(result.getFile('package.json') || '{}');
 
     expect(packageJson.devDependencies).toEqual({ vitest: '^4.0.0' });
+  });
+
+  it('should warn about breaking changes when jest is bumped', () => {
+    migrate(setupContext({ jest: '^29.7.0' }));
+
+    expect(output.warning).toHaveBeenCalledWith(expect.objectContaining({ title: 'Jest was updated to v30' }));
+  });
+
+  it('should not warn when jest is already on v30', () => {
+    migrate(setupContext({ jest: '^30.5.0' }));
+
+    expect(output.warning).not.toHaveBeenCalled();
   });
 
   it('should be idempotent', async () => {

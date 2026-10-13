@@ -1,5 +1,6 @@
 import type { Context } from '../../context.js';
 import { addDependenciesToPackageJson, readJsonFile } from '../../utils.js';
+import { output } from '../../../utils/utils.console.js';
 
 const JEST_30_DEPENDENCIES: Record<string, string> = {
   jest: '^30.5.0',
@@ -21,7 +22,18 @@ export default function migrate(context: Context) {
     Object.entries(JEST_30_DEPENDENCIES).filter(([name]) => Boolean(installed[name]))
   );
 
+  const before = context.getFile('package.json');
   addDependenciesToPackageJson(context, {}, devDependencies);
+
+  if (context.getFile('package.json') !== before) {
+    output.warning({
+      title: 'Jest was updated to v30',
+      body: [
+        'Jest 30 is a major release, so existing tests may need small fixes (jsdom 26, removed matcher aliases like `toBeCalled`).',
+        'See https://jestjs.io/docs/upgrading-to-jest30 if `npm run test:ci` fails after the update.',
+      ],
+    });
+  }
 
   return context;
 }
