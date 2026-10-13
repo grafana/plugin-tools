@@ -10,7 +10,6 @@ import {
   DEFAULT_PACKAGE_MANAGER,
   getPackageManagerWithFallback,
   type PackageManager,
-  parsePackageManagerField,
 } from '../utils/utils.packageManager.js';
 import { execSync } from 'node:child_process';
 import which from 'which';
@@ -200,9 +199,9 @@ export function readJsonFile<T extends object = any>(context: Context, path: str
  */
 export function getPackageManager(context: Context): PackageManager {
   const packageJson = readOptionalJsonFile<{ packageManager?: string }>(context, 'package.json');
-  const fromPackageJson = parsePackageManagerField(packageJson?.packageManager);
-  if (fromPackageJson) {
-    return fromPackageJson;
+  if (packageJson?.packageManager) {
+    const [packageManagerName, packageManagerVersion] = packageJson.packageManager.split('@');
+    return { packageManagerName, packageManagerVersion };
   }
 
   additionsDebug('no usable packageManager field in package.json, checking for a lockfile');

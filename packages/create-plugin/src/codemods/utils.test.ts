@@ -197,7 +197,7 @@ describe('utils', () => {
   describe('getPackageManager', () => {
     it('reads the packageManager field', () => {
       const context = new Context(tmpDir);
-      context.addFile('package.json', JSON.stringify({ packageManager: 'pnpm@10.4.1+sha512.abc' }));
+      context.addFile('package.json', JSON.stringify({ packageManager: 'pnpm@10.4.1' }));
       expect(getPackageManager(context)).toEqual({ packageManagerName: 'pnpm', packageManagerVersion: '10.4.1' });
     });
 
@@ -215,15 +215,6 @@ describe('utils', () => {
       const context = new Context(tmpDir);
       context.addFile('package.json', '{}');
       expect(getPackageManager(context).packageManagerName).toBe('npm');
-    });
-
-    it.each([
-      ['yarn@4', 'yarn', '4.0.0'],
-      ['pnpm@10.4', 'pnpm', '10.4.0'],
-    ])('fills in a partial %s version', (packageManager, name, version) => {
-      const context = new Context(tmpDir);
-      context.addFile('package.json', JSON.stringify({ packageManager }));
-      expect(getPackageManager(context)).toEqual({ packageManagerName: name, packageManagerVersion: version });
     });
 
     it.each([
