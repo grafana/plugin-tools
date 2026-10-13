@@ -9,7 +9,8 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     binaryNames: ['claude'],
     buildInteractive: (invocationContext) => ({
       args: [
-        '--system-prompt',
+        // appended rather than replaced, so claude-code keeps its own tool and safety guidance
+        '--append-system-prompt',
         invocationContext.systemPrompt,
         // pre-authorize the handoff write so the session cannot stall on a permission prompt.
         // claude-code matches file permissions against Edit(...) rules only; they cover Write too

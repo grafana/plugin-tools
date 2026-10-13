@@ -36,6 +36,15 @@ describe('AGENT_DEFINITIONS', () => {
     });
   });
 
+  it('should append the system prompt to the claude-code default rather than replace it', () => {
+    const invocation = getDefinition('claude-code').buildInteractive(invocationContext);
+    const appendIndex = invocation.args.indexOf('--append-system-prompt');
+
+    expect(appendIndex).toBeGreaterThan(-1);
+    expect(invocation.args[appendIndex + 1]).toBe(invocationContext.systemPrompt);
+    expect(invocation.args).not.toContain('--system-prompt');
+  });
+
   it('should pre-authorize the handoff write for claude-code', () => {
     const invocation = getDefinition('claude-code').buildInteractive(invocationContext);
     const allowedToolsIndex = invocation.args.indexOf('--allowedTools');
