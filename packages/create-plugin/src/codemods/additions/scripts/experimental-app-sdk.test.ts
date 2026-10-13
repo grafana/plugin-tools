@@ -340,6 +340,15 @@ describe('experimental-app-sdk addition', () => {
 
       expect(result.doesFileExist('kinds/config.cue')).toBe(true);
     });
+
+    it('still scaffolds the kinds when there is no package.json', () => {
+      const context = createAppContext();
+      context.deleteFile('package.json');
+
+      const result = appSdk(context);
+
+      expect(result.doesFileExist('kinds/config.cue')).toBe(true);
+    });
   });
 
   describe('user messaging', () => {

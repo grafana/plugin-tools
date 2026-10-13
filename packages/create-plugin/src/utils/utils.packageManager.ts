@@ -1,4 +1,4 @@
-import { gte, lt } from 'semver';
+import { coerce, gte, lt } from 'semver';
 
 import { basename } from 'node:path';
 import { findUpSync } from '@libs/find-up';
@@ -9,7 +9,7 @@ const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
 const YARN_LOCKFILE = 'yarn.lock';
 const SUPPORTED_PACKAGE_MANAGERS = ['npm', 'yarn', 'pnpm'];
-const DEFAULT_PACKAGE_MANAGER = { packageManagerName: 'npm', packageManagerVersion: '10.9.0' };
+export const DEFAULT_PACKAGE_MANAGER = { packageManagerName: 'npm', packageManagerVersion: '10.9.0' };
 
 export type PackageManager = {
   packageManagerName: string;
@@ -169,11 +169,18 @@ function getPackageManagerFromLockFile(): PackageManager | undefined {
 }
 
 function getPackageManagerFromPackageJson(): PackageManager | undefined {
-  const packageJson = getPackageJson();
-  if (packageJson?.packageManager) {
-    const [packageManagerName, packageManagerVersion] = packageJson.packageManager.split('@');
-    return { packageManagerName, packageManagerVersion };
-  }
+  return parsePackageManagerField(getPackageJson()?.packageManager);
+}
 
-  return undefined;
+/**
+ * Parses package.json's `packageManager` field, such as `pnpm@10.4.1+sha512.abc` or `yarn@4`, into a name
+ * and a full `X.Y.Z` version.
+ */
+export function parsePackageManagerField(packageManager?: string): PackageManager | undefined {
+  const match = /^([a-z]+)@(\d+(?:\.\d+){0,2})/.exec(packageManager ?? '');
+  const version = match && coerce(match[2]);
+  if (!match || !version) {
+    return undefined;
+  }
+  return { packageManagerName: match[1], packageManagerVersion: version.version };
 }

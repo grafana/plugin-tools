@@ -2,13 +2,13 @@ import { fileURLToPath } from 'node:url';
 import { styleText } from 'node:util';
 import { parseDocument, stringify, YAMLMap, Scalar } from 'yaml';
 import type { Context, ContextMessage } from '../../context.js';
+import type { TemplateData } from '../../../types.js';
 import { getBackendCmd } from '../../../commands/generate/print-success-message.js';
 import { output } from '../../../utils/utils.console.js';
 import {
   additionsDebug,
   AGENT_INSTRUCTIONS_PATH,
   appendToAgentInstructions,
-  getPackageManager,
   getTemplateDataFromContext,
   renderTemplate,
 } from '../../utils.js';
@@ -51,15 +51,17 @@ export default function appSdk(context: Context): Context {
 
   const changesBefore = Object.keys(context.listChanges()).length;
 
-  addTemplateFiles(context);
-  referenceAgentInstructions(context);
+  const data = getTemplateDataFromContext(context);
+
+  addTemplateFiles(context, data);
+  referenceAgentInstructions(context, data);
   addGenerateScript(context);
   addFeatureToggle(context);
-  wireGoBackend(context);
+  wireGoBackend(context, data);
 
   // Only guide the user when we actually scaffolded something; a re-run should stay quiet.
   if (Object.keys(context.listChanges()).length > changesBefore) {
-    context.setMessage(buildNextStepsMessage(hasGoBackend(context), getPackageManager(context).packageManagerName));
+    context.setMessage(buildNextStepsMessage(hasGoBackend(context), data.packageManagerName));
   }
 
   return context;
@@ -104,14 +106,14 @@ function skip(title: string, body: string[] = []) {
   output.warning({ title: `Skipping app-sdk: ${title}`, body });
 }
 
-function addTemplateFiles(context: Context) {
+function addTemplateFiles(context: Context, data: TemplateData) {
   for (const [file, includeWarning] of TEMPLATE_FILES) {
     if (context.doesFileExist(file)) {
       additionsDebug(`${file} already exists. Skipping.`);
       continue;
     }
 
-    context.addFile(file, renderAppSdkTemplate(context, file, includeWarning));
+    context.addFile(file, renderAppSdkTemplate(file, data, includeWarning));
   }
 }
 
@@ -119,8 +121,8 @@ function templatePath(file: string): string {
   return fileURLToPath(new URL(`../../../../templates/app-sdk/${file}`, import.meta.url));
 }
 
-function renderAppSdkTemplate(context: Context, file: string, includeWarning = false): string {
-  return renderTemplate(templatePath(file), includeWarning, getTemplateDataFromContext(context));
+function renderAppSdkTemplate(file: string, data: TemplateData, includeWarning = false): string {
+  return renderTemplate(templatePath(file), includeWarning, data);
 }
 
 /**
@@ -130,14 +132,14 @@ function renderAppSdkTemplate(context: Context, file: string, includeWarning = f
  * have an instructions.md that predates the flag, so add it here — without it, an agent reading the
  * plugin's instructions has no idea kinds or generated code exist.
  */
-function referenceAgentInstructions(context: Context) {
+function referenceAgentInstructions(context: Context, data: TemplateData) {
   if (!context.getFile(AGENT_INSTRUCTIONS_PATH)) {
     additionsDebug(`Could not find ${AGENT_INSTRUCTIONS_PATH}. Skipping the app-sdk reference.`);
     return;
   }
 
   if (!context.doesFileExist(APP_SDK_MD)) {
-    context.addFile(APP_SDK_MD, renderAppSdkTemplate(context, APP_SDK_MD));
+    context.addFile(APP_SDK_MD, renderAppSdkTemplate(APP_SDK_MD, data));
   }
 
   appendToAgentInstructions(
@@ -240,14 +242,14 @@ function addFeatureToggle(context: Context) {
  * Wires the generated kinds into the Go backend, for app plugins that have one. Go code generation
  * itself is enabled when kinds/config.cue is first scaffolded, in addTemplateFiles.
  */
-function wireGoBackend(context: Context) {
+function wireGoBackend(context: Context, data: TemplateData) {
   if (!hasGoBackend(context)) {
     additionsDebug('No Go backend found. Skipping main.go wiring.');
     return;
   }
 
-  addAppProvider(context);
-  addGeneratedStubs(context);
+  addAppProvider(context, data);
+  addGeneratedStubs(context, data);
   wireMainGo(context);
   addGoModDependency(context);
 }
@@ -277,7 +279,7 @@ function addGoModDependency(context: Context) {
  * Not overwritten on a re-run — like kinds/*.cue, it's meant to be edited as the plugin adds
  * validators, mutators, or more kinds.
  */
-function addAppProvider(context: Context) {
+function addAppProvider(context: Context, data: TemplateData) {
   const path = 'pkg/provider/provider.go';
 
   if (context.doesFileExist(path)) {
@@ -285,7 +287,7 @@ function addAppProvider(context: Context) {
     return;
   }
 
-  context.addFile(path, renderAppSdkTemplate(context, path));
+  context.addFile(path, renderAppSdkTemplate(path, data));
 }
 
 // Stub doc.go files under pkg/generated/. Both are real packages `generate:kinds` fills in; they
@@ -300,14 +302,14 @@ const GENERATED_STUB_PATHS = ['pkg/generated/example/v1alpha1/doc.go', 'pkg/gene
  * Scaffolds stub packages under pkg/generated/, so provider.go's imports resolve for `go mod tidy`
  * before `generate:kinds` has run for the first time.
  */
-function addGeneratedStubs(context: Context) {
+function addGeneratedStubs(context: Context, data: TemplateData) {
   for (const path of GENERATED_STUB_PATHS) {
     if (context.doesFileExist(path)) {
       additionsDebug(`${path} already exists. Skipping.`);
       continue;
     }
 
-    context.addFile(path, renderAppSdkTemplate(context, path));
+    context.addFile(path, renderAppSdkTemplate(path, data));
   }
 }
 

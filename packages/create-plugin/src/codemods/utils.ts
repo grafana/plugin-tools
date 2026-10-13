@@ -1,4 +1,4 @@
-import { dirname, join, relative } from 'node:path';
+import { dirname, join } from 'node:path';
 import { createRequire } from 'node:module';
 import { Context } from './context.js';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -7,8 +7,10 @@ import { styleText } from 'node:util';
 import { output } from '../utils/utils.console.js';
 import {
   getPackageManagerSilentInstallCmd,
+  DEFAULT_PACKAGE_MANAGER,
   getPackageManagerWithFallback,
   type PackageManager,
+  parsePackageManagerField,
 } from '../utils/utils.packageManager.js';
 import { execSync } from 'node:child_process';
 import which from 'which';
@@ -16,9 +18,8 @@ import { clean, coerce, gt, gte } from 'semver';
 import { debug } from '../utils/utils.cli.js';
 import { renderHandlebarsTemplate } from '../utils/utils.handlebars.js';
 import { buildTemplateData, getTemplateData } from '../utils/utils.templates.js';
-import { type CreatePluginConfig, mergeConfigs, type UserConfig } from '../utils/utils.config.js';
-import { getExportFileName, isFile } from '../utils/utils.files.js';
-import { CURRENT_APP_VERSION } from '../utils/utils.version.js';
+import { type CreatePluginConfig, resolveConfig, type UserConfig } from '../utils/utils.config.js';
+import { getExportFileName } from '../utils/utils.files.js';
 import type { TemplateData } from '../types.js';
 
 export function printChanges(context: Context, key: string, description: string) {
@@ -200,22 +201,28 @@ export function readJsonFile<T extends object = any>(context: Context, path: str
 /**
  * Reads the plugin's package manager from the context, so it sees pending changes and never touches disk.
  * Plugins without a `packageManager` field fall back to the lockfile, like `getPackageManagerWithFallback`.
+ * Lockfiles carry no exact version, so a representative one is used.
  */
 export function getPackageManager(context: Context): PackageManager {
-  const packageJson = readJsonFile<{ packageManager?: string }>(context, 'package.json');
-  const match = /^([a-z]+)@(\d+\.\d+\.\d+)/.exec(packageJson.packageManager ?? '');
-  if (match) {
-    return { packageManagerName: match[1], packageManagerVersion: match[2] };
+  const packageJson = readOptionalJsonFile<{ packageManager?: string }>(context, 'package.json');
+  const fromPackageJson = parsePackageManagerField(packageJson?.packageManager);
+  if (fromPackageJson) {
+    return fromPackageJson;
   }
 
   additionsDebug('no usable packageManager field in package.json, checking for a lockfile');
-  if (context.doesFileExist('yarn.lock')) {
-    return { packageManagerName: 'yarn', packageManagerVersion: '4.0.0' };
+  const yarnLock = context.getFile('yarn.lock');
+  if (yarnLock !== undefined) {
+    // Yarn Berry lockfiles have a `__metadata` block, Yarn 1 lockfiles don't
+    return {
+      packageManagerName: 'yarn',
+      packageManagerVersion: yarnLock.includes('__metadata:') ? '4.0.0' : '1.22.22',
+    };
   }
   if (context.doesFileExist('pnpm-lock.yaml')) {
     return { packageManagerName: 'pnpm', packageManagerVersion: '9.0.0' };
   }
-  return { packageManagerName: 'npm', packageManagerVersion: '10.9.0' };
+  return { ...DEFAULT_PACKAGE_MANAGER };
 }
 
 export function addDependenciesToPackageJson(
@@ -398,10 +405,7 @@ export function renderTemplate(
 export function getTemplateDataFromContext(context: Context): TemplateData {
   const rootConfig = readOptionalJsonFile<Partial<CreatePluginConfig>>(context, '.config/.cprc.json');
   const userConfig = readOptionalJsonFile<Partial<UserConfig>>(context, '.cprc.json');
-  const { features } = mergeConfigs(
-    { version: CURRENT_APP_VERSION, ...rootConfig, features: rootConfig?.features ?? {} },
-    { features: userConfig?.features ?? {} }
-  );
+  const { features } = resolveConfig(rootConfig, userConfig);
   return buildTemplateData({
     pluginJson: readJsonFile(context, 'src/plugin.json'),
     packageManager: getPackageManager(context),
@@ -438,9 +442,10 @@ export function addTemplateFolder(
   }
 
   const added: string[] = [];
-  for (const file of glob.sync(`${folderPath}/**`, { dot: true }).filter(isFile)) {
-    const relativeDir = relative(folderPath, dirname(file));
-    const filePath = join(targetPath, relativeDir, getExportFileName(file));
+  // relative to `cwd`, so glob characters in the install path (such as Windows backslashes) can't break the pattern
+  for (const relativeFile of glob.sync('**', { cwd: folderPath, dot: true, nodir: true })) {
+    const file = join(folderPath, relativeFile);
+    const filePath = join(targetPath, dirname(relativeFile), getExportFileName(file));
     if (context.doesFileExist(filePath)) {
       additionsDebug(`${filePath} already exists, skipping`);
       continue;
@@ -472,5 +477,6 @@ export function appendToAgentInstructions(context: Context, marker: string, text
     additionsDebug(`${AGENT_INSTRUCTIONS_PATH} already contains ${marker}, skipping`);
     return;
   }
-  context.updateFile(AGENT_INSTRUCTIONS_PATH, `${existing.trimEnd()}${separator}${text}`);
+  const kept = existing.trimEnd();
+  context.updateFile(AGENT_INSTRUCTIONS_PATH, kept ? `${kept}${separator}${text}` : text);
 }
