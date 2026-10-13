@@ -22,6 +22,6 @@ export function getLatestPackageJson(): PackageJson {
   return JSON.parse(renderTemplateFromFile(packageJsonPath, data));
 }
 
-export function writePackageJson(json: PackageJson) {
-  return fs.writeFileSync(path.join(process.cwd(), 'package.json'), `${JSON.stringify(json, null, 2)}\n`);
+export function writePackageJson(json: PackageJson, rootPath = process.cwd()) {
+  return fs.writeFileSync(path.join(rootPath, 'package.json'), `${JSON.stringify(json, null, 2)}\n`);
 }

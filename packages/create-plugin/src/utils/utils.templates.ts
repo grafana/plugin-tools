@@ -1,10 +1,4 @@
-import {
-  DEFAULT_FEATURE_FLAGS,
-  EXPORT_PATH_PREFIX,
-  EXTRA_TEMPLATE_VARIABLES,
-  PLUGIN_TYPES,
-  TEMPLATE_PATHS,
-} from '../constants.js';
+import { DEFAULT_FEATURE_FLAGS, EXTRA_TEMPLATE_VARIABLES, PLUGIN_TYPES, TEMPLATE_PATHS } from '../constants.js';
 import { GenerateCliArgs, TemplateData } from '../types.js';
 import { filterOutCommonFiles, isFile, isFileStartingWith } from './utils.files.js';
 import {
@@ -56,33 +50,43 @@ export function getProjectRelativeTemplatePath(file: string, pluginType: string)
   return file.replace(TEMPLATE_PATHS.common, '').replace(TEMPLATE_PATHS[pluginType], '').replace(/^\/+/, '');
 }
 
-export function compileTemplateFiles(filter?: string[], data?: any) {
-  const { type } = getPluginJson();
+export function compileTemplateFiles(filter?: string[], data?: any, rootPath = process.cwd()) {
+  const { type } = getPluginJson(path.join(rootPath, 'src'));
 
-  getTemplateFiles(type, filter).forEach((file) => compileSingleTemplateFile(type, file, data));
+  getTemplateFiles(type, filter).forEach((file) => compileSingleTemplateFile(type, file, data, rootPath));
 }
 
-export function compileSingleTemplateFile(pluginType: string, templateFile: string, data?: any) {
+export function compileSingleTemplateFile(
+  pluginType: string,
+  templateFile: string,
+  data?: any,
+  rootPath = process.cwd()
+) {
   if (!isFile(templateFile)) {
     return;
   }
 
   const rendered = renderTemplateFromFile(templateFile, data);
   const relativeExportPath = templateFile.replace(TEMPLATE_PATHS.common, '').replace(TEMPLATE_PATHS[pluginType], '');
-  const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
+  const exportPath = path.join(rootPath, path.dirname(relativeExportPath), getExportFileName(templateFile));
 
   fs.mkdirSync(path.dirname(exportPath), { recursive: true });
   fs.writeFileSync(exportPath, rendered);
 }
 
-export function compileProvisioningTemplateFile(pluginType: string, templateFile: string, data?: any) {
+export function compileProvisioningTemplateFile(
+  pluginType: string,
+  templateFile: string,
+  data?: any,
+  rootPath = process.cwd()
+) {
   if (!isFile(templateFile)) {
     return;
   }
 
   const rendered = renderTemplateFromFile(templateFile, data);
   const relativeExportPath = templateFile.replace(TEMPLATE_PATHS[pluginType], '.');
-  const exportPath = path.join(EXPORT_PATH_PREFIX, path.dirname(relativeExportPath), getExportFileName(templateFile));
+  const exportPath = path.join(rootPath, path.dirname(relativeExportPath), getExportFileName(templateFile));
 
   fs.mkdirSync(path.dirname(exportPath), { recursive: true });
   fs.writeFileSync(exportPath, rendered);
@@ -92,8 +96,8 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
 
-export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
-  const { features } = getConfig();
+export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cwd()): TemplateData {
+  const { features } = getConfig(rootPath);
   const currentVersion = CURRENT_APP_VERSION;
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
   const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
@@ -128,8 +132,8 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
   } else {
-    const pluginJson = getPluginJson();
-    const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
+    const pluginJson = getPluginJson(path.join(rootPath, 'src'));
+    const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback(rootPath);
 
     templateData = {
       ...EXTRA_TEMPLATE_VARIABLES,

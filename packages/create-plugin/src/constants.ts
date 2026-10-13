@@ -5,8 +5,6 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export const IS_DEV = process.env.CREATE_PLUGIN_DEV !== undefined;
 
-export const EXPORT_PATH_PREFIX = process.cwd();
-
 export const DIST_DIR = path.join(__dirname, 'dist');
 
 export const TEMPLATES_DIR = path.join(__dirname, '..', 'templates');

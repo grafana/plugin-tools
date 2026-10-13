@@ -2,6 +2,7 @@ import { Context } from './context.js';
 import { formatFiles, flushChanges, installNPMDependencies, printChanges, runGoModTidy } from './utils.js';
 import { parseAndValidateOptions } from './schema-parser.js';
 import { Codemod } from './types.js';
+import { ProjectLayout, resolveProject } from '../utils/utils.project.js';
 
 /**
  * Run a single codemod
@@ -16,7 +17,11 @@ import { Codemod } from './types.js';
  * 7. Install dependencies if needed
  * 8. Run `go mod tidy` if go.mod changed
  */
-export async function runCodemod(codemod: Codemod, options?: Record<string, any>): Promise<Context> {
+export async function runCodemod(
+  codemod: Codemod,
+  options?: Record<string, any>,
+  project: ProjectLayout = resolveProject()
+): Promise<Context> {
   const codemodModule = await import(codemod.scriptPath);
   if (!codemodModule.default || typeof codemodModule.default !== 'function') {
     throw new Error(`Codemod ${codemod.name} must export a default function`);
@@ -28,8 +33,7 @@ export async function runCodemod(codemod: Codemod, options?: Record<string, any>
     codemodOptions = parseAndValidateOptions(options, codemodModule.schema);
   }
 
-  const basePath = process.cwd();
-  const context = new Context(basePath);
+  const context = new Context(project.root, project);
 
   try {
     const updatedContext = await codemodModule.default(context, codemodOptions);

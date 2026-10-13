@@ -1,6 +1,7 @@
 import { constants, accessSync, readFileSync, readdirSync } from 'node:fs';
 import { relative, normalize, join, dirname } from 'node:path';
 import { debug } from '../utils/utils.cli.js';
+import { ProjectLayout } from '../utils/utils.project.js';
 
 const codemodsDebug = debug.extend('codemods');
 
@@ -22,9 +23,11 @@ export class Context {
   private files: ContextFile = {};
   private message?: ContextMessage;
   basePath: string;
+  project: ProjectLayout;
 
-  constructor(basePath?: string) {
+  constructor(basePath?: string, project?: ProjectLayout) {
     this.basePath = basePath || process.cwd();
+    this.project = project ?? { root: this.basePath, kind: 'single', plugins: [{ dir: '.' }] };
   }
 
   /**
