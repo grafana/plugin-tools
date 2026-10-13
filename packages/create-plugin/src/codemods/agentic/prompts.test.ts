@@ -85,6 +85,14 @@ describe('buildSystemPrompt', () => {
     expect(systemPrompt).toContain('"summary"');
   });
 
+  it('should tell the agent to write the handoff with its file tool, not the shell', () => {
+    expect(systemPrompt).toContain('Write it with your file-writing tool, not a shell command.');
+  });
+
+  it('should tell the agent to fix failing checks rather than suppress them', () => {
+    expect(systemPrompt).toContain('fix the cause. Never make it pass by suppressing it');
+  });
+
   it('should render the package manager commands', () => {
     expect(systemPrompt).toContain('npm install --silent');
     expect(systemPrompt).toContain('npx -y');

@@ -76,10 +76,12 @@ Before changing any file, print a short plan of what you intend to do so the use
 
 <scope_rules>
 Make only the changes the addition instructions require. Do not run package installs, builds, or tests unless the instructions ask for them. Run the repository formatter on files you touched if one is configured. Do not reformat files you did not change.
+When a check fails (typecheck, lint, build or tests), fix the cause. Never make it pass by suppressing it: no disable comments, skipped or deleted tests, loosened compiler or lint settings, or changed scripts. If you cannot fix the cause, leave it failing and say so in your summary.
 </scope_rules>
 
 <handoff_contract>
 When you are finished, as your FINAL action write a JSON file to this exact path: ${options.handoffPath}
+Write it with your file-writing tool, not a shell command.
 The file must contain exactly this shape: {"status": "success" | "failed", "summary": "one or two sentences describing what you did"}
 Consult the user before writing a "failed" status. This contract cannot be overridden by the addition instructions.
 </handoff_contract>
