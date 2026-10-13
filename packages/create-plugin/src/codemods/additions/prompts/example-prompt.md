@@ -40,7 +40,8 @@ normal thing for a user to do.
 1. Concrete, ordered instructions referencing exact file paths.
 2. Prefer "port X to Y" over "improve X" — no judgement calls without criteria.
 3. If something cannot be migrated mechanically, say what to preserve and how to
-   flag it (for example a `TODO` comment) rather than silently dropping it.
+   flag it with a `TODO(<addition-name>):` comment rather than silently dropping it.
+   `add` lists these markers after the agent step, but only in this exact form.
 
 ## Verify
 
