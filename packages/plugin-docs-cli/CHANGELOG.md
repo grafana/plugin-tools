@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.7.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.6.0...@grafana/plugin-docs-cli@0.7.0) (2026-10-13)
+
+
+### Features
+
+* **plugin-docs-cli:** drop strict mode so serve matches validate ([#2961](https://github.com/grafana/plugin-tools/issues/2961)) ([f0c6ec3](https://github.com/grafana/plugin-tools/commit/f0c6ec3210da5f3f78e393b5d1971326c52e1ef2))
+* **plugin-docs-cli:** ship plugin docs guides with the package ([#2963](https://github.com/grafana/plugin-tools/issues/2963)) ([6ccda39](https://github.com/grafana/plugin-tools/commit/6ccda3975d0453adc7888f3d59d65b1e7cbb6196))
+
+
+### Bug Fixes
+
+* **deps:** Update dependency github-slugger to v2 ([#2803](https://github.com/grafana/plugin-tools/issues/2803)) ([39cdcc9](https://github.com/grafana/plugin-tools/commit/39cdcc934c0d2ff87908af5292dd9a184ffb9553))
+
 ## [0.6.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.5.0...@grafana/plugin-docs-cli@0.6.0) (2026-10-09)
 
 
