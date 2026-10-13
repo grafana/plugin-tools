@@ -1,4 +1,4 @@
-import { coerce, gte, lt } from 'semver';
+import { gte, lt } from 'semver';
 
 import { basename } from 'node:path';
 import { findUpSync } from '@libs/find-up';
@@ -169,18 +169,11 @@ function getPackageManagerFromLockFile(): PackageManager | undefined {
 }
 
 function getPackageManagerFromPackageJson(): PackageManager | undefined {
-  return parsePackageManagerField(getPackageJson()?.packageManager);
-}
-
-/**
- * Parses package.json's `packageManager` field, such as `pnpm@10.4.1+sha512.abc` or `yarn@4`, into a name
- * and a full `X.Y.Z` version.
- */
-export function parsePackageManagerField(packageManager?: string): PackageManager | undefined {
-  const match = /^([a-z]+)@(\d+(?:\.\d+){0,2})/.exec(packageManager ?? '');
-  const version = match && coerce(match[2]);
-  if (!match || !version) {
-    return undefined;
+  const packageJson = getPackageJson();
+  if (packageJson?.packageManager) {
+    const [packageManagerName, packageManagerVersion] = packageJson.packageManager.split('@');
+    return { packageManagerName, packageManagerVersion };
   }
-  return { packageManagerName: match[1], packageManagerVersion: version.version };
+
+  return undefined;
 }
