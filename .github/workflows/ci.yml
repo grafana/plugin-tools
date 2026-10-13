@@ -128,6 +128,13 @@ jobs:
           npm install ../packed-artifacts/${TSCONFIG_PACKAGE}
         working-directory: ./${{ env.WORKING_DIR }}
 
+      - name: Install packed plugin-e2e and eslint-config
+        run: |
+          PLUGIN_E2E_PACKAGE=$(ls ../packed-artifacts/grafana-plugin-e2e-*.tgz | xargs basename)
+          ESLINT_CONFIG_PACKAGE=$(ls ../packed-artifacts/grafana-eslint-config-*.tgz | xargs basename)
+          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE} ../packed-artifacts/${ESLINT_CONFIG_PACKAGE}
+        working-directory: ./${{ env.WORKING_DIR }}
+
       - name: Lint plugin frontend
         run: npm run lint
         working-directory: ./${{ env.WORKING_DIR }}
@@ -142,6 +149,31 @@ jobs:
 
       - name: Test plugin frontend
         run: npm run test:ci
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: '@grafana/react-detect - analyse plugin'
+        # --noErrorExitCode: React 19 findings shouldn't fail the job, only crashes should.
+        run: react-detect --json --noErrorExitCode
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: '@grafana/plugin-meta-extractor - extract module metadata'
+        run: plugin-meta-extractor src/module.ts
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: '@grafana/plugin-types-bundler - bundle plugin types'
+        # Write outside dist/ so the bundled types don't end up in the signed plugin.
+        run: plugin-types-bundler --entry-point src/types.ts --out-dir ../types-bundler-out
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: '@grafana/plugin-docs-cli - validate docs'
+        # The scaffold has no docs, so add a stub. Validation findings are expected;
+        # only fail if the CLI didn't produce well-formed JSON (e.g. it crashed).
+        run: |
+          node -e "const f='src/plugin.json';const p=JSON.parse(require('fs').readFileSync(f,'utf8'));p.docsPath='docs';require('fs').writeFileSync(f,JSON.stringify(p,null,2))"
+          mkdir -p docs
+          printf -- '---\ntitle: Overview\n---\n\nStub page.\n' > docs/index.md
+          plugin-docs-cli validate --json --allow-unfilled-stubs > ../docs-validate.json || true
+          node -e "const r=JSON.parse(require('fs').readFileSync('../docs-validate.json','utf8'));if(typeof r.valid!=='boolean'){process.exit(1)}"
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Install playwright dependencies
