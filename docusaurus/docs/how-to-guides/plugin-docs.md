@@ -46,7 +46,7 @@ npx @grafana/create-plugin@latest add docs
 The codemod:
 
 - sets [`docsPath`](../reference/metadata.md) in `src/plugin.json`, which turns on plugin docs
-- scaffolds stub pages in a `docs` folder
+- scaffolds stub pages in a `catalog-docs` folder
 - adds `@grafana/plugin-docs-cli` and the `docs:*` scripts to `package.json`
 - adds a workflow that validates your docs on pull requests
 - updates the `build-plugin` or `package-plugin` action in `release.yml` to a version that builds your docs
@@ -60,7 +60,7 @@ For a panel plugin, the codemod adds:
 
 ```text
 .
-├── docs/
+├── catalog-docs/
 │   ├── index.md              # landing page of the Documentation tab
 │   ├── data-formats.md
 │   ├── options.md
@@ -73,7 +73,7 @@ For a panel plugin, the codemod adds:
 │   └── validate-docs.yml     # validates docs on pull requests
 ├── .agents/skills/bootstrap-plugin-docs/   # also in .claude/ and .codex/
 ├── .config/AGENTS/
-│   └── instructions.md       # gets a Documentation section pointing at docs/AGENTS.md
+│   └── instructions.md       # gets a Plugin docs section pointing at catalog-docs/AGENTS.md
 └── package.json              # adds @grafana/plugin-docs-cli and the docs:* scripts
 ```
 
