@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { checkManifest } from './manifest.js';
 import { Rule } from '../types.js';
 
-const input = (docsPath: string, strict = true) => ({ docsPath, strict });
+const input = (docsPath: string) => ({ docsPath });
 
 const md = (title: string, body = '') =>
   `---\ntitle: ${title}\ndescription: A page about ${title.toLowerCase()}\n---\n${body}`;

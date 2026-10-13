@@ -26,6 +26,7 @@ describe('isMetaFile', () => {
     expect(isMetaFile('SECURITY.md')).toBe(true);
     expect(isMetaFile('CHANGELOG.md')).toBe(true);
     expect(isMetaFile('AGENTS.md')).toBe(true);
+    expect(isMetaFile('CLAUDE.md')).toBe(true);
   });
 
   it('matches when given a path, not just a basename', () => {

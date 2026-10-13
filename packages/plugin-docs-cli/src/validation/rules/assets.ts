@@ -61,7 +61,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     if (!IMAGE_FILE_NAME_RE.test(img.name)) {
       diagnostics.push({
         rule: Rule.ImageFileNaming,
-        severity: input.strict ? 'error' : 'info',
+        severity: 'error',
         file: rel(img),
         title: `${ALLOWED_VIDEO_EXTENSIONS.has(extname(img.name).toLowerCase()) ? 'Video' : 'Image'} filename contains invalid characters`,
         detail: `"${img.name}" should use only letters, digits, hyphens, underscores and dots.`,
@@ -89,7 +89,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     if (size > maxSize) {
       diagnostics.push({
         rule: Rule.MaxImageSize,
-        severity: input.strict ? 'error' : 'info',
+        severity: 'error',
         file: rel(img),
         title: `Image exceeds ${maxLabel} limit`,
         detail: `"${img.name}" is ${formatBytes(size)} which exceeds the ${maxLabel} limit for ${isGif ? 'GIF' : 'static'} images. Compress or resize the image.`,
@@ -108,7 +108,7 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     if (size > MAX_VIDEO_SIZE) {
       diagnostics.push({
         rule: Rule.MaxVideoSize,
-        severity: input.strict ? 'error' : 'info',
+        severity: 'error',
         file: rel(video),
         title: 'Video exceeds 3MB limit',
         detail: `"${video.name}" is ${formatBytes(size)} which exceeds the 3MB limit for videos. Shorten or compress the video, or upload it to YouTube and link to it.`,
@@ -116,8 +116,8 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     }
   }
 
-  // max-total-images-size: only checked under `validate` (not `serve`)
-  if (input.strict && totalSize > MAX_TOTAL_SIZE) {
+  // max-total-images-size
+  if (totalSize > MAX_TOTAL_SIZE) {
     diagnostics.push({
       rule: Rule.MaxTotalImagesSize,
       severity: 'warning',
@@ -176,20 +176,18 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     }
   }
 
-  // no-orphaned-images: only checked under `validate` (not `serve`)
-  if (input.strict) {
-    for (const img of [...imageFiles, ...videoFiles]) {
-      const relPath = rel(img);
-      if (!referencedPaths.has(relPath)) {
-        const kind = ALLOWED_VIDEO_EXTENSIONS.has(extname(img.name).toLowerCase()) ? 'video' : 'image';
-        diagnostics.push({
-          rule: Rule.NoOrphanedImages,
-          severity: 'info',
-          file: relPath,
-          title: `Unreferenced ${kind}`,
-          detail: `"${img.name}" is not referenced by any markdown file. Remove it if it is no longer needed.`,
-        });
-      }
+  // no-orphaned-images
+  for (const img of [...imageFiles, ...videoFiles]) {
+    const relPath = rel(img);
+    if (!referencedPaths.has(relPath)) {
+      const kind = ALLOWED_VIDEO_EXTENSIONS.has(extname(img.name).toLowerCase()) ? 'video' : 'image';
+      diagnostics.push({
+        rule: Rule.NoOrphanedImages,
+        severity: 'info',
+        file: relPath,
+        title: `Unreferenced ${kind}`,
+        detail: `"${img.name}" is not referenced by any markdown file. Remove it if it is no longer needed.`,
+      });
     }
   }
 

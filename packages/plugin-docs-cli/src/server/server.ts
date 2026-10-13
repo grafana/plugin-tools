@@ -82,12 +82,12 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   app.set('view engine', 'ejs');
   app.set('views', join(__dirname, 'views'));
 
-  // run validation in non-strict mode and log results without blocking. this reruns on every
-  // save, so writing-style findings are collapsed to a single line - printing all of them would
-  // bury the structural problems the author actually has to fix.
+  // log validation results without blocking. this reruns on every save, so writing-style findings
+  // are collapsed to a single line - printing all of them would bury the structural problems the
+  // author actually has to fix.
   const runValidation = async () => {
     try {
-      const result = await validate({ docsPath, strict: false, pluginType }, allRules);
+      const result = await validate({ docsPath, pluginType }, allRules);
       const styleFindings = result.diagnostics.filter((d) => d.rule.startsWith('style-'));
       const rest = { ...result, diagnostics: result.diagnostics.filter((d) => !d.rule.startsWith('style-')) };
 

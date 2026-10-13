@@ -83,7 +83,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     if (depth > MAX_NESTING_DEPTH) {
       diagnostics.push({
         rule: Rule.MaxNestingDepth,
-        severity: input.strict ? 'error' : 'info',
+        severity: 'error',
         file: relFile,
         title: `Doc page nested too deeply (${depth} levels, max ${MAX_NESTING_DEPTH})`,
         detail: `"${relFile}" is ${depth} levels from the docs root. Deeply nested pages are hard to discover in the sidebar nav. Flatten the structure so no page is more than ${MAX_NESTING_DEPTH} levels deep.`,
@@ -97,7 +97,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     if (!ALLOWED_EXTENSIONS.has(ext)) {
       diagnostics.push({
         rule: Rule.AllowedFileTypes,
-        severity: input.strict ? 'error' : 'info',
+        severity: 'error',
         file: join(file.parentPath, file.name),
         title: 'File type not allowed',
         detail: `"${file.name}" is not an allowed file type. Only .md, image (png, jpg, jpeg, webp, gif) and video (mp4, webm) files are permitted in the docs folder.`,
@@ -120,34 +120,32 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   if (mdFiles.length > MAX_TOTAL_PAGES) {
     diagnostics.push({
       rule: Rule.MaxTotalPages,
-      severity: input.strict ? 'error' : 'info',
+      severity: 'error',
       title: `Too many documentation pages (${mdFiles.length}, max ${MAX_TOTAL_PAGES})`,
       detail: `The docs folder has ${mdFiles.length} pages, which exceeds the ${MAX_TOTAL_PAGES}-page limit. Consolidate related pages or split the plugin's documentation into a linked external resource.`,
     });
   }
 
-  // max-total-docs-size: only checked under `validate` (not `serve`)
-  if (input.strict) {
-    let totalSize = 0;
-    for (const file of entries) {
-      if (!file.isFile()) {
-        continue;
-      }
-      try {
-        const st = await stat(join(file.parentPath, file.name));
-        totalSize += st.size;
-      } catch {
-        continue;
-      }
+  // max-total-docs-size
+  let totalSize = 0;
+  for (const file of entries) {
+    if (!file.isFile()) {
+      continue;
     }
-    if (totalSize > MAX_TOTAL_DOCS_SIZE) {
-      diagnostics.push({
-        rule: Rule.MaxTotalDocsSize,
-        severity: 'warning',
-        title: `Docs folder exceeds ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit`,
-        detail: `The docs folder is ${formatBytes(totalSize)} in total, which exceeds the ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit. Reduce the number or size of pages, images and videos.`,
-      });
+    try {
+      const st = await stat(join(file.parentPath, file.name));
+      totalSize += st.size;
+    } catch {
+      continue;
     }
+  }
+  if (totalSize > MAX_TOTAL_DOCS_SIZE) {
+    diagnostics.push({
+      rule: Rule.MaxTotalDocsSize,
+      severity: 'warning',
+      title: `Docs folder exceeds ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit`,
+      detail: `The docs folder is ${formatBytes(totalSize)} in total, which exceeds the ${formatBytes(MAX_TOTAL_DOCS_SIZE)} limit. Reduce the number or size of pages, images and videos.`,
+    });
   }
 
   // root-index-exists
@@ -175,7 +173,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     if (!hasAllowed) {
       diagnostics.push({
         rule: Rule.NoEmptyDir,
-        severity: input.strict ? 'error' : 'warning',
+        severity: 'error',
         file: dirPath,
         title: 'Directory contains no documentation files',
         detail: `"${dir.name}" contains no .md, image or video files and serves no purpose in the documentation structure. Remove it or add documentation files.`,
@@ -201,7 +199,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     }
   }
 
-  // no-spaces-in-names (error) and valid-file-naming (strict-dependent): applies to file stems and dir names
+  // no-spaces-in-names and valid-file-naming: applies to file stems and dir names
   const namesToCheck = [
     ...mdFiles.map((e) => ({ slug: e.name.slice(0, -3), label: e.name, path: join(e.parentPath, e.name) })),
     ...dirs.map((e) => ({ slug: e.name, label: e.name, path: join(e.parentPath, e.name) })),
@@ -218,7 +216,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     } else if (!SLUG_SAFE_RE.test(item.slug)) {
       diagnostics.push({
         rule: Rule.ValidNaming,
-        severity: input.strict ? 'error' : 'warning',
+        severity: 'error',
         file: item.path,
         title: 'Name contains non-slug characters',
         detail: `"${item.label}" should use only lowercase letters, digits and hyphens for clean URL slugs.`,

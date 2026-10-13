@@ -131,7 +131,7 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
           if (headings && !headings.has(anchor)) {
             diagnostics.push({
               rule: Rule.AnchorLinksResolve,
-              severity: input.strict ? 'error' : 'warning',
+              severity: 'error',
               file: relPath,
               line,
               title: 'Anchor link does not resolve',
@@ -155,7 +155,7 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
       if (!allFilePaths.has(resolvedPath)) {
         diagnostics.push({
           rule: Rule.InternalLinksResolve,
-          severity: input.strict ? 'error' : 'warning',
+          severity: 'error',
           file: relPath,
           line,
           title: 'Internal link does not resolve',
@@ -170,7 +170,7 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
         if (targetHeadings && !targetHeadings.has(anchor)) {
           diagnostics.push({
             rule: Rule.AnchorLinksResolve,
-            severity: input.strict ? 'error' : 'warning',
+            severity: 'error',
             file: relPath,
             line,
             title: 'Anchor link does not resolve',

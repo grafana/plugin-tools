@@ -13,7 +13,7 @@ describe('checkRequiredPages', () => {
   it('reports nothing for an unknown plugin type', async () => {
     const docsPath = await makeDocsDir();
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'app' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'app' });
 
     expect(findings).toHaveLength(0);
   });
@@ -21,7 +21,7 @@ describe('checkRequiredPages', () => {
   it('reports nothing when pluginType is unset', async () => {
     const docsPath = await makeDocsDir();
 
-    const findings = await checkRequiredPages({ docsPath, strict: true });
+    const findings = await checkRequiredPages({ docsPath });
 
     expect(findings).toHaveLength(0);
   });
@@ -29,13 +29,13 @@ describe('checkRequiredPages', () => {
   it('reports nothing for a plugin type that collides with an Object.prototype key', async () => {
     const docsPath = await makeDocsDir();
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'constructor' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'constructor' });
 
     expect(findings).toHaveLength(0);
   });
 
   it('reports nothing when the docs path does not exist', async () => {
-    const findings = await checkRequiredPages({ docsPath: '/nonexistent/path', strict: true, pluginType: 'panel' });
+    const findings = await checkRequiredPages({ docsPath: '/nonexistent/path', pluginType: 'panel' });
 
     expect(findings).toHaveLength(0);
   });
@@ -45,7 +45,7 @@ describe('checkRequiredPages', () => {
     await writeFile(join(docsPath, 'options.md'), '---\ntitle: Options\n---\n');
     await writeFile(join(docsPath, 'data-formats.md'), '---\ntitle: Data formats\n---\n');
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'panel' });
 
     expect(findings).toHaveLength(0);
   });
@@ -57,7 +57,7 @@ describe('checkRequiredPages', () => {
       await writeFile(join(docsPath, name, 'index.md'), '---\ntitle: X\n---\n');
     }
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'datasource' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'datasource' });
 
     expect(findings).toHaveLength(0);
   });
@@ -68,7 +68,7 @@ describe('checkRequiredPages', () => {
     await mkdir(join(docsPath, 'data-formats'));
     await writeFile(join(docsPath, 'data-formats', 'index.md'), '---\ntitle: X\n---\n');
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'panel' });
 
     expect(findings).toHaveLength(0);
   });
@@ -79,7 +79,7 @@ describe('checkRequiredPages', () => {
     await writeFile(join(docsPath, 'options', 'advanced', 'thresholds.md'), '---\ntitle: X\n---\n');
     await writeFile(join(docsPath, 'data-formats.md'), '---\ntitle: X\n---\n');
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'panel' });
 
     expect(findings).toHaveLength(0);
   });
@@ -88,7 +88,7 @@ describe('checkRequiredPages', () => {
     const docsPath = await makeDocsDir();
     await writeFile(join(docsPath, 'options.md'), '---\ntitle: Options\n---\n');
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'panel' });
 
     expect(findings).toHaveLength(1);
     expect(findings[0].rule).toBe(Rule.RequiredPages);
@@ -100,7 +100,7 @@ describe('checkRequiredPages', () => {
     const docsPath = await makeDocsDir();
     await writeFile(join(docsPath, 'index.md'), '---\ntitle: Home\n---\n');
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'datasource' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'datasource' });
 
     expect(findings).toHaveLength(2);
     expect(findings.every((f) => f.rule === Rule.RequiredPages && f.severity === 'error')).toBe(true);
@@ -112,7 +112,7 @@ describe('checkRequiredPages', () => {
     await writeFile(join(docsPath, 'options', 'diagram.png'), '');
     await writeFile(join(docsPath, 'data-formats.md'), '---\ntitle: X\n---\n');
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'panel' });
 
     expect(findings).toHaveLength(1);
     expect(findings[0].title).toContain('options');
@@ -126,7 +126,7 @@ describe('checkRequiredPages', () => {
     await writeFile(join(docsPath, 'options', 'dist', 'page.md'), '---\ntitle: X\n---\n');
     await writeFile(join(docsPath, 'data-formats.md'), '---\ntitle: X\n---\n');
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'panel' });
 
     expect(findings).toHaveLength(1);
     expect(findings[0].title).toContain('options');
@@ -138,7 +138,7 @@ describe('checkRequiredPages', () => {
     await writeFile(join(docsPath, 'options', 'GUIDE.MD'), '---\ntitle: X\n---\n');
     await writeFile(join(docsPath, 'data-formats.md'), '---\ntitle: X\n---\n');
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'panel' });
 
     expect(findings).toHaveLength(1);
     expect(findings[0].title).toContain('options');
@@ -150,7 +150,7 @@ describe('checkRequiredPages', () => {
     await writeFile(join(docsPath, 'options', 'README.md'), '# readme');
     await writeFile(join(docsPath, 'data-formats.md'), '---\ntitle: X\n---\n');
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'panel' });
 
     expect(findings).toHaveLength(1);
     expect(findings[0].title).toContain('options');
@@ -162,18 +162,9 @@ describe('checkRequiredPages', () => {
     await writeFile(join(docsPath, 'guides', 'options.md'), '---\ntitle: Options\n---\n');
     await writeFile(join(docsPath, 'data-formats.md'), '---\ntitle: X\n---\n');
 
-    const findings = await checkRequiredPages({ docsPath, strict: true, pluginType: 'panel' });
+    const findings = await checkRequiredPages({ docsPath, pluginType: 'panel' });
 
     expect(findings).toHaveLength(1);
     expect(findings[0].title).toContain('options');
-  });
-
-  it('reports errors even outside strict mode', async () => {
-    const docsPath = await makeDocsDir();
-
-    const findings = await checkRequiredPages({ docsPath, strict: false, pluginType: 'panel' });
-
-    expect(findings).toHaveLength(2);
-    expect(findings.every((f) => f.severity === 'error')).toBe(true);
   });
 });

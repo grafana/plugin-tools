@@ -1,4 +1,4 @@
-import { Page, Route } from '@playwright/test';
+import { APIResponse, Page, Route } from '@playwright/test';
 
 import { FeatureFlagValue, PlaywrightArgs } from '../types';
 
@@ -43,7 +43,7 @@ async function handleBulkEvaluationRoute(
   flags: Record<string, FeatureFlagValue>,
   latency: number
 ): Promise<void> {
-  let response: Awaited<ReturnType<Route['fetch']>> | undefined;
+  let response: APIResponse | undefined;
 
   try {
     response = await route.fetch();
