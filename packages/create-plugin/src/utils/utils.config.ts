@@ -27,50 +27,56 @@ export type UserConfig = {
 let hasShownConfigWarnings = false;
 
 export function getConfig(workDir = process.cwd()): CreatePluginConfig {
-  return resolveConfig(
-    readRCFileSync(path.resolve(workDir, '.config/.cprc.json')),
-    readRCFileSync(path.resolve(workDir, '.cprc.json'))
-  );
-}
-
-/**
- * Resolves the config from the parsed root `.config/.cprc.json` and user `.cprc.json`, either of which may
- * be missing. The user's feature flags win, and any `--feature-flags` CLI argument is applied last.
- */
-export function resolveConfig(rawRootConfig?: Partial<CreatePluginConfig>, rawUserConfig?: Partial<UserConfig>) {
-  const rootConfig = normalizeRootConfig(rawRootConfig);
-  const userConfig = normalizeUserConfig(rawUserConfig);
+  const rootConfig = getRootConfig(workDir);
+  const userConfig = getUserConfig(workDir);
 
   return {
     ...rootConfig,
     ...userConfig,
-    version: rootConfig.version,
+    version: rootConfig!.version,
     features: createFeatureFlags({
-      ...rootConfig.features,
-      ...userConfig.features,
+      ...(rootConfig!.features ?? {}),
+      ...(userConfig!.features ?? {}),
     }),
   };
 }
 
-// Most likely a config is missing because there's no ".config/.cprc.json" or ".cprc.json" file.
-// (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
-function normalizeRootConfig(rootConfig?: Partial<CreatePluginConfig>): CreatePluginConfig {
-  return {
-    version: CURRENT_APP_VERSION,
-    ...rootConfig,
-    features: rootConfig?.features ?? {},
-  };
-}
-
-function normalizeUserConfig(userConfig?: Partial<UserConfig>): UserConfig {
-  return {
-    ...userConfig,
-    features: userConfig?.features ?? {},
-  };
-}
-
 function getRootConfig(workDir = process.cwd()): CreatePluginConfig {
-  return normalizeRootConfig(readRCFileSync(path.resolve(workDir, '.config/.cprc.json')));
+  try {
+    const rootPath = path.resolve(workDir, '.config/.cprc.json');
+    const rootConfig = readRCFileSync(rootPath);
+
+    return {
+      version: CURRENT_APP_VERSION,
+      ...rootConfig,
+      features: rootConfig!.features ?? {},
+    };
+    // Most likely this happens because of no ".config/.cprc.json" (root configuration) file.
+    // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
+  } catch (error) {
+    return {
+      version: CURRENT_APP_VERSION,
+      features: {},
+    };
+  }
+}
+
+function getUserConfig(workDir = process.cwd()): UserConfig | undefined {
+  try {
+    const userPath = path.resolve(workDir, '.cprc.json');
+    const userConfig = readRCFileSync(userPath);
+
+    return {
+      ...userConfig,
+      features: userConfig!.features ?? {},
+    };
+    // Most likely this happens because of no ".cprc.json" (user configuration) file.
+    // (This can both happen for new scaffolds and for existing plugins that have not been updated yet.)
+  } catch (error) {
+    return {
+      features: {},
+    };
+  }
 }
 
 function readRCFileSync(path: string): CreatePluginConfig | undefined {

@@ -17,7 +17,7 @@ import { clean, coerce, gt, gte } from 'semver';
 import { debug } from '../utils/utils.cli.js';
 import { renderHandlebarsTemplate } from '../utils/utils.handlebars.js';
 import { buildTemplateData, getTemplateData } from '../utils/utils.templates.js';
-import { type CreatePluginConfig, resolveConfig, type UserConfig } from '../utils/utils.config.js';
+import { getConfig } from '../utils/utils.config.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import type { TemplateData } from '../types.js';
 
@@ -393,21 +393,18 @@ export function renderTemplate(
 }
 
 /**
- * The same data `getTemplateData` gives scaffold templates, read from the context instead of from disk,
- * so it includes changes the codemod has made but not yet written.
+ * The same data `getTemplateData` gives scaffold templates, with plugin.json and package.json read from the
+ * context, so it includes changes the codemod has made but not yet written.
  */
 export function getTemplateDataFromContext(context: Context): TemplateData {
-  const rootConfig = readOptionalJsonFile<Partial<CreatePluginConfig>>(context, '.config/.cprc.json');
-  const userConfig = readOptionalJsonFile<Partial<UserConfig>>(context, '.cprc.json');
-  const { features } = resolveConfig(rootConfig, userConfig);
   return buildTemplateData({
     pluginJson: readJsonFile(context, 'src/plugin.json'),
     packageManager: getPackageManager(context),
-    features,
+    features: getConfig(context.basePath).features,
   });
 }
 
-// like getConfig, a missing or broken rc file means no config
+// a missing or broken file counts as absent
 function readOptionalJsonFile<T extends object>(context: Context, path: string): T | undefined {
   if (!context.doesFileExist(path)) {
     return undefined;
