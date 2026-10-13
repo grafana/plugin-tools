@@ -11,13 +11,14 @@ import {
   getPackageManagerFromUserAgent,
   getPackageManagerInstallCmd,
   getPackageManagerWithFallback,
+  type PackageManager,
 } from './utils.packageManager.js';
 import { normalizeId, renderHandlebarsTemplate } from './utils.handlebars.js';
 
 import { CURRENT_APP_VERSION } from './utils.version.js';
 import { debug } from './utils.cli.js';
 import fs from 'node:fs';
-import { getConfig } from './utils.config.js';
+import { type FeatureFlags, getConfig } from './utils.config.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import { getPluginJson } from './utils.plugin.js';
 import { glob } from 'glob';
@@ -92,12 +93,53 @@ export function renderTemplateFromFile(templateFile: string, data?: any) {
   return renderHandlebarsTemplate(fs.readFileSync(templateFile).toString(), data);
 }
 
+/**
+ * Builds the template data for an existing plugin from its plugin.json, package manager and feature flags.
+ * Pure, so codemods can pass in values read from their Context instead of from disk.
+ */
+export function buildTemplateData({
+  pluginJson,
+  packageManager,
+  features,
+}: {
+  pluginJson: Record<string, any>;
+  packageManager: PackageManager;
+  features: FeatureFlags;
+}): TemplateData {
+  const { packageManagerName, packageManagerVersion } = packageManager;
+  return {
+    ...EXTRA_TEMPLATE_VARIABLES,
+    pluginId: pluginJson.id,
+    pluginName: pluginJson.name,
+    hasBackend: pluginJson.backend,
+    orgName: pluginJson.info?.author?.name,
+    pluginType: pluginJson.type,
+    packageManagerName,
+    packageManagerVersion,
+    packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName, packageManagerVersion),
+    isAppType: isAppType(pluginJson.type),
+    isNPM: isNPM(packageManagerName),
+    version: CURRENT_APP_VERSION,
+    bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
+    scenesVersion: '^8.17.0',
+    pluginExecutable: pluginJson.executable,
+    useExperimentalRspack: Boolean(features.useExperimentalRspack),
+    frontendBundler: features.useExperimentalRspack ? 'rspack' : 'webpack',
+  };
+}
+
+function isAppType(pluginType: string) {
+  return pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
+}
+
+function isNPM(packageManagerName: string) {
+  return packageManagerName === 'npm';
+}
+
 export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
   const currentVersion = CURRENT_APP_VERSION;
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
-  const isAppType = (pluginType: string) => pluginType === PLUGIN_TYPES.app || pluginType === PLUGIN_TYPES.scenes;
-  const isNPM = (packageManagerName: string) => packageManagerName === 'npm';
   const frontendBundler = features.useExperimentalRspack ? 'rspack' : 'webpack';
 
   let templateData: TemplateData;
@@ -128,28 +170,11 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
   } else {
-    const pluginJson = getPluginJson();
-    const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback();
-
-    templateData = {
-      ...EXTRA_TEMPLATE_VARIABLES,
-      pluginId: pluginJson.id,
-      pluginName: pluginJson.name,
-      hasBackend: pluginJson.backend,
-      orgName: pluginJson.info.author.name,
-      pluginType: pluginJson.type,
-      packageManagerName: packageManagerName,
-      packageManagerVersion: packageManagerVersion,
-      packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName, packageManagerVersion),
-      isAppType: isAppType(pluginJson.type),
-      isNPM: isNPM(packageManagerName),
-      version: currentVersion,
-      bundleGrafanaUI,
-      scenesVersion: '^8.17.0',
-      pluginExecutable: pluginJson.executable,
-      useExperimentalRspack: Boolean(features.useExperimentalRspack),
-      frontendBundler,
-    };
+    templateData = buildTemplateData({
+      pluginJson: getPluginJson(),
+      packageManager: getPackageManagerWithFallback(),
+      features,
+    });
   }
 
   templatesDebugger('\nTemplate data:\n' + JSON.stringify(templateData, null, 2));

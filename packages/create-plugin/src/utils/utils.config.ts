@@ -27,16 +27,21 @@ export type UserConfig = {
 let hasShownConfigWarnings = false;
 
 export function getConfig(workDir = process.cwd()): CreatePluginConfig {
-  const rootConfig = getRootConfig(workDir);
-  const userConfig = getUserConfig(workDir);
+  return mergeConfigs(getRootConfig(workDir), getUserConfig(workDir));
+}
 
+/**
+ * Merges the root `.config/.cprc.json` and the user `.cprc.json`, with the user's feature flags winning
+ * and any `--feature-flags` CLI argument applied last.
+ */
+export function mergeConfigs(rootConfig: CreatePluginConfig, userConfig?: UserConfig): CreatePluginConfig {
   return {
     ...rootConfig,
     ...userConfig,
-    version: rootConfig!.version,
+    version: rootConfig.version,
     features: createFeatureFlags({
-      ...(rootConfig!.features ?? {}),
-      ...(userConfig!.features ?? {}),
+      ...(rootConfig.features ?? {}),
+      ...(userConfig?.features ?? {}),
     }),
   };
 }

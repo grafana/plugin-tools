@@ -123,13 +123,22 @@ Don't call `output.*` directly from a codemod to tell the author what to do next
 // package.json manipulation
 addDependenciesToPackageJson(context, dependencies, devDependencies?, packageJsonPath?)
 removeDependenciesFromPackageJson(context, dependencies, devDependencies?, packageJsonPath?)
-readJsonFile<T>(context, path): T  // throws if missing or unparseable
+readJsonFile<T>(context, path): T  // throws if missing, unparseable or not an object
+
+// Package manager from package.json's `packageManager` field, else the lockfile. Reads the context,
+// so use it instead of getPackageManagerWithFallback, which reads from disk
+getPackageManager(context): { packageManagerName, packageManagerVersion }
 
 // Semver — handles dist-tags ("latest", "next", "*") and standard ranges
 isVersionGreater(incomingVersion, existingVersion, orEqualTo?): boolean
 
+// Agent instructions. AGENT_INSTRUCTIONS_PATH is `.config/AGENTS/instructions.md`
+appendToAgentInstructions(context, marker, text, separator?)  // no-op if missing or `marker` is already there
+
 // Render a file from the scaffold templates (see "Rendering scaffold templates")
-renderTemplate(templatePath, includeWarning?): string
+renderTemplate(templatePath, includeWarning?, data?): string
+addTemplateFolder(context, { folderPath, targetPath, data }): string[]  // renders a whole folder, skips existing files
+getTemplateDataFromContext(context): TemplateData  // the data `generate` uses, read from the context
 
 // Debug loggers (namespace create-plugin:*)
 migrationsDebug, additionsDebug
@@ -245,6 +254,23 @@ const templatePath = fileURLToPath(
 );
 context.addFile('.config/bundler/externals.ts', renderTemplate(templatePath, true));
 ```
+
+Templates are Handlebars, so a codemod's own templates can use everything `generate` templates use: variables
+such as `{{ pluginId }}` and `{{ packageManagerName }}`, helpers such as `{{#if_eq packageManagerName "pnpm"}}`
+and the partials in `templates/_partials/`.
+
+Without `data`, `renderTemplate` reads the template data from disk, so it misses changes the codemod has made
+but not written yet, and tests have to mock the filesystem. Prefer passing `getTemplateDataFromContext(context)`,
+extended with any variables of the codemod's own:
+
+```ts
+const data = { ...getTemplateDataFromContext(context), docsPath };
+context.addFile('.github/workflows/validate-docs.yml', renderTemplate(workflowTemplatePath, false, data));
+// a whole folder, the way generate scaffolds one: `.hbs` stripped, config file names mapped, existing files skipped
+addTemplateFolder(context, { folderPath: docsTemplateDir, targetPath: docsPath, data });
+```
+
+`{{ }}` HTML-escapes its value, so use `{{{ }}}` for free text such as `pluginName` that may contain `'` or `&`.
 
 ## Working from a template change
 
