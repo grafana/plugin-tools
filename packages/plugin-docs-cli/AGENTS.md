@@ -24,7 +24,8 @@ So write for someone who has a plugin and no knowledge of this codebase:
 - Never refer to this repo's layout, tests or conventions from inside `docs/`.
 - Use the same text for humans and agents. Don't write "you are an agent" or agent-only sections. What
   agents need beyond the guides (commands for the plugin's package manager) is scaffolded by `create-plugin`.
-- Examples use `npm run`. The scaffolded `AGENTS.md` tells agents to substitute the plugin's package manager.
+- Name scripts (`docs:validate`) in examples rather than a package manager's run command, so they work for every
+  package manager.
 
 When you change anything a plugin author sees - a command, a flag, what `validate` or `serve` prints, a
 validation rule or the markdown the parser supports - update the matching guide in `docs/` in the same
