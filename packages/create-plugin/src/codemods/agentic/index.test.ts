@@ -234,6 +234,61 @@ describe('runAgenticStep', () => {
     });
   });
 
+  async function getRejectionMessage(promise: Promise<unknown>): Promise<string> {
+    try {
+      await promise;
+    } catch (error) {
+      return error instanceof Error ? error.message : String(error);
+    }
+    throw new Error('Expected the agent step to throw');
+  }
+
+  describe('when a hybrid agent step does not finish', () => {
+    const unfinishedSessions = [
+      ['the agent hands off a failure', () => handoffResult('failed', 'Could not parse the config.')],
+      ['the user aborts the session', () => ({ outcome: 'user-aborted' as const })],
+    ] as const;
+
+    unfinishedSessions.forEach(([scenario, createResult]) => {
+      it(`should explain how to recover the automated changes when ${scenario}`, async () => {
+        runAgentSessionMock.mockResolvedValue(createResult());
+
+        const message = await getRejectionMessage(runStep({ context: createContextWithChanges() }));
+
+        expect(message).toMatch(/automated part of rspack-overrides has already changed your working tree/);
+        expect(message).toContain('git diff');
+        expect(message).toMatch(/rspack-overrides\.md/);
+        expect(message).toContain('git restore . && git clean -fd');
+      });
+    });
+
+    it('should explain recovery when the user aborts after an ambiguous exit', async () => {
+      runAgentSessionMock.mockResolvedValue({ outcome: 'ambiguous-exit', exitCode: 1, signal: null });
+      selectPromptMock.mockResolvedValue(ABORT_CHOICE);
+
+      await expect(runStep({ context: createContextWithChanges() })).rejects.toThrow(
+        /already changed your working tree/
+      );
+    });
+
+    it('should not suggest discarding changes when --force let a dirty tree through', async () => {
+      runAgentSessionMock.mockResolvedValue({ outcome: 'user-aborted' });
+
+      const message = await getRejectionMessage(runStep({ context: createContextWithChanges(), treeWasDirty: true }));
+
+      expect(message).toContain('git diff');
+      expect(message).not.toContain('git clean');
+    });
+
+    it('should add no recovery note for a prompt-only addition', async () => {
+      runAgentSessionMock.mockResolvedValue({ outcome: 'user-aborted' });
+
+      const message = await getRejectionMessage(runStep());
+
+      expect(message).not.toContain('working tree');
+    });
+  });
+
   describe('ambiguous exit', () => {
     beforeEach(() => {
       runAgentSessionMock.mockResolvedValue({ outcome: 'ambiguous-exit', exitCode: 1, signal: null });

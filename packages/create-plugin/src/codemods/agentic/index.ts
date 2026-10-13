@@ -105,18 +105,36 @@ export async function runAgenticStep(options: AgenticStepOptions): Promise<Agent
     handoffPath,
   });
 
+  // a hybrid codemod has already written its changes, so an unfinished agent step leaves them behind
+  const withRecoveryNote = (message: string) =>
+    context ? [message, '', ...buildHybridRecoveryLines(addition, treeWasDirty)].join('\n') : message;
+
   if (sessionResult.outcome === 'handoff') {
     if (sessionResult.handoff.status === 'failed') {
-      throw new Error(`The agent reported failure for ${addition.name}: ${sessionResult.handoff.summary}`);
+      throw new Error(
+        withRecoveryNote(`The agent reported failure for ${addition.name}: ${sessionResult.handoff.summary}`)
+      );
     }
     return { kind: 'applied', summary: sessionResult.handoff.summary };
   }
 
   if (sessionResult.outcome === 'user-aborted') {
-    throw new Error(`The agent session for ${addition.name} was aborted.`);
+    throw new Error(withRecoveryNote(`The agent session for ${addition.name} was aborted.`));
   }
 
-  return handleAmbiguousExit(addition.name, sessionResult);
+  return handleAmbiguousExit(addition.name, sessionResult, withRecoveryNote);
+}
+
+function buildHybridRecoveryLines(addition: Addition & { prompt: string }, treeWasDirty: boolean): string[] {
+  const lines = [
+    `The automated part of ${addition.name} has already changed your working tree.`,
+    `Review the changes with git diff, then apply the instructions in ${getPromptPath(addition.prompt)} yourself.`,
+  ];
+  // only safe to suggest when the tree was clean before the run, otherwise it discards the user's own work too
+  if (!treeWasDirty) {
+    lines.push('To undo the automated changes instead, run git restore . && git clean -fd');
+  }
+  return lines;
 }
 
 function buildUnavailableMessage(addition: Addition & { prompt: string }, reason: 'no-tty' | 'no-agents'): string {
@@ -135,7 +153,8 @@ function buildUnavailableMessage(addition: Addition & { prompt: string }, reason
 
 async function handleAmbiguousExit(
   additionName: string,
-  sessionResult: Extract<AgentSessionResult, { outcome: 'ambiguous-exit' }>
+  sessionResult: Extract<AgentSessionResult, { outcome: 'ambiguous-exit' }>,
+  withRecoveryNote: (message: string) => string
 ): Promise<AgenticStepResult> {
   output.warning({
     title: `The agent session for ${additionName} ended without reporting a result.`,
@@ -150,7 +169,9 @@ async function handleAmbiguousExit(
     return { kind: 'assumed-applied' };
   }
 
-  throw new Error(`The addition was aborted after the agent session for ${additionName} ended unexpectedly.`);
+  throw new Error(
+    withRecoveryNote(`The addition was aborted after the agent session for ${additionName} ended unexpectedly.`)
+  );
 }
 
 function getCodemodChanges(context: Context, treeWasDirty: boolean): CodemodChanges {
