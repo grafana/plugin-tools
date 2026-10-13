@@ -2,6 +2,11 @@ import { dirSync } from 'tmp';
 import { Context } from './context.js';
 import {
   addDependenciesToPackageJson,
+  addTemplateFolder,
+  AGENT_INSTRUCTIONS_PATH,
+  appendToAgentInstructions,
+  getPackageManager,
+  getTemplateDataFromContext,
   removeDependenciesFromPackageJson,
   flushChanges,
   formatFiles,
@@ -12,7 +17,8 @@ import {
 } from './utils.js';
 import { join } from 'node:path';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { execSync } from 'node:child_process';
 import which from 'which';
 import { output } from '../utils/utils.console.js';
@@ -21,6 +27,12 @@ import { vi } from 'vitest';
 vi.mock(import('node:child_process'), async (importOriginal) => ({
   ...(await importOriginal()),
   execSync: vi.fn(),
+}));
+
+// codemods run under `update` or `add`. Without a command, the config would use generate's defaults
+vi.mock(import('../utils/utils.cli.js'), async (importOriginal) => ({
+  ...(await importOriginal()),
+  commandName: 'add',
 }));
 
 vi.mock('which', () => ({
@@ -181,6 +193,133 @@ describe('utils', () => {
     it('should throw an error if the file does not exist', () => {
       const context = new Context(tmpDir);
       expect(() => readJsonFile(context, 'file.json')).toThrowError();
+    });
+
+    it.each(['[]', 'null', '"text"'])('should throw when the file contains %s instead of an object', (content) => {
+      const context = new Context(tmpDir);
+      context.addFile('file.json', content);
+      expect(() => readJsonFile(context, 'file.json')).toThrowError('does not contain a JSON object');
+    });
+  });
+
+  describe('getPackageManager', () => {
+    it('reads the packageManager field', () => {
+      const context = new Context(tmpDir);
+      context.addFile('package.json', JSON.stringify({ packageManager: 'pnpm@10.4.1+sha512.abc' }));
+      expect(getPackageManager(context)).toEqual({ packageManagerName: 'pnpm', packageManagerVersion: '10.4.1' });
+    });
+
+    it.each([
+      ['yarn.lock', 'yarn'],
+      ['pnpm-lock.yaml', 'pnpm'],
+    ])('falls back to %s when there is no packageManager field', (lockfile, name) => {
+      const context = new Context(tmpDir);
+      context.addFile('package.json', '{}');
+      context.addFile(lockfile, '');
+      expect(getPackageManager(context).packageManagerName).toBe(name);
+    });
+
+    it('defaults to npm', () => {
+      const context = new Context(tmpDir);
+      context.addFile('package.json', '{}');
+      expect(getPackageManager(context).packageManagerName).toBe('npm');
+    });
+  });
+
+  describe('getTemplateDataFromContext', () => {
+    function pluginContext() {
+      const context = new Context(tmpDir);
+      context.addFile(
+        'src/plugin.json',
+        JSON.stringify({ id: 'org-name-panel', name: 'Name', type: 'panel', info: { author: { name: 'Org' } } })
+      );
+      context.addFile('package.json', JSON.stringify({ packageManager: 'pnpm@10.4.1' }));
+      return context;
+    }
+
+    it('reads plugin.json and package.json from the context', () => {
+      expect(getTemplateDataFromContext(pluginContext())).toMatchObject({
+        pluginId: 'org-name-panel',
+        pluginName: 'Name',
+        pluginType: 'panel',
+        orgName: 'Org',
+        packageManagerName: 'pnpm',
+        packageManagerInstallCmd: 'pnpm install --frozen-lockfile --prefer-offline',
+        isAppType: false,
+        isNPM: false,
+        frontendBundler: 'webpack',
+      });
+    });
+
+    it('sees changes the codemod has not written yet', () => {
+      const context = pluginContext();
+      context.updateFile('src/plugin.json', JSON.stringify({ id: 'org-new-app', name: 'New', type: 'app' }));
+      expect(getTemplateDataFromContext(context)).toMatchObject({ pluginId: 'org-new-app', isAppType: true });
+    });
+
+    it('reads feature flags from .cprc.json files in the context', () => {
+      const context = pluginContext();
+      context.addFile('.config/.cprc.json', JSON.stringify({ features: { bundleGrafanaUI: true } }));
+      context.addFile('.cprc.json', JSON.stringify({ features: { useExperimentalRspack: true } }));
+      expect(getTemplateDataFromContext(context)).toMatchObject({ bundleGrafanaUI: true, frontendBundler: 'rspack' });
+    });
+
+    it('ignores a .cprc.json it cannot parse', () => {
+      const context = pluginContext();
+      context.addFile('.cprc.json', 'not json');
+      expect(getTemplateDataFromContext(context).frontendBundler).toBe('webpack');
+    });
+  });
+
+  describe('addTemplateFolder', () => {
+    function templateFolder(files: Record<string, string>): string {
+      const dir = mkdtempSync(join(tmpdir(), 'codemod-templates-'));
+      for (const [file, content] of Object.entries(files)) {
+        mkdirSync(join(dir, file, '..'), { recursive: true });
+        writeFileSync(join(dir, file), content);
+      }
+      return dir;
+    }
+
+    const data = { pluginName: "Erik's & Co", packageManagerName: 'pnpm' };
+
+    it('renders every file with Handlebars into the target folder', () => {
+      const context = new Context(tmpDir);
+      const folderPath = templateFolder({
+        'index.md': '# {{{pluginName}}}\n',
+        'nested/setup.md': '{{#if_eq packageManagerName "pnpm"}}pnpm{{/if_eq}} {{dashCase "Some Name"}}\n',
+      });
+      const added = addTemplateFolder(context, { folderPath, targetPath: 'docs', data });
+      expect(added.sort()).toEqual(['docs/index.md', 'docs/nested/setup.md']);
+      expect(context.getFile('docs/index.md')).toBe("# Erik's & Co\n");
+      expect(context.getFile('docs/nested/setup.md')).toBe('pnpm some-name\n');
+    });
+
+    it('strips .hbs and maps config file names like generate does', () => {
+      const context = new Context(tmpDir);
+      const folderPath = templateFolder({ 'page.md.hbs': 'x', npmrc: 'y' });
+      addTemplateFolder(context, { folderPath, targetPath: '', data });
+      expect(context.doesFileExist('page.md')).toBe(true);
+      expect(context.doesFileExist('.npmrc')).toBe(true);
+    });
+
+    it('leaves existing files alone', () => {
+      const context = new Context(tmpDir);
+      context.addFile('docs/index.md', 'mine');
+      const added = addTemplateFolder(context, {
+        folderPath: templateFolder({ 'index.md': 'new' }),
+        targetPath: 'docs',
+        data,
+      });
+      expect(added).toEqual([]);
+      expect(context.getFile('docs/index.md')).toBe('mine');
+    });
+
+    it('throws when the template folder is missing', () => {
+      const context = new Context(tmpDir);
+      expect(() =>
+        addTemplateFolder(context, { folderPath: join(tmpdir(), 'missing-templates'), targetPath: 'docs', data })
+      ).toThrow('Cannot find templates at');
     });
   });
 
@@ -423,6 +562,39 @@ describe('utils', () => {
         expect(isVersionGreater('~1.0.0', '0.9.0')).toBe(true);
         expect(isVersionGreater('>=1.0.0', '0.9.0')).toBe(true);
       });
+    });
+  });
+
+  describe('appendToAgentInstructions', () => {
+    it('appends after a blank line', () => {
+      const context = new Context('/virtual');
+      context.addFile(AGENT_INSTRUCTIONS_PATH, '# Mine\n');
+      appendToAgentInstructions(context, 'new.md', '## New\n');
+
+      expect(context.getFile(AGENT_INSTRUCTIONS_PATH)).toBe('# Mine\n\n## New\n');
+    });
+
+    it('uses the given separator', () => {
+      const context = new Context('/virtual');
+      context.addFile(AGENT_INSTRUCTIONS_PATH, '- one\n');
+      appendToAgentInstructions(context, 'new.md', '- two\n', '\n');
+
+      expect(context.getFile(AGENT_INSTRUCTIONS_PATH)).toBe('- one\n- two\n');
+    });
+
+    it('skips when the marker is already present', () => {
+      const context = new Context('/virtual');
+      context.addFile(AGENT_INSTRUCTIONS_PATH, 'See new.md\n');
+      appendToAgentInstructions(context, 'new.md', '## New\n');
+
+      expect(context.getFile(AGENT_INSTRUCTIONS_PATH)).toBe('See new.md\n');
+    });
+
+    it('skips when there is no instructions file', () => {
+      const context = new Context('/virtual');
+      appendToAgentInstructions(context, 'new.md', '## New\n');
+
+      expect(context.doesFileExist(AGENT_INSTRUCTIONS_PATH)).toBe(false);
     });
   });
 });
