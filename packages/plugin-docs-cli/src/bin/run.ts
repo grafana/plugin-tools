@@ -22,8 +22,7 @@ async function main() {
     console.error('Commands:');
     console.error('  serve      Start the local docs preview server');
     console.error('  build      Build docs for publishing (generates manifest, copies to dist/)');
-    console.error('  validate   Validate documentation (--json for machine-readable output,');
-    console.error('             --allow-unfilled-stubs while docs are still being written)');
+    console.error('  validate   Validate documentation (--json for machine-readable output)');
     process.exit(1);
   }
 
@@ -78,17 +77,13 @@ async function main() {
     }
     case 'validate': {
       const validateArgv = minimist(process.argv.slice(3), {
-        boolean: ['strict', 'json', 'allow-unfilled-stubs'],
+        boolean: ['json'],
         default: {
-          strict: true,
           json: false,
-          'allow-unfilled-stubs': false,
         },
       });
       await validateCommand(docsPath, {
-        strict: validateArgv.strict,
         json: validateArgv.json,
-        allowUnfilledStubs: validateArgv['allow-unfilled-stubs'],
         pluginType,
       });
       break;

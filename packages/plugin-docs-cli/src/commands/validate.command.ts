@@ -8,30 +8,13 @@ const debug = createDebug('plugin-docs-cli:validate');
 export async function validateCommand(
   docsPath: string,
   options: {
-    strict: boolean;
     json: boolean;
-    allowUnfilledStubs?: boolean;
     pluginType?: string;
-  } = { strict: true, json: false }
+  } = { json: false }
 ): Promise<void> {
-  debug(
-    'Validating docs at: %s (strict: %s, json: %s, allowUnfilledStubs: %s, pluginType: %s)',
-    docsPath,
-    options.strict,
-    options.json,
-    options.allowUnfilledStubs ?? false,
-    options.pluginType
-  );
+  debug('Validating docs at: %s (json: %s, pluginType: %s)', docsPath, options.json, options.pluginType);
 
-  const result = await validate(
-    {
-      docsPath,
-      strict: options.strict,
-      allowUnfilledStubs: options.allowUnfilledStubs,
-      pluginType: options.pluginType,
-    },
-    allRules
-  );
+  const result = await validate({ docsPath, pluginType: options.pluginType }, allRules);
 
   if (options.json) {
     console.log(JSON.stringify(result, null, 2));

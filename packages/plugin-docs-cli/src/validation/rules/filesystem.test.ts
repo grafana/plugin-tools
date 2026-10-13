@@ -12,7 +12,7 @@ describe('checkFilesystem', () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-no-index-'));
     await writeFile(join(tmp, 'guide.md'), '---\ntitle: Guide\ndescription: A guide\n---\n# Guide\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const finding = findings.find((f) => f.rule === Rule.RootIndex);
     expect(finding).toBeDefined();
@@ -20,7 +20,7 @@ describe('checkFilesystem', () => {
   });
 
   it('should not report has-markdown-files when docs folder has .md files', async () => {
-    const findings = await checkFilesystem({ docsPath: testDocsPath, strict: true });
+    const findings = await checkFilesystem({ docsPath: testDocsPath });
 
     const finding = findings.find((f) => f.rule === Rule.HasMarkdown);
     expect(finding).toBeUndefined();
@@ -33,14 +33,14 @@ describe('checkFilesystem', () => {
       '---\ntitle: Home\ndescription: Home page\nsidebar_position: 1\n---\n# Home\n'
     );
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.RootIndex)).toBeUndefined();
     expect(findings.find((f) => f.rule === Rule.HasMarkdown)).toBeUndefined();
   });
 
   it('should report docs-path-exists (and nothing else) when docs path does not exist', async () => {
-    const findings = await checkFilesystem({ docsPath: '/nonexistent/path', strict: true });
+    const findings = await checkFilesystem({ docsPath: '/nonexistent/path' });
 
     const finding = findings.find((f) => f.rule === Rule.DocsPathExists);
     expect(finding).toBeDefined();
@@ -51,7 +51,7 @@ describe('checkFilesystem', () => {
   it('should report has-markdown-files for empty directory', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-empty-'));
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.HasMarkdown)).toBeDefined();
   });
@@ -62,7 +62,7 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'sub'));
     await writeFile(join(tmp, 'sub', 'page.md'), '---\ntitle: Page\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.NestedDirIndex)).toBeDefined();
   });
@@ -73,7 +73,7 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'sub'));
     await writeFile(join(tmp, 'sub', 'index.md'), '---\ntitle: Sub\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.NestedDirIndex)).toBeUndefined();
   });
@@ -84,7 +84,7 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'img'));
     await writeFile(join(tmp, 'img', 'screenshot.png'), '');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.NestedDirIndex)).toBeUndefined();
   });
@@ -95,7 +95,7 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'images'));
     await writeFile(join(tmp, 'images', 'screenshot.png'), '');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.NoEmptyDir)).toBeUndefined();
   });
@@ -105,7 +105,7 @@ describe('checkFilesystem', () => {
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
     await mkdir(join(tmp, 'assets'));
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.NoEmptyDir)).toBeDefined();
   });
@@ -116,13 +116,13 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'sub'));
     await writeFile(join(tmp, 'sub', 'index.md'), '---\ntitle: Sub\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.NoEmptyDir)).toBeUndefined();
   });
 
   it('should not report naming rules for files and dirs with safe names', async () => {
-    const findings = await checkFilesystem({ docsPath: testDocsPath, strict: true });
+    const findings = await checkFilesystem({ docsPath: testDocsPath });
 
     expect(findings.find((f) => f.rule === Rule.NoSpaces)).toBeUndefined();
     expect(findings.find((f) => f.rule === Rule.ValidNaming)).toBeUndefined();
@@ -133,7 +133,7 @@ describe('checkFilesystem', () => {
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
     await writeFile(join(tmp, 'my guide.md'), '---\ntitle: Guide\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const finding = findings.find((f) => f.rule === Rule.NoSpaces);
     expect(finding).toBeDefined();
@@ -147,7 +147,7 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'my section'));
     await writeFile(join(tmp, 'my section', 'index.md'), '---\ntitle: Section\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const finding = findings.find((f) => f.rule === Rule.NoSpaces && f.file?.endsWith('my section'));
     expect(finding).toBeDefined();
@@ -159,7 +159,7 @@ describe('checkFilesystem', () => {
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
     await writeFile(join(tmp, 'guide!important.md'), '---\ntitle: Guide\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const finding = findings.find((f) => f.rule === Rule.ValidNaming);
     expect(finding).toBeDefined();
@@ -172,37 +172,11 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'MySection'));
     await writeFile(join(tmp, 'MySection', 'index.md'), '---\ntitle: Section\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const finding = findings.find((f) => f.rule === Rule.ValidNaming && f.file?.endsWith('MySection'));
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('error');
-  });
-
-  describe('non-strict mode', () => {
-    it('should report valid-file-naming as warning in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
-      await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
-      await writeFile(join(tmp, 'guide!important.md'), '---\ntitle: Guide\n---\n');
-
-      const findings = await checkFilesystem({ docsPath: tmp, strict: false });
-
-      const finding = findings.find((f) => f.rule === Rule.ValidNaming);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('warning');
-    });
-
-    it('should report no-empty-directories as warning in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
-      await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
-      await mkdir(join(tmp, 'assets'));
-
-      const findings = await checkFilesystem({ docsPath: tmp, strict: false });
-
-      const finding = findings.find((f) => f.rule === Rule.NoEmptyDir);
-      expect(finding).toBeDefined();
-      expect(finding!.severity).toBe('warning');
-    });
   });
 
   it('should report no-symlinks for a symlinked file', async () => {
@@ -211,7 +185,7 @@ describe('checkFilesystem', () => {
     const target = join(tmp, 'index.md');
     await symlink(target, join(tmp, 'link.md'));
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const finding = findings.find((f) => f.rule === Rule.NoSymlinks);
     expect(finding).toBeDefined();
@@ -219,29 +193,17 @@ describe('checkFilesystem', () => {
     expect(finding!.file).toContain('link.md');
   });
 
-  it('should report allowed-file-types as error in strict mode for disallowed extension', async () => {
+  it('should report allowed-file-types as error for disallowed extension', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
     await writeFile(join(tmp, 'config.json'), '{}');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const finding = findings.find((f) => f.rule === Rule.AllowedFileTypes);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('error');
     expect(finding!.file).toContain('config.json');
-  });
-
-  it('should report allowed-file-types as info in non-strict mode', async () => {
-    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
-    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
-    await writeFile(join(tmp, 'notes.txt'), 'some notes');
-
-    const findings = await checkFilesystem({ docsPath: tmp, strict: false });
-
-    const finding = findings.find((f) => f.rule === Rule.AllowedFileTypes);
-    expect(finding).toBeDefined();
-    expect(finding!.severity).toBe('info');
   });
 
   it('should not report allowed-file-types for permitted image formats', async () => {
@@ -252,7 +214,7 @@ describe('checkFilesystem', () => {
     await writeFile(join(tmp, 'img', 'photo.jpg'), '');
     await writeFile(join(tmp, 'img', 'animation.gif'), '');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.AllowedFileTypes)).toBeUndefined();
   });
@@ -264,7 +226,7 @@ describe('checkFilesystem', () => {
     await writeFile(join(tmp, 'video', 'demo.mp4'), '');
     await writeFile(join(tmp, 'video', 'demo.webm'), '');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.AllowedFileTypes)).toBeUndefined();
     expect(findings.find((f) => f.rule === Rule.NoEmptyDir)).toBeUndefined();
@@ -278,37 +240,24 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'a', 'b'));
     await writeFile(join(tmp, 'a', 'b', 'page.md'), '---\ntitle: Page\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.MaxNestingDepth)).toBeUndefined();
   });
 
-  it('should report max-nesting-depth as error in strict mode for pages deeper than 3 levels', async () => {
+  it('should report max-nesting-depth as error for pages deeper than 3 levels', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
     await mkdir(join(tmp, 'a', 'b', 'c'), { recursive: true });
     await writeFile(join(tmp, 'a', 'b', 'c', 'page.md'), '---\ntitle: Deep\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const finding = findings.find((f) => f.rule === Rule.MaxNestingDepth);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('error');
     expect(finding!.file).toContain(join('a', 'b', 'c', 'page.md'));
     expect(finding!.title).toContain('4 levels');
-  });
-
-  it('should report max-nesting-depth as info in non-strict mode for pages deeper than 3 levels', async () => {
-    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
-    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
-    await mkdir(join(tmp, 'a', 'b', 'c'), { recursive: true });
-    await writeFile(join(tmp, 'a', 'b', 'c', 'page.md'), '---\ntitle: Deep\n---\n');
-
-    const findings = await checkFilesystem({ docsPath: tmp, strict: false });
-
-    const finding = findings.find((f) => f.rule === Rule.MaxNestingDepth);
-    expect(finding).toBeDefined();
-    expect(finding!.severity).toBe('info');
   });
 
   it('should report max-nesting-depth once per offending file', async () => {
@@ -320,7 +269,7 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'a', 'b', 'c', 'd'), { recursive: true });
     await writeFile(join(tmp, 'a', 'b', 'c', 'd', 'three.md'), '---\ntitle: Three\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const depthFindings = findings.filter((f) => f.rule === Rule.MaxNestingDepth);
     expect(depthFindings).toHaveLength(3);
@@ -336,7 +285,7 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'x', 'y', 'z'), { recursive: true });
     await writeFile(join(tmp, 'x', 'y', 'z', 'index.md'), '---\ntitle: Z index\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.MaxNestingDepth)).toBeUndefined();
   });
@@ -348,7 +297,7 @@ describe('checkFilesystem', () => {
     await mkdir(join(tmp, 'a', 'b', 'c', 'd'), { recursive: true });
     await writeFile(join(tmp, 'a', 'b', 'c', 'd', 'index.md'), '---\ntitle: Deep\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const finding = findings.find((f) => f.rule === Rule.MaxNestingDepth);
     expect(finding).toBeDefined();
@@ -356,33 +305,19 @@ describe('checkFilesystem', () => {
     expect(finding!.title).toContain('4 levels');
   });
 
-  it('should report max-total-pages as error in strict mode when over the limit', async () => {
+  it('should report max-total-pages as error when over the limit', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
     for (let i = 0; i < 50; i++) {
       await writeFile(join(tmp, `page-${i}.md`), `---\ntitle: Page ${i}\n---\n`);
     }
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     const finding = findings.find((f) => f.rule === Rule.MaxTotalPages);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('error');
     expect(finding!.title).toContain('51');
-  });
-
-  it('should report max-total-pages as info in non-strict mode when over the limit', async () => {
-    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
-    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
-    for (let i = 0; i < 50; i++) {
-      await writeFile(join(tmp, `page-${i}.md`), `---\ntitle: Page ${i}\n---\n`);
-    }
-
-    const findings = await checkFilesystem({ docsPath: tmp, strict: false });
-
-    const finding = findings.find((f) => f.rule === Rule.MaxTotalPages);
-    expect(finding).toBeDefined();
-    expect(finding!.severity).toBe('info');
   });
 
   it('should not report max-total-pages at or under the limit', async () => {
@@ -392,32 +327,29 @@ describe('checkFilesystem', () => {
       await writeFile(join(tmp, `page-${i}.md`), `---\ntitle: Page ${i}\n---\n`);
     }
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.MaxTotalPages)).toBeUndefined();
   });
 
-  it('should report max-total-docs-size only in strict mode when over the limit', async () => {
+  it('should report max-total-docs-size when over the limit', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
     await mkdir(join(tmp, 'img'));
     // one file just over the 10MB total-docs-size limit
     await writeFile(join(tmp, 'img', 'big.png'), Buffer.alloc(11 * 1024 * 1024));
 
-    const strictFindings = await checkFilesystem({ docsPath: tmp, strict: true });
-    const finding = strictFindings.find((f) => f.rule === Rule.MaxTotalDocsSize);
+    const findings = await checkFilesystem({ docsPath: tmp });
+    const finding = findings.find((f) => f.rule === Rule.MaxTotalDocsSize);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('warning');
-
-    const nonStrictFindings = await checkFilesystem({ docsPath: tmp, strict: false });
-    expect(nonStrictFindings.find((f) => f.rule === Rule.MaxTotalDocsSize)).toBeUndefined();
   });
 
   it('should not report max-total-docs-size under the limit', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
     await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
 
-    const findings = await checkFilesystem({ docsPath: tmp, strict: true });
+    const findings = await checkFilesystem({ docsPath: tmp });
 
     expect(findings.find((f) => f.rule === Rule.MaxTotalDocsSize)).toBeUndefined();
   });
