@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { checkStubContent } from './stub-content.js';
 import { Rule } from '../types.js';
 
-const input = (docsPath: string, strict = true) => ({ docsPath, strict });
+const input = (docsPath: string) => ({ docsPath });
 
 // helper: valid frontmatter markdown file content
 const md = (body = '') => `---\ntitle: Page\ndescription: A page\n---\n${body}`;
@@ -24,16 +24,6 @@ describe('checkStubContent', () => {
     );
 
     const findings = await checkStubContent(input(tmp));
-    const finding = findings.find((f) => f.rule === Rule.UnfilledSectionBrief);
-    expect(finding).toBeDefined();
-    expect(finding!.severity).toBe('error');
-  });
-
-  it('should report as warning in non-strict mode', async () => {
-    const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
-    await writeFile(join(tmp, 'index.md'), md('<!-- section-brief:start -->\n'));
-
-    const findings = await checkStubContent(input(tmp, false));
     const finding = findings.find((f) => f.rule === Rule.UnfilledSectionBrief);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('warning');
@@ -88,29 +78,128 @@ describe('checkStubContent', () => {
     expect(files).toContain('index.md');
     expect(files).toContain('options.md');
   });
+});
 
-  it('treats stubs as informational when the author opts in, so a fresh scaffold validates clean', async () => {
+describe('checkStubContent with comment briefs', () => {
+  const brief = (text = 'Describe the options.') => `<!-- section-brief\n${text}\n-->`;
+
+  async function check(body: string) {
     const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
-    await writeFile(
-      join(tmp, 'index.md'),
-      md('<!-- section-brief:start -->\n\n> Fill me in\n\n<!-- section-brief:end -->')
-    );
+    await writeFile(join(tmp, 'index.md'), md(body));
+    return checkStubContent({ docsPath: tmp });
+  }
 
-    const findings = await checkStubContent({ docsPath: tmp, strict: true, allowUnfilledStubs: true });
+  it('reports a section that only has its brief as empty, not as a leftover brief', async () => {
+    const findings = await check(`## Options\n\n${brief()}\n\n## Next\n\nReal text.\n`);
 
     expect(findings).toHaveLength(1);
-    expect(findings[0].severity).toBe('info');
+    expect(findings[0]).toMatchObject({
+      rule: Rule.EmptySection,
+      severity: 'warning',
+      line: 5,
+      title: 'Unfilled documentation stub',
+    });
   });
 
-  it('still errors for the publishing check, which never opts in', async () => {
-    const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
-    await writeFile(
-      join(tmp, 'index.md'),
-      md('<!-- section-brief:start -->\n\n> Fill me in\n\n<!-- section-brief:end -->')
+  it('keeps a multi-line brief with blank lines, tables and lists from counting as content', async () => {
+    const findings = await check(
+      `## Options\n\n<!-- section-brief\nFill this in.\n\n| A | B |\n| - | - |\n\n- one\n- two\n\n> quote\n-->\n`
     );
 
-    const findings = await checkStubContent({ docsPath: tmp, strict: true });
+    expect(findings.map((f) => f.rule)).toEqual([Rule.EmptySection]);
+  });
 
-    expect(findings[0].severity).toBe('error');
+  it('warns about a brief left in a section that has content', async () => {
+    const findings = await check(`## Options\n\n${brief()}\n\nOne row per option.\n`);
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({ rule: Rule.UnfilledSectionBrief, severity: 'warning', line: 7 });
+  });
+
+  it('reports one finding per empty section in a fresh scaffold', async () => {
+    const findings = await check(`${brief()}\n\n## One\n\n${brief()}\n\n## Two\n\n${brief()}\n`);
+
+    expect(findings.map((f) => [f.rule, f.line])).toEqual([
+      [Rule.EmptySection, 5],
+      [Rule.EmptySection, 9],
+      [Rule.EmptySection, 15],
+    ]);
+  });
+
+  it('reports a brief before the first heading when nothing else is there, but not a bare preamble', async () => {
+    expect((await check(`${brief()}\n\n## One\n\nText.\n`)).map((f) => f.line)).toEqual([5]);
+    expect(await check('## One\n\nText.\n')).toEqual([]);
+  });
+
+  it('reports a heading with no brief and no content', async () => {
+    const findings = await check('## One\n\n## Two\n\nText.\n\n## Three\n');
+
+    expect(findings.map((f) => [f.line, f.title])).toEqual([
+      [5, 'Empty section'],
+      [11, 'Empty section'],
+    ]);
+  });
+
+  it('does not report a heading that is followed directly by a deeper one', async () => {
+    expect(await check('## Options\n\n### Panel\n\nText.\n\n### Tooltip\n\nText.\n')).toEqual([]);
+  });
+
+  it('reports a heading followed by a heading of the same or a higher level', async () => {
+    expect((await check('### One\n\n## Two\n\nText.\n')).map((f) => f.line)).toEqual([5]);
+  });
+
+  it('counts images, tables, code and inline text next to a comment as content', async () => {
+    const body = [
+      '## Image\n\n![Alt](img/a.png)\n',
+      '## Table\n\n| A |\n| - |\n| 1 |\n',
+      '## Code\n\n```bash\nnpm run x\n```\n',
+      '## Inline\n\n<!-- note --> Some text\n',
+    ].join('\n');
+
+    expect(await check(body)).toEqual([]);
+  });
+
+  it('does not read a heading or a brief inside a fenced code block', async () => {
+    const body =
+      '## Example\n\n```markdown\n## Not a heading\n\n<!-- section-brief\nFill me\n-->\n```\n\n## After\n\nText.\n';
+
+    expect(await check(body)).toEqual([]);
+  });
+
+  it('does not read comment-looking text in frontmatter as a heading', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Page\n# a yaml comment\n---\n\n## One\n\nText.\n');
+
+    expect(await checkStubContent({ docsPath: tmp })).toEqual([]);
+  });
+
+  it('reports a section whose only content is an unrelated comment', async () => {
+    expect((await check('## One\n\n<!-- TODO -->\n')).map((f) => f.rule)).toEqual([Rule.EmptySection]);
+  });
+
+  it('ignores a brief written inside inline code', async () => {
+    expect(await check('## Options\n\nWrite `<!-- section-brief -->` to add a brief.\n')).toEqual([]);
+  });
+
+  it('does not let a comment opener in inline code hide the sections after it', async () => {
+    const findings = await check(`## Options\n\nComments start with \`<!--\`.\n\n## Next\n\n${brief()}\n`);
+
+    expect(findings.map((f) => f.rule)).toEqual([Rule.EmptySection]);
+  });
+
+  it('ignores legacy markers shown in a code block or inline code', async () => {
+    const body =
+      '## Options\n\nUse `<!-- section-brief:start -->` like this:\n\n```md\n<!-- section-brief:start -->\n```\n';
+
+    expect(await check(body)).toEqual([]);
+  });
+
+  it('keeps the legacy markers a stub even though the text between them renders', async () => {
+    const findings = await check(
+      '## Options\n\n<!-- section-brief:start -->\n\n> Fill this in\n\n<!-- section-brief:end -->\n'
+    );
+
+    expect(findings.map((f) => f.rule)).toEqual([Rule.UnfilledSectionBrief]);
+    expect(findings[0].severity).toBe('warning');
   });
 });

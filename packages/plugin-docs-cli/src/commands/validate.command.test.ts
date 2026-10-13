@@ -5,13 +5,11 @@ import { tmpdir } from 'node:os';
 import { validateCommand } from './validate.command.js';
 import { guidesLocation } from '../utils/utils.guides.js';
 
-type Options = Parameters<typeof validateCommand>[1];
-
 describe('validateCommand', () => {
   let tmpDir: string;
   let logSpy: ReturnType<typeof vi.spyOn>;
 
-  const run = (docsPath: string, json: boolean) => validateCommand(docsPath, { json } as Options);
+  const run = (docsPath: string, json: boolean) => validateCommand(docsPath, { json });
 
   beforeEach(async () => {
     tmpDir = await mkdtemp(join(tmpdir(), 'plugin-docs-validate-'));

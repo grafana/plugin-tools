@@ -193,7 +193,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
     if (typeof data.title === 'string' && data.title.length > MAX_TITLE_LENGTH) {
       diagnostics.push({
         rule: Rule.TitleLength,
-        severity: input.strict ? 'error' : 'info',
+        severity: 'error',
         file: relativePath,
         line: findFieldLine(raw, 'title'),
         title: `Title exceeds ${MAX_TITLE_LENGTH} characters`,
@@ -207,7 +207,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       if (data.description.length < MIN_DESCRIPTION_LENGTH) {
         diagnostics.push({
           rule: Rule.DescriptionLength,
-          severity: input.strict ? 'error' : 'info',
+          severity: 'error',
           file: relativePath,
           line: findFieldLine(raw, 'description'),
           title: `Description is shorter than ${MIN_DESCRIPTION_LENGTH} characters`,
@@ -216,7 +216,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       } else if (data.description.length > MAX_DESCRIPTION_LENGTH) {
         diagnostics.push({
           rule: Rule.DescriptionLength,
-          severity: input.strict ? 'error' : 'info',
+          severity: 'error',
           file: relativePath,
           line: findFieldLine(raw, 'description'),
           title: `Description exceeds ${MAX_DESCRIPTION_LENGTH} characters`,
@@ -225,9 +225,8 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       }
     }
 
-    // min-content-length: only checked under `validate` (not `serve`); catches pages stubbed
-    // out with just a title and a sentence
-    if (input.strict && body.trim().length < MIN_CONTENT_LENGTH) {
+    // min-content-length: catches pages stubbed out with just a title and a sentence
+    if (body.trim().length < MIN_CONTENT_LENGTH) {
       diagnostics.push({
         rule: Rule.MinContentLength,
         severity: 'info',
@@ -308,7 +307,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       }
       diagnostics.push({
         rule: Rule.DuplicatePosition,
-        severity: input.strict ? 'error' : 'warning',
+        severity: 'error',
         file: record.relativePath,
         line: record.sidebarPositionLine,
         title: `Duplicate sidebar_position: ${record.sidebarPosition}`,
