@@ -224,6 +224,33 @@ describe('utils', () => {
       context.addFile('package.json', '{}');
       expect(getPackageManager(context).packageManagerName).toBe('npm');
     });
+
+    it.each([
+      ['yarn@4', 'yarn', '4.0.0'],
+      ['pnpm@10.4', 'pnpm', '10.4.0'],
+    ])('fills in a partial %s version', (packageManager, name, version) => {
+      const context = new Context(tmpDir);
+      context.addFile('package.json', JSON.stringify({ packageManager }));
+      expect(getPackageManager(context)).toEqual({ packageManagerName: name, packageManagerVersion: version });
+    });
+
+    it.each([
+      ['a Yarn 1 lockfile', '# yarn lockfile v1\n', '1.22.22'],
+      ['a Yarn Berry lockfile', '__metadata:\n  version: 8\n', '4.0.0'],
+    ])('tells %s apart', (_, lockfile, version) => {
+      const context = new Context(tmpDir);
+      context.addFile('package.json', '{}');
+      context.addFile('yarn.lock', lockfile);
+      expect(getPackageManager(context).packageManagerVersion).toBe(version);
+    });
+
+    it('falls back to the lockfile when package.json is missing or invalid', () => {
+      const context = new Context(tmpDir);
+      context.addFile('pnpm-lock.yaml', '');
+      expect(getPackageManager(context).packageManagerName).toBe('pnpm');
+      context.addFile('package.json', '[]');
+      expect(getPackageManager(context).packageManagerName).toBe('pnpm');
+    });
   });
 
   describe('getTemplateDataFromContext', () => {
@@ -566,6 +593,13 @@ describe('utils', () => {
   });
 
   describe('appendToAgentInstructions', () => {
+    it('writes just the text into an empty instructions file', () => {
+      const context = new Context(tmpDir);
+      context.addFile(AGENT_INSTRUCTIONS_PATH, '\n');
+      appendToAgentInstructions(context, 'new.md', '## New\n');
+      expect(context.getFile(AGENT_INSTRUCTIONS_PATH)).toBe('## New\n');
+    });
+
     it('appends after a blank line', () => {
       const context = new Context('/virtual');
       context.addFile(AGENT_INSTRUCTIONS_PATH, '# Mine\n');
