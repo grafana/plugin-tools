@@ -14,6 +14,8 @@ import { findAdditionTodos, isGitDirectoryClean } from '../utils/utils.git.js';
 import minimist from 'minimist';
 import { output } from '../utils/utils.console.js';
 
+const ADD_FEATURES_DOCS_URL = 'https://grafana.com/developers/plugin-tools/how-to-guides/add-features-to-a-plugin';
+
 export const add = async (argv: minimist.ParsedArgs) => {
   const subCommand = argv._[1];
 
@@ -135,6 +137,8 @@ async function showAdditionsHelp() {
       '',
       'Available additions:',
       ...output.bulletList(additionsList),
+      '',
+      `Learn more: ${output.formatUrl(ADD_FEATURES_DOCS_URL)}`,
     ],
   });
 }

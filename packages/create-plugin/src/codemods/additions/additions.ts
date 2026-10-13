@@ -32,12 +32,8 @@ export function hasPromptStep(addition: Addition): addition is Addition & { prom
 
 // annotated rather than `satisfies Addition[]` so consumers see the union. with `satisfies` the
 // inferred element type stays the object literal, which means the type guards above cannot narrow it
+// scripts/example-addition.ts is a reference for authors and is deliberately not registered, so users never see it
 const additions: Addition[] = [
-  {
-    name: 'example-addition',
-    description: 'Adds an example addition to the plugin',
-    scriptPath: import.meta.resolve('./scripts/example-addition.js'),
-  },
   {
     name: 'externalize-jsx-runtime',
     description: 'Externalizes the react JSX runtime to help migrate plugins to React 19',
