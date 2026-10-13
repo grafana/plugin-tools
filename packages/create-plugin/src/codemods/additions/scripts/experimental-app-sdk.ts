@@ -5,13 +5,7 @@ import type { Context, ContextMessage } from '../../context.js';
 import type { TemplateData } from '../../../types.js';
 import { getBackendCmd } from '../../../commands/generate/print-success-message.js';
 import { output } from '../../../utils/utils.console.js';
-import {
-  additionsDebug,
-  AGENT_INSTRUCTIONS_PATH,
-  appendToAgentInstructions,
-  getTemplateDataFromContext,
-  renderTemplate,
-} from '../../utils.js';
+import { additionsDebug, getTemplateDataFromContext, renderTemplate } from '../../utils.js';
 import { addRequireToGoMod } from '../../utils.goMod.js';
 
 // Grafana reads an app-sdk manifest from the plugin bundle, and registers its API server, only when
@@ -133,8 +127,11 @@ function renderAppSdkTemplate(file: string, data: TemplateData, includeWarning =
  * plugin's instructions has no idea kinds or generated code exist.
  */
 function referenceAgentInstructions(context: Context, data: TemplateData) {
-  if (!context.getFile(AGENT_INSTRUCTIONS_PATH)) {
-    additionsDebug(`Could not find ${AGENT_INSTRUCTIONS_PATH}. Skipping the app-sdk reference.`);
+  const path = '.config/AGENTS/instructions.md';
+  const instructions = context.getFile(path);
+
+  if (!instructions) {
+    additionsDebug(`Could not find ${path}. Skipping the app-sdk reference.`);
     return;
   }
 
@@ -142,11 +139,13 @@ function referenceAgentInstructions(context: Context, data: TemplateData) {
     context.addFile(APP_SDK_MD, renderAppSdkTemplate(APP_SDK_MD, data));
   }
 
-  appendToAgentInstructions(
-    context,
-    APP_SDK_MD,
-    `- This plugin defines its API resources as **CUE kinds** under \`kinds/\`, with TypeScript and Go types generated from them. Read @./${APP_SDK_MD} before changing anything under \`kinds/\` or any generated directory. **Never hand-edit generated code.**\n`,
-    '\n'
+  if (instructions.includes(APP_SDK_MD)) {
+    return;
+  }
+
+  context.updateFile(
+    path,
+    `${instructions.trimEnd()}\n- This plugin defines its API resources as **CUE kinds** under \`kinds/\`, with TypeScript and Go types generated from them. Read @./${APP_SDK_MD} before changing anything under \`kinds/\` or any generated directory. **Never hand-edit generated code.**\n`
   );
 }
 

@@ -123,7 +123,7 @@ Don't call `output.*` directly from a codemod to tell the author what to do next
 // package.json manipulation
 addDependenciesToPackageJson(context, dependencies, devDependencies?, packageJsonPath?)
 removeDependenciesFromPackageJson(context, dependencies, devDependencies?, packageJsonPath?)
-readJsonFile<T>(context, path): T  // throws if missing, unparseable or not an object
+readJsonFile<T>(context, path): T  // throws if missing or unparseable
 
 // Package manager from package.json's `packageManager` field, else the lockfile. Reads the context,
 // so use it instead of getPackageManagerWithFallback, which reads from disk
@@ -132,8 +132,6 @@ getPackageManager(context): { packageManagerName, packageManagerVersion }
 // Semver — handles dist-tags ("latest", "next", "*") and standard ranges
 isVersionGreater(incomingVersion, existingVersion, orEqualTo?): boolean
 
-// Agent instructions. AGENT_INSTRUCTIONS_PATH is `.config/AGENTS/instructions.md`
-appendToAgentInstructions(context, marker, text, separator?)  // no-op if missing or `marker` is already there
 
 // Render a file from the scaffold templates (see "Rendering scaffold templates")
 renderTemplate(templatePath, includeWarning?, data?): string

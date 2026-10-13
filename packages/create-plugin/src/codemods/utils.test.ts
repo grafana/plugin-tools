@@ -3,8 +3,6 @@ import { Context } from './context.js';
 import {
   addDependenciesToPackageJson,
   addTemplateFolder,
-  AGENT_INSTRUCTIONS_PATH,
-  appendToAgentInstructions,
   getPackageManager,
   getTemplateDataFromContext,
   removeDependenciesFromPackageJson,
@@ -193,12 +191,6 @@ describe('utils', () => {
     it('should throw an error if the file does not exist', () => {
       const context = new Context(tmpDir);
       expect(() => readJsonFile(context, 'file.json')).toThrowError();
-    });
-
-    it.each(['[]', 'null', '"text"'])('should throw when the file contains %s instead of an object', (content) => {
-      const context = new Context(tmpDir);
-      context.addFile('file.json', content);
-      expect(() => readJsonFile(context, 'file.json')).toThrowError('does not contain a JSON object');
     });
   });
 
@@ -589,46 +581,6 @@ describe('utils', () => {
         expect(isVersionGreater('~1.0.0', '0.9.0')).toBe(true);
         expect(isVersionGreater('>=1.0.0', '0.9.0')).toBe(true);
       });
-    });
-  });
-
-  describe('appendToAgentInstructions', () => {
-    it('writes just the text into an empty instructions file', () => {
-      const context = new Context(tmpDir);
-      context.addFile(AGENT_INSTRUCTIONS_PATH, '\n');
-      appendToAgentInstructions(context, 'new.md', '## New\n');
-      expect(context.getFile(AGENT_INSTRUCTIONS_PATH)).toBe('## New\n');
-    });
-
-    it('appends after a blank line', () => {
-      const context = new Context('/virtual');
-      context.addFile(AGENT_INSTRUCTIONS_PATH, '# Mine\n');
-      appendToAgentInstructions(context, 'new.md', '## New\n');
-
-      expect(context.getFile(AGENT_INSTRUCTIONS_PATH)).toBe('# Mine\n\n## New\n');
-    });
-
-    it('uses the given separator', () => {
-      const context = new Context('/virtual');
-      context.addFile(AGENT_INSTRUCTIONS_PATH, '- one\n');
-      appendToAgentInstructions(context, 'new.md', '- two\n', '\n');
-
-      expect(context.getFile(AGENT_INSTRUCTIONS_PATH)).toBe('- one\n- two\n');
-    });
-
-    it('skips when the marker is already present', () => {
-      const context = new Context('/virtual');
-      context.addFile(AGENT_INSTRUCTIONS_PATH, 'See new.md\n');
-      appendToAgentInstructions(context, 'new.md', '## New\n');
-
-      expect(context.getFile(AGENT_INSTRUCTIONS_PATH)).toBe('See new.md\n');
-    });
-
-    it('skips when there is no instructions file', () => {
-      const context = new Context('/virtual');
-      appendToAgentInstructions(context, 'new.md', '## New\n');
-
-      expect(context.doesFileExist(AGENT_INSTRUCTIONS_PATH)).toBe(false);
     });
   });
 });
