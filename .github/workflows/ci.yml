@@ -64,7 +64,7 @@ jobs:
         run: |
           mkdir ./packed-artifacts
           npm version patch --workspace="@grafana/create-plugin" --commit-hooks=false --git-tag-version=false
-          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --workspace="@grafana/plugin-e2e" --workspace="@grafana/tsconfig" --pack-destination="./packed-artifacts"
+          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --workspace="@grafana/plugin-e2e" --workspace="@grafana/tsconfig" --workspace="@grafana/react-detect" --workspace="@grafana/plugin-types-bundler" --workspace="@grafana/plugin-meta-extractor" --workspace="@grafana/plugin-docs-cli" --workspace="@grafana/eslint-config" --pack-destination="./packed-artifacts"
           cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -178,6 +178,50 @@ jobs:
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').GRAFANA_ACCESS_POLICY_TOKEN }}
         run: sign-plugin --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ env.WORKING_DIR }}
+
+  unit-test-node-versions:
+    runs-on: ubuntu-x64
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    name: Run unit tests (node ${{ matrix.node-version }})
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version:
+          - 22
+          - 26
+    env:
+      NX_BRANCH: ${{ github.event.number || github.ref_name }}
+    steps:
+      - id: get-secrets
+        if: ${{ github.event.pull_request.head.repo.fork != true }}
+        uses: grafana/shared-workflows/actions/get-vault-secrets@f1614b210386ac420af6807a997ac7f6d96e477a # get-vault-secrets/v1.3.1
+        with:
+          repo_secrets: |
+            NX_CLOUD_ACCESS_TOKEN=nx_token:nx_token
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
+      - name: Setup nodejs
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+      - name: Build
+        run: npm exec nx affected -- --target build --parallel
+      - name: Unit tests
+        run: npm exec nx affected -- --target test --run
+
   test-updates:
     name: Test create-plugin update command
     runs-on: ubuntu-x64
