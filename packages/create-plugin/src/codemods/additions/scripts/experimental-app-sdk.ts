@@ -4,9 +4,15 @@ import { parseDocument, stringify, YAMLMap, Scalar } from 'yaml';
 import type { Context, ContextMessage } from '../../context.js';
 import { getBackendCmd } from '../../../commands/generate/print-success-message.js';
 import { output } from '../../../utils/utils.console.js';
-import { additionsDebug, renderTemplate } from '../../utils.js';
+import {
+  additionsDebug,
+  AGENT_INSTRUCTIONS_PATH,
+  appendToAgentInstructions,
+  getPackageManager,
+  getTemplateDataFromContext,
+  renderTemplate,
+} from '../../utils.js';
 import { addRequireToGoMod } from '../../utils.goMod.js';
-import { getTemplateData } from '../../../utils/utils.templates.js';
 
 // Grafana reads an app-sdk manifest from the plugin bundle, and registers its API server, only when
 // these toggles are enabled.
@@ -53,7 +59,7 @@ export default function appSdk(context: Context): Context {
 
   // Only guide the user when we actually scaffolded something; a re-run should stay quiet.
   if (Object.keys(context.listChanges()).length > changesBefore) {
-    context.setMessage(buildNextStepsMessage(hasGoBackend(context)));
+    context.setMessage(buildNextStepsMessage(hasGoBackend(context), getPackageManager(context).packageManagerName));
   }
 
   return context;
@@ -105,12 +111,16 @@ function addTemplateFiles(context: Context) {
       continue;
     }
 
-    context.addFile(file, renderTemplate(templatePath(file), includeWarning));
+    context.addFile(file, renderAppSdkTemplate(context, file, includeWarning));
   }
 }
 
 function templatePath(file: string): string {
   return fileURLToPath(new URL(`../../../../templates/app-sdk/${file}`, import.meta.url));
+}
+
+function renderAppSdkTemplate(context: Context, file: string, includeWarning = false): string {
+  return renderTemplate(templatePath(file), includeWarning, getTemplateDataFromContext(context));
 }
 
 /**
@@ -121,25 +131,20 @@ function templatePath(file: string): string {
  * plugin's instructions has no idea kinds or generated code exist.
  */
 function referenceAgentInstructions(context: Context) {
-  const path = '.config/AGENTS/instructions.md';
-  const instructions = context.getFile(path);
-
-  if (!instructions) {
-    additionsDebug(`Could not find ${path}. Skipping the app-sdk reference.`);
+  if (!context.getFile(AGENT_INSTRUCTIONS_PATH)) {
+    additionsDebug(`Could not find ${AGENT_INSTRUCTIONS_PATH}. Skipping the app-sdk reference.`);
     return;
   }
 
   if (!context.doesFileExist(APP_SDK_MD)) {
-    context.addFile(APP_SDK_MD, renderTemplate(templatePath(APP_SDK_MD), false));
+    context.addFile(APP_SDK_MD, renderAppSdkTemplate(context, APP_SDK_MD));
   }
 
-  if (instructions.includes(APP_SDK_MD)) {
-    return;
-  }
-
-  context.updateFile(
-    path,
-    `${instructions.trimEnd()}\n- This plugin defines its API resources as **CUE kinds** under \`kinds/\`, with TypeScript and Go types generated from them. Read @./${APP_SDK_MD} before changing anything under \`kinds/\` or any generated directory. **Never hand-edit generated code.**\n`
+  appendToAgentInstructions(
+    context,
+    APP_SDK_MD,
+    `- This plugin defines its API resources as **CUE kinds** under \`kinds/\`, with TypeScript and Go types generated from them. Read @./${APP_SDK_MD} before changing anything under \`kinds/\` or any generated directory. **Never hand-edit generated code.**\n`,
+    '\n'
   );
 }
 
@@ -280,7 +285,7 @@ function addAppProvider(context: Context) {
     return;
   }
 
-  context.addFile(path, renderTemplate(templatePath(path), false));
+  context.addFile(path, renderAppSdkTemplate(context, path));
 }
 
 // Stub doc.go files under pkg/generated/. Both are real packages `generate:kinds` fills in; they
@@ -302,7 +307,7 @@ function addGeneratedStubs(context: Context) {
       continue;
     }
 
-    context.addFile(path, renderTemplate(templatePath(path), false));
+    context.addFile(path, renderAppSdkTemplate(context, path));
   }
 }
 
@@ -398,8 +403,7 @@ ${errorBody}\t}`
 }
 
 /** Builds the message telling the user what to run next. */
-function buildNextStepsMessage(hasGoBackend: boolean): ContextMessage {
-  const { packageManagerName } = getTemplateData();
+function buildNextStepsMessage(hasGoBackend: boolean, packageManagerName: string): ContextMessage {
   const versionBadge = styleText(['reset', 'inverse', 'bold', 'cyan'], ` grafana-app-sdk@${GRAFANA_APP_SDK_VERSION} `);
 
   const commands = output.bulletList([
