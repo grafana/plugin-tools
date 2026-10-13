@@ -50,7 +50,7 @@
     "@grafana/plugin-docs-parser": "^0.4.0",
     "chokidar": "^5.0.0",
     "debug": "^4.3.7",
-    "ejs": "^5.0.0",
+    "ejs": "^7.0.0",
     "express": "^5.0.0",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
