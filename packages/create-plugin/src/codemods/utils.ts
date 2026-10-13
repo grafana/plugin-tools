@@ -186,11 +186,16 @@ export function readJsonFile<T extends object = any>(context: Context, path: str
   if (!context.doesFileExist(path)) {
     throw new Error(`Cannot find ${path}`);
   }
+  let parsed;
   try {
-    return JSON.parse(context.getFile(path) || '');
+    parsed = JSON.parse(context.getFile(path) || '');
   } catch (e) {
     throw new Error(`Cannot parse ${path}: ${e}`);
   }
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    throw new Error(`${path} does not contain a JSON object.`);
+  }
+  return parsed;
 }
 
 /**

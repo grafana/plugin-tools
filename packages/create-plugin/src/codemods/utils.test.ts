@@ -192,6 +192,12 @@ describe('utils', () => {
       const context = new Context(tmpDir);
       expect(() => readJsonFile(context, 'file.json')).toThrowError();
     });
+
+    it.each(['[]', 'null', '"text"'])('should throw when the file contains %s instead of an object', (content) => {
+      const context = new Context(tmpDir);
+      context.addFile('file.json', content);
+      expect(() => readJsonFile(context, 'file.json')).toThrowError('does not contain a JSON object');
+    });
   });
 
   describe('getPackageManager', () => {
