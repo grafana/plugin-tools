@@ -1,6 +1,7 @@
 import { constants } from 'node:fs';
 import { access } from 'node:fs/promises';
-import { basename } from 'node:path';
+import { homedir } from 'node:os';
+import { basename, join } from 'node:path';
 import which from 'which';
 import { AGENT_DEFINITIONS } from './definitions.js';
 import { AgentDefinition, InstalledAgent } from './types.js';
@@ -27,9 +28,10 @@ export async function detectInstalledAgents(
 // escape hatch for agents installed outside PATH, e.g. claude at ~/.claude/local/claude. the binary
 // name has to identify the agent because each one takes different invocation arguments
 export async function resolveAgentFromPath(
-  binaryPath: string,
+  agentPath: string,
   definitions: AgentDefinition[] = AGENT_DEFINITIONS
 ): Promise<InstalledAgent> {
+  const binaryPath = expandHomeDirectory(agentPath);
   const binaryName = basename(binaryPath);
   const definition = definitions.find((agentDefinition) => agentDefinition.binaryNames.includes(binaryName));
 
@@ -47,6 +49,14 @@ export async function resolveAgentFromPath(
   }
 
   return { definition, binaryPath };
+}
+
+// shells only expand ~ at the start of a word, so `--agent=~/...` reaches us unexpanded
+function expandHomeDirectory(agentPath: string): string {
+  if (!agentPath.startsWith('~/')) {
+    return agentPath;
+  }
+  return join(homedir(), agentPath.slice(2));
 }
 
 export function isInsideAgent(env: NodeJS.ProcessEnv = process.env): boolean {

@@ -1,3 +1,5 @@
+import { homedir } from 'node:os';
+import { join } from 'node:path';
 import { constants } from 'node:fs';
 import { access } from 'node:fs/promises';
 import which from 'which';
@@ -93,6 +95,13 @@ describe('resolveAgentFromPath', () => {
 
     expect(agent.definition).toBe(definition);
     expect(agent.binaryPath).toBe('/opt/homebrew/bin/claude');
+  });
+
+  it('should expand a leading ~ to the home directory, since shells leave it alone after --agent=', async () => {
+    const agent = await resolveAgentFromPath('~/.claude/local/claude', [createDefinition({})]);
+
+    expect(agent.binaryPath).toBe(join(homedir(), '.claude/local/claude'));
+    expect(accessMock).toHaveBeenCalledWith(join(homedir(), '.claude/local/claude'), constants.X_OK);
   });
 
   it('should check the path is executable', async () => {

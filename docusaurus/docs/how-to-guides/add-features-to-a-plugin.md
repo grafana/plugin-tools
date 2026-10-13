@@ -74,7 +74,7 @@ To select an agent without the question, use the `--agent` flag:
 The flag also accepts a path, which lets you use an agent installed outside your `PATH`:
 
 ```shell
-npx @grafana/create-plugin@latest add <addition> --agent=~/.claude/local/claude
+npx @grafana/create-plugin@latest add <addition> --agent="$HOME/.claude/local/claude"
 ```
 
 :::note

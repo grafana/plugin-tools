@@ -131,7 +131,7 @@ Some additions include instructions for an AI coding agent, because the change d
 The flag accepts an agent identifier, either `claude-code` or `codex`. It also accepts a path, which lets you use an agent that is installed outside your `PATH`:
 
 ```shell
-npx @grafana/create-plugin@latest add <addition> --agent=~/.claude/local/claude
+npx @grafana/create-plugin@latest add <addition> --agent="$HOME/.claude/local/claude"
 ```
 
 ### add --no-agent
