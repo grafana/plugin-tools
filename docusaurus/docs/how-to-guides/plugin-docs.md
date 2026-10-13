@@ -161,6 +161,8 @@ Docs publish as part of a plugin release:
 
 There are no docs-only releases. To publish a docs change, release a new plugin version. Until then, the catalog keeps showing the docs from your current version.
 
+For the full process, refer to [Publish your plugins](../publish-a-plugin/index.md).
+
 ## Keep the docs CLI up to date
 
 The codemod pins `@grafana/plugin-docs-cli` to an exact version, so validation results don't change unless you choose to update. Dependabot or Renovate can bump it like any other dependency.
