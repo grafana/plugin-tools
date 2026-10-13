@@ -5,9 +5,13 @@ import { tmpdir } from 'node:os';
 import { validateCommand } from './validate.command.js';
 import { guidesLocation } from '../utils/utils.guides.js';
 
+type Options = Parameters<typeof validateCommand>[1];
+
 describe('validateCommand', () => {
   let tmpDir: string;
   let logSpy: ReturnType<typeof vi.spyOn>;
+
+  const run = (docsPath: string, json: boolean) => validateCommand(docsPath, { json } as Options);
 
   beforeEach(async () => {
     tmpDir = await mkdtemp(join(tmpdir(), 'plugin-docs-validate-'));
@@ -25,7 +29,7 @@ describe('validateCommand', () => {
   });
 
   it('adds the location of the guides to the JSON output', async () => {
-    await validateCommand(tmpDir, { strict: true, json: true });
+    await run(tmpDir, true);
 
     expect(logSpy).toHaveBeenCalledTimes(1);
     const output = JSON.parse(logSpy.mock.calls[0][0] as string);
@@ -36,18 +40,18 @@ describe('validateCommand', () => {
   });
 
   it('prints the location of the guides after the results in text output', async () => {
-    await validateCommand(tmpDir, { strict: true, json: false });
+    await run(tmpDir, false);
 
     expect(logSpy).toHaveBeenCalledTimes(2);
     expect(logSpy.mock.calls[1][0]).toBe(`\nDocs guides: ${guidesLocation()}`);
   });
 
   it('sets the exit code from the validation result', async () => {
-    await validateCommand(join(tmpDir, 'missing'), { strict: true, json: true });
+    await run(join(tmpDir, 'missing'), true);
     expect(JSON.parse(logSpy.mock.calls[0][0] as string).valid).toBe(false);
     expect(process.exitCode).toBe(1);
 
-    await validateCommand(tmpDir, { strict: true, json: true });
+    await run(tmpDir, true);
     expect(JSON.parse(logSpy.mock.calls[1][0] as string).valid).toBe(true);
     expect(process.exitCode).toBe(0);
   });
