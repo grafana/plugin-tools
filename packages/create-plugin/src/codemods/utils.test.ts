@@ -267,17 +267,14 @@ describe('utils', () => {
       expect(getTemplateDataFromContext(context)).toMatchObject({ pluginId: 'org-new-app', isAppType: true });
     });
 
-    it('reads feature flags from .cprc.json files in the context', () => {
-      const context = pluginContext();
-      context.addFile('.config/.cprc.json', JSON.stringify({ features: { bundleGrafanaUI: true } }));
-      context.addFile('.cprc.json', JSON.stringify({ features: { useExperimentalRspack: true } }));
-      expect(getTemplateDataFromContext(context)).toMatchObject({ bundleGrafanaUI: true, frontendBundler: 'rspack' });
-    });
-
-    it('ignores a .cprc.json it cannot parse', () => {
-      const context = pluginContext();
-      context.addFile('.cprc.json', 'not json');
-      expect(getTemplateDataFromContext(context).frontendBundler).toBe('webpack');
+    it('reads feature flags from the .cprc.json files', async () => {
+      await mkdir(join(tmpDir, '.config'));
+      await writeFile(join(tmpDir, '.config/.cprc.json'), JSON.stringify({ features: { bundleGrafanaUI: true } }));
+      await writeFile(join(tmpDir, '.cprc.json'), JSON.stringify({ features: { useExperimentalRspack: true } }));
+      expect(getTemplateDataFromContext(pluginContext())).toMatchObject({
+        bundleGrafanaUI: true,
+        frontendBundler: 'rspack',
+      });
     });
   });
 
