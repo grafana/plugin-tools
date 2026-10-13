@@ -64,7 +64,7 @@ jobs:
         run: |
           mkdir ./packed-artifacts
           npm version patch --workspace="@grafana/create-plugin" --commit-hooks=false --git-tag-version=false
-          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --workspace="@grafana/plugin-e2e" --workspace="@grafana/tsconfig" --workspace="@grafana/react-detect" --workspace="@grafana/plugin-types-bundler" --workspace="@grafana/plugin-meta-extractor" --workspace="@grafana/plugin-docs-cli" --workspace="@grafana/eslint-config" --pack-destination="./packed-artifacts"
+          npm pack --workspace="@grafana/create-plugin" --workspace="@grafana/sign-plugin" --workspace="@grafana/plugin-e2e" --workspace="@grafana/tsconfig" --workspace="@grafana/react-detect" --workspace="@grafana/plugin-types-bundler" --workspace="@grafana/plugin-meta-extractor" --workspace="@grafana/plugin-docs-cli" --workspace="@grafana/plugin-docs-parser" --workspace="@grafana/eslint-config" --pack-destination="./packed-artifacts"
           cp ./.github/knip.json ./packed-artifacts
       - name: Upload artifacts for testing
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -172,8 +172,16 @@ jobs:
           node -e "const f='src/plugin.json';const p=JSON.parse(require('fs').readFileSync(f,'utf8'));p.docsPath='docs';require('fs').writeFileSync(f,JSON.stringify(p,null,2))"
           mkdir -p docs
           printf -- '---\ntitle: Overview\n---\n\nStub page.\n' > docs/index.md
-          plugin-docs-cli validate --json --allow-unfilled-stubs > ../docs-validate.json || true
+          plugin-docs-cli validate --json > ../docs-validate.json || true
           node -e "const r=JSON.parse(require('fs').readFileSync('../docs-validate.json','utf8'));if(typeof r.valid!=='boolean'){process.exit(1)}"
+        working-directory: ./${{ env.WORKING_DIR }}
+
+      - name: '@grafana/plugin-docs-parser - parse markdown'
+        # Install the packed parser so we test this branch's code, not the registry copy plugin-docs-cli depends on.
+        run: |
+          DOCS_PARSER_PACKAGE=$(ls ../packed-artifacts/grafana-plugin-docs-parser-*.tgz | xargs basename)
+          npm install ../packed-artifacts/${DOCS_PARSER_PACKAGE}
+          node --input-type=module -e "import { parseMarkdown } from '@grafana/plugin-docs-parser'; const { frontmatter } = parseMarkdown('---\\ntitle: Overview\\n---\\n\\n# Hello\\n'); if (frontmatter.title !== 'Overview') { process.exit(1); }"
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Install playwright dependencies
