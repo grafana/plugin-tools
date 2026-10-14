@@ -6,6 +6,7 @@ import * as v from 'valibot';
 import { parse as parseYaml } from 'yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../context.js';
+import { getPackageManagerWithFallback } from '../../../utils/utils.packageManager.js';
 import docs, { assertSupportedPluginType, schema, setupDocsScaffolding } from './docs.js';
 
 // capture the real existsSync before mocking so we can delegate to it in beforeEach
@@ -18,6 +19,11 @@ vi.mock('node:fs', async (importOriginal) => {
     existsSync: vi.fn().mockImplementation(mod.existsSync),
   };
 });
+
+vi.mock(import('../../../utils/utils.packageManager.js'), async (importOriginal) => ({
+  ...(await importOriginal()),
+  getPackageManagerWithFallback: vi.fn(() => ({ packageManagerName: 'npm', packageManagerVersion: '10.9.0' })),
+}));
 
 function makeContext(pluginJson: Record<string, unknown> = { type: 'panel', name: 'My Plugin' }): Context {
   const context = new Context('/virtual');
@@ -319,13 +325,12 @@ describe('docs scaffolding', () => {
 describe('docs codemod', () => {
   describe('validate-docs workflow package manager', () => {
     // exercises the real shipped workflow template, so these assert on generated CI content
-    function workflowFor(packageManager?: string): string {
+    function workflowFor(packageManager: string): string {
+      const [packageManagerName, packageManagerVersion] = packageManager.split('@');
+      vi.mocked(getPackageManagerWithFallback).mockReturnValueOnce({ packageManagerName, packageManagerVersion });
       const context = new Context('/virtual');
       context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P' }));
-      context.addFile(
-        'package.json',
-        JSON.stringify({ scripts: {}, devDependencies: {}, ...(packageManager ? { packageManager } : {}) })
-      );
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
       docs(context, { docsPath: 'docs' });
       return context.getFile('.github/workflows/validate-docs.yml') ?? '';
     }
@@ -367,12 +372,6 @@ describe('docs codemod', () => {
       expect(workflowFor('npm@10.2.3')).toContain(
         '          persist-credentials: false\n      - name: Setup Node.js environment\n'
       );
-    });
-
-    it('falls back to npm when package.json has no packageManager field', () => {
-      const workflow = workflowFor();
-      expect(workflow).toContain('run: npm ci');
-      expect(workflow).not.toContain('pnpm/action-setup');
     });
   });
 

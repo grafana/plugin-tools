@@ -1,17 +1,11 @@
-import { basename, dirname, join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { createRequire } from 'node:module';
 import { Context } from './context.js';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { glob } from 'glob';
-import { findUpSync } from '@libs/find-up';
 import { styleText } from 'node:util';
 import { output } from '../utils/utils.console.js';
-import {
-  getPackageManagerSilentInstallCmd,
-  DEFAULT_PACKAGE_MANAGER,
-  getPackageManagerWithFallback,
-  type PackageManager,
-} from '../utils/utils.packageManager.js';
+import { getPackageManagerSilentInstallCmd, getPackageManagerWithFallback } from '../utils/utils.packageManager.js';
 import { execSync } from 'node:child_process';
 import which from 'which';
 import { clean, coerce, gt, gte } from 'semver';
@@ -198,47 +192,6 @@ export function readJsonFile<T extends object = any>(context: Context, path: str
   return parsed;
 }
 
-/**
- * Reads the plugin's package manager from the context, so it sees pending changes.
- * Plugins without a `packageManager` field fall back to the closest lockfile, like `getPackageManagerWithFallback`.
- * Lockfiles carry no exact version, so a representative one is used.
- */
-export function getPackageManager(context: Context): PackageManager {
-  const packageJson = readOptionalJsonFile<{ packageManager?: string }>(context, 'package.json');
-  const [packageManagerName, packageManagerVersion] = packageJson?.packageManager?.split('@') ?? [];
-  if (packageManagerName && packageManagerVersion) {
-    return { packageManagerName, packageManagerVersion };
-  }
-
-  additionsDebug('no usable packageManager field in package.json, checking for a lockfile');
-  const lockfile = findLockfile(context);
-  if (lockfile?.name === 'yarn.lock') {
-    // Yarn Berry lockfiles have a `__metadata` block, Yarn 1 lockfiles don't
-    return {
-      packageManagerName: 'yarn',
-      packageManagerVersion: lockfile.content.includes('__metadata:') ? '4.0.0' : '1.22.22',
-    };
-  }
-  if (lockfile?.name === 'pnpm-lock.yaml') {
-    return { packageManagerName: 'pnpm', packageManagerVersion: '9.0.0' };
-  }
-  return { ...DEFAULT_PACKAGE_MANAGER };
-}
-
-const LOCKFILES = ['yarn.lock', 'pnpm-lock.yaml', 'package-lock.json'];
-
-function findLockfile(context: Context): { name: string; content: string } | undefined {
-  for (const name of LOCKFILES) {
-    const content = context.getFile(name);
-    if (content !== undefined) {
-      return { name, content };
-    }
-  }
-  // the context only holds the plugin folder, so a workspace lockfile above it is read from disk
-  const path = findUpSync(LOCKFILES, { cwd: dirname(context.basePath) });
-  return path ? { name: basename(path), content: readFileSync(path, 'utf-8') } : undefined;
-}
-
 export function addDependenciesToPackageJson(
   context: Context,
   dependencies: Record<string, string>,
@@ -413,28 +366,15 @@ export function renderTemplate(
 }
 
 /**
- * The same data `getTemplateData` gives scaffold templates, with plugin.json and package.json read from the
- * context, so it includes changes the codemod has made but not yet written.
+ * The same data `getTemplateData` gives scaffold templates, with plugin.json read from the context, so it
+ * includes changes the codemod has made but not yet written.
  */
 export function getTemplateDataFromContext(context: Context): TemplateData {
   return buildTemplateData({
     pluginJson: readJsonFile(context, 'src/plugin.json'),
-    packageManager: getPackageManager(context),
+    packageManager: getPackageManagerWithFallback(),
     features: getConfig(context.basePath).features,
   });
-}
-
-// a missing or broken file counts as absent
-function readOptionalJsonFile<T extends object>(context: Context, path: string): T | undefined {
-  if (!context.doesFileExist(path)) {
-    return undefined;
-  }
-  try {
-    return readJsonFile<T>(context, path);
-  } catch (error) {
-    additionsDebug(`Ignoring ${path}: ${error}`);
-    return undefined;
-  }
 }
 
 /**

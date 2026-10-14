@@ -26,7 +26,7 @@ When you change code, update the page that documents it:
 | `options.md`         | `setPanelOptions` and `useFieldConfig` in `src/module.ts`                              |
 | `data-formats.md`    | The panel component's data handling, plus any field pickers in `src/module.ts`         |
 | `examples.md`        | `provisioning/dashboards/*.json` if present, otherwise the panel's own option defaults |
-| `troubleshooting.md` | Real reported failures. Don't invent failure modes.                                    |
+| `troubleshooting.md` | Error and empty-state messages in source, and reported issues. Don't invent failures.  |
 
 ## Optional pages
 

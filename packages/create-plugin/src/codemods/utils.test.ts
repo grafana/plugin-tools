@@ -3,7 +3,6 @@ import { Context } from './context.js';
 import {
   addDependenciesToPackageJson,
   addTemplateFolder,
-  getPackageManager,
   getTemplateDataFromContext,
   removeDependenciesFromPackageJson,
   flushChanges,
@@ -31,6 +30,11 @@ vi.mock(import('node:child_process'), async (importOriginal) => ({
 vi.mock(import('../utils/utils.cli.js'), async (importOriginal) => ({
   ...(await importOriginal()),
   commandName: 'add',
+}));
+
+vi.mock(import('../utils/utils.packageManager.js'), async (importOriginal) => ({
+  ...(await importOriginal()),
+  getPackageManagerWithFallback: vi.fn(() => ({ packageManagerName: 'pnpm', packageManagerVersion: '10.4.1' })),
 }));
 
 vi.mock('which', () => ({
@@ -200,72 +204,6 @@ describe('utils', () => {
     });
   });
 
-  describe('getPackageManager', () => {
-    it('reads the packageManager field', () => {
-      const context = new Context(tmpDir);
-      context.addFile('package.json', JSON.stringify({ packageManager: 'pnpm@10.4.1' }));
-      expect(getPackageManager(context)).toEqual({ packageManagerName: 'pnpm', packageManagerVersion: '10.4.1' });
-    });
-
-    it.each([
-      ['yarn.lock', 'yarn'],
-      ['pnpm-lock.yaml', 'pnpm'],
-    ])('falls back to %s when there is no packageManager field', (lockfile, name) => {
-      const context = new Context(tmpDir);
-      context.addFile('package.json', '{}');
-      context.addFile(lockfile, '');
-      expect(getPackageManager(context).packageManagerName).toBe(name);
-    });
-
-    it('defaults to npm', () => {
-      const context = new Context(tmpDir);
-      context.addFile('package.json', '{}');
-      expect(getPackageManager(context).packageManagerName).toBe('npm');
-    });
-
-    it.each([
-      ['a Yarn 1 lockfile', '# yarn lockfile v1\n', '1.22.22'],
-      ['a Yarn Berry lockfile', '__metadata:\n  version: 8\n', '4.0.0'],
-    ])('tells %s apart', (_, lockfile, version) => {
-      const context = new Context(tmpDir);
-      context.addFile('package.json', '{}');
-      context.addFile('yarn.lock', lockfile);
-      expect(getPackageManager(context).packageManagerVersion).toBe(version);
-    });
-
-    it('falls back to the lockfile when the packageManager field has no version', () => {
-      const context = new Context(tmpDir);
-      context.addFile('package.json', JSON.stringify({ packageManager: 'yarn' }));
-      context.addFile('yarn.lock', '# yarn lockfile v1\n');
-      expect(getPackageManager(context)).toEqual({ packageManagerName: 'yarn', packageManagerVersion: '1.22.22' });
-    });
-
-    it('finds a workspace lockfile above the plugin', async () => {
-      const pluginDir = join(tmpDir, 'plugins', 'my-plugin');
-      await mkdir(pluginDir, { recursive: true });
-      await writeFile(join(tmpDir, 'pnpm-lock.yaml'), '');
-      const context = new Context(pluginDir);
-      context.addFile('package.json', '{}');
-      expect(getPackageManager(context).packageManagerName).toBe('pnpm');
-    });
-
-    it('prefers a lockfile in the plugin over one above it', async () => {
-      const pluginDir = join(tmpDir, 'my-plugin');
-      await mkdir(pluginDir);
-      await writeFile(join(tmpDir, 'yarn.lock'), '');
-      await writeFile(join(pluginDir, 'package-lock.json'), '{}');
-      expect(getPackageManager(new Context(pluginDir)).packageManagerName).toBe('npm');
-    });
-
-    it('falls back to the lockfile when package.json is missing or invalid', () => {
-      const context = new Context(tmpDir);
-      context.addFile('pnpm-lock.yaml', '');
-      expect(getPackageManager(context).packageManagerName).toBe('pnpm');
-      context.addFile('package.json', '[]');
-      expect(getPackageManager(context).packageManagerName).toBe('pnpm');
-    });
-  });
-
   describe('getTemplateDataFromContext', () => {
     function pluginContext() {
       const context = new Context(tmpDir);
@@ -273,11 +211,10 @@ describe('utils', () => {
         'src/plugin.json',
         JSON.stringify({ id: 'org-name-panel', name: 'Name', type: 'panel', info: { author: { name: 'Org' } } })
       );
-      context.addFile('package.json', JSON.stringify({ packageManager: 'pnpm@10.4.1' }));
       return context;
     }
 
-    it('reads plugin.json and package.json from the context', () => {
+    it('reads plugin.json from the context', () => {
       expect(getTemplateDataFromContext(pluginContext())).toMatchObject({
         pluginId: 'org-name-panel',
         pluginName: 'Name',

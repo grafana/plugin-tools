@@ -20,7 +20,7 @@ Fill this in: Emit a markdown table with these columns - one row per option regi
 
 - _Option_: the `name` value from the `setPanelOptions` `.add*({...})` call, verbatim.
 - _Type_: a short label for the editor the option uses, derived from the builder method (`addBooleanSwitch` → Toggle, `addSelect` → Select, `addNumberInput` → Number, `addFieldNamePicker` → Field picker). For a custom editor, name what it is, such as Color picker, rather than writing Custom.
-- _Default_: the value a reader sees in the panel editor, rendered as inline code. Resolve enum members, constants and translation calls to that value - `ClockMode.time` becomes `Time`. Keep the source expression only when it can't be resolved. Empty cell when there is no default.
+- _Default_: the value a reader sees in the panel editor, rendered as inline code. Resolve enum members, constants and translation calls to that value - `ClockMode.time` becomes `Time`. Keep the source expression only when it can't be resolved. When there is no default but the code falls back to a value while the option is unset, give that fallback value. Leave the cell empty only when there is neither.
 - _Description_: the `description` value, verbatim. When source has none, write one short sentence describing what the option does, based on how the panel code uses it. Don't guess beyond what the code shows.
 
 If the panel does not call `setPanelOptions`, remove this section entirely.
