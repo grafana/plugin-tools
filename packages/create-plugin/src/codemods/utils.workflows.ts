@@ -18,7 +18,7 @@ export interface BumpActionRefsResult {
  * runs the latest release.
  *
  * The parser finds each `uses` value, then only that value's source text is replaced, so comments and
- * formatting elsewhere stay byte-for-byte the same - re-serializing re-indents commented-out blocks.
+ * formatting elsewhere stay byte-for-byte the same.
  */
 export function bumpActionRefs(
   context: Context,

@@ -88,9 +88,7 @@ describe('docs scaffolding', () => {
 
   it('is idempotent', async () => {
     const context = makeContext();
-    // template dirs must stay fixed across both runs - call() mints a fresh temp dir per
-    // invocation, and two different (if equal-content) dirs would make every re-run look
-    // like a first run instead of exercising the skip-existing-file branches.
+    // shared across both runs so the second one reaches the skip-existing-file branches
     const templateDir = makeTemplateDir({ 'index.md': '# {{pluginName}}\n' });
     const commonTemplateDir = makeCommonTemplateDir();
     const migrate = async (ctx: Context) =>
@@ -144,7 +142,7 @@ describe('docs scaffolding', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
-      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('0.7.0');
+      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.7.0');
     });
 
     it('adds docs:serve and docs:validate scripts, with no separate release script', () => {
