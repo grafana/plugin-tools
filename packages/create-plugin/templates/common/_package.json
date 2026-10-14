@@ -62,7 +62,7 @@
     "swc-loader": "^0.2.0",
     "terser-webpack-plugin": "^5.3.0",{{/unless}}
     "ts-node": "^10.9.0",{{#if useExperimentalRspack}}
-    "ts-checker-rspack-plugin": "^1.4.0",{{/if}}
+    "ts-checker-rspack-plugin": "^1.7.0",{{/if}}
     "typescript": "5.9.2",
     "webpack": "^5.106.0"{{#unless useExperimentalRspack}},
     "webpack-cli": "^6.0.0",
