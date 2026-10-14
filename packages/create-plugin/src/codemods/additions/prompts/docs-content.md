@@ -10,7 +10,7 @@ Throughout, `{docsPath}` means the `docsPath` value in `src/plugin.json` (`catal
 
 This works on greenfield panels (no existing docs - drive content from source) and on brownfield panels (a README full of documentation - move it onto pages, then trim the README back to what the Overview tab needs). Both paths are first-class.
 
-Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guides that ship with `@grafana/plugin-docs-cli`. They hold the frontmatter shape, the folder conventions, the source-to-page mapping and the style rules.
+Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guides that ship with `@grafana/plugin-docs-cli`. They hold the frontmatter shape, when to split a page into a folder, how to handle section briefs, the style rules and when the docs are done. This document only adds what is specific to a first migration and to panel plugins.
 
 This is meant to run once, after `add docs`. Ongoing per-page updates are routine work: edit the pages directly against those conventions.
 
@@ -24,62 +24,17 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
 1. Inventory everything available. Read in parallel:
    - `src/plugin.json` (plugin type, name, declared `includes`, `info.description`, `info.links`)
-   - `src/module.ts` (the `PanelPlugin` builder chain - the load-bearing file for option extraction)
-   - The panel React component referenced from `module.ts|tsx` (commonly `src/components/{PanelName}.tsx` or `src/{PanelName}.tsx`)
-   - `src/types.ts` and any other source entry points
-   - `provisioning/dashboards/*.json` if present - bundled example dashboards. These are the canonical source for `{docsPath}/examples.md`: real working panel configs that already exercise the plugin's features. Prefer lifting examples from here over inventing them.
+   - `src/module.ts` and the panel component it registers, `src/types.ts` and any other source entry points
+   - `provisioning/dashboards/*.json` if present - bundled example dashboards, the canonical source for `{docsPath}/examples.md`
    - `README.md` and `CHANGELOG.md` if present (these may be near-empty boilerplate for fresh panels - that's fine)
    - Documentation linked from `info.links` in `src/plugin.json`. Walk every entry and read the ones that may hold material for the docs pages: an entry named "Documentation", and any entry that points at a user guide, wiki, docs site or a markdown file such as `TESTING.md` or `CONFIGURATION.md`. Skip links with nothing to harvest, such as issue trackers, support portals and vendor or project home pages. When a link points at a file in this repository (its URL matches the `repository` field in `package.json` or the git remote), read the local file instead of fetching it. Fetch the rest, and note each link you couldn't fetch for the summary.
-   - Image assets under `src/img/`, `src/img/screenshots/`, `screenshots/`, `{docsPath}/img/`. If usable screenshots already exist in any of these locations, you may copy the relevant files into `{docsPath}/img/` during the fill pass and reference them from the doc pages. If no usable screenshots exist, flag the gap in the final summary - never generate new images.
+   - Image assets under `src/img/`, `src/img/screenshots/`, `screenshots/` and `{docsPath}/img/`. Copy usable screenshots into `{docsPath}/img/` during the fill pass and reference them from the pages. If there are none, flag the gap in the final summary.
 
-2. **Build a working understanding from the `PanelPlugin` builder. This step is mandatory; do not skip even when README is rich.** Locate `new PanelPlugin(...)` in `src/module.ts` (or wherever the default export lives). Walk the chained methods and extract:
-   - **Panel purpose** (one sentence). Combine `plugin.json.info.description`, the React component's leading docstring and any descriptive `description:` strings inside `setPanelOptions` calls.
-
-   - **Panel options** (`setPanelOptions((builder) => ...)`). For each `.add*({...})` call on the builder, capture the literal values of these object properties: `name`, `description`, `defaultValue`, `category`. For `defaultValue`, also resolve what it evaluates to (see the Default rule in step 6) - the literal is for your working notes, the resolved value is what gets published. Record the builder method name so you can derive a Type label using the table below.
-
-     | Builder method     | Type label   |
-     | ------------------ | ------------ |
-     | `addBooleanSwitch` | Toggle       |
-     | `addTextInput`     | Text         |
-     | `addTextArea`      | Text area    |
-     | `addNumberInput`   | Number       |
-     | `addRadio`         | Radio        |
-     | `addSelect`        | Select       |
-     | `addMultiSelect`   | Multi-select |
-     | `addColorPicker`   | Color        |
-     | `addSliderInput`   | Slider       |
-     | `addUnitPicker`    | Unit         |
-     | `addCustomEditor`  | Custom       |
-     | anything else      | Custom       |
-
-   - **Standard field options** (`useFieldConfig({...})`). Three cases:
-     - No `.useFieldConfig(...)` call at all → no Standard field options section. Remove the empty section from `options.md` during the fill pass.
-     - `.useFieldConfig()` or `.useFieldConfig({})` or any call without a `standardOptions` key → the panel enables all standard options. Document this as "all standard options".
-     - `.useFieldConfig({ standardOptions: [FieldConfigProperty.Min, FieldConfigProperty.Decimals, ...] })` → list only the named ones.
-
-     Friendly labels for the common `FieldConfigProperty` values:
-
-     | Property      | Label          |
-     | ------------- | -------------- |
-     | `Min`         | Min            |
-     | `Max`         | Max            |
-     | `Unit`        | Unit           |
-     | `Decimals`    | Decimals       |
-     | `Thresholds`  | Thresholds     |
-     | `Mappings`    | Value mappings |
-     | `Color`       | Color scheme   |
-     | `DisplayName` | Display name   |
-     | `NoValue`     | No-value text  |
-     | `Links`       | Data links     |
-     | `Filterable`  | Filterable     |
-
-   - **Custom field options** (`useFieldConfig({ useCustomConfig: (builder) => ... })`). Same walker as `setPanelOptions`. These appear under the **Overrides** picker in the panel editor.
-
-   - **Data support** (`setDataSupport({ annotations: true, alertStates: true })`). Each truthy flag is a capability worth a feature bullet in the plugin's own `README.md`, which is the Overview tab:
-     - `annotations: true` → "Reads from annotations queries"
-     - `alertStates: true` → "Visualises alert state on the panel"
-
-   - **Suggestions / presets suppliers** (`setSuggestionsSupplier(...)` / `setPresetsSupplier(...)`). Presence → README feature bullets: "Appears in the Suggestions list when data shape matches" and "Ships preset configurations".
+2. **Build a working understanding from the `PanelPlugin` builder. This step is mandatory; do not skip even when README is rich.** Walk the builder chain from `src/module.ts`, into any helpers it calls, and note:
+   - The panel's purpose in one sentence, from `info.description`, the component and the option descriptions.
+   - Every panel option and custom field option: its `name`, `description`, `defaultValue`, `category` and builder method.
+   - Which standard field options `useFieldConfig` enables, if it is called at all.
+   - Capabilities worth a feature bullet in the plugin's own `README.md`, which is the Overview tab: `setDataSupport` flags such as annotations and alert states, and a suggestions or presets supplier.
 
    If source is genuinely thin (a barely-modified scaffold), say so in the final summary; do not invent.
 
@@ -91,16 +46,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
    - Write the plan down before editing anything, so nothing is dropped between moving it out and trimming the README in step 7.
    - Plan the documentation harvested from `info.links` in step 1 the same way, section by section. Content from another file in this repository is a move, like the README. Content from an external site is a copy, since you can't trim it. Leave out what the README or source already covers, and keep the source understanding from step 2 as the authority when the two disagree.
 
-4. Detect optional features the codemod could not auto-scaffold and propose pages for them. The codemod has already scaffolded the baseline set (`index.md`, `options.md`, `data-formats.md`, `examples.md`, `troubleshooting.md`). The catalog below covers softer features that need contextual judgment - propose these pages to the user when you detect the trigger. Ask before scaffolding.
-
-   **Panel soft-signal catalog** (trigger → filename → scope):
-
-   | Trigger                                                                            | Filename                      | Scope                                                        |
-   | ---------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------ |
-   | `setSuggestionsSupplier(...)` in source                                            | feature bullet in `README.md` | When this panel surfaces in the Suggestions list.            |
-   | `setPresetsSupplier(...)` in source                                                | `{docsPath}/presets.md`       | The presets the panel ships, when each applies, screenshots. |
-   | RBAC role declarations in `plugin.json`                                            | `{docsPath}/permissions.md`   | What each role grants, default assignments.                  |
-   | Substantial accessibility considerations (keyboard shortcuts, screen reader notes) | `{docsPath}/accessibility.md` | Keyboard interaction, ARIA, contrast, motion preferences.    |
+4. **Propose optional pages.** Check the source against the "Optional pages" table in `{docsPath}/AGENTS.md`. Propose a page for each trigger you find, and ask the author before adding it.
 
 5. **Prompt the author for context that source and README genuinely can't supply.**
 
@@ -115,38 +61,9 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
    Questions never block the work. Ask them once, then keep writing. If no answer arrives, go with what source supports, write down each assumption you made and list them in the final summary so the author can correct them. Each topic the author names becomes a new page.
 
-6. For every page in the resulting list (scaffolded stubs + new pages):
-   - Write the page following the conventions in the authoring guides.
-   - Pass the source understanding (always present), README excerpts and linked documentation (only when harvested in step 3) and author answers (only when given in step 5) as the page brief.
+6. **Write every page** (scaffolded stubs and new pages) as the authoring guides describe, and fill each section as its `section-brief` says. The briefs hold the page formats, so panel docs read the same across plugins. Use the source understanding as your material, plus README excerpts and linked documentation (when harvested in step 3) and author answers (when given in step 5).
 
-   **Special case: `{docsPath}/options.md`.** Use the source understanding from step 2 to populate the page directly:
-   - For the `## Panel options` section, emit a markdown table with columns `Option | Type | Default | Description` and one row per `setPanelOptions` `.add*` call. Match the Grafana built-in panel docs style (see https://grafana.com/docs/grafana/latest/visualizations/panels-visualizations/visualizations/logs/#logs-options for the reference shape).
-     - `Option`: the `name` value, verbatim.
-     - `Type`: the friendly Type label from the builder method table above.
-     - `Default`: the value a reader sees in the panel editor, as inline code (`` `false` ``, `` `100` ``, `` `Time` ``). Resolve source expressions before publishing: an enum member such as `ClockMode.time` becomes the label of the matching `options` entry (`Time`), a constant becomes its value and a translation call such as `t('panel.mode.time', 'Time')` becomes its default string. Keep the source expression only when you can't resolve it, and list that row in the gaps summary. Empty cell when no default.
-     - `Description`: the `description` value, verbatim. When source has none, write one short sentence describing what the option does, based on how the panel component uses it. Stay within what the code shows, and list the rows you wrote in the summary so the author can review them.
-     - Escape pipes (`|`) inside any cell value as `\|`.
-
-   - For the `## Standard field options` section, emit a bulleted list of the friendly labels. When the panel enables all standard options, prefix the list with a sentence noting that.
-
-   - For the `## Custom field options` section, emit a table with the same shape as Panel options.
-
-   - If `setPanelOptions` is absent, drop the `## Panel options` section. If `useFieldConfig` is absent, drop both Standard and Custom field options sections. Same for Tooltip and Legend - if the panel has no options under those categories (check the `category:` field in `setPanelOptions` add calls), remove the empty sections rather than leaving placeholder briefs.
-
-   **Verbatim-and-flag rule.** When a source `description:` string contradicts observable behaviour elsewhere in source (for example, the description lists option values that don't appear in the matching `options:` array, names a default the constructor doesn't actually set, or describes a constraint the validator doesn't enforce), keep the description verbatim AND add a row to the gaps summary in step 10 with file + line references. Do not silently paraphrase the discrepancy away. Do not invent corrected wording. The author resolves the contradiction; the agent surfaces it.
-
-   **Special case: `{docsPath}/data-formats.md`.** For every query-backed data shape described on the page, immediately after the prose description add a `#### Example` subsection containing a Markdown table. The table headers must be the actual field names the panel reads - draw them from query field pickers in source (look for `queryField`, `fieldName`, or `FieldNamePicker` in `setPanelOptions` / component props) and from `queryField` values in any provisioning JSON. Populate 3-5 rows with realistic sample values that match the declared types. This is the minimal artifact that lets a dashboard author write a working query or a test datasource payload - without it the page is descriptive but not actionable. If source contains no field-name evidence, flag the gap in the summary rather than omitting the subsection silently.
-
-   **Special case: `{docsPath}/examples.md`.** If `provisioning/dashboards/*.json` exists, lift example configurations from there before falling back to invented ones. Find panels of this plugin type (match the `type` field against `plugin.json.id`) and choose 1-3 representative ones - the basic setup plus the variations that show distinct features. Don't include every matching panel. Publish an excerpt of each, not the full panel object: keep `type` and `options`, plus `fieldConfig` and `targets` when the example depends on them. Drop `id`, `gridPos`, `pluginVersion`, datasource UIDs, timestamps and options left at their defaults. Link to the full dashboard file in the plugin's repository for readers who want the complete JSON - use its `https://` URL, since relative links can't point outside the docs folder. Pair each example with a one-paragraph explanation of which features it exercises and what data shape it expects. If the provisioning directory is missing or has no relevant panels, only then construct examples from the source understanding plus author input.
-
-   **Estimate per-page length.** Project the final size based on the content the page will absorb. If any threshold will be exceeded, plan to split the page into a folder:
-   - More than 6 H2 sections, or
-   - More than ~400 lines, or
-   - More than ~3,000 words
-
-   Pages that commonly need this split: `examples.md` (many distinct scenarios) and `options.md` (an overview plus a page per option category, as the authoring guide shows). `index.md` is a router and should never split.
-
-   **Group closely-coupled pages into folders.** When two or more pages in the resulting set share a single topic, make them a folder with an `index.md` parent and per-aspect children rather than flat siblings. Set `sidebar_position` on each child to control nav order within the folder.
+   **Verbatim-and-flag rule.** When a source `description:` string contradicts observable behaviour elsewhere in source (for example, it lists option values that don't appear in the matching `options:` array, names a default the constructor doesn't set or describes a constraint nothing enforces), keep the description verbatim and add it to the gaps summary in step 10 with file and line references. Don't paraphrase the discrepancy away or invent corrected wording. The author resolves it.
 
 7. **Rewrite `README.md` down to its job.** Only once every page from step 6 is written, so no content is lost in transit. Skip this step entirely when you skipped the README part of step 3 - a plugin whose README was already at scaffold default has nothing to migrate and nothing to trim. The README is the Overview tab, seen mostly by people who have not installed the plugin yet and are deciding whether to. It should end up as:
    - One or two paragraphs saying what the plugin does and which problem it solves. Lead with the problem, not the implementation.
@@ -160,7 +77,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
 8. **Remove the "Documentation" link from `info.links` in `src/plugin.json`.** The Documentation tab replaces it, and keeping it would give the catalog page two routes to the docs. Match the entry by `name`, ignoring case, and leave every other link and the rest of the file as they are. Skip this step when there's no such entry.
 
-9. After all pages are written, run the plugin's `docs:validate` script and fix what it reports. Repeat until it reports no warnings. Warnings don't fail validation, so a passing exit code does not mean the work is finished. In particular, an `empty-section` or `unfilled-section-brief` warning means a section is still unwritten or a brief is still in place.
+9. **Validate** with the plugin's `docs:validate` script, and finish as the authoring guide's "Validate" section says.
 
 10. Report a summary to the user:
     - Pages drafted from source-only understanding (note when source was thin).
@@ -170,7 +87,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
     - Pages drafted from `provisioning/dashboards/*.json` content.
     - Pages added for detected optional features.
     - Pages added from author-named topics.
-    - Screenshots copied from `src/img/screenshots/` (or similar) into `{docsPath}/img/`. List which pages they landed on. Flag pages that would benefit from screenshots but where none exist in the repo.
+    - Screenshots copied into `{docsPath}/img/`, and which pages they landed on. Flag pages that would benefit from a screenshot where the repo has none.
     - Gaps flagged for the author:
       - Description-vs-source contradictions kept verbatim per the verbatim-and-flag rule (cite file and line).
       - Option descriptions you wrote because source had none, so the author can review them.
@@ -180,25 +97,19 @@ Running this again on a plugin that has already been migrated is a normal thing 
       - README content that did not get routed to any page.
       - Links in `info.links` you couldn't fetch, and linked content that did not get routed to any page.
       - README sections you removed, and which page each moved to, so the author can spot-check the migration.
-      - Pages that would benefit from a screenshot but the repo has none.
     - Final `docs:validate` result.
 
 ## Notes
 
-- The README stays and remains the Overview tab's source, whether or not `docsPath` is set. `index.md` never appears on Overview - it is the Documentation tab's landing page, written for a reader who has already installed the plugin and clicked through from Overview. Never delete the README. On a brownfield plugin, move the instructional content out and trim what is left to the pitch. On a greenfield plugin, leave the README alone beyond the pitch.
-- **Edge cases when walking the builder chain:**
-  - **Multi-file builder chains.** If `setPanelOptions(builder => buildOptions(builder))` delegates to a helper function in another file, follow the import and walk the helper too. If you can't reasonably resolve the chain, document the source location and flag the gap in the summary.
-  - **Computed defaults.** Resolve enum members, constants and translation calls to the value the reader sees. When `defaultValue: getDefaultThreshold()` calls a function you can't evaluate from source, render the source text in backticks (`` `getDefaultThreshold()` ``) and flag the row so the author can replace it with the resolved value.
-  - **`useFieldConfig()` with no arguments.** Treat as `kind: 'all'`; list the standard options in the Standard field options section.
+The README stays and remains the Overview tab's source, whether or not `docsPath` is set. `index.md` never appears on Overview - it is the Documentation tab's landing page, written for a reader who has already installed the plugin and clicked through from Overview. Never delete the README. On a brownfield plugin, move the instructional content out and trim what is left to the pitch. On a greenfield plugin, leave the README alone beyond the pitch.
 
 ## Verify
 
-Run the plugin's `docs:validate` script until it reports no warnings, as step 9 says. Limit fixes to problems in pages you wrote or changed.
+`docs:validate` reports no warnings, as step 9 says. Limit fixes to problems in pages you wrote or changed.
 
 ## Out of scope
 
 - Do not modify anything under `.config/`.
 - Do not change the plugin id or type in `src/plugin.json`. The only edit to that file is removing the "Documentation" link in step 8.
 - Do not upgrade dependencies or change scripts, workflows or any source code.
-- Do not generate screenshots or other images.
 - Do not leave `TODO` markers in the pages. Anything published in a page is shown to catalog readers, so report gaps in the summary instead.
