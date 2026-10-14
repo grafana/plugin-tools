@@ -173,7 +173,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       const name = match[2];
       diagnostics.push({
         rule: Rule.NoHugoShortcodes,
-        severity: input.strict ? 'error' : 'warning',
+        severity: 'error',
         file: relPath,
         line,
         title: 'Hugo shortcode detected',
@@ -309,7 +309,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       }
       diagnostics.push({
         rule: Rule.NoRawHtml,
-        severity: input.strict ? 'error' : 'warning',
+        severity: 'error',
         file: relPath,
         line,
         title: 'Raw HTML tag detected',
@@ -344,7 +344,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       if (EXTERNAL_URL_RE.test(ref)) {
         diagnostics.push({
           rule: Rule.NoExternalImages,
-          severity: input.strict ? 'error' : 'warning',
+          severity: 'error',
           file: relPath,
           line,
           title: `External ${kind} URL detected`,
@@ -406,7 +406,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       }
       diagnostics.push({
         rule: Rule.NoUrlPlaceholders,
-        severity: input.strict ? 'error' : 'warning',
+        severity: 'error',
         file: relPath,
         line,
         title: 'Placeholder in link URL',
@@ -470,7 +470,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       if (ref.startsWith('/')) {
         diagnostics.push({
           rule: Rule.InternalLinksRelative,
-          severity: input.strict ? 'error' : 'warning',
+          severity: 'error',
           file: relPath,
           line,
           title: 'Internal link is not a relative path',

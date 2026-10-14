@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { checkAssets } from './assets.js';
 import { Rule } from '../types.js';
 
-const input = (docsPath: string, strict = true) => ({ docsPath, strict });
+const input = (docsPath: string) => ({ docsPath });
 
 // helper: valid frontmatter markdown file content
 const md = (body = '') => `---\ntitle: Page\ndescription: A page\n---\n${body}`;
@@ -51,18 +51,6 @@ describe('checkAssets', () => {
       expect(svgs[0].severity).toBe('error');
       expect(svgs[0].file).toContain('icon.svg');
     });
-
-    it('should report SVG files as error even in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await writeFile(join(tmp, 'diagram.svg'), '<svg></svg>');
-
-      const findings = await checkAssets(input(tmp, false));
-
-      const svgs = findings.filter((f) => f.rule === Rule.NoSvg);
-      expect(svgs).toHaveLength(1);
-      expect(svgs[0].severity).toBe('error');
-    });
   });
 
   // --- image-file-naming ---
@@ -98,19 +86,6 @@ describe('checkAssets', () => {
 
       const naming = findings.filter((f) => f.rule === Rule.ImageFileNaming);
       expect(naming).toHaveLength(1);
-    });
-
-    it('should report as info in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await mkdir(join(tmp, 'img'));
-      await writeFile(join(tmp, 'img', 'my screenshot.png'), bufferOfSize(100));
-
-      const findings = await checkAssets(input(tmp, false));
-
-      const naming = findings.filter((f) => f.rule === Rule.ImageFileNaming);
-      expect(naming).toHaveLength(1);
-      expect(naming[0].severity).toBe('info');
     });
   });
 
@@ -163,19 +138,6 @@ describe('checkAssets', () => {
       expect(size).toHaveLength(1);
       expect(size[0].title).toContain('1MB');
     });
-
-    it('should report as info in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await mkdir(join(tmp, 'img'));
-      await writeFile(join(tmp, 'img', 'large.png'), bufferOfSize(400 * 1024));
-
-      const findings = await checkAssets(input(tmp, false));
-
-      const size = findings.filter((f) => f.rule === Rule.MaxImageSize);
-      expect(size).toHaveLength(1);
-      expect(size[0].severity).toBe('info');
-    });
   });
 
   // --- max-total-images-size ---
@@ -191,7 +153,7 @@ describe('checkAssets', () => {
       expect(findings.filter((f) => f.rule === Rule.MaxTotalImagesSize)).toHaveLength(0);
     });
 
-    it('should report when total exceeds 5MB in strict mode', async () => {
+    it('should report when total exceeds 5MB', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await writeFile(join(tmp, 'index.md'), md());
       await mkdir(join(tmp, 'img'));
@@ -205,18 +167,6 @@ describe('checkAssets', () => {
       const total = findings.filter((f) => f.rule === Rule.MaxTotalImagesSize);
       expect(total).toHaveLength(1);
       expect(total[0].severity).toBe('warning');
-    });
-
-    it('should not report in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await writeFile(join(tmp, 'index.md'), md());
-      await mkdir(join(tmp, 'img'));
-      for (let i = 0; i < 6; i++) {
-        await writeFile(join(tmp, 'img', `img-${i}.png`), bufferOfSize(1024 * 1024));
-      }
-
-      const findings = await checkAssets(input(tmp, false));
-      expect(findings.filter((f) => f.rule === Rule.MaxTotalImagesSize)).toHaveLength(0);
     });
   });
 
@@ -497,7 +447,7 @@ describe('checkAssets', () => {
       expect(findings.filter((f) => f.rule === Rule.NoOrphanedImages)).toHaveLength(0);
     });
 
-    it('should report unreferenced images in img/ in strict mode', async () => {
+    it('should report unreferenced images in img/', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await mkdir(join(tmp, 'img'));
       await writeFile(join(tmp, 'img', 'orphan.png'), bufferOfSize(100));
@@ -509,16 +459,6 @@ describe('checkAssets', () => {
       expect(orphans).toHaveLength(1);
       expect(orphans[0].severity).toBe('info');
       expect(orphans[0].file).toContain('orphan.png');
-    });
-
-    it('should not report in non-strict mode', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
-      await mkdir(join(tmp, 'img'));
-      await writeFile(join(tmp, 'img', 'orphan.png'), bufferOfSize(100));
-      await writeFile(join(tmp, 'index.md'), md('## No images'));
-
-      const findings = await checkAssets(input(tmp, false));
-      expect(findings.filter((f) => f.rule === Rule.NoOrphanedImages)).toHaveLength(0);
     });
 
     it('should report unreferenced images anywhere as orphaned', async () => {
@@ -561,12 +501,12 @@ describe('checkAssets', () => {
   // --- videos ---
 
   describe('videos', () => {
-    async function docsWithVideo(name: string, bytes: number, body: string, strict = true) {
+    async function docsWithVideo(name: string, bytes: number, body: string) {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await mkdir(join(tmp, 'video'));
       await writeFile(join(tmp, 'video', name), bufferOfSize(bytes));
       await writeFile(join(tmp, 'index.md'), md(body));
-      return checkAssets(input(tmp, strict));
+      return checkAssets(input(tmp));
     }
 
     it('should accept a referenced video under 3MB', async () => {
@@ -582,12 +522,6 @@ describe('checkAssets', () => {
       expect(size).toHaveLength(1);
       expect(size[0].severity).toBe('error');
       expect(size[0].title).toContain('3MB');
-    });
-
-    it('should downgrade an oversized video to info outside strict mode', async () => {
-      const findings = await docsWithVideo('demo.mp4', 4 * 1024 * 1024, '![Demo](video/demo.mp4)', false);
-
-      expect(findings.find((f) => f.rule === Rule.MaxVideoSize)?.severity).toBe('info');
     });
 
     it('should report a missing video', async () => {

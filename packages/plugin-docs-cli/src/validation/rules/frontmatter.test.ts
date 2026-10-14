@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { checkFrontmatter } from './frontmatter.js';
 import { Rule } from '../types.js';
 
-const input = (docsPath: string) => ({ docsPath, strict: true });
+const input = (docsPath: string) => ({ docsPath });
 
 // a description long enough to clear the 20-char min-description-length floor introduced by
 // frontmatter-description-length, so tests unrelated to that rule don't trip it incidentally
@@ -249,20 +249,6 @@ describe('checkFrontmatter', () => {
     expect(findings.find((f) => f.rule === Rule.DuplicatePosition)).toBeUndefined();
   });
 
-  it('should report no-duplicate-sidebar-position as warning in non-strict mode', async () => {
-    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
-    const fm = (pos: number) => `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\nsidebar_position: ${pos}\n---\n`;
-    await writeFile(join(tmp, 'a.md'), fm(1));
-    await writeFile(join(tmp, 'b.md'), fm(1));
-
-    const findings = await checkFrontmatter({ docsPath: tmp, strict: false });
-    expect(findings).toHaveLength(2);
-
-    const dup = findings.find((f) => f.rule === Rule.DuplicatePosition);
-    expect(dup).toBeDefined();
-    expect(dup!.severity).toBe('warning');
-  });
-
   it('should not report no-duplicate-sidebar-position for same position in different dirs', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     await mkdir(join(tmp, 'sub'));
@@ -303,7 +289,7 @@ describe('checkFrontmatter', () => {
     expect(findings.find((f) => f.rule === Rule.DuplicateSlug)).toBeUndefined();
   });
 
-  it('should report frontmatter-title-length as error in strict mode for a title over 60 characters', async () => {
+  it('should report frontmatter-title-length as error for a title over 60 characters', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     const longTitle = 'A'.repeat(61);
     await writeFile(
@@ -315,17 +301,6 @@ describe('checkFrontmatter', () => {
     const finding = findings.find((f) => f.rule === Rule.TitleLength);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('error');
-  });
-
-  it('should report frontmatter-title-length as info in non-strict mode', async () => {
-    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
-    const longTitle = 'A'.repeat(61);
-    await writeFile(join(tmp, 'page.md'), `---\ntitle: ${longTitle}\ndescription: ${GOOD_DESCRIPTION}\n---\n`);
-
-    const findings = await checkFrontmatter({ docsPath: tmp, strict: false });
-    const finding = findings.find((f) => f.rule === Rule.TitleLength);
-    expect(finding).toBeDefined();
-    expect(finding!.severity).toBe('info');
   });
 
   it('should not report frontmatter-title-length for a title at or under 60 characters', async () => {
@@ -371,17 +346,14 @@ describe('checkFrontmatter', () => {
     expect(findings.find((f) => f.rule === Rule.DescriptionLength)).toBeUndefined();
   });
 
-  it('should report min-content-length only in strict mode for a very short page', async () => {
+  it('should report min-content-length for a very short page', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     await writeFile(join(tmp, 'page.md'), `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\n---\n\nToo short.\n`);
 
-    const strictFindings = await checkFrontmatter(input(tmp));
-    const finding = strictFindings.find((f) => f.rule === Rule.MinContentLength);
+    const findings = await checkFrontmatter(input(tmp));
+    const finding = findings.find((f) => f.rule === Rule.MinContentLength);
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('info');
-
-    const nonStrictFindings = await checkFrontmatter({ docsPath: tmp, strict: false });
-    expect(nonStrictFindings.find((f) => f.rule === Rule.MinContentLength)).toBeUndefined();
   });
 
   it('should not report min-content-length for a page with enough body content', async () => {

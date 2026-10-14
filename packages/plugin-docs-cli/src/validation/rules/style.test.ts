@@ -7,11 +7,7 @@ import { validate } from '../engine.js';
 import { allRules } from './index.js';
 import type { ValidationInput } from '../types.js';
 
-const input = (docsPath: string, overrides: Partial<ValidationInput> = {}): ValidationInput => ({
-  docsPath,
-  strict: true,
-  ...overrides,
-});
+const input = (docsPath: string): ValidationInput => ({ docsPath });
 
 const md = (body = '') => `---\ntitle: Page\ndescription: A description with enough words in it\n---\n\n${body}`;
 
@@ -113,13 +109,11 @@ describe('checkWritingStyle', () => {
       'It will be be currently unsupported — for now — in the modal.',
     ].join('\n\n');
 
-    it('should never report an error, in either strict mode', async () => {
+    it('should never report an error', async () => {
       const tmp = await withDoc(everyRuleTripped);
-      for (const strict of [true, false]) {
-        const findings = await checkWritingStyle(input(tmp, { strict }));
-        expect(findings.length).toBeGreaterThan(0);
-        expect(findings.every((f) => f.severity !== 'error')).toBe(true);
-      }
+      const findings = await checkWritingStyle(input(tmp));
+      expect(findings.length).toBeGreaterThan(0);
+      expect(findings.every((f) => f.severity !== 'error')).toBe(true);
     });
 
     it('should keep a docs tree valid when its only problems are writing style', async () => {
@@ -133,20 +127,16 @@ describe('checkWritingStyle', () => {
       expect(result.valid).toBe(true);
     });
 
-    it('should keep the warn tier at warning in both modes', async () => {
+    it('should keep the warn tier at warning', async () => {
       const tmp = await withDoc('Please restart the server.');
-      for (const strict of [true, false]) {
-        const findings = await checkWritingStyle(input(tmp, { strict }));
-        expect(findings.find((f) => f.rule === 'style-please')!.severity).toBe('warning');
-      }
+      const findings = await checkWritingStyle(input(tmp));
+      expect(findings.find((f) => f.rule === 'style-please')!.severity).toBe('warning');
     });
 
-    it('should keep the info tier at info in both modes', async () => {
+    it('should keep the info tier at info', async () => {
       const tmp = await withDoc('This is currently unsupported.');
-      for (const strict of [true, false]) {
-        const findings = await checkWritingStyle(input(tmp, { strict }));
-        expect(findings.find((f) => f.rule === 'style-timeless')!.severity).toBe('info');
-      }
+      const findings = await checkWritingStyle(input(tmp));
+      expect(findings.find((f) => f.rule === 'style-timeless')!.severity).toBe('info');
     });
   });
 

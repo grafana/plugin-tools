@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.15.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.0...@grafana/plugin-e2e@3.15.1) (2026-10-13)
+
+
+### Bug Fixes
+
+* **plugin-e2e:** type route.fetch response as APIResponse ([#2956](https://github.com/grafana/plugin-tools/issues/2956)) ([209c9ec](https://github.com/grafana/plugin-tools/commit/209c9ec76dde79c07ab01281f4910514b5f40f0e))
+
 ## [3.15.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.14.1...@grafana/plugin-e2e@3.15.0) (2026-10-09)
 
 
