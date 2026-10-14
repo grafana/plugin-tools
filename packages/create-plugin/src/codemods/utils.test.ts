@@ -227,6 +227,23 @@ describe('utils', () => {
       expect(getPackageManager(context).packageManagerVersion).toBe(version);
     });
 
+    it('finds a workspace lockfile above the plugin', async () => {
+      const pluginDir = join(tmpDir, 'plugins', 'my-plugin');
+      await mkdir(pluginDir, { recursive: true });
+      await writeFile(join(tmpDir, 'pnpm-lock.yaml'), '');
+      const context = new Context(pluginDir);
+      context.addFile('package.json', '{}');
+      expect(getPackageManager(context).packageManagerName).toBe('pnpm');
+    });
+
+    it('prefers a lockfile in the plugin over one above it', async () => {
+      const pluginDir = join(tmpDir, 'my-plugin');
+      await mkdir(pluginDir);
+      await writeFile(join(tmpDir, 'yarn.lock'), '');
+      await writeFile(join(pluginDir, 'package-lock.json'), '{}');
+      expect(getPackageManager(new Context(pluginDir)).packageManagerName).toBe('npm');
+    });
+
     it('falls back to the lockfile when package.json is missing or invalid', () => {
       const context = new Context(tmpDir);
       context.addFile('pnpm-lock.yaml', '');

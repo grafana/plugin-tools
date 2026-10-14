@@ -1,8 +1,9 @@
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { createRequire } from 'node:module';
 import { Context } from './context.js';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { glob } from 'glob';
+import { findUpSync } from '@libs/find-up';
 import { styleText } from 'node:util';
 import { output } from '../utils/utils.console.js';
 import {
@@ -193,8 +194,8 @@ export function readJsonFile<T extends object = any>(context: Context, path: str
 }
 
 /**
- * Reads the plugin's package manager from the context, so it sees pending changes and never touches disk.
- * Plugins without a `packageManager` field fall back to the lockfile, like `getPackageManagerWithFallback`.
+ * Reads the plugin's package manager from the context, so it sees pending changes.
+ * Plugins without a `packageManager` field fall back to the closest lockfile, like `getPackageManagerWithFallback`.
  * Lockfiles carry no exact version, so a representative one is used.
  */
 export function getPackageManager(context: Context): PackageManager {
@@ -205,18 +206,32 @@ export function getPackageManager(context: Context): PackageManager {
   }
 
   additionsDebug('no usable packageManager field in package.json, checking for a lockfile');
-  const yarnLock = context.getFile('yarn.lock');
-  if (yarnLock !== undefined) {
+  const lockfile = findLockfile(context);
+  if (lockfile?.name === 'yarn.lock') {
     // Yarn Berry lockfiles have a `__metadata` block, Yarn 1 lockfiles don't
     return {
       packageManagerName: 'yarn',
-      packageManagerVersion: yarnLock.includes('__metadata:') ? '4.0.0' : '1.22.22',
+      packageManagerVersion: lockfile.content.includes('__metadata:') ? '4.0.0' : '1.22.22',
     };
   }
-  if (context.doesFileExist('pnpm-lock.yaml')) {
+  if (lockfile?.name === 'pnpm-lock.yaml') {
     return { packageManagerName: 'pnpm', packageManagerVersion: '9.0.0' };
   }
   return { ...DEFAULT_PACKAGE_MANAGER };
+}
+
+const LOCKFILES = ['yarn.lock', 'pnpm-lock.yaml', 'package-lock.json'];
+
+function findLockfile(context: Context): { name: string; content: string } | undefined {
+  for (const name of LOCKFILES) {
+    const content = context.getFile(name);
+    if (content !== undefined) {
+      return { name, content };
+    }
+  }
+  // the context only holds the plugin folder, so a workspace lockfile above it is read from disk
+  const path = findUpSync(LOCKFILES, { cwd: dirname(context.basePath) });
+  return path ? { name: basename(path), content: readFileSync(path, 'utf-8') } : undefined;
 }
 
 export function addDependenciesToPackageJson(
