@@ -2,19 +2,19 @@
 
 ## Context
 
-`create-plugin add docs` has scaffolded catalog docs for this panel plugin: stub pages in the docs folder, each section holding a `section-brief` note that says what belongs there. This task fills those stubs from the plugin's source code and migrates any existing documentation (the README and the documents linked from `info.links` in `src/plugin.json`) into them. Then it trims the README back to its pitch.
+`create-plugin add docs` has scaffolded catalog docs for this plugin: stub pages in the docs folder, each section holding a `section-brief` note that says what belongs there. This task fills those stubs from the plugin's source code and migrates any existing documentation (the README and the documents linked from `info.links` in `src/plugin.json`) into them. Then it trims the README back to its pitch.
 
 `create-plugin add docs-content` only checks that catalog docs are set up before handing over these instructions. It changes no files itself, so the working tree starts clean and every change is part of this task.
 
 Throughout, `{docsPath}` means the `docsPath` value in `src/plugin.json` (`catalog-docs` unless the author changed it).
 
-This works on greenfield panels (no existing docs - drive content from source) and on brownfield panels (a README full of documentation - move it onto pages, then trim the README back to what the Overview tab needs). Both paths are first-class.
+This works on greenfield plugins (no existing docs - drive content from source) and on brownfield plugins (a README full of documentation - move it onto pages, then trim the README back to what the Overview tab needs). Both paths are first-class.
 
 Throughout, "the README" means `src/README.md` when that file exists, and the root `README.md` otherwise. The plugin build ships `src/README.md` when there is one, so it takes precedence: it is the source of the catalog's Overview tab, and the root `README.md` is then only for the repository. Always read and edit `src/README.md` when it exists, and leave the root `README.md` alone.
 
 `index.md` never appears on the Overview tab - it is the Documentation tab's landing page, written for a reader who has already installed the plugin and clicked through from Overview.
 
-Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guides that ship with `@grafana/plugin-docs-cli`. They hold the frontmatter shape, when to split a page into a folder, how to handle section briefs, the style rules and when the docs are done. This document only adds what is specific to a first migration and to panel plugins.
+Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guides that ship with `@grafana/plugin-docs-cli`. They hold the frontmatter shape, when to split a page into a folder, how to handle section briefs, the style rules and when the docs are done. Everything specific to the plugin type is in the scaffolded pages and in `{docsPath}/AGENTS.md`: the briefs say what each page holds, and its "Pages and their source" table says which source each page documents. This document only adds what is specific to a first migration.
 
 This is meant to run once, after `add docs`. Ongoing per-page updates are routine work: edit the pages directly against those conventions.
 
@@ -30,22 +30,20 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
 1. Inventory everything available. Read:
    - `src/plugin.json` (plugin type, name, declared `includes`, `info.description`, `info.links`)
-   - `src/module.ts` (or `src/module.tsx`) and the panel component it registers, `src/types.ts` and any other source entry points
-   - `provisioning/dashboards/*.json` if present - bundled example dashboards, the canonical source for `{docsPath}/examples.md`
-   - The README (`src/README.md` if it exists, otherwise `README.md`) and `CHANGELOG.md` if present. These may be near-empty boilerplate for fresh panels - that's fine.
+   - `src/module.ts` (or `src/module.tsx`), what it registers and the source each page documents, from the "Pages and their source" table in `{docsPath}/AGENTS.md`
+   - `provisioning/` if present - bundled dashboards and data sources, often the best source of examples
+   - The README (`src/README.md` if it exists, otherwise `README.md`) and `CHANGELOG.md` if present. These may be near-empty boilerplate for fresh plugins - that's fine.
    - Documentation linked from `info.links` in `src/plugin.json`. Walk every entry and read the ones that may hold material for the docs pages: an entry named "Documentation", and any entry that points at a user guide, wiki, docs site or a markdown file such as `TESTING.md` or `CONFIGURATION.md`. Skip links with nothing to harvest, such as issue trackers, support portals and vendor or project home pages. When a link points at a file in this repository (its URL matches the `repository` field in `package.json` or the git remote), read the local file instead of fetching it. Fetch the rest, and note each link you couldn't fetch for the summary.
    - Image assets under `src/img/`, `src/img/screenshots/`, `screenshots/` and `{docsPath}/img/`. Copy usable screenshots into `{docsPath}/img/` during the fill pass and reference them from the pages. If there are none, flag the gap in the final summary.
 
-2. **Build a working understanding from the `PanelPlugin` builder. This step is mandatory; do not skip even when README is rich.** Walk the builder chain from the module file, into any helpers it calls, and note:
-   - The panel's purpose in one sentence, from `info.description`, the component and the option descriptions.
-   - Every panel option and custom field option: its `name`, `description`, `defaultValue`, `category` and builder method.
-   - Which standard field options `useFieldConfig` enables, if it is called at all.
-   - Capabilities worth a feature bullet in the plugin's README, which is the Overview tab: `setDataSupport` flags such as annotations and alert states, and a suggestions or presets supplier. When step 7 is skipped because the README is the scaffold default, list these bullets in the summary instead.
+2. **Build a working understanding from source. This step is mandatory; do not skip even when README is rich.** For each scaffolded page, read the source that `{docsPath}/AGENTS.md` names for it, following the module file into any helpers it calls, and note what the page's briefs ask for. Also note:
+   - The plugin's purpose in one sentence, from `info.description`, the module and what it registers.
+   - Capabilities worth a feature bullet in the plugin's README, which is the Overview tab. For a panel, these include `setDataSupport` flags such as annotations and alert states, and a suggestions or presets supplier. When step 7 is skipped because the README is the scaffold default, list these bullets in the summary instead.
 
    If source is genuinely thin (a barely-modified scaffold), say so in the final summary; do not invent.
 
-3. **Plan the README migration.** First decide whether there is anything to migrate. Skip the README part of this step when the README says nothing specific to this plugin. The `create-plugin` scaffold ships a `src/README.md` that is only a title and commented-out guidance, and a generic root `README.md` titled "Grafana panel plugin template" that explains what panel plugins are in general, plus getting-started and contributing boilerplate. Generic boilerplate is not documentation: do not move it onto pages. The test is whether a sentence would still be true of a different plugin; if so, leave it. Otherwise the README is this plugin's existing documentation and the job is to _move_ it into the docs pages, not to copy it and leave a duplicate behind:
-   - For each README section, decide which scaffolded stub page it belongs on (`{docsPath}/options.md`, `{docsPath}/data-formats.md`, `{docsPath}/examples.md`, `{docsPath}/troubleshooting.md`, etc.).
+3. **Plan the README migration.** First decide whether there is anything to migrate. Skip the README part of this step when the README says nothing specific to this plugin. The `create-plugin` scaffold ships a `src/README.md` that is only a title and commented-out guidance, and a generic root `README.md` titled after the plugin type, such as "Grafana panel plugin template", that explains what plugins of that type are in general, plus getting-started and contributing boilerplate. Generic boilerplate is not documentation: do not move it onto pages. The test is whether a sentence would still be true of a different plugin; if so, leave it. Otherwise the README is this plugin's existing documentation and the job is to _move_ it into the docs pages, not to copy it and leave a duplicate behind:
+   - For each README section, decide which scaffolded stub page in `{docsPath}` it belongs on.
    - Never drop content. When a section maps to no existing stub, put it on the closest page or on a new page. If it fits nowhere, leave it in the README and list it in the summary.
    - Quote verbatim when the README's existing text already matches the authoring guide's style; rewrite when it does not.
    - Mark what stays behind. Only the pitch survives in the README: what the plugin does, the problem it solves and the feature list. Everything instructional - option tables, data-shape rules, query examples, troubleshooting, configuration walkthroughs - moves to a page.
@@ -58,16 +56,16 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
    These docs render on a single, general page on the plugin catalog (`grafana.com/grafana/plugins/{slug}/docs/`), read by anyone evaluating or using the plugin. There's no persona segmentation to ask about - do not ask who the target user is.
 
-   **Panel purpose.** Check whether step 2 (source) or step 3 (README) already yields a clear one-sentence statement of what problem the panel solves. If so, state that sentence back to the author for a quick confirm rather than an open question, for example: "I read the purpose as: '{sentence}' (from README.md). Confirm or correct?" Only ask the open question - "In one sentence, what problem does this panel solve for users?" - when neither source nor README gives a usable answer.
+   **Plugin purpose.** Check whether step 2 (source) or step 3 (README) already yields a clear one-sentence statement of what problem the plugin solves. If so, state that sentence back to the author for a quick confirm rather than an open question, for example: "I read the purpose as: '{sentence}' (from README.md). Confirm or correct?" Only ask the open question - "In one sentence, what problem does this plugin solve for users?" - when neither source nor README gives a usable answer.
 
    **Ask only what source and README can't answer.** Candidates:
 
-   > "What data shape does the panel expect, and what kinds of queries produce it (time series, table, traces, logs)?" - only when the panel reads query data and source doesn't make the shape clear. Skip it for panels that don't read data at all.
+   > "What data shape does the panel expect, and what kinds of queries produce it (time series, table, traces, logs)?" - only for a panel that reads query data, when source doesn't make the shape clear.
    > "Are there topics that don't map to source - prerequisites, conceptual overviews, troubleshooting scenarios, FAQs? List them and I'll scaffold them as new pages."
 
    Questions never block the work. Ask them once, in the session, then keep writing. If no answer arrives, go with what source supports, write down each assumption you made and list them in the final summary so the author can correct them. Each topic the author names becomes a new page.
 
-6. **Write every page** (scaffolded stubs and new pages) as the authoring guides describe, and fill each section that still has a `section-brief` as its brief says. The briefs hold the page formats, so panel docs read the same across plugins. Use the source understanding as your material, plus README excerpts and linked documentation (when harvested in step 3) and author answers (when given in step 5). Run `docs:validate` after each page, as the authoring guide says, so problems are fixed before the README rewrite.
+6. **Write every page** (scaffolded stubs and new pages) as the authoring guides describe, and fill each section that still has a `section-brief` as its brief says. The briefs hold the page formats, so docs read the same across plugins. Use the source understanding as your material, plus README excerpts and linked documentation (when harvested in step 3) and author answers (when given in step 5). Run `docs:validate` after each page, as the authoring guide says, so problems are fixed before the README rewrite.
 
    **Verbatim-and-flag rule.** When a source `description:` string contradicts observable behaviour elsewhere in source (for example, it lists option values that don't appear in the matching `options:` array, names a default the constructor doesn't set or describes a constraint nothing enforces), keep the description verbatim and add it to the gaps summary in step 10 with file and line references. Don't paraphrase the discrepancy away or invent corrected wording. The author resolves it.
 
@@ -91,7 +89,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
     - Pages drafted with README content layered in.
     - Pages drafted with content from `info.links`, naming the link each came from.
     - Whether you removed a "Documentation" link from `src/plugin.json`, and its URL.
-    - Pages drafted from `provisioning/dashboards/*.json` content.
+    - Pages drafted from `provisioning/` content.
     - Pages added for detected optional features, and any you proposed but didn't add.
     - README feature bullets you couldn't add because the README was left as the scaffold default.
     - Pages added from author-named topics.
