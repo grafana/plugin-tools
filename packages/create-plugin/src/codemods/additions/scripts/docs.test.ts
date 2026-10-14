@@ -423,7 +423,7 @@ describe('docs codemod', () => {
       expect(context.doesFileExist('docs/troubleshooting.md')).toBe(true);
     });
 
-    it.each(['./docs', 'docs/', 'docs/v1.0'])(
+    it.each<string | number | null>(['./docs', 'docs/', 'docs/v1.0', null, 5])(
       'refuses an existing docsPath of %s instead of suggesting a --docsPath the schema rejects',
       (existingDocsPath) => {
         const context = makeContext({ type: 'panel', name: 'P', docsPath: existingDocsPath });
