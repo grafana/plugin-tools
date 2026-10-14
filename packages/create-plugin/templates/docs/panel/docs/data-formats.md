@@ -1,6 +1,6 @@
 ---
 title: Data formats
-description: Learn what data formats the {{{pluginName}}} panel accepts.
+description: "Learn what data formats the {{{yamlEscape pluginName}}} panel accepts."
 sidebar_position: 2
 ---
 

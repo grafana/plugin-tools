@@ -1,6 +1,6 @@
 ---
 title: Options
-description: Reference for {{{pluginName}}} panel options.
+description: "Reference for {{{yamlEscape pluginName}}} panel options."
 sidebar_position: 3
 ---
 
