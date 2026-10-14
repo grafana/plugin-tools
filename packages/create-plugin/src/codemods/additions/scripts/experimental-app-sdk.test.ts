@@ -131,6 +131,13 @@ describe('experimental-app-sdk addition', () => {
       expect(result.doesFileExist('kinds/config.cue')).toBe(false);
     });
 
+    it('explains a missing author name instead of failing while rendering', () => {
+      const context = createAppContext();
+      context.updateFile('src/plugin.json', JSON.stringify({ type: 'app', id: 'my-plugin-id', name: 'My Plugin' }));
+
+      expect(() => appSdk(context)).toThrow('src/plugin.json has no info.author.name');
+    });
+
     it('makes no changes when plugin.json is malformed', () => {
       const context = new Context('/virtual');
       context.addFile('src/plugin.json', '{ not json');

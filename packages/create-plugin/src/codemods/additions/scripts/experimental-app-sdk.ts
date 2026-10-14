@@ -46,6 +46,9 @@ export default function appSdk(context: Context): Context {
   const changesBefore = Object.keys(context.listChanges()).length;
 
   const data = getTemplateDataFromContext(context);
+  if (!data.orgName) {
+    throw new Error('src/plugin.json has no info.author.name, which the app-sdk uses to name the Go and CUE modules.');
+  }
 
   addTemplateFiles(context, data);
   referenceAgentInstructions(context, data);
