@@ -1,21 +1,27 @@
 import type { Context } from '../../context.js';
 import { readJsonFile } from '../../utils.js';
-import { assertSupportedPluginType } from './docs.js';
+import { assertSupportedPluginType, hasDocsPages, isValidDocsPath } from './docs.js';
 
 // the agent step does the writing. this only stops it from starting on a plugin with no docs pages to fill
 export default function docsContent(context: Context): Context {
   assertSupportedPluginType(context, 'docs-content');
 
-  const { docsPath } = readJsonFile<{ docsPath?: string }>(context, 'src/plugin.json');
-  if (!docsPath) {
+  const { docsPath } = readJsonFile<{ docsPath?: unknown }>(context, 'src/plugin.json');
+  if (docsPath === undefined) {
     throw new Error(
       'src/plugin.json has no docsPath, so there are no docs pages to write yet.\n  Scaffold them first, commit the result, then run this again:\n  create-plugin add docs'
     );
   }
 
-  if (context.readDir(docsPath).length === 0) {
+  if (!isValidDocsPath(docsPath)) {
     throw new Error(
-      `src/plugin.json sets docsPath to '${docsPath}', but that folder is missing or empty.\n  Scaffold the pages first, commit the result, then run this again:\n  create-plugin add docs --docsPath ${docsPath}`
+      `src/plugin.json has docsPath set to '${docsPath}', which create-plugin add docs-content can't use.\n  Change it to a relative path of letters, digits, hyphens, underscores and single "/" separators (for example "catalog-docs" or "docs/plugin"), then run create-plugin add docs to scaffold the pages there.`
+    );
+  }
+
+  if (!hasDocsPages(context, docsPath)) {
+    throw new Error(
+      `src/plugin.json sets docsPath to '${docsPath}', but that folder has no docs pages.\n  Scaffold the pages first, commit the result, then run this again:\n  create-plugin add docs --docsPath ${docsPath}`
     );
   }
 

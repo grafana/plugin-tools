@@ -38,7 +38,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
    - The panel's purpose in one sentence, from `info.description`, the component and the option descriptions.
    - Every panel option and custom field option: its `name`, `description`, `defaultValue`, `category` and builder method.
    - Which standard field options `useFieldConfig` enables, if it is called at all.
-   - Capabilities worth a feature bullet in the plugin's own `README.md`, which is the Overview tab: `setDataSupport` flags such as annotations and alert states, and a suggestions or presets supplier.
+   - Capabilities worth a feature bullet in the plugin's own `README.md`, which is the Overview tab: `setDataSupport` flags such as annotations and alert states, and a suggestions or presets supplier. When step 7 is skipped because the README is the scaffold default, list these bullets in the summary instead.
 
    If source is genuinely thin (a barely-modified scaffold), say so in the final summary; do not invent.
 
@@ -50,7 +50,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
    - Write the plan down before editing anything, so nothing is dropped between moving it out and trimming the README in step 7.
    - Plan the documentation harvested from `info.links` in step 1 the same way, section by section. Content from another file in this repository is a move, like the README. Content from an external site is a copy, since you can't trim it. Leave out what the README or source already covers, and keep the source understanding from step 2 as the authority when the two disagree.
 
-4. **Propose optional pages.** Check the source against the "Optional pages" table in `{docsPath}/AGENTS.md`. Propose a page for each trigger you find, and ask the author before adding it.
+4. **Propose optional pages.** Check the source against the "Optional pages" table in `{docsPath}/AGENTS.md`. Propose a page for each trigger you find, and add it when the author agrees. When no answer comes, don't add it, and list it in the summary instead.
 
 5. **Prompt the author for context that source and README genuinely can't supply.**
 
@@ -89,7 +89,8 @@ Running this again on a plugin that has already been migrated is a normal thing 
     - Pages drafted with content from `info.links`, naming the link each came from.
     - Whether you removed a "Documentation" link from `src/plugin.json`, and its URL.
     - Pages drafted from `provisioning/dashboards/*.json` content.
-    - Pages added for detected optional features.
+    - Pages added for detected optional features, and any you proposed but didn't add.
+    - README feature bullets you couldn't add because the README was left as the scaffold default.
     - Pages added from author-named topics.
     - Screenshots copied into `{docsPath}/img/`, and which pages they landed on. Flag pages that would benefit from a screenshot where the repo has none.
     - Gaps flagged for the author:

@@ -35,11 +35,26 @@ describe('docs-content', () => {
     expect(() => docsContent(context)).toThrow(/no docsPath.*create-plugin add docs$/s);
   });
 
-  it('should stop when the docs folder is missing', () => {
-    const context = makeContext(wiredPanel);
+  it.each([
+    ['is missing', {}],
+    [
+      'holds only files that are not pages',
+      { 'catalog-docs/README.md': '# Notes\n', 'catalog-docs/AGENTS.md': '# A\n' },
+    ],
+    ['holds only images', { 'catalog-docs/img/clock.png': 'png' }],
+  ])('should stop when the docs folder %s', (_label, files) => {
+    const context = makeContext(wiredPanel, files);
 
     expect(() => docsContent(context)).toThrow(
-      /'catalog-docs', but that folder is missing or empty.*create-plugin add docs --docsPath catalog-docs$/s
+      /'catalog-docs', but that folder has no docs pages.*create-plugin add docs --docsPath catalog-docs$/s
+    );
+  });
+
+  it.each<unknown>(['../shared-docs', './docs', null, 5])('should stop when docsPath is %s', (docsPath) => {
+    const context = makeContext({ ...wiredPanel, docsPath }, { 'catalog-docs/index.md': '# Clock\n' });
+
+    expect(() => docsContent(context)).toThrow(
+      `src/plugin.json has docsPath set to '${docsPath}', which create-plugin add docs-content can't use.`
     );
   });
 
