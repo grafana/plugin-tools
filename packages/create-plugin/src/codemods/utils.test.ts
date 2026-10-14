@@ -227,6 +227,13 @@ describe('utils', () => {
       expect(getPackageManager(context).packageManagerVersion).toBe(version);
     });
 
+    it('falls back to the lockfile when the packageManager field has no version', () => {
+      const context = new Context(tmpDir);
+      context.addFile('package.json', JSON.stringify({ packageManager: 'yarn' }));
+      context.addFile('yarn.lock', '# yarn lockfile v1\n');
+      expect(getPackageManager(context)).toEqual({ packageManagerName: 'yarn', packageManagerVersion: '1.22.22' });
+    });
+
     it('finds a workspace lockfile above the plugin', async () => {
       const pluginDir = join(tmpDir, 'plugins', 'my-plugin');
       await mkdir(pluginDir, { recursive: true });

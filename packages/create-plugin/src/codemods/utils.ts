@@ -200,8 +200,8 @@ export function readJsonFile<T extends object = any>(context: Context, path: str
  */
 export function getPackageManager(context: Context): PackageManager {
   const packageJson = readOptionalJsonFile<{ packageManager?: string }>(context, 'package.json');
-  if (packageJson?.packageManager) {
-    const [packageManagerName, packageManagerVersion] = packageJson.packageManager.split('@');
+  const [packageManagerName, packageManagerVersion] = packageJson?.packageManager?.split('@') ?? [];
+  if (packageManagerName && packageManagerVersion) {
     return { packageManagerName, packageManagerVersion };
   }
 
