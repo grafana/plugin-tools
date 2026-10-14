@@ -3,9 +3,8 @@ import { Compilation, type Compiler } from '@rspack/core';
 const PLUGIN_NAME = 'LicenseRspackPlugin';
 const CHUNK_LICENSE_PATTERN = /\.LICENSE\.txt$/;
 
-// SwcJsMinimizerRspackPlugin extracts license comments into one file per chunk. Plugins with many
-// chunks, for example those bundling monaco-editor, end up with dozens of identical files in dist.
-// This merges them into a single LICENSE.txt, keeping each distinct comment once.
+// This Rspack plugin works alongside SwcJsMinimizerRspackPlugin by taking all license file comments,
+// deduping them and then writing them to a single file.
 export class LicenseRspackPlugin {
   apply(compiler: Compiler) {
     compiler.hooks.thisCompilation.tap(PLUGIN_NAME, (compilation) => {

@@ -130,7 +130,6 @@ const config = async (env: Env): Promise<Configuration> => {
       minimize: Boolean(env.production),
       minimizer: [
         new SwcJsMinimizerRspackPlugin({
-          // Extract license comments (LicenseRspackPlugin merges them into one LICENSE.txt) and strip the rest.
           extractComments: { banner: false },
           minimizerOptions: {
             format: { comments: false },
@@ -161,21 +160,18 @@ const config = async (env: Env): Promise<Configuration> => {
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new BannerPlugin({
-        // Pipelines read these lines from the top of module.js, so keep their format exactly.
         banner: [
           `/* [create-plugin] version: ${cpVersion} */`,
           `/* [create-plugin] plugin: ${pluginId}@${pluginVersion} */`,
         ].join('\n'),
         raw: true,
         entryOnly: true,
-        // Added straight after minification so the minimizer cannot strip or move the banner,
-        // and before source maps and hashes are generated so they include it.
+        // after minification to prevent banner removal and before source maps and hashes are generated so they include it.
         stage: Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
       }),
       new CopyRspackPlugin({
         patterns: copyFilePatterns,
       }),
-      // Replace certain template-variables in the README and plugin.json
       new ReplaceInFileWebpackPlugin([
         {
           dir: DIST_DIR,
