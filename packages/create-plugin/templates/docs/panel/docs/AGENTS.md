@@ -28,6 +28,17 @@ When you change code, update the page that documents it:
 | `examples.md`        | `provisioning/dashboards/*.json` if present, otherwise the panel's own option defaults |
 | `troubleshooting.md` | Real reported failures. Don't invent failure modes.                                    |
 
+## Optional pages
+
+Add one of these pages when the plugin has the matching feature. Use the filename given here, give the page
+a `sidebar_position` that puts it where it belongs and link it from `index.md`.
+
+| Trigger                                                                            | Page               | Scope                                                        |
+| ---------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------ |
+| `setPresetsSupplier(...)` in source                                                | `presets.md`       | The presets the panel ships, when each applies, screenshots. |
+| RBAC role declarations in `src/plugin.json`                                        | `permissions.md`   | What each role grants, default assignments.                  |
+| Substantial accessibility considerations (keyboard shortcuts, screen reader notes) | `accessibility.md` | Keyboard interaction, ARIA, contrast, motion preferences.    |
+
 ## Section briefs
 
 Each section of a scaffolded page has a brief telling you what belongs there. A brief is an HTML comment

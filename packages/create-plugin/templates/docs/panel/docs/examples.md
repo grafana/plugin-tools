@@ -1,11 +1,11 @@
 ---
 title: Examples
-description: Worked examples of the {{{pluginName}}} panel.
+description: "Worked examples of the {{{yamlEscape pluginName}}} panel."
 sidebar_position: 4
 ---
 
 <!-- section-brief
-Fill this in: Show concrete examples of {{{pluginName}}} configured for real use cases. Express each example as a `dashboard.json` panel excerpt: `type` and `options`, plus `fieldConfig` and `targets` when the example depends on them. Leave out `id`, `gridPos`, `pluginVersion`, datasource UIDs and timestamps - they are specific to one dashboard and hide the settings that matter. Pair each example with a screenshot of the rendered visualization.
+Fill this in: Show concrete examples of {{{pluginName}}} configured for real use cases. When the repo has panels of this plugin's type in `provisioning/dashboards/*.json`, take the examples from those before inventing any. Express each example as a `dashboard.json` panel excerpt: `type` and `options`, plus `fieldConfig` and `targets` when the example depends on them. Leave out `id`, `gridPos`, `pluginVersion`, datasource UIDs and timestamps - they are specific to one dashboard and hide the settings that matter. Pair each example with a screenshot of the rendered visualization.
 
 If the repo ships a complete dashboard, for example under `provisioning/dashboards/`, link to it for readers who want the full JSON. Use the file's `https://` URL in your repository - relative links can't point outside the docs folder.
 -->

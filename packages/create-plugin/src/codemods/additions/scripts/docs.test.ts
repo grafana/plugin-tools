@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { stripVTControlCharacters } from 'node:util';
 import * as v from 'valibot';
+import { parse as parseYaml } from 'yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../context.js';
 import { getPackageManagerWithFallback } from '../../../utils/utils.packageManager.js';
@@ -40,9 +41,6 @@ describe('docs scaffolding', () => {
     const dir = mkdtempSync(join(tmpdir(), 'docs-templates-'));
     tempDirs.push(dir);
     mkdirSync(join(dir, 'docs'), { recursive: true });
-    // agent scaffolding always runs, so every synthetic template dir needs the subtree
-    mkdirSync(join(dir, 'agent', 'skills', 'bootstrap-plugin-docs'), { recursive: true });
-    writeFileSync(join(dir, 'agent', 'skills', 'bootstrap-plugin-docs', 'SKILL.md'), '---\nname: b\n---\n');
     for (const [relPath, content] of Object.entries(files)) {
       const target = join(dir, 'docs', relPath);
       mkdirSync(join(target, '..'), { recursive: true });
@@ -97,9 +95,7 @@ describe('docs scaffolding', () => {
 
   it('is idempotent', async () => {
     const context = makeContext();
-    // template dirs must stay fixed across both runs - call() mints a fresh temp dir per
-    // invocation, and two different (if equal-content) dirs would make every re-run look
-    // like a first run instead of exercising the skip-existing-file branches.
+    // shared across both runs so the second one reaches the skip-existing-file branches
     const templateDir = makeTemplateDir({ 'index.md': '# {{pluginName}}\n' });
     const commonTemplateDir = makeCommonTemplateDir();
     const migrate = async (ctx: Context) =>
@@ -153,7 +149,7 @@ describe('docs scaffolding', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
-      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('0.7.0');
+      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.7.0');
     });
 
     it('adds docs:serve and docs:validate scripts, with no separate release script', () => {
@@ -245,23 +241,6 @@ describe('docs scaffolding', () => {
           commonTemplateDir: makeCommonTemplateDir(),
         })
       ).toThrow(/Cannot find templates at .*docs/);
-    });
-
-    it('throws if the agent template directory is missing (packaging bug guard)', () => {
-      const context = makeContext();
-      // a template dir with `docs/` but no `agent/` - simulating a build that copied only half
-      const dir = mkdtempSync(join(tmpdir(), 'docs-noagent-'));
-      tempDirs.push(dir);
-      mkdirSync(join(dir, 'docs'), { recursive: true });
-      writeFileSync(join(dir, 'docs', 'index.md'), '# Page\n');
-      expect(() =>
-        setupDocsScaffolding({
-          context,
-          docsPath: 'docs',
-          templateDir: dir,
-          commonTemplateDir: makeCommonTemplateDir(),
-        })
-      ).toThrow(/Cannot find templates at .*skills/);
     });
   });
 
@@ -409,8 +388,49 @@ describe('docs codemod', () => {
 
       // the author's page is left untouched, and agent files can still be picked up after a bump
       expect(context.listChanges()['docs/index.md']).toBeUndefined();
-      expect(context.doesFileExist('.claude/skills/bootstrap-plugin-docs/SKILL.md')).toBe(true);
+      expect(context.doesFileExist('.config/AGENTS/instructions.md')).toBe(true);
     });
+
+    it('does not bring back a page the author deleted, but still adds missing meta files', () => {
+      const root = mkdtempSync(join(tmpdir(), 'docs-rerun-deleted-'));
+      mkdirSync(join(root, 'docs'), { recursive: true });
+      writeFileSync(join(root, 'docs', 'index.md'), '# Mine\n');
+      const context = new Context(root);
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P', docsPath: 'docs' }));
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+
+      docs(context, { docsPath: 'docs' });
+
+      expect(context.doesFileExist('docs/troubleshooting.md')).toBe(false);
+      expect(context.doesFileExist('docs/options.md')).toBe(false);
+      for (const meta of ['README.md', 'AGENTS.md', 'CLAUDE.md']) {
+        expect(context.doesFileExist(`docs/${meta}`), meta).toBe(true);
+      }
+    });
+
+    it('scaffolds the pages into an empty docs folder that plugin.json already declares', () => {
+      const root = mkdtempSync(join(tmpdir(), 'docs-rerun-empty-'));
+      mkdirSync(join(root, 'docs'), { recursive: true });
+      writeFileSync(join(root, 'docs', 'README.md'), '# Notes\n');
+      const context = new Context(root);
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P', docsPath: 'docs' }));
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+
+      docs(context, { docsPath: 'docs' });
+
+      expect(context.doesFileExist('docs/index.md')).toBe(true);
+      expect(context.doesFileExist('docs/troubleshooting.md')).toBe(true);
+    });
+
+    it.each<string | number | null>(['./docs', 'docs/', 'docs/v1.0', null, 5])(
+      'refuses an existing docsPath of %s instead of suggesting a --docsPath the schema rejects',
+      (existingDocsPath) => {
+        const context = makeContext({ type: 'panel', name: 'P', docsPath: existingDocsPath });
+        expect(() => docs(context, { docsPath: 'catalog-docs' })).toThrow(
+          `src/plugin.json has docsPath set to '${existingDocsPath}', which create-plugin add docs can't use.`
+        );
+      }
+    );
 
     it('refuses a docs folder that plugin.json knows nothing about', () => {
       const root = mkdtempSync(join(tmpdir(), 'docs-unknown-'));
@@ -434,8 +454,26 @@ describe('docs codemod', () => {
       const context = makeContext({ type: 'panel', name: "Erik's A & B" });
       docs(context, { docsPath: 'docs' });
       const index = context.getFile('docs/index.md') ?? '';
-      expect(index).toContain("title: Erik's A & B documentation");
+      expect(index).toContain(`description: "Where to start and what to read next in the Erik's A & B docs."`);
       expect(index).not.toMatch(/&amp;|&#x27;/);
+    });
+
+    it('keeps every page frontmatter valid YAML when the plugin name contains YAML syntax', () => {
+      const name = 'Clock: "Analog" #2 \\ *';
+      const context = makeContext({ type: 'panel', name });
+      docs(context, { docsPath: 'docs' });
+      const pages = ['index.md', 'options.md', 'data-formats.md', 'examples.md', 'troubleshooting.md'];
+      for (const page of pages) {
+        const frontmatter = /^---\n([\s\S]*?)\n---/.exec(context.getFile(`docs/${page}`) ?? '')?.[1] ?? '';
+        const { description } = parseYaml(frontmatter);
+        expect(description, page).toContain(name);
+      }
+    });
+
+    it('gives the landing page a title that stays short whatever the plugin is called', () => {
+      const context = makeContext({ type: 'panel', name: 'A'.repeat(80) });
+      docs(context, { docsPath: 'docs' });
+      expect(context.getFile('docs/index.md')).toContain('\ntitle: Introduction\n');
     });
 
     it('substitutes the plugin id into catalog URLs', () => {
@@ -618,55 +656,11 @@ describe('docs codemod', () => {
   });
 
   describe('AI authoring assistance', () => {
-    const SKILLS = [
-      '.claude/skills/bootstrap-plugin-docs/SKILL.md',
-      '.agents/skills/bootstrap-plugin-docs/SKILL.md',
-      '.codex/skills/bootstrap-plugin-docs/SKILL.md',
-    ];
-
-    it('writes the skill to every agent skills directory', () => {
+    it('does not scaffold any skills', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
-      for (const skill of SKILLS) {
-        expect(context.doesFileExist(skill)).toBe(true);
-      }
-    });
-
-    it('writes each skill as a complete self-contained file, not an @import shim', () => {
-      const context = makeContext();
-      docs(context, { docsPath: 'docs' });
-      for (const skill of SKILLS) {
-        const content = context.getFile(skill) ?? '';
-        // Claude Code ignores @imports in SKILL.md and treats a file whose first
-        // line isn't `---` as literal content, so both copies must be whole.
-        expect(content).toMatch(/^---\nname: bootstrap-plugin-docs\ndescription: .+\n---/s);
-        expect(content).toContain('## Steps');
-        expect(content).not.toContain('@../');
-      }
-    });
-
-    it('writes identical content to every skills directory', () => {
-      const context = makeContext();
-      docs(context, { docsPath: 'docs' });
-      const [first, ...rest] = SKILLS.map((s) => context.getFile(s));
-      for (const other of rest) {
-        expect(other).toEqual(first);
-      }
-    });
-
-    it('writes a .codex copy too, matching where templates/common puts its skills', () => {
-      const context = makeContext();
-      docs(context, { docsPath: 'docs' });
-      expect(context.doesFileExist('.codex/skills/bootstrap-plugin-docs/SKILL.md')).toBe(true);
-    });
-
-    it('does not scaffold the skills that were folded into the authoring guide', () => {
-      const context = makeContext();
-      docs(context, { docsPath: 'docs' });
-      for (const name of ['write-plugin-docs', 'review-plugin-docs', 'validate-plugin-docs']) {
-        expect(context.doesFileExist(`.claude/skills/${name}/SKILL.md`)).toBe(false);
-        expect(context.doesFileExist(`.agents/skills/${name}/SKILL.md`)).toBe(false);
-      }
+      const skills = Object.keys(context.listChanges()).filter((file) => /(^|\/)skills\//.test(file));
+      expect(skills).toEqual([]);
     });
 
     it('scaffolds AGENTS.md in the docs folder, pointing at the guides shipped with plugin-docs-cli', () => {
@@ -682,6 +676,16 @@ describe('docs codemod', () => {
       expect(content).not.toContain('{{');
     });
 
+    it('lists the conventional filenames for optional pages in the docs AGENTS.md', () => {
+      const context = makeContext();
+      docs(context, { docsPath: 'docs' });
+      const content = context.getFile('docs/AGENTS.md') ?? '';
+      expect(content).toContain('## Optional pages');
+      for (const page of ['presets.md', 'permissions.md', 'accessibility.md']) {
+        expect(content).toContain(`\`${page}\``);
+      }
+    });
+
     it('scaffolds CLAUDE.md in the docs folder as an import of AGENTS.md', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
@@ -694,13 +698,11 @@ describe('docs codemod', () => {
       expect(context.doesFileExist('.config/AGENTS/plugin-docs.md')).toBe(false);
     });
 
-    it('interpolates the configured docsPath into the skill body', () => {
+    it('scaffolds the docs AGENTS.md under the configured docsPath', () => {
       const context = makeContext();
       docs(context, { docsPath: 'documentation' });
-      const skill = context.getFile('.claude/skills/bootstrap-plugin-docs/SKILL.md') ?? '';
       expect(context.doesFileExist('documentation/AGENTS.md')).toBe(true);
-      expect(skill).toContain('documentation/AGENTS.md');
-      expect(skill).not.toContain('{{docsPath}}');
+      expect(context.doesFileExist('docs/AGENTS.md')).toBe(false);
     });
 
     it('does not overwrite an existing customized docs AGENTS.md', () => {
@@ -715,7 +717,7 @@ describe('docs codemod', () => {
       context.addFile('.config/AGENTS/instructions.md', '# Existing instructions\n\nDo the thing.\n');
       docs(context, { docsPath: 'docs' });
       expect(context.getFile('.config/AGENTS/instructions.md')).toBe(
-        '# Existing instructions\n\nDo the thing.\n\n## Plugin docs\n\nWhenever you add, remove or change a feature in the plugin, you must update the plugin documentation under `docs/`. Refer to [`docs/AGENTS.md`](./docs/AGENTS.md) for instructions.\n'
+        '# Existing instructions\n\nDo the thing.\n\n## Plugin docs\n\nWhenever you add, remove or change a feature in the plugin, you must update the plugin documentation under `docs/`. Refer to [`docs/AGENTS.md`](../../docs/AGENTS.md) for instructions.\n'
       );
     });
 
@@ -725,7 +727,7 @@ describe('docs codemod', () => {
       docs(context, { docsPath: 'documentation' });
       const content = context.getFile('.config/AGENTS/instructions.md') ?? '';
       expect(content).toContain('under `documentation/`');
-      expect(content).toContain('[`documentation/AGENTS.md`](./documentation/AGENTS.md)');
+      expect(content).toContain('[`documentation/AGENTS.md`](../../documentation/AGENTS.md)');
     });
 
     it.each([
@@ -745,7 +747,7 @@ describe('docs codemod', () => {
       const content = context.getFile('.config/AGENTS/instructions.md') ?? '';
       expect(content).toContain('This repository contains a **Grafana plugin**');
       expect(content).toContain('\n\n## Plugin docs\n\n');
-      expect(content).toContain('[`docs/AGENTS.md`](./docs/AGENTS.md)');
+      expect(content).toContain('[`docs/AGENTS.md`](../../docs/AGENTS.md)');
     });
 
     it('creates root AGENTS.md, CLAUDE.md and GEMINI.md when absent, pointing at .config/AGENTS/instructions.md', () => {
@@ -790,11 +792,11 @@ describe('docs codemod', () => {
       expect(context.doesFileExist('.config/AGENTS/e2e-testing.md')).toBe(false);
     });
 
-    it('mentions the bootstrap skill in docs/README.md', () => {
+    it('does not point docs/README.md at a skill', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/README.md') ?? '';
-      expect(content).toContain('/bootstrap-plugin-docs');
+      expect(content).not.toContain('bootstrap-plugin-docs');
     });
   });
 
@@ -822,14 +824,13 @@ describe('docs codemod', () => {
     it('numbers the steps in the order the author does them', () => {
       expect(nextSteps(makeContext()).filter((line) => /^ \d\. /.test(line))).toEqual([
         ' 1. Read docs/README.md',
-        ' 2. Optional: run /bootstrap-plugin-docs in your coding agent',
-        ' 3. Review and finish the pages under docs/',
+        ' 2. Fill in or review the pages under docs/',
       ]);
     });
 
     it('indents each detail line under its step', () => {
       const body = nextSteps(makeContext());
-      const step = body.indexOf(' 3. Review and finish the pages under docs/');
+      const step = body.indexOf(' 2. Fill in or review the pages under docs/');
       expect(body[step + 1]).toBe(
         '    Preview them with npm run docs:serve, which also warns about every section left to fill.'
       );
@@ -846,6 +847,15 @@ describe('docs codemod', () => {
       context.addFile('CLAUDE.md', '# My own instructions\n\nRead docs/AGENTS.md for docs.\n');
       context.addFile('GEMINI.md', '# Gemini notes\n');
       expect(nextSteps(context).join('\n')).not.toContain("won't find docs/AGENTS.md");
+    });
+
+    it('reports each existing root agent file it appended the instructions pointer to', () => {
+      const context = makeContext();
+      context.addFile('CLAUDE.md', '# My own instructions\n');
+      const body = nextSteps(context);
+      expect(body).toContain('Needs your attention:');
+      expect(body).toContain(' ! Added a pointer to .config/AGENTS/instructions.md at the end of CLAUDE.md');
+      expect(body.join('\n')).not.toContain('end of AGENTS.md');
     });
 
     it('says nothing about the release pipeline when build-plugin was bumped', () => {
