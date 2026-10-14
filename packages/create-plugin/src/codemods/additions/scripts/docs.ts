@@ -126,21 +126,13 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const pluginActions = bumpActionRefs(context, RELEASE_WORKFLOW_PATH, REQUIRED_ACTION_REFS);
 
   // step 8: agent instructions, creating the root and .config/AGENTS files a plugin predating them lacks
-  addSkillTemplates(context, join(templateDir, 'agent', 'skills'), data);
   ensureRootAgentFiles(context, TEMPLATE_PATHS.common);
   ensureConfigAgentFiles(context, TEMPLATE_PATHS.common, CONFIG_AGENT_FILES, data);
   appendDocsPointerToInstructions(context, docsPath);
 
   // step 9: deferred so it prints after the runner's change list, and only when something changed
   if (context.hasChanges()) {
-    context.setMessage(
-      buildNextStepsMessage({
-        docsPath,
-        packageManagerName,
-        agentAssistanceAdded: anyAgentFileExists(context),
-        pluginActions,
-      })
-    );
+    context.setMessage(buildNextStepsMessage({ docsPath, packageManagerName, pluginActions }));
   }
 
   return context;
@@ -149,10 +141,9 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
 function buildNextStepsMessage(opts: {
   docsPath: string;
   packageManagerName: string;
-  agentAssistanceAdded: boolean;
   pluginActions: BumpActionRefsResult;
 }): ContextMessage {
-  const { docsPath, packageManagerName, agentAssistanceAdded, pluginActions } = opts;
+  const { docsPath, packageManagerName, pluginActions } = opts;
   const run = (script: string) => output.formatCode(`${packageManagerName} run ${script}`);
 
   const steps: NextStep[] = [
@@ -160,17 +151,11 @@ function buildNextStepsMessage(opts: {
       title: `Read ${docsPath}/README.md`,
       detail: 'It has the commands and a link to the plugin docs guide.',
     },
+    {
+      title: `Fill in or review the pages under ${docsPath}/`,
+      detail: `Preview them with ${run('docs:serve')}, which also warns about every section left to fill.`,
+    },
   ];
-  if (agentAssistanceAdded) {
-    steps.push({
-      title: `Optional: run ${output.formatCode('/bootstrap-plugin-docs')} in your coding agent`,
-      detail: `It drafts the pages under ${docsPath}/ from source code and any existing docs such as README.`,
-    });
-  }
-  steps.push({
-    title: `${agentAssistanceAdded ? 'Review and finish' : 'Fill in'} the pages under ${docsPath}/`,
-    detail: `Preview them with ${run('docs:serve')}, which also warns about every section left to fill.`,
-  });
 
   const warnings: NextStep[] = [];
   if (pluginActions.found.length === 0) {
@@ -226,21 +211,8 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
   return SUPPORTED_PLUGIN_TYPES.includes(type as SupportedPluginType);
 }
 
-// each agent reads only its own skills dir and SKILL.md can't import, so every dir gets a full copy
-const SKILL_TARGET_DIRS = ['.claude/skills', '.agents/skills', '.codex/skills'];
-const BOOTSTRAP_SKILL_NAME = 'bootstrap-plugin-docs';
 // instructions.md imports e2e-testing.md, so the two are created together
 const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
-
-function anyAgentFileExists(context: Context): boolean {
-  return SKILL_TARGET_DIRS.some((dir) => context.doesFileExist(`${dir}/${BOOTSTRAP_SKILL_NAME}/SKILL.md`));
-}
-
-function addSkillTemplates(context: Context, skillsTemplateDir: string, data: Record<string, unknown>): void {
-  for (const dir of SKILL_TARGET_DIRS) {
-    addTemplateFolder(context, { folderPath: skillsTemplateDir, targetPath: dir, data });
-  }
-}
 
 function appendDocsPointerToInstructions(context: Context, docsPath: string): void {
   const agentsPath = `${docsPath}/AGENTS.md`;
