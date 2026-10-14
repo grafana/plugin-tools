@@ -196,6 +196,7 @@ describe('rspack', () => {
       expect(result.doesFileExist('.config/rspack/LiveReloadRspackPlugin.ts')).toBe(true);
       expect(result.doesFileExist('.config/rspack/liveReloadPlugin.ts')).toBe(false);
       expect(result.doesFileExist('.config/rspack/LicenseRspackPlugin.ts')).toBe(true);
+      expect(result.doesFileExist('.config/rspack/DiagnosticsRspackPlugin.ts')).toBe(true);
     });
   });
 
@@ -260,10 +261,23 @@ describe('rspack', () => {
       const result = addRspack(context);
       const pkg = JSON.parse(result.getFile('package.json')!);
 
-      expect(rspackOnlyDeps).toEqual(expect.arrayContaining(['@rspack/core', '@rspack/cli', 'eslint-rspack-plugin']));
+      expect(rspackOnlyDeps).toEqual(expect.arrayContaining(['@rspack/core', '@rspack/cli']));
       for (const name of rspackOnlyDeps) {
         expect(pkg.devDependencies[name], name).toBe(rspackDeps[name]);
       }
+    });
+
+    it('should lint with diagnostics-webpack-plugin and raise webpack to the version it needs', async () => {
+      const rspackDeps = await getTemplateDevDependencies(RSPACK_TEMPLATE_DATA);
+      const context = createBaseContext();
+
+      const result = addRspack(context);
+      const pkg = JSON.parse(result.getFile('package.json')!);
+
+      expect(pkg.devDependencies['diagnostics-webpack-plugin']).toBe(rspackDeps['diagnostics-webpack-plugin']);
+      expect(pkg.devDependencies['eslint-rspack-plugin']).toBeUndefined();
+      // the base fixture pins webpack ^5.94.0, below diagnostics-webpack-plugin's peer floor
+      expect(pkg.devDependencies.webpack).toBe(rspackDeps.webpack);
     });
 
     it('should add packages the rspack base config needs when the plugin has dropped them', async () => {
@@ -360,13 +374,16 @@ describe('rspack', () => {
       expect(pkg.devDependencies['copy-webpack-plugin']).toBeUndefined();
     });
 
-    it('should keep webpack package itself', () => {
+    it('should keep webpack at a version already above the template floor', () => {
       const context = createBaseContext();
+      const basePkg = JSON.parse(context.getFile('package.json')!);
+      basePkg.devDependencies.webpack = '^5.200.0';
+      context.updateFile('package.json', JSON.stringify(basePkg, null, 2));
 
       const result = addRspack(context);
       const pkg = JSON.parse(result.getFile('package.json')!);
 
-      expect(pkg.devDependencies['webpack']).toBe('^5.94.0');
+      expect(pkg.devDependencies.webpack).toBe('^5.200.0');
     });
 
     it('should update build and dev scripts to use rspack', () => {
@@ -494,14 +511,14 @@ describe('rspack', () => {
       expect(result.getFile('rspack.config.ts')).toBe('my rspack config');
     });
 
-    it('should swap eslint-webpack-plugin for eslint-rspack-plugin', () => {
+    it('should swap eslint-webpack-plugin for diagnostics-webpack-plugin', () => {
       const context = createExperimentalRspackContext({ '@rspack/core': '^1.6.0', '@rspack/cli': '^1.6.0' });
 
       const result = addRspack(context);
       const pkg = JSON.parse(result.getFile('package.json')!);
 
       expect(pkg.devDependencies['eslint-webpack-plugin']).toBeUndefined();
-      expect(pkg.devDependencies['eslint-rspack-plugin']).toBeDefined();
+      expect(pkg.devDependencies['diagnostics-webpack-plugin']).toBeDefined();
     });
 
     it('should keep rspack versions the plugin already pinned at or above the template', () => {

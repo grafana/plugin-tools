@@ -37,14 +37,13 @@
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",{{#unless useExperimentalRspack}}
     "copy-webpack-plugin": "^14.0.0",{{/unless}}
-    "css-loader": "^7.1.0",{{#unless useExperimentalRspack}}
-    "diagnostics-webpack-plugin": "^1.0.1",{{/unless}}
+    "css-loader": "^7.1.0",
+    "diagnostics-webpack-plugin": "^1.0.1",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.0",
     "eslint-plugin-jsdoc": "^52.0.0",
     "eslint-plugin-react": "^7.37.0",
-    "eslint-plugin-react-hooks": "^7.1.0",{{#if useExperimentalRspack}}
-    "eslint-rspack-plugin": "^5.0.1",{{/if}}{{#unless useExperimentalRspack}}
+    "eslint-plugin-react-hooks": "^7.1.0",{{#unless useExperimentalRspack}}
     "fork-ts-checker-webpack-plugin": "^9.1.0",{{/unless}}
     "identity-obj-proxy": "^3.0.0",
     "imports-loader": "^5.0.0",
