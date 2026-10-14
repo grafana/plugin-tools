@@ -797,8 +797,9 @@ describe('docs codemod', () => {
       ['pnpm@9.1.0', 'pnpm dlx @grafana/create-plugin@latest add docs-content'],
       ['yarn@4.1.0', 'yarn dlx @grafana/create-plugin@latest add docs-content'],
     ])('points docs/README.md at docs-content with the %s exec command', (packageManager, command) => {
+      const [packageManagerName, packageManagerVersion] = packageManager.split('@');
+      vi.mocked(getPackageManagerWithFallback).mockReturnValueOnce({ packageManagerName, packageManagerVersion });
       const context = makeContext();
-      context.updateFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {}, packageManager }));
       docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/README.md') ?? '';
       expect(content).toContain(`\`${command}\``);

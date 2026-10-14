@@ -34,7 +34,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
    - `provisioning/` if present - bundled dashboards and data sources, often the best source of examples
    - The README (`src/README.md` if it exists, otherwise `README.md`) and `CHANGELOG.md` if present. These may be near-empty boilerplate for fresh plugins - that's fine.
    - Documentation linked from `info.links` in `src/plugin.json`. Walk every entry and read the ones that may hold material for the docs pages: an entry named "Documentation" or "Docs", and any entry that points at a user guide, wiki, docs site or a markdown file such as `TESTING.md` or `CONFIGURATION.md`. Skip links with nothing to harvest, such as issue trackers, support portals and vendor or project home pages. When a link points at a file in this repository (its URL matches the `repository` field in `package.json` or the git remote), read the local file instead of fetching it. Fetch the rest, and note each link you couldn't fetch for the summary.
-   - Image assets under `src/img/`, `src/img/screenshots/`, `screenshots/` and `{docsPath}/img/`. Copy usable screenshots into `{docsPath}/img/` during the fill pass and reference them from the pages. If there are none, flag the gap in the final summary.
+   - Image assets under `src/img/`, `src/img/screenshots/`, `screenshots/` and `{docsPath}/img/`, plus any image the README or linked docs reference, wherever it lives. Copy usable screenshots into `{docsPath}/img/` during the fill pass and reference them from the pages. If there are none, flag the gap in the final summary.
 
 2. **Build a working understanding from source. This step is mandatory; do not skip even when README is rich.** For each scaffolded page, read the source that `{docsPath}/AGENTS.md` names for it, following the module file into any helpers it calls, and note what the page's briefs ask for. Also note:
    - The plugin's purpose in one sentence, from `info.description`, the module and what it registers.
@@ -48,7 +48,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
    - Quote verbatim when the README's existing text already matches the authoring guide's style; rewrite when it does not.
    - Mark what stays behind. Only the pitch survives in the README: what the plugin does, the problem it solves and the feature list. Everything instructional - option tables, data-shape rules, query examples, troubleshooting, configuration walkthroughs - moves to a page.
    - Write the plan down before editing anything, so nothing is dropped between moving it out and trimming the README in step 7.
-   - Plan the documentation harvested from `info.links` in step 1 the same way, section by section. Content from another file in this repository is a move, like the README. Content from an external site is a copy, since you can't trim it. Leave out what the README or source already covers, and keep the source understanding from step 2 as the authority when the two disagree.
+   - Plan the documentation harvested from `info.links` in step 1 the same way, section by section. Content from another file in this repository is a move, like the README. Content from an external site is a copy, since you can't trim it. Leave out what the README or source already covers, and keep the source understanding from step 2 as the authority when the two disagree, as the contradiction rule in step 6 says.
 
 4. **Add optional pages.** Check the source against the "Optional pages" table in `{docsPath}/AGENTS.md`, and add a page for each trigger you find. When a trigger needs judgement, such as accessibility, add the page only when source clearly supports it.
 
@@ -64,7 +64,9 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
 6. **Write every page** (scaffolded stubs and new pages) as the authoring guides describe, and fill each section that still has a `section-brief` as its brief says. The briefs hold the page formats, so docs read the same across plugins. Use the source understanding as your material, plus README excerpts and linked documentation (when harvested in step 3) and author answers (when given in step 5). Run `docs:validate` after each page, as the authoring guide says, so problems are fixed before the README rewrite.
 
-   **Verbatim-and-flag rule.** When a source `description:` string contradicts observable behaviour elsewhere in source (for example, it lists option values that don't appear in the matching `options:` array, names a default the constructor doesn't set or describes a constraint nothing enforces), keep the description verbatim and add it to the gaps summary in step 10 with file and line references. Don't paraphrase the discrepancy away or invent corrected wording. The author resolves it.
+   **Contradiction rule.** Flag contradictions rather than resolving them, and add each one to the gaps summary in step 10 with file and line references. The author resolves them. There are two kinds:
+   - Source contradicts itself. For example, a `description:` string lists option values that don't appear in the matching `options:` array or describes a constraint nothing enforces, or a `defaultValue` matches none of the values its option offers, which is likely a bug. Keep the source text verbatim. Don't paraphrase the discrepancy away or invent corrected wording.
+   - The README or linked docs contradict source. For example, they describe an option, a value or a behaviour that the code doesn't have, or that works differently. Document what source does. Check every claim you carry over from the README or linked docs against source before you write it.
 
 7. **Rewrite the README down to its job.** This is `src/README.md` when it exists, and never the root `README.md` in that case. Only once every page from step 6 is written, so no content is lost in transit. Skip this step entirely when you skipped the README part of step 3 - a plugin whose README was already at scaffold default has nothing to migrate and nothing to trim. The README is the Overview tab, seen mostly by people who have not installed the plugin yet and are deciding whether to. It should end up as:
    - One or two paragraphs saying what the plugin does and which problem it solves. Lead with the problem, not the implementation.
@@ -80,7 +82,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
 9. **Validate** once more with the plugin's `docs:validate` script, and finish as the authoring guide's "Validate" section says.
 
-10. Show the author a summary before you finish:
+10. Print a summary for the author as a message in the session. Do this before any other final step, so the author always sees it:
     - Which file you used as the README, `src/README.md` or `README.md`.
     - The sentence you used as the plugin's purpose, and where it came from.
     - Pages drafted from source-only understanding (note when source was thin).
@@ -93,7 +95,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
     - Pages added from author-named topics.
     - Screenshots copied into `{docsPath}/img/`, and which pages they landed on. Flag pages that would benefit from a screenshot where the repo has none.
     - Gaps flagged for the author:
-      - Description-vs-source contradictions kept verbatim per the verbatim-and-flag rule (cite file and line).
+      - Contradictions found under the contradiction rule, within source and between the README or linked docs and source (cite file and line).
       - Option descriptions you wrote because source had none, so the author can review them.
       - Defaults you couldn't resolve and left as source expressions.
       - Assumptions you made where an author question went unanswered.
