@@ -332,6 +332,18 @@ describe('utils', () => {
       expect(context.getFile('docs/nested/setup.md')).toBe('pnpm some-name\n');
     });
 
+    it('skips templates that include rejects, matching on the path relative to the folder', () => {
+      const context = new Context(tmpDir);
+      const folderPath = templateFolder({ 'README.md': 'readme\n', 'nested/page.md': 'page\n' });
+      const added = addTemplateFolder(context, {
+        folderPath,
+        targetPath: 'docs',
+        data,
+        include: (file) => file !== 'nested/page.md',
+      });
+      expect(added).toEqual(['docs/README.md']);
+    });
+
     it('strips .hbs and maps config file names like generate does', () => {
       const context = new Context(tmpDir);
       const folderPath = templateFolder({ 'page.md.hbs': 'x', npmrc: 'y' });

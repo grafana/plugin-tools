@@ -1,6 +1,6 @@
 ---
-title: {{{pluginName}}} documentation
-description: Where to start and what to read next in the {{{pluginName}}} docs.
+title: Introduction
+description: "Where to start and what to read next in the {{{yamlEscape pluginName}}} docs."
 sidebar_position: 1
 ---
 

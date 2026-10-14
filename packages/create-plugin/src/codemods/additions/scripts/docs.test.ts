@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { stripVTControlCharacters } from 'node:util';
 import * as v from 'valibot';
+import { parse as parseYaml } from 'yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../context.js';
 import docs, { assertSupportedPluginType, schema, setupDocsScaffolding } from './docs.js';
@@ -391,6 +392,47 @@ describe('docs codemod', () => {
       expect(context.doesFileExist('.config/AGENTS/instructions.md')).toBe(true);
     });
 
+    it('does not bring back a page the author deleted, but still adds missing meta files', () => {
+      const root = mkdtempSync(join(tmpdir(), 'docs-rerun-deleted-'));
+      mkdirSync(join(root, 'docs'), { recursive: true });
+      writeFileSync(join(root, 'docs', 'index.md'), '# Mine\n');
+      const context = new Context(root);
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P', docsPath: 'docs' }));
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+
+      docs(context, { docsPath: 'docs' });
+
+      expect(context.doesFileExist('docs/troubleshooting.md')).toBe(false);
+      expect(context.doesFileExist('docs/options.md')).toBe(false);
+      for (const meta of ['README.md', 'AGENTS.md', 'CLAUDE.md']) {
+        expect(context.doesFileExist(`docs/${meta}`), meta).toBe(true);
+      }
+    });
+
+    it('scaffolds the pages into an empty docs folder that plugin.json already declares', () => {
+      const root = mkdtempSync(join(tmpdir(), 'docs-rerun-empty-'));
+      mkdirSync(join(root, 'docs'), { recursive: true });
+      writeFileSync(join(root, 'docs', 'README.md'), '# Notes\n');
+      const context = new Context(root);
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P', docsPath: 'docs' }));
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+
+      docs(context, { docsPath: 'docs' });
+
+      expect(context.doesFileExist('docs/index.md')).toBe(true);
+      expect(context.doesFileExist('docs/troubleshooting.md')).toBe(true);
+    });
+
+    it.each(['./docs', 'docs/', 'docs/v1.0'])(
+      'refuses an existing docsPath of %s instead of suggesting a --docsPath the schema rejects',
+      (existingDocsPath) => {
+        const context = makeContext({ type: 'panel', name: 'P', docsPath: existingDocsPath });
+        expect(() => docs(context, { docsPath: 'catalog-docs' })).toThrow(
+          `src/plugin.json has docsPath set to '${existingDocsPath}', which create-plugin add docs can't use.`
+        );
+      }
+    );
+
     it('refuses a docs folder that plugin.json knows nothing about', () => {
       const root = mkdtempSync(join(tmpdir(), 'docs-unknown-'));
       mkdirSync(join(root, 'docs'), { recursive: true });
@@ -413,8 +455,26 @@ describe('docs codemod', () => {
       const context = makeContext({ type: 'panel', name: "Erik's A & B" });
       docs(context, { docsPath: 'docs' });
       const index = context.getFile('docs/index.md') ?? '';
-      expect(index).toContain("title: Erik's A & B documentation");
+      expect(index).toContain(`description: "Where to start and what to read next in the Erik's A & B docs."`);
       expect(index).not.toMatch(/&amp;|&#x27;/);
+    });
+
+    it('keeps every page frontmatter valid YAML when the plugin name contains YAML syntax', () => {
+      const name = 'Clock: "Analog" #2 \\ *';
+      const context = makeContext({ type: 'panel', name });
+      docs(context, { docsPath: 'docs' });
+      const pages = ['index.md', 'options.md', 'data-formats.md', 'examples.md', 'troubleshooting.md'];
+      for (const page of pages) {
+        const frontmatter = /^---\n([\s\S]*?)\n---/.exec(context.getFile(`docs/${page}`) ?? '')?.[1] ?? '';
+        const { description } = parseYaml(frontmatter);
+        expect(description, page).toContain(name);
+      }
+    });
+
+    it('gives the landing page a title that stays short whatever the plugin is called', () => {
+      const context = makeContext({ type: 'panel', name: 'A'.repeat(80) });
+      docs(context, { docsPath: 'docs' });
+      expect(context.getFile('docs/index.md')).toContain('\ntitle: Introduction\n');
     });
 
     it('substitutes the plugin id into catalog URLs', () => {
@@ -658,7 +718,7 @@ describe('docs codemod', () => {
       context.addFile('.config/AGENTS/instructions.md', '# Existing instructions\n\nDo the thing.\n');
       docs(context, { docsPath: 'docs' });
       expect(context.getFile('.config/AGENTS/instructions.md')).toBe(
-        '# Existing instructions\n\nDo the thing.\n\n## Plugin docs\n\nWhenever you add, remove or change a feature in the plugin, you must update the plugin documentation under `docs/`. Refer to [`docs/AGENTS.md`](./docs/AGENTS.md) for instructions.\n'
+        '# Existing instructions\n\nDo the thing.\n\n## Plugin docs\n\nWhenever you add, remove or change a feature in the plugin, you must update the plugin documentation under `docs/`. Refer to [`docs/AGENTS.md`](../../docs/AGENTS.md) for instructions.\n'
       );
     });
 
@@ -668,7 +728,7 @@ describe('docs codemod', () => {
       docs(context, { docsPath: 'documentation' });
       const content = context.getFile('.config/AGENTS/instructions.md') ?? '';
       expect(content).toContain('under `documentation/`');
-      expect(content).toContain('[`documentation/AGENTS.md`](./documentation/AGENTS.md)');
+      expect(content).toContain('[`documentation/AGENTS.md`](../../documentation/AGENTS.md)');
     });
 
     it.each([
@@ -688,7 +748,7 @@ describe('docs codemod', () => {
       const content = context.getFile('.config/AGENTS/instructions.md') ?? '';
       expect(content).toContain('This repository contains a **Grafana plugin**');
       expect(content).toContain('\n\n## Plugin docs\n\n');
-      expect(content).toContain('[`docs/AGENTS.md`](./docs/AGENTS.md)');
+      expect(content).toContain('[`docs/AGENTS.md`](../../docs/AGENTS.md)');
     });
 
     it('creates root AGENTS.md, CLAUDE.md and GEMINI.md when absent, pointing at .config/AGENTS/instructions.md', () => {
@@ -788,6 +848,15 @@ describe('docs codemod', () => {
       context.addFile('CLAUDE.md', '# My own instructions\n\nRead docs/AGENTS.md for docs.\n');
       context.addFile('GEMINI.md', '# Gemini notes\n');
       expect(nextSteps(context).join('\n')).not.toContain("won't find docs/AGENTS.md");
+    });
+
+    it('reports each existing root agent file it appended the instructions pointer to', () => {
+      const context = makeContext();
+      context.addFile('CLAUDE.md', '# My own instructions\n');
+      const body = nextSteps(context);
+      expect(body).toContain('Needs your attention:');
+      expect(body).toContain(' ! Added a pointer to .config/AGENTS/instructions.md at the end of CLAUDE.md');
+      expect(body.join('\n')).not.toContain('end of AGENTS.md');
     });
 
     it('says nothing about the release pipeline when build-plugin was bumped', () => {

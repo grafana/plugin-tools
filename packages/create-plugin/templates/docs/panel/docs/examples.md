@@ -1,6 +1,6 @@
 ---
 title: Examples
-description: Worked examples of the {{{pluginName}}} panel.
+description: "Worked examples of the {{{yamlEscape pluginName}}} panel."
 sidebar_position: 4
 ---
 

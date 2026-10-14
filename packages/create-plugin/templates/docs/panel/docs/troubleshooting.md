@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting
-description: Troubleshoot the {{{pluginName}}} panel.
+description: "Troubleshoot the {{{yamlEscape pluginName}}} panel."
 sidebar_position: 5
 ---
 

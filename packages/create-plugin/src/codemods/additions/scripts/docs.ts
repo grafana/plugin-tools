@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import * as v from 'valibot';
 import type { Context, ContextMessage } from '../../context.js';
 import { TEMPLATE_PATHS, TEMPLATES_DIR } from '../../../constants.js';
@@ -11,7 +11,12 @@ import {
   readJsonFile,
   renderTemplate,
 } from '../../utils.js';
-import { appendToAgentInstructions, ensureConfigAgentFiles, ensureRootAgentFiles } from '../../utils.agents.js';
+import {
+  AGENT_INSTRUCTIONS_PATH,
+  appendToAgentInstructions,
+  ensureConfigAgentFiles,
+  ensureRootAgentFiles,
+} from '../../utils.agents.js';
 import { type BumpActionRefsResult, bumpActionRefs } from '../../utils.workflows.js';
 
 // an allowlist, because the value becomes a path on disk and is embedded unescaped in a YAML workflow
@@ -75,6 +80,12 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const pluginJson = readJsonFile<PluginJson>(context, 'src/plugin.json');
   const existingDocsPath = pluginJson.docsPath;
 
+  if (existingDocsPath !== undefined && !DOCS_PATH_RE.test(String(existingDocsPath))) {
+    throw new Error(
+      `src/plugin.json has docsPath set to '${existingDocsPath}', which create-plugin add docs can't use.\n  Change it to a relative path of letters, digits, hyphens, underscores and single "/" separators (for example "catalog-docs" or "docs/plugin"), then run this again.`
+    );
+  }
+
   if (existingDocsPath !== undefined && existingDocsPath !== docsPath) {
     throw new Error(
       `src/plugin.json already has docsPath set to '${existingDocsPath}'.\n  Re-run with the existing path:\n  create-plugin add docs --docsPath ${existingDocsPath}`
@@ -114,8 +125,16 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   // step 4: add docs:serve and docs:validate npm scripts
   addDocsScripts(context);
 
-  // step 5: render the docs pages into the docs folder (includes README.md)
-  addTemplateFolder(context, { folderPath: join(templateDir, 'docs'), targetPath: docsPath, data });
+  // step 5: render the docs pages only into a folder without any, so pages the author deleted stay deleted
+  const hasPages = context
+    .readDir(docsPath)
+    .some((file) => file.endsWith('.md') && !DOCS_META_FILES.includes(basename(file)));
+  addTemplateFolder(context, {
+    folderPath: join(templateDir, 'docs'),
+    targetPath: docsPath,
+    data,
+    include: (file) => !hasPages || DOCS_META_FILES.includes(file),
+  });
 
   // step 6: copy validate-docs workflow, unless the user already customized one
   const workflowPath = '.github/workflows/validate-docs.yml';
@@ -129,13 +148,13 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const pluginActions = bumpActionRefs(context, RELEASE_WORKFLOW_PATH, REQUIRED_ACTION_REFS);
 
   // step 8: agent instructions, creating the root and .config/AGENTS files a plugin predating them lacks
-  ensureRootAgentFiles(context, TEMPLATE_PATHS.common);
+  const linkedRootFiles = ensureRootAgentFiles(context, TEMPLATE_PATHS.common);
   ensureConfigAgentFiles(context, TEMPLATE_PATHS.common, CONFIG_AGENT_FILES, data);
   appendDocsPointerToInstructions(context, docsPath);
 
   // step 9: deferred so it prints after the runner's change list, and only when something changed
   if (context.hasChanges()) {
-    context.setMessage(buildNextStepsMessage({ docsPath, packageManagerName, pluginActions }));
+    context.setMessage(buildNextStepsMessage({ docsPath, packageManagerName, pluginActions, linkedRootFiles }));
   }
 
   return context;
@@ -145,8 +164,9 @@ function buildNextStepsMessage(opts: {
   docsPath: string;
   packageManagerName: string;
   pluginActions: BumpActionRefsResult;
+  linkedRootFiles: string[];
 }): ContextMessage {
-  const { docsPath, packageManagerName, pluginActions } = opts;
+  const { docsPath, packageManagerName, pluginActions, linkedRootFiles } = opts;
   const run = (script: string) => output.formatCode(`${packageManagerName} run ${script}`);
 
   const steps: NextStep[] = [
@@ -171,6 +191,12 @@ function buildNextStepsMessage(opts: {
     warnings.push({
       title: `${RELEASE_WORKFLOW_PATH} pins ${action} to a branch or commit, so it was left as is`,
       detail: `Docs need ${REQUIRED_ACTION_REFS[action]} or later.`,
+    });
+  }
+  for (const file of linkedRootFiles) {
+    warnings.push({
+      title: `Added a pointer to ${AGENT_INSTRUCTIONS_PATH} at the end of ${file}`,
+      detail: 'Agents that read it now also load the plugin instructions. Check it fits with the rest of the file.',
     });
   }
 
@@ -216,11 +242,13 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
 
 // instructions.md imports e2e-testing.md, so the two are created together
 const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
+// files in the docs folder that aren't pages, so they're added on every run
+const DOCS_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
 
 function appendDocsPointerToInstructions(context: Context, docsPath: string): void {
   const agentsPath = `${docsPath}/AGENTS.md`;
   // a link rather than an @-import, so the docs guidance only loads when an agent works in the docs folder
-  const section = `## Plugin docs\n\nWhenever you add, remove or change a feature in the plugin, you must update the plugin documentation under \`${docsPath}/\`. Refer to [\`${agentsPath}\`](./${agentsPath}) for instructions.\n`;
+  const section = `## Plugin docs\n\nWhenever you add, remove or change a feature in the plugin, you must update the plugin documentation under \`${docsPath}/\`. Refer to [\`${agentsPath}\`](../../${agentsPath}) for instructions.\n`;
   appendToAgentInstructions(context, agentsPath, section);
 }
 
