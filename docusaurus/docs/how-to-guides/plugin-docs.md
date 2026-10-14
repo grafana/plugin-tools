@@ -94,16 +94,7 @@ This step is optional. To have an AI agent write the first version of your pages
 npx @grafana/create-plugin@latest add docs-content
 ```
 
-The codemod checks that plugin docs are set up, then has the agent fill the stub pages from your source code, your README and any docs linked from `info.links` in `src/plugin.json`. The agent:
-
-- moves instructions from your README onto the pages, and trims the README back to what the Overview tab needs
-- removes a "Documentation" link from `info.links`, if there is one, because the Documentation tab replaces it
-- asks you about anything your source code can't answer
-- ends with a summary of what it wrote, what it assumed and which pages need screenshots
-
-The agent changes only your docs folder, your README and `src/plugin.json`. Review its work with `git diff` before you commit it.
-
-To pick an agent, apply the instructions yourself or run the codemod from inside an agent session, refer to [Additions that an AI agent applies](./add-features-to-a-plugin.md#additions-that-an-ai-agent-applies).
+The agent reads your README, your source code and any existing docs, and moves what it finds into the stub pages. The result is a best-effort first draft, so review every change carefully before you commit it. To choose or skip an agent, refer to [Additions that an AI agent applies](./add-features-to-a-plugin.md#additions-that-an-ai-agent-applies).
 
 Run `add docs-content` once, after `add docs`. After that, update pages as part of your normal work.
 
