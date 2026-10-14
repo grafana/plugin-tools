@@ -46,7 +46,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
 3. **Plan the README migration.** First decide whether there is anything to migrate. Skip the README part of this step when the README says nothing specific to this plugin. The `create-plugin` scaffold ships a `src/README.md` that is only a title and commented-out guidance, and a generic root `README.md` titled "Grafana panel plugin template" that explains what panel plugins are in general, plus getting-started and contributing boilerplate. Generic boilerplate is not documentation: do not move it onto pages. The test is whether a sentence would still be true of a different plugin; if so, leave it. Otherwise the README is this plugin's existing documentation and the job is to _move_ it into the docs pages, not to copy it and leave a duplicate behind:
    - For each README section, decide which scaffolded stub page it belongs on (`{docsPath}/options.md`, `{docsPath}/data-formats.md`, `{docsPath}/examples.md`, `{docsPath}/troubleshooting.md`, etc.).
-   - Note content that does not map to any existing stub - those become candidates for new pages.
+   - Never drop content. When a section maps to no existing stub, put it on the closest page or on a new page. If it fits nowhere, leave it in the README and list it in the summary.
    - Quote verbatim when the README's existing text already matches the authoring guide's style; rewrite when it does not.
    - Mark what stays behind. Only the pitch survives in the README: what the plugin does, the problem it solves and the feature list. Everything instructional - option tables, data-shape rules, query examples, troubleshooting, configuration walkthroughs - moves to a page.
    - Write the plan down before editing anything, so nothing is dropped between moving it out and trimming the README in step 7.
@@ -65,9 +65,9 @@ Running this again on a plugin that has already been migrated is a normal thing 
    > "What data shape does the panel expect, and what kinds of queries produce it (time series, table, traces, logs)?" - only when the panel reads query data and source doesn't make the shape clear. Skip it for panels that don't read data at all.
    > "Are there topics that don't map to source - prerequisites, conceptual overviews, troubleshooting scenarios, FAQs? List them and I'll scaffold them as new pages."
 
-   Questions never block the work. Ask them once, then keep writing. If no answer arrives, go with what source supports, write down each assumption you made and list them in the final summary so the author can correct them. Each topic the author names becomes a new page.
+   Questions never block the work. Ask them once, in the session, then keep writing. If no answer arrives, go with what source supports, write down each assumption you made and list them in the final summary so the author can correct them. Each topic the author names becomes a new page.
 
-6. **Write every page** (scaffolded stubs and new pages) as the authoring guides describe, and fill each section that still has a `section-brief` as its brief says. The briefs hold the page formats, so panel docs read the same across plugins. Use the source understanding as your material, plus README excerpts and linked documentation (when harvested in step 3) and author answers (when given in step 5).
+6. **Write every page** (scaffolded stubs and new pages) as the authoring guides describe, and fill each section that still has a `section-brief` as its brief says. The briefs hold the page formats, so panel docs read the same across plugins. Use the source understanding as your material, plus README excerpts and linked documentation (when harvested in step 3) and author answers (when given in step 5). Run `docs:validate` after each page, as the authoring guide says, so problems are fixed before the README rewrite.
 
    **Verbatim-and-flag rule.** When a source `description:` string contradicts observable behaviour elsewhere in source (for example, it lists option values that don't appear in the matching `options:` array, names a default the constructor doesn't set or describes a constraint nothing enforces), keep the description verbatim and add it to the gaps summary in step 10 with file and line references. Don't paraphrase the discrepancy away or invent corrected wording. The author resolves it.
 
@@ -77,15 +77,15 @@ Running this again on a plugin that has already been migrated is a normal thing 
    - A screenshot near the top if the repo has a usable one.
    - Whatever non-documentation sections the project already had and still needs: badges, licence, contributing, support links.
 
-   Delete the instructional sections you moved to pages. Do not leave a condensed copy - two versions of the same guidance drift apart, and the reader is better served by a link. Where the README previously explained something at length, a single sentence pointing into the docs is enough.
+   Delete the instructional sections you moved to pages, and only those. A section that fit on no page stays. Do not leave a condensed copy - two versions of the same guidance drift apart, and the reader is better served by a link. Where the README previously explained something at length, a single sentence pointing into the docs is enough.
 
    Never delete the README, and never invent a pitch. If the README has no clear statement of purpose and step 2 could not derive one from source, ask the author rather than writing marketing copy for them. Preserve any existing badges, licence text and links verbatim.
 
 8. **Remove the "Documentation" link from `info.links` in `src/plugin.json`.** The Documentation tab replaces it, and keeping it would give the catalog page two routes to the docs. Match the entry by `name`, ignoring case, and leave every other link and the rest of the file as they are. Skip this step when there's no such entry.
 
-9. **Validate** with the plugin's `docs:validate` script, and finish as the authoring guide's "Validate" section says.
+9. **Validate** once more with the plugin's `docs:validate` script, and finish as the authoring guide's "Validate" section says.
 
-10. Summarize the work for the author:
+10. Show the author a summary before you finish:
     - Which file you used as the README, `src/README.md` or `README.md`.
     - Pages drafted from source-only understanding (note when source was thin).
     - Pages drafted with README content layered in.
@@ -102,7 +102,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
       - Defaults you couldn't resolve and left as source expressions.
       - Assumptions you made where an author question went unanswered.
       - Purpose unclear from source.
-      - README content that did not get routed to any page.
+      - README content that fit on no page and stayed in the README.
       - Links in `info.links` you couldn't fetch, and linked content that did not get routed to any page.
       - README sections you removed, and which page each moved to, so the author can spot-check the migration.
     - Final `docs:validate` result.
