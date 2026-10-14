@@ -41,3 +41,28 @@ export async function gitCommitNoVerify(commitMsg: string) {
     }
   }
 }
+
+export interface AdditionTodo {
+  file: string;
+  line: number;
+  text: string;
+}
+
+const GIT_GREP_LINE_PATTERN = /^(.+?):(\d+):(.*)$/;
+
+// Finds the `TODO(<additionName>)` markers an addition's instructions ask the agent to leave for
+// anything it could not apply. --untracked covers files the addition created
+export async function findAdditionTodos(additionName: string, cwd: string): Promise<AdditionTodo[]> {
+  try {
+    const { stdout } = await exec(`git grep -n --untracked -F "TODO(${additionName})"`, { cwd });
+
+    return stdout
+      .split('\n')
+      .map((line) => GIT_GREP_LINE_PATTERN.exec(line))
+      .filter((match): match is RegExpExecArray => match !== null)
+      .map(([, file, line, text]) => ({ file, line: Number(line), text: text.trim() }));
+  } catch (error) {
+    // git grep exits 1 when nothing matches. that, and git being unavailable, both mean nothing to report
+    return [];
+  }
+}
