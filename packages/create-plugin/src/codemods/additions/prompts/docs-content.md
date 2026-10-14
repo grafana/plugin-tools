@@ -10,27 +10,31 @@ Throughout, `{docsPath}` means the `docsPath` value in `src/plugin.json` (`catal
 
 This works on greenfield panels (no existing docs - drive content from source) and on brownfield panels (a README full of documentation - move it onto pages, then trim the README back to what the Overview tab needs). Both paths are first-class.
 
+The README stays the source of the catalog's Overview tab. `index.md` never appears there - it is the Documentation tab's landing page, written for a reader who has already installed the plugin and clicked through from Overview.
+
 Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guides that ship with `@grafana/plugin-docs-cli`. They hold the frontmatter shape, when to split a page into a folder, how to handle section briefs, the style rules and when the docs are done. This document only adds what is specific to a first migration and to panel plugins.
 
 This is meant to run once, after `add docs`. Ongoing per-page updates are routine work: edit the pages directly against those conventions.
 
 ## Check first
 
-Search the docs folder for `section-brief` comments. If none remain, the pages are already written. Report that, and ask the author whether they want only the README migration (steps 1, 3, 7 and 8). Stop if they don't.
+Search the docs folder for `section-brief` comments. A section that still has its brief is yours to write. A section without one has been written by the author, so never rewrite it.
 
-Running this again on a plugin that has already been migrated is a normal thing to do. Never overwrite a page the author has written.
+If no briefs remain, the pages are already written. Report that, and ask the author whether they want only the README and linked docs migrated: steps 1 and 3, adding that content to the existing pages without rewriting what is there, then steps 7 and 8. Stop if they don't.
+
+Running this again on a plugin that has already been migrated is a normal thing to do.
 
 ## Steps
 
-1. Inventory everything available. Read in parallel:
+1. Inventory everything available. Read:
    - `src/plugin.json` (plugin type, name, declared `includes`, `info.description`, `info.links`)
-   - `src/module.ts` and the panel component it registers, `src/types.ts` and any other source entry points
+   - `src/module.ts` (or `src/module.tsx`) and the panel component it registers, `src/types.ts` and any other source entry points
    - `provisioning/dashboards/*.json` if present - bundled example dashboards, the canonical source for `{docsPath}/examples.md`
    - `README.md` and `CHANGELOG.md` if present (these may be near-empty boilerplate for fresh panels - that's fine)
    - Documentation linked from `info.links` in `src/plugin.json`. Walk every entry and read the ones that may hold material for the docs pages: an entry named "Documentation", and any entry that points at a user guide, wiki, docs site or a markdown file such as `TESTING.md` or `CONFIGURATION.md`. Skip links with nothing to harvest, such as issue trackers, support portals and vendor or project home pages. When a link points at a file in this repository (its URL matches the `repository` field in `package.json` or the git remote), read the local file instead of fetching it. Fetch the rest, and note each link you couldn't fetch for the summary.
    - Image assets under `src/img/`, `src/img/screenshots/`, `screenshots/` and `{docsPath}/img/`. Copy usable screenshots into `{docsPath}/img/` during the fill pass and reference them from the pages. If there are none, flag the gap in the final summary.
 
-2. **Build a working understanding from the `PanelPlugin` builder. This step is mandatory; do not skip even when README is rich.** Walk the builder chain from `src/module.ts`, into any helpers it calls, and note:
+2. **Build a working understanding from the `PanelPlugin` builder. This step is mandatory; do not skip even when README is rich.** Walk the builder chain from the module file, into any helpers it calls, and note:
    - The panel's purpose in one sentence, from `info.description`, the component and the option descriptions.
    - Every panel option and custom field option: its `name`, `description`, `defaultValue`, `category` and builder method.
    - Which standard field options `useFieldConfig` enables, if it is called at all.
@@ -41,7 +45,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
 3. **Plan the README migration.** First decide whether there is anything to migrate. Skip the README part of this step when `README.md` says nothing specific to this plugin - the `create-plugin` scaffold ships a generic one titled "Grafana panel plugin template" that explains what panel plugins are in general, plus getting-started and contributing boilerplate. Generic boilerplate is not documentation: do not move it onto pages. The test is whether a sentence would still be true of a different plugin; if so, leave it. Otherwise the README is this plugin's existing documentation and the job is to _move_ it into the docs pages, not to copy it and leave a duplicate behind:
    - For each README section, decide which scaffolded stub page it belongs on (`{docsPath}/options.md`, `{docsPath}/data-formats.md`, `{docsPath}/examples.md`, `{docsPath}/troubleshooting.md`, etc.).
    - Note content that does not map to any existing stub - those become candidates for new pages.
-   - Quote verbatim when the README's existing style already matches those conventions; rewrite when it does not.
+   - Quote verbatim when the README's existing text already matches the authoring guide's style; rewrite when it does not.
    - Mark what stays behind. Only the pitch survives in the README: what the plugin does, the problem it solves and the feature list. Everything instructional - option tables, data-shape rules, query examples, troubleshooting, configuration walkthroughs - moves to a page.
    - Write the plan down before editing anything, so nothing is dropped between moving it out and trimming the README in step 7.
    - Plan the documentation harvested from `info.links` in step 1 the same way, section by section. Content from another file in this repository is a move, like the README. Content from an external site is a copy, since you can't trim it. Leave out what the README or source already covers, and keep the source understanding from step 2 as the authority when the two disagree.
@@ -61,7 +65,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
    Questions never block the work. Ask them once, then keep writing. If no answer arrives, go with what source supports, write down each assumption you made and list them in the final summary so the author can correct them. Each topic the author names becomes a new page.
 
-6. **Write every page** (scaffolded stubs and new pages) as the authoring guides describe, and fill each section as its `section-brief` says. The briefs hold the page formats, so panel docs read the same across plugins. Use the source understanding as your material, plus README excerpts and linked documentation (when harvested in step 3) and author answers (when given in step 5).
+6. **Write every page** (scaffolded stubs and new pages) as the authoring guides describe, and fill each section that still has a `section-brief` as its brief says. The briefs hold the page formats, so panel docs read the same across plugins. Use the source understanding as your material, plus README excerpts and linked documentation (when harvested in step 3) and author answers (when given in step 5).
 
    **Verbatim-and-flag rule.** When a source `description:` string contradicts observable behaviour elsewhere in source (for example, it lists option values that don't appear in the matching `options:` array, names a default the constructor doesn't set or describes a constraint nothing enforces), keep the description verbatim and add it to the gaps summary in step 10 with file and line references. Don't paraphrase the discrepancy away or invent corrected wording. The author resolves it.
 
@@ -73,13 +77,13 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
    Delete the instructional sections you moved to pages. Do not leave a condensed copy - two versions of the same guidance drift apart, and the reader is better served by a link. Where the README previously explained something at length, a single sentence pointing into the docs is enough.
 
-   Never invent a pitch. If the README has no clear statement of purpose and step 2 could not derive one from source, ask the author rather than writing marketing copy for them. Preserve any existing badges, licence text and links verbatim.
+   Never delete the README, and never invent a pitch. If the README has no clear statement of purpose and step 2 could not derive one from source, ask the author rather than writing marketing copy for them. Preserve any existing badges, licence text and links verbatim.
 
 8. **Remove the "Documentation" link from `info.links` in `src/plugin.json`.** The Documentation tab replaces it, and keeping it would give the catalog page two routes to the docs. Match the entry by `name`, ignoring case, and leave every other link and the rest of the file as they are. Skip this step when there's no such entry.
 
 9. **Validate** with the plugin's `docs:validate` script, and finish as the authoring guide's "Validate" section says.
 
-10. Report a summary to the user:
+10. Summarize the work for the author:
     - Pages drafted from source-only understanding (note when source was thin).
     - Pages drafted with README content layered in.
     - Pages drafted with content from `info.links`, naming the link each came from.
@@ -99,10 +103,6 @@ Running this again on a plugin that has already been migrated is a normal thing 
       - README sections you removed, and which page each moved to, so the author can spot-check the migration.
     - Final `docs:validate` result.
 
-## Notes
-
-The README stays and remains the Overview tab's source, whether or not `docsPath` is set. `index.md` never appears on Overview - it is the Documentation tab's landing page, written for a reader who has already installed the plugin and clicked through from Overview. Never delete the README. On a brownfield plugin, move the instructional content out and trim what is left to the pitch. On a greenfield plugin, leave the README alone beyond the pitch.
-
 ## Verify
 
 `docs:validate` reports no warnings, as step 9 says. Limit fixes to problems in pages you wrote or changed.
@@ -112,4 +112,5 @@ The README stays and remains the Overview tab's source, whether or not `docsPath
 - Do not modify anything under `.config/`.
 - Do not change the plugin id or type in `src/plugin.json`. The only edit to that file is removing the "Documentation" link in step 8.
 - Do not upgrade dependencies or change scripts, workflows or any source code.
+- Do not reformat files you did not change.
 - Do not leave `TODO` markers in the pages. Anything published in a page is shown to catalog readers, so report gaps in the summary instead.
