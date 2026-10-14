@@ -9,6 +9,8 @@ import { AGENT_RUNS_DIR } from './handoff.js';
 import {
   ABORT_CHOICE,
   buildAdditionTodosWarning,
+  buildSkippedOptionalStepMessage,
+  buildUnfinishedOptionalStepWarning,
   CONTINUE_CHOICE,
   prepareAgenticAddition,
   runAgenticStep,
@@ -134,6 +136,50 @@ describe('prepareAgenticAddition', () => {
     await prepareAgenticAddition(promptOnly, '/opt/homebrew/bin/claude');
 
     expect(resolveMock).toHaveBeenCalledWith({ agentFlag: '/opt/homebrew/bin/claude' });
+  });
+
+  it('should pass the agent summary through to the resolver', async () => {
+    resolveMock.mockResolvedValue({ mode: 'enabled', agent: fakeAgent });
+
+    await prepareAgenticAddition({ ...promptOnly, agentSummary: 'An agent can port things.' }, undefined);
+
+    expect(resolveMock).toHaveBeenCalledWith({ agentFlag: undefined, agentSummary: 'An agent can port things.' });
+  });
+
+  describe('when the agent step is optional', () => {
+    const optionalHybrid: Addition = {
+      name: 'docs',
+      description: 'Scaffolds docs.',
+      scriptPath: 'file:///virtual/docs.js',
+      prompt: 'file:///virtual/docs.md',
+      optionalAgent: true,
+    };
+
+    it.each([
+      ['no agent is installed', { mode: 'unavailable', reason: 'no-agents' } as const],
+      ['there is no interactive terminal', { mode: 'unavailable', reason: 'no-tty' } as const],
+    ])('should return the resolution instead of throwing when %s', async (_label, resolution) => {
+      resolveMock.mockResolvedValue(resolution);
+
+      await expect(prepareAgenticAddition(optionalHybrid, undefined)).resolves.toEqual(resolution);
+    });
+
+    it.each([
+      ['a bare --agent', ''],
+      ['--agent=<id>', 'claude-code'],
+    ])('should still throw when %s asked for an agent', async (_label, agentFlag) => {
+      resolveMock.mockResolvedValue({ mode: 'unavailable', reason: 'no-tty' });
+
+      await expect(prepareAgenticAddition(optionalHybrid, agentFlag)).rejects.toThrow(/interactive terminal/);
+    });
+
+    it('should still throw for a hybrid whose agent step is required', async () => {
+      resolveMock.mockResolvedValue({ mode: 'unavailable', reason: 'no-agents' });
+
+      await expect(prepareAgenticAddition({ ...optionalHybrid, optionalAgent: false }, undefined)).rejects.toThrow(
+        /needs an AI agent/
+      );
+    });
   });
 });
 
@@ -289,6 +335,37 @@ describe('runAgenticStep', () => {
     });
   });
 
+  describe('when an optional agent step does not finish', () => {
+    function runOptionalStep() {
+      return runStep({
+        addition: { ...promptOnly, scriptPath: 'file:///virtual/rspack-overrides.js', optionalAgent: true },
+        context: createContextWithChanges(),
+      });
+    }
+
+    it('should report a failed handoff instead of throwing', async () => {
+      runAgentSessionMock.mockResolvedValue(handoffResult('failed', 'Could not parse the config.'));
+
+      await expect(runOptionalStep()).resolves.toEqual({
+        kind: 'not-finished',
+        message: 'The agent reported failure for rspack-overrides: Could not parse the config.',
+      });
+    });
+
+    it('should report an aborted session instead of throwing', async () => {
+      runAgentSessionMock.mockResolvedValue({ outcome: 'user-aborted' });
+
+      await expect(runOptionalStep()).resolves.toMatchObject({ kind: 'not-finished' });
+    });
+
+    it('should report an abort after an ambiguous exit instead of throwing', async () => {
+      runAgentSessionMock.mockResolvedValue({ outcome: 'ambiguous-exit', exitCode: 1, signal: null });
+      selectPromptMock.mockResolvedValue(ABORT_CHOICE);
+
+      await expect(runOptionalStep()).resolves.toMatchObject({ kind: 'not-finished' });
+    });
+  });
+
   describe('ambiguous exit', () => {
     beforeEach(() => {
       runAgentSessionMock.mockResolvedValue({ outcome: 'ambiguous-exit', exitCode: 1, signal: null });
@@ -338,5 +415,52 @@ describe('buildAdditionTodosWarning', () => {
     const warning = buildAdditionTodosWarning('rspack', [{ file: 'a.ts', line: 1, text: '// TODO(rspack): x' }]);
 
     expect(warning?.title).toBe('rspack left 1 item that needs your attention.');
+  });
+});
+
+describe('optional agent step messages', () => {
+  const docs = {
+    name: 'docs',
+    description: 'Scaffolds docs.',
+    scriptPath: 'file:///virtual/docs.js',
+    prompt: 'file:///virtual/docs.md',
+    optionalAgent: true,
+    agentSummary: 'An AI agent can draft the pages.',
+  };
+
+  it('should say what the skipped step does and where its instructions are', () => {
+    const message = buildSkippedOptionalStepMessage(docs, { mode: 'opted-out', reason: 'declined' });
+
+    expect(message).toEqual({
+      title: 'docs has an optional AI-agent step that was not run.',
+      body: ['An AI agent can draft the pages.', expect.stringMatching(/follow \/virtual\/docs\.md$/)],
+    });
+  });
+
+  it.each([
+    ['no-tty', /not an interactive terminal/],
+    ['no-agents', /no supported agent CLI was found/],
+  ] as const)('should explain why the step was skipped when %s', (reason, expected) => {
+    const message = buildSkippedOptionalStepMessage(docs, { mode: 'unavailable', reason });
+
+    expect(message.body).toContainEqual(expect.stringMatching(expected));
+  });
+
+  it('should leave out the summary when the addition has none', () => {
+    const message = buildSkippedOptionalStepMessage(
+      { ...docs, agentSummary: undefined },
+      { mode: 'opted-out', reason: 'flag' }
+    );
+
+    expect(message.body).toHaveLength(1);
+  });
+
+  it('should keep the codemod changes when the step did not finish', () => {
+    const warning = buildUnfinishedOptionalStepWarning(docs, 'The agent session for docs was aborted.');
+
+    expect(warning.title).toBe('docs was added, but its optional AI-agent step did not finish.');
+    expect(warning.body).toContain('The agent session for docs was aborted.');
+    expect(warning.body.join('\n')).toContain('/virtual/docs.md');
+    expect(warning.body.join('\n')).not.toContain('git restore');
   });
 });

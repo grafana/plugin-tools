@@ -216,6 +216,25 @@ describe('deferred addition output', () => {
     expect(directive).toContain('Port custom webpack &lt;overrides&gt; &amp; loaders.');
     expect(directive).toContain('No handoff file is required');
     expect(directive).not.toContain('<verify>');
+    expect(directive).toContain('Read the instructions file and apply it to this workspace.');
+    expect(directive).not.toContain('optional');
+  });
+
+  it('should ask the outer agent to check with the user before applying an optional step', () => {
+    const directive = buildDirectiveBlock({ ...deferredAddition, isOptional: true });
+
+    expect(directive).toMatch(/This step is optional.*ask whether they want it\. If they do, read the instructions/);
+    expect(directive).not.toContain('Read the instructions file');
+  });
+
+  it('should give the outer agent the summary of an optional step', () => {
+    const directive = buildDirectiveBlock({
+      ...deferredAddition,
+      isOptional: true,
+      agentSummary: 'An agent can draft <pages>.',
+    });
+
+    expect(directive).toContain('already complete. An agent can draft &lt;pages&gt;. Before you change anything');
   });
 
   it('should ask the outer agent to run the verify scripts when the addition has any', () => {

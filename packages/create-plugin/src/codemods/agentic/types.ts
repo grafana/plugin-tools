@@ -25,11 +25,14 @@ export interface InstalledAgent {
   binaryPath: string;
 }
 
+export type UnavailableReason = 'no-tty' | 'no-agents';
+
 // 'unavailable' and 'opted-out' are deliberately distinct: the first means no agent could be used, the
-// second means one could have been but the user said no. Only the first is an error.
+// second means one could have been but the user said no. Only the first is an error, and only when the
+// addition's agent step is required or --agent asked for one.
 export type AgenticResolution =
   | { mode: 'inside-agent' }
-  | { mode: 'unavailable'; reason: 'no-tty' | 'no-agents' }
+  | { mode: 'unavailable'; reason: UnavailableReason }
   | { mode: 'opted-out'; reason: 'flag' | 'declined' }
   | { mode: 'enabled'; agent: InstalledAgent };
 
@@ -47,4 +50,6 @@ export type AgentSessionResult =
 export type AgenticStepResult =
   | { kind: 'applied'; summary: string }
   // the agent session ended without a valid handoff and the user chose to continue
-  | { kind: 'assumed-applied' };
+  | { kind: 'assumed-applied' }
+  // an optional agent step failed or was aborted. the codemod result stands on its own
+  | { kind: 'not-finished'; message: string };

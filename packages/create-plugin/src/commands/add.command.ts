@@ -1,5 +1,11 @@
 import defaultAdditions, { hasPromptStep, isScriptAddition } from '../codemods/additions/additions.js';
-import { buildAdditionTodosWarning, prepareAgenticAddition, runAgenticStep } from '../codemods/agentic/index.js';
+import {
+  buildAdditionTodosWarning,
+  buildSkippedOptionalStepMessage,
+  buildUnfinishedOptionalStepWarning,
+  prepareAgenticAddition,
+  runAgenticStep,
+} from '../codemods/agentic/index.js';
 import { buildDirectiveBlock, buildNextStepsLine, getPromptPath } from '../codemods/agentic/prompts.js';
 import { buildVerifyWarning, runVerifyScripts } from '../codemods/agentic/verify.js';
 import { Context } from '../codemods/context.js';
@@ -71,6 +77,11 @@ export const add = async (argv: minimist.ParsedArgs) => {
         treeWasDirty,
       });
 
+      if (result.kind === 'not-finished') {
+        output.warning(buildUnfinishedOptionalStepWarning(addition, result.message));
+        return;
+      }
+
       const summaryBody = result.kind === 'applied' ? [result.summary] : [];
       const { packageManagerName } = getPackageManagerWithFallback();
       const verifyWarning = buildVerifyWarning(
@@ -98,16 +109,23 @@ export const add = async (argv: minimist.ParsedArgs) => {
       return;
     }
 
-    // opted out, or already running inside an agent: the agent step is handed onwards
+    // opted out, no agent for an optional step, or inside an agent: the agent step is handed onwards
     const deferredAddition = {
       name: addition.name,
       description: addition.description,
       instructionsPath: getPromptPath(addition.prompt),
       verifyScripts: addition.verify ?? [],
+      isOptional: addition.optionalAgent,
+      agentSummary: addition.agentSummary,
     };
 
     if (resolution.mode === 'inside-agent') {
       output.logSingleLine(buildDirectiveBlock(deferredAddition));
+      return;
+    }
+
+    if (addition.optionalAgent) {
+      output.log(buildSkippedOptionalStepMessage(addition, resolution));
       return;
     }
 

@@ -134,6 +134,8 @@ The flag accepts an agent identifier, either `claude-code` or `codex`. It also a
 npx @grafana/create-plugin@latest add <addition> --agent="$HOME/.claude/local/claude"
 ```
 
+If an addition needs an agent and none is available, the command stops before it writes anything. Some additions make the agent step optional. Without `--agent`, those apply their automated part and print the path to the instructions file instead.
+
 ### add --no-agent
 
 To skip the agent, use the `--no-agent` flag:

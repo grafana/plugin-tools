@@ -6,6 +6,7 @@ import { AgenticResolution, InstalledAgent } from './types.js';
 export interface ResolveAgenticOptions {
   // raw minimist value: undefined = flag absent, '' = bare --agent, '<id>' or '<path>' = --agent=..., false = --no-agent
   agentFlag: string | boolean | undefined;
+  agentSummary?: string;
   isTTY?: boolean;
   env?: NodeJS.ProcessEnv;
   detect?: typeof detectInstalledAgents;
@@ -60,15 +61,18 @@ export async function resolveAgenticMode(options: ResolveAgenticOptions): Promis
     return { mode: 'unavailable', reason: 'no-agents' };
   }
 
-  return optInInteractively(installedAgents);
+  return optInInteractively(installedAgents, options.agentSummary);
 }
 
 export const NO_AGENT_CHOICE = "Don't use an agent";
 
 // names the agent and its binary before asking, so the user knows exactly what will run on their behalf
-async function optInInteractively(installedAgents: InstalledAgent[]): Promise<AgenticResolution> {
+async function optInInteractively(
+  installedAgents: InstalledAgent[],
+  agentSummary = 'This addition includes instructions for an AI agent.'
+): Promise<AgenticResolution> {
   output.log({
-    title: 'This addition includes instructions for an AI agent.',
+    title: agentSummary,
     body: [
       'The agent runs on your own account and can edit files and run commands in this repository.',
       ...installedAgents.map((agent) => `${agent.definition.displayName}: ${agent.binaryPath}`),

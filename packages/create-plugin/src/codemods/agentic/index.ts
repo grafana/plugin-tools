@@ -17,7 +17,13 @@ import {
 } from './prompts.js';
 import { resolveAgenticMode } from './resolve.js';
 import { runAgentSession } from './runner.js';
-import { AgenticResolution, AgenticStepResult, AgentSessionResult, InstalledAgent } from './types.js';
+import {
+  AgenticResolution,
+  AgenticStepResult,
+  AgentSessionResult,
+  InstalledAgent,
+  UnavailableReason,
+} from './types.js';
 import type { AdditionTodo } from '../../utils/utils.git.js';
 
 export const ABORT_CHOICE = 'Abort the addition';
@@ -35,7 +41,7 @@ export interface AgenticStepOptions {
 
 // Resolves the agent before any codemod work runs, so a missing agent can never leave an addition
 // half-applied. Returns undefined when the addition needs no agent, and throws when it needs one that
-// is not available.
+// is not available, unless its agent step is optional and no agent was asked for with --agent.
 export async function prepareAgenticAddition(
   addition: Addition,
   agentFlag: string | boolean | undefined
@@ -44,8 +50,9 @@ export async function prepareAgenticAddition(
     return undefined;
   }
 
-  const resolution = await resolveAgenticMode({ agentFlag });
-  if (resolution.mode === 'unavailable') {
+  const resolution = await resolveAgenticMode({ agentFlag, agentSummary: addition.agentSummary });
+  const isAgentRequested = agentFlag !== undefined;
+  if (resolution.mode === 'unavailable' && (!addition.optionalAgent || isAgentRequested)) {
     throw new Error(buildUnavailableMessage(addition, resolution.reason));
   }
 
@@ -109,20 +116,26 @@ export async function runAgenticStep(options: AgenticStepOptions): Promise<Agent
   const withRecoveryNote = (message: string) =>
     context ? [message, '', ...buildHybridRecoveryLines(addition, treeWasDirty)].join('\n') : message;
 
+  // an optional step's codemod result is complete on its own, so an unfinished session doesn't fail the addition
+  const stopUnfinished = (message: string): AgenticStepResult => {
+    if (addition.optionalAgent) {
+      return { kind: 'not-finished', message };
+    }
+    throw new Error(withRecoveryNote(message));
+  };
+
   if (sessionResult.outcome === 'handoff') {
     if (sessionResult.handoff.status === 'failed') {
-      throw new Error(
-        withRecoveryNote(`The agent reported failure for ${addition.name}: ${sessionResult.handoff.summary}`)
-      );
+      return stopUnfinished(`The agent reported failure for ${addition.name}: ${sessionResult.handoff.summary}`);
     }
     return { kind: 'applied', summary: sessionResult.handoff.summary };
   }
 
   if (sessionResult.outcome === 'user-aborted') {
-    throw new Error(withRecoveryNote(`The agent session for ${addition.name} was aborted.`));
+    return stopUnfinished(`The agent session for ${addition.name} was aborted.`);
   }
 
-  return handleAmbiguousExit(addition.name, sessionResult, withRecoveryNote);
+  return handleAmbiguousExit(addition.name, sessionResult, stopUnfinished);
 }
 
 function buildHybridRecoveryLines(addition: Addition & { prompt: string }, treeWasDirty: boolean): string[] {
@@ -137,12 +150,13 @@ function buildHybridRecoveryLines(addition: Addition & { prompt: string }, treeW
   return lines;
 }
 
-function buildUnavailableMessage(addition: Addition & { prompt: string }, reason: 'no-tty' | 'no-agents'): string {
-  const cause =
-    reason === 'no-tty' ? 'this is not an interactive terminal' : 'no supported agent CLI was found on your PATH';
+function describeUnavailableReason(reason: UnavailableReason): string {
+  return reason === 'no-tty' ? 'this is not an interactive terminal' : 'no supported agent CLI was found on your PATH';
+}
 
+function buildUnavailableMessage(addition: Addition & { prompt: string }, reason: UnavailableReason): string {
   return [
-    `${addition.name} needs an AI agent to apply its instructions, and ${cause}.`,
+    `${addition.name} needs an AI agent to apply its instructions, and ${describeUnavailableReason(reason)}.`,
     '',
     'Ways forward:',
     '  - install a supported agent CLI and run this again',
@@ -154,7 +168,7 @@ function buildUnavailableMessage(addition: Addition & { prompt: string }, reason
 async function handleAmbiguousExit(
   additionName: string,
   sessionResult: Extract<AgentSessionResult, { outcome: 'ambiguous-exit' }>,
-  withRecoveryNote: (message: string) => string
+  stopUnfinished: (message: string) => AgenticStepResult
 ): Promise<AgenticStepResult> {
   output.warning({
     title: `The agent session for ${additionName} ended without reporting a result.`,
@@ -169,9 +183,7 @@ async function handleAmbiguousExit(
     return { kind: 'assumed-applied' };
   }
 
-  throw new Error(
-    withRecoveryNote(`The addition was aborted after the agent session for ${additionName} ended unexpectedly.`)
-  );
+  return stopUnfinished(`The addition was aborted after the agent session for ${additionName} ended unexpectedly.`);
 }
 
 function getCodemodChanges(context: Context, treeWasDirty: boolean): CodemodChanges {
@@ -217,5 +229,38 @@ export function buildAdditionTodosWarning(
   return {
     title: `${additionName} left ${todos.length} ${itemsNeed} your attention.`,
     body: todos.map(({ file, line, text }) => `${file}:${line}  ${text}`),
+  };
+}
+
+export interface OptionalStepMessage {
+  title: string;
+  body: string[];
+}
+
+// the session never started: the user declined, passed --no-agent or has no agent that can run it
+export function buildSkippedOptionalStepMessage(
+  addition: Addition & { prompt: string },
+  resolution: AgenticResolution
+): OptionalStepMessage {
+  const body = addition.agentSummary ? [addition.agentSummary] : [];
+  if (resolution.mode === 'unavailable') {
+    body.push(`It was skipped because ${describeUnavailableReason(resolution.reason)}.`);
+  }
+  body.push(`To apply it yourself or with any coding agent, follow ${getPromptPath(addition.prompt)}`);
+
+  return { title: `${addition.name} has an optional AI-agent step that was not run.`, body };
+}
+
+export function buildUnfinishedOptionalStepWarning(
+  addition: Addition & { prompt: string },
+  message: string
+): OptionalStepMessage {
+  return {
+    title: `${addition.name} was added, but its optional AI-agent step did not finish.`,
+    body: [
+      message,
+      'Review anything the agent changed with git diff.',
+      `To finish the step yourself, follow ${getPromptPath(addition.prompt)}`,
+    ],
   };
 }

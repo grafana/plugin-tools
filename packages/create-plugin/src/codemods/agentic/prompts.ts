@@ -37,6 +37,8 @@ export interface DeferredAddition {
   instructionsPath: string;
   // package.json scripts that prove the addition worked; create-plugin cannot run them after an outer agent
   verifyScripts?: string[];
+  isOptional?: boolean;
+  agentSummary?: string;
 }
 
 // escape user/file-derived content embedded in XML-sectioned prompts so it cannot
@@ -113,11 +115,20 @@ Finish this addition in the current workspace now. Remember the handoff contract
 
 export function buildDirectiveBlock(deferredAddition: DeferredAddition): string {
   return `<create_plugin_agent_directive>
-This \`create-plugin add\` run deferred its agent step to you, the AI agent driving this session. Read the instructions file and apply it to this workspace. No handoff file is required in this mode.
+This \`create-plugin add\` run deferred its agent step to you, the AI agent driving this session. ${buildDirectiveTask(deferredAddition)} No handoff file is required in this mode.
 <addition name="${deferredAddition.name}" instructions_file="${deferredAddition.instructionsPath}">
 ${escapeXmlBody(deferredAddition.description)}
 </addition>${buildDirectiveVerifySection(deferredAddition.verifyScripts ?? [])}
 </create_plugin_agent_directive>`;
+}
+
+// the automated half already left a complete result, so the user may not want the agent step at all
+function buildDirectiveTask(deferredAddition: DeferredAddition): string {
+  if (!deferredAddition.isOptional) {
+    return 'Read the instructions file and apply it to this workspace.';
+  }
+  const summary = deferredAddition.agentSummary ? ` ${escapeXmlBody(deferredAddition.agentSummary)}` : '';
+  return `This step is optional, and the automated part is already complete.${summary} Before you change anything, tell the user what the step does and ask whether they want it. If they do, read the instructions file and apply it to this workspace.`;
 }
 
 function buildDirectiveVerifySection(verifyScripts: string[]): string {

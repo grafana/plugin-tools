@@ -91,7 +91,7 @@ To skip the agent, use the `--no-agent` flag:
 
 The command applies the automated part of the addition, if there is one, and then prints the path to the instructions file. Every instructions file works as manual instructions, so you can read it and make the changes yourself.
 
-If an addition needs an agent and none is available, the command stops before it writes anything and tells you how to continue.
+If an addition needs an agent and none is available, the command stops before it writes anything and tells you how to continue. Some additions make the agent step optional, because their automated part is complete on its own. For those, the command applies the automated part and prints the path to the instructions file, just as with `--no-agent`. It still stops if you asked for an agent with `--agent`.
 
 ### Run add from inside an agent session
 

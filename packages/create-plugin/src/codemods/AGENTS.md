@@ -42,6 +42,8 @@ An addition registry entry in @./additions/additions.ts takes one of three shape
 
 Prefer a script addition whenever the change is mechanically expressible. Reach for a prompt only when judgement over user-authored code is unavoidable.
 
+By default an addition with a prompt fails before any codemod work when no agent can run, because the codemod half alone would leave the plugin unfinished. Set `optionalAgent: true` on a hybrid only when the codemod's output is already a complete, valid state and the agent step is extra work on top of it. When no agent is available, the codemod runs and the instructions path is printed instead, unless the user asked for one with `--agent`. If the agent session fails or is aborted, the codemod result stays and `add` ends with a warning, not an error. Set `agentSummary` to one sentence saying what the agent will do. It replaces the generic title shown before the user is asked whether to use an agent.
+
 The registry is annotated `Addition[]` rather than using `satisfies`. With `satisfies` the inferred element type stays the object literal, which stops `isScriptAddition` and `hasPromptStep` narrowing it for consumers.
 
 ## Prompt authoring rules

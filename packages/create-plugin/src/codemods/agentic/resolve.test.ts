@@ -151,6 +151,22 @@ describe('resolveAgenticMode', () => {
     expect(outputLogMock.mock.invocationCallOrder[0]).toBeLessThan(confirmPromptMock.mock.invocationCallOrder[0]);
   });
 
+  it('should explain that the addition has agent instructions when it has no summary', async () => {
+    confirmPromptMock.mockResolvedValue(true);
+    await resolveAgenticMode(createOptions({ detect: vi.fn().mockResolvedValue([claude]) }));
+    expect(outputLogMock).toHaveBeenCalledWith(
+      expect.objectContaining({ title: 'This addition includes instructions for an AI agent.' })
+    );
+  });
+
+  it("should use the addition's agent summary as the title before asking", async () => {
+    confirmPromptMock.mockResolvedValue(true);
+    await resolveAgenticMode(
+      createOptions({ agentSummary: 'An AI agent can draft the pages.', detect: vi.fn().mockResolvedValue([claude]) })
+    );
+    expect(outputLogMock).toHaveBeenCalledWith(expect.objectContaining({ title: 'An AI agent can draft the pages.' }));
+  });
+
   it('should resolve to opted-out when the user declines the confirm prompt', async () => {
     confirmPromptMock.mockResolvedValue(false);
     const resolution = await resolveAgenticMode(createOptions({ detect: vi.fn().mockResolvedValue([claude]) }));
