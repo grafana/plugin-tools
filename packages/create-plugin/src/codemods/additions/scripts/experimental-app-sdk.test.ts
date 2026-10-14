@@ -2,6 +2,11 @@ import { Context } from '../../context.js';
 import { output } from '../../../utils/utils.console.js';
 import appSdk from './experimental-app-sdk.js';
 
+vi.mock(import('../../../utils/utils.packageManager.js'), async (importOriginal) => ({
+  ...(await importOriginal()),
+  getPackageManagerWithFallback: () => ({ packageManagerName: 'npm', packageManagerVersion: '10.9.0' }),
+}));
+
 const APP_SDK_FILES = [
   '.config/app-sdk/generate-kinds.mjs',
   '.config/app-sdk/README.md',

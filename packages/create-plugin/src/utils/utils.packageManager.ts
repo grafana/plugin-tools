@@ -9,7 +9,7 @@ const NPM_LOCKFILE = 'package-lock.json';
 const PNPM_LOCKFILE = 'pnpm-lock.yaml';
 const YARN_LOCKFILE = 'yarn.lock';
 const SUPPORTED_PACKAGE_MANAGERS = ['npm', 'yarn', 'pnpm'];
-export const DEFAULT_PACKAGE_MANAGER = { packageManagerName: 'npm', packageManagerVersion: '10.9.0' };
+const DEFAULT_PACKAGE_MANAGER = { packageManagerName: 'npm', packageManagerVersion: '10.9.0' };
 
 export type PackageManager = {
   packageManagerName: string;
