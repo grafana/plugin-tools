@@ -12,6 +12,8 @@ Fill this in: Describe the data shape {{{pluginName}}} needs from its data sourc
 
 <!-- section-brief
 Fill this in: Describe the data frame shape {{{pluginName}}} expects: time series with N numeric fields, table with specific columns, single numeric value, geographic coordinates, log lines, etc. Name the required field types (time, number, string, boolean) and any minimum/maximum field counts.
+
+After each shape, add a `#### Example` table whose headers are the field names the panel reads, with 3-5 rows of realistic values, so a reader can build a matching query or test data.
 -->
 
 ## Field mapping
