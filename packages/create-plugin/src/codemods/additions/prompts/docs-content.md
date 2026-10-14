@@ -10,7 +10,9 @@ Throughout, `{docsPath}` means the `docsPath` value in `src/plugin.json` (`catal
 
 This works on greenfield panels (no existing docs - drive content from source) and on brownfield panels (a README full of documentation - move it onto pages, then trim the README back to what the Overview tab needs). Both paths are first-class.
 
-The README stays the source of the catalog's Overview tab. `index.md` never appears there - it is the Documentation tab's landing page, written for a reader who has already installed the plugin and clicked through from Overview.
+Throughout, "the README" means `src/README.md` when that file exists, and the root `README.md` otherwise. The plugin build ships `src/README.md` when there is one, so it takes precedence: it is the source of the catalog's Overview tab, and the root `README.md` is then only for the repository. Always read and edit `src/README.md` when it exists, and leave the root `README.md` alone.
+
+`index.md` never appears on the Overview tab - it is the Documentation tab's landing page, written for a reader who has already installed the plugin and clicked through from Overview.
 
 Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guides that ship with `@grafana/plugin-docs-cli`. They hold the frontmatter shape, when to split a page into a folder, how to handle section briefs, the style rules and when the docs are done. This document only adds what is specific to a first migration and to panel plugins.
 
@@ -30,7 +32,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
    - `src/plugin.json` (plugin type, name, declared `includes`, `info.description`, `info.links`)
    - `src/module.ts` (or `src/module.tsx`) and the panel component it registers, `src/types.ts` and any other source entry points
    - `provisioning/dashboards/*.json` if present - bundled example dashboards, the canonical source for `{docsPath}/examples.md`
-   - `README.md` and `CHANGELOG.md` if present (these may be near-empty boilerplate for fresh panels - that's fine)
+   - The README (`src/README.md` if it exists, otherwise `README.md`) and `CHANGELOG.md` if present. These may be near-empty boilerplate for fresh panels - that's fine.
    - Documentation linked from `info.links` in `src/plugin.json`. Walk every entry and read the ones that may hold material for the docs pages: an entry named "Documentation", and any entry that points at a user guide, wiki, docs site or a markdown file such as `TESTING.md` or `CONFIGURATION.md`. Skip links with nothing to harvest, such as issue trackers, support portals and vendor or project home pages. When a link points at a file in this repository (its URL matches the `repository` field in `package.json` or the git remote), read the local file instead of fetching it. Fetch the rest, and note each link you couldn't fetch for the summary.
    - Image assets under `src/img/`, `src/img/screenshots/`, `screenshots/` and `{docsPath}/img/`. Copy usable screenshots into `{docsPath}/img/` during the fill pass and reference them from the pages. If there are none, flag the gap in the final summary.
 
@@ -38,11 +40,11 @@ Running this again on a plugin that has already been migrated is a normal thing 
    - The panel's purpose in one sentence, from `info.description`, the component and the option descriptions.
    - Every panel option and custom field option: its `name`, `description`, `defaultValue`, `category` and builder method.
    - Which standard field options `useFieldConfig` enables, if it is called at all.
-   - Capabilities worth a feature bullet in the plugin's own `README.md`, which is the Overview tab: `setDataSupport` flags such as annotations and alert states, and a suggestions or presets supplier. When step 7 is skipped because the README is the scaffold default, list these bullets in the summary instead.
+   - Capabilities worth a feature bullet in the plugin's README, which is the Overview tab: `setDataSupport` flags such as annotations and alert states, and a suggestions or presets supplier. When step 7 is skipped because the README is the scaffold default, list these bullets in the summary instead.
 
    If source is genuinely thin (a barely-modified scaffold), say so in the final summary; do not invent.
 
-3. **Plan the README migration.** First decide whether there is anything to migrate. Skip the README part of this step when `README.md` says nothing specific to this plugin - the `create-plugin` scaffold ships a generic one titled "Grafana panel plugin template" that explains what panel plugins are in general, plus getting-started and contributing boilerplate. Generic boilerplate is not documentation: do not move it onto pages. The test is whether a sentence would still be true of a different plugin; if so, leave it. Otherwise the README is this plugin's existing documentation and the job is to _move_ it into the docs pages, not to copy it and leave a duplicate behind:
+3. **Plan the README migration.** First decide whether there is anything to migrate. Skip the README part of this step when the README says nothing specific to this plugin. The `create-plugin` scaffold ships a `src/README.md` that is only a title and commented-out guidance, and a generic root `README.md` titled "Grafana panel plugin template" that explains what panel plugins are in general, plus getting-started and contributing boilerplate. Generic boilerplate is not documentation: do not move it onto pages. The test is whether a sentence would still be true of a different plugin; if so, leave it. Otherwise the README is this plugin's existing documentation and the job is to _move_ it into the docs pages, not to copy it and leave a duplicate behind:
    - For each README section, decide which scaffolded stub page it belongs on (`{docsPath}/options.md`, `{docsPath}/data-formats.md`, `{docsPath}/examples.md`, `{docsPath}/troubleshooting.md`, etc.).
    - Note content that does not map to any existing stub - those become candidates for new pages.
    - Quote verbatim when the README's existing text already matches the authoring guide's style; rewrite when it does not.
@@ -69,7 +71,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
    **Verbatim-and-flag rule.** When a source `description:` string contradicts observable behaviour elsewhere in source (for example, it lists option values that don't appear in the matching `options:` array, names a default the constructor doesn't set or describes a constraint nothing enforces), keep the description verbatim and add it to the gaps summary in step 10 with file and line references. Don't paraphrase the discrepancy away or invent corrected wording. The author resolves it.
 
-7. **Rewrite `README.md` down to its job.** Only once every page from step 6 is written, so no content is lost in transit. Skip this step entirely when you skipped the README part of step 3 - a plugin whose README was already at scaffold default has nothing to migrate and nothing to trim. The README is the Overview tab, seen mostly by people who have not installed the plugin yet and are deciding whether to. It should end up as:
+7. **Rewrite the README down to its job.** This is `src/README.md` when it exists, and never the root `README.md` in that case. Only once every page from step 6 is written, so no content is lost in transit. Skip this step entirely when you skipped the README part of step 3 - a plugin whose README was already at scaffold default has nothing to migrate and nothing to trim. The README is the Overview tab, seen mostly by people who have not installed the plugin yet and are deciding whether to. It should end up as:
    - One or two paragraphs saying what the plugin does and which problem it solves. Lead with the problem, not the implementation.
    - A short list of features as bullet points - concrete capabilities, one per bullet.
    - A screenshot near the top if the repo has a usable one.
@@ -84,6 +86,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
 9. **Validate** with the plugin's `docs:validate` script, and finish as the authoring guide's "Validate" section says.
 
 10. Summarize the work for the author:
+    - Which file you used as the README, `src/README.md` or `README.md`.
     - Pages drafted from source-only understanding (note when source was thin).
     - Pages drafted with README content layered in.
     - Pages drafted with content from `info.links`, naming the link each came from.
@@ -110,7 +113,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
 ## Out of scope
 
-- Change only files inside `{docsPath}`. There are two exceptions: `README.md` in step 7, and the "Documentation" entry in `info.links` of `src/plugin.json` in step 8. Everything else stays as it is, including `.config/`, source code, dependencies, scripts and workflows.
+- Change only files inside `{docsPath}`. There are two exceptions: the README in step 7 (`src/README.md` when it exists), and the "Documentation" entry in `info.links` of `src/plugin.json` in step 8. Everything else stays as it is, including `.config/`, source code, dependencies, scripts and workflows.
 - Never change source code to fit the docs. When the two disagree, document what the source does and flag the difference in the summary.
 - Do not reformat files you did not change.
 - Do not leave `TODO` markers in the pages. Anything published in a page is shown to catalog readers, so report gaps in the summary instead.
