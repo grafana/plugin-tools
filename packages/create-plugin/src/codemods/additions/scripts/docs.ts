@@ -34,6 +34,9 @@ export const schema = v.object({
 
 type Options = v.InferOutput<typeof schema>;
 
+// kept current by a Renovate custom manager in .github/renovate.json, which matches this exact line
+const PLUGIN_DOCS_CLI_VERSION = '^0.7.0';
+
 // each type needs a template set under `templates/docs/<type>/`
 const SUPPORTED_PLUGIN_TYPES = ['panel'] as const;
 type SupportedPluginType = (typeof SUPPORTED_PLUGIN_TYPES)[number];
@@ -109,7 +112,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const data = { ...templateData, pluginId, docsPath, createPluginCmd };
 
   // step 3: add @grafana/plugin-docs-cli as a devDependency
-  addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': '0.7.0' });
+  addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': PLUGIN_DOCS_CLI_VERSION });
 
   // step 4: add docs:serve and docs:validate npm scripts
   addDocsScripts(context);

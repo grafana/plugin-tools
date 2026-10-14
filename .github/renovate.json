@@ -39,7 +39,8 @@
   // (This repo's own CI workflows under .github/workflows are matched by a packageRule below.)
   "github-actions": {
     "managerFilePatterns": [
-      "/(^|/)packages/create-plugin/templates/github/workflows/.+\\.ya?ml$/"
+      "/(^|/)packages/create-plugin/templates/github/workflows/.+\\.ya?ml$/",
+      "/(^|/)packages/create-plugin/templates/docs/common/workflows/.+\\.ya?ml$/"
     ]
   },
   "postUpdateOptions": ["npmDedupe"],
@@ -47,6 +48,7 @@
   // Custom regex managers:
   //  1. @grafana/* versions inside create-plugin's template `_package.json`.
   //  2. The grafana-enterprise image version pinned in docker-compose files.
+  //  3. The @grafana/plugin-docs-cli version that `create-plugin add docs` installs.
   "customManagers": [
     {
       "customType": "regex",
@@ -64,6 +66,17 @@
       ],
       "depNameTemplate": "grafana/grafana-enterprise",
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)packages/create-plugin/src/codemods/additions/scripts/docs\\.ts$/"
+      ],
+      "matchStrings": [
+        "const PLUGIN_DOCS_CLI_VERSION = '\\^?(?<currentValue>[^']+)';"
+      ],
+      "depNameTemplate": "@grafana/plugin-docs-cli",
+      "datasourceTemplate": "npm"
     }
   ],
   // packageRules apply IN ORDER; for a given update a later matching rule overrides an earlier one.
@@ -151,6 +164,17 @@
       "prConcurrentLimit": 0,
       "commitMessagePrefix": "fix(templates):"
     },
+    // Bumps the @grafana/plugin-docs-cli version `create-plugin add docs` installs (custom.regex manager).
+    // Not automerged: the guides it ships change with each version, so the scaffolded AGENTS.md may need a look.
+    {
+      "automerge": false,
+      "groupName": "plugin-docs-cli docs addition version",
+      "labels": ["dependencies", "create-plugin"],
+      "matchManagers": ["custom.regex"],
+      "matchPackageNames": ["@grafana/plugin-docs-cli"],
+      "minimumReleaseAge": null,
+      "commitMessagePrefix": "fix(create-plugin):"
+    },
     // GitHub Actions inside create-plugin's scaffolded workflow templates - these ship to plugin
     // authors, so warrant a create-plugin release with fix(templates):.
     {
@@ -159,7 +183,8 @@
       "labels": ["create-plugin"],
       "matchManagers": ["github-actions"],
       "matchFileNames": [
-        "packages/create-plugin/templates/github/workflows/**"
+        "packages/create-plugin/templates/github/workflows/**",
+        "packages/create-plugin/templates/docs/common/workflows/**"
       ],
       "pinDigests": false,
       "commitMessagePrefix": "fix(templates):"
