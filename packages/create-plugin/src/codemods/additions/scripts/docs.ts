@@ -13,6 +13,7 @@ import {
 } from '../../utils.js';
 import { appendToAgentInstructions, ensureConfigAgentFiles, ensureRootAgentFiles } from '../../utils.agents.js';
 import { type BumpActionRefsResult, bumpActionRefs } from '../../utils.workflows.js';
+import { getPackageManagerExecCmd } from '../../../utils/utils.packageManager.js';
 
 // an allowlist, because the value becomes a path on disk and is embedded unescaped in a YAML workflow
 const DOCS_PATH_RE = /^[a-zA-Z0-9](?:[a-zA-Z0-9_-]|\/[a-zA-Z0-9_-])*$/;
@@ -102,8 +103,10 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     context.updateFile('src/plugin.json', JSON.stringify({ ...pluginJson, docsPath }, null, 2));
   }
 
-  const data = { ...getTemplateDataFromContext(context), pluginId, docsPath };
-  const { packageManagerName } = data;
+  const templateData = getTemplateDataFromContext(context);
+  const { packageManagerName, packageManagerVersion } = templateData;
+  const createPluginCmd = `${getPackageManagerExecCmd(packageManagerName, packageManagerVersion)}@latest`;
+  const data = { ...templateData, pluginId, docsPath, createPluginCmd };
 
   // step 3: add @grafana/plugin-docs-cli as a devDependency
   addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': '0.7.0' });
@@ -132,7 +135,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
 
   // step 9: deferred so it prints after the runner's change list, and only when something changed
   if (context.hasChanges()) {
-    context.setMessage(buildNextStepsMessage({ docsPath, packageManagerName, pluginActions }));
+    context.setMessage(buildNextStepsMessage({ docsPath, packageManagerName, createPluginCmd, pluginActions }));
   }
 
   return context;
@@ -141,15 +144,20 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
 function buildNextStepsMessage(opts: {
   docsPath: string;
   packageManagerName: string;
+  createPluginCmd: string;
   pluginActions: BumpActionRefsResult;
 }): ContextMessage {
-  const { docsPath, packageManagerName, pluginActions } = opts;
+  const { docsPath, packageManagerName, createPluginCmd, pluginActions } = opts;
   const run = (script: string) => output.formatCode(`${packageManagerName} run ${script}`);
 
   const steps: NextStep[] = [
     {
       title: `Read ${docsPath}/README.md`,
       detail: 'It has the commands and a link to the plugin docs guide.',
+    },
+    {
+      title: 'Optional: have an AI agent draft the pages',
+      detail: `Commit these changes, then run ${output.formatCode(`${createPluginCmd} add docs-content`)}. It fills the pages from your source code and README.`,
     },
     {
       title: `Fill in or review the pages under ${docsPath}/`,
@@ -191,7 +199,7 @@ function formatNextStep({ title, detail }: NextStep, marker: string): string[] {
   return lines;
 }
 
-export function assertSupportedPluginType(context: Context): SupportedPluginType {
+export function assertSupportedPluginType(context: Context, additionName = 'docs'): SupportedPluginType {
   const { type } = readJsonFile<PluginJson>(context, 'src/plugin.json');
 
   if (isSupportedPluginType(type)) {
@@ -200,10 +208,12 @@ export function assertSupportedPluginType(context: Context): SupportedPluginType
 
   const supported = SUPPORTED_PLUGIN_TYPES.join(', ');
   if (type === 'app' || type === 'datasource') {
-    throw new Error(`create-plugin add docs does not support '${type}' plugins yet. Supported so far: ${supported}.`);
+    throw new Error(
+      `create-plugin add ${additionName} does not support '${type}' plugins yet. Supported so far: ${supported}.`
+    );
   }
   throw new Error(
-    `create-plugin add docs needs a plugin type of ${supported} in src/plugin.json, but found '${type ?? 'unset'}'.`
+    `create-plugin add ${additionName} needs a plugin type of ${supported} in src/plugin.json, but found '${type ?? 'unset'}'.`
   );
 }
 

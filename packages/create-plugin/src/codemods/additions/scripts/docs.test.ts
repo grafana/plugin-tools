@@ -735,10 +735,16 @@ describe('docs codemod', () => {
       expect(context.doesFileExist('.config/AGENTS/e2e-testing.md')).toBe(false);
     });
 
-    it('does not point docs/README.md at a skill', () => {
+    it.each([
+      ['npm@10.2.3', 'npx -y @grafana/create-plugin@latest add docs-content'],
+      ['pnpm@9.1.0', 'pnpm dlx @grafana/create-plugin@latest add docs-content'],
+      ['yarn@4.1.0', 'yarn dlx @grafana/create-plugin@latest add docs-content'],
+    ])('points docs/README.md at docs-content with the %s exec command', (packageManager, command) => {
       const context = makeContext();
+      context.updateFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {}, packageManager }));
       docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/README.md') ?? '';
+      expect(content).toContain(`\`${command}\``);
       expect(content).not.toContain('bootstrap-plugin-docs');
     });
   });
@@ -767,13 +773,22 @@ describe('docs codemod', () => {
     it('numbers the steps in the order the author does them', () => {
       expect(nextSteps(makeContext()).filter((line) => /^ \d\. /.test(line))).toEqual([
         ' 1. Read docs/README.md',
-        ' 2. Fill in or review the pages under docs/',
+        ' 2. Optional: have an AI agent draft the pages',
+        ' 3. Fill in or review the pages under docs/',
       ]);
+    });
+
+    it('tells the author to commit before running docs-content, since add needs a clean tree', () => {
+      const body = nextSteps(makeContext());
+      const step = body.indexOf(' 2. Optional: have an AI agent draft the pages');
+      expect(body[step + 1]).toBe(
+        '    Commit these changes, then run npx -y @grafana/create-plugin@latest add docs-content. It fills the pages from your source code and README.'
+      );
     });
 
     it('indents each detail line under its step', () => {
       const body = nextSteps(makeContext());
-      const step = body.indexOf(' 2. Fill in or review the pages under docs/');
+      const step = body.indexOf(' 3. Fill in or review the pages under docs/');
       expect(body[step + 1]).toBe(
         '    Preview them with npm run docs:serve, which also warns about every section left to fill.'
       );

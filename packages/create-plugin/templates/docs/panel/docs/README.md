@@ -8,6 +8,7 @@ To learn how plugin docs work and how to write them, read the
 
 ## Next steps
 
+1. Optional: have an AI agent draft the pages from your source code and README. Commit your changes, then run `{{createPluginCmd}} add docs-content`.
 1. Fill in or review the pages. Each section has a note that says what belongs there.
 1. Run `{{packageManagerName}} run docs:serve` to preview the docs. It also reports warnings for every section left to fill.
 
