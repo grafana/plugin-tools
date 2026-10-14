@@ -169,6 +169,7 @@
     {
       "automerge": false,
       "groupName": "plugin-docs-cli docs addition version",
+      "groupSlug": "plugin-docs-cli-docs-addition",
       "labels": ["dependencies", "create-plugin"],
       "matchManagers": ["custom.regex"],
       "matchPackageNames": ["@grafana/plugin-docs-cli"],

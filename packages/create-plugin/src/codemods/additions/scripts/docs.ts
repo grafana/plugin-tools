@@ -22,6 +22,10 @@ import { type BumpActionRefsResult, bumpActionRefs } from '../../utils.workflows
 // an allowlist, because the value becomes a path on disk and is embedded unescaped in a YAML workflow
 const DOCS_PATH_RE = /^[a-zA-Z0-9](?:[a-zA-Z0-9_-]|\/[a-zA-Z0-9_-])*$/;
 
+export function isValidDocsPath(value: unknown): value is string {
+  return typeof value === 'string' && DOCS_PATH_RE.test(value);
+}
+
 export const schema = v.object({
   docsPath: v.optional(
     v.pipe(
@@ -80,7 +84,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const pluginJson = readJsonFile<PluginJson>(context, 'src/plugin.json');
   const existingDocsPath = pluginJson.docsPath;
 
-  if (existingDocsPath !== undefined && !DOCS_PATH_RE.test(String(existingDocsPath))) {
+  if (existingDocsPath !== undefined && !isValidDocsPath(existingDocsPath)) {
     throw new Error(
       `src/plugin.json has docsPath set to '${existingDocsPath}', which create-plugin add docs can't use.\n  Change it to a relative path of letters, digits, hyphens, underscores and single "/" separators (for example "catalog-docs" or "docs/plugin"), then run this again.`
     );
@@ -126,9 +130,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   addDocsScripts(context);
 
   // step 5: render the docs pages only into a folder without any, so pages the author deleted stay deleted
-  const hasPages = context
-    .readDir(docsPath)
-    .some((file) => file.endsWith('.md') && !DOCS_META_FILES.includes(basename(file)));
+  const hasPages = hasDocsPages(context, docsPath);
   addTemplateFolder(context, {
     folderPath: join(templateDir, 'docs'),
     targetPath: docsPath,
@@ -244,6 +246,10 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
 const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
 // files in the docs folder that aren't pages, so they're added on every run
 const DOCS_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
+
+export function hasDocsPages(context: Context, docsPath: string): boolean {
+  return context.readDir(docsPath).some((file) => file.endsWith('.md') && !DOCS_META_FILES.includes(basename(file)));
+}
 
 function appendDocsPointerToInstructions(context: Context, docsPath: string): void {
   const agentsPath = `${docsPath}/AGENTS.md`;

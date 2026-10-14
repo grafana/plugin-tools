@@ -33,12 +33,11 @@ When you change code, update the page that documents it:
 Add one of these pages when the plugin has the matching feature. Use the filename given here, give the page
 a `sidebar_position` that puts it where it belongs and link it from `index.md`.
 
-| Trigger                                                                            | Page                            | Scope                                                        |
-| ---------------------------------------------------------------------------------- | ------------------------------- | ------------------------------------------------------------ |
-| `setSuggestionsSupplier(...)` in source                                            | A feature bullet in `README.md` | When this panel surfaces in the Suggestions list.            |
-| `setPresetsSupplier(...)` in source                                                | `presets.md`                    | The presets the panel ships, when each applies, screenshots. |
-| RBAC role declarations in `src/plugin.json`                                        | `permissions.md`                | What each role grants, default assignments.                  |
-| Substantial accessibility considerations (keyboard shortcuts, screen reader notes) | `accessibility.md`              | Keyboard interaction, ARIA, contrast, motion preferences.    |
+| Trigger                                                                            | Page               | Scope                                                        |
+| ---------------------------------------------------------------------------------- | ------------------ | ------------------------------------------------------------ |
+| `setPresetsSupplier(...)` in source                                                | `presets.md`       | The presets the panel ships, when each applies, screenshots. |
+| RBAC role declarations in `src/plugin.json`                                        | `permissions.md`   | What each role grants, default assignments.                  |
+| Substantial accessibility considerations (keyboard shortcuts, screen reader notes) | `accessibility.md` | Keyboard interaction, ARIA, contrast, motion preferences.    |
 
 ## Section briefs
 
