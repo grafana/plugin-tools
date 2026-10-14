@@ -110,8 +110,7 @@ Running this again on a plugin that has already been migrated is a normal thing 
 
 ## Out of scope
 
-- Do not modify anything under `.config/`.
-- Do not change the plugin id or type in `src/plugin.json`. The only edit to that file is removing the "Documentation" link in step 8.
-- Do not upgrade dependencies or change scripts, workflows or any source code.
+- Change only files inside `{docsPath}`. There are two exceptions: `README.md` in step 7, and the "Documentation" entry in `info.links` of `src/plugin.json` in step 8. Everything else stays as it is, including `.config/`, source code, dependencies, scripts and workflows.
+- Never change source code to fit the docs. When the two disagree, document what the source does and flag the difference in the summary.
 - Do not reformat files you did not change.
 - Do not leave `TODO` markers in the pages. Anything published in a page is shown to catalog readers, so report gaps in the summary instead.
