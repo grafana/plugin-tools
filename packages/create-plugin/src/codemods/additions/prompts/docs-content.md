@@ -105,6 +105,8 @@ Running this again on a plugin that has already been migrated is a normal thing 
       - README sections you removed, and which page each moved to, so the author can spot-check the migration.
     - Final `docs:validate` result.
 
+    End the summary with a note that you didn't take any new screenshots and only reused images already in the repository. Recommend that the author adds screenshots of the plugin in use, starting with the pages you flagged, and references them from those pages.
+
 ## Verify
 
 `docs:validate` reports no warnings, as step 9 says. Limit fixes to problems in pages you wrote or changed.
