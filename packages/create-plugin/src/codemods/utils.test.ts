@@ -2,6 +2,8 @@ import { dirSync } from 'tmp';
 import { Context } from './context.js';
 import {
   addDependenciesToPackageJson,
+  addTemplateFolder,
+  getTemplateDataFromContext,
   removeDependenciesFromPackageJson,
   flushChanges,
   formatFiles,
@@ -12,7 +14,8 @@ import {
 } from './utils.js';
 import { join } from 'node:path';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { execSync } from 'node:child_process';
 import which from 'which';
 import { output } from '../utils/utils.console.js';
@@ -21,6 +24,17 @@ import { vi } from 'vitest';
 vi.mock(import('node:child_process'), async (importOriginal) => ({
   ...(await importOriginal()),
   execSync: vi.fn(),
+}));
+
+// codemods run under `update` or `add`. Without a command, the config would use generate's defaults
+vi.mock(import('../utils/utils.cli.js'), async (importOriginal) => ({
+  ...(await importOriginal()),
+  commandName: 'add',
+}));
+
+vi.mock(import('../utils/utils.packageManager.js'), async (importOriginal) => ({
+  ...(await importOriginal()),
+  getPackageManagerWithFallback: vi.fn(() => ({ packageManagerName: 'pnpm', packageManagerVersion: '10.4.1' })),
 }));
 
 vi.mock('which', () => ({
@@ -181,6 +195,99 @@ describe('utils', () => {
     it('should throw an error if the file does not exist', () => {
       const context = new Context(tmpDir);
       expect(() => readJsonFile(context, 'file.json')).toThrowError();
+    });
+  });
+
+  describe('getTemplateDataFromContext', () => {
+    function pluginContext() {
+      const context = new Context(tmpDir);
+      context.addFile(
+        'src/plugin.json',
+        JSON.stringify({ id: 'org-name-panel', name: 'Name', type: 'panel', info: { author: { name: 'Org' } } })
+      );
+      return context;
+    }
+
+    it('reads plugin.json from the context', () => {
+      expect(getTemplateDataFromContext(pluginContext())).toMatchObject({
+        pluginId: 'org-name-panel',
+        pluginName: 'Name',
+        pluginType: 'panel',
+        orgName: 'Org',
+        packageManagerName: 'pnpm',
+        packageManagerInstallCmd: 'pnpm install --frozen-lockfile --prefer-offline',
+        isAppType: false,
+        isNPM: false,
+        frontendBundler: 'webpack',
+      });
+    });
+
+    it('sees changes the codemod has not written yet', () => {
+      const context = pluginContext();
+      context.updateFile('src/plugin.json', JSON.stringify({ id: 'org-new-app', name: 'New', type: 'app' }));
+      expect(getTemplateDataFromContext(context)).toMatchObject({ pluginId: 'org-new-app', isAppType: true });
+    });
+
+    it('reads feature flags from the .cprc.json files', async () => {
+      await mkdir(join(tmpDir, '.config'));
+      await writeFile(join(tmpDir, '.config/.cprc.json'), JSON.stringify({ features: { bundleGrafanaUI: true } }));
+      await writeFile(join(tmpDir, '.cprc.json'), JSON.stringify({ features: { useExperimentalRspack: true } }));
+      expect(getTemplateDataFromContext(pluginContext())).toMatchObject({
+        bundleGrafanaUI: true,
+        frontendBundler: 'rspack',
+      });
+    });
+  });
+
+  describe('addTemplateFolder', () => {
+    function templateFolder(files: Record<string, string>): string {
+      const dir = mkdtempSync(join(tmpdir(), 'codemod-templates-'));
+      for (const [file, content] of Object.entries(files)) {
+        mkdirSync(join(dir, file, '..'), { recursive: true });
+        writeFileSync(join(dir, file), content);
+      }
+      return dir;
+    }
+
+    const data = { pluginName: "Erik's & Co", packageManagerName: 'pnpm' };
+
+    it('renders every file with Handlebars into the target folder', () => {
+      const context = new Context(tmpDir);
+      const folderPath = templateFolder({
+        'index.md': '# {{{pluginName}}}\n',
+        'nested/setup.md': '{{#if_eq packageManagerName "pnpm"}}pnpm{{/if_eq}} {{dashCase "Some Name"}}\n',
+      });
+      const added = addTemplateFolder(context, { folderPath, targetPath: 'docs', data });
+      expect(added.sort()).toEqual(['docs/index.md', 'docs/nested/setup.md']);
+      expect(context.getFile('docs/index.md')).toBe("# Erik's & Co\n");
+      expect(context.getFile('docs/nested/setup.md')).toBe('pnpm some-name\n');
+    });
+
+    it('strips .hbs and maps config file names like generate does', () => {
+      const context = new Context(tmpDir);
+      const folderPath = templateFolder({ 'page.md.hbs': 'x', npmrc: 'y' });
+      addTemplateFolder(context, { folderPath, targetPath: '', data });
+      expect(context.doesFileExist('page.md')).toBe(true);
+      expect(context.doesFileExist('.npmrc')).toBe(true);
+    });
+
+    it('leaves existing files alone', () => {
+      const context = new Context(tmpDir);
+      context.addFile('docs/index.md', 'mine');
+      const added = addTemplateFolder(context, {
+        folderPath: templateFolder({ 'index.md': 'new' }),
+        targetPath: 'docs',
+        data,
+      });
+      expect(added).toEqual([]);
+      expect(context.getFile('docs/index.md')).toBe('mine');
+    });
+
+    it('throws when the template folder is missing', () => {
+      const context = new Context(tmpDir);
+      expect(() =>
+        addTemplateFolder(context, { folderPath: join(tmpdir(), 'missing-templates'), targetPath: 'docs', data })
+      ).toThrow('Cannot find templates at');
     });
   });
 

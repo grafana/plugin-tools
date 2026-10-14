@@ -170,8 +170,9 @@ function getPackageManagerFromLockFile(): PackageManager | undefined {
 
 function getPackageManagerFromPackageJson(): PackageManager | undefined {
   const packageJson = getPackageJson();
-  if (packageJson?.packageManager) {
-    const [packageManagerName, packageManagerVersion] = packageJson.packageManager.split('@');
+  // without a version there's nothing to pick the install command by, so the lockfile decides
+  const [packageManagerName, packageManagerVersion] = packageJson?.packageManager?.split('@') ?? [];
+  if (packageManagerName && packageManagerVersion) {
     return { packageManagerName, packageManagerVersion };
   }
 
