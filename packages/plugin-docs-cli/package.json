@@ -47,25 +47,25 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@grafana/plugin-docs-parser": "^0.4.0",
-    "chokidar": "^5.0.0",
-    "debug": "^4.3.7",
-    "ejs": "^7.0.0",
-    "express": "^5.0.0",
-    "github-slugger": "^2.0.0",
-    "gray-matter": "^4.0.3",
-    "hast-util-to-html": "^9.0.0",
-    "marked": "^16.3.0",
-    "minimist": "^1.2.8",
-    "xss": "^1.0.15"
+    "@grafana/plugin-docs-parser": "0.4.0",
+    "chokidar": "5.0.0",
+    "debug": "4.4.3",
+    "ejs": "7.0.1",
+    "express": "5.3.0",
+    "github-slugger": "2.0.0",
+    "gray-matter": "4.0.3",
+    "hast-util-to-html": "9.0.5",
+    "marked": "16.3.0",
+    "minimist": "1.2.8",
+    "xss": "1.0.15"
   },
   "devDependencies": {
-    "@types/debug": "^4.1.12",
-    "@types/ejs": "^3.1.5",
-    "@types/express": "^5.0.0",
-    "@types/github-slugger": "^2.0.0",
-    "@types/minimist": "^1.2.5",
-    "@types/supertest": "^7.0.0",
-    "supertest": "^7.0.0"
+    "@types/debug": "4.1.13",
+    "@types/ejs": "3.1.5",
+    "@types/express": "5.0.6",
+    "@types/github-slugger": "2.0.0",
+    "@types/minimist": "1.2.5",
+    "@types/supertest": "7.2.1",
+    "supertest": "7.3.1"
   }
 }
