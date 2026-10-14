@@ -125,18 +125,13 @@ addDependenciesToPackageJson(context, dependencies, devDependencies?, packageJso
 removeDependenciesFromPackageJson(context, dependencies, devDependencies?, packageJsonPath?)
 readJsonFile<T>(context, path): T  // throws if missing or unparseable
 
-// Package manager from package.json's `packageManager` field, else the lockfile. Reads the context,
-// so use it instead of getPackageManagerWithFallback, which reads from disk
-getPackageManager(context): { packageManagerName, packageManagerVersion }
-
 // Semver — handles dist-tags ("latest", "next", "*") and standard ranges
 isVersionGreater(incomingVersion, existingVersion, orEqualTo?): boolean
-
 
 // Render a file from the scaffold templates (see "Rendering scaffold templates")
 renderTemplate(templatePath, includeWarning?, data?): string
 addTemplateFolder(context, { folderPath, targetPath, data }): string[]  // renders a whole folder, skips existing files
-getTemplateDataFromContext(context): TemplateData  // the data `generate` uses, read from the context
+getTemplateDataFromContext(context): TemplateData  // the data `generate` uses, with plugin.json read from the context
 
 // Debug loggers (namespace create-plugin:*)
 migrationsDebug, additionsDebug
