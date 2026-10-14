@@ -13,7 +13,6 @@ import {
   SwcJsMinimizerRspackPlugin,
   type Configuration,
 } from '@rspack/core';
-import ESLintPlugin from 'eslint-rspack-plugin';
 import { TsCheckerRspackPlugin } from 'ts-checker-rspack-plugin';
 import path from 'path';
 import ReplaceInFileWebpackPlugin from 'replace-in-file-webpack-plugin';
@@ -22,6 +21,7 @@ import { RspackVirtualModulePlugin } from 'rspack-plugin-virtual-module';
 import RspackLiveReloadPlugin from './LiveReloadRspackPlugin.ts';
 import { BuildModeRspackPlugin } from './BuildModeRspackPlugin.ts';
 import { LicenseRspackPlugin } from './LicenseRspackPlugin.ts';
+import DiagnosticsRspackPlugin from './DiagnosticsRspackPlugin.ts';
 import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, isWSL } from '../bundler/utils.ts';
 import { externals } from '../bundler/externals.ts';
@@ -205,9 +205,9 @@ const config = async (env: Env): Promise<Configuration> => {
               },
               typescript: { configFile: path.join(process.cwd(), 'tsconfig.json') },
             }),
-            new ESLintPlugin({
-              extensions: ['.ts', '.tsx'],
-              lintDirtyModulesOnly: Boolean(env.development), // don't lint on start, only lint changed files
+            new DiagnosticsRspackPlugin({
+              lintOnStart: false, // don't lint on start, only lint changed files
+              checks: [{ use: 'eslint', extensions: ['ts', 'tsx'] }],
             }),
           ]
         : []),

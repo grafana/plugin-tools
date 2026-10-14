@@ -21,6 +21,7 @@ const RSPACK_CONFIG_FILES = [
   '.config/rspack/BuildModeRspackPlugin.ts',
   '.config/rspack/LiveReloadRspackPlugin.ts',
   '.config/rspack/LicenseRspackPlugin.ts',
+  '.config/rspack/DiagnosticsRspackPlugin.ts',
 ];
 
 // files the rspack template used to ship under another name. removed so they do not linger
@@ -319,10 +320,12 @@ export const RSPACK_DEV_DEPENDENCIES = [
   '@rspack/cli',
   '@rspack/core',
   '@types/ws',
-  'eslint-rspack-plugin',
+  'diagnostics-webpack-plugin',
   'rspack-merge',
   'rspack-plugin-virtual-module',
   'ts-checker-rspack-plugin',
+  // style-loader and imports-loader still need webpack, and diagnostics-webpack-plugin peers on webpack ^5.106
+  'webpack',
   'ws',
 ];
 
