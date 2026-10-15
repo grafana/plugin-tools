@@ -56,7 +56,7 @@ type Options = v.InferOutput<typeof schema>;
 const PLUGIN_DOCS_CLI_VERSION = '^0.8.0';
 
 // each type needs a template set under `templates/docs/<type>/`
-const SUPPORTED_PLUGIN_TYPES = ['panel'] as const;
+const SUPPORTED_PLUGIN_TYPES = ['panel', 'datasource'] as const;
 type SupportedPluginType = (typeof SUPPORTED_PLUGIN_TYPES)[number];
 
 export default function docs(context: Context, options: Options): Context {
@@ -75,6 +75,9 @@ interface PluginJson {
   name?: string;
   id?: string;
   docsPath?: string;
+  annotations?: boolean;
+  alerting?: boolean;
+  includes?: Array<{ type?: string }>;
   [key: string]: unknown;
 }
 
@@ -127,7 +130,18 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   }
 
   const templateData = getTemplateDataFromContext(context);
-  const data = { ...templateData, pluginId, docsPath, lockFile: LOCK_FILES[templateData.packageManagerName] };
+  const featurePages = Object.fromEntries(
+    Object.entries(FEATURE_PAGES).map(([page, { hasFeature }]) => [page, hasFeature(pluginJson)])
+  );
+  const data = {
+    ...templateData,
+    pluginId,
+    docsPath,
+    lockFile: LOCK_FILES[templateData.packageManagerName],
+    ...Object.fromEntries(
+      Object.entries(FEATURE_PAGES).map(([page, { templateFlag }]) => [templateFlag, featurePages[page]])
+    ),
+  };
   const { packageManagerName } = data;
 
   addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': PLUGIN_DOCS_CLI_VERSION });
@@ -140,8 +154,12 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     folderPath: join(templateDir, 'docs'),
     targetPath: docsPath,
     data,
-    include: (file) => !hasPages || SCAFFOLD_META_FILES.includes(file),
+    include: (file) => SCAFFOLD_META_FILES.includes(file) || (!hasPages && featurePages[file] !== false),
   });
+  // a feature turned on after the first scaffold gets no page, so point the author at it instead
+  const missingFeaturePages = hasPages
+    ? Object.keys(featurePages).filter((page) => featurePages[page] && !context.doesFileExist(`${docsPath}/${page}`))
+    : [];
 
   // left alone when it exists, since the author may have customized it
   const workflowPath = '.github/workflows/validate-docs.yml';
@@ -160,7 +178,9 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
 
   // deferred so it prints after the runner's change list, and only when something changed
   if (context.hasChanges()) {
-    context.setMessage(buildNextStepsMessage({ docsPath, packageManagerName, pluginActions, linkedRootFiles }));
+    context.setMessage(
+      buildNextStepsMessage({ docsPath, packageManagerName, pluginActions, linkedRootFiles, missingFeaturePages })
+    );
   }
 
   return context;
@@ -171,8 +191,9 @@ function buildNextStepsMessage(opts: {
   packageManagerName: string;
   pluginActions: BumpActionRefsResult;
   linkedRootFiles: string[];
+  missingFeaturePages: string[];
 }): ContextMessage {
-  const { docsPath, packageManagerName, pluginActions, linkedRootFiles } = opts;
+  const { docsPath, packageManagerName, pluginActions, linkedRootFiles, missingFeaturePages } = opts;
   const run = (script: string) => output.formatCode(`${packageManagerName} run ${script}`);
 
   const steps: NextStep[] = [
@@ -197,6 +218,12 @@ function buildNextStepsMessage(opts: {
     warnings.push({
       title: `${RELEASE_WORKFLOW_PATH} pins ${action} to a branch or commit, so it was left as is`,
       detail: `Docs need ${REQUIRED_ACTION_REFS[action]} or later.`,
+    });
+  }
+  for (const page of missingFeaturePages) {
+    warnings.push({
+      title: `src/plugin.json declares the feature ${docsPath}/${page} documents, but the page doesn't exist`,
+      detail: `Add it as described under Optional pages in ${docsPath}/AGENTS.md.`,
     });
   }
   for (const file of linkedRootFiles) {
@@ -234,7 +261,7 @@ export function assertSupportedPluginType(context: Context): SupportedPluginType
   }
 
   const supported = SUPPORTED_PLUGIN_TYPES.join(', ');
-  if (type === 'app' || type === 'datasource') {
+  if (type === 'app') {
     throw new Error(`create-plugin add docs does not support '${type}' plugins yet. Supported so far: ${supported}.`);
   }
   throw new Error(
@@ -250,6 +277,15 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
 const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
 // the scaffold's files that aren't pages, so they're added on every run
 const SCAFFOLD_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
+// pages scaffolded only when src/plugin.json declares the feature they document
+const FEATURE_PAGES: Record<string, { templateFlag: string; hasFeature: (pluginJson: PluginJson) => boolean }> = {
+  'annotations.md': { templateFlag: 'hasAnnotations', hasFeature: (p) => p.annotations === true },
+  'alerting.md': { templateFlag: 'hasAlerting', hasFeature: (p) => p.alerting === true },
+  'dashboards.md': {
+    templateFlag: 'hasDashboards',
+    hasFeature: (p) => Array.isArray(p.includes) && p.includes.some((i) => i?.type === 'dashboard'),
+  },
+};
 // mirrors isMetaFile in @grafana/plugin-docs-cli, so both tools agree on what counts as a page
 const DOCS_CLI_META_FILES = [
   'README.MD',
