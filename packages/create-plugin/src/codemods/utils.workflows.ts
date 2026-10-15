@@ -110,7 +110,7 @@ interface Tag {
 
 // reads `vX[.Y[.Z]]`, or `<name>/vX[.Y[.Z]]` where name is the action's last path segment
 function parseTag(action: string, ref: string): Tag | undefined {
-  const match = /^(?:(.+)\/)?v(\d+)(?:\.(\d+))?(?:\.(\d+))?$/.exec(ref);
+  const match = /^(?:([^/]+)\/)?v(\d+)(?:\.(\d+))?(?:\.(\d+))?$/.exec(ref);
   if (!match || (match[1] !== undefined && match[1] !== action.split('/').at(-1))) {
     return undefined;
   }
