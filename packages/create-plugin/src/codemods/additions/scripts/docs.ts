@@ -286,13 +286,25 @@ export function hasDocsPages(context: Context, docsPath: string): boolean {
     .filter(([path, change]) => change.changeType === 'add' && path.startsWith(`${docsPath}/`))
     .map(([path]) => path);
   return [...listFiles(context, docsPath), ...addedInContext].some(
-    (file) => file.endsWith('.md') && !DOCS_CLI_META_FILES.includes(basename(file).toUpperCase())
+    (file) =>
+      file.endsWith('.md') &&
+      !DOCS_CLI_META_FILES.includes(basename(file).toUpperCase()) &&
+      !isInSkippedFolder(file.slice(docsPath.length + 1))
   );
+}
+
+// plugin-docs-cli skips these too, and walking node_modules would be slow
+const SKIPPED_FOLDERS = ['node_modules', 'dist'];
+
+function isInSkippedFolder(relativePath: string): boolean {
+  return relativePath.split('/').some((segment) => SKIPPED_FOLDERS.includes(segment));
 }
 
 // readDir gives nothing for a file, so this walks into every entry
 function listFiles(context: Context, folder: string): string[] {
-  return context.readDir(folder).flatMap((entry) => [entry, ...listFiles(context, entry)]);
+  return context
+    .readDir(folder)
+    .flatMap((entry) => (SKIPPED_FOLDERS.includes(basename(entry)) ? [] : [entry, ...listFiles(context, entry)]));
 }
 
 function appendDocsPointerToInstructions(context: Context, docsPath: string): void {

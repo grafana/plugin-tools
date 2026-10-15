@@ -495,11 +495,11 @@ describe('docs codemod', () => {
       expect(context.doesFileExist('docs/index.md')).toBe(false);
     });
 
-    it.each(['CHANGELOG.md', 'readme.md', 'nested/LICENSE.md'])(
+    it.each(['CHANGELOG.md', 'readme.md', 'nested/LICENSE.md', 'node_modules/pkg/index.md', 'dist/index.md'])(
       'does not count %s as a page, the same way plugin-docs-cli does not',
       (file) => {
         const root = mkdtempSync(join(tmpdir(), 'docs-rerun-meta-'));
-        mkdirSync(join(root, 'docs', 'nested'), { recursive: true });
+        mkdirSync(join(root, 'docs', file, '..'), { recursive: true });
         writeFileSync(join(root, 'docs', file), '# Meta\n');
         const context = new Context(root);
         context.addFile(
@@ -759,6 +759,7 @@ describe('docs codemod', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/AGENTS.md') ?? '';
+      expect(content).toContain('Docs guides:');
       expect(content).toContain('node_modules/@grafana/plugin-docs-cli/docs/index.md');
       expect(content).toContain('npm run docs:validate');
       expect(content).toContain('`empty-section` or `unfilled-section-brief` warning');
