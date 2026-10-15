@@ -119,7 +119,8 @@ Validation can't catch these, so they are on you:
 ## Validate
 
 Run `docs:validate` after every page you write or change and fix what it reports. You are done when it
-reports no warnings. A section you haven't written and a `section-brief` comment left in place are both
-warnings, and warnings don't fail the command, so a passing exit code alone doesn't mean the docs are done.
+reports no warnings and no `section-brief` suggestions. A brief never renders, so a section you haven't
+written and a brief left in place are suggestions, not warnings. A passing exit code alone doesn't mean the
+docs are done.
 
 For the commands, refer to [Scripts](https://grafana.com/developers/plugin-tools/how-to-guides/plugin-docs#scripts).

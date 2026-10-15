@@ -160,7 +160,8 @@ export async function checkStubContent(input: ValidationInput): Promise<Diagnost
       if (isEmpty) {
         diagnostics.push({
           rule: Rule.EmptySection,
-          severity: 'warning',
+          // a brief is an HTML comment, so it never renders. a bare heading the author wrote is still worth a warning
+          severity: hasBrief ? 'info' : 'warning',
           file: relativePath,
           line: section.heading?.line ?? section.briefLines[0],
           title: hasBrief ? 'Unfilled documentation stub' : 'Empty section',
@@ -174,7 +175,7 @@ export async function checkStubContent(input: ValidationInput): Promise<Diagnost
       for (const line of section.briefLines) {
         diagnostics.push({
           rule: Rule.UnfilledSectionBrief,
-          severity: 'warning',
+          severity: 'info',
           file: relativePath,
           line,
           title: 'Leftover section brief',

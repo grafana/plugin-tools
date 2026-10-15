@@ -3,6 +3,7 @@ import { extname, join, relative } from 'node:path';
 import createDebug from 'debug';
 import { scanDocsFolder } from '../scanner.js';
 import { ALLOWED_EXTENSIONS } from '../validation/rules/filesystem.js';
+import { isMetaFile } from '../validation/rules/utils.js';
 
 const debug = createDebug('plugin-docs-cli:build');
 
@@ -27,7 +28,7 @@ export async function buildDocs(projectRoot: string, docsPath: string): Promise<
   await rm(outputDir, { recursive: true, force: true });
   await mkdir(outputDir, { recursive: true });
 
-  // copy only allowed file types to output (mirrors the allowed-file-types validation rule)
+  // copy only allowed file types (mirrors the allowed-file-types rule), and leave out the meta files the manifest skips
   await cp(docsPath, outputDir, {
     recursive: true,
     filter: async (src) => {
@@ -35,7 +36,7 @@ export async function buildDocs(projectRoot: string, docsPath: string): Promise<
       if (stat.isDirectory()) {
         return true;
       }
-      return ALLOWED_EXTENSIONS.has(extname(src).toLowerCase());
+      return ALLOWED_EXTENSIONS.has(extname(src).toLowerCase()) && !isMetaFile(src);
     },
   });
   debug('Copied docs folder to %s', outputDir);
