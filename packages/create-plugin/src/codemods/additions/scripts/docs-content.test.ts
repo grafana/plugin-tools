@@ -15,7 +15,10 @@ const wiredPanel = { type: 'panel', name: 'Clock', docsPath: 'catalog-docs' };
 
 describe('docs-content', () => {
   it('should change nothing when catalog docs are set up', () => {
-    const context = makeContext(wiredPanel, { 'catalog-docs/index.md': '# Clock\n' });
+    const context = makeContext(wiredPanel, {
+      'catalog-docs/index.md': '# Clock\n',
+      'catalog-docs/AGENTS.md': '# Agents\n',
+    });
     const changesBefore = context.listChanges();
 
     const result = docsContent(context);
@@ -24,7 +27,10 @@ describe('docs-content', () => {
   });
 
   it('should be idempotent', async () => {
-    const context = makeContext(wiredPanel, { 'catalog-docs/index.md': '# Clock\n' });
+    const context = makeContext(wiredPanel, {
+      'catalog-docs/index.md': '# Clock\n',
+      'catalog-docs/AGENTS.md': '# Agents\n',
+    });
 
     await expect(docsContent).toBeIdempotent(context);
   });
@@ -53,6 +59,7 @@ describe('docs-content', () => {
   it('should accept a docs folder whose pages all live in subfolders', () => {
     const context = makeContext(wiredPanel, {
       'catalog-docs/README.md': '# Notes\n',
+      'catalog-docs/AGENTS.md': '# Agents\n',
       'catalog-docs/options/index.md': '# Options\n',
       'catalog-docs/guide/setup.md': '# Setup\n',
     });
@@ -61,10 +68,21 @@ describe('docs-content', () => {
   });
 
   it.each<unknown>(['../shared-docs', './docs', null, 5])('should stop when docsPath is %s', (docsPath) => {
-    const context = makeContext({ ...wiredPanel, docsPath }, { 'catalog-docs/index.md': '# Clock\n' });
+    const context = makeContext(
+      { ...wiredPanel, docsPath },
+      { 'catalog-docs/index.md': '# Clock\n', 'catalog-docs/AGENTS.md': '# Agents\n' }
+    );
 
     expect(() => docsContent(context)).toThrow(
       `src/plugin.json has docsPath set to '${docsPath}', which create-plugin add docs-content can't use.`
+    );
+  });
+
+  it('should stop when the docs folder has pages but no AGENTS.md', () => {
+    const context = makeContext(wiredPanel, { 'catalog-docs/index.md': '# Clock\n' });
+
+    expect(() => docsContent(context)).toThrow(
+      /catalog-docs\/AGENTS.md is missing.*create-plugin add docs --docsPath catalog-docs$/s
     );
   });
 

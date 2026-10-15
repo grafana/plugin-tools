@@ -21,5 +21,12 @@ export default function docsContent(context: Context): Context {
     );
   }
 
+  // the prompt relies on its page-to-source table, and re-running add docs adds it without touching pages
+  if (!context.doesFileExist(`${docsPath}/AGENTS.md`)) {
+    throw new Error(
+      `${docsPath}/AGENTS.md is missing, and the agent needs it to know which source each page documents.\n  Add it, commit the result, then run this again:\n  create-plugin add docs --docsPath ${docsPath}`
+    );
+  }
+
   return context;
 }
