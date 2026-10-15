@@ -1,7 +1,9 @@
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Context } from './context.js';
 import {
   AGENT_INSTRUCTIONS_PATH,
+  INSTRUCTIONS_POINTER,
   appendToAgentInstructions,
   ensureConfigAgentFiles,
   ensureRootAgentFiles,
@@ -35,6 +37,28 @@ describe('utils.agents', () => {
       expect(context.getFile('CLAUDE.md')).toBe('@AGENTS.md\n');
     });
 
+    it.each(['AGENTS.md', 'CLAUDE.md', 'GEMINI.md'])('uses the same pointer as the %s template', (file) => {
+      expect(readFileSync(join(templateDir, file), 'utf-8')).toContain(INSTRUCTIONS_POINTER);
+    });
+
+    it.each([
+      ['a plain mention of AGENTS.md', 'Codex reads AGENTS.md, this file is for Claude.\n'],
+      ['a markdown link to AGENTS.md', 'See [the guide](AGENTS.md).\n'],
+      ['a plain mention of the instructions', `Don't edit ${AGENT_INSTRUCTIONS_PATH} by hand.\n`],
+    ])('links a CLAUDE.md with only %s', (_, content) => {
+      const context = new Context('/virtual');
+      context.addFile('AGENTS.md', `Read @./${AGENT_INSTRUCTIONS_PATH}\n`);
+      context.addFile('CLAUDE.md', content);
+      expect(ensureRootAgentFiles(context, templateDir)).toEqual(['CLAUDE.md']);
+      expect(context.getFile('CLAUDE.md')).toBe(`${content}\n${INSTRUCTIONS_POINTER}`);
+    });
+
+    it('treats a plain mention of the instructions in AGENTS.md as linked', () => {
+      const context = new Context('/virtual');
+      context.addFile('AGENTS.md', `Read ${AGENT_INSTRUCTIONS_PATH} first.\n`);
+      expect(ensureRootAgentFiles(context, templateDir)).toEqual([]);
+    });
+
     it('links existing files that never reach instructions.md', () => {
       const context = new Context('/virtual');
       context.addFile('AGENTS.md', '# Mine\n');
@@ -51,22 +75,23 @@ describe('utils.agents', () => {
   describe('ensureConfigAgentFiles', () => {
     const templateDir = join(__dirname, '..', '..', 'templates', 'common');
 
-    it('creates the given files from the template dir', () => {
+    it('creates only the given files from the template dir and returns them', () => {
       const context = new Context('/virtual');
-      ensureConfigAgentFiles(context, templateDir, ['instructions.md', 'e2e-testing.md'], {
+      const added = ensureConfigAgentFiles(context, templateDir, ['instructions.md', 'e2e-testing.md'], {
         packageManagerName: 'npm',
       });
 
-      expect(context.doesFileExist(AGENT_INSTRUCTIONS_PATH)).toBe(true);
-      expect(context.doesFileExist('.config/AGENTS/e2e-testing.md')).toBe(true);
+      expect(added.sort()).toEqual(['.config/AGENTS/e2e-testing.md', AGENT_INSTRUCTIONS_PATH]);
     });
 
     it('does nothing when instructions.md already exists', () => {
       const context = new Context('/virtual');
       context.addFile(AGENT_INSTRUCTIONS_PATH, '# Mine\n');
-      ensureConfigAgentFiles(context, templateDir, ['instructions.md', 'e2e-testing.md'], {
-        packageManagerName: 'npm',
-      });
+      expect(
+        ensureConfigAgentFiles(context, templateDir, ['instructions.md', 'e2e-testing.md'], {
+          packageManagerName: 'npm',
+        })
+      ).toEqual([]);
 
       expect(context.getFile(AGENT_INSTRUCTIONS_PATH)).toBe('# Mine\n');
       expect(context.doesFileExist('.config/AGENTS/e2e-testing.md')).toBe(false);

@@ -22,20 +22,30 @@ describe('bumpActionRefs', () => {
   it.each([
     ['a prefixed tag', 'build-plugin/v1.0.2'],
     ['a bare tag', 'v1.0.0'],
-    ['a floating minor tag', 'build-plugin/v1.1'],
-    ['a major-only tag', 'v1'],
   ])('raises %s to the minimum', (_, ref) => {
     const { content, result } = bump(workflowWith(`${BUILD_PLUGIN}@${ref}`));
     expect(content).toBe(workflowWith(`${BUILD_PLUGIN}@build-plugin/v1.2.0`));
     expect(result).toEqual({ found: [BUILD_PLUGIN], unrecognized: [] });
   });
 
-  it.each(['build-plugin/v1.2.0', 'build-plugin/v2.0.0', 'build-plugin/v1.2', 'main'])('leaves %s alone', (ref) => {
-    const workflow = workflowWith(`${BUILD_PLUGIN}@${ref}`);
-    const { content, result } = bump(workflow);
-    expect(content).toBe(workflow);
-    expect(result).toEqual({ found: [BUILD_PLUGIN], unrecognized: [] });
+  it.each([
+    ['a floating minor tag', 'build-plugin/v1.1', 'build-plugin/v1.2'],
+    ['a bare floating minor tag', 'v1.0', 'build-plugin/v1.2'],
+    ['a floating major tag', 'v0', 'build-plugin/v1'],
+  ])('raises %s and keeps it floating', (_, ref, raised) => {
+    const { content } = bump(workflowWith(`${BUILD_PLUGIN}@${ref}`));
+    expect(content).toBe(workflowWith(`${BUILD_PLUGIN}@${raised}`));
   });
+
+  it.each(['build-plugin/v1.2.0', 'build-plugin/v2.0.0', 'build-plugin/v1.2', 'build-plugin/v1', 'v1', 'v2', 'main'])(
+    'leaves %s alone',
+    (ref) => {
+      const workflow = workflowWith(`${BUILD_PLUGIN}@${ref}`);
+      const { content, result } = bump(workflow);
+      expect(content).toBe(workflow);
+      expect(result).toEqual({ found: [BUILD_PLUGIN], unrecognized: [] });
+    }
+  );
 
   it.each([
     ['a branch', 'some-feature-branch'],
