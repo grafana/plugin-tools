@@ -36,7 +36,7 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
 
 2. **Build a working understanding from source. This step is mandatory; do not skip even when README is rich.** For each scaffolded page, read the source that `{docsPath}/AGENTS.md` names for it, following the module file into any helpers it calls, and note what the page's briefs ask for. Also note:
    - The plugin's purpose in one sentence, from `info.description`, the module and what it registers.
-   - Capabilities worth a feature bullet in the plugin's README, which is the Overview tab. For a panel, these include `setDataSupport` flags such as annotations and alert states, and a suggestions or presets supplier. When step 7 is skipped because the README is the scaffold default, list these bullets in the summary instead.
+   - Capabilities worth a feature bullet in the plugin's README, which is the Overview tab. For a panel, these include `setDataSupport` flags such as annotations and alert states, and a suggestions or presets supplier. For a data source, these include the `annotations`, `alerting`, `metrics`, `logs`, `tracing` and `backend` flags in `src/plugin.json`, the authentication methods the config editor offers, query editor modes such as a builder and a code editor, and ad hoc filter support. When step 7 is skipped because the README is the scaffold default, list these bullets in the summary instead.
 
    If source is genuinely thin (a barely-modified scaffold), say so in the final summary; do not invent.
 
@@ -55,11 +55,14 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
    Don't ask who the target user is: one set of docs serves everyone. Ask only in these cases:
    - Neither source nor the README says what problem the plugin solves. Ask: "In one sentence, what problem does this plugin solve for users?"
    - The plugin is a panel that reads query data, and source doesn't make the data shape clear. Ask which data shape it expects and which kinds of queries produce it (time series, table, traces, logs).
+   - The plugin is a data source, and neither source nor the README says which versions of the target service it supports or which permissions its credentials need. Ask for both.
    - The README or `info.links` point at existing docs that the pages will only partly cover, such as a docs site. Ask whether these docs replace them.
 
    Questions never block the work. Ask them all at once, in the session, then keep writing. If no answer arrives, go with what source supports, write down each assumption you made and list them in the final summary so the author can correct them. When the author names a topic that needs its own page, add it.
 
 6. **Write every page** (scaffolded stubs and new pages, renumbering `sidebar_position` across pages as needed) as the authoring guides describe, and fill each section that still has a `section-brief` as its brief says. The briefs hold the page formats, so docs read the same across plugins. Use the source understanding as your material, plus README excerpts and linked documentation (when harvested in step 3) and author answers (when given in step 5). Run `docs:validate` after each page, as the authoring guide says, so problems are fixed before the README rewrite.
+
+   **Secrets rule.** Never copy a real credential, token, API key, password or internal hostname onto a page, even when `provisioning/`, the README or a linked doc contains one. Use an obvious placeholder such as `<API_KEY>` or `https://example.com` instead. The pages are published.
 
    **Contradiction rule.** Flag contradictions rather than resolving them, and add each one to the gaps summary in step 10 with file and line references. The author resolves them. There are two kinds:
    - Source contradicts itself. For example, a `description:` string lists option values that don't appear in the matching `options:` array or describes a constraint nothing enforces, or a `defaultValue` matches none of the values its option offers, which is likely a bug. Keep the source text verbatim. Don't paraphrase the discrepancy away or invent corrected wording.
