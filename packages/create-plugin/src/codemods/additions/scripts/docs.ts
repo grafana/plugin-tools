@@ -183,12 +183,17 @@ function buildNextStepsMessage(opts: {
       detail: 'It has the commands and a link to the plugin docs guide.',
     },
     {
-      title: 'Optional: have an AI agent draft the pages',
-      detail: `Commit these changes, then run ${output.formatCode(`${createPluginCmd} add docs-content`)}. It fills the pages from your source code and README.`,
+      title: 'Write the pages, yourself or with an AI agent',
+      detail: [
+        `Fill in or review the pages under ${docsPath}/ by hand.`,
+        'Or commit these changes, then have an agent draft them from your source code and README:',
+        output.formatCode(`${createPluginCmd} add docs-content`),
+        'Review its work either way.',
+      ],
     },
     {
-      title: `Fill in or review the pages under ${docsPath}/`,
-      detail: `Preview them with ${run('docs:serve')}, which also warns about every section left to fill.`,
+      title: 'Preview the pages',
+      detail: `Run ${run('docs:serve')}, which also warns about every section left to fill.`,
     },
   ];
 
@@ -221,15 +226,12 @@ function buildNextStepsMessage(opts: {
 
 interface NextStep {
   title: string;
-  detail?: string;
+  detail?: string | string[];
 }
 
 function formatNextStep({ title, detail }: NextStep, marker: string): string[] {
-  const lines = [`${marker}${title}`];
-  if (detail) {
-    lines.push(`${' '.repeat(marker.length)}${detail}`);
-  }
-  return lines;
+  const indent = ' '.repeat(marker.length);
+  return [`${marker}${title}`, ...[detail ?? []].flat().map((line) => `${indent}${line}`)];
 }
 
 export function assertSupportedPluginType(context: Context, additionName = 'docs'): SupportedPluginType {

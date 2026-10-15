@@ -831,25 +831,26 @@ describe('docs codemod', () => {
     it('numbers the steps in the order the author does them', () => {
       expect(nextSteps(makeContext()).filter((line) => /^ \d\. /.test(line))).toEqual([
         ' 1. Read docs/README.md',
-        ' 2. Optional: have an AI agent draft the pages',
-        ' 3. Fill in or review the pages under docs/',
+        ' 2. Write the pages, yourself or with an AI agent',
+        ' 3. Preview the pages',
       ]);
     });
 
     it('tells the author to commit before running docs-content, since add needs a clean tree', () => {
       const body = nextSteps(makeContext());
-      const step = body.indexOf(' 2. Optional: have an AI agent draft the pages');
-      expect(body[step + 1]).toBe(
-        '    Commit these changes, then run npx -y @grafana/create-plugin@latest add docs-content. It fills the pages from your source code and README.'
-      );
+      const step = body.indexOf(' 2. Write the pages, yourself or with an AI agent');
+      expect(body.slice(step + 1, step + 5)).toEqual([
+        '    Fill in or review the pages under docs/ by hand.',
+        '    Or commit these changes, then have an agent draft them from your source code and README:',
+        '    npx -y @grafana/create-plugin@latest add docs-content',
+        '    Review its work either way.',
+      ]);
     });
 
     it('indents each detail line under its step', () => {
       const body = nextSteps(makeContext());
-      const step = body.indexOf(' 3. Fill in or review the pages under docs/');
-      expect(body[step + 1]).toBe(
-        '    Preview them with npm run docs:serve, which also warns about every section left to fill.'
-      );
+      const step = body.indexOf(' 3. Preview the pages');
+      expect(body[step + 1]).toBe('    Run npm run docs:serve, which also warns about every section left to fill.');
       expect(body.join('\n')).not.toContain('docs:validate:release');
       expect(body.join('\n')).not.toContain('strict');
     });
