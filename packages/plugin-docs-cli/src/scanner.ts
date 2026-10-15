@@ -10,7 +10,7 @@ import {
   type MarkdownFiles,
   type Frontmatter,
 } from '@grafana/plugin-docs-parser';
-import { isMetaFile } from './validation/rules/utils.js';
+import { isInExcludedFolder, isMetaFile } from './validation/rules/utils.js';
 
 const debug = createDebug('plugin-docs-cli:scanner');
 
@@ -126,7 +126,7 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
       if (isMetaFile(entry)) {
         return false;
       }
-      return !entry.includes('node_modules') && !entry.includes('dist');
+      return !isInExcludedFolder(entry);
     })
     .map((entry) => join(docsPath, entry));
 

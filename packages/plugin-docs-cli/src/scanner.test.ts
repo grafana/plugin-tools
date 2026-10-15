@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { join } from 'node:path';
+import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import type { Page } from '@grafana/plugin-docs-parser';
 import { scanDocsFolder } from './scanner.js';
 
@@ -120,6 +122,19 @@ describe('scanDocsFolder', () => {
 
     expect(result.manifest.pages).toHaveLength(2);
     expect(result.manifest.pages.find((p: Page) => p.title === 'Unsafe Slug Test')?.slug).toBe('home');
+  });
+
+  it('should skip node_modules and dist folders but keep pages whose names contain those words', async () => {
+    const docsPath = await mkdtemp(join(tmpdir(), 'scan-excluded-'));
+    const page = (title: string) => `---\ntitle: ${title}\ndescription: A page about ${title}\n---\n\nBody.\n`;
+    await writeFile(join(docsPath, 'index.md'), page('Home'));
+    await writeFile(join(docsPath, 'distributed-tracing.md'), page('Tracing'));
+    await mkdir(join(docsPath, 'dist'));
+    await writeFile(join(docsPath, 'dist', 'built.md'), page('Built'));
+
+    const result = await scanDocsFolder(docsPath);
+
+    expect(result.manifest.pages.map((p: Page) => p.title).sort()).toEqual(['Home', 'Tracing']);
   });
 
   describe('nested directories', () => {

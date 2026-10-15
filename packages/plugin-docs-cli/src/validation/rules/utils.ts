@@ -29,6 +29,17 @@ export function isMetaFile(filenameOrPath: string): boolean {
   return META_FILE_BASENAMES_UPPER.has(base.toUpperCase());
 }
 
+const EXCLUDED_FOLDERS: ReadonlySet<string> = new Set(['node_modules', 'dist']);
+
+/**
+ * Returns true when a path relative to the docs folder sits inside a folder that
+ * scanning and validation skip. Matches whole path segments, so a page such as
+ * `distributed-tracing.md` is still included.
+ */
+export function isInExcludedFolder(relativePath: string): boolean {
+  return relativePath.split(/[\\/]/).some((segment) => EXCLUDED_FOLDERS.has(segment));
+}
+
 /**
  * Neutralizes the contents of inline code spans (`` `code` ``, ` ``code`` `,
  * etc.) on a single line by replacing the inner characters with a same-length
