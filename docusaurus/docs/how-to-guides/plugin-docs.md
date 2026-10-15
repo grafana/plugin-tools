@@ -17,7 +17,7 @@ This guide shows you how to set up plugin docs, preview and validate them and pu
 
 :::important
 
-Plugin docs are an experimental feature. Breaking changes might happen without notice, such as renamed commands, changed validation rules or a different file structure. Panel plugins are the only supported plugin type for the moment.
+Plugin docs are an experimental feature. Breaking changes might happen without notice, such as renamed commands, changed validation rules or a different file structure. Panel and data source plugins are the only supported plugin types for the moment.
 
 :::
 
@@ -37,7 +37,7 @@ Plugin docs are an experimental feature. Breaking changes might happen without n
 
 :::note
 
-The `add docs` codemod only supports panel plugins so far.
+The `add docs` codemod only supports panel and data source plugins so far.
 
 :::
 
@@ -80,6 +80,20 @@ For a panel plugin, the codemod adds:
 ├── .config/AGENTS/
 │   └── instructions.md       # gets a Plugin docs section pointing at catalog-docs/AGENTS.md
 └── package.json              # adds @grafana/plugin-docs-cli and the docs:* scripts
+```
+
+For a data source plugin, the `catalog-docs/` folder has these pages instead:
+
+```text
+catalog-docs/
+├── index.md
+├── configure.md
+├── query-editor.md
+├── template-variables.md
+├── annotations.md            # only when plugin.json has "annotations": true
+├── alerting.md               # only when plugin.json has "alerting": true
+├── dashboards.md             # only when plugin.json includes a dashboard
+└── troubleshooting.md
 ```
 
 If your plugin doesn't have them yet, the codemod also creates `.config/AGENTS/instructions.md` and the `AGENTS.md`, `CLAUDE.md` and `GEMINI.md` files in the root of your plugin that point agents at it.
