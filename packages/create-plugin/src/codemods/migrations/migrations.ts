@@ -115,14 +115,14 @@ export default [
   },
   {
     name: '017-jest-30',
-    version: '7.13.0', // x-release-please-version
+    version: '7.13.0',
     description:
       'Update Jest to v30, which replaces micromatch with picomatch and drops the braces dependency flagged by vulnerability scanners.',
     scriptPath: import.meta.resolve('./scripts/017-jest-30.js'),
   },
   {
     name: '018-replace-eslint-webpack-plugin',
-    version: '7.13.0', // x-release-please-version
+    version: '7.13.0',
     description:
       'Replace eslint-webpack-plugin with diagnostics-webpack-plugin in the webpack config. eslint-webpack-plugin depends on micromatch, which pulls in the braces dependency flagged by vulnerability scanners.',
     scriptPath: import.meta.resolve('./scripts/018-replace-eslint-webpack-plugin.js'),
