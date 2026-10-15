@@ -269,15 +269,20 @@ describe('utils', () => {
       expect(context.getFile('docs/nested/setup.md')).toBe('pnpm some-name\n');
     });
 
-    it('skips templates that include rejects, matching on the path relative to the folder', () => {
+    it('skips files that include rejects, matching on the output path relative to the target', () => {
       const context = new Context(tmpDir);
-      const folderPath = templateFolder({ 'README.md': 'readme\n', 'nested/page.md': 'page\n' });
+      const folderPath = templateFolder({ 'README.md': 'readme\n', 'nested/page.md.hbs': 'page\n', npmrc: 'x' });
+      const seen: string[] = [];
       const added = addTemplateFolder(context, {
         folderPath,
         targetPath: 'docs',
         data,
-        include: (file) => file !== 'nested/page.md',
+        include: (file) => {
+          seen.push(file);
+          return file === 'README.md';
+        },
       });
+      expect(seen.sort()).toEqual(['.npmrc', 'README.md', 'nested/page.md']);
       expect(added).toEqual(['docs/README.md']);
     });
 

@@ -1,4 +1,4 @@
-import { dirname, join } from 'node:path';
+import { dirname, join, posix } from 'node:path';
 import { createRequire } from 'node:module';
 import { Context } from './context.js';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -180,7 +180,7 @@ export function readJsonFile<T extends object = any>(context: Context, path: str
   if (!context.doesFileExist(path)) {
     throw new Error(`Cannot find ${path}`);
   }
-  let parsed;
+  let parsed: unknown;
   try {
     parsed = JSON.parse(context.getFile(path) || '');
   } catch (e) {
@@ -189,7 +189,7 @@ export function readJsonFile<T extends object = any>(context: Context, path: str
   if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
     throw new Error(`${path} does not contain a JSON object.`);
   }
-  return parsed;
+  return parsed as T;
 }
 
 export function addDependenciesToPackageJson(
@@ -351,6 +351,8 @@ function sortObjectByKeys<T extends Record<string, any>>(obj: T): T {
 
 export const migrationsDebug = debug.extend('migrations');
 export const additionsDebug = debug.extend('additions');
+// for helpers that migrations and additions share
+export const codemodsDebug = debug.extend('codemods');
 
 export function renderTemplate(
   templatePath: string,
@@ -380,7 +382,8 @@ export function getTemplateDataFromContext(context: Context): TemplateData {
 /**
  * Renders every file under `folderPath` into `targetPath`, the way `generate` scaffolds a template folder:
  * `.hbs` is stripped and config file names are mapped. Files that already exist are left alone, and so are
- * files `include` rejects, given each template's path relative to `folderPath`. Returns the paths it added.
+ * files `include` rejects, given each file's output path relative to `targetPath` with `/` separators.
+ * Returns the paths it added.
  */
 export function addTemplateFolder(
   context: Context,
@@ -404,14 +407,15 @@ export function addTemplateFolder(
 
   const added: string[] = [];
   // relative to `cwd`, so glob characters in the install path (such as Windows backslashes) can't break the pattern
-  for (const relativeFile of glob.sync('**', { cwd: folderPath, dot: true, nodir: true })) {
-    if (!include(relativeFile)) {
+  for (const relativeFile of glob.sync('**', { cwd: folderPath, dot: true, nodir: true, posix: true })) {
+    const file = join(folderPath, relativeFile);
+    const outputFile = posix.join(posix.dirname(relativeFile), getExportFileName(file));
+    if (!include(outputFile)) {
       continue;
     }
-    const file = join(folderPath, relativeFile);
-    const filePath = join(targetPath, dirname(relativeFile), getExportFileName(file));
+    const filePath = join(targetPath, outputFile);
     if (context.doesFileExist(filePath)) {
-      additionsDebug(`${filePath} already exists, skipping`);
+      codemodsDebug(`${filePath} already exists, skipping`);
       continue;
     }
     context.addFile(filePath, renderHandlebarsTemplate(readFileSync(file, 'utf-8'), data));

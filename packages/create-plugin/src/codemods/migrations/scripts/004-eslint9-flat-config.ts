@@ -159,9 +159,7 @@ function addConfigsToMigration(imports: Imports, config: Linter.ConfigOverride) 
 function generateAST(
   value: Object
 ):
-  | recast.types.namedTypes.ObjectExpression
-  | recast.types.namedTypes.ArrayExpression
-  | recast.types.namedTypes.Literal {
+  recast.types.namedTypes.ObjectExpression | recast.types.namedTypes.ArrayExpression | recast.types.namedTypes.Literal {
   if (Array.isArray(value)) {
     return builders.arrayExpression(value.map((i) => generateAST(i)));
   }

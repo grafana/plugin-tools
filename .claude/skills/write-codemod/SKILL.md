@@ -130,11 +130,11 @@ isVersionGreater(incomingVersion, existingVersion, orEqualTo?): boolean
 
 // Render a file from the scaffold templates (see "Rendering scaffold templates")
 renderTemplate(templatePath, includeWarning?, data?): string
-addTemplateFolder(context, { folderPath, targetPath, data }): string[]  // renders a whole folder, skips existing files
+addTemplateFolder(context, { folderPath, targetPath, data, include? }): string[]  // renders a whole folder, skips existing files
 getTemplateDataFromContext(context): TemplateData  // the data `generate` uses, with plugin.json read from the context
 
-// Debug loggers (namespace create-plugin:*)
-migrationsDebug, additionsDebug
+// Debug loggers (namespace create-plugin:*), codemodsDebug for helpers both kinds share
+migrationsDebug, additionsDebug, codemodsDebug
 ```
 
 From `../../utils.agents.js`:
@@ -143,14 +143,14 @@ From `../../utils.agents.js`:
 // AGENT_INSTRUCTIONS_PATH is `.config/AGENTS/instructions.md`
 appendToAgentInstructions(context, marker, text, separator?)  // skips if missing or `marker` is present
 ensureRootAgentFiles(context, templateDir): string[]  // creates AGENTS.md, CLAUDE.md and GEMINI.md, returns the ones it linked
-ensureConfigAgentFiles(context, templateDir, files, data)  // creates `.config/AGENTS/` files if there are no instructions
+ensureConfigAgentFiles(context, templateDir, files, data): string[]  // creates `.config/AGENTS/` files if there are no instructions
 ```
 
 From `../../utils.workflows.js`:
 
 ```ts
-// Raises `uses: <action>@<ref>` to at least each minimum tag and never lowers one. Returns the
-// actions it found and those pinned to a branch or SHA, so the codemod can tell the author
+// Raises `uses: <action>@<ref>` to at least each minimum tag and never lowers one. A floating tag such
+// as `v1` stays floating. Returns the actions it found and those pinned to a branch or SHA
 bumpActionRefs(context, workflowPath, { 'grafana/plugin-actions/build-plugin': 'build-plugin/v1.2.0' });
 ```
 

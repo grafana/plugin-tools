@@ -131,7 +131,7 @@ function renderAppSdkTemplate(file: string, data: TemplateData, includeWarning =
  * plugin's instructions has no idea kinds or generated code exist.
  */
 function referenceAgentInstructions(context: Context, data: TemplateData) {
-  if (!context.getFile(AGENT_INSTRUCTIONS_PATH)) {
+  if (!context.doesFileExist(AGENT_INSTRUCTIONS_PATH)) {
     additionsDebug(`Could not find ${AGENT_INSTRUCTIONS_PATH}. Skipping the app-sdk reference.`);
     return;
   }
