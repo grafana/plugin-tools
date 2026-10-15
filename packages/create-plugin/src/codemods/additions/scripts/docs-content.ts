@@ -1,6 +1,6 @@
 import type { Context } from '../../context.js';
 import { readJsonFile } from '../../utils.js';
-import { assertSupportedPluginType, hasDocsPages, isValidDocsPath } from './docs.js';
+import { assertSupportedPluginType, assertValidDocsPath, hasDocsPages } from './docs.js';
 
 // the agent step does the writing. this only stops it from starting on a plugin with no docs pages to fill
 export default function docsContent(context: Context): Context {
@@ -13,11 +13,7 @@ export default function docsContent(context: Context): Context {
     );
   }
 
-  if (!isValidDocsPath(docsPath)) {
-    throw new Error(
-      `src/plugin.json has docsPath set to '${docsPath}', which create-plugin add docs-content can't use.\n  Change it to a relative path of letters, digits, hyphens, underscores and single "/" separators (for example "catalog-docs" or "docs/plugin"), then run create-plugin add docs to scaffold the pages there.`
-    );
-  }
+  assertValidDocsPath(docsPath, 'add docs-content', 'run create-plugin add docs to scaffold the pages there');
 
   if (!hasDocsPages(context, docsPath)) {
     throw new Error(

@@ -4,7 +4,7 @@
 
 `create-plugin add docs` has scaffolded catalog docs for this plugin: stub pages in the docs folder, each section holding a `section-brief` note that says what belongs there. This task fills those stubs from the plugin's source code and migrates any existing documentation (the README and the documents linked from `info.links` in `src/plugin.json`) into them. Then it trims the README back to its pitch.
 
-`create-plugin add docs-content` only checks that catalog docs are set up before handing over these instructions. It changes no files itself, so the working tree starts clean and every change is part of this task.
+`create-plugin add docs-content` only checks that catalog docs are set up before handing over these instructions. It changes no files itself. Any change already in the working tree before you start is the author's, so leave it alone.
 
 Throughout, `{docsPath}` means the `docsPath` value in `src/plugin.json` (`catalog-docs` unless the author changed it).
 
@@ -16,15 +16,13 @@ Throughout, "the README" means `src/README.md` when that file exists, and the ro
 
 Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guides that ship with `@grafana/plugin-docs-cli`, starting at `node_modules/@grafana/plugin-docs-cli/docs/index.md` (in a monorepo, `docs:validate` prints the path). They hold the frontmatter shape, when to split a page into a folder, how to handle section briefs, the style rules and when the docs are done. Everything specific to the plugin type is in the scaffolded pages and in `{docsPath}/AGENTS.md`: the briefs say what each page holds, and its "Pages and their source" table says which source each page documents. This document only adds what is specific to a first migration.
 
-This is meant to run once, after `add docs`. Ongoing per-page updates are routine work: edit the pages directly against those conventions.
+This usually runs once, after `add docs`. Running it again is safe, because it only writes sections that still have a brief. Ongoing per-page updates are routine work: edit the pages directly against those conventions.
 
 ## Check first
 
 Search the docs folder for `section-brief` comments. A section that still has its brief is yours to write. A section without one has been written by the author, so never rewrite it.
 
-If no briefs remain, the pages are already written. Report that, and ask the author whether they want only the README and linked docs migrated: steps 1 and 3, adding that content to the existing pages without rewriting what is there, then steps 7 and 8. Stop if they don't.
-
-Running this again on a plugin that has already been migrated is a normal thing to do.
+If no briefs remain, the pages are already written. Do steps 1 and 3, adding any README or linked-docs content that isn't on the pages yet without rewriting what is there, then steps 7 to 10. If nothing is left to migrate, say so in the summary and change nothing.
 
 ## Steps
 

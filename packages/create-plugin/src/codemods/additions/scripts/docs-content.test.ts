@@ -50,6 +50,16 @@ describe('docs-content', () => {
     );
   });
 
+  it('should accept a docs folder whose pages all live in subfolders', () => {
+    const context = makeContext(wiredPanel, {
+      'catalog-docs/README.md': '# Notes\n',
+      'catalog-docs/options/index.md': '# Options\n',
+      'catalog-docs/guide/setup.md': '# Setup\n',
+    });
+
+    expect(() => docsContent(context)).not.toThrow();
+  });
+
   it.each<unknown>(['../shared-docs', './docs', null, 5])('should stop when docsPath is %s', (docsPath) => {
     const context = makeContext({ ...wiredPanel, docsPath }, { 'catalog-docs/index.md': '# Clock\n' });
 

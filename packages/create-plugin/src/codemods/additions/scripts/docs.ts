@@ -1,4 +1,4 @@
-import { basename, join } from 'node:path';
+import { join } from 'node:path';
 import * as v from 'valibot';
 import type { Context, ContextMessage } from '../../context.js';
 import { TEMPLATE_PATHS, TEMPLATES_DIR } from '../../../constants.js';
@@ -22,9 +22,19 @@ import { getPackageManagerExecCmd } from '../../../utils/utils.packageManager.js
 
 // an allowlist, because the value becomes a path on disk and is embedded unescaped in a YAML workflow
 const DOCS_PATH_RE = /^[a-zA-Z0-9](?:[a-zA-Z0-9_-]|\/[a-zA-Z0-9_-])*$/;
+const DOCS_PATH_RULE =
+  'a relative path of letters, digits, hyphens, underscores and single "/" separators (for example "catalog-docs" or "docs/plugin")';
 
 export function isValidDocsPath(value: unknown): value is string {
   return typeof value === 'string' && DOCS_PATH_RE.test(value);
+}
+
+export function assertValidDocsPath(value: unknown, command: string, nextStep: string): asserts value is string {
+  if (!isValidDocsPath(value)) {
+    throw new Error(
+      `src/plugin.json has docsPath set to '${value}', which create-plugin ${command} can't use.\n  Change it to ${DOCS_PATH_RULE}, then ${nextStep}.`
+    );
+  }
 }
 
 export const schema = v.object({
@@ -34,7 +44,7 @@ export const schema = v.object({
       v.minLength(1, 'docsPath must not be empty.'),
       v.regex(
         DOCS_PATH_RE,
-        'docsPath must be a relative path of letters, digits, hyphens, underscores and single "/" separators (for example "catalog-docs" or "docs/plugin"), with no leading "/", "./", trailing "/", ".." segment, backslash or quote character.'
+        `docsPath must be ${DOCS_PATH_RULE}, with no leading "/", "./", trailing "/", ".." segment, backslash or quote character.`
       )
     ),
     'catalog-docs'
@@ -85,10 +95,8 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const pluginJson = readJsonFile<PluginJson>(context, 'src/plugin.json');
   const existingDocsPath = pluginJson.docsPath;
 
-  if (existingDocsPath !== undefined && !isValidDocsPath(existingDocsPath)) {
-    throw new Error(
-      `src/plugin.json has docsPath set to '${existingDocsPath}', which create-plugin add docs can't use.\n  Change it to a relative path of letters, digits, hyphens, underscores and single "/" separators (for example "catalog-docs" or "docs/plugin"), then run this again.`
-    );
+  if (existingDocsPath !== undefined) {
+    assertValidDocsPath(existingDocsPath, 'add docs', 'run this again');
   }
 
   if (existingDocsPath !== undefined && existingDocsPath !== docsPath) {
@@ -262,7 +270,18 @@ const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
 const DOCS_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
 
 export function hasDocsPages(context: Context, docsPath: string): boolean {
-  return context.readDir(docsPath).some((file) => file.endsWith('.md') && !DOCS_META_FILES.includes(basename(file)));
+  const prefix = `${docsPath}/`;
+  const addedInContext = Object.entries(context.listChanges())
+    .filter(([path, change]) => change.changeType === 'add' && path.startsWith(prefix))
+    .map(([path]) => path);
+  return [...listFiles(context, docsPath), ...addedInContext].some(
+    (file) => file.endsWith('.md') && !DOCS_META_FILES.includes(file.slice(prefix.length))
+  );
+}
+
+// readDir gives nothing for a file, so this walks into every entry
+function listFiles(context: Context, folder: string): string[] {
+  return context.readDir(folder).flatMap((entry) => [entry, ...listFiles(context, entry)]);
 }
 
 function appendDocsPointerToInstructions(context: Context, docsPath: string): void {
