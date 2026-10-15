@@ -18,7 +18,7 @@ Each `.md` file in your docs folder is one page. The folder structure becomes th
 ```
 docs/
 ├── index.md            # landing page for your documentation
-├── configuration.md
+├── configure.md
 └── query-editor/
     ├── index.md        # the "Query editor" page and sidebar category
     └── macros.md
@@ -128,14 +128,14 @@ never highlighted.
 Link to another page with a relative path to its `.md` file. Add `#anchor` to link to a heading:
 
 ```markdown
-Refer to [Configure the data source](./configuration.md#authentication).
+Refer to [Configure the data source](./configure.md#authentication).
 Refer to [Macros](./query-editor/macros.md).
 ```
 
 - The link works on GitHub and is rewritten to the page's URL on grafana.com, including any custom
   `slug`.
 - To link to a folder's page, link to its `index.md`, such as `./query-editor/index.md`.
-- Don't use absolute paths like `/docs/configuration`, and don't link to your own pages with a full
+- Don't use absolute paths like `/docs/configure`, and don't link to your own pages with a full
   `https://grafana.com/...` URL. Use relative paths, so the link keeps working when your docs move.
 
 Reference-style links work too, and are checked the same way:
@@ -143,7 +143,7 @@ Reference-style links work too, and are checked the same way:
 ```markdown
 Refer to [Configure the data source][configure].
 
-[configure]: ./configuration.md
+[configure]: ./configure.md
 ```
 
 External links use the full URL. A bare URL such as `https://grafana.com` becomes a link

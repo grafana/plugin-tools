@@ -43,7 +43,7 @@ find the same information in the same place across every plugin. Each topic can 
 docs folder.
 
 - **Panel:** `options` and `data-formats`
-- **Data source:** `query-editor` and `configuration`
+- **Data source:** `query-editor` and `configure`
 
 | Rule             | What it checks                                                                   | Severity |
 | ---------------- | -------------------------------------------------------------------------------- | -------- |

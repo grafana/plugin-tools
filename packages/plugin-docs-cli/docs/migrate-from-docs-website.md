@@ -22,8 +22,8 @@ shortcodes, frontmatter and links. For everything plugin docs support, refer to
    or delete any stub you don't replace.
 3. Rename every `_index.md` to `index.md`.
 4. Keep the required pages for your plugin type at the root, and rename existing pages to match:
-   `configuration` and `query-editor` for a data source, `options` and `data-formats` for a panel.
-   For example, `configure.md` becomes `configuration.md`.
+   `configure` and `query-editor` for a data source, `options` and `data-formats` for a panel.
+   For example, `configuration.md` becomes `configure.md`.
 
 ## 2. Convert frontmatter
 
@@ -68,7 +68,7 @@ Private data source connect (PDC) is only available in Grafana Cloud.
 
 | Docs website link                                                         | Plugin docs                                                                                      |
 | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| To this plugin's pages, such as `/docs/plugins/<id>/<VERSION>/configure/` | A relative link to the `.md` file, such as `./configuration.md#anchor`.                          |
+| To this plugin's pages, such as `/docs/plugins/<id>/<VERSION>/configure/` | A relative link to the `.md` file, such as `./configure.md#anchor`.                              |
 | To other docs website pages, such as `/docs/grafana/latest/alerting/`     | A full URL: `https://grafana.com/docs/grafana/latest/alerting/`.                                 |
 | `ref:` links, such as `[Explore](ref:explore)`                            | The `destination` for that name in `refs`, for the `/docs/grafana/` pattern, converted as above. |
 | Placeholders in URLs, such as `<GRAFANA_VERSION>`                         | A real value, such as `latest`.                                                                  |
