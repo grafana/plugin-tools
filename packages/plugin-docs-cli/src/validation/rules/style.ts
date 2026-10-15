@@ -2,7 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import type { Diagnostic, Severity, StyleRuleId, ValidationInput } from '../types.js';
-import { getCodeBlockLines, getNonProseLines, isMetaFile, matchOutsideCode } from './utils.js';
+import { getCodeBlockLines, getNonProseLines, isInExcludedFolder, isMetaFile, matchOutsideCode } from './utils.js';
 
 /**
  * Applies a curated subset of the Grafana Writers' Toolkit's writing-style rules.
@@ -871,8 +871,7 @@ export async function checkWritingStyle(input: ValidationInput): Promise<Diagnos
       e.isFile() &&
       e.name.endsWith('.md') &&
       !isMetaFile(e.name) &&
-      !e.parentPath.includes('node_modules') &&
-      !e.parentPath.includes('dist')
+      !isInExcludedFolder(relative(input.docsPath, e.parentPath))
   );
 
   for (const entry of mdFiles) {
