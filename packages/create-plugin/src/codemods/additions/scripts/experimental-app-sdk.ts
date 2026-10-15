@@ -10,8 +10,12 @@ import { AGENT_INSTRUCTIONS_PATH, appendToAgentInstructions } from '../../utils.
 import { addRequireToGoMod } from '../../utils.goMod.js';
 
 // Grafana reads an app-sdk manifest from the plugin bundle, and registers its API server, only when
-// these toggles are enabled.
-const APP_SDK_FEATURE_TOGGLES = ['appplugins.loadAppManifest', 'appplugins.registerAPIServer'];
+// these toggles are enabled. The router middleware lets the app's requests through the router.
+const APP_SDK_FEATURE_TOGGLES = [
+  'appplugins.loadAppManifest',
+  'appplugins.registerAPIServer',
+  'grafana.useRouterMiddleware',
+];
 
 // Files copied verbatim from templates/app-sdk, and whether they get the "scaffolded by create-plugin,
 // don't edit" header. Paths are relative to both the template folder and the plugin root.
