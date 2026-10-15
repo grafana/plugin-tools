@@ -35,6 +35,11 @@ function isTeardownError(error: unknown): boolean {
   );
 }
 
+// Playwright appends a multi-line call log to error messages, so keep only the first line
+function summarizeError(error: unknown): string {
+  return error instanceof Error ? error.message.split('\n')[0] : String(error);
+}
+
 /**
  * Handles the OFREP bulk evaluation endpoint by merging flags into the response
  */
@@ -92,7 +97,7 @@ async function handleBulkEvaluationRoute(
     if (isTeardownError(error)) {
       return;
     }
-    console.error('@grafana/plugin-e2e: Failed to intercept OFREP bulk evaluation', error);
+    console.error(`@grafana/plugin-e2e: Failed to intercept OFREP bulk evaluation: ${summarizeError(error)}`);
     // fulfill with original response if available, otherwise return error response
     try {
       if (response) {
@@ -148,7 +153,7 @@ async function handleSingleFlagRoute(
     if (isTeardownError(error)) {
       return;
     }
-    console.error('@grafana/plugin-e2e: Failed to intercept OFREP single flag evaluation', error);
+    console.error(`@grafana/plugin-e2e: Failed to intercept OFREP single flag evaluation: ${summarizeError(error)}`);
     // return error response since we can't continue after route.fetch()
     try {
       await route.fulfill({
