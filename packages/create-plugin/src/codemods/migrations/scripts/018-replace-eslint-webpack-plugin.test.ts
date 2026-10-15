@@ -1,0 +1,174 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import migrate from './018-replace-eslint-webpack-plugin.js';
+import { Context } from '../../context.js';
+import { output } from '../../../utils/utils.console.js';
+
+const WEBPACK_CONFIG_PATH = '.config/webpack/webpack.config.ts';
+const RSPACK_CONFIG_PATH = '.config/rspack/rspack.config.ts';
+
+const WEBPACK_CONFIG = `import ESLintPlugin from 'eslint-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import { type Configuration } from 'webpack';
+import LiveReloadPlugin from 'webpack-livereload-plugin';
+
+const config = async (env: Record<string, unknown>): Promise<Configuration> => ({
+  plugins: [
+    ...(env.development ? [
+      new LiveReloadPlugin(),
+      new ForkTsCheckerWebpackPlugin({
+        async: Boolean(env.development),
+      }),
+      new ESLintPlugin({
+        extensions: ['.ts', '.tsx'],
+        lintDirtyModulesOnly: Boolean(env.development), // don't lint on start, only lint changed files
+        failOnError: Boolean(env.production),
+      }),
+    ] : []),
+  ],
+});
+
+export default config;
+`;
+
+const RSPACK_CONFIG = `import rspack, { type Configuration } from '@rspack/core';
+import ESLintPlugin from 'eslint-webpack-plugin';
+import { TsCheckerRspackPlugin } from 'ts-checker-rspack-plugin';
+
+const config = async (env: Record<string, unknown>): Promise<Configuration> => ({
+  plugins: [
+    ...(env.development
+      ? [
+          new TsCheckerRspackPlugin({
+            async: Boolean(env.development),
+          }),
+          new ESLintPlugin({
+            extensions: ['.ts', '.tsx'],
+            lintDirtyModulesOnly: Boolean(env.development), // don't lint on start, only lint changed files
+          }),
+        ]
+      : []),
+  ],
+});
+
+export default config;
+`;
+
+function setupContext(files: Record<string, string> = { [WEBPACK_CONFIG_PATH]: WEBPACK_CONFIG }) {
+  const context = new Context('/virtual');
+  context.addFile(
+    'package.json',
+    JSON.stringify({ devDependencies: { 'eslint-webpack-plugin': '^5.0.0', webpack: '^5.101.0' } })
+  );
+  for (const [path, content] of Object.entries(files)) {
+    context.addFile(path, content);
+  }
+  return context;
+}
+
+describe('018-replace-eslint-webpack-plugin', () => {
+  beforeEach(() => {
+    vi.spyOn(output, 'warning').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should replace the plugin in the webpack config', () => {
+    const result = migrate(setupContext());
+    const expected = WEBPACK_CONFIG.replace(
+      "import ESLintPlugin from 'eslint-webpack-plugin';",
+      "import DiagnosticsPlugin from 'diagnostics-webpack-plugin';"
+    ).replace(
+      /new ESLintPlugin\(\{\n(?:.*\n){3} {6}\}\)/,
+      `new DiagnosticsPlugin({
+        lintOnStart: false, // don't lint on start, only lint changed files
+        checks: [{ use: 'eslint', extensions: ['ts', 'tsx'] }],
+      })`
+    );
+
+    expect(result.getFile(WEBPACK_CONFIG_PATH)).toBe(expected);
+  });
+
+  it('should swap the dependency and bump webpack in package.json', () => {
+    const result = migrate(setupContext());
+    const packageJson = JSON.parse(result.getFile('package.json') || '{}');
+
+    expect(packageJson.devDependencies).toEqual({ 'diagnostics-webpack-plugin': '^1.0.1', webpack: '^5.106.0' });
+  });
+
+  it('should replace the plugin when it shares a line with other plugins', () => {
+    const result = migrate(
+      setupContext({
+        [WEBPACK_CONFIG_PATH]: `import ESLintPlugin from 'eslint-webpack-plugin';\nimport LiveReloadPlugin from 'webpack-livereload-plugin';\n\nexport default { plugins: [new LiveReloadPlugin(), new ESLintPlugin({ extensions: ['.ts', '.tsx'], lintDirtyModulesOnly: Boolean(env.development) })] };\n`,
+      })
+    );
+    const config = result.getFile(WEBPACK_CONFIG_PATH) || '';
+
+    expect(config).not.toContain('ESLintPlugin');
+    expect(config).toContain('[new LiveReloadPlugin(), new DiagnosticsPlugin({');
+  });
+
+  it('should replace the plugin when it has the older scaffolded options', () => {
+    const result = migrate(setupContext({ [WEBPACK_CONFIG_PATH]: WEBPACK_CONFIG.replace(/\n.*failOnError.*/, '') }));
+
+    expect(result.getFile(WEBPACK_CONFIG_PATH)).not.toContain('ESLintPlugin');
+    expect(output.warning).not.toHaveBeenCalled();
+  });
+
+  it('should skip the replacement and warn when the options were customised', () => {
+    const customConfig = WEBPACK_CONFIG.replace("extensions: ['.ts', '.tsx'],", "extensions: ['.ts', '.tsx', '.js'],");
+    const result = migrate(setupContext({ [WEBPACK_CONFIG_PATH]: customConfig }));
+    const packageJson = JSON.parse(result.getFile('package.json') || '{}');
+
+    expect(result.getFile(WEBPACK_CONFIG_PATH)).toBe(customConfig);
+    expect(packageJson.devDependencies).toEqual({ 'eslint-webpack-plugin': '^5.0.0', webpack: '^5.101.0' });
+    expect(output.warning).toHaveBeenCalledWith(
+      expect.objectContaining({ title: expect.stringContaining('Skipping the eslint-webpack-plugin replacement') })
+    );
+  });
+
+  it('should skip the replacement when the plugin is called without options', () => {
+    const config = `import ESLintPlugin from 'eslint-webpack-plugin';\n\nexport default { plugins: [new ESLintPlugin()] };\n`;
+    const result = migrate(setupContext({ [WEBPACK_CONFIG_PATH]: config }));
+
+    expect(result.getFile(WEBPACK_CONFIG_PATH)).toBe(config);
+  });
+
+  it('should leave the rspack config alone', () => {
+    const result = migrate(setupContext({ [RSPACK_CONFIG_PATH]: RSPACK_CONFIG }));
+    const packageJson = JSON.parse(result.getFile('package.json') || '{}');
+
+    expect(result.getFile(RSPACK_CONFIG_PATH)).toBe(RSPACK_CONFIG);
+    expect(packageJson.devDependencies).toEqual({ 'eslint-webpack-plugin': '^5.0.0', webpack: '^5.101.0' });
+  });
+
+  it('should keep the old dependency when an extended config still imports it', () => {
+    const result = migrate(
+      setupContext({
+        [WEBPACK_CONFIG_PATH]: WEBPACK_CONFIG,
+        'webpack.config.ts': `import ESLintPlugin from 'eslint-webpack-plugin';\n`,
+      })
+    );
+    const packageJson = JSON.parse(result.getFile('package.json') || '{}');
+
+    expect(result.getFile(WEBPACK_CONFIG_PATH)).not.toContain('ESLintPlugin');
+    expect(packageJson.devDependencies['eslint-webpack-plugin']).toBe('^5.0.0');
+    expect(packageJson.devDependencies['diagnostics-webpack-plugin']).toBe('^1.0.1');
+  });
+
+  it('should not modify configs that do not use the plugin', () => {
+    const context = new Context('/virtual');
+    context.addFile(WEBPACK_CONFIG_PATH, `export default {};\n`);
+
+    const result = migrate(context);
+
+    expect(result.getFile(WEBPACK_CONFIG_PATH)).toBe(`export default {};\n`);
+  });
+
+  it('should be idempotent', async () => {
+    await expect(migrate).toBeIdempotent(
+      setupContext({ [WEBPACK_CONFIG_PATH]: WEBPACK_CONFIG, [RSPACK_CONFIG_PATH]: RSPACK_CONFIG })
+    );
+  });
+});
