@@ -1,8 +1,8 @@
-import fg from 'fast-glob';
+import { glob } from 'tinyglobby';
 
 export async function findSourceMapFiles(distDir: string): Promise<string[]> {
   try {
-    const files = await fg('**/*.js.map', {
+    const files = await glob('**/*.js.map', {
       cwd: distDir,
       absolute: true,
       ignore: ['**/node_modules/**'],
