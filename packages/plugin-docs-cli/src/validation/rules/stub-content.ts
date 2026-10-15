@@ -101,7 +101,9 @@ function parseSections(raw: string): Section[] {
  * - `unfilled-section-brief`: a brief left in a section that has content, or a legacy
  *   `section-brief:start` marker block.
  *
- * Both are warnings, so a freshly scaffolded docs folder still passes `validate`.
+ * A finding about a `section-brief` comment is info, since the comment never renders. An empty heading
+ * without a brief and a legacy marker block, whose text does render, are warnings. None of them fail
+ * `validate`, so a freshly scaffolded docs folder still passes.
  */
 export async function checkStubContent(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
@@ -159,7 +161,8 @@ export async function checkStubContent(input: ValidationInput): Promise<Diagnost
       if (isEmpty) {
         diagnostics.push({
           rule: Rule.EmptySection,
-          severity: 'warning',
+          // a brief is an HTML comment, so it never renders. a bare heading the author wrote is still worth a warning
+          severity: hasBrief ? 'info' : 'warning',
           file: relativePath,
           line: section.heading?.line ?? section.briefLines[0],
           title: hasBrief ? 'Unfilled documentation stub' : 'Empty section',
@@ -173,7 +176,7 @@ export async function checkStubContent(input: ValidationInput): Promise<Diagnost
       for (const line of section.briefLines) {
         diagnostics.push({
           rule: Rule.UnfilledSectionBrief,
-          severity: 'warning',
+          severity: 'info',
           file: relativePath,
           line,
           title: 'Leftover section brief',
