@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import * as v from 'valibot';
 import type { Context, ContextMessage } from '../../context.js';
 import { TEMPLATE_PATHS, TEMPLATES_DIR } from '../../../constants.js';
@@ -24,6 +24,7 @@ import { getPackageManagerExecCmd } from '../../../utils/utils.packageManager.js
 const DOCS_PATH_RE = /^[a-zA-Z0-9](?:[a-zA-Z0-9_-]|\/[a-zA-Z0-9_-])*$/;
 const DOCS_PATH_RULE =
   'a relative path of letters, digits, hyphens, underscores and single "/" separators (for example "catalog-docs" or "docs/plugin")';
+const DEFAULT_DOCS_PATH = 'catalog-docs';
 
 export function isValidDocsPath(value: unknown): value is string {
   return typeof value === 'string' && DOCS_PATH_RE.test(value);
@@ -46,8 +47,7 @@ export const schema = v.object({
         DOCS_PATH_RE,
         `docsPath must be ${DOCS_PATH_RULE}, with no leading "/", "./", trailing "/", ".." segment, backslash or quote character.`
       )
-    ),
-    'catalog-docs'
+    )
   ),
 });
 
@@ -81,7 +81,8 @@ interface PluginJson {
 
 export interface DocsSetupOptions {
   context: Context;
-  docsPath: string;
+  /** Falls back to the docsPath in `src/plugin.json`, then to `catalog-docs`. */
+  docsPath?: string;
   /** Templates specific to this plugin type, under `templates/docs/<type>/`. */
   templateDir: string;
   /** Templates shared by every plugin type, under `templates/docs/common/`. */
@@ -89,9 +90,8 @@ export interface DocsSetupOptions {
 }
 
 export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
-  const { context, docsPath, templateDir, commonTemplateDir } = opts;
+  const { context, templateDir, commonTemplateDir } = opts;
 
-  // step 1: reconcile the requested docsPath with what the plugin already has
   const pluginJson = readJsonFile<PluginJson>(context, 'src/plugin.json');
   const existingDocsPath = pluginJson.docsPath;
 
@@ -99,17 +99,16 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     assertValidDocsPath(existingDocsPath, 'add docs', 'run this again');
   }
 
-  if (existingDocsPath !== undefined && existingDocsPath !== docsPath) {
+  if (opts.docsPath !== undefined && existingDocsPath !== undefined && existingDocsPath !== opts.docsPath) {
     throw new Error(
       `src/plugin.json already has docsPath set to '${existingDocsPath}'.\n  Re-run with the existing path:\n  create-plugin add docs --docsPath ${existingDocsPath}`
     );
   }
 
+  const docsPath = opts.docsPath ?? existingDocsPath ?? DEFAULT_DOCS_PATH;
+
   // a folder plugin.json doesn't declare isn't ours. doesFileExistOnDisk also catches an empty directory
-  if (
-    existingDocsPath === undefined &&
-    (context.doesFileExistOnDisk(docsPath) || context.readDir(docsPath).length > 0)
-  ) {
+  if (existingDocsPath === undefined && context.doesFileExistOnDisk(docsPath)) {
     throw new Error(
       `A directory already exists at '${docsPath}' but src/plugin.json has no docsPath.\n  Point the plugin at it by setting "docsPath": "${docsPath}" in src/plugin.json, or scaffold elsewhere:\n  create-plugin add docs --docsPath <alternative-path>`
     );
@@ -118,13 +117,12 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   if (!pluginJson.name) {
     throw new Error('src/plugin.json has no "name". Add one - it is used as the title throughout the docs.');
   }
-  const pluginName = pluginJson.name;
   if (!pluginJson.id) {
-    additionsDebug('src/plugin.json has no "id", falling back to "name" - catalog links will be wrong until it is set');
+    throw new Error('src/plugin.json has no "id". Add one - it is used in the catalog links throughout the docs.');
   }
-  const pluginId = pluginJson.id ?? pluginName;
+  const pluginId = pluginJson.id;
 
-  // step 2: set docsPath, only rewriting plugin.json when it changes so re-runs don't reformat it
+  // only rewritten when docsPath changes, so re-runs don't reformat plugin.json
   if (existingDocsPath !== docsPath) {
     context.updateFile('src/plugin.json', JSON.stringify({ ...pluginJson, docsPath }, null, 2));
   }
@@ -132,24 +130,28 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const templateData = getTemplateDataFromContext(context);
   const { packageManagerName, packageManagerVersion } = templateData;
   const createPluginCmd = `${getPackageManagerExecCmd(packageManagerName, packageManagerVersion)}@latest`;
-  const data = { ...templateData, pluginId, docsPath, createPluginCmd };
+  const data = {
+    ...templateData,
+    pluginId,
+    docsPath,
+    createPluginCmd,
+    lockFile: LOCK_FILES[packageManagerName],
+  };
 
-  // step 3: add @grafana/plugin-docs-cli as a devDependency
   addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': PLUGIN_DOCS_CLI_VERSION });
 
-  // step 4: add docs:serve and docs:validate npm scripts
   addDocsScripts(context);
 
-  // step 5: render the docs pages only into a folder without any, so pages the author deleted stay deleted
+  // pages are only rendered into a folder without any, so pages the author deleted stay deleted
   const hasPages = hasDocsPages(context, docsPath);
   addTemplateFolder(context, {
     folderPath: join(templateDir, 'docs'),
     targetPath: docsPath,
     data,
-    include: (file) => !hasPages || DOCS_META_FILES.includes(file),
+    include: (file) => !hasPages || SCAFFOLD_META_FILES.includes(file),
   });
 
-  // step 6: copy validate-docs workflow, unless the user already customized one
+  // left alone when it exists, since the author may have customized it
   const workflowPath = '.github/workflows/validate-docs.yml';
   if (!context.doesFileExist(workflowPath)) {
     context.addFile(workflowPath, renderTemplate(join(commonTemplateDir, 'workflows/validate-docs.yml'), false, data));
@@ -157,15 +159,14 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     additionsDebug(`${workflowPath} already exists, skipping`);
   }
 
-  // step 7: bump build-plugin and package-plugin in release.yml to versions that build docs
   const pluginActions = bumpActionRefs(context, RELEASE_WORKFLOW_PATH, REQUIRED_ACTION_REFS);
 
-  // step 8: agent instructions, creating the root and .config/AGENTS files a plugin predating them lacks
+  // a plugin that predates the root and .config/AGENTS files gets them here
   const linkedRootFiles = ensureRootAgentFiles(context, TEMPLATE_PATHS.common);
   ensureConfigAgentFiles(context, TEMPLATE_PATHS.common, CONFIG_AGENT_FILES, data);
   appendDocsPointerToInstructions(context, docsPath);
 
-  // step 9: deferred so it prints after the runner's change list, and only when something changed
+  // deferred so it prints after the runner's change list, and only when something changed
   if (context.hasChanges()) {
     context.setMessage(
       buildNextStepsMessage({ docsPath, packageManagerName, createPluginCmd, pluginActions, linkedRootFiles })
@@ -266,16 +267,26 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
 
 // instructions.md imports e2e-testing.md, so the two are created together
 const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
-// files in the docs folder that aren't pages, so they're added on every run
-const DOCS_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
+// the scaffold's files that aren't pages, so they're added on every run
+const SCAFFOLD_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
+// mirrors isMetaFile in @grafana/plugin-docs-cli, so both tools agree on what counts as a page
+const DOCS_CLI_META_FILES = [
+  'README.MD',
+  'CONTRIBUTING.MD',
+  'LICENSE.MD',
+  'CODE_OF_CONDUCT.MD',
+  'SECURITY.MD',
+  'CHANGELOG.MD',
+  'AGENTS.MD',
+  'CLAUDE.MD',
+];
 
 export function hasDocsPages(context: Context, docsPath: string): boolean {
-  const prefix = `${docsPath}/`;
   const addedInContext = Object.entries(context.listChanges())
-    .filter(([path, change]) => change.changeType === 'add' && path.startsWith(prefix))
+    .filter(([path, change]) => change.changeType === 'add' && path.startsWith(`${docsPath}/`))
     .map(([path]) => path);
   return [...listFiles(context, docsPath), ...addedInContext].some(
-    (file) => file.endsWith('.md') && !DOCS_META_FILES.includes(file.slice(prefix.length))
+    (file) => file.endsWith('.md') && !DOCS_CLI_META_FILES.includes(basename(file).toUpperCase())
   );
 }
 
@@ -291,6 +302,13 @@ function appendDocsPointerToInstructions(context: Context, docsPath: string): vo
   appendToAgentInstructions(context, agentsPath, section);
 }
 
+// so the docs workflow also runs when the docs CLI is bumped
+const LOCK_FILES: Record<string, string> = {
+  npm: 'package-lock.json',
+  pnpm: 'pnpm-lock.yaml',
+  yarn: 'yarn.lock',
+};
+
 const RELEASE_WORKFLOW_PATH = '.github/workflows/release.yml';
 // the oldest release of each action that builds docs into the plugin archive
 const REQUIRED_ACTION_REFS: Record<string, string> = {
@@ -298,26 +316,26 @@ const REQUIRED_ACTION_REFS: Record<string, string> = {
   'grafana/plugin-actions/package-plugin': 'package-plugin/v1.3.3',
 };
 
+const DOCS_SCRIPTS: Record<string, string> = {
+  'docs:serve': 'plugin-docs-cli serve --port 3001 --reload',
+  'docs:validate': 'plugin-docs-cli validate',
+};
+
 function addDocsScripts(context: Context): void {
   const packageJson = readJsonFile<Record<string, unknown>>(context, 'package.json');
   const scripts = (packageJson['scripts'] ?? {}) as Record<string, string>;
-  let changed = false;
+  const missing = Object.entries(DOCS_SCRIPTS).filter(([name]) => {
+    if (scripts[name]) {
+      additionsDebug(`${name} already exists in package.json scripts, skipping`);
+      return false;
+    }
+    return true;
+  });
 
-  if (!scripts['docs:serve']) {
-    scripts['docs:serve'] = 'plugin-docs-cli serve --port 3001 --reload';
-    changed = true;
-  } else {
-    additionsDebug('docs:serve already exists in package.json scripts, skipping');
-  }
-
-  if (!scripts['docs:validate']) {
-    scripts['docs:validate'] = 'plugin-docs-cli validate';
-    changed = true;
-  } else {
-    additionsDebug('docs:validate already exists in package.json scripts, skipping');
-  }
-
-  if (changed) {
-    context.updateFile('package.json', JSON.stringify({ ...packageJson, scripts }, null, 2));
+  if (missing.length > 0) {
+    context.updateFile(
+      'package.json',
+      JSON.stringify({ ...packageJson, scripts: { ...scripts, ...Object.fromEntries(missing) } }, null, 2)
+    );
   }
 }

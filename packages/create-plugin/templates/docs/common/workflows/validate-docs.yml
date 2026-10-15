@@ -8,6 +8,10 @@ on:
     paths:
       - '{{docsPath}}/**'
       - 'src/plugin.json'
+      - 'package.json'
+{{#if lockFile}}
+      - '{{lockFile}}'
+{{/if}}
   pull_request:
     branches:
       - main
@@ -15,6 +19,10 @@ on:
     paths:
       - '{{docsPath}}/**'
       - 'src/plugin.json'
+      - 'package.json'
+{{#if lockFile}}
+      - '{{lockFile}}'
+{{/if}}
 
 jobs:
   validate:
@@ -41,11 +49,4 @@ jobs:
         run: {{packageManagerInstallCmd}}
 
       - name: Validate plugin documentation
-        run: |
-          DOCS_PATH=$(jq -r '.docsPath // empty' src/plugin.json)
-          if [ -z "$DOCS_PATH" ]; then
-            echo "docsPath not set in src/plugin.json, skipping"
-            exit 0
-          fi
-
-          {{packageManagerName}} run docs:validate
+        run: {{packageManagerName}} run docs:validate
