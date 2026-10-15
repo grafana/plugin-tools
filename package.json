@@ -86,11 +86,11 @@
   "overrides": {
     "serialize-javascript": "7.0.7",
     "uuid": "^11.1.1",
-    "js-cookie": "^3.0.0",
     "basic-ftp": "^6.2.1",
+    "postcss-selector-parser": "7.1.6",
+    "tinypool": "2.1.2",
     "nx": {
-      "axios": "^1.18.0",
-      "brace-expansion": "^5.0.12"
+      "undici": "7.29.1"
     }
   },
   "packageManager": "npm@12.2.0"
