@@ -51,6 +51,7 @@ describe('bumpActionRefs', () => {
     ['a branch', 'some-feature-branch'],
     ['a commit SHA', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'],
     ["another action's tag", 'package-plugin/v1.0.0'],
+    ['a tag with a longer prefix', 'foo/build-plugin/v1.0.0'],
   ])('leaves %s alone and reports it', (_, ref) => {
     const workflow = workflowWith(`${BUILD_PLUGIN}@${ref}`);
     const { content, result } = bump(workflow);
