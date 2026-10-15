@@ -8,10 +8,11 @@ This folder is the documentation for **{{{pluginName}}}**, published at
 Read these before you write or change any page. This docs format is new and your training
 data does not cover it, so do not rely on what you know about other docs tools.
 
-Start with `node_modules/@grafana/plugin-docs-cli/docs/index.md`, which says which guide to read for what.
-The guides match the version of the validator this plugin uses. In a monorepo the package may be in a
-parent `node_modules` - `{{packageManagerName}} run docs:validate` prints the exact path to the guides'
-`index.md`, and the other guides sit next to it.
+Run `{{packageManagerName}} run docs:validate` and open the guide on its last line, `Docs guides:`. It's
+the guides' `index.md`, which says which guide to read for what, and the other guides sit next to it.
+The guides match the version of the validator this plugin uses. The line is a local path, usually
+`node_modules/@grafana/plugin-docs-cli/docs/index.md`, or a URL when the package isn't on disk, such as
+with Yarn Plug'n'Play.
 
 The guides name scripts such as `docs:validate`. This plugin uses **{{packageManagerName}}**, so run them
 with `{{packageManagerName}} run`, as in the commands below.
