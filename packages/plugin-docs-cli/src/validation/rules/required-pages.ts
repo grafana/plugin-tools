@@ -10,7 +10,7 @@ import { isInExcludedFolder, isMetaFile } from './utils.js';
  */
 const REQUIRED_PAGES: Record<string, string[]> = {
   panel: ['options', 'data-formats'],
-  datasource: ['query-editor', 'configuration'],
+  datasource: ['query-editor', 'configure'],
 };
 
 export async function checkRequiredPages(input: ValidationInput): Promise<Diagnostic[]> {
