@@ -101,7 +101,9 @@ function parseSections(raw: string): Section[] {
  * - `unfilled-section-brief`: a brief left in a section that has content, or a legacy
  *   `section-brief:start` marker block.
  *
- * Both are warnings, so a freshly scaffolded docs folder still passes `validate`.
+ * A finding about a `section-brief` comment is info, since the comment never renders. An empty heading
+ * without a brief and a legacy marker block, whose text does render, are warnings. None of them fail
+ * `validate`, so a freshly scaffolded docs folder still passes.
  */
 export async function checkStubContent(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
