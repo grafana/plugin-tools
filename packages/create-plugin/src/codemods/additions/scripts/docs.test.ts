@@ -25,7 +25,9 @@ vi.mock(import('../../../utils/utils.packageManager.js'), async (importOriginal)
   getPackageManagerWithFallback: vi.fn(() => ({ packageManagerName: 'npm', packageManagerVersion: '10.9.0' })),
 }));
 
-function makeContext(pluginJson: Record<string, unknown> = { type: 'panel', name: 'My Plugin' }): Context {
+function makeContext(
+  pluginJson: Record<string, unknown> = { type: 'panel', id: 'acme-test-panel', name: 'My Plugin' }
+): Context {
   const context = new Context('/virtual');
   context.addFile('src/plugin.json', JSON.stringify(pluginJson));
   context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
@@ -87,7 +89,7 @@ describe('docs scaffolding', () => {
       tempDirs.push(root);
       mkdirSync(join(root, 'docs'), { recursive: true });
       const context = new Context(root);
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'My Plugin' }));
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', id: 'acme-test-panel', name: 'My Plugin' }));
       context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
       expect(() => call(context)).toThrow("A directory already exists at 'docs'");
     });
@@ -133,7 +135,7 @@ describe('docs scaffolding', () => {
     });
 
     it('throws when docsPath is already set to a different value', () => {
-      const context = makeContext({ type: 'panel', name: 'My Plugin', docsPath: 'custom-docs' });
+      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'My Plugin', docsPath: 'custom-docs' });
       expect(() => call(context)).toThrow(/docsPath set to 'custom-docs'.*--docsPath custom-docs/s);
     });
 
@@ -163,7 +165,7 @@ describe('docs scaffolding', () => {
 
     it('leaves a docs:validate:release script from an earlier scaffold alone', () => {
       const context = new Context('/virtual');
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'My Plugin' }));
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', id: 'acme-test-panel', name: 'My Plugin' }));
       context.addFile(
         'package.json',
         JSON.stringify({ scripts: { 'docs:validate:release': 'custom-command' }, devDependencies: {} })
@@ -176,7 +178,7 @@ describe('docs scaffolding', () => {
 
     it('skips docs:serve if already present', () => {
       const context = new Context('/virtual');
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'My Plugin' }));
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', id: 'acme-test-panel', name: 'My Plugin' }));
       context.addFile(
         'package.json',
         JSON.stringify({ scripts: { 'docs:serve': 'custom-command' }, devDependencies: {} })
@@ -222,7 +224,7 @@ describe('docs scaffolding', () => {
     it('skips a file already present in the context', () => {
       // docsPath already set, so this docs/ folder is ours from a previous run, not a
       // foreign one - the folder-exists guard must fall through rather than refuse.
-      const context = makeContext({ type: 'panel', name: 'My Plugin', docsPath: 'docs' });
+      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'My Plugin', docsPath: 'docs' });
       context.addFile('docs/index.md', '# Existing\n');
       call(context, { templates: { 'index.md': '# Replacement\n' } });
       expect(context.getFile('docs/index.md')).toBe('# Existing\n');
@@ -290,7 +292,7 @@ describe('docs scaffolding', () => {
 
     it('does not throw when release.yml does not exist', () => {
       const context = new Context('/virtual');
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'My Plugin' }));
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', id: 'acme-test-panel', name: 'My Plugin' }));
       context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
       expect(() => call(context)).not.toThrow();
       expect(context.doesFileExist('.github/workflows/release.yml')).toBe(false);
@@ -299,7 +301,7 @@ describe('docs scaffolding', () => {
 
   describe('assertSupportedPluginType', () => {
     it('returns the plugin type when it is supported', () => {
-      const context = makeContext({ type: 'panel', name: 'X' });
+      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'X' });
       expect(assertSupportedPluginType(context)).toBe('panel');
     });
 
@@ -329,7 +331,7 @@ describe('docs codemod', () => {
       const [packageManagerName, packageManagerVersion] = packageManager.split('@');
       vi.mocked(getPackageManagerWithFallback).mockReturnValueOnce({ packageManagerName, packageManagerVersion });
       const context = new Context('/virtual');
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P' }));
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', id: 'acme-test-panel', name: 'P' }));
       context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
       docs(context, { docsPath: 'docs' });
       return context.getFile('.github/workflows/validate-docs.yml') ?? '';
@@ -360,6 +362,28 @@ describe('docs codemod', () => {
       expect(workflow).toContain(`${name} run docs:validate`);
     });
 
+    it.each([
+      ['npm@10.2.3', 'package-lock.json'],
+      ['pnpm@9.1.0', 'pnpm-lock.yaml'],
+      ['yarn@4.1.0', 'yarn.lock'],
+    ])(
+      'also runs for %s when package.json or %s changes, so a docs CLI bump is validated',
+      (packageManager, lockFile) => {
+        const { on } = parseYaml(workflowFor(packageManager));
+        for (const trigger of [on.push, on.pull_request]) {
+          expect(trigger.paths).toEqual(['docs/**', 'src/plugin.json', 'package.json', lockFile]);
+        }
+      }
+    );
+
+    it('runs docs:validate directly, with no docsPath guard', () => {
+      const { jobs } = parseYaml(workflowFor('npm@10.2.3'));
+      expect(jobs.validate.steps.at(-1)).toEqual({
+        name: 'Validate plugin documentation',
+        run: 'npm run docs:validate',
+      });
+    });
+
     it('adds the pnpm setup action only for pnpm', () => {
       expect(workflowFor('pnpm@9.1.0')).toContain('pnpm/action-setup@v6');
       expect(workflowFor('npm@10.2.3')).not.toContain('pnpm/action-setup');
@@ -381,7 +405,10 @@ describe('docs codemod', () => {
       mkdirSync(join(root, 'docs'), { recursive: true });
       writeFileSync(join(root, 'docs', 'index.md'), '# Mine\n');
       const context = new Context(root);
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P', docsPath: 'docs' }));
+      context.addFile(
+        'src/plugin.json',
+        JSON.stringify({ type: 'panel', id: 'acme-test-panel', name: 'P', docsPath: 'docs' })
+      );
       context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
 
       docs(context, { docsPath: 'docs' });
@@ -396,7 +423,10 @@ describe('docs codemod', () => {
       mkdirSync(join(root, 'docs'), { recursive: true });
       writeFileSync(join(root, 'docs', 'index.md'), '# Mine\n');
       const context = new Context(root);
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P', docsPath: 'docs' }));
+      context.addFile(
+        'src/plugin.json',
+        JSON.stringify({ type: 'panel', id: 'acme-test-panel', name: 'P', docsPath: 'docs' })
+      );
       context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
 
       docs(context, { docsPath: 'docs' });
@@ -413,7 +443,10 @@ describe('docs codemod', () => {
       mkdirSync(join(root, 'docs'), { recursive: true });
       writeFileSync(join(root, 'docs', 'README.md'), '# Notes\n');
       const context = new Context(root);
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P', docsPath: 'docs' }));
+      context.addFile(
+        'src/plugin.json',
+        JSON.stringify({ type: 'panel', id: 'acme-test-panel', name: 'P', docsPath: 'docs' })
+      );
       context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
 
       docs(context, { docsPath: 'docs' });
@@ -425,10 +458,59 @@ describe('docs codemod', () => {
     it.each<string | number | null>(['./docs', 'docs/', 'docs/v1.0', null, 5])(
       'refuses an existing docsPath of %s instead of suggesting a --docsPath the schema rejects',
       (existingDocsPath) => {
-        const context = makeContext({ type: 'panel', name: 'P', docsPath: existingDocsPath });
+        const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'P', docsPath: existingDocsPath });
         expect(() => docs(context, { docsPath: 'catalog-docs' })).toThrow(
           `src/plugin.json has docsPath set to '${existingDocsPath}', which create-plugin add docs can't use.`
         );
+      }
+    );
+
+    it('scaffolds into "catalog-docs" when neither --docsPath nor plugin.json sets one', () => {
+      const context = makeContext();
+      docs(context, {});
+      expect(JSON.parse(context.getFile('src/plugin.json') ?? '{}').docsPath).toBe('catalog-docs');
+      expect(context.doesFileExist('catalog-docs/index.md')).toBe(true);
+    });
+
+    it('reuses the docsPath in plugin.json when --docsPath is omitted', () => {
+      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'P', docsPath: 'docs' });
+      docs(context, {});
+      expect(context.doesFileExist('docs/AGENTS.md')).toBe(true);
+      expect(context.doesFileExist('catalog-docs/AGENTS.md')).toBe(false);
+    });
+
+    it('counts pages that live only in subfolders, so it does not scaffold stubs next to them', () => {
+      const root = mkdtempSync(join(tmpdir(), 'docs-rerun-nested-'));
+      mkdirSync(join(root, 'docs', 'options'), { recursive: true });
+      writeFileSync(join(root, 'docs', 'options', 'index.md'), '# Options\n');
+      const context = new Context(root);
+      context.addFile(
+        'src/plugin.json',
+        JSON.stringify({ type: 'panel', id: 'acme-p-panel', name: 'P', docsPath: 'docs' })
+      );
+      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+
+      docs(context, {});
+
+      expect(context.doesFileExist('docs/index.md')).toBe(false);
+    });
+
+    it.each(['CHANGELOG.md', 'readme.md', 'nested/LICENSE.md'])(
+      'does not count %s as a page, the same way plugin-docs-cli does not',
+      (file) => {
+        const root = mkdtempSync(join(tmpdir(), 'docs-rerun-meta-'));
+        mkdirSync(join(root, 'docs', 'nested'), { recursive: true });
+        writeFileSync(join(root, 'docs', file), '# Meta\n');
+        const context = new Context(root);
+        context.addFile(
+          'src/plugin.json',
+          JSON.stringify({ type: 'panel', id: 'acme-p-panel', name: 'P', docsPath: 'docs' })
+        );
+        context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+
+        docs(context, {});
+
+        expect(context.doesFileExist('docs/index.md')).toBe(true);
       }
     );
 
@@ -436,13 +518,23 @@ describe('docs codemod', () => {
       const root = mkdtempSync(join(tmpdir(), 'docs-unknown-'));
       mkdirSync(join(root, 'docs'), { recursive: true });
       const context = new Context(root);
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', name: 'P' }));
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'panel', id: 'acme-test-panel', name: 'P' }));
       context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
       expect(() => docs(context, { docsPath: 'docs' })).toThrow(/has no docsPath/);
     });
   });
 
   describe('plugin.json requirements', () => {
+    it('refuses a plugin.json with no id, since the catalog links need it', () => {
+      const context = makeContext({ type: 'panel', name: 'P' });
+      expect(() => docs(context, {})).toThrow(/has no "id"/);
+    });
+
+    it('refuses an empty id', () => {
+      const context = makeContext({ type: 'panel', id: '', name: 'P' });
+      expect(() => docs(context, {})).toThrow(/has no "id"/);
+    });
+
     it('refuses a plugin.json with no name rather than scaffolding docs about "my-plugin"', () => {
       const context = new Context('/virtual');
       context.addFile('src/plugin.json', JSON.stringify({ type: 'panel' }));
@@ -451,7 +543,7 @@ describe('docs codemod', () => {
     });
 
     it('writes a plugin name with special characters as-is, not HTML-escaped', () => {
-      const context = makeContext({ type: 'panel', name: "Erik's A & B" });
+      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: "Erik's A & B" });
       docs(context, { docsPath: 'docs' });
       const index = context.getFile('docs/index.md') ?? '';
       expect(index).toContain(`description: "Where to start and what to read next in the Erik's A & B docs."`);
@@ -460,7 +552,7 @@ describe('docs codemod', () => {
 
     it('keeps every page frontmatter valid YAML when the plugin name contains YAML syntax', () => {
       const name = 'Clock: "Analog" #2 \\ *';
-      const context = makeContext({ type: 'panel', name });
+      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name });
       docs(context, { docsPath: 'docs' });
       const pages = ['index.md', 'options.md', 'data-formats.md', 'examples.md', 'troubleshooting.md'];
       for (const page of pages) {
@@ -471,7 +563,7 @@ describe('docs codemod', () => {
     });
 
     it('gives the landing page a title that stays short whatever the plugin is called', () => {
-      const context = makeContext({ type: 'panel', name: 'A'.repeat(80) });
+      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'A'.repeat(80) });
       docs(context, { docsPath: 'docs' });
       expect(context.getFile('docs/index.md')).toContain('\ntitle: Introduction\n');
     });
@@ -502,8 +594,8 @@ describe('docs codemod', () => {
   });
 
   describe('docsPath validation', () => {
-    it('defaults to "catalog-docs" when omitted', () => {
-      expect(v.parse(schema, {})).toEqual({ docsPath: 'catalog-docs' });
+    it('leaves docsPath unset when omitted, so the codemod can tell it from an explicit value', () => {
+      expect(v.parse(schema, {})).toEqual({});
     });
 
     it('rejects an empty docsPath', () => {
@@ -544,7 +636,7 @@ describe('docs codemod', () => {
 
     it('ignores unrelated CLI flags that always ride along in argv', () => {
       const parsed = v.parse(schema, { force: false, f: false, 'experimental-updates': false });
-      expect(parsed).toEqual({ docsPath: 'catalog-docs' });
+      expect(parsed).toEqual({});
     });
   });
 
@@ -602,7 +694,7 @@ describe('docs codemod', () => {
     });
 
     it('interpolates pluginName into the index page', () => {
-      const context = makeContext({ type: 'panel', name: 'My Panel' });
+      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'My Panel' });
       docs(context, { docsPath: 'docs' });
       expect(context.getFile('docs/index.md') ?? '').toContain('My Panel');
     });
@@ -639,7 +731,7 @@ describe('docs codemod', () => {
     });
 
     it('scaffolds docs/README.md with panel-specific content', () => {
-      const context = makeContext({ type: 'panel', name: 'My Panel' });
+      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'My Panel' });
       docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/README.md') ?? '';
       expect(content).toContain('# My Panel documentation');
@@ -706,7 +798,7 @@ describe('docs codemod', () => {
     });
 
     it('does not overwrite an existing customized docs AGENTS.md', () => {
-      const context = makeContext({ type: 'panel', name: 'My Plugin', docsPath: 'docs' });
+      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'My Plugin', docsPath: 'docs' });
       context.addFile('docs/AGENTS.md', 'CUSTOMIZED');
       docs(context, { docsPath: 'docs' });
       expect(context.getFile('docs/AGENTS.md')).toEqual('CUSTOMIZED');
