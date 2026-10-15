@@ -14,7 +14,7 @@ Throughout, "the README" means `src/README.md` when that file exists, and the ro
 
 `index.md` never appears on the Overview tab - it is the Documentation tab's landing page, written for a reader who has already installed the plugin and clicked through from Overview.
 
-Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guides that ship with `@grafana/plugin-docs-cli`, starting at `node_modules/@grafana/plugin-docs-cli/docs/index.md` (in a monorepo, `docs:validate` prints the path). They hold the frontmatter shape, when to split a page into a folder, how to handle section briefs, the style rules and when the docs are done. Everything specific to the plugin type is in the scaffolded pages and in `{docsPath}/AGENTS.md`: the briefs say what each page holds, and its "Pages and their source" table says which source each page documents. This document only adds what is specific to a first migration.
+Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guides that ship with `@grafana/plugin-docs-cli`, starting at the `index.md` that `docs:validate` prints on its `Docs guides:` line. They hold the frontmatter shape, when to split a page into a folder, how to handle section briefs, the style rules and when the docs are done. Everything specific to the plugin type is in the scaffolded pages and in `{docsPath}/AGENTS.md`: the briefs say what each page holds, and its "Pages and their source" table says which source each page documents. This document only adds what is specific to a first migration.
 
 This usually runs once, after `add docs`. Running it again is safe, because it only writes sections that still have a brief. Ongoing per-page updates are routine work: edit the pages directly against those conventions.
 
