@@ -196,6 +196,12 @@ describe('utils', () => {
       const context = new Context(tmpDir);
       expect(() => readJsonFile(context, 'file.json')).toThrowError();
     });
+
+    it.each(['[]', 'null', '"text"'])('should throw when the file contains %s instead of an object', (content) => {
+      const context = new Context(tmpDir);
+      context.addFile('file.json', content);
+      expect(() => readJsonFile(context, 'file.json')).toThrowError('does not contain a JSON object');
+    });
   });
 
   describe('getTemplateDataFromContext', () => {
@@ -261,6 +267,23 @@ describe('utils', () => {
       expect(added.sort()).toEqual(['docs/index.md', 'docs/nested/setup.md']);
       expect(context.getFile('docs/index.md')).toBe("# Erik's & Co\n");
       expect(context.getFile('docs/nested/setup.md')).toBe('pnpm some-name\n');
+    });
+
+    it('skips files that include rejects, matching on the output path relative to the target', () => {
+      const context = new Context(tmpDir);
+      const folderPath = templateFolder({ 'README.md': 'readme\n', 'nested/page.md.hbs': 'page\n', npmrc: 'x' });
+      const seen: string[] = [];
+      const added = addTemplateFolder(context, {
+        folderPath,
+        targetPath: 'docs',
+        data,
+        include: (file) => {
+          seen.push(file);
+          return file === 'README.md';
+        },
+      });
+      expect(seen.sort()).toEqual(['.npmrc', 'README.md', 'nested/page.md']);
+      expect(added).toEqual(['docs/README.md']);
     });
 
     it('strips .hbs and maps config file names like generate does', () => {
