@@ -180,11 +180,16 @@ export function readJsonFile<T extends object = any>(context: Context, path: str
   if (!context.doesFileExist(path)) {
     throw new Error(`Cannot find ${path}`);
   }
+  let parsed;
   try {
-    return JSON.parse(context.getFile(path) || '');
+    parsed = JSON.parse(context.getFile(path) || '');
   } catch (e) {
     throw new Error(`Cannot parse ${path}: ${e}`);
   }
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    throw new Error(`${path} does not contain a JSON object.`);
+  }
+  return parsed;
 }
 
 export function addDependenciesToPackageJson(
@@ -374,12 +379,22 @@ export function getTemplateDataFromContext(context: Context): TemplateData {
 
 /**
  * Renders every file under `folderPath` into `targetPath`, the way `generate` scaffolds a template folder:
- * `.hbs` is stripped and config file names are mapped. Files that already exist are left alone.
- * Returns the paths it added.
+ * `.hbs` is stripped and config file names are mapped. Files that already exist are left alone, and so are
+ * files `include` rejects, given each template's path relative to `folderPath`. Returns the paths it added.
  */
 export function addTemplateFolder(
   context: Context,
-  { folderPath, targetPath, data }: { folderPath: string; targetPath: string; data: Record<string, unknown> }
+  {
+    folderPath,
+    targetPath,
+    data,
+    include = () => true,
+  }: {
+    folderPath: string;
+    targetPath: string;
+    data: Record<string, unknown>;
+    include?: (relativeFile: string) => boolean;
+  }
 ): string[] {
   if (!existsSync(folderPath)) {
     throw new Error(
@@ -390,6 +405,9 @@ export function addTemplateFolder(
   const added: string[] = [];
   // relative to `cwd`, so glob characters in the install path (such as Windows backslashes) can't break the pattern
   for (const relativeFile of glob.sync('**', { cwd: folderPath, dot: true, nodir: true })) {
+    if (!include(relativeFile)) {
+      continue;
+    }
     const file = join(folderPath, relativeFile);
     const filePath = join(targetPath, dirname(relativeFile), getExportFileName(file));
     if (context.doesFileExist(filePath)) {

@@ -123,7 +123,7 @@ Don't call `output.*` directly from a codemod to tell the author what to do next
 // package.json manipulation
 addDependenciesToPackageJson(context, dependencies, devDependencies?, packageJsonPath?)
 removeDependenciesFromPackageJson(context, dependencies, devDependencies?, packageJsonPath?)
-readJsonFile<T>(context, path): T  // throws if missing or unparseable
+readJsonFile<T>(context, path): T  // throws if missing, unparseable or not an object
 
 // Semver — handles dist-tags ("latest", "next", "*") and standard ranges
 isVersionGreater(incomingVersion, existingVersion, orEqualTo?): boolean
@@ -135,6 +135,23 @@ getTemplateDataFromContext(context): TemplateData  // the data `generate` uses, 
 
 // Debug loggers (namespace create-plugin:*)
 migrationsDebug, additionsDebug
+```
+
+From `../../utils.agents.js`:
+
+```ts
+// AGENT_INSTRUCTIONS_PATH is `.config/AGENTS/instructions.md`
+appendToAgentInstructions(context, marker, text, separator?)  // skips if missing or `marker` is present
+ensureRootAgentFiles(context, templateDir): string[]  // creates AGENTS.md, CLAUDE.md and GEMINI.md, returns the ones it linked
+ensureConfigAgentFiles(context, templateDir, files, data)  // creates `.config/AGENTS/` files if there are no instructions
+```
+
+From `../../utils.workflows.js`:
+
+```ts
+// Raises `uses: <action>@<ref>` to at least each minimum tag and never lowers one. Returns the
+// actions it found and those pinned to a branch or SHA, so the codemod can tell the author
+bumpActionRefs(context, workflowPath, { 'grafana/plugin-actions/build-plugin': 'build-plugin/v1.2.0' });
 ```
 
 ## Writing a migration
