@@ -1,0 +1,12 @@
+{
+  "errors": [
+    {
+      "message": "error occurred",
+      "refId": "A",
+      "status": 500
+    }
+  ],
+  "schemaVersion": 1,
+  "series": [],
+  "state": "Error"
+}

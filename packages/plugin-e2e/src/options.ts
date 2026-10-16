@@ -26,4 +26,5 @@ export const options: Fixtures<{}, PluginOptions> = {
   provisioningRootDir: [path.join(process.cwd(), 'provisioning'), { option: true, scope: 'worker' }],
   user: [DEFAULT_ADMIN_USER, { option: true, scope: 'worker' }],
   grafanaAPICredentials: [DEFAULT_ADMIN_USER, { option: true, scope: 'worker' }],
+  dataSnapshot: [{}, { option: true, scope: 'worker' }],
 };
