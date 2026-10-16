@@ -35,7 +35,7 @@ and the options type, and `setConfigEditor` and `setQueryEditor` name the editor
 | `annotations.md`        | `annotations` support in the data source class                                                                                             |
 | `alerting.md`           | The backend's query handling, and what the data source class does to queries first, since alert rules skip it                              |
 | `dashboards.md`         | `includes` entries of type `dashboard` in `src/plugin.json` and their JSON files                                                           |
-| `troubleshooting.md`    | Error messages in source, health check failures and reported issues. Don't invent failures.                                                |
+| `troubleshooting.md`    | Error messages in source, known issues in the README or other docs and reported issues. Never guess failures                               |
 
 ## Optional pages
 

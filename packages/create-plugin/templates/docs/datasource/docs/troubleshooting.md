@@ -13,7 +13,15 @@ Fill this in: Delete only this brief, then fill in the sections below. Open each
 - Under it, list what the reader sees after **Symptoms:**.
 - Then give a **Possible causes and solutions:** table with Cause and Solution columns when there are several causes, or a numbered **Solutions:** list when there's one.
 
-Take the symptoms from error messages in the frontend and backend source and from issues reported in the repository. Document only real failures, not generic advice. If the backend prefixes or classifies its errors, add an H2 that explains the categories first. Add an H2 for any other feature with its own real failures, such as ad hoc filters or upgrading across a major version.
+Never guess what might go wrong. Every symptom must come from one of these sources:
+
+- An error message in the frontend or backend source, including the health check.
+- A known issue or troubleshooting tip in the README, CHANGELOG or other docs in the repository.
+- An issue reported in the repository's issue tracker.
+
+If you can't point to the source for a symptom, leave it out. The category examples in the briefs below show what belongs where, not what to write. A short page with real failures is better than a long one with guesses, so remove any section with nothing real to document.
+
+If the backend prefixes or classifies its errors, add an H2 that explains the categories first. Add an H2 for any other feature with its own real failures, such as ad hoc filters or upgrading across a major version.
 -->
 
 ## Connection errors
