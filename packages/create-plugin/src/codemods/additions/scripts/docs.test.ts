@@ -943,7 +943,7 @@ describe('docs codemod', () => {
     it('indents each detail line under its step', () => {
       const body = nextSteps(makeContext());
       const step = body.indexOf(' 3. Preview the pages');
-      expect(body[step + 1]).toBe('    Run npm run docs:serve, which also warns about every section left to fill.');
+      expect(body[step + 1]).toBe('    Run npm run docs:serve, which also lists every section left to fill.');
       expect(body.join('\n')).not.toContain('docs:validate:release');
       expect(body.join('\n')).not.toContain('strict');
     });

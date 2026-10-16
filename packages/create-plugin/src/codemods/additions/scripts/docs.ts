@@ -202,7 +202,7 @@ function buildNextStepsMessage(opts: {
     },
     {
       title: 'Preview the pages',
-      detail: `Run ${run('docs:serve')}, which also warns about every section left to fill.`,
+      detail: `Run ${run('docs:serve')}, which also lists every section left to fill.`,
     },
   ];
 

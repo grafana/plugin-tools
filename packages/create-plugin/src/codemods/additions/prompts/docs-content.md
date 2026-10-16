@@ -109,7 +109,7 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
 
 ## Verify
 
-`docs:validate` reports no warnings, as step 9 says. Limit fixes to problems in pages you wrote or changed.
+`docs:validate` reports no warnings and no `section-brief` suggestions, as step 9 says. Limit fixes to problems in pages you wrote or changed.
 
 ## Out of scope
 
