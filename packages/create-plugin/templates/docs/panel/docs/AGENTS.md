@@ -55,13 +55,13 @@ If the plugin has no options, remove this section entirely.
 -->
 ```
 
-The first paragraph, after `Fill this in:`, is the instruction. A paragraph after it is extra context.
+Everything inside a brief is the instruction. A brief covers the section it sits under, unless it says otherwise.
 
 To fill a section:
 
-1. Read the brief. It covers only the section it sits under.
+1. Read the brief.
 2. Read the source the page documents, from the table above, then write the section.
-3. Delete the whole comment, from `<!-- section-brief` to `-->`, including any extra paragraphs inside it.
+3. Delete the whole comment, from `<!-- section-brief` to `-->`.
 
 Briefs are not shown in the preview or the catalog, so a section you haven't written looks like a bare
 heading. `docs:validate` lists every section that still has only its brief.

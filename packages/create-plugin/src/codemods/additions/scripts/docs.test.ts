@@ -6,6 +6,7 @@ import * as v from 'valibot';
 import { parse as parseYaml } from 'yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../context.js';
+import { flushChanges } from '../../utils.js';
 import { getPackageManagerWithFallback } from '../../../utils/utils.packageManager.js';
 import docs, { assertSupportedPluginType, schema, setupDocsScaffolding } from './docs.js';
 
@@ -34,6 +35,34 @@ function makeContext(
   context.addFile('.github/workflows/release.yml', 'uses: grafana/plugin-actions/build-plugin@v1.0.2\n');
   return context;
 }
+
+// a plugin.json per type with every feature that adds a page turned on, so every template is rendered
+const FULL_PLUGIN_JSON: Record<string, Record<string, unknown>> = {
+  panel: { type: 'panel', id: 'acme-test-panel', name: 'My Plugin' },
+  datasource: {
+    type: 'datasource',
+    id: 'acme-test-datasource',
+    name: 'My Plugin',
+    backend: true,
+    annotations: true,
+    alerting: true,
+    includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }],
+  },
+};
+const PAGES_BY_TYPE: Record<string, string[]> = {
+  panel: ['index', 'options', 'data-formats', 'examples', 'troubleshooting'],
+  datasource: [
+    'index',
+    'configure',
+    'query-editor',
+    'template-variables',
+    'annotations',
+    'alerting',
+    'dashboards',
+    'troubleshooting',
+  ],
+};
+const PLUGIN_TYPES = Object.keys(PAGES_BY_TYPE);
 
 describe('docs scaffolding', () => {
   const tempDirs: string[] = [];
@@ -305,10 +334,15 @@ describe('docs scaffolding', () => {
       expect(assertSupportedPluginType(context)).toBe('panel');
     });
 
-    it.each(['app', 'datasource'])('reports %s as not supported yet', (type) => {
-      const context = makeContext({ type, name: 'X' });
+    it('returns datasource for a data source plugin', () => {
+      const context = makeContext({ type: 'datasource', id: 'acme-test-datasource', name: 'X' });
+      expect(assertSupportedPluginType(context)).toBe('datasource');
+    });
+
+    it('reports app as not supported yet', () => {
+      const context = makeContext({ type: 'app', name: 'X' });
       expect(() => assertSupportedPluginType(context)).toThrow(
-        new RegExp(`does not support '${type}' plugins yet.*Supported so far: panel`, 's')
+        /does not support 'app' plugins yet.*Supported so far: panel, datasource/s
       );
     });
 
@@ -550,17 +584,22 @@ describe('docs codemod', () => {
       expect(index).not.toMatch(/&amp;|&#x27;/);
     });
 
-    it('keeps every page frontmatter valid YAML when the plugin name contains YAML syntax', () => {
-      const name = 'Clock: "Analog" #2 \\ *';
-      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name });
-      docs(context, { docsPath: 'docs' });
-      const pages = ['index.md', 'options.md', 'data-formats.md', 'examples.md', 'troubleshooting.md'];
-      for (const page of pages) {
-        const frontmatter = /^---\n([\s\S]*?)\n---/.exec(context.getFile(`docs/${page}`) ?? '')?.[1] ?? '';
-        const { description } = parseYaml(frontmatter);
-        expect(description, page).toContain(name);
+    it.each(PLUGIN_TYPES)(
+      'keeps every %s page frontmatter valid YAML when the plugin name contains YAML syntax',
+      (type) => {
+        const name = 'Clock: "Analog" #2 \\ *';
+        const context = makeContext({ ...FULL_PLUGIN_JSON[type], name });
+        docs(context, { docsPath: 'docs' });
+        for (const page of PAGES_BY_TYPE[type]) {
+          const frontmatter = /^---\n([\s\S]*?)\n---/.exec(context.getFile(`docs/${page}.md`) ?? '')?.[1] ?? '';
+          const { description, keywords } = parseYaml(frontmatter);
+          expect(description, page).toContain(name);
+          if (type === 'datasource') {
+            expect(keywords, page).toContain(name);
+          }
+        }
       }
-    });
+    );
 
     it('gives the landing page a title that stays short whatever the plugin is called', () => {
       const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'A'.repeat(80) });
@@ -580,10 +619,10 @@ describe('docs codemod', () => {
   });
 
   describe('plugin type support', () => {
-    it.each(['app', 'datasource'])('refuses a %s plugin until its templates exist', (type) => {
+    it('refuses an app plugin until its templates exist', () => {
       const context = new Context('/virtual');
-      context.addFile('src/plugin.json', JSON.stringify({ type, name: 'X' }));
-      expect(() => docs(context, { docsPath: 'docs' })).toThrow(new RegExp(`does not support '${type}' plugins yet`));
+      context.addFile('src/plugin.json', JSON.stringify({ type: 'app', name: 'X' }));
+      expect(() => docs(context, { docsPath: 'docs' })).toThrow(/does not support 'app' plugins yet/);
     });
 
     it('refuses a plugin with no type set', () => {
@@ -668,10 +707,10 @@ describe('docs codemod', () => {
       expect(context.getFile('docs/options.md') ?? '').toContain('<!-- section-brief\nFill this in:');
     });
 
-    it('closes every brief and never nests a comment inside one', () => {
-      const context = makeContext();
+    it.each(PLUGIN_TYPES)('closes every %s brief and never nests a comment inside one', (type) => {
+      const context = makeContext(FULL_PLUGIN_JSON[type]);
       docs(context, { docsPath: 'docs' });
-      for (const page of ['index', 'options', 'data-formats', 'examples', 'troubleshooting']) {
+      for (const page of PAGES_BY_TYPE[type]) {
         const content = context.getFile(`docs/${page}.md`) ?? '';
         const briefs = content.match(/<!-- section-brief\n[\s\S]*?-->/g) ?? [];
         expect(briefs.length, page).toBeGreaterThan(0);
@@ -680,18 +719,82 @@ describe('docs codemod', () => {
       }
     });
 
-    it('scaffolds pages where every section is only a brief, so an untouched scaffold is all stubs', () => {
-      const context = makeContext();
-      docs(context, { docsPath: 'docs' });
-      for (const page of ['index', 'options', 'data-formats', 'examples', 'troubleshooting']) {
-        const left = (context.getFile(`docs/${page}.md`) ?? '')
-          .replace(/^---\n[\s\S]*?\n---\n/, '')
-          .replace(/<!-- section-brief\n[\s\S]*?-->/g, '')
-          .replace(/^#{1,6} .*$/gm, '')
-          .trim();
-        expect(left, page).toBe('');
+    // text the scaffold keeps on purpose, which agents leave in place
+    const FIXED_TEXT: Record<string, Record<string, string[]>> = {
+      panel: {},
+      datasource: {
+        configure: [
+          'This document explains how to add and configure the My Plugin data source in Grafana. After you configure the data source, refer to the [My Plugin query editor](./query-editor.md) to start querying your data.',
+          'Before you configure the data source, ensure you have:',
+          '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can add data sources.',
+          'To add the My Plugin data source:',
+          '1. Click **Connections** in the left-side menu.\n1. Click **Add new connection**.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click **Add new data source**.',
+          'Click **Save & test** to verify the connection.',
+          'You can provision the My Plugin data source as code, with a Grafana provisioning file or with the Grafana Terraform provider.',
+          'You can define the data source in a YAML file as part of the Grafana provisioning system. For more information, refer to [Provision Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources).',
+          'You can provision the data source with the [Grafana Terraform provider](https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/data_source) using the `grafana_data_source` resource.',
+        ],
+        'template-variables': [
+          'Use template variables to create dynamic, reusable dashboards that let you change query parameters without editing individual panels. For general information about template variables, refer to [Templates and variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).',
+          '- [Configure the My Plugin data source](./configure.md).\n- Understand [Grafana template variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).\n- Know how to write queries in the [My Plugin query editor](./query-editor.md).',
+          'The My Plugin data source supports the following variable types:',
+          'A query variable fills its drop-down by running a query against My Plugin, so its options stay current with your data. Use one to let viewers pick a value, such as a host, a table or a project, and update every panel that uses it.',
+          'To create a query variable:',
+          '1. Navigate to **Dashboard settings** > **Variables**.\n1. Click **Add variable**.\n1. Select **Query** as the variable type.\n1. Select the **My Plugin** data source.',
+        ],
+        alerting: [
+          'You can create alert rules that run My Plugin queries on a schedule and fire when the result meets a condition, such as a value above a threshold. For general information about alerting, refer to [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/).',
+          '- [Configure the My Plugin data source](./configure.md).',
+          'To create an alert rule from a My Plugin query:',
+          '1. Navigate to **Alerting** > **Alert rules**.\n1. Click **New alert rule**.\n1. Enter a **Name** for the rule.\n1. Select the **My Plugin** data source.',
+        ],
+        annotations: [
+          'Annotations overlay event markers on time series panels, so you can correlate events from My Plugin, such as deployments or incidents, with the metrics on your dashboards. For general information about annotations, refer to [Annotate visualizations](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/annotate-visualizations/).',
+          '- [Configure the My Plugin data source](./configure.md).',
+          'To add an annotation query to a dashboard:',
+          '1. Navigate to **Dashboard settings** > **Annotations**.\n1. Click **Add annotation query**.\n1. Enter a **Name** for the annotation.\n1. Select the **My Plugin** data source.',
+        ],
+        dashboards: [
+          'My Plugin ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).',
+          'To import a dashboard that ships with My Plugin:',
+          '1. Click **Connections** > **Data sources** in the left-side menu.\n1. Select your My Plugin data source.\n1. Click the **Dashboards** tab.\n1. Click **Import** next to the dashboard.',
+          "Imported dashboards don't update when you upgrade the plugin. When a plugin upgrade ships a newer version of a dashboard, click **Update** next to it. This overwrites any changes you made to it.",
+        ],
+        'query-editor': [
+          'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
+          '- [Configure the My Plugin data source](./configure.md).',
+        ],
+        troubleshooting: [
+          'This page explains how to fix common issues when you configure or use the My Plugin data source. For setup instructions, refer to [Configure the My Plugin data source](./configure.md).',
+          'To see the raw request and response for a panel, open the panel editor and click **Query inspector**.',
+          'In self-managed Grafana, you can also find more detail in the Grafana server logs:',
+          "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-datasource`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
+          "If this page doesn't solve your problem:",
+          '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
+          'When you report an issue, include:',
+          '- The Grafana and plugin versions.\n- The error message, with sensitive information removed.\n- The steps to reproduce the issue.\n- The relevant data source settings, with credentials removed.',
+        ],
+      },
+    };
+
+    it.each(PLUGIN_TYPES)(
+      'scaffolds %s pages where every section is only a brief or fixed text, so an untouched scaffold is all stubs',
+      (type) => {
+        const context = makeContext(FULL_PLUGIN_JSON[type]);
+        docs(context, { docsPath: 'docs' });
+        for (const page of PAGES_BY_TYPE[type]) {
+          let left = (context.getFile(`docs/${page}.md`) ?? '')
+            .replace(/^---\n[\s\S]*?\n---\n/, '')
+            .replace(/<!-- section-brief\n[\s\S]*?-->/g, '')
+            .replace(/^#{1,6} .*$/gm, '');
+          for (const text of FIXED_TEXT[type][page] ?? []) {
+            expect(left, page).toContain(text);
+            left = left.replace(text, '');
+          }
+          expect(left.trim(), page).toBe('');
+        }
       }
-    });
+    );
 
     it('interpolates pluginName into the index page', () => {
       const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'My Panel' });
@@ -744,6 +847,187 @@ describe('docs codemod', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
       expect(context.doesFileExist('docs/README.txt')).toBe(false);
+    });
+  });
+
+  describe('datasource pages', () => {
+    const datasource = { type: 'datasource', id: 'acme-test-datasource', name: 'My Data Source' };
+    const conditionalPages = ['annotations.md', 'alerting.md', 'dashboards.md'];
+
+    it('scaffolds the pages every data source needs, and no feature pages when plugin.json declares none', () => {
+      const context = makeContext(datasource);
+      docs(context, { docsPath: 'docs' });
+      const files = [
+        ...PAGES_BY_TYPE.datasource.map((page) => `${page}.md`).filter((file) => !conditionalPages.includes(file)),
+        'README.md',
+        'AGENTS.md',
+        'CLAUDE.md',
+      ];
+      for (const file of files) {
+        expect(context.doesFileExist(`docs/${file}`), file).toBe(true);
+      }
+      for (const file of conditionalPages) {
+        expect(context.doesFileExist(`docs/${file}`), file).toBe(false);
+      }
+    });
+
+    it.each([
+      ['annotations.md', { annotations: true }],
+      ['alerting.md', { alerting: true }],
+      ['dashboards.md', { includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }] }],
+    ])('scaffolds %s when plugin.json declares the feature', (page, feature) => {
+      const context = makeContext({ ...datasource, ...feature });
+      docs(context, { docsPath: 'docs' });
+      for (const file of conditionalPages) {
+        expect(context.doesFileExist(`docs/${file}`), file).toBe(file === page);
+      }
+    });
+
+    it.each([{ annotations: false }, { alerting: 'true' }, { includes: [{ type: 'page' }, { type: 'datasource' }] }])(
+      'scaffolds no feature page for %j',
+      (feature) => {
+        const context = makeContext({ ...datasource, ...feature });
+        docs(context, { docsPath: 'docs' });
+        for (const file of conditionalPages) {
+          expect(context.doesFileExist(`docs/${file}`), file).toBe(false);
+        }
+      }
+    );
+
+    it.each([
+      ['no feature', datasource],
+      ['every feature', FULL_PLUGIN_JSON.datasource],
+    ])('links only scaffolded pages from index.md with %s pages', (_, pluginJson) => {
+      const context = makeContext(pluginJson);
+      docs(context, { docsPath: 'docs' });
+      const links = [...(context.getFile('docs/index.md') ?? '').matchAll(/\]\(\.\/([\w-]+\.md)\)/g)].map(
+        ([, file]) => file
+      );
+      expect(links).toContain('configure.md');
+      for (const file of links) {
+        expect(context.doesFileExist(`docs/${file}`), file).toBe(true);
+      }
+    });
+
+    it.each([
+      ['query-editor', '## Macros'],
+      ['configure', '## Private data source connect'],
+      ['troubleshooting', '## Private data source connect errors'],
+      ['troubleshooting', 'level = debug'],
+    ])('renders %s.md "%s" only for a backend data source', (page, heading) => {
+      for (const backend of [true, false]) {
+        const context = makeContext({ ...datasource, backend });
+        docs(context, { docsPath: 'docs' });
+        const content = context.getFile(`docs/${page}.md`) ?? '';
+        expect(content.includes(heading), `backend: ${backend}`).toBe(backend);
+        expect(content).not.toContain('{{');
+        expect(content).not.toMatch(/\n\n\n/);
+      }
+    });
+
+    it.each([
+      ['annotations', '## Annotation errors'],
+      ['alerting', '## Alerting errors'],
+    ])('renders troubleshooting.md "%s" only when plugin.json sets %s', (flag, heading) => {
+      for (const enabled of [true, false]) {
+        const context = makeContext({ ...datasource, [flag]: enabled });
+        docs(context, { docsPath: 'docs' });
+        const content = context.getFile('docs/troubleshooting.md') ?? '';
+        expect(content.includes(heading), `${flag}: ${enabled}`).toBe(enabled);
+        expect(content).not.toContain('{{');
+        expect(content).not.toMatch(/\n\n\n/);
+      }
+    });
+
+    it('keeps the template conditionals out of index.md', () => {
+      const context = makeContext(FULL_PLUGIN_JSON.datasource);
+      docs(context, { docsPath: 'docs' });
+      const index = context.getFile('docs/index.md') ?? '';
+      expect(index).not.toContain('{{');
+      expect(index).not.toMatch(/\n\n\n/);
+    });
+
+    it('scaffolds configure.md, the page plugin-docs-cli requires for data sources', () => {
+      const context = makeContext(datasource);
+      docs(context, { docsPath: 'docs' });
+      expect(context.doesFileExist('docs/configuration.md')).toBe(false);
+      expect(context.getFile('docs/configure.md') ?? '').toContain('## Provision the data source');
+    });
+
+    it('gives every page a unique sidebar_position', () => {
+      const context = makeContext(FULL_PLUGIN_JSON.datasource);
+      docs(context, { docsPath: 'docs' });
+      const positions = PAGES_BY_TYPE.datasource.map(
+        (page) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${page}.md`) ?? '')?.[1]
+      );
+      expect(positions.every(Boolean)).toBe(true);
+      expect(new Set(positions).size).toBe(positions.length);
+    });
+
+    it('lists every data source page in the docs AGENTS.md', () => {
+      const context = makeContext(datasource);
+      docs(context, { docsPath: 'docs' });
+      const content = context.getFile('docs/AGENTS.md') ?? '';
+      for (const page of PAGES_BY_TYPE.datasource) {
+        expect(content).toContain(`| \`${page}.md\``);
+      }
+      expect(content).not.toContain('setPanelOptions');
+    });
+
+    // scaffolds once and writes it to disk, so the re-run sees a plugin that is already fully set up
+    function scaffoldThenRerun(
+      pluginJson: Record<string, unknown>,
+      addFeature: Record<string, unknown>,
+      docsFile?: string
+    ) {
+      const root = mkdtempSync(join(tmpdir(), 'docs-rerun-feature-'));
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ scripts: {}, devDependencies: {} }));
+      mkdirSync(join(root, 'src'), { recursive: true });
+      writeFileSync(join(root, 'src', 'plugin.json'), JSON.stringify(pluginJson));
+      const first = new Context(root);
+      docs(first, { docsPath: 'docs' });
+      flushChanges(first);
+      writeFileSync(
+        join(root, 'src', 'plugin.json'),
+        JSON.stringify({ ...pluginJson, docsPath: 'docs', ...addFeature })
+      );
+      if (docsFile) {
+        mkdirSync(join(root, 'docs', docsFile, '..'), { recursive: true });
+        writeFileSync(join(root, 'docs', docsFile), '# Mine\n');
+      }
+
+      const context = new Context(root);
+      docs(context, { docsPath: 'docs' });
+      rmSync(root, { recursive: true, force: true });
+      return { context, body: stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n')) };
+    }
+
+    it('warns about a feature page on a re-run that changes nothing else, without adding it', () => {
+      const { context, body } = scaffoldThenRerun(datasource, { annotations: true });
+      expect(context.hasChanges()).toBe(false);
+      expect(context.doesFileExist('docs/annotations.md')).toBe(false);
+      expect(body).toContain('docs/annotations.md documents');
+      expect(body).toContain('Optional pages in docs/AGENTS.md');
+      expect(body).not.toContain('alerting.md');
+    });
+
+    it.each(['annotations.md', 'annotations/index.md'])(
+      'says nothing about a feature page at %s on a re-run',
+      (file) => {
+        const { context, body } = scaffoldThenRerun(datasource, { annotations: true }, file);
+        expect(context.getMessage()).toBeUndefined();
+        expect(body).not.toContain('annotations.md');
+      }
+    );
+
+    it('never warns about data source feature pages for a panel', () => {
+      const panel = { type: 'panel', id: 'acme-test-panel', name: 'My Plugin' };
+      const { context } = scaffoldThenRerun(panel, {
+        annotations: true,
+        alerting: true,
+        includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }],
+      });
+      expect(context.getMessage()).toBeUndefined();
     });
   });
 
