@@ -40,5 +40,7 @@ If the plugin has no macros, remove this section entirely.
 ## Query examples
 
 <!-- section-brief
-Fill this in: Give a few realistic queries for the jobs people use {{{pluginName}}} for. For each one, write a short heading or sentence saying what it does, then the query in a code block with the right language. Use the field names and syntax the editor really accepts.
+Fill this in: Give realistic examples of the common query types from Query types, with an H3 for each type. If there is only one type, give examples for the jobs people use {{{pluginName}}} for instead. For each example, say what it does and show the query the way a reader enters it in the editor, using the field names and syntax the editor really accepts.
+
+Follow each example with the query as dashboard JSON stores it, a `targets` entry in a `json` code block. Take the shape from the query model in source and from any dashboard JSON under `provisioning/dashboards/`, and replace real UIDs and credentials with placeholders. Add a screenshot of the query editor when you can capture one, saved under `img/`. Never link an image that doesn't exist.
 -->
