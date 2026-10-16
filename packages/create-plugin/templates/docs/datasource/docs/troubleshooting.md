@@ -4,8 +4,16 @@ description: "Troubleshoot common {{{yamlEscape pluginName}}} connection, authen
 sidebar_position: 8
 ---
 
+This page explains how to fix common issues when you configure or use the {{{pluginName}}} data source. For setup instructions, refer to [Configure the {{{pluginName}}} data source](./configure.md).
+
 <!-- section-brief
-Fill this in: Say in one sentence what this page covers. Use one H2 per category below and one H3 per symptom, named after what the user sees, such as the error message. Under each symptom, give the error message, its cause and the steps to fix it. Start from the error messages in the frontend and backend source and from failures reported in the repository's issues. Focus on real, observed failures - not generic advice.
+Fill this in: Delete only this brief, then fill in the sections below. Open each H2 with one sentence saying when its errors occur, then add an H3 per symptom:
+
+- Name the H3 after the error message in quotes, such as `### "Password authentication failed"`, or after what the reader sees when there's no message, such as `### Annotations don't appear`.
+- Under it, list what the reader sees after **Symptoms:**.
+- Then give a **Possible causes and solutions:** table with Cause and Solution columns when there are several causes, or a numbered **Solutions:** list when there's one.
+
+Take the symptoms from error messages in the frontend and backend source and from issues reported in the repository. Document only real failures, not generic advice. If the backend prefixes or classifies its errors, add an H2 that explains the categories first. Add an H2 for any other feature with its own real failures, such as ad hoc filters or upgrading across a major version.
 -->
 
 ## Connection errors
@@ -39,6 +47,36 @@ Fill this in: Symptoms such as a variable that returns no values, shows the wron
 
 If the plugin doesn't support template variables, or there are no real failures to document, remove this section entirely.
 -->
+{{#if hasAnnotations}}
+
+## Annotation errors
+
+<!-- section-brief
+Fill this in: Symptoms such as annotations that don't appear or too many annotations, with the annotation query fields that fix them. Link to [annotations](./annotations.md).
+
+If there are no real annotation failures to document, remove this section entirely.
+-->
+{{/if}}
+{{#if hasAlerting}}
+
+## Alerting errors
+
+<!-- section-brief
+Fill this in: Symptoms where an alert rule fails to evaluate or doesn't fire. Cover a query that works on a dashboard but fails in an alert rule, since alert rules skip the frontend data source class, tabular results with no **Reduce** expression, and rate limits from frequent evaluation. Link to [alerting](./alerting.md).
+
+If there are no real alerting failures to document, remove this section entirely.
+-->
+{{/if}}
+{{#if hasBackend}}
+
+## Private data source connect errors
+
+<!-- section-brief
+Fill this in: Symptoms when connecting through private data source connect (PDC), such as the toggle missing from the config editor, connections that fail only when a PDC network is selected, and host names that don't resolve from the PDC agent's network. Link to the Private data source connect section in [configure](./configure.md).
+
+Keep this section only if the backend supports the secure SOCKS proxy. Otherwise, remove it entirely.
+-->
+{{/if}}
 
 ## Performance issues
 
@@ -50,14 +88,37 @@ If there are no real performance issues to document, remove this section entirel
 
 ## Enable debug logging
 
-<!-- section-brief
-Fill this in: Explain how to get more detail when an error isn't clear: set `level = debug` under `[log]` in the Grafana configuration file and find the plugin's log lines, and check the query inspector in the panel editor for the raw request and response.
+{{#if hasBackend}}
+To see more detail about an error in the Grafana server logs:
 
-If the plugin has no backend, cover only the query inspector and the browser developer tools.
--->
+1. Set the log level to `debug` in the Grafana configuration file:
+
+   ```ini
+   [log]
+   level = debug
+   ```
+
+1. Restart Grafana and reproduce the error.
+1. Look for log lines with `logger=plugin.{{{pluginId}}}`.
+1. Set the log level back to `info` when you're done, to keep the logs small.
+
+{{/if}}
+To see the raw request and response for a panel, open the panel editor and click **Query inspector**.
 
 ## Get additional help
 
+If this page doesn't solve your problem:
+
+- Search the [Grafana community forums](https://community.grafana.com/).
+- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.
+
 <!-- section-brief
-Fill this in: Say where to ask for help when the page doesn't solve the problem: the plugin repository's issue tracker, the Grafana community forum at https://community.grafana.com/ and, for customers, Grafana support. Say what to include in a report, such as the Grafana and plugin versions and the error message.
+Fill this in: Add bullets to the list above that link to the plugin repository's issue tracker and to the service's own documentation. Take the repository URL from `package.json` or the `info.links` in `src/plugin.json`.
 -->
+
+When you report an issue, include:
+
+- The Grafana and plugin versions.
+- The error message, with sensitive information removed.
+- The steps to reproduce the issue.
+- The relevant data source settings, with credentials removed.

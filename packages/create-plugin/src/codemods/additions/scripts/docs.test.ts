@@ -717,48 +717,61 @@ describe('docs codemod', () => {
     });
 
     // text the scaffold keeps on purpose, which agents leave in place
-    const FIXED_TEXT: Record<string, string[]> = {
-      configure: [
-        'This document explains how to add and configure the My Plugin data source in Grafana. After you configure the data source, refer to the [My Plugin query editor](./query-editor.md) to start querying your data.',
-        'Before you configure the data source, ensure you have:',
-        '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can add data sources.',
-        'To add the My Plugin data source:',
-        '1. Click **Connections** in the left-side menu.\n1. Click **Add new connection**.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click **Add new data source**.',
-        'Click **Save & test** to verify the connection.',
-        'You can provision the My Plugin data source as code, with a Grafana provisioning file or with the Grafana Terraform provider.',
-        'You can define the data source in a YAML file as part of the Grafana provisioning system. For more information, refer to [Provision Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources).',
-        'You can provision the data source with the [Grafana Terraform provider](https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/data_source) using the `grafana_data_source` resource.',
-      ],
-      'template-variables': [
-        'Use template variables to create dynamic, reusable dashboards that let you change query parameters without editing individual panels. For general information about template variables, refer to [Templates and variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).',
-        '- [Configure the My Plugin data source](./configure.md).\n- Understand [Grafana template variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).\n- Know how to write queries in the [My Plugin query editor](./query-editor.md).',
-        'The My Plugin data source supports the following variable types:',
-        'A query variable fills its drop-down by running a query against My Plugin, so its options stay current with your data. Use one to let viewers pick a value, such as a host, a table or a project, and update every panel that uses it.',
-        'To create a query variable:',
-        '1. Navigate to **Dashboard settings** > **Variables**.\n1. Click **Add variable**.\n1. Select **Query** as the variable type.\n1. Select the **My Plugin** data source.',
-      ],
-      alerting: [
-        'You can create alert rules that run My Plugin queries on a schedule and fire when the result meets a condition, such as a value above a threshold. For general information about alerting, refer to [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/).',
-        '- [Configure the My Plugin data source](./configure.md).',
-        'To create an alert rule from a My Plugin query:',
-        '1. Navigate to **Alerting** > **Alert rules**.\n1. Click **New alert rule**.\n1. Enter a **Name** for the rule.\n1. Select the **My Plugin** data source.',
-      ],
-      annotations: [
-        'Annotations overlay event markers on time series panels, so you can correlate events from My Plugin, such as deployments or incidents, with the metrics on your dashboards. For general information about annotations, refer to [Annotate visualizations](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/annotate-visualizations/).',
-        '- [Configure the My Plugin data source](./configure.md).',
-        'To add an annotation query to a dashboard:',
-        '1. Navigate to **Dashboard settings** > **Annotations**.\n1. Click **Add annotation query**.\n1. Enter a **Name** for the annotation.\n1. Select the **My Plugin** data source.',
-      ],
-      dashboards: [
-        'My Plugin ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).',
-        'To import a dashboard that ships with My Plugin:',
-        '1. Click **Connections** > **Data sources** in the left-side menu.\n1. Select your My Plugin data source.\n1. Click the **Dashboards** tab.\n1. Click **Import** next to the dashboard.',
-        "Imported dashboards don't update when you upgrade the plugin. To get a newer version, click **Re-import** next to the dashboard. This overwrites any changes you made to it.",
-      ],
-      'query-editor': [
-        'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
-        '- [Configure the My Plugin data source](./configure.md).',
-      ],
+    const FIXED_TEXT: Record<string, Record<string, string[]>> = {
+      panel: {},
+      datasource: {
+        configure: [
+          'This document explains how to add and configure the My Plugin data source in Grafana. After you configure the data source, refer to the [My Plugin query editor](./query-editor.md) to start querying your data.',
+          'Before you configure the data source, ensure you have:',
+          '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can add data sources.',
+          'To add the My Plugin data source:',
+          '1. Click **Connections** in the left-side menu.\n1. Click **Add new connection**.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click **Add new data source**.',
+          'Click **Save & test** to verify the connection.',
+          'You can provision the My Plugin data source as code, with a Grafana provisioning file or with the Grafana Terraform provider.',
+          'You can define the data source in a YAML file as part of the Grafana provisioning system. For more information, refer to [Provision Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources).',
+          'You can provision the data source with the [Grafana Terraform provider](https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/data_source) using the `grafana_data_source` resource.',
+        ],
+        'template-variables': [
+          'Use template variables to create dynamic, reusable dashboards that let you change query parameters without editing individual panels. For general information about template variables, refer to [Templates and variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).',
+          '- [Configure the My Plugin data source](./configure.md).\n- Understand [Grafana template variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).\n- Know how to write queries in the [My Plugin query editor](./query-editor.md).',
+          'The My Plugin data source supports the following variable types:',
+          'A query variable fills its drop-down by running a query against My Plugin, so its options stay current with your data. Use one to let viewers pick a value, such as a host, a table or a project, and update every panel that uses it.',
+          'To create a query variable:',
+          '1. Navigate to **Dashboard settings** > **Variables**.\n1. Click **Add variable**.\n1. Select **Query** as the variable type.\n1. Select the **My Plugin** data source.',
+        ],
+        alerting: [
+          'You can create alert rules that run My Plugin queries on a schedule and fire when the result meets a condition, such as a value above a threshold. For general information about alerting, refer to [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/).',
+          '- [Configure the My Plugin data source](./configure.md).',
+          'To create an alert rule from a My Plugin query:',
+          '1. Navigate to **Alerting** > **Alert rules**.\n1. Click **New alert rule**.\n1. Enter a **Name** for the rule.\n1. Select the **My Plugin** data source.',
+        ],
+        annotations: [
+          'Annotations overlay event markers on time series panels, so you can correlate events from My Plugin, such as deployments or incidents, with the metrics on your dashboards. For general information about annotations, refer to [Annotate visualizations](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/annotate-visualizations/).',
+          '- [Configure the My Plugin data source](./configure.md).',
+          'To add an annotation query to a dashboard:',
+          '1. Navigate to **Dashboard settings** > **Annotations**.\n1. Click **Add annotation query**.\n1. Enter a **Name** for the annotation.\n1. Select the **My Plugin** data source.',
+        ],
+        dashboards: [
+          'My Plugin ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).',
+          'To import a dashboard that ships with My Plugin:',
+          '1. Click **Connections** > **Data sources** in the left-side menu.\n1. Select your My Plugin data source.\n1. Click the **Dashboards** tab.\n1. Click **Import** next to the dashboard.',
+          "Imported dashboards don't update when you upgrade the plugin. To get a newer version, click **Re-import** next to the dashboard. This overwrites any changes you made to it.",
+        ],
+        'query-editor': [
+          'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
+          '- [Configure the My Plugin data source](./configure.md).',
+        ],
+        troubleshooting: [
+          'This page explains how to fix common issues when you configure or use the My Plugin data source. For setup instructions, refer to [Configure the My Plugin data source](./configure.md).',
+          'To see more detail about an error in the Grafana server logs:',
+          "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-datasource`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
+          'To see the raw request and response for a panel, open the panel editor and click **Query inspector**.',
+          "If this page doesn't solve your problem:",
+          '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
+          'When you report an issue, include:',
+          '- The Grafana and plugin versions.\n- The error message, with sensitive information removed.\n- The steps to reproduce the issue.\n- The relevant data source settings, with credentials removed.',
+        ],
+      },
     };
 
     it.each(PLUGIN_TYPES)(
@@ -771,7 +784,7 @@ describe('docs codemod', () => {
             .replace(/^---\n[\s\S]*?\n---\n/, '')
             .replace(/<!-- section-brief\n[\s\S]*?-->/g, '')
             .replace(/^#{1,6} .*$/gm, '');
-          for (const text of FIXED_TEXT[page] ?? []) {
+          for (const text of FIXED_TEXT[type][page] ?? []) {
             expect(left, page).toContain(text);
             left = left.replace(text, '');
           }
@@ -896,12 +909,28 @@ describe('docs codemod', () => {
     it.each([
       ['query-editor', '## Macros'],
       ['configure', '## Private data source connect'],
+      ['troubleshooting', '## Private data source connect errors'],
+      ['troubleshooting', 'level = debug'],
     ])('renders %s.md "%s" only for a backend data source', (page, heading) => {
       for (const backend of [true, false]) {
         const context = makeContext({ ...datasource, backend });
         docs(context, { docsPath: 'docs' });
         const content = context.getFile(`docs/${page}.md`) ?? '';
         expect(content.includes(heading), `backend: ${backend}`).toBe(backend);
+        expect(content).not.toContain('{{');
+        expect(content).not.toMatch(/\n\n\n/);
+      }
+    });
+
+    it.each([
+      ['annotations', '## Annotation errors'],
+      ['alerting', '## Alerting errors'],
+    ])('renders troubleshooting.md "%s" only when plugin.json sets %s', (flag, heading) => {
+      for (const enabled of [true, false]) {
+        const context = makeContext({ ...datasource, [flag]: enabled });
+        docs(context, { docsPath: 'docs' });
+        const content = context.getFile('docs/troubleshooting.md') ?? '';
+        expect(content.includes(heading), `${flag}: ${enabled}`).toBe(enabled);
         expect(content).not.toContain('{{');
         expect(content).not.toMatch(/\n\n\n/);
       }
