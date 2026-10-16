@@ -729,6 +729,12 @@ describe('docs codemod', () => {
         'You can define the data source in a YAML file as part of the Grafana provisioning system. For more information, refer to [Provision Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources).',
         'You can provision the data source with the [Grafana Terraform provider](https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/data_source) using the `grafana_data_source` resource.',
       ],
+      'template-variables': [
+        'Use template variables to create dynamic, reusable dashboards that let you change query parameters without editing individual panels. For general information about template variables, refer to [Templates and variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).',
+        '- [Configure the My Plugin data source](./configure.md).\n- Understand [Grafana template variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).',
+        'To create a query variable:',
+        '1. Navigate to **Dashboard settings** > **Variables**.\n1. Click **Add variable**.\n1. Select **Query** as the variable type.\n1. Select the **My Plugin** data source.',
+      ],
       'query-editor': [
         'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
         '- [Configure the My Plugin data source](./configure.md).',
