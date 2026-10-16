@@ -43,7 +43,7 @@ find the same information in the same place across every plugin. Each topic can 
 docs folder.
 
 - **Panel:** `options` and `data-formats`
-- **Data source:** `query-editor` and `configuration`
+- **Data source:** `query-editor` and `configure`
 
 | Rule             | What it checks                                                                   | Severity |
 | ---------------- | -------------------------------------------------------------------------------- | -------- |
@@ -106,11 +106,11 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 
 ## Content quality
 
-| Rule                     | What it checks                                                                                                                                                                                                                                                                                            | Severity   |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `min-content-length`     | A page's body should have at least 150 characters of real content. A heads-up, not a hard requirement - catches pages that are still effectively blank.                                                                                                                                                   | Suggestion |
-| `empty-section`          | A heading needs content before the next heading. This also catches a section that still has only its `section-brief` comment, so write it or remove the heading. A heading followed directly by a deeper heading is fine.                                                                                 | Warning    |
-| `unfilled-section-brief` | A `section-brief` comment left in a section that already has content. It isn't shown in the catalog, so delete it to keep the page tidy. A page scaffolded earlier may use `<!-- section-brief:start -->` / `<!-- section-brief:end -->` markers instead. Their text is shown, so remove the whole block. | Warning    |
+| Rule                     | What it checks                                                                                                                                                                                                                                                                                                                                | Severity              |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `min-content-length`     | A page's body should have at least 150 characters of real content. A heads-up, not a hard requirement - catches pages that are still effectively blank.                                                                                                                                                                                       | Suggestion            |
+| `empty-section`          | A heading needs content before the next heading, and a heading followed directly by a deeper heading is fine. A section that still has only its `section-brief` comment is a suggestion, because the brief never renders: write it or remove the heading.                                                                                     | Warning or Suggestion |
+| `unfilled-section-brief` | A `section-brief` comment left in a section that already has content is a suggestion. It isn't shown in the catalog, so delete it to keep the page tidy. A page scaffolded earlier may use `<!-- section-brief:start -->` / `<!-- section-brief:end -->` markers instead. Their text is shown, so they are a warning: remove the whole block. | Warning or Suggestion |
 
 ## Writing style
 

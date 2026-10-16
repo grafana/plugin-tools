@@ -30,6 +30,16 @@ describe('checkFrontmatter', () => {
     expect(missing.map((f) => f.title)).toContain('Missing required field: description');
   });
 
+  it('should still check pages when a folder above the docs folder is called dist', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'fm-dist-parent-'));
+    const docsPath = join(root, 'dist', 'docs');
+    await mkdir(docsPath, { recursive: true });
+    await writeFile(join(docsPath, 'page.md'), `---\ntitle: Hello\n---\n\n${LONG_BODY}\n`);
+
+    const findings = await checkFrontmatter(input(docsPath));
+    expect(findings.map((f) => f.title)).toContain('Missing required field: description');
+  });
+
   it('should report wrong field types', async () => {
     const invalidDocs = join(__dirname, '..', '..', '__fixtures__', 'invalid-frontmatter-docs');
     const findings = await checkFrontmatter(input(invalidDocs));

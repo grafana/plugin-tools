@@ -20,7 +20,7 @@ validation.
 
 ## Add a page
 
-If the plugin has the `bootstrap-plugin-docs` skill, its page catalog lists the conventional filenames
+If the `AGENTS.md` in the docs folder has an "Optional pages" table, it lists the conventional filenames
 for optional pages. Use the name from there. Otherwise pick a `kebab-case` filename and a
 `sidebar_position` that puts the page where it belongs. Link the new page from `index.md` so readers can
 reach it.
@@ -119,7 +119,6 @@ Validation can't catch these, so they are on you:
 ## Validate
 
 Run `docs:validate` after every page you write or change and fix what it reports. You are done when it
-reports no warnings. A section you haven't written and a `section-brief` comment left in place are both
-warnings, and warnings don't fail the command, so a passing exit code alone doesn't mean the docs are done.
+reports no warnings and no `section-brief` suggestions. A bare empty heading remains a warning; a current brief never renders, so a section with only that brief and a brief left in place are suggestions. A passing exit code alone doesn't mean the docs are done.
 
 For the commands, refer to [Scripts](https://grafana.com/developers/plugin-tools/how-to-guides/plugin-docs#scripts).

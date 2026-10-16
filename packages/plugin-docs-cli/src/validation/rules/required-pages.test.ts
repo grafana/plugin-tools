@@ -52,7 +52,7 @@ describe('checkRequiredPages', () => {
 
   it('passes a datasource plugin with all required pages as folders', async () => {
     const docsPath = await makeDocsDir();
-    for (const name of ['query-editor', 'configuration']) {
+    for (const name of ['query-editor', 'configure']) {
       await mkdir(join(docsPath, name));
       await writeFile(join(docsPath, name, 'index.md'), '---\ntitle: X\n---\n');
     }

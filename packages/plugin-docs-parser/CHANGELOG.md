@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.4.0...@grafana/plugin-docs-parser@0.4.1) (2026-10-15)
+
+
+### Bug Fixes
+
+* **plugin-docs:** pin dependencies for better security ([#2976](https://github.com/grafana/plugin-tools/issues/2976)) ([98c1323](https://github.com/grafana/plugin-tools/commit/98c13230224b8fa87aed02d0e9d5e7279c592916))
+
 ## [0.4.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.3.1...@grafana/plugin-docs-parser@0.4.0) (2026-10-09)
 
 

@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.8.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.7.0...@grafana/plugin-docs-cli@0.8.0) (2026-10-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* **plugin-docs-cli:** require configure page for data sources ([#2985](https://github.com/grafana/plugin-tools/issues/2985))
+
+### Features
+
+* **plugin-docs-cli:** require configure page for data sources ([#2985](https://github.com/grafana/plugin-tools/issues/2985)) ([b4715b8](https://github.com/grafana/plugin-tools/commit/b4715b834e353b1df89eea589ffd527a1e17712d))
+
+
+### Bug Fixes
+
+* **deps:** Update dependency ejs to v7 ([#2965](https://github.com/grafana/plugin-tools/issues/2965)) ([5a6c44e](https://github.com/grafana/plugin-tools/commit/5a6c44e04fa81cb0685ea198ae0dee1ce3c64a7e))
+* **plugin-docs-cli:** skip meta files in builds and report briefs as suggestions ([#2986](https://github.com/grafana/plugin-tools/issues/2986)) ([c21afe7](https://github.com/grafana/plugin-tools/commit/c21afe79f10eb43ad9d497a4aaa7dd1a2db5cac5))
+* **plugin-docs-cli:** skip only whole node_modules and dist folders ([#2984](https://github.com/grafana/plugin-tools/issues/2984)) ([698533d](https://github.com/grafana/plugin-tools/commit/698533dcc72fa39cee1ae5c1e657200614fca9b9))
+* **plugin-docs:** pin dependencies for better security ([#2976](https://github.com/grafana/plugin-tools/issues/2976)) ([98c1323](https://github.com/grafana/plugin-tools/commit/98c13230224b8fa87aed02d0e9d5e7279c592916))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 0.4.0 to 0.4.1
+
 ## [0.7.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.6.0...@grafana/plugin-docs-cli@0.7.0) (2026-10-13)
 
 

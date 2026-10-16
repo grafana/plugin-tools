@@ -107,7 +107,7 @@ Run `add docs-content` once, after `add docs`. After that, update pages as part 
 
 Use `docs:serve` while you write. It shows your pages as they'll look in the catalog and reports problems as you save. Run `docs:validate` before you open a pull request.
 
-Unwritten sections and leftover section notes are reported as warnings. Since warnings don't fail the check and allow pages to be published as they are, finish with none left.
+Bare empty headings remain warnings, while current section-brief comments are suggestions because they never show in the catalog. Legacy `section-brief:start` blocks remain warnings because their text renders, so finish with none left.
 
 For every check, refer to [Validation rules](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/validation-rules.md).
 
@@ -182,7 +182,7 @@ For the full process, refer to [Publish your plugins](../publish-a-plugin/index.
 
 ## Keep the docs CLI up to date
 
-The codemod adds `@grafana/plugin-docs-cli` with a `^` range, such as `^0.7.0`. While the CLI is below version 1.0, that range only takes patch releases, so a new minor version reaches your plugin only when you, Dependabot or Renovate update it.
+The codemod adds `@grafana/plugin-docs-cli` with a `^` range, such as `^0.8.0`. While the CLI is below version 1.0, that range only takes patch releases, so a new minor version reaches your plugin only when you, Dependabot or Renovate update it.
 
 A new version can add rules or tighten existing ones, so run `docs:validate` after you update and fix anything new before your next release.
 

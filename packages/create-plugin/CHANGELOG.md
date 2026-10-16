@@ -1,5 +1,20 @@
 # Changelog
 
+## [7.13.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.12.3...@grafana/create-plugin@7.13.0) (2026-10-15)
+
+
+### Features
+
+* add AI-agent assisted additions to create-plugin ([#2898](https://github.com/grafana/plugin-tools/issues/2898)) ([d656507](https://github.com/grafana/plugin-tools/commit/d656507bfb672304530d960484a84a940c53af31))
+* **create-plugin:** render codemod templates like generate does ([#2972](https://github.com/grafana/plugin-tools/issues/2972)) ([9f44506](https://github.com/grafana/plugin-tools/commit/9f44506a026a11291015dcfdabdaa6d8462382c7))
+
+
+### Bug Fixes
+
+* **create-plugin:** drop braces from scaffolded dev dependencies ([#2945](https://github.com/grafana/plugin-tools/issues/2945)) ([633090b](https://github.com/grafana/plugin-tools/commit/633090b276009d4cf3d2e587c59969230c1257ba))
+* **templates:** Update create-plugin template github actions ([#2966](https://github.com/grafana/plugin-tools/issues/2966)) ([021aef5](https://github.com/grafana/plugin-tools/commit/021aef59fddd9d46b6633037eb200c68e5b964f8))
+* **templates:** Update dependency @grafana/plugin-e2e to v3.15.0 ([#2974](https://github.com/grafana/plugin-tools/issues/2974)) ([4e5d599](https://github.com/grafana/plugin-tools/commit/4e5d59900da03b05d841548455c48d118726b369))
+
 ## [7.12.3](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.12.2...@grafana/create-plugin@7.12.3) (2026-10-13)
 
 
