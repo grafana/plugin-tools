@@ -71,12 +71,6 @@ Click **Save & test** to verify the connection.
 <!-- section-brief
 Fill this in: Give the message the reader sees when the connection works and the most common failure messages, each with what it means. Take the messages from the health check in source (`CheckHealth` in the backend, or `testDatasource` in the frontend). Link failures to [troubleshooting](./troubleshooting.md) with a relative link.
 -->
-{{#if hasBackend}}
-
-## Query caching
-
-In Grafana Cloud and Grafana Enterprise, you can use the **Cache** tab on the data source page to enable query caching, which reduces load on {{{pluginName}}} by reusing recent query results. For more information, refer to [Query and resource caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching).
-{{/if}}
 
 ## Provision the data source
 
