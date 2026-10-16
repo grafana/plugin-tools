@@ -1,5 +1,5 @@
 ---
-title: "{{{yamlEscape pluginName}}} annotations"
+title: Annotations
 description: "Mark events on your graphs with annotation queries from {{{yamlEscape pluginName}}}."
 keywords:
   - "{{{yamlEscape pluginName}}}"

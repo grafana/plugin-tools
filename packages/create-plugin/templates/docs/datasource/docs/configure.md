@@ -1,5 +1,5 @@
 ---
-title: "Configure the {{{yamlEscape pluginName}}} data source"
+title: Configure
 description: "Add the {{{yamlEscape pluginName}}} data source in Grafana and connect it to your service."
 keywords:
   - "{{{yamlEscape pluginName}}}"

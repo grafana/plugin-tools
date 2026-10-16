@@ -1,5 +1,5 @@
 ---
-title: "{{{yamlEscape pluginName}}} query editor"
+title: Query editor
 description: "Build and run queries with the {{{yamlEscape pluginName}}} query editor."
 keywords:
   - "{{{yamlEscape pluginName}}}"

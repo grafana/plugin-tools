@@ -1,5 +1,5 @@
 ---
-title: "{{{yamlEscape pluginName}}} template variables"
+title: Template variables
 description: "Use template variables with {{{yamlEscape pluginName}}} to build dynamic, reusable dashboards."
 keywords:
   - "{{{yamlEscape pluginName}}}"

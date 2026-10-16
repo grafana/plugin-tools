@@ -1,5 +1,5 @@
 ---
-title: "{{{yamlEscape pluginName}}} alerting"
+title: Alerting
 description: "Create Grafana alert rules from {{{yamlEscape pluginName}}} queries."
 keywords:
   - "{{{yamlEscape pluginName}}}"
