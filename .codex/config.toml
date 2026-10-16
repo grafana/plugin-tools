@@ -1,6 +1,0 @@
-[mcp_servers.nx-mcp]
-command = "npx"
-args = [
-    "nx",
-    "mcp",
-]
