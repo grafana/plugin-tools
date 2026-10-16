@@ -18,6 +18,7 @@ import {
   ensureRootAgentFiles,
 } from '../../utils.agents.js';
 import { type BumpActionRefsResult, bumpActionRefs } from '../../utils.workflows.js';
+import { getPackageManagerExecCmd } from '../../../utils/utils.packageManager.js';
 
 // an allowlist, because the value becomes a path on disk and is embedded unescaped in a YAML workflow
 const DOCS_PATH_RE = /^[a-zA-Z0-9](?:[a-zA-Z0-9_-]|\/[a-zA-Z0-9_-])*$/;
@@ -127,8 +128,15 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   }
 
   const templateData = getTemplateDataFromContext(context);
-  const data = { ...templateData, pluginId, docsPath, lockFile: LOCK_FILES[templateData.packageManagerName] };
-  const { packageManagerName } = data;
+  const { packageManagerName, packageManagerVersion } = templateData;
+  const createPluginCmd = `${getPackageManagerExecCmd(packageManagerName, packageManagerVersion)}@latest`;
+  const data = {
+    ...templateData,
+    pluginId,
+    docsPath,
+    createPluginCmd,
+    lockFile: LOCK_FILES[packageManagerName],
+  };
 
   addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': PLUGIN_DOCS_CLI_VERSION });
 
@@ -160,7 +168,9 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
 
   // deferred so it prints after the runner's change list, and only when something changed
   if (context.hasChanges()) {
-    context.setMessage(buildNextStepsMessage({ docsPath, packageManagerName, pluginActions, linkedRootFiles }));
+    context.setMessage(
+      buildNextStepsMessage({ docsPath, packageManagerName, createPluginCmd, pluginActions, linkedRootFiles })
+    );
   }
 
   return context;
@@ -169,10 +179,11 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
 function buildNextStepsMessage(opts: {
   docsPath: string;
   packageManagerName: string;
+  createPluginCmd: string;
   pluginActions: BumpActionRefsResult;
   linkedRootFiles: string[];
 }): ContextMessage {
-  const { docsPath, packageManagerName, pluginActions, linkedRootFiles } = opts;
+  const { docsPath, packageManagerName, createPluginCmd, pluginActions, linkedRootFiles } = opts;
   const run = (script: string) => output.formatCode(`${packageManagerName} run ${script}`);
 
   const steps: NextStep[] = [
@@ -181,8 +192,17 @@ function buildNextStepsMessage(opts: {
       detail: 'It has the commands and a link to the plugin docs guide.',
     },
     {
-      title: `Fill in or review the pages under ${docsPath}/`,
-      detail: `Preview them with ${run('docs:serve')}, which also warns about every section left to fill.`,
+      title: 'Write the pages, yourself or with an AI agent',
+      detail: [
+        `Fill in or review the pages under ${docsPath}/ by hand.`,
+        'Or commit these changes, then have an agent draft them from your source code and README:',
+        output.formatCode(`${createPluginCmd} add docs-content`),
+        'Review its work either way.',
+      ],
+    },
+    {
+      title: 'Preview the pages',
+      detail: `Run ${run('docs:serve')}, which also lists every section left to fill.`,
     },
   ];
 
@@ -215,18 +235,15 @@ function buildNextStepsMessage(opts: {
 
 interface NextStep {
   title: string;
-  detail?: string;
+  detail?: string | string[];
 }
 
 function formatNextStep({ title, detail }: NextStep, marker: string): string[] {
-  const lines = [`${marker}${title}`];
-  if (detail) {
-    lines.push(`${' '.repeat(marker.length)}${detail}`);
-  }
-  return lines;
+  const indent = ' '.repeat(marker.length);
+  return [`${marker}${title}`, ...[detail ?? []].flat().map((line) => `${indent}${line}`)];
 }
 
-export function assertSupportedPluginType(context: Context): SupportedPluginType {
+export function assertSupportedPluginType(context: Context, additionName = 'docs'): SupportedPluginType {
   const { type } = readJsonFile<PluginJson>(context, 'src/plugin.json');
 
   if (isSupportedPluginType(type)) {
@@ -235,10 +252,12 @@ export function assertSupportedPluginType(context: Context): SupportedPluginType
 
   const supported = SUPPORTED_PLUGIN_TYPES.join(', ');
   if (type === 'app' || type === 'datasource') {
-    throw new Error(`create-plugin add docs does not support '${type}' plugins yet. Supported so far: ${supported}.`);
+    throw new Error(
+      `create-plugin add ${additionName} does not support '${type}' plugins yet. Supported so far: ${supported}.`
+    );
   }
   throw new Error(
-    `create-plugin add docs needs a plugin type of ${supported} in src/plugin.json, but found '${type ?? 'unset'}'.`
+    `create-plugin add ${additionName} needs a plugin type of ${supported} in src/plugin.json, but found '${type ?? 'unset'}'.`
   );
 }
 
