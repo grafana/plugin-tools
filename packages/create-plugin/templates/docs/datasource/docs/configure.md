@@ -13,7 +13,15 @@ Before you configure the data source, ensure you have:
 - **Grafana permissions:** The `Organization administrator` role. Only organization administrators can add data sources.
 
 <!-- section-brief
-Fill this in: Keep the list above. Add a bullet in the same **Label:** form for each other thing the reader needs: the instance of the service {{{pluginName}}} connects to and how Grafana reaches it, such as its address, default port and network access, and the credentials and permissions needed on it. Recommend the least-privileged access that still works, such as a read-only user, when the service supports one.
+Fill this in: Keep the list above. Add a bullet in the same **Label:** form for each other thing the reader needs: the instance of the service {{{pluginName}}} connects to and how Grafana reaches it, such as its address, default port and network access, and the credentials and permissions needed on it. If the service can sit behind a firewall, add a `> [!NOTE]` callout telling Grafana Cloud users to allowlist the Grafana Cloud outbound IP addresses, and link to https://grafana.com/docs/grafana-cloud/account-management/allow-traffic/.
+-->
+
+## Set up access in {{{pluginName}}}
+
+<!-- section-brief
+Fill this in: Steps the reader follows in the service {{{pluginName}}} connects to before adding the data source, such as creating a user, an API token or a cloud role. Take what's needed from the credential fields in the config editor, and work out the least access that works from what the backend calls, such as API endpoints, SQL statements or settings it changes. Say what fails if a permission is missing. Change the heading if necessary to name the task, such as "Create a read-only user". Leave the Grafana fields to Authentication below.
+
+If the reader only needs credentials they already have, remove this section and keep them as a bullet in Before you begin.
 -->
 
 ## Add the data source
