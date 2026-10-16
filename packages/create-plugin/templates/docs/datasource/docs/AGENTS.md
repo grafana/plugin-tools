@@ -22,16 +22,20 @@ with `{{packageManagerName}} run`, as in the commands below.
 When you change code, update the page that documents it. `annotations.md`, `alerting.md` and `dashboards.md`
 exist only when the plugin has that feature, as described under [Optional pages](#optional-pages).
 
-| Page                    | Source of truth                                                                                                                           |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `index.md`              | Nothing - it is a curated router. Update it when pages are added or removed.                                                              |
-| `configure.md`          | The config editor component, the options types in `src/types.ts`, and settings parsing and `CheckHealth` in `pkg/` when there's a backend |
-| `query-editor.md`       | The query editor component, the query model in `src/types.ts`, and query handling in `pkg/` or `src/datasource.ts`                        |
-| `template-variables.md` | Variable support in `src/datasource.ts`: `variables` or `metricFindQuery`, `applyTemplateVariables`, and `getTagKeys` and `getTagValues`  |
-| `annotations.md`        | `annotations` support in `src/datasource.ts`                                                                                              |
-| `alerting.md`           | Backend query handling in `pkg/`                                                                                                          |
-| `dashboards.md`         | `includes` entries of type `dashboard` in `src/plugin.json` and their JSON files                                                          |
-| `troubleshooting.md`    | Error messages in source, health check failures and reported issues. Don't invent failures.                                               |
+The table names code by what it does, not by file. A new plugin from `create-plugin` keeps this code in
+`src/datasource.ts`, `src/types.ts` and, with a backend, `pkg/`, but plugins often rename, move or split
+it. Find where this plugin keeps it before you write.
+
+| Page                    | Source of truth                                                                                                                                                           |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `index.md`              | Nothing - it is a curated router. Update it when pages are added or removed.                                                                                              |
+| `configure.md`          | The config editor component and the types of its `jsonData` and `secureJsonData`. With a backend, also how the backend reads these settings and its `CheckHealth` handler |
+| `query-editor.md`       | The query editor component, the query type and the code that runs queries in the frontend or backend                                                                      |
+| `template-variables.md` | Variable support in the data source class: `variables` or `metricFindQuery`, `applyTemplateVariables`, and `getTagKeys` and `getTagValues`                                |
+| `annotations.md`        | `annotations` support in the data source class                                                                                                                            |
+| `alerting.md`           | The backend's query handling, since alert rules run queries on the backend                                                                                                |
+| `dashboards.md`         | `includes` entries of type `dashboard` in `src/plugin.json` and their JSON files                                                                                          |
+| `troubleshooting.md`    | Error messages in source, health check failures and reported issues. Don't invent failures.                                                                               |
 
 ## Optional pages
 
