@@ -1,7 +1,7 @@
 ---
 title: "{{{yamlEscape pluginName}}} template variables"
 description: "Use template variables with {{{yamlEscape pluginName}}} to build dynamic, reusable dashboards."
-tags:
+keywords:
   - data source
   - template variables
 sidebar_position: 4

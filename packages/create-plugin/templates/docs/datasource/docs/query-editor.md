@@ -1,7 +1,7 @@
 ---
 title: "{{{yamlEscape pluginName}}} query editor"
 description: "Build and run queries with the {{{yamlEscape pluginName}}} query editor."
-tags:
+keywords:
   - data source
   - query editor
   - queries

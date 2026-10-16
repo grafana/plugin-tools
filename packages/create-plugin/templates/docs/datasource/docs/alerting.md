@@ -1,7 +1,7 @@
 ---
 title: "{{{yamlEscape pluginName}}} alerting"
 description: "Create Grafana alert rules from {{{yamlEscape pluginName}}} queries."
-tags:
+keywords:
   - data source
   - alerting
 sidebar_position: 6
