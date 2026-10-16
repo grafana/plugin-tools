@@ -722,6 +722,8 @@ describe('docs codemod', () => {
         'This document explains how to add and configure the My Plugin data source in Grafana. After you configure the data source, refer to the [My Plugin query editor](./query-editor.md) to start querying your data.',
         'Before you configure the data source, ensure you have:',
         '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can add data sources.',
+        'To add the My Plugin data source:',
+        '1. Click **Connections** in the left-side menu.\n1. Click **Add new connection**.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click **Add new data source**.',
       ],
       'query-editor': [
         'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',

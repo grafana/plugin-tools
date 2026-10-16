@@ -18,16 +18,13 @@ Fill this in: Keep the list above. Add a bullet in the same **Label:** form for 
 
 ## Add the data source
 
-<!-- section-brief
-Fill this in: Numbered steps to create the data source in the Grafana UI:
+To add the {{{pluginName}}} data source:
 
 1. Click **Connections** in the left-side menu.
 1. Click **Add new connection**.
-1. Search for {{{pluginName}}} and select it.
+1. Enter `{{{pluginName}}}` in the search bar.
+1. Select **{{{pluginName}}}**.
 1. Click **Add new data source**.
-
-Keep the steps short. The settings themselves belong in the sections below.
--->
 
 ## Authentication
 
