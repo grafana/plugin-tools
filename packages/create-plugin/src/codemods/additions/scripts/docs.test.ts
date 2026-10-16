@@ -749,6 +749,9 @@ describe('docs codemod', () => {
         'To add an annotation query to a dashboard:',
         '1. Navigate to **Dashboard settings** > **Annotations**.\n1. Click **Add annotation query**.\n1. Enter a **Name** for the annotation.\n1. Select the **My Plugin** data source.',
       ],
+      dashboards: [
+        'My Plugin ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).',
+      ],
       'query-editor': [
         'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
         '- [Configure the My Plugin data source](./configure.md).',

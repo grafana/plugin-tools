@@ -4,9 +4,7 @@ description: "Import and use the dashboards that ship with {{{yamlEscape pluginN
 sidebar_position: 7
 ---
 
-<!-- section-brief
-Fill this in: Say in one or two sentences what this page covers: the ready-made dashboards {{{pluginName}}} includes and how to import them.
--->
+{{{pluginName}}} ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).
 
 ## Included dashboards
 
