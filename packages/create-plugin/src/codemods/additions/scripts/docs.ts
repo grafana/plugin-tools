@@ -53,7 +53,7 @@ export const schema = v.object({
 type Options = v.InferOutput<typeof schema>;
 
 // kept current by a Renovate custom manager in .github/renovate.json, which matches this exact line
-const PLUGIN_DOCS_CLI_VERSION = '^0.7.0';
+const PLUGIN_DOCS_CLI_VERSION = '^0.8.0';
 
 // each type needs a template set under `templates/docs/<type>/`
 const SUPPORTED_PLUGIN_TYPES = ['panel'] as const;
