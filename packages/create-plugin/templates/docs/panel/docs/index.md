@@ -16,13 +16,11 @@ Fill this in: Give a short, ordered reading path for someone new to {{{pluginNam
 
 ## Common tasks
 
-<!-- section-brief
-Fill this in: List the jobs someone lands here to do, phrased as tasks rather than page titles, each linked to the page that answers it. For a typical panel plugin this might look like:
-
 - [Shape your query results for {{{pluginName}}}](./data-formats.md)
 - [Configure panel and field options](./options.md)
 - [See worked dashboard.json examples](./examples.md)
 - [Fix a panel that isn't rendering correctly](./troubleshooting.md)
 
-Adapt this to {{{pluginName}}}'s actual entry points - add, remove or reword tasks so each one matches a real job a user comes here to do. This is a curated set of jobs, not a mechanical list of every file in this folder.
+<!-- section-brief
+Fill this in: Keep the list above and adapt it to {{{pluginName}}}'s actual entry points - add, remove or reword tasks so each one matches a real job a user comes here to do. If you remove a page, remove its task too. This is a curated set of jobs, not a mechanical list of every file in this folder.
 -->

@@ -4,8 +4,10 @@ description: "Reference for {{{yamlEscape pluginName}}} panel options."
 sidebar_position: 3
 ---
 
+To change these options, edit the panel and use the options pane.
+
 <!-- section-brief
-Fill this in: Reference the options {{{pluginName}}} exposes in the panel editor. Cover both the custom options the panel adds (via `setPanelOptions` in source) and the standard field options it enables (via `useFieldConfig`). Skip the sections below that don't apply to this panel - if there's no Standard field options block, no Tooltip section etc., remove those headings entirely rather than leaving an empty brief.
+Fill this in: Reference the options {{{pluginName}}} exposes in the panel editor. Cover both the custom options the panel adds (via `setPanelOptions` in source) and the standard field options it enables (via `useFieldConfig`). Skip the sections below that don't apply to this panel - if there's no Standard field options block, no Tooltip and legend section etc., remove those headings entirely rather than leaving an empty brief.
 
 Do not redocument the framework-level standard options themselves (Min, Max, Unit, etc.) - Grafana's own docs cover those. The Standard field options section lists which ones are enabled, nothing more.
 -->
@@ -28,10 +30,12 @@ If the panel does not call `setPanelOptions`, remove this section entirely.
 
 ## Standard field options
 
+For what each standard option does, refer to [Configure standard options](https://grafana.com/docs/grafana/latest/panels-visualizations/configure-standard-options/).
+
 <!-- section-brief
 Fill this in: A bulleted list of the standard field options this panel enables - the entries from `useFieldConfig({ standardOptions: [...] })` in `src/module.ts`. If the panel calls `useFieldConfig()` or `useFieldConfig({})` without a `standardOptions` key, document this as "all standard options are enabled" and list the standard set.
 
-If the panel does not call `useFieldConfig` at all, remove this section entirely.
+If the panel does not call `useFieldConfig` at all, remove this section entirely, including the link above.
 -->
 
 ## Custom field options
@@ -42,14 +46,8 @@ Fill this in: A table with the same shape as Panel options (Option / Type / Defa
 If the panel does not register custom field options, remove this section entirely.
 -->
 
-## Tooltip options
+## Tooltip and legend options
 
 <!-- section-brief
-Fill this in: Describe the tooltip-related options {{{pluginName}}} exposes (hover behavior, what fields the tooltip shows, formatting). Most tooltip options will already appear in the Panel options table above when they're registered via `setPanelOptions` with `category: ['Tooltip']`; use this section for narrative context that doesn't fit in a table row. Remove this section if there is nothing extra to say beyond the table.
--->
-
-## Legend options
-
-<!-- section-brief
-Fill this in: Describe the legend-related options {{{pluginName}}} exposes (placement, values shown, calculations). Same pattern as Tooltip options - the table above already covers the per-option reference; this section is for narrative context. Remove the section if not applicable.
+Fill this in: Describe the tooltip and legend options {{{pluginName}}} exposes: hover behavior, the fields the tooltip shows and its formatting, and legend placement, values and calculations. Most of these already appear in the Panel options table above when they're registered via `setPanelOptions` with `category: ['Tooltip']` or `category: ['Legend']`, so use this section only for narrative context that doesn't fit in a table row. Remove this section if there is nothing extra to say beyond the table.
 -->

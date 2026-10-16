@@ -4,6 +4,8 @@ description: "Worked examples of the {{{yamlEscape pluginName}}} panel."
 sidebar_position: 4
 ---
 
+To use an example, open your dashboard and go to **Dashboard settings** > **JSON Model**. Paste the excerpt into the `panels` array and click **Save changes**.
+
 <!-- section-brief
 Fill this in: Show concrete examples of {{{pluginName}}} configured for real use cases. When the repo has panels of this plugin's type in `provisioning/dashboards/*.json`, take the examples from those before inventing any. Express each example as a `dashboard.json` panel excerpt: `type` and `options`, plus `fieldConfig` and `targets` when the example depends on them. Leave out `id`, `gridPos`, `pluginVersion`, datasource UIDs and timestamps - they are specific to one dashboard and hide the settings that matter. Pair each example with a screenshot of the rendered visualization.
 
@@ -12,8 +14,18 @@ If the repo ships a complete dashboard, for example under `provisioning/dashboar
 
 ## Basic example
 
+A panel excerpt in dashboard JSON has this shape:
+
+```json
+{
+  "type": "{{pluginId}}",
+  "options": {},
+  "targets": []
+}
+```
+
 <!-- section-brief
-Fill this in: Provide the minimum viable {{{pluginName}}} configuration: the smallest `panels[]` entry that produces a meaningful visualization. Include only the settings it needs, plus a sample query in `targets` if the panel reads data. Pair with a screenshot of the result.
+Fill this in: Complete the excerpt above as the minimum viable {{{pluginName}}} configuration: the smallest `panels[]` entry that produces a meaningful visualization. Include only the settings it needs, plus a sample query in `targets` if the panel reads data. If the panel doesn't read data, remove `targets` from the excerpt. Pair with a screenshot of the result.
 -->
 
 ## Common variations
