@@ -87,6 +87,10 @@ jobs:
           version: latest
           args: test
 
+      - name: Check backend for vulnerabilities
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.5.0 ./...
+
       - name: Check for E2E
         id: check-for-e2e
         run: |
