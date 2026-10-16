@@ -11,15 +11,18 @@ const selectors = {
   apis: { OpenFeature: { ofrepBulkPattern: BULK_PATTERN, ofrepSinglePattern: SINGLE_PATTERN } },
 } as unknown as PlaywrightArgs['selectors'];
 
-const fetchError = new Error(
-  [
-    'route.fetch: Test ended.',
-    'Call log:',
-    '  - → POST http://localhost:3000/apis/features.grafana.app/v0alpha1/namespaces/default/ofrep/v1/evaluate/flags',
-    '    - user-agent: Mozilla/5.0 (X11; Linux x86_64)',
-    '    - accept: */*',
-  ].join('\n')
-);
+const withCallLog = (message: string) =>
+  new Error(
+    [
+      message,
+      'Call log:',
+      '  - → POST http://localhost:3000/apis/features.grafana.app/v0alpha1/namespaces/default/ofrep/v1/evaluate/flags',
+      '    - user-agent: Mozilla/5.0 (X11; Linux x86_64)',
+      '    - accept: */*',
+    ].join('\n')
+  );
+
+const fetchError = withCallLog('route.fetch: connect ECONNREFUSED 127.0.0.1:3000');
 
 type RouteHandler = (route: Route) => Promise<void>;
 
@@ -35,10 +38,10 @@ async function registerRoutes() {
   return handlers;
 }
 
-function createFailingRoute(url: string) {
+function createFailingRoute(url: string, error: Error = fetchError) {
   return {
     request: () => ({ url: () => url }),
-    fetch: vi.fn().mockRejectedValue(fetchError),
+    fetch: vi.fn().mockRejectedValue(error),
     fulfill: vi.fn().mockResolvedValue(undefined),
   } as unknown as Route;
 }
@@ -61,7 +64,7 @@ describe('setupOpenFeatureRoutes', () => {
     await handlers.get(BULK_PATTERN)?.(route);
 
     expect(errorSpy).toHaveBeenCalledExactlyOnceWith(
-      '@grafana/plugin-e2e: Failed to intercept OFREP bulk evaluation: route.fetch: Test ended.'
+      '@grafana/plugin-e2e: Failed to intercept OFREP bulk evaluation: route.fetch: connect ECONNREFUSED 127.0.0.1:3000'
     );
   });
 
@@ -81,8 +84,25 @@ describe('setupOpenFeatureRoutes', () => {
     await handlers.get(SINGLE_PATTERN)?.(route);
 
     expect(errorSpy).toHaveBeenCalledExactlyOnceWith(
-      '@grafana/plugin-e2e: Failed to intercept OFREP single flag evaluation: route.fetch: Test ended.'
+      '@grafana/plugin-e2e: Failed to intercept OFREP single flag evaluation: route.fetch: connect ECONNREFUSED 127.0.0.1:3000'
     );
     expect(route.fulfill).toHaveBeenCalledWith(expect.objectContaining({ status: 500 }));
   });
+
+  it.each(['route.fetch: Test ended.', 'route.fetch: Test timeout of 30000ms exceeded.'])(
+    'stays silent when the test closes the context mid-request (%s)',
+    async (message) => {
+      const handlers = await registerRoutes();
+      const bulk = createFailingRoute('http://localhost:3000/ofrep/v1/evaluate/flags', withCallLog(message));
+      const single = createFailingRoute(
+        'http://localhost:3000/ofrep/v1/evaluate/flags/otherFlag',
+        withCallLog(message)
+      );
+
+      await handlers.get(BULK_PATTERN)?.(bulk);
+      await handlers.get(SINGLE_PATTERN)?.(single);
+
+      expect(errorSpy).not.toHaveBeenCalled();
+    }
+  );
 });
