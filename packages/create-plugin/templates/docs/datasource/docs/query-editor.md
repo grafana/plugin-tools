@@ -31,7 +31,7 @@ Fill this in: A table of every macro the plugin expands in queries, such as `$__
 | Macro | Description | Example |
 | ----- | ----------- | ------- |
 
-Take the macros from where source interpolates them, and show the syntax exactly as a reader writes it.
+Macros are expanded in the backend, in the `QueryData` handler that implements `backend.QueryDataHandler`, or in code it calls. Take the macros from there, and show the syntax exactly as a reader writes it.
 
 If the plugin has no macros, remove this section entirely.
 -->
