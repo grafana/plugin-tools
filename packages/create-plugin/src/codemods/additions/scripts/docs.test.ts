@@ -151,7 +151,7 @@ describe('docs scaffolding', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
-      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.7.0');
+      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.8.0');
     });
 
     it('adds docs:serve and docs:validate scripts, with no separate release script', () => {
@@ -762,7 +762,7 @@ describe('docs codemod', () => {
       expect(content).toContain('Docs guides:');
       expect(content).toContain('node_modules/@grafana/plugin-docs-cli/docs/index.md');
       expect(content).toContain('npm run docs:validate');
-      expect(content).toContain('`empty-section` or `unfilled-section-brief` warning');
+      expect(content).toContain('`unfilled-section-brief` suggestion');
       expect(content).not.toContain('docs:validate:release');
       expect(content).toContain('## Pages and their source');
       expect(content).toContain('## Section briefs');
