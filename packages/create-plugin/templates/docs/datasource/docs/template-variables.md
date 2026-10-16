@@ -20,13 +20,19 @@ If the plugin supports no variable types and interpolates no variables in its qu
 
 ## Supported variable types
 
+The {{{pluginName}}} data source supports the following variable types:
+
 <!-- section-brief
-Fill this in: A table of the variable types and whether {{{pluginName}}} supports each, with this shape:
+Fill this in: A table with a Yes or No for each variable type, in this order:
 
-| Variable type | Supported |
-| ------------- | --------- |
+| Variable type  | Supported |
+| -------------- | --------- |
+| Query          |           |
+| Custom         | Yes       |
+| Data source    | Yes       |
+| Ad hoc filters |           |
 
-Cover Query, Custom, Data source and Ad hoc filters. Base it on what source implements: variable support in the data source class (`variables` or `metricFindQuery`) for Query variables, and `getTagKeys` and `getTagValues` for Ad hoc filters.
+Custom and Data source variables are handled by Grafana itself and work with every data source, so keep them as Yes. Query is Yes if the data source class sets `variables` or implements `metricFindQuery`. Ad hoc filters is Yes if it implements both `getTagKeys` and `getTagValues`.
 
 If the variable query editor has its own query types, such as projects or environments, add a second table of them with the display text and the value each one returns.
 -->
