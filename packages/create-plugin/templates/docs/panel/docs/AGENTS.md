@@ -27,7 +27,10 @@ When you change code, update the page that documents it:
 | `options.md`         | `setPanelOptions` and `useFieldConfig` in `src/module.ts`                              |
 | `data-formats.md`    | The panel component's data handling, plus any field pickers in `src/module.ts`         |
 | `examples.md`        | `provisioning/dashboards/*.json` if present, otherwise the panel's own option defaults |
-| `troubleshooting.md` | Error and empty-state messages in source, and reported issues. Don't invent failures.  |
+| `troubleshooting.md` | Error and empty-state messages in source, known and reported issues. Never guess.      |
+
+Never guess failures in `troubleshooting.md`. Each symptom must come from an error, warning or empty-state
+message in source, a known issue in the README or other docs or a reported issue.
 
 ## Optional pages
 
@@ -55,13 +58,30 @@ If the plugin has no options, remove this section entirely.
 -->
 ```
 
-The first paragraph, after `Fill this in:`, is the instruction. A paragraph after it is extra context.
+Some sections also have fixed text, with a brief that builds on it:
+
+```markdown
+## Basic example
+
+A panel excerpt in dashboard JSON has this shape:
+
+<!-- section-brief
+Fill this in: Complete the excerpt above with the options the example needs.
+-->
+```
+
+Text outside a brief is written for every panel and is part of the scaffold. Keep it, and change it
+only where it's wrong for this plugin, such as a menu path or a step that differs.
+
+Everything inside a brief is the instruction. A brief covers the section it sits under, unless it says
+otherwise: it may tell you to extend the fixed text above it, to replace it with several sections or to
+remove the page. When a brief says to remove a section, remove its heading and fixed text too.
 
 To fill a section:
 
-1. Read the brief. It covers only the section it sits under.
+1. Read the brief.
 2. Read the source the page documents, from the table above, then write the section.
-3. Delete the whole comment, from `<!-- section-brief` to `-->`, including any extra paragraphs inside it.
+3. Delete the whole comment, from `<!-- section-brief` to `-->`.
 
 Briefs are not shown in the preview or the catalog, so a section you haven't written looks like a bare
 heading. `docs:validate` lists every section that still has only its brief.
