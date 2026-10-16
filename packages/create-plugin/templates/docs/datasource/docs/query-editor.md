@@ -17,9 +17,9 @@ Fill this in: Keep the bullet above. Add a bullet for each other thing a reader 
 ## Query types
 
 <!-- section-brief
-Fill this in: List each query type or result format the editor offers, such as time series, table, logs or traces, and say when to use each one. Take them from the query model in source.
+Fill this in: Describe the ways the editor builds queries, with an H3 for each one: editor modes such as a builder and a code editor, the query types or APIs it can query, and the result formats it returns, such as time series, table, logs or traces. Say when to use each. Take them from the query editor component and the query model in source, and leave out anything the editor offers only one of.
 
-If the editor has only one query type, remove this section entirely.
+If the editor has one mode, one query type and one result format, remove this section entirely.
 -->
 
 ## Create a query
