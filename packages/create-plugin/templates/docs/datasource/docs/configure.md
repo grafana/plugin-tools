@@ -1,6 +1,10 @@
 ---
 title: "Configure the {{{yamlEscape pluginName}}} data source"
 description: "Add the {{{yamlEscape pluginName}}} data source in Grafana and connect it to your service."
+tags:
+  - data source
+  - configuration
+  - provisioning
 sidebar_position: 2
 ---
 

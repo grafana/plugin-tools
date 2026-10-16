@@ -1,6 +1,9 @@
 ---
 title: Troubleshooting
 description: "Troubleshoot common {{{yamlEscape pluginName}}} connection, authentication and query errors."
+tags:
+  - data source
+  - troubleshooting
 sidebar_position: 8
 ---
 

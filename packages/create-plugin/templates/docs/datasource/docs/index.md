@@ -1,6 +1,8 @@
 ---
 title: Introduction
 description: "Where to start and what to read next in the {{{yamlEscape pluginName}}} docs."
+tags:
+  - data source
 sidebar_position: 1
 ---
 

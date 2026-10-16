@@ -1,6 +1,9 @@
 ---
 title: "{{{yamlEscape pluginName}}} annotations"
 description: "Mark events on your graphs with annotation queries from {{{yamlEscape pluginName}}}."
+tags:
+  - data source
+  - annotations
 sidebar_position: 5
 ---
 
