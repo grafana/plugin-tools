@@ -10,8 +10,12 @@ import { AGENT_INSTRUCTIONS_PATH, appendToAgentInstructions } from '../../utils.
 import { addRequireToGoMod } from '../../utils.goMod.js';
 
 // Grafana reads an app-sdk manifest from the plugin bundle, and registers its API server, only when
-// these toggles are enabled.
-const APP_SDK_FEATURE_TOGGLES = ['appplugins.loadAppManifest', 'appplugins.registerAPIServer'];
+// these toggles are enabled. The router middleware lets the app's requests through the router.
+const APP_SDK_FEATURE_TOGGLES = [
+  'appplugins.loadAppManifest',
+  'appplugins.registerAPIServer',
+  'grafana.useRouterMiddleware',
+];
 
 // Files copied verbatim from templates/app-sdk, and whether they get the "scaffolded by create-plugin,
 // don't edit" header. Paths are relative to both the template folder and the plugin root.
@@ -253,7 +257,7 @@ function wireGoBackend(context: Context, data: TemplateData) {
 }
 
 // The go.mod version for grafana-app-sdk and its plugin/ submodule.
-const GRAFANA_APP_SDK_VERSION = 'v0.60.3';
+const GRAFANA_APP_SDK_VERSION = 'v0.60.16';
 
 /**
  * Adds github.com/grafana/grafana-app-sdk and its plugin/ submodule to go.mod. The generated Go kind
