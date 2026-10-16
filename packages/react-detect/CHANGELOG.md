@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.5](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.4...@grafana/react-detect@0.7.5) (2026-10-16)
+
+
+### Bug Fixes
+
+* **react-detect:** replace fast-glob with tinyglobby ([#2982](https://github.com/grafana/plugin-tools/issues/2982)) ([0ab7e32](https://github.com/grafana/plugin-tools/commit/0ab7e32ba1a66bc144176b9c4d47763f9c69ec69))
+
 ## [0.7.4](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.3...@grafana/react-detect@0.7.4) (2026-10-13)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.8.0...@grafana/plugin-docs-cli@0.9.0) (2026-10-16)
+
+
+### Features
+
+* **create-plugin:** add docs codemod ([#2834](https://github.com/grafana/plugin-tools/issues/2834)) ([2a173ca](https://github.com/grafana/plugin-tools/commit/2a173caa5be5dfe5a901eef138f9239cdca7ae05))
+
 ## [0.8.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.7.0...@grafana/plugin-docs-cli@0.8.0) (2026-10-15)
 
 
