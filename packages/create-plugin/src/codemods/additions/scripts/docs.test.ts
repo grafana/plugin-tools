@@ -724,6 +724,11 @@ describe('docs codemod', () => {
         '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can add data sources.',
         'To add the My Plugin data source:',
         '1. Click **Connections** in the left-side menu.\n1. Click **Add new connection**.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click **Add new data source**.',
+        'Click **Save & test** to verify the connection.',
+        'In Grafana Cloud and Grafana Enterprise, you can use the **Cache** tab on the data source page to enable query caching, which reduces load on My Plugin by reusing recent query results. For more information, refer to [Query and resource caching](https://grafana.com/docs/grafana/latest/administration/data-source-management/#query-and-resource-caching).',
+        'You can provision the My Plugin data source as code, with a Grafana provisioning file or with the Grafana Terraform provider.',
+        'You can define the data source in a YAML file as part of the Grafana provisioning system. For more information, refer to [Provision Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources).',
+        'You can provision the data source with the [Grafana Terraform provider](https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/data_source) using the `grafana_data_source` resource.',
       ],
       'query-editor': [
         'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
@@ -864,15 +869,18 @@ describe('docs codemod', () => {
     });
 
     it.each([
-      [true, true],
-      [false, false],
-    ])('renders the Macros section in query-editor.md when backend is %s: %s', (backend, hasMacros) => {
-      const context = makeContext({ ...datasource, backend });
-      docs(context, { docsPath: 'docs' });
-      const page = context.getFile('docs/query-editor.md') ?? '';
-      expect(page.includes('## Macros')).toBe(hasMacros);
-      expect(page).not.toContain('{{');
-      expect(page).not.toMatch(/\n\n\n/);
+      ['query-editor', '## Macros'],
+      ['configure', '## Private data source connect'],
+      ['configure', '## Query caching'],
+    ])('renders %s.md "%s" only for a backend data source', (page, heading) => {
+      for (const backend of [true, false]) {
+        const context = makeContext({ ...datasource, backend });
+        docs(context, { docsPath: 'docs' });
+        const content = context.getFile(`docs/${page}.md`) ?? '';
+        expect(content.includes(heading), `backend: ${backend}`).toBe(backend);
+        expect(content).not.toContain('{{');
+        expect(content).not.toMatch(/\n\n\n/);
+      }
     });
 
     it('keeps the template conditionals out of index.md', () => {
