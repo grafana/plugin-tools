@@ -1169,10 +1169,17 @@ describe('docs codemod', () => {
       expect(context.doesFileExist('.config/AGENTS/e2e-testing.md')).toBe(false);
     });
 
-    it('does not point docs/README.md at a skill', () => {
+    it.each([
+      ['npm@10.2.3', 'npx -y @grafana/create-plugin@latest add docs-content'],
+      ['pnpm@9.1.0', 'pnpm dlx @grafana/create-plugin@latest add docs-content'],
+      ['yarn@4.1.0', 'yarn dlx @grafana/create-plugin@latest add docs-content'],
+    ])('points docs/README.md at docs-content with the %s exec command', (packageManager, command) => {
+      const [packageManagerName, packageManagerVersion] = packageManager.split('@');
+      vi.mocked(getPackageManagerWithFallback).mockReturnValueOnce({ packageManagerName, packageManagerVersion });
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/README.md') ?? '';
+      expect(content).toContain(`\`${command}\``);
       expect(content).not.toContain('bootstrap-plugin-docs');
     });
   });
@@ -1201,16 +1208,26 @@ describe('docs codemod', () => {
     it('numbers the steps in the order the author does them', () => {
       expect(nextSteps(makeContext()).filter((line) => /^ \d\. /.test(line))).toEqual([
         ' 1. Read docs/README.md',
-        ' 2. Fill in or review the pages under docs/',
+        ' 2. Write the pages, yourself or with an AI agent',
+        ' 3. Preview the pages',
+      ]);
+    });
+
+    it('tells the author to commit before running docs-content, since add needs a clean tree', () => {
+      const body = nextSteps(makeContext());
+      const step = body.indexOf(' 2. Write the pages, yourself or with an AI agent');
+      expect(body.slice(step + 1, step + 5)).toEqual([
+        '    Fill in or review the pages under docs/ by hand.',
+        '    Or commit these changes, then have an agent draft them from your source code and README:',
+        '    npx -y @grafana/create-plugin@latest add docs-content',
+        '    Review its work either way.',
       ]);
     });
 
     it('indents each detail line under its step', () => {
       const body = nextSteps(makeContext());
-      const step = body.indexOf(' 2. Fill in or review the pages under docs/');
-      expect(body[step + 1]).toBe(
-        '    Preview them with npm run docs:serve, which also warns about every section left to fill.'
-      );
+      const step = body.indexOf(' 3. Preview the pages');
+      expect(body[step + 1]).toBe('    Run npm run docs:serve, which also lists every section left to fill.');
       expect(body.join('\n')).not.toContain('docs:validate:release');
       expect(body.join('\n')).not.toContain('strict');
     });
