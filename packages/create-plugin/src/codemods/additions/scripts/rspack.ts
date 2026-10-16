@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { lt, major, minVersion, validRange } from 'semver';
 import type { Context } from '../../context.js';
 import { renderHandlebarsTemplate } from '../../../utils/utils.handlebars.js';
+import { getTemplateData } from '../../../utils/utils.templates.js';
 import {
   additionsDebug,
   addDependenciesToPackageJson,
@@ -126,8 +127,9 @@ const resolveTemplatePath = (relativePath: string) =>
 
 // updateFile is a no-op for identical content, so re-rendering on every run keeps the addition idempotent
 function renderTemplateFiles(context: Context, filePaths: string[], includeWarning = true): void {
+  const templateData = { ...getTemplateData(), ...RSPACK_TEMPLATE_DATA_OVERRIDES };
   for (const filePath of filePaths) {
-    const rendered = renderTemplate(resolveTemplatePath(filePath), includeWarning, RSPACK_TEMPLATE_DATA_OVERRIDES);
+    const rendered = renderTemplate(resolveTemplatePath(filePath), includeWarning, templateData);
     if (context.doesFileExist(filePath)) {
       context.updateFile(filePath, rendered);
     } else {

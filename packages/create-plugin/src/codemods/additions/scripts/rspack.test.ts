@@ -34,9 +34,9 @@ vi.mock(import('../../utils.js'), async (importOriginal) => {
   // All other templates just need a non-empty stub.
   return {
     ...originalModule,
-    renderTemplate: (path: string, includeWarning?: boolean, templateDataOverrides?: Record<string, unknown>) => {
+    renderTemplate: (path: string, includeWarning?: boolean, data?: Record<string, unknown>) => {
       if (path.includes('.config/bundler/externals.ts')) {
-        return originalModule.renderTemplate(path, includeWarning, templateDataOverrides);
+        return originalModule.renderTemplate(path, includeWarning, data);
       }
       return '// rendered template stub';
     },
@@ -48,8 +48,13 @@ const WEBPACK_TEMPLATE_DATA = { useExperimentalRspack: false, frontendBundler: '
 
 async function getTemplateDevDependencies(templateData: Record<string, unknown>): Promise<Record<string, string>> {
   const { renderTemplate } = await vi.importActual<typeof import('../../utils.js')>('../../utils.js');
+  const { getTemplateData } = await vi.importActual<typeof import('../../../utils/utils.templates.js')>(
+    '../../../utils/utils.templates.js'
+  );
   const packageJsonTemplatePath = new URL('../../../../templates/common/_package.json', import.meta.url).pathname;
-  const { devDependencies } = JSON.parse(renderTemplate(packageJsonTemplatePath, false, templateData));
+  const { devDependencies } = JSON.parse(
+    renderTemplate(packageJsonTemplatePath, false, { ...getTemplateData(), ...templateData })
+  );
   return devDependencies;
 }
 
