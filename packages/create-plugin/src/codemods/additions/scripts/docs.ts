@@ -67,6 +67,7 @@ export default function docs(context: Context, options: Options): Context {
     // `templates/docs` is left out of TEMPLATE_PATHS so `generate` ignores it
     templateDir: join(TEMPLATES_DIR, 'docs', pluginType),
     commonTemplateDir: join(TEMPLATES_DIR, 'docs', 'common'),
+    featurePages: FEATURE_PAGES_BY_TYPE[pluginType],
   });
 }
 
@@ -89,6 +90,15 @@ export interface DocsSetupOptions {
   templateDir: string;
   /** Templates shared by every plugin type, under `templates/docs/common/`. */
   commonTemplateDir: string;
+  /** Pages scaffolded only when `src/plugin.json` declares the feature they document. */
+  featurePages?: FeaturePage[];
+}
+
+interface FeaturePage {
+  /** Page name without `.md`. Plugin-docs-cli also accepts it as a folder of that name. */
+  page: string;
+  templateFlag: string;
+  hasFeature: (pluginJson: PluginJson) => boolean;
 }
 
 export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
@@ -130,17 +140,17 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   }
 
   const templateData = getTemplateDataFromContext(context);
-  const featurePages = Object.fromEntries(
-    Object.entries(FEATURE_PAGES).map(([page, { hasFeature }]) => [page, hasFeature(pluginJson)])
-  );
+  const featurePages = (opts.featurePages ?? []).map(({ page, templateFlag, hasFeature }) => ({
+    page,
+    templateFlag,
+    isEnabled: hasFeature(pluginJson),
+  }));
   const data = {
     ...templateData,
     pluginId,
     docsPath,
     lockFile: LOCK_FILES[templateData.packageManagerName],
-    ...Object.fromEntries(
-      Object.entries(FEATURE_PAGES).map(([page, { templateFlag }]) => [templateFlag, featurePages[page]])
-    ),
+    ...Object.fromEntries(featurePages.map(({ templateFlag, isEnabled }) => [templateFlag, isEnabled])),
   };
   const { packageManagerName } = data;
 
@@ -150,15 +160,23 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
 
   // pages are only rendered into a folder without any, so pages the author deleted stay deleted
   const hasPages = hasDocsPages(context, docsPath);
+  const disabledPageFiles = featurePages.filter(({ isEnabled }) => !isEnabled).map(({ page }) => `${page}.md`);
   addTemplateFolder(context, {
     folderPath: join(templateDir, 'docs'),
     targetPath: docsPath,
     data,
-    include: (file) => SCAFFOLD_META_FILES.includes(file) || (!hasPages && featurePages[file] !== false),
+    include: (file) => SCAFFOLD_META_FILES.includes(file) || (!hasPages && !disabledPageFiles.includes(file)),
   });
   // a feature turned on after the first scaffold gets no page, so point the author at it instead
   const missingFeaturePages = hasPages
-    ? Object.keys(featurePages).filter((page) => featurePages[page] && !context.doesFileExist(`${docsPath}/${page}`))
+    ? featurePages
+        .filter(
+          ({ page, isEnabled }) =>
+            isEnabled &&
+            !context.doesFileExist(`${docsPath}/${page}.md`) &&
+            !context.doesFileExist(`${docsPath}/${page}`)
+        )
+        .map(({ page }) => `${page}.md`)
     : [];
 
   // left alone when it exists, since the author may have customized it
@@ -176,8 +194,8 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   ensureConfigAgentFiles(context, TEMPLATE_PATHS.common, CONFIG_AGENT_FILES, data);
   appendDocsPointerToInstructions(context, docsPath);
 
-  // deferred so it prints after the runner's change list, and only when something changed
-  if (context.hasChanges()) {
+  // deferred so it prints after the runner's change list, and only when there is something to report
+  if (context.hasChanges() || missingFeaturePages.length > 0) {
     context.setMessage(
       buildNextStepsMessage({ docsPath, packageManagerName, pluginActions, linkedRootFiles, missingFeaturePages })
     );
@@ -277,14 +295,17 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
 const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
 // the scaffold's files that aren't pages, so they're added on every run
 const SCAFFOLD_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
-// pages scaffolded only when src/plugin.json declares the feature they document
-const FEATURE_PAGES: Record<string, { templateFlag: string; hasFeature: (pluginJson: PluginJson) => boolean }> = {
-  'annotations.md': { templateFlag: 'hasAnnotations', hasFeature: (p) => p.annotations === true },
-  'alerting.md': { templateFlag: 'hasAlerting', hasFeature: (p) => p.alerting === true },
-  'dashboards.md': {
-    templateFlag: 'hasDashboards',
-    hasFeature: (p) => Array.isArray(p.includes) && p.includes.some((i) => i?.type === 'dashboard'),
-  },
+const FEATURE_PAGES_BY_TYPE: Record<SupportedPluginType, FeaturePage[]> = {
+  panel: [],
+  datasource: [
+    { page: 'annotations', templateFlag: 'hasAnnotations', hasFeature: (p) => p.annotations === true },
+    { page: 'alerting', templateFlag: 'hasAlerting', hasFeature: (p) => p.alerting === true },
+    {
+      page: 'dashboards',
+      templateFlag: 'hasDashboards',
+      hasFeature: (p) => Array.isArray(p.includes) && p.includes.some((i) => i?.type === 'dashboard'),
+    },
+  ],
 };
 // mirrors isMetaFile in @grafana/plugin-docs-cli, so both tools agree on what counts as a page
 const DOCS_CLI_META_FILES = [

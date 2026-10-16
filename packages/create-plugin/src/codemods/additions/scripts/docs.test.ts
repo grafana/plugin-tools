@@ -6,6 +6,7 @@ import * as v from 'valibot';
 import { parse as parseYaml } from 'yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../context.js';
+import { flushChanges } from '../../utils.js';
 import { getPackageManagerWithFallback } from '../../../utils/utils.packageManager.js';
 import docs, { assertSupportedPluginType, schema, setupDocsScaffolding } from './docs.js';
 
@@ -792,11 +793,7 @@ describe('docs codemod', () => {
       const context = makeContext(datasource);
       docs(context, { docsPath: 'docs' });
       const files = [
-        'index.md',
-        'configure.md',
-        'query-editor.md',
-        'template-variables.md',
-        'troubleshooting.md',
+        ...PAGES_BY_TYPE.datasource.map((page) => `${page}.md`).filter((file) => !conditionalPages.includes(file)),
         'README.md',
         'AGENTS.md',
         'CLAUDE.md',
@@ -882,37 +879,60 @@ describe('docs codemod', () => {
       expect(content).not.toContain('setPanelOptions');
     });
 
-    it('does not add a feature page on a re-run once the docs folder has pages', () => {
+    // scaffolds once and writes it to disk, so the re-run sees a plugin that is already fully set up
+    function scaffoldThenRerun(
+      pluginJson: Record<string, unknown>,
+      addFeature: Record<string, unknown>,
+      docsFile?: string
+    ) {
       const root = mkdtempSync(join(tmpdir(), 'docs-rerun-feature-'));
-      mkdirSync(join(root, 'docs'), { recursive: true });
-      writeFileSync(join(root, 'docs', 'index.md'), '# Mine\n');
+      writeFileSync(join(root, 'package.json'), JSON.stringify({ scripts: {}, devDependencies: {} }));
+      mkdirSync(join(root, 'src'), { recursive: true });
+      writeFileSync(join(root, 'src', 'plugin.json'), JSON.stringify(pluginJson));
+      const first = new Context(root);
+      docs(first, { docsPath: 'docs' });
+      flushChanges(first);
+      writeFileSync(
+        join(root, 'src', 'plugin.json'),
+        JSON.stringify({ ...pluginJson, docsPath: 'docs', ...addFeature })
+      );
+      if (docsFile) {
+        mkdirSync(join(root, 'docs', docsFile, '..'), { recursive: true });
+        writeFileSync(join(root, 'docs', docsFile), '# Mine\n');
+      }
+
       const context = new Context(root);
-      context.addFile('src/plugin.json', JSON.stringify({ ...datasource, annotations: true, docsPath: 'docs' }));
-      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
-
       docs(context, { docsPath: 'docs' });
+      rmSync(root, { recursive: true, force: true });
+      return { context, body: stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n')) };
+    }
 
+    it('warns about a feature page on a re-run that changes nothing else, without adding it', () => {
+      const { context, body } = scaffoldThenRerun(datasource, { annotations: true });
+      expect(context.hasChanges()).toBe(false);
       expect(context.doesFileExist('docs/annotations.md')).toBe(false);
-      expect(context.doesFileExist('docs/AGENTS.md')).toBe(true);
-      const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n') ?? '');
       expect(body).toContain('docs/annotations.md documents');
       expect(body).toContain('Optional pages in docs/AGENTS.md');
       expect(body).not.toContain('alerting.md');
     });
 
-    it('says nothing about feature pages that already exist on a re-run', () => {
-      const root = mkdtempSync(join(tmpdir(), 'docs-rerun-feature-exists-'));
-      mkdirSync(join(root, 'docs'), { recursive: true });
-      writeFileSync(join(root, 'docs', 'index.md'), '# Mine\n');
-      writeFileSync(join(root, 'docs', 'annotations.md'), '# Annotations\n');
-      const context = new Context(root);
-      context.addFile('src/plugin.json', JSON.stringify({ ...datasource, annotations: true, docsPath: 'docs' }));
-      context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
+    it.each(['annotations.md', 'annotations/index.md'])(
+      'says nothing about a feature page at %s on a re-run',
+      (file) => {
+        const { context, body } = scaffoldThenRerun(datasource, { annotations: true }, file);
+        expect(context.getMessage()).toBeUndefined();
+        expect(body).not.toContain('annotations.md');
+      }
+    );
 
-      docs(context, { docsPath: 'docs' });
-
-      const body = (context.getMessage()?.body ?? []).join('\n') ?? '';
-      expect(body).not.toContain('annotations.md');
+    it('never warns about data source feature pages for a panel', () => {
+      const panel = { type: 'panel', id: 'acme-test-panel', name: 'My Plugin' };
+      const { context } = scaffoldThenRerun(panel, {
+        annotations: true,
+        alerting: true,
+        includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }],
+      });
+      expect(context.getMessage()).toBeUndefined();
     });
   });
 
