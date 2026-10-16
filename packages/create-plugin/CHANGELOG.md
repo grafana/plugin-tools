@@ -1,5 +1,19 @@
 # Changelog
 
+## [7.14.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.13.0...@grafana/create-plugin@7.14.0) (2026-10-16)
+
+
+### Features
+
+* **create-plugin:** add codemod helpers for agent files and workflows ([#2981](https://github.com/grafana/plugin-tools/issues/2981)) ([091dd00](https://github.com/grafana/plugin-tools/commit/091dd00e973477635504dfb2dad43424ee4d2068))
+* **create-plugin:** add docs codemod ([#2834](https://github.com/grafana/plugin-tools/issues/2834)) ([2a173ca](https://github.com/grafana/plugin-tools/commit/2a173caa5be5dfe5a901eef138f9239cdca7ae05))
+* **create-plugin:** add fixed text to panel docs pages ([#2994](https://github.com/grafana/plugin-tools/issues/2994)) ([a3e2b61](https://github.com/grafana/plugin-tools/commit/a3e2b61795f96b9122a9340528af2d73c1135201))
+
+
+### Bug Fixes
+
+* **create-plugin:** install plugin-docs-cli 0.8 and reword brief checks ([#2992](https://github.com/grafana/plugin-tools/issues/2992)) ([6aece5b](https://github.com/grafana/plugin-tools/commit/6aece5b9fb573afef5b78fa3723071b2604c3e2b))
+
 ## [7.13.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.12.3...@grafana/create-plugin@7.13.0) (2026-10-15)
 
 

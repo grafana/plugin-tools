@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.15.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.1...@grafana/plugin-e2e@3.15.2) (2026-10-16)
+
+
+### Bug Fixes
+
+* **plugin-e2e:** print one line when an OFREP route fails ([#2991](https://github.com/grafana/plugin-tools/issues/2991)) ([9889388](https://github.com/grafana/plugin-tools/commit/9889388a4387bc838ee0e782ecab7eb966c07a29))
+
 ## [3.15.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.0...@grafana/plugin-e2e@3.15.1) (2026-10-13)
 
 
