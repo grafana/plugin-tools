@@ -751,6 +751,9 @@ describe('docs codemod', () => {
       ],
       dashboards: [
         'My Plugin ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).',
+        'To import a dashboard that ships with My Plugin:',
+        '1. Click **Connections** > **Data sources** in the left-side menu.\n1. Select your My Plugin data source.\n1. Click the **Dashboards** tab.\n1. Click **Import** next to the dashboard.',
+        "Imported dashboards don't update when you upgrade the plugin. To get a newer version, click **Re-import** next to the dashboard. This overwrites any changes you made to it.",
       ],
       'query-editor': [
         'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',

@@ -8,16 +8,14 @@ sidebar_position: 7
 
 ## Import a dashboard
 
-<!-- section-brief
-Fill this in: Numbered steps to import a bundled dashboard:
+To import a dashboard that ships with {{{pluginName}}}:
 
 1. Click **Connections** > **Data sources** in the left-side menu.
 1. Select your {{{pluginName}}} data source.
 1. Click the **Dashboards** tab.
 1. Click **Import** next to the dashboard.
 
-Say whether the dashboards need to be imported again to pick up changes in a new plugin version.
--->
+Imported dashboards don't update when you upgrade the plugin. To get a newer version, click **Re-import** next to the dashboard. This overwrites any changes you made to it.
 
 ## Included dashboards
 
