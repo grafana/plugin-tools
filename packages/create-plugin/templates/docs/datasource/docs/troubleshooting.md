@@ -7,62 +7,42 @@ sidebar_position: 8
 This page explains how to fix common issues when you configure or use the {{{pluginName}}} data source. For setup instructions, refer to [Configure the {{{pluginName}}} data source](./configure.md).
 
 <!-- section-brief
-Fill this in: Delete only this brief, then fill in the sections below. Open each H2 with one sentence saying when its errors occur, then add an H3 per symptom:
+Fill this in: Delete only this brief. Never guess failures. Each symptom must come from an error message in source, a known issue in the README or other docs or a reported issue. The examples in the briefs below are not things to write.
 
-- Name the H3 after the error message in quotes, such as `### "Password authentication failed"`, or after what the reader sees when there's no message, such as `### Annotations don't appear`.
-- Under it, list what the reader sees after **Symptoms:**.
-- Then give a **Possible causes and solutions:** table with Cause and Solution columns when there are several causes, or a numbered **Solutions:** list when there's one.
+Open each H2 with one sentence on when its errors occur. Under it, add an H3 per symptom, named after the error message in quotes, such as `### "Password authentication failed"`, then **Symptoms:** and a **Possible causes and solutions:** table, or a numbered **Solutions:** list for a single cause.
 
-Never guess what might go wrong. Every symptom must come from one of these sources:
-
-- An error message in the frontend or backend source, including the health check.
-- A known issue or troubleshooting tip in the README, CHANGELOG or other docs in the repository.
-- An issue reported in the repository's issue tracker.
-
-If you can't point to the source for a symptom, leave it out. The category examples in the briefs below show what belongs where, not what to write. A short page with real failures is better than a long one with guesses, so remove any section with nothing real to document.
-
-If the backend prefixes or classifies its errors, add an H2 that explains the categories first. Add an H2 for any other feature with its own real failures, such as ad hoc filters or upgrading across a major version.
+Remove any section with nothing real in it. Add an H2 if the backend classifies its errors, or for another feature with real failures, such as ad hoc filters.
 -->
 
 ## Connection errors
 
 <!-- section-brief
-Fill this in: Symptoms where Grafana can't reach the service, such as timeouts, refused connections, DNS or TLS errors, with the messages source returns for them.
-
-If there are no real connection failures to document, remove this section entirely.
+Fill this in: Grafana can't reach the service, such as timeouts, refused connections or TLS errors.
 -->
 
 ## Authentication errors
 
 <!-- section-brief
-Fill this in: Symptoms caused by wrong credentials, expired tokens or missing permissions on the service, with the messages source returns for them, such as from the health check.
-
-If there are no real authentication failures to document, remove this section entirely.
+Fill this in: Wrong credentials, expired tokens or missing permissions, such as health check failures.
 -->
 
 ## Query errors
 
 <!-- section-brief
-Fill this in: Symptoms when a query fails or returns nothing, such as syntax errors, unknown fields or "No data". Include the query validation messages from source, and say how to check the time range and filters when a query returns no data.
-
-If there are no real query failures to document, remove this section entirely.
+Fill this in: Queries that fail or return no data, such as syntax errors or unknown fields.
 -->
 
 ## Template variable errors
 
 <!-- section-brief
-Fill this in: Symptoms such as a variable that returns no values, shows the wrong values or is slow to load, with causes and fixes.
-
-If the plugin doesn't support template variables, or there are no real failures to document, remove this section entirely.
+Fill this in: Variables that return no values, the wrong values or load slowly.
 -->
 {{#if hasAnnotations}}
 
 ## Annotation errors
 
 <!-- section-brief
-Fill this in: Symptoms such as annotations that don't appear or too many annotations, with the annotation query fields that fix them. Link to [annotations](./annotations.md).
-
-If there are no real annotation failures to document, remove this section entirely.
+Fill this in: Annotations that don't appear or appear too often. Link to [annotations](./annotations.md).
 -->
 {{/if}}
 {{#if hasAlerting}}
@@ -70,9 +50,7 @@ If there are no real annotation failures to document, remove this section entire
 ## Alerting errors
 
 <!-- section-brief
-Fill this in: Symptoms where an alert rule fails to evaluate or doesn't fire. Cover a query that works on a dashboard but fails in an alert rule, since alert rules skip the frontend data source class, tabular results with no **Reduce** expression, and rate limits from frequent evaluation. Link to [alerting](./alerting.md).
-
-If there are no real alerting failures to document, remove this section entirely.
+Fill this in: Alert rules that fail or don't fire, such as queries that work on a dashboard but not in an alert rule, which skips the frontend data source class. Link to [alerting](./alerting.md).
 -->
 {{/if}}
 {{#if hasBackend}}
@@ -80,18 +58,14 @@ If there are no real alerting failures to document, remove this section entirely
 ## Private data source connect errors
 
 <!-- section-brief
-Fill this in: Symptoms when connecting through private data source connect (PDC), such as the toggle missing from the config editor, connections that fail only when a PDC network is selected, and host names that don't resolve from the PDC agent's network. Link to the Private data source connect section in [configure](./configure.md).
-
-Keep this section only if the backend supports the secure SOCKS proxy. Otherwise, remove it entirely.
+Fill this in: Connections through private data source connect that fail, such as a missing toggle or a host the PDC agent can't resolve. Remove if the backend doesn't support the secure SOCKS proxy.
 -->
 {{/if}}
 
 ## Performance issues
 
 <!-- section-brief
-Fill this in: Symptoms such as slow dashboards, query timeouts or rate limits from the service, and the settings or query changes that fix them. Name any timeout, limit or cache setting from the config editor.
-
-If there are no real performance issues to document, remove this section entirely.
+Fill this in: Slow dashboards, timeouts or rate limits, and the settings that help, such as a timeout or cache setting.
 -->
 
 ## Enable debug logging
@@ -121,7 +95,7 @@ If this page doesn't solve your problem:
 - If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.
 
 <!-- section-brief
-Fill this in: Add bullets to the list above that link to the plugin repository's issue tracker and to the service's own documentation. Take the repository URL from `package.json` or the `info.links` in `src/plugin.json`.
+Fill this in: Add links to the plugin's issue tracker and the service's docs to the list above.
 -->
 
 When you report an issue, include:
