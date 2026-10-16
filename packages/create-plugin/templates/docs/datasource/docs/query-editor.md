@@ -21,12 +21,7 @@ Fill this in: Describe the ways the editor builds queries, with an H3 for each o
 
 If the editor has one mode, one query type and one result format, remove this section entirely.
 -->
-
-## Create a query
-
-<!-- section-brief
-Fill this in: Numbered steps from an empty panel to a first result: select the data source, pick a query type or mode, fill in the fields the editor shows and run the query. Name the editor fields as they appear in the UI, in bold.
--->
+{{#if hasBackend}}
 
 ## Macros
 
@@ -40,6 +35,7 @@ Take the macros from where source interpolates them, and show the syntax exactly
 
 If the plugin has no macros, remove this section entirely.
 -->
+{{/if}}
 
 ## Query examples
 

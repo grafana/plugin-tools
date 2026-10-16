@@ -43,6 +43,7 @@ const FULL_PLUGIN_JSON: Record<string, Record<string, unknown>> = {
     type: 'datasource',
     id: 'acme-test-datasource',
     name: 'My Plugin',
+    backend: true,
     annotations: true,
     alerting: true,
     includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }],
@@ -853,6 +854,18 @@ describe('docs codemod', () => {
       for (const file of links) {
         expect(context.doesFileExist(`docs/${file}`), file).toBe(true);
       }
+    });
+
+    it.each([
+      [true, true],
+      [false, false],
+    ])('renders the Macros section in query-editor.md when backend is %s: %s', (backend, hasMacros) => {
+      const context = makeContext({ ...datasource, backend });
+      docs(context, { docsPath: 'docs' });
+      const page = context.getFile('docs/query-editor.md') ?? '';
+      expect(page.includes('## Macros')).toBe(hasMacros);
+      expect(page).not.toContain('{{');
+      expect(page).not.toMatch(/\n\n\n/);
     });
 
     it('keeps the template conditionals out of index.md', () => {
