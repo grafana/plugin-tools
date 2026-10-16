@@ -41,6 +41,14 @@ export const kebabToPascalKebab = (str: string) => {
     .join('-');
 };
 
+// for text inside a double-quoted YAML scalar, e.g. `title: "{{{yamlEscape pluginName}}}"`
+export const yamlEscape = (str: string) => {
+  if (typeof str !== 'string') {
+    return '';
+  }
+  return str.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
+};
+
 // Register our helpers and partials with handlebars.
 registerHandlebarsHelpers();
 registerHandlebarsPartials();
@@ -63,6 +71,7 @@ function registerHandlebarsHelpers() {
     properCase: pascalCase,
     pascalCase: pascalCase,
     if_eq: ifEq,
+    yamlEscape: yamlEscape,
   };
 
   Object.keys(helpers).forEach((helperName) =>

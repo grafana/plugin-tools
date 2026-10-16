@@ -20,7 +20,7 @@ validation.
 
 ## Add a page
 
-If the plugin has the `bootstrap-plugin-docs` skill, its page catalog lists the conventional filenames
+If the `AGENTS.md` in the docs folder has an "Optional pages" table, it lists the conventional filenames
 for optional pages. Use the name from there. Otherwise pick a `kebab-case` filename and a
 `sidebar_position` that puts the page where it belongs. Link the new page from `index.md` so readers can
 reach it.
