@@ -737,6 +737,12 @@ describe('docs codemod', () => {
         'To create a query variable:',
         '1. Navigate to **Dashboard settings** > **Variables**.\n1. Click **Add variable**.\n1. Select **Query** as the variable type.\n1. Select the **My Plugin** data source.',
       ],
+      annotations: [
+        'Annotations overlay event markers on time series panels, so you can correlate events from My Plugin, such as deployments or incidents, with the metrics on your dashboards. For general information about annotations, refer to [Annotate visualizations](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/annotate-visualizations/).',
+        '- [Configure the My Plugin data source](./configure.md).',
+        'To add an annotation query to a dashboard:',
+        '1. Navigate to **Dashboard settings** > **Annotations**.\n1. Click **Add annotation query**.\n1. Enter a **Name** for the annotation.\n1. Select the **My Plugin** data source.',
+      ],
       'query-editor': [
         'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
         '- [Configure the My Plugin data source](./configure.md).',
