@@ -52,20 +52,22 @@ Fill this in: Continue the list above with the steps for the variable query edit
 If the plugin doesn't support query variables, remove this section entirely.
 -->
 
+## Use variables in queries
+
+<!-- section-brief
+Fill this in: Explain how to use a variable in the {{{pluginName}}} query editor, field by field, since fields accept variables in different ways. For each field that accepts one, say how the reader adds it: picked from a drop-down that lists dashboard variables, perhaps with a prefix such as `var:`, or typed into an input or code editor as `$variable` or `${variable}`. Note fields that don't accept variables, and any difference between editor modes, such as a builder and a code editor. Give an example, and say how a single value is substituted, such as whether a string needs quotes. Say which Grafana global variables, such as `$__interval` or `$__from`, work and in which fields.
+
+Find which fields list variables in the query editor component, usually from `getTemplateSrv().getVariables()`, and which fields are interpolated in `applyTemplateVariables` or `interpolateVariablesInQueries`, or in the backend.
+
+If the plugin doesn't interpolate variables in its queries, remove this section entirely.
+-->
+
 ## How query results become variable options
 
 <!-- section-brief
 Fill this in: Explain how the variable query's result becomes the options in the variable drop-down: which column becomes the display text and which becomes the value, and whether columns are matched by name, such as `text` and `value`, or by position. Give one example for a single column and one for separate text and value. Take the rules from `metricFindQuery` or the variable support class in source, including any type a column must have.
 
 If the options come from fixed entity types rather than a query result, remove this section entirely.
--->
-
-## Use variables in queries
-
-<!-- section-brief
-Fill this in: Show how to reference a variable in a query with `$variable` or `${variable}`, with an example, and say how single values are substituted, such as whether a string needs quotes. Say which query editor fields accept variables and how variables appear in them, such as options in a drop-down. Say which Grafana global variables, such as `$__interval` or `$__from`, work and in which fields. Base it on how source interpolates variables (`applyTemplateVariables` or `interpolateVariablesInQueries`), including which query fields are interpolated.
-
-If the plugin doesn't interpolate variables in its queries, remove this section entirely.
 -->
 
 ## Chained variables
