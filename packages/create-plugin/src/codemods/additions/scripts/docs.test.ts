@@ -737,6 +737,12 @@ describe('docs codemod', () => {
         'To create a query variable:',
         '1. Navigate to **Dashboard settings** > **Variables**.\n1. Click **Add variable**.\n1. Select **Query** as the variable type.\n1. Select the **My Plugin** data source.',
       ],
+      alerting: [
+        'You can create alert rules that run My Plugin queries on a schedule and fire when the result meets a condition, such as a value above a threshold. For general information about alerting, refer to [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/).',
+        '- [Configure the My Plugin data source](./configure.md).',
+        'To create an alert rule from a My Plugin query:',
+        '1. Navigate to **Alerting** > **Alert rules**.\n1. Click **New alert rule**.\n1. Enter a **Name** for the rule.\n1. Select the **My Plugin** data source.',
+      ],
       annotations: [
         'Annotations overlay event markers on time series panels, so you can correlate events from My Plugin, such as deployments or incidents, with the metrics on your dashboards. For general information about annotations, refer to [Annotate visualizations](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/annotate-visualizations/).',
         '- [Configure the My Plugin data source](./configure.md).',

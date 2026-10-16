@@ -33,7 +33,7 @@ and the options type, and `setConfigEditor` and `setQueryEditor` name the editor
 | `query-editor.md`       | The `setQueryEditor` component, the query type and the code that runs queries in the data source class or backend                          |
 | `template-variables.md` | Variable support in the data source class: `variables` or `metricFindQuery`, `applyTemplateVariables`, and `getTagKeys` and `getTagValues` |
 | `annotations.md`        | `annotations` support in the data source class                                                                                             |
-| `alerting.md`           | The backend's query handling, since alert rules run queries on the backend                                                                 |
+| `alerting.md`           | The backend's query handling, and what the data source class does to queries first, since alert rules skip it                              |
 | `dashboards.md`         | `includes` entries of type `dashboard` in `src/plugin.json` and their JSON files                                                           |
 | `troubleshooting.md`    | Error messages in source, health check failures and reported issues. Don't invent failures.                                                |
 
