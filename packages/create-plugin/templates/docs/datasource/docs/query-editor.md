@@ -1,17 +1,17 @@
 ---
-title: Query editor
+title: "{{{yamlEscape pluginName}}} query editor"
 description: "Build and run queries with the {{{yamlEscape pluginName}}} query editor."
 sidebar_position: 3
 ---
 
-<!-- section-brief
-Fill this in: Say in one or two sentences what this page covers: how the {{{pluginName}}} query editor works and how to write queries with it. Base it on the query editor component and the query model in source.
--->
+This document explains how to use the {{{pluginName}}} query editor to build queries and visualize {{{pluginName}}} data in Grafana dashboards.
 
-## Key concepts
+## Before you begin
+
+- [Configure the {{{pluginName}}} data source](./configure.md).
 
 <!-- section-brief
-Fill this in: Explain what a reader needs to know before writing a first query. Cover the editor modes if there's more than one, such as a builder that generates the query and a code editor for the raw query language, and any terms from the service the editor uses. Keep it short: a few sentences or a short list.
+Fill this in: Keep the bullet above. Add a bullet for each other thing a reader needs before writing a query, such as a feature to enable on the target service or a query language to know. If there is nothing else, delete only this brief.
 -->
 
 ## Query types

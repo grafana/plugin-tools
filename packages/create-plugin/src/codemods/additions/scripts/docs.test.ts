@@ -715,18 +715,29 @@ describe('docs codemod', () => {
       }
     });
 
+    // text the scaffold keeps on purpose, which agents leave in place
+    const FIXED_TEXT: Record<string, string[]> = {
+      'query-editor': [
+        'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
+        '- [Configure the My Plugin data source](./configure.md).',
+      ],
+    };
+
     it.each(PLUGIN_TYPES)(
-      'scaffolds %s pages where every section is only a brief, so an untouched scaffold is all stubs',
+      'scaffolds %s pages where every section is only a brief or fixed text, so an untouched scaffold is all stubs',
       (type) => {
         const context = makeContext(FULL_PLUGIN_JSON[type]);
         docs(context, { docsPath: 'docs' });
         for (const page of PAGES_BY_TYPE[type]) {
-          const left = (context.getFile(`docs/${page}.md`) ?? '')
+          let left = (context.getFile(`docs/${page}.md`) ?? '')
             .replace(/^---\n[\s\S]*?\n---\n/, '')
             .replace(/<!-- section-brief\n[\s\S]*?-->/g, '')
-            .replace(/^#{1,6} .*$/gm, '')
-            .trim();
-          expect(left, page).toBe('');
+            .replace(/^#{1,6} .*$/gm, '');
+          for (const text of FIXED_TEXT[page] ?? []) {
+            expect(left, page).toContain(text);
+            left = left.replace(text, '');
+          }
+          expect(left.trim(), page).toBe('');
         }
       }
     );

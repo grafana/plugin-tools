@@ -66,6 +66,8 @@ If the plugin has no macros, remove this section entirely.
 ```
 
 The first paragraph, after `Fill this in:`, is the instruction. A paragraph after it is extra context.
+Text outside a brief, such as a page's opening sentence, is part of the scaffold. Keep it unless you remove
+the page.
 
 To fill a section:
 
