@@ -1,12 +1,10 @@
 ---
-title: Configure
+title: "Configure the {{{yamlEscape pluginName}}} data source"
 description: "Add the {{{yamlEscape pluginName}}} data source in Grafana and connect it to your service."
 sidebar_position: 2
 ---
 
-<!-- section-brief
-Fill this in: Say in one or two sentences what this page covers: adding {{{pluginName}}} as a data source, choosing how it authenticates, filling in its settings and provisioning it as code. Base every setting on the config editor and the options types in source, not on what similar data sources offer.
--->
+This document explains how to add and configure the {{{pluginName}}} data source in Grafana. After you configure the data source, refer to the [{{{pluginName}}} query editor](./query-editor.md) to start querying your data.
 
 ## Before you begin
 
