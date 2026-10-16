@@ -16,6 +16,7 @@ If the plugin supports no variable types and interpolates no variables in its qu
 
 - [Configure the {{{pluginName}}} data source](./configure.md).
 - Understand [Grafana template variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).
+- Know how to write queries in the [{{{pluginName}}} query editor](./query-editor.md).
 
 ## Supported variable types
 
