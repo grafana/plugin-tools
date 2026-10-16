@@ -8,8 +8,12 @@ This document explains how to add and configure the {{{pluginName}}} data source
 
 ## Before you begin
 
+Before you configure the data source, ensure you have:
+
+- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can add data sources.
+
 <!-- section-brief
-Fill this in: A bulleted list of what the reader needs before adding the data source. Cover the Grafana role needed to add data sources (usually Organization administrator), the account, credentials and permissions needed on the service {{{pluginName}}} connects to, and any network access Grafana needs to reach it. Recommend the least-privileged access that still works, such as a read-only user, when the service supports one.
+Fill this in: Keep the list above. Add a bullet in the same **Label:** form for each other thing the reader needs: the instance of the service {{{pluginName}}} connects to and how Grafana reaches it, such as its address, default port and network access, and the credentials and permissions needed on it. Recommend the least-privileged access that still works, such as a read-only user, when the service supports one.
 -->
 
 ## Add the data source

@@ -720,6 +720,8 @@ describe('docs codemod', () => {
     const FIXED_TEXT: Record<string, string[]> = {
       configure: [
         'This document explains how to add and configure the My Plugin data source in Grafana. After you configure the data source, refer to the [My Plugin query editor](./query-editor.md) to start querying your data.',
+        'Before you configure the data source, ensure you have:',
+        '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can add data sources.',
       ],
       'query-editor': [
         'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
