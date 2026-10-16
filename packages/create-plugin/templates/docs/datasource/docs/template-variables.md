@@ -33,23 +33,6 @@ Fill this in: A table with a Yes or No for each variable type, in this order:
 | Ad hoc filters |           |
 
 Custom and Data source variables are handled by Grafana itself and work with every data source, so keep them as Yes. Query is Yes if the data source class sets `variables` or implements `metricFindQuery`. Ad hoc filters is Yes if it implements both `getTagKeys` and `getTagValues`.
-
-If the variable query editor has its own query types, such as projects or environments, add a second table of them with the display text and the value each one returns.
--->
-
-## Create a query variable
-
-To create a query variable:
-
-1. Navigate to **Dashboard settings** > **Variables**.
-1. Click **Add variable**.
-1. Select **Query** as the variable type.
-1. Select the **{{{pluginName}}}** data source.
-
-<!-- section-brief
-Fill this in: Continue the list above with the steps for the variable query editor, using its field labels in bold. Say whether it's the same editor as the query editor or a separate one, from the variable support in source.
-
-If the plugin doesn't support query variables, remove this section entirely.
 -->
 
 ## Use variables in queries
@@ -62,34 +45,21 @@ Find which fields list variables in the query editor component, usually from `ge
 If the plugin doesn't interpolate variables in its queries, remove this section entirely.
 -->
 
-## How query results become variable options
+## Query variables
+
+A query variable fills its drop-down by running a query against {{{pluginName}}}, so its options stay current with your data. Use one to let viewers pick a value, such as a host, a table or a project, and update every panel that uses it.
+
+To create a query variable:
+
+1. Navigate to **Dashboard settings** > **Variables**.
+1. Click **Add variable**.
+1. Select **Query** as the variable type.
+1. Select the **{{{pluginName}}}** data source.
 
 <!-- section-brief
-Fill this in: Explain how the variable query's result becomes the options in the variable drop-down: which column becomes the display text and which becomes the value, and whether columns are matched by name, such as `text` and `value`, or by position. Give one example for a single column and one for separate text and value. Take the rules from `metricFindQuery` or the variable support class in source, including any type a column must have.
+Fill this in: Continue the list above with the steps for the variable query editor, using its field labels in bold. Say whether it's the same editor as the query editor or a separate one, from the variable support in source.
 
-If the options come from fixed entity types rather than a query result, remove this section entirely.
--->
+If the variable query editor has several query types, such as projects or environments, add an H3 for each that says what it lists, its fields and which part of each result becomes the display text and which the value. Otherwise, explain how the query result becomes the options: which column becomes the display text and which the value, and whether columns are matched by name, such as `text` and `value`, or by position, with one example for a single column and one for separate text and value. Take this from `metricFindQuery` or the variable support class in source.
 
-## Chained variables
-
-<!-- section-brief
-Fill this in: Explain how to make one variable's options depend on another by referencing the first variable in the second variable's query. Give one parent and child example. Note that when the parent is multi-value, the child query may only get its first value.
-
-If the plugin doesn't interpolate variables in variable queries, remove this section entirely.
--->
-
-## Multi-value variables
-
-<!-- section-brief
-Fill this in: Explain how a multi-value variable expands in a query, such as `'a','b'` for an `IN` list, with an example and what it expands to. Say which format to use, such as `${variable:singlequote}`, and what the **All** option becomes. Document any macro the plugin offers for it, such as one that drops a filter when **All** is selected. Base it on how source formats multi-value variables.
-
-If the plugin doesn't support multi-value variables, remove this section entirely.
--->
-
-## Ad hoc filters
-
-<!-- section-brief
-Fill this in: Explain how ad hoc filters apply to {{{pluginName}}} queries: where the filter keys and values come from, how to limit them to a database or table if the plugin supports it, which operators work and any limit on the number of values. Base it on `getTagKeys`, `getTagValues` and the code that applies the filters in source.
-
-If the plugin doesn't implement `getTagKeys` and `getTagValues`, remove this section entirely.
+If the plugin doesn't support query variables, remove this whole section, including its heading and the text above.
 -->
