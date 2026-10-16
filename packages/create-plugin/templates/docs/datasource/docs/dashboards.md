@@ -2,6 +2,7 @@
 title: Dashboards
 description: "Import and use the dashboards that ship with {{{yamlEscape pluginName}}}."
 keywords:
+  - "{{{yamlEscape pluginName}}}"
   - data source
   - dashboards
 sidebar_position: 7

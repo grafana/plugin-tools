@@ -592,8 +592,11 @@ describe('docs codemod', () => {
         docs(context, { docsPath: 'docs' });
         for (const page of PAGES_BY_TYPE[type]) {
           const frontmatter = /^---\n([\s\S]*?)\n---/.exec(context.getFile(`docs/${page}.md`) ?? '')?.[1] ?? '';
-          const { description } = parseYaml(frontmatter);
+          const { description, keywords } = parseYaml(frontmatter);
           expect(description, page).toContain(name);
+          if (type === 'datasource') {
+            expect(keywords, page).toContain(name);
+          }
         }
       }
     );

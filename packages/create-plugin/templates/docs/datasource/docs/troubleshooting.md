@@ -2,6 +2,7 @@
 title: Troubleshooting
 description: "Troubleshoot common {{{yamlEscape pluginName}}} connection, authentication and query errors."
 keywords:
+  - "{{{yamlEscape pluginName}}}"
   - data source
   - troubleshooting
 sidebar_position: 8

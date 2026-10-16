@@ -2,6 +2,7 @@
 title: Introduction
 description: "Where to start and what to read next in the {{{yamlEscape pluginName}}} docs."
 keywords:
+  - "{{{yamlEscape pluginName}}}"
   - data source
 sidebar_position: 1
 ---
