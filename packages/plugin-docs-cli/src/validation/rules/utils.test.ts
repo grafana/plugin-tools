@@ -6,11 +6,26 @@ import {
   getCodeBlockLines,
   getNonProseLines,
   getReferenceDefinitions,
+  isInExcludedFolder,
   isMetaFile,
   maskInlineCode,
   maskLinkTargets,
   matchOutsideCode,
 } from './utils.js';
+
+describe('isInExcludedFolder', () => {
+  it('matches a node_modules or dist folder at any depth', () => {
+    expect(isInExcludedFolder('node_modules/pkg/index.md')).toBe(true);
+    expect(isInExcludedFolder('guide/dist/page.md')).toBe(true);
+    expect(isInExcludedFolder('guide\\dist\\page.md')).toBe(true);
+  });
+
+  it('does not match a page or folder whose name only contains those words', () => {
+    expect(isInExcludedFolder('distributed-tracing.md')).toBe(false);
+    expect(isInExcludedFolder('distilled/index.md')).toBe(false);
+    expect(isInExcludedFolder('')).toBe(false);
+  });
+});
 
 describe('isMetaFile', () => {
   it('matches README.md regardless of case', () => {

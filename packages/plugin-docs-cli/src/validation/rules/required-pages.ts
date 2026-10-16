@@ -1,8 +1,8 @@
 import { readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
-import { join, sep } from 'node:path';
+import { join, relative, sep } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { isMetaFile } from './utils.js';
+import { isInExcludedFolder, isMetaFile } from './utils.js';
 
 /**
  * Pages every plugin of a given type must have at the root of its docs folder, so that authors,
@@ -10,7 +10,7 @@ import { isMetaFile } from './utils.js';
  */
 const REQUIRED_PAGES: Record<string, string[]> = {
   panel: ['options', 'data-formats'],
-  datasource: ['query-editor', 'configuration'],
+  datasource: ['query-editor', 'configure'],
 };
 
 export async function checkRequiredPages(input: ValidationInput): Promise<Diagnostic[]> {
@@ -55,8 +55,7 @@ export async function checkRequiredPages(input: ValidationInput): Promise<Diagno
         e.isFile() &&
         e.name.endsWith('.md') &&
         !isMetaFile(e.name) &&
-        !e.parentPath.split(sep).includes('node_modules') &&
-        !e.parentPath.split(sep).includes('dist') &&
+        !isInExcludedFolder(relative(input.docsPath, e.parentPath)) &&
         (e.parentPath === dirPath || e.parentPath.startsWith(dirPath + sep))
     );
     if (!dirHasPage) {

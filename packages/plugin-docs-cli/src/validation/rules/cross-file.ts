@@ -3,7 +3,14 @@ import type { Dirent } from 'node:fs';
 import { join, relative, dirname, normalize } from 'node:path';
 import GithubSlugger from 'github-slugger';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
-import { decodeRefPath, escapesDocsRoot, getCodeBlockLines, getReferenceDefinitions, isMetaFile } from './utils.js';
+import {
+  decodeRefPath,
+  escapesDocsRoot,
+  getCodeBlockLines,
+  getReferenceDefinitions,
+  isInExcludedFolder,
+  isMetaFile,
+} from './utils.js';
 
 // matches markdown links: [text](url)
 const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
@@ -80,9 +87,7 @@ export async function checkCrossFile(input: ValidationInput): Promise<Diagnostic
     return diagnostics;
   }
 
-  const allFiles = entries.filter(
-    (e) => e.isFile() && !e.parentPath.includes('node_modules') && !e.parentPath.includes('dist')
-  );
+  const allFiles = entries.filter((e) => e.isFile() && !isInExcludedFolder(relative(input.docsPath, e.parentPath)));
   const mdFiles = allFiles.filter((e) => e.name.endsWith('.md') && !isMetaFile(e.name));
   const allFilePaths = new Set(allFiles.map((e) => relative(input.docsPath, join(e.parentPath, e.name))));
 

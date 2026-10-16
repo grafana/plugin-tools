@@ -95,10 +95,17 @@ describe('checkStubContent with comment briefs', () => {
     expect(findings).toHaveLength(1);
     expect(findings[0]).toMatchObject({
       rule: Rule.EmptySection,
-      severity: 'warning',
+      severity: 'info',
       line: 5,
       title: 'Unfilled documentation stub',
     });
+  });
+
+  it('still warns about an empty heading that has no brief', async () => {
+    const findings = await check('## Options\n\n## Next\n\nReal text.\n');
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({ rule: Rule.EmptySection, severity: 'warning', title: 'Empty section' });
   });
 
   it('keeps a multi-line brief with blank lines, tables and lists from counting as content', async () => {
@@ -109,11 +116,11 @@ describe('checkStubContent with comment briefs', () => {
     expect(findings.map((f) => f.rule)).toEqual([Rule.EmptySection]);
   });
 
-  it('warns about a brief left in a section that has content', async () => {
+  it('reports a brief left in a section that has content as info, since a brief never renders', async () => {
     const findings = await check(`## Options\n\n${brief()}\n\nOne row per option.\n`);
 
     expect(findings).toHaveLength(1);
-    expect(findings[0]).toMatchObject({ rule: Rule.UnfilledSectionBrief, severity: 'warning', line: 7 });
+    expect(findings[0]).toMatchObject({ rule: Rule.UnfilledSectionBrief, severity: 'info', line: 7 });
   });
 
   it('reports one finding per empty section in a fresh scaffold', async () => {

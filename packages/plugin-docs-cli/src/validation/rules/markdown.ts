@@ -8,6 +8,7 @@ import {
   getCodeBlockLines,
   getNonProseLines,
   getReferenceDefinitions,
+  isInExcludedFolder,
   isMetaFile,
   maskInlineCode,
   matchOutsideCode,
@@ -118,8 +119,7 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
       e.isFile() &&
       e.name.endsWith('.md') &&
       !isMetaFile(e.name) &&
-      !e.parentPath.includes('node_modules') &&
-      !e.parentPath.includes('dist')
+      !isInExcludedFolder(relative(input.docsPath, e.parentPath))
   );
 
   for (const md of mdFiles) {

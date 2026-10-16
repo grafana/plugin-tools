@@ -65,6 +65,22 @@ describe('build', () => {
     expect(settingsContent).toContain('# Settings');
   });
 
+  it('should leave meta files such as README.md and AGENTS.md out of the output', async () => {
+    for (const file of ['README.md', 'AGENTS.md', 'CLAUDE.md', 'readme.md']) {
+      await writeFile(join(docsPath, file), '# Notes for the author\n');
+    }
+    await mkdir(join(docsPath, 'config'), { recursive: true });
+    await writeFile(join(docsPath, 'config', 'CHANGELOG.md'), '# Changes\n');
+
+    await buildDocs(tmpDir, docsPath);
+
+    const outputDir = join(tmpDir, 'dist', 'docs');
+    for (const file of ['README.md', 'AGENTS.md', 'CLAUDE.md', 'readme.md', join('config', 'CHANGELOG.md')]) {
+      await expect(access(join(outputDir, file)), file).rejects.toThrow();
+    }
+    await expect(readFile(join(outputDir, 'home.md'), 'utf-8')).resolves.toContain('# Welcome');
+  });
+
   it('should copy non-markdown assets', async () => {
     await buildDocs(tmpDir, docsPath);
 
