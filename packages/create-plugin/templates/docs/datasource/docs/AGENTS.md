@@ -79,9 +79,9 @@ heading. `docs:validate` lists every section that still has only its brief.
 ```
 
 Run `docs:validate` after every page you write or change and fix what it reports. A docs task is done when
-it reports no warnings. In particular, an `empty-section` or `unfilled-section-brief` warning means a section
-is still unwritten or a brief is still in place. These warnings don't fail validation, so a passing exit
-code alone does not mean the docs are done.
+it reports no warnings and no suggestions about section briefs. In particular, an `empty-section` or
+`unfilled-section-brief` suggestion means a section is still unwritten or a brief is still in place. Neither
+fails validation, so a passing exit code alone does not mean the docs are done.
 
 ## Preview
 

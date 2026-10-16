@@ -10,7 +10,7 @@ To learn how plugin docs work and how to write them, read the
 
 1. Fill in or review the pages. Each section has a note that says what belongs there.
 2. Add screenshots, videos and figures where they help readers. Save them inside this folder, for example in `img/`, and link to them with a relative path. `docs:validate` checks their formats and sizes.
-3. Run `{{packageManagerName}} run docs:serve` to preview the docs. It also reports warnings for every section left to fill.
+3. Run `{{packageManagerName}} run docs:serve` to preview the docs. It also lists every section left to fill.
 
 ## Commands
 
