@@ -755,7 +755,7 @@ describe('docs codemod', () => {
           'My Plugin ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).',
           'To import a dashboard that ships with My Plugin:',
           '1. Click **Connections** > **Data sources** in the left-side menu.\n1. Select your My Plugin data source.\n1. Click the **Dashboards** tab.\n1. Click **Import** next to the dashboard.',
-          "Imported dashboards don't update when you upgrade the plugin. To get a newer version, click **Re-import** next to the dashboard. This overwrites any changes you made to it.",
+          "Imported dashboards don't update when you upgrade the plugin. When a plugin upgrade ships a newer version of a dashboard, click **Update** next to it. This overwrites any changes you made to it.",
         ],
         'query-editor': [
           'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
@@ -763,9 +763,9 @@ describe('docs codemod', () => {
         ],
         troubleshooting: [
           'This page explains how to fix common issues when you configure or use the My Plugin data source. For setup instructions, refer to [Configure the My Plugin data source](./configure.md).',
-          'To see more detail about an error in the Grafana server logs:',
-          "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-datasource`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
           'To see the raw request and response for a panel, open the panel editor and click **Query inspector**.',
+          'In self-managed Grafana, you can also find more detail in the Grafana server logs:',
+          "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-datasource`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
           "If this page doesn't solve your problem:",
           '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
           'When you report an issue, include:',

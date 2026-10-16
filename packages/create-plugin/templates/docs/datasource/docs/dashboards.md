@@ -18,7 +18,7 @@ To import a dashboard that ships with {{{pluginName}}}:
 1. Click the **Dashboards** tab.
 1. Click **Import** next to the dashboard.
 
-Imported dashboards don't update when you upgrade the plugin. To get a newer version, click **Re-import** next to the dashboard. This overwrites any changes you made to it.
+Imported dashboards don't update when you upgrade the plugin. When a plugin upgrade ships a newer version of a dashboard, click **Update** next to it. This overwrites any changes you made to it.
 
 ## Included dashboards
 
