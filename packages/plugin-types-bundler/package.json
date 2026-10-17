@@ -50,7 +50,7 @@
     "node": ">=18.8.0"
   },
   "dependencies": {
-    "@grafana/levitate": "^0.17.0",
+    "@grafana/levitate": "^0.18.0",
     "@types/minimist": "^1.2.2",
     "@types/node": "^24.0.0",
     "debug": "^4.3.4",
