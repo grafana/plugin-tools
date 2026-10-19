@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.15.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.14.0...@grafana/create-plugin@7.15.0) (2026-10-19)
+
+
+### Features
+
+* **create-plugin:** support app plugins in add docs codemod ([#3000](https://github.com/grafana/plugin-tools/issues/3000)) ([46703b6](https://github.com/grafana/plugin-tools/commit/46703b694dd9d38166dc1a82b77ac3534a5a37d8))
+* **create-plugin:** support data sources in `add docs` codemod ([#2993](https://github.com/grafana/plugin-tools/issues/2993)) ([01e0b4c](https://github.com/grafana/plugin-tools/commit/01e0b4c1e9d8bbed2308de0b600499319cf61be5))
+
 ## [7.14.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.13.0...@grafana/create-plugin@7.14.0) (2026-10-19)
 
 
