@@ -82,6 +82,9 @@ Describe every option the plugin registers, one row per option.
 
 Briefs aren't shown in the catalog or the preview. Write the section, then delete the whole comment.
 
+Text outside a brief is part of the scaffold, such as a page's opening sentence or steps that are the same
+for every plugin. Keep it, and change it only where it's wrong for your plugin.
+
 Validation warns about a section that only has its brief, and about a brief left in a section that has
 content. It also warns about any heading with no content before the next heading, so write the section or
 remove the heading. A heading followed directly by a deeper heading is fine. Finish with none of these

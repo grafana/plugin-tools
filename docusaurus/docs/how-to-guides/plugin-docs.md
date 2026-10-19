@@ -11,13 +11,16 @@ keywords:
 unlisted: true
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 Plugin docs let you write your plugin's documentation in markdown, right next to your code, and ship it with every release. Your users get a Documentation tab on your plugin's page in the [Grafana plugin catalog](https://grafana.com/grafana/plugins/), with a sidebar and one page per topic. You write the content, and Grafana handles the styling and hosting.
 
 This guide shows you how to set up plugin docs, preview and validate them and publish them with a release.
 
 :::important
 
-Plugin docs are an experimental feature. Breaking changes might happen without notice, such as renamed commands, changed validation rules or a different file structure. Panel plugins are the only supported plugin type for the moment.
+Plugin docs are an experimental feature. Breaking changes might happen without notice, such as renamed commands, changed validation rules or a different file structure. Panel and data source plugins are the only supported plugin types for the moment.
 
 :::
 
@@ -37,7 +40,7 @@ Plugin docs are an experimental feature. Breaking changes might happen without n
 
 :::note
 
-The `add docs` codemod only supports panel plugins so far.
+The `add docs` codemod only supports panel and data source plugins so far.
 
 :::
 
@@ -62,7 +65,10 @@ To use a different folder, pass `--docsPath`, for example `--docsPath documentat
 
 ## File structure
 
-For a panel plugin, the codemod adds:
+The codemod adds these files, depending on your plugin type:
+
+<Tabs groupId="plugin-type">
+<TabItem value="panel" label="Panel">
 
 ```text
 .
@@ -81,6 +87,33 @@ For a panel plugin, the codemod adds:
 │   └── instructions.md       # gets a Plugin docs section pointing at catalog-docs/AGENTS.md
 └── package.json              # adds @grafana/plugin-docs-cli and the docs:* scripts
 ```
+
+</TabItem>
+<TabItem value="datasource" label="Data source">
+
+```text
+.
+├── catalog-docs/
+│   ├── index.md              # landing page of the Documentation tab
+│   ├── configure.md
+│   ├── query-editor.md
+│   ├── template-variables.md
+│   ├── annotations.md        # only when plugin.json has "annotations": true
+│   ├── alerting.md           # only when plugin.json has "alerting": true
+│   ├── dashboards.md         # only when plugin.json includes a dashboard
+│   ├── troubleshooting.md
+│   ├── README.md             # notes for you, not published
+│   ├── AGENTS.md             # instructions for coding agents, not published
+│   └── CLAUDE.md             # points Claude Code at AGENTS.md
+├── .github/workflows/
+│   └── validate-docs.yml     # validates docs on pull requests
+├── .config/AGENTS/
+│   └── instructions.md       # gets a Plugin docs section pointing at catalog-docs/AGENTS.md
+└── package.json              # adds @grafana/plugin-docs-cli and the docs:* scripts
+```
+
+</TabItem>
+</Tabs>
 
 If your plugin doesn't have them yet, the codemod also creates `.config/AGENTS/instructions.md` and the `AGENTS.md`, `CLAUDE.md` and `GEMINI.md` files in the root of your plugin that point agents at it.
 
