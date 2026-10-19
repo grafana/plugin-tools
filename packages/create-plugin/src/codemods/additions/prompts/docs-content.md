@@ -79,11 +79,11 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
    - A screenshot near the top if the repo has a usable one.
    - Badges and a licence line when the project already had them.
 
-   Nothing else belongs on the Overview tab. Delete the instructional sections you moved to pages, and the installation and requirements sections. Delete contributor-facing sections too, such as Development, Building, Testing, Contributing, Feedback and Release process, because the Overview reader can't use them. Keep a section only when it fits no page and isn't contributor-facing, and list it in the summary. Do not leave a condensed copy of what moved - two versions of the same guidance drift apart, and the reader is better served by a link. Where the README previously explained something at length, a single sentence pointing into the docs is enough.
+   Nothing else belongs on the Overview tab. Delete the instructional sections you moved to pages, including requirements, which belong on the pages as step 3 says, and delete the installation sections. Delete contributor-facing sections too, such as Development, Building, Testing, Contributing, Feedback and Release process, because the Overview reader can't use them. Keep a section only when it fits no page and isn't contributor-facing, and list it in the summary. Do not leave a condensed copy of what moved - two versions of the same guidance drift apart, and the reader is better served by a link. Where the README previously explained something at length, a single sentence pointing into the docs is enough.
 
    Where the contributor-facing sections go depends on which file the Overview is:
    - When `src/README.md` exists, it is the Overview and the root `README.md` is the repository's. Move its contributor-facing sections to the root `README.md`, unless that already has them. Touch nothing else in the root `README.md`.
-   - When only the root `README.md` exists, it is both. Create `src/README.md` with the Overview content above, which the plugin build then ships as the Overview. In the root `README.md`, delete only the instructional sections you moved to pages and leave the rest, such as Development and Contributing, because the repository still needs them.
+   - When only the root `README.md` exists, it is both. Create `src/README.md` with the Overview content above, which the plugin build then ships as the Overview. In the root `README.md`, delete only the instructional sections you moved to pages and leave the rest, such as Development and Contributing, because the repository still needs them. Relative links and image paths in it now resolve from `src/`, so rewrite each one to point at the same file as before.
 
    Never delete a README, and never invent a pitch. If the README has no clear statement of purpose and step 2 could not derive one from source, ask the author rather than writing marketing copy for them. Preserve any existing badges, licence text and links verbatim, apart from the links to the old docs that step 8 handles.
 
@@ -125,7 +125,7 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
 
 ## Out of scope
 
-- Change only files inside `{docsPath}`. There are three exceptions: the READMEs in step 7, which includes creating `src/README.md` when only the root `README.md` exists, and the `info.links` entries in `src/plugin.json` in step 8. Everything else stays as it is, including `.config/`, source code, dependencies, scripts and workflows.
+- Change only files inside `{docsPath}`. There are two exceptions: the READMEs in step 7, which includes creating `src/README.md` when only the root `README.md` exists, and the `info.links` entries in `src/plugin.json` in step 8. Everything else stays as it is, including `.config/`, source code, dependencies, scripts and workflows.
 - Never change source code to fit the docs. When the two disagree, document what the source does and flag the difference in the summary.
 - Do not reformat files you did not change.
 - Do not leave `TODO` markers in the pages. Anything published in a page is shown to catalog readers, so report gaps in the summary instead.
