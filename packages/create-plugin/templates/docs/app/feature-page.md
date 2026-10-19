@@ -18,5 +18,5 @@ Fill this in: One or two sentences on what the {{{page.name}}} page is for and w
 {{/if}}
 
 <!-- section-brief
-Fill this in: Replace this brief with one H2 per task someone does on the {{{page.name}}} page, named after the task, such as "Filter by service" or "Compare two time ranges". Under each, give the steps with the UI labels in bold, and say what each part of the page shows when it helps the task. Find the tasks in the component that renders `{{{page.path}}}`, including its tabs and drilldowns, which `src/plugin.json` doesn't list.
+Fill this in: Replace this brief with one H2 per task someone does on the {{{page.name}}} page, named after the task, such as "Filter by service" or "Compare two time ranges". Under each, give the steps with the UI labels in bold, and say what each part of the page shows when it helps the task. Find the tasks in the component that renders `{{{page.path}}}`, including its tabs and drilldowns, which `src/plugin.json` doesn't list. Describe UI that only appears behind a feature flag or a condition as "when X is enabled".
 -->
