@@ -1,3 +1,5 @@
+import type { SnippetValues } from '@grafana/plugin-docs-parser';
+
 export type Severity = 'error' | 'warning' | 'info';
 
 export const Rule = {
@@ -54,6 +56,10 @@ export const Rule = {
   ValidCalloutMarker: 'valid-callout-marker',
   ValidYoutubeLink: 'valid-youtube-link',
   ValidDetailsBlock: 'valid-details-block',
+  // snippet rules
+  KnownSnippet: 'known-snippet',
+  ValidSnippetBlock: 'valid-snippet-block',
+  SnippetTextCurrent: 'snippet-text-current',
   // cross-file rules
   InternalLinksResolve: 'internal-links-resolve',
   AnchorLinksResolve: 'anchor-links-resolve',
@@ -99,6 +105,11 @@ export interface ValidationInput {
    * `required-pages` rule, which reports nothing when this is unset.
    */
   pluginType?: string;
+  /**
+   * Values from `plugin.json` that snippets show. When this is unset, `snippet-text-current` skips
+   * the snippets that need a value.
+   */
+  snippetValues?: SnippetValues;
 }
 
 /**

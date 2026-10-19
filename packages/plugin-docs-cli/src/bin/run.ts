@@ -2,6 +2,7 @@
 import { stat } from 'node:fs/promises';
 import minimist from 'minimist';
 import createDebug from 'debug';
+import type { SnippetValues } from '@grafana/plugin-docs-parser';
 import { readmeCandidates, resolvePluginJson } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
 import { buildDocs } from '../commands/build.command.js';
@@ -26,11 +27,12 @@ async function main() {
     process.exit(1);
   }
 
-  // resolve docs path and plugin type once for all commands.
+  // resolve docs path, plugin type and snippet values once for all commands.
   let docsPath: string;
   let pluginType: string | undefined;
+  let snippetValues: SnippetValues | undefined;
   try {
-    ({ docsPath, pluginType } = await resolvePluginJson());
+    ({ docsPath, pluginType, snippetValues } = await resolvePluginJson());
   } catch (error) {
     console.error(`Error: ${error instanceof Error ? error.message : error}`);
     process.exit(1);
@@ -68,7 +70,7 @@ async function main() {
           reload: false,
         },
       });
-      await serve(serveArgv, docsPath, pluginType, readmeCandidates());
+      await serve(serveArgv, docsPath, pluginType, readmeCandidates(), snippetValues);
       break;
     }
     case 'build': {
@@ -85,6 +87,7 @@ async function main() {
       await validateCommand(docsPath, {
         json: validateArgv.json,
         pluginType,
+        snippetValues,
       });
       break;
     }

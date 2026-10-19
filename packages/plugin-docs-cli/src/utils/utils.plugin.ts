@@ -1,19 +1,22 @@
 import { readFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import createDebug from 'debug';
+import type { SnippetValues } from '@grafana/plugin-docs-parser';
 
 const debug = createDebug('plugin-docs-cli:utils:plugin');
 
 export interface PluginJson {
   docsPath: string;
   pluginType?: string;
+  /** Unset when `plugin.json` has no `name` or `id`. */
+  snippetValues?: SnippetValues;
 }
 
 /**
- * Resolves the docs path and plugin type by reading src/plugin.json.
+ * Resolves the docs path, plugin type and snippet values by reading src/plugin.json.
  *
  * @param projectRoot - The root directory of the plugin project (defaults to cwd)
- * @returns The resolved absolute path to the docs directory, and the plugin's type
+ * @returns The resolved absolute path to the docs directory, the plugin's type and the values snippets show
  * @throws {Error} If plugin.json is missing or lacks docsPath
  */
 export async function resolvePluginJson(projectRoot?: string): Promise<PluginJson> {
@@ -28,7 +31,12 @@ export async function resolvePluginJson(projectRoot?: string): Promise<PluginJso
     throw new Error(`Could not find src/plugin.json in ${root}`);
   }
 
-  let pluginJson: { docsPath?: string; type?: string };
+  let pluginJson: {
+    docsPath?: string;
+    type?: string;
+    name?: unknown;
+    id?: unknown;
+  };
   try {
     pluginJson = JSON.parse(raw);
   } catch (error) {
@@ -41,7 +49,10 @@ export async function resolvePluginJson(projectRoot?: string): Promise<PluginJso
 
   const docsPath = resolve(root, pluginJson.docsPath);
   debug('Resolved docsPath from plugin.json: %s -> %s', pluginJson.docsPath, docsPath);
-  return { docsPath, pluginType: pluginJson.type };
+  const { name, id } = pluginJson;
+  const snippetValues =
+    typeof name === 'string' && typeof id === 'string' ? { pluginName: name, pluginId: id } : undefined;
+  return { docsPath, pluginType: pluginJson.type, snippetValues };
 }
 
 /**

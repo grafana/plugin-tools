@@ -5,11 +5,15 @@ import { resolvePluginJson } from './utils.plugin.js';
 describe('resolvePluginJson', () => {
   const fixturesPath = join(__dirname, '..', '__fixtures__');
 
-  it('should resolve docsPath and pluginType from plugin.json', async () => {
+  it('should resolve docsPath, pluginType and snippetValues from plugin.json', async () => {
     const projectRoot = join(fixturesPath, 'test-plugin');
     const result = await resolvePluginJson(projectRoot);
 
-    expect(result).toEqual({ docsPath: join(projectRoot, 'docs'), pluginType: 'datasource' });
+    expect(result).toEqual({
+      docsPath: join(projectRoot, 'docs'),
+      pluginType: 'datasource',
+      snippetValues: { pluginName: 'Test Plugin', pluginId: 'test-plugin' },
+    });
   });
 
   it('should throw when src/plugin.json is missing', async () => {

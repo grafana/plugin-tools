@@ -1,4 +1,5 @@
 import createDebug from 'debug';
+import type { SnippetValues } from '@grafana/plugin-docs-parser';
 import { validate } from '../validation/engine.js';
 import { formatResult } from '../validation/format.js';
 import { allRules } from '../validation/rules/index.js';
@@ -11,11 +12,15 @@ export async function validateCommand(
   options: {
     json: boolean;
     pluginType?: string;
+    snippetValues?: SnippetValues;
   } = { json: false }
 ): Promise<void> {
   debug('Validating docs at: %s (json: %s, pluginType: %s)', docsPath, options.json, options.pluginType);
 
-  const result = await validate({ docsPath, pluginType: options.pluginType }, allRules);
+  const result = await validate(
+    { docsPath, pluginType: options.pluginType, snippetValues: options.snippetValues },
+    allRules
+  );
 
   const guide = guidesLocation();
   if (options.json) {
