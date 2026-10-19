@@ -50,6 +50,12 @@ a `sidebar_position` that puts it where it belongs and link it from `index.md`.
 | Macros that outgrow a section of `query-editor.md` | `macros.md`      | Every macro with its syntax, what it expands to and an example.  |
 | RBAC role declarations in `src/plugin.json`        | `permissions.md` | What each role grants, default assignments.                      |
 
+## What not to write
+
+Never write installation instructions, such as installing the plugin with `grafana-cli`, from a zip file or
+in Docker. The Installation tab on the plugin page covers them, and these docs start from a plugin that is
+already installed. When the README has an installation section, leave it out of the pages.
+
 ## Section briefs
 
 Each section of a scaffolded page has a brief telling you what belongs there. A brief is an HTML comment

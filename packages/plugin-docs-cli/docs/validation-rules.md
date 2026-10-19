@@ -45,6 +45,8 @@ docs folder.
 - **Panel:** `options` and `data-formats`
 - **Data source:** `query-editor` and `configure`
 
+App plugins have no required pages, because what an app does varies too much for a fixed set of topics.
+
 | Rule             | What it checks                                                                   | Severity |
 | ---------------- | -------------------------------------------------------------------------------- | -------- |
 | `required-pages` | Every required page for your plugin type exists at the root of your docs folder. | Error    |
