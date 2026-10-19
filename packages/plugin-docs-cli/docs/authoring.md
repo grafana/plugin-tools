@@ -122,7 +122,7 @@ Validation can't catch these, so they are on you:
 - Don't change a UI label to satisfy a style warning. Quote the label as the UI shows it, because readers
   search for what they see, and tell the author about the warning.
 - Don't leave links broken when you move, rename or split a page. Update the links to it in every other
-  page, including the pages `create-plugin` scaffolded. Validation doesn't check links between pages.
+  page, including the pages `create-plugin` scaffolded. Validation reports links that no longer resolve.
 - Don't mention one-click installation. It has been removed from the plugin catalog.
 - Don't link to internal-only URLs, anything on `*.grafana-ops.net` or a staging environment.
 
