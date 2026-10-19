@@ -47,6 +47,29 @@ Imported dashboards don't update when you upgrade the plugin. When a plugin upgr
   'reshape-with-transformations': `If a query returns data in a different shape, you can reshape it without changing the query. Select the **Transform data** tab in the panel editor and add a transformation. For more information, refer to [Transform data](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/).`,
 
   'use-example-json': `To use an example, open your dashboard and go to **Dashboard settings** > **JSON Model**. Paste the excerpt into the \`panels\` array and click **Save changes**.`,
+
+  'enable-app': `To enable {{pluginName}}:
+
+1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.
+1. Enter \`{{pluginName}}\` in the search bar.
+1. Select **{{pluginName}}**.
+1. Click **Enable**.`,
+
+  'open-app-config': `To open the {{pluginName}} configuration page:
+
+1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.
+1. Enter \`{{pluginName}}\` in the search bar.
+1. Select **{{pluginName}}**.`,
+
+  'import-app-dashboard': `To import a dashboard that ships with {{pluginName}}:
+
+1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.
+1. Enter \`{{pluginName}}\` in the search bar.
+1. Select **{{pluginName}}**.
+1. Click the **Dashboards** tab.
+1. Click **Import** next to the dashboard.
+
+Imported dashboards don't update when you upgrade the plugin. When a plugin upgrade ships a newer version of a dashboard, click **Update** next to it. This overwrites any changes you made to it.`,
 } as const satisfies Record<string, string>;
 
 export type SnippetName = keyof typeof SNIPPETS;

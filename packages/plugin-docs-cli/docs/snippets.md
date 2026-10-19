@@ -41,13 +41,16 @@ details, refer to [Validation rules](./validation-rules.md#snippets).
 
 ## Available snippets
 
-| Snippet                        | What it covers                                                      | Where it fits                                                                    |
-| ------------------------------ | ------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `add-data-source`              | The steps to add the data source in Grafana                         | "Add the data source" in a data source's `configure.md`                          |
-| `import-dashboard`             | The steps to import a bundled dashboard, and how upgrades affect it | "Import a dashboard" in a data source's `dashboards.md`                          |
-| `server-debug-logs`            | How to turn on debug logs for the plugin in self-managed Grafana    | "Get more detail about an error" in a backend data source's `troubleshooting.md` |
-| `reshape-with-transformations` | How to reshape query data with transformations                      | "Reshape data that doesn't match" in a panel's `data-formats.md`                 |
-| `use-example-json`             | How to paste a panel example into a dashboard's JSON model          | The top of a panel's `examples.md`                                               |
+| Snippet                        | What it covers                                                                  | Where it fits                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `add-data-source`              | The steps to add the data source in Grafana                                     | "Add the data source" in a data source's `configure.md`                          |
+| `import-dashboard`             | The steps to import a bundled dashboard, and how upgrades affect it             | "Import a dashboard" in a data source's `dashboards.md`                          |
+| `server-debug-logs`            | How to turn on debug logs for the plugin in self-managed Grafana                | "Get more detail about an error" in a backend data source's `troubleshooting.md` |
+| `reshape-with-transformations` | How to reshape query data with transformations                                  | "Reshape data that doesn't match" in a panel's `data-formats.md`                 |
+| `use-example-json`             | How to paste a panel example into a dashboard's JSON model                      | The top of a panel's `examples.md`                                               |
+| `enable-app`                   | The steps to enable the app in Grafana                                          | "Enable the app" in an app's `get-started.md`                                    |
+| `open-app-config`              | The first steps to open the app's configuration page                            | "Open the configuration page" in an app's `configure.md`                         |
+| `import-app-dashboard`         | The steps to import a dashboard bundled with an app, and how upgrades affect it | "Import a dashboard" in an app's `dashboards.md`                                 |
 
 ## Current text
 
@@ -107,4 +110,39 @@ If a query returns data in a different shape, you can reshape it without changin
 
 ```markdown
 To use an example, open your dashboard and go to **Dashboard settings** > **JSON Model**. Paste the excerpt into the `panels` array and click **Save changes**.
+```
+
+### `enable-app`
+
+```markdown
+To enable {{pluginName}}:
+
+1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.
+1. Enter `{{pluginName}}` in the search bar.
+1. Select **{{pluginName}}**.
+1. Click **Enable**.
+```
+
+### `open-app-config`
+
+```markdown
+To open the {{pluginName}} configuration page:
+
+1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.
+1. Enter `{{pluginName}}` in the search bar.
+1. Select **{{pluginName}}**.
+```
+
+### `import-app-dashboard`
+
+```markdown
+To import a dashboard that ships with {{pluginName}}:
+
+1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.
+1. Enter `{{pluginName}}` in the search bar.
+1. Select **{{pluginName}}**.
+1. Click the **Dashboards** tab.
+1. Click **Import** next to the dashboard.
+
+Imported dashboards don't update when you upgrade the plugin. When a plugin upgrade ships a newer version of a dashboard, click **Update** next to it. This overwrites any changes you made to it.
 ```
