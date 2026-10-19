@@ -10,7 +10,7 @@ Throughout, `{docsPath}` means the `docsPath` value in `src/plugin.json` (`catal
 
 This works on greenfield plugins (no existing docs - drive content from source) and on brownfield plugins (a README full of documentation - move it onto pages, then trim the README back to what the Overview tab needs). Both paths are first-class.
 
-Throughout, "the README" means `src/README.md` when that file exists, and the root `README.md` otherwise. The plugin build ships `src/README.md` when there is one, so it takes precedence: it is the source of the catalog's Overview tab, and the root `README.md` is then only for the repository. Always read and edit `src/README.md` when it exists, and leave the root `README.md` alone.
+Throughout, "the README" means `src/README.md` when that file exists, and the root `README.md` otherwise. The plugin build ships `src/README.md` when there is one, so it takes precedence: it is the source of the catalog's Overview tab, and the root `README.md` is then only for the repository. Always read and edit `src/README.md` when it exists, and leave the root `README.md` alone, apart from what step 7 says. When only the root `README.md` exists, step 7 has you create `src/README.md` for the Overview.
 
 `index.md` never appears on the Overview tab - it is the Documentation tab's landing page, written for a reader who has already installed the plugin and clicked through from Overview.
 
@@ -43,6 +43,7 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
 
 3. **Plan the README migration.** First decide whether there is anything to migrate. Skip the README part of this step when the README says nothing specific to this plugin. The `create-plugin` scaffold ships a `src/README.md` that is only a title and commented-out guidance, and a generic root `README.md` titled after the plugin type, such as "Grafana panel plugin template", that explains what plugins of that type are in general, plus getting-started and contributing boilerplate. Generic boilerplate is not documentation: do not move it onto pages. The test is whether a sentence would still be true of a different plugin; if so, leave it. Otherwise the README is this plugin's existing documentation and the job is to _move_ it into the docs pages, not to copy it and leave a duplicate behind:
    - For each README section, decide which scaffolded stub page in `{docsPath}` it belongs on. In an app, setup, prerequisites and telemetry sections belong on `get-started.md` and settings on `configure.md`.
+   - Installation instructions, such as `grafana-cli plugins install`, a download or Docker setup, belong to the Installation tab on the plugin page, so they never go on a page. Leave them out of the pages and list the removed README section in the summary.
    - Never drop content. When a section maps to no existing stub, put it on the closest page or on a new page. If it fits nowhere, leave it in the README and list it in the summary.
    - Quote verbatim when the README's existing text already matches the authoring guide's style; rewrite when it does not.
    - Mark what stays behind. Only the pitch survives in the README: what the plugin does, the problem it solves and the feature list. Everything instructional - option tables, data-shape rules, query examples, troubleshooting, configuration walkthroughs - moves to a page.
@@ -72,15 +73,19 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
    - Source contradicts itself. For example, a `description:` string lists option values that don't appear in the matching `options:` array or describes a constraint nothing enforces, or a `defaultValue` matches none of the values its option offers, which is likely a bug. Keep the source text verbatim. Don't paraphrase the discrepancy away or invent corrected wording.
    - The README or linked docs contradict source. For example, they describe an option, a value or a behaviour that the code doesn't have, or that works differently. Document what source does. Check every claim you carry over from the README or linked docs against source before you write it.
 
-7. **Rewrite the README down to its job.** This is `src/README.md` when it exists, and never the root `README.md` in that case. Only once every page from step 6 is written, so no content is lost in transit. Skip this step only when the README is the scaffold default. The README is the Overview tab, seen mostly by people who have not installed the plugin yet and are deciding whether to. It should end up as:
+7. **Rewrite the README down to its job.** Only once every page from step 6 is written, so no content is lost in transit. Skip this step only when the README is the scaffold default. The README is the Overview tab, seen mostly by people who have not installed the plugin yet and are deciding whether to. It should end up as:
    - One or two paragraphs saying what the plugin does and which problem it solves. Lead with the problem, not the implementation.
    - A short list of features as bullet points - concrete capabilities, one per bullet.
    - A screenshot near the top if the repo has a usable one.
-   - Whatever non-documentation sections the project already had and still needs: badges, licence, contributing, support links.
+   - Badges and a licence line when the project already had them.
 
-   Delete the instructional sections you moved to pages, and only those. A section that fit on no page stays. Do not leave a condensed copy - two versions of the same guidance drift apart, and the reader is better served by a link. Where the README previously explained something at length, a single sentence pointing into the docs is enough.
+   Nothing else belongs on the Overview tab. Delete the instructional sections you moved to pages, and the installation and requirements sections. Delete contributor-facing sections too, such as Development, Building, Testing, Contributing, Feedback and Release process, because the Overview reader can't use them. Keep a section only when it fits no page and isn't contributor-facing, and list it in the summary. Do not leave a condensed copy of what moved - two versions of the same guidance drift apart, and the reader is better served by a link. Where the README previously explained something at length, a single sentence pointing into the docs is enough.
 
-   Never delete the README, and never invent a pitch. If the README has no clear statement of purpose and step 2 could not derive one from source, ask the author rather than writing marketing copy for them. Preserve any existing badges, licence text and links verbatim, apart from the links to the old docs that step 8 handles.
+   Where the contributor-facing sections go depends on which file the Overview is:
+   - When `src/README.md` exists, it is the Overview and the root `README.md` is the repository's. Move its contributor-facing sections to the root `README.md`, unless that already has them. Touch nothing else in the root `README.md`.
+   - When only the root `README.md` exists, it is both. Create `src/README.md` with the Overview content above, which the plugin build then ships as the Overview. In the root `README.md`, delete only the instructional sections you moved to pages and leave the rest, such as Development and Contributing, because the repository still needs them.
+
+   Never delete a README, and never invent a pitch. If the README has no clear statement of purpose and step 2 could not derive one from source, ask the author rather than writing marketing copy for them. Preserve any existing badges, licence text and links verbatim, apart from the links to the old docs that step 8 handles.
 
 8. **Repoint links to the old docs.** The Documentation tab replaces the docs that the README and `info.links` in `src/plugin.json` used to point at, whatever the link is called: a "Docs" entry, a docs site or a "full documentation is on the website" line. When the pages now cover what a link points at, remove its `info.links` entry, and change a README pointer to the Documentation tab (`grafana.com/grafana/plugins/{id}/docs/`, where `{id}` is the `id` in `src/plugin.json`) or drop it. When the pages only partly cover it, do this only if the author said in step 5 that these docs replace it. Otherwise keep the link. Leave every other link and the rest of `src/plugin.json` as they are.
 
@@ -118,7 +123,7 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
 
 ## Out of scope
 
-- Change only files inside `{docsPath}`. There are two exceptions: the README in step 7 (`src/README.md` when it exists), and the `info.links` entries in `src/plugin.json` in step 8. Everything else stays as it is, including `.config/`, source code, dependencies, scripts and workflows.
+- Change only files inside `{docsPath}`. There are three exceptions: the READMEs in step 7, which includes creating `src/README.md` when only the root `README.md` exists, and the `info.links` entries in `src/plugin.json` in step 8. Everything else stays as it is, including `.config/`, source code, dependencies, scripts and workflows.
 - Never change source code to fit the docs. When the two disagree, document what the source does and flag the difference in the summary.
 - Do not reformat files you did not change.
 - Do not leave `TODO` markers in the pages. Anything published in a page is shown to catalog readers, so report gaps in the summary instead.
