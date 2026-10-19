@@ -207,36 +207,17 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     data,
     include: (file) => SCAFFOLD_META_FILES.includes(file) || (!hasPages && !disabledPageFiles.includes(file)),
   });
-  const missingPageStubs: string[] = [];
-  for (const stub of pageStubs.stubs) {
-    const filePath = `${docsPath}/${stub.file}`;
-    if (hasPages) {
-      // the author may have moved the pages between the root and features/ since the first scaffold
-      const isMissing =
-        stub.slug !== undefined &&
-        [stub.slug, `features/${stub.slug}`].every(
-          (name) => !context.doesFileExist(`${docsPath}/${name}.md`) && !context.doesFileExist(`${docsPath}/${name}`)
-        );
-      if (isMissing) {
-        missingPageStubs.push(filePath);
-      }
-    } else if (context.doesFileExist(filePath)) {
-      additionsDebug(`${filePath} already exists, skipping`);
-    } else {
-      context.addFile(filePath, renderTemplate(stub.templatePath, false, { ...data, ...stub.data }));
-    }
-  }
-  // a feature turned on after the first scaffold gets no page, so point the author at it instead
-  const missingFeaturePages = hasPages
-    ? featurePages
-        .filter(
-          ({ page, isEnabled }) =>
-            isEnabled &&
-            !context.doesFileExist(`${docsPath}/${page}.md`) &&
-            !context.doesFileExist(`${docsPath}/${page}`)
-        )
-        .map(({ page }) => `${page}.md`)
-    : [];
+  const report: PageReport = {
+    missingPageStubs: scaffoldPageStubs({ context, docsPath, stubs: pageStubs.stubs, data, hasPages }),
+    // a feature turned on after the first scaffold gets no page, so point the author at it instead
+    missingFeaturePages: hasPages
+      ? featurePages
+          .filter(({ page, isEnabled }) => isEnabled && !pageExists(context, docsPath, [page]))
+          .map(({ page }) => `${page}.md`)
+      : [],
+    // a re-run has no pages to compare against, so it only reports what the first scaffold left out
+    skippedPages: hasPages ? [] : pageStubs.skipped,
+  };
 
   // left alone when it exists, since the author may have customized it
   const workflowPath = '.github/workflows/validate-docs.yml';
@@ -254,23 +235,58 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   appendDocsPointerToInstructions(context, docsPath);
 
   // deferred so it prints after the runner's change list, and only when there is something to report
-  const skippedPages = hasPages ? [] : pageStubs.skipped;
-  if (context.hasChanges() || missingFeaturePages.length > 0 || missingPageStubs.length > 0) {
+  if (context.hasChanges() || report.missingFeaturePages.length > 0 || report.missingPageStubs.length > 0) {
     context.setMessage(
-      buildNextStepsMessage({
-        docsPath,
-        packageManagerName,
-        createPluginCmd,
-        pluginActions,
-        linkedRootFiles,
-        missingFeaturePages,
-        missingPageStubs,
-        skippedPages,
-      })
+      buildNextStepsMessage({ docsPath, packageManagerName, createPluginCmd, pluginActions, linkedRootFiles, report })
     );
   }
 
   return context;
+}
+
+interface PageReport {
+  /** Feature pages that plugin.json declares and the docs folder doesn't have, as `<page>.md`. */
+  missingFeaturePages: string[];
+  /** Pages from `pageStubs` that the docs folder doesn't have, as paths. */
+  missingPageStubs: string[];
+  /** Entries in plugin.json that got no page on the first scaffold, with the reason. */
+  skippedPages: string[];
+}
+
+// a page counts as there as a file or as a folder, so authors can turn a page into a folder
+function pageExists(context: Context, docsPath: string, pageNames: string[]): boolean {
+  return pageNames.some(
+    (name) => context.doesFileExist(`${docsPath}/${name}.md`) || context.doesFileExist(`${docsPath}/${name}`)
+  );
+}
+
+/**
+ * Renders each stub into a docs folder that has no pages yet. When the folder has pages it adds nothing and
+ * returns the stubs it doesn't have, so a page the author deleted stays deleted.
+ */
+function scaffoldPageStubs(opts: {
+  context: Context;
+  docsPath: string;
+  stubs: PageStub[];
+  data: Record<string, unknown>;
+  hasPages: boolean;
+}): string[] {
+  const { context, docsPath, stubs, data, hasPages } = opts;
+  const missing: string[] = [];
+  for (const stub of stubs) {
+    const filePath = `${docsPath}/${stub.file}`;
+    if (hasPages) {
+      // the author may have moved the pages between the root and features/ since the first scaffold
+      if (stub.slug !== undefined && !pageExists(context, docsPath, [stub.slug, `features/${stub.slug}`])) {
+        missing.push(filePath);
+      }
+    } else if (context.doesFileExist(filePath)) {
+      additionsDebug(`${filePath} already exists, skipping`);
+    } else {
+      context.addFile(filePath, renderTemplate(stub.templatePath, false, { ...data, ...stub.data }));
+    }
+  }
+  return missing;
 }
 
 function buildNextStepsMessage(opts: {
@@ -279,12 +295,10 @@ function buildNextStepsMessage(opts: {
   createPluginCmd: string;
   pluginActions: BumpActionRefsResult;
   linkedRootFiles: string[];
-  missingFeaturePages: string[];
-  missingPageStubs: string[];
-  skippedPages: string[];
+  report: PageReport;
 }): ContextMessage {
-  const { docsPath, packageManagerName, createPluginCmd, pluginActions, linkedRootFiles, missingFeaturePages } = opts;
-  const { missingPageStubs, skippedPages } = opts;
+  const { docsPath, packageManagerName, createPluginCmd, pluginActions, linkedRootFiles } = opts;
+  const { missingFeaturePages, missingPageStubs, skippedPages } = opts.report;
   const run = (script: string) => output.formatCode(`${packageManagerName} run ${script}`);
 
   const steps: NextStep[] = [
