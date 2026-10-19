@@ -261,7 +261,7 @@ function buildNextStepsMessage(opts: {
   for (const page of missingFeaturePages) {
     warnings.push({
       title: `src/plugin.json declares the feature ${docsPath}/${page} documents, but the page doesn't exist`,
-      detail: `Add it as described under Optional pages in ${docsPath}/AGENTS.md.`,
+      detail: `If it needs docs, add the page as described under Optional pages in ${docsPath}/AGENTS.md. If you deleted it on purpose, ignore this.`,
     });
   }
   for (const file of linkedRootFiles) {
