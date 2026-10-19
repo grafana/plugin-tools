@@ -29,15 +29,15 @@ Files may have moved since the plugin was scaffolded, so trace them from `src/mo
 renders it. `src/plugin.json` only lists the pages in the app's navigation, so look for tabs and drilldowns
 in those components too.
 
-| Page                 | Source of truth                                                                                                                                   |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `index.md`           | `dependencies` in `src/plugin.json`, the setup sections of the README and `provisioning/`. Update the links when pages are added or removed.                                                         |
-| `configure.md`       | The components passed to `addConfigPage` and the settings type, including `jsonData` and `secureJsonData`. With a backend, also how it reads them |
-| `features/index.md`  | Nothing - it is a curated router for the pages in `features/`, if the folder exists. Update it when pages are added or removed.                   |
-| App pages            | The component the root page routes the page's path to. Screenshots from `info.screenshots` in `src/plugin.json` whose name matches the page       |
-| `dashboards.md`      | `includes` entries of type `dashboard` in `src/plugin.json` and their JSON files                                                                  |
-| `permissions.md`     | `roles`, `iam` and the `role` and `action` of each `includes` entry in `src/plugin.json`                                                          |
-| `troubleshooting.md` | Error and empty-state messages in source, known issues in the README or other docs and reported issues. Never guess failures                      |
+| Page                 | Source of truth                                                                                                                                                                                                               |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `index.md`           | `dependencies` in `src/plugin.json`, the setup sections of the README and `provisioning/`. Update the links when pages are added or removed.                                                                                  |
+| `configure.md`       | The components passed to `addConfigPage` and the settings type, including `jsonData` and `secureJsonData`, or the in-app page named Configuration when the app has no `addConfigPage`. With a backend, also how it reads them |
+| `features/index.md`  | Nothing - it is a curated router for the pages in `features/`, if the folder exists. Update it when pages are added or removed.                                                                                               |
+| App pages            | The component the root page routes the page's path to. Screenshots from `info.screenshots` in `src/plugin.json` whose name matches the page                                                                                   |
+| `dashboards.md`      | `includes` entries of type `dashboard` in `src/plugin.json` and their JSON files                                                                                                                                              |
+| `permissions.md`     | `roles`, `iam` and the `role` and `action` of each `includes` entry in `src/plugin.json`                                                                                                                                      |
+| `troubleshooting.md` | Error and empty-state messages in source, known issues in the README or other docs and reported issues. Never guess failures                                                                                                  |
 
 ## Optional pages
 
@@ -47,6 +47,7 @@ a `sidebar_position` that puts it where it belongs and link it from `index.md`.
 | Trigger                                                                | Page             | Scope                                                                                                                                                                                    |
 | ---------------------------------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `addConfigPage` in `src/module.ts(x)`                                  | `configure.md`   | Opening the config page, every setting and provisioning the app.                                                                                                                         |
+| An app page named Configuration, when there is no `addConfigPage`      | `configure.md`   | What the page is for and how to use it, as for any app page.                                                                                                                             |
 | An `includes` entry of type `page` with a path under `/a/{{pluginId}}` | App page         | What the page is for and how to use it. Copy an existing app page, and link it from `index.md`. With a fourth page, move them all into `features/` and list them in `features/index.md`. |
 | An `includes` entry of type `dashboard`                                | `dashboards.md`  | What each bundled dashboard shows and how to import it.                                                                                                                                  |
 | `roles` or `iam` in `src/plugin.json`                                  | `permissions.md` | What each role grants, default assignments and what the app can access.                                                                                                                  |

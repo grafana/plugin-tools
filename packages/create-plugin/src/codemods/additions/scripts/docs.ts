@@ -105,7 +105,7 @@ export interface DocsSetupOptions {
   /** Pages scaffolded only when `src/plugin.json` declares the feature they document. */
   featurePages?: FeaturePage[];
   /** Pages rendered from one template per entry, such as a page for each app page in `src/plugin.json`. */
-  pageStubs?: (pluginJson: PluginJson) => PageStubs;
+  pageStubs?: (pluginJson: PluginJson, context: Context) => PageStubs;
 }
 
 interface FeaturePage {
@@ -176,7 +176,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     templateFlag,
     isEnabled: hasFeature(pluginJson, context),
   }));
-  const pageStubs = opts.pageStubs?.(pluginJson) ?? { data: {}, stubs: [], skipped: [] };
+  const pageStubs = opts.pageStubs?.(pluginJson, context) ?? { data: {}, stubs: [], skipped: [] };
   const { packageManagerName, packageManagerVersion } = templateData;
   const createPluginCmd = `${getPackageManagerExecCmd(packageManagerName, packageManagerVersion)}@latest`;
   const data = {
@@ -435,6 +435,8 @@ const TEMPLATE_DEFAULT_PAGES: Record<string, string> = {
   'Page Four': '/four',
 };
 
+const CONFIG_PAGE_SLUGS = ['configuration', 'configure'];
+
 interface AppFeaturePage {
   name: string;
   slug: string;
@@ -443,8 +445,12 @@ interface AppFeaturePage {
 }
 
 // pages under /plugins/ are the config page and pages under /d/ link to a bundled dashboard, so neither gets a page
-function getAppFeaturePages(pluginJson: PluginJson): { pages: AppFeaturePage[]; skipped: string[] } {
+function getAppFeaturePages(
+  pluginJson: PluginJson,
+  hasConfigPage: boolean
+): { pages: AppFeaturePage[]; configPage?: AppFeaturePage; skipped: string[] } {
   const pages: AppFeaturePage[] = [];
+  let configPage: AppFeaturePage | undefined;
   const skipped: string[] = [];
   const appPages = getIncludes(pluginJson)
     .filter((i) => i.type === 'page' && typeof i.name === 'string' && isAppPath(i.path, pluginJson.id, '/a/'))
@@ -463,15 +469,22 @@ function getAppFeaturePages(pluginJson: PluginJson): { pages: AppFeaturePage[]; 
     if (!slug) {
       continue;
     }
+    const role = typeof include.role === 'string' ? include.role : undefined;
+    // an in-app page named like the config page takes its place, the way data sources name it
+    if (!hasConfigPage && !configPage && CONFIG_PAGE_SLUGS.includes(slug)) {
+      configPage = { name, slug: 'configure', path, role };
+      takenSlugs.add('configure');
+      continue;
+    }
     if (takenSlugs.has(slug)) {
       additionsDebug(`${name} would be written to ${slug}.md, which another page uses, skipping`);
       skipped.push(`${name} (${include.path}, its file name is used by another page)`);
       continue;
     }
     takenSlugs.add(slug);
-    pages.push({ name, slug, path, role: typeof include.role === 'string' ? include.role : undefined });
+    pages.push({ name, slug, path, role });
   }
-  return { pages, skipped };
+  return { pages, configPage, skipped };
 }
 
 function slugify(name: string): string {
@@ -485,6 +498,7 @@ function slugify(name: string): string {
 const MAX_FLAT_PAGES = 3;
 // the root pages that come before the app pages, which take the positions after it
 const FIRST_PAGE_POSITION = 3;
+const CONFIG_PAGE_POSITION = 2;
 const FIXED_PAGE_SLUGS = ['index', 'configure', 'dashboards', 'permissions', 'troubleshooting'];
 
 // file names an app page can't take, because another page or plugin-docs-cli uses them
@@ -495,15 +509,27 @@ function getReservedPageSlugs(): string[] {
   ];
 }
 
-function getAppFeaturePageStubs(pluginJson: PluginJson): PageStubs {
-  const { pages, skipped } = getAppFeaturePages(pluginJson);
+function getAppFeaturePageStubs(pluginJson: PluginJson, context: Context): PageStubs {
+  const { pages, configPage, skipped } = getAppFeaturePages(pluginJson, hasAppConfigPage(pluginJson, context));
   const templateDir = join(TEMPLATES_DIR, 'docs', 'app');
   const pageTemplate = join(templateDir, 'feature-page.md');
+  const configStubs: PageStub[] = configPage
+    ? [
+        {
+          templatePath: pageTemplate,
+          file: 'configure.md',
+          slug: 'configure',
+          data: { page: { ...configPage, position: CONFIG_PAGE_POSITION } },
+        },
+      ]
+    : [];
+  const configData = configPage ? { hasConfigPage: true } : {};
 
   if (pages.length > MAX_FLAT_PAGES) {
     return {
-      data: { defaultFeaturePage: { ...pages[0], file: `features/${pages[0].slug}` } },
+      data: { ...configData, defaultFeaturePage: { ...pages[0], file: `features/${pages[0].slug}` } },
       stubs: [
+        ...configStubs,
         {
           templatePath: join(templateDir, 'features-index.md'),
           file: 'features/index.md',
@@ -522,13 +548,16 @@ function getAppFeaturePageStubs(pluginJson: PluginJson): PageStubs {
   }
 
   return {
-    data: pages.length > 0 ? { defaultFeaturePage: { ...pages[0], file: pages[0].slug } } : {},
-    stubs: pages.map((page, i) => ({
-      templatePath: pageTemplate,
-      file: `${page.slug}.md`,
-      slug: page.slug,
-      data: { page: { ...page, position: FIRST_PAGE_POSITION + i } },
-    })),
+    data: { ...configData, ...(pages.length > 0 ? { defaultFeaturePage: { ...pages[0], file: pages[0].slug } } : {}) },
+    stubs: [
+      ...configStubs,
+      ...pages.map((page, i) => ({
+        templatePath: pageTemplate,
+        file: `${page.slug}.md`,
+        slug: page.slug,
+        data: { page: { ...page, position: FIRST_PAGE_POSITION + i } },
+      })),
+    ],
     skipped,
   };
 }

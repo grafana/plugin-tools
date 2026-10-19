@@ -1220,12 +1220,44 @@ describe('docs codemod', () => {
       expect(context.getFile('docs/index.md')).toContain('](./features/overview.md)');
     });
 
-    it('leaves out a root app page that would take the file name of another page', () => {
-      const context = scaffold({ ...app, includes: [page('Configure', '/a/%PLUGIN_ID%/configure')] });
-      expect(context.doesFileExist('docs/configure.md')).toBe(false);
-      expect(context.getFile('docs/index.md')).not.toContain('](./configure.md)');
+    it('leaves out an app page that would take the file name of another page', () => {
+      const context = scaffold({ ...app, includes: [page('Permissions', '/a/%PLUGIN_ID%/permissions')] });
+      expect(context.doesFileExist('docs/permissions.md')).toBe(false);
+      expect(context.getFile('docs/index.md')).not.toContain('](./permissions.md)');
       const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n'));
-      expect(body).toContain('Configure (/a/%PLUGIN_ID%/configure, its file name is used by another page)');
+      expect(body).toContain('Permissions (/a/%PLUGIN_ID%/permissions, its file name is used by another page)');
+    });
+
+    it.each(['Configuration', 'Configure'])('uses an app page named %s as the root configure page', (name) => {
+      const includes = ['One', 'Two', 'Three', 'Four'].map((n) => page(n, `/a/%PLUGIN_ID%/${n.toLowerCase()}`));
+      const context = scaffold({
+        ...app,
+        includes: [page(name, '/a/%PLUGIN_ID%/configuration', { role: 'Editor' }), ...includes],
+      });
+      const content = context.getFile('docs/configure.md') ?? '';
+      expect(content).toContain(`title: "${name}"`);
+      expect(content).toContain('/a/acme-test-app/configuration');
+      expect(content).toContain('At least the `Editor` role.');
+      expect(content).toMatch(/\nsidebar_position: 2\n/);
+      expect(content).not.toContain('Administration');
+      expect(docsFiles(context)).not.toContain(`features/${name.toLowerCase()}.md`);
+      expect(docsFiles(context)).toContain('features/one.md');
+      expect(context.getFile('docs/index.md')).toContain('](./configure.md)');
+    });
+
+    it('keeps an app page named Configuration among the app pages when the app has a config page', () => {
+      const context = scaffold(
+        { ...app, includes: [page('Configuration', '/a/%PLUGIN_ID%/configuration')] },
+        { 'src/module.tsx': 'new AppPlugin().addConfigPage({ title: "Config" });' }
+      );
+      expect(context.getFile('docs/configure.md')).toContain('Open the configuration page');
+      expect(context.doesFileExist('docs/configuration.md')).toBe(true);
+    });
+
+    it('says nothing on a re-run when the configure page exists', () => {
+      const pluginJson = { ...app, includes: [page('Configuration', '/a/%PLUGIN_ID%/configuration')] };
+      const { context } = scaffoldThenRerun(pluginJson, {});
+      expect(context.getMessage()).toBeUndefined();
     });
 
     it('adds a role line to a feature page only when the page sets a role', () => {
