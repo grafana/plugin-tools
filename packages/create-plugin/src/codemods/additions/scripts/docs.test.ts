@@ -1420,6 +1420,15 @@ describe('docs codemod', () => {
       }
     });
 
+    it.each(PLUGIN_TYPES)('tells agents never to write installation instructions for a %s', (type) => {
+      const context = makeContext(FULL_PLUGIN_JSON[type]);
+      docs(context, { docsPath: 'docs' });
+      const content = context.getFile('docs/AGENTS.md') ?? '';
+      expect(content).toContain('## What not to write');
+      expect(content).toContain('Never write installation instructions');
+      expect(content).toContain('Installation tab');
+    });
+
     it('scaffolds CLAUDE.md in the docs folder as an import of AGENTS.md', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });

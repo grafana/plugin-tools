@@ -55,6 +55,12 @@ a `sidebar_position` that puts it where it belongs and link it from `index.md`.
 When an app page grows too long, turn it into a folder of the same name with an `index.md` and
 split it into pages there. Keep every page within three folder levels of this one.
 
+## What not to write
+
+Never write installation instructions, such as installing the plugin with `grafana-cli`, from a zip file or
+in Docker. The Installation tab on the plugin page covers them, and these docs start from a plugin that is
+already installed. When the README has an installation section, leave it out of the pages.
+
 ## Section briefs
 
 Each section of a scaffolded page has a brief telling you what belongs there. A brief is an HTML comment

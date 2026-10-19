@@ -42,7 +42,7 @@ After you enable the app, configure it. For each setting, refer to [Configure](.
 ## Send data to {{{pluginName}}}
 
 <!-- section-brief
-Fill this in: The steps to get the data the app shows into Grafana, such as installing an agent, setting environment variables, configuring a telemetry exporter or adding a data source. Take them from the README's setup sections and from what the app queries in source. Give each step the commands or settings to copy, and say how the reader can tell the data has arrived. Change the heading if necessary to name the task, such as "Connect your cluster".
+Fill this in: The steps to get the data the app shows into Grafana, such as setting up an agent, setting environment variables, configuring a telemetry exporter or adding a data source. Never include steps to install the plugin itself, because the Installation tab on the plugin page owns them. Take them from the README's setup sections and from what the app queries in source. Give each step the commands or settings to copy, and say how the reader can tell the data has arrived. Change the heading if necessary to name the task, such as "Connect your cluster".
 
 If the app works without any setup of its own, remove this section entirely.
 -->
