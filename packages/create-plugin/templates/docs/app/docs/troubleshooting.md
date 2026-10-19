@@ -11,7 +11,7 @@ sidebar_position: 8
 This page explains how to fix common issues when you set up or use {{{pluginName}}}. For setup instructions, refer to the [Introduction](./index.md).
 
 <!-- section-brief
-Fill this in: Never guess failures. Each symptom must come from an error or empty-state message in source, a known issue in the README or other docs or a reported issue.
+Fill this in: Never guess failures. Each symptom must come from an error or empty-state message in source, a known issue in the README or other docs or a reported issue. When source holds only a few real failures, a short page is right, so don't pad it.
 
 Replace this brief with one H2 per category that has real failures, in this order:
 
