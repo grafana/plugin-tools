@@ -47,7 +47,7 @@
   "dependencies": {
     "@types/hast": "3.0.5",
     "hast-util-raw": "9.1.0",
-    "js-yaml": "5.4.3",
+    "js-yaml": "5.5.0",
     "rehype-highlight": "7.0.2",
     "rehype-sanitize": "6.0.0",
     "remark-gfm": "4.0.1",
