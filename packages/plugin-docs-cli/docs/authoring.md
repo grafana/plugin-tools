@@ -91,6 +91,12 @@ Pages scaffolded by an earlier version use `<!-- section-brief:start -->` and `<
 markers instead, with visible text between them. Validation warns about these too, but their text is shown
 in the catalog, so delete the whole block, markers included.
 
+## Snippets
+
+Some scaffolded text sits between `<!-- snippet:<name> -->` and `<!-- /snippet:<name> -->` markers.
+Grafana keeps that text up to date, so don't edit inside it. Delete the whole snippet if it doesn't apply,
+and write plugin-specific text outside it. For details, refer to [Snippets](./snippets.md).
+
 ## Style
 
 These pages follow the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/).
