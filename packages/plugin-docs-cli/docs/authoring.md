@@ -116,6 +116,9 @@ Validation can't catch these, so they are on you:
 - Don't invent query fields, options or behavior. On a page backed by source code, document only what
   you can see in the source.
 - Don't generate images. Flag missing images for the author to add.
+- Don't write installation instructions, such as `grafana-cli plugins install`, a download or a Docker
+  setup. The Installation tab on the plugin page owns them, and your docs start from a plugin that is
+  already installed. This applies to every plugin type.
 - Don't mention one-click installation. It has been removed from the plugin catalog.
 - Don't link to internal-only URLs, anything on `*.grafana-ops.net` or a staging environment.
 
