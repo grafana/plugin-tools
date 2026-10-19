@@ -277,7 +277,10 @@ function scaffoldPageStubs(opts: {
     const filePath = `${docsPath}/${stub.file}`;
     if (hasPages) {
       // the author may have moved the pages between the root and features/ since the first scaffold
-      if (stub.slug !== undefined && !pageExists(context, docsPath, [stub.slug, `features/${stub.slug}`])) {
+      if (
+        (stub.slug !== undefined && !pageExists(context, docsPath, [stub.slug, `features/${stub.slug}`])) ||
+        (stub.slug === undefined && !context.doesFileExist(filePath))
+      ) {
         missing.push(filePath);
       }
     } else if (context.doesFileExist(filePath)) {
