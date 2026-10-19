@@ -697,7 +697,7 @@ describe('docs codemod', () => {
       expect(context.getFile('docs/data-formats.md') ?? '').toContain('## Supported data shape');
       expect(context.getFile('docs/options.md') ?? '').toContain('## Panel options');
       expect(context.getFile('docs/examples.md') ?? '').toContain('## Basic example');
-      expect(context.getFile('docs/troubleshooting.md') ?? '').toContain('## Common issues');
+      expect(context.getFile('docs/troubleshooting.md') ?? '').toContain('## Get more detail about an error');
     });
 
     it('scaffolds section briefs as HTML comments that start with section-brief', () => {
@@ -721,7 +721,34 @@ describe('docs codemod', () => {
 
     // text the scaffold keeps on purpose, which agents leave in place
     const FIXED_TEXT: Record<string, Record<string, string[]>> = {
-      panel: {},
+      panel: {
+        index: [
+          "- [Shape your query results for My Plugin](./data-formats.md)\n- [Configure panel and field options](./options.md)\n- [See worked dashboard.json examples](./examples.md)\n- [Fix a panel that isn't rendering correctly](./troubleshooting.md)",
+        ],
+        options: [
+          'To change these options, edit the panel and use the options pane.',
+          'For what each standard option does, refer to [Configure standard options](https://grafana.com/docs/grafana/latest/panels-visualizations/configure-standard-options/).',
+        ],
+        'data-formats': [
+          'This document explains the data the My Plugin panel needs from a query, so you can build a matching query or check your test data.',
+          'To see the data the panel receives, open the panel editor, click **Query inspector** and select the **Data** tab. You can also turn on **Table view** at the top of the panel editor to see the data as a table.',
+          'If a query returns data in a different shape, you can reshape it without changing the query. Select the **Transform data** tab in the panel editor and add a transformation. For more information, refer to [Transform data](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/).',
+        ],
+        examples: [
+          'To use an example, open your dashboard and go to **Dashboard settings** > **JSON Model**. Paste the excerpt into the `panels` array and click **Save changes**.',
+          'A panel excerpt in dashboard JSON has this shape:',
+          '```json\n{\n  "type": "acme-test-panel",\n  "options": {},\n  "targets": []\n}\n```',
+        ],
+        troubleshooting: [
+          'This page explains how to fix common issues when you use the My Plugin panel. For the data the panel expects, refer to [Data formats](./data-formats.md).',
+          'To see the data the panel receives, open the panel editor, click **Query inspector** and select the **Data** tab.',
+          'For errors in the panel itself, open the developer tools in your browser and check the console.',
+          "If this page doesn't solve your problem:",
+          '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
+          'When you report an issue, include:',
+          '- The Grafana and plugin versions.\n- The error message, with sensitive information removed.\n- The steps to reproduce the issue.\n- The panel options and a sample of the data it shows, with sensitive information removed.',
+        ],
+      },
       datasource: {
         configure: [
           'This document explains how to add and configure the My Plugin data source in Grafana. After you configure the data source, refer to the [My Plugin query editor](./query-editor.md) to start querying your data.',

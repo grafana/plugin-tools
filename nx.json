@@ -3,7 +3,7 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["default", "{workspaceRoot}/rollup.config.ts"],
+      "inputs": ["default", "nodeVersion", "{workspaceRoot}/rollup.config.ts"],
       "outputs": ["{projectRoot}/dist"],
       "cache": true
     },
@@ -17,12 +17,13 @@
       "cache": true
     },
     "test": {
-      "inputs": ["default", "{projectRoot}/vitest.config.ts", "{workspaceRoot}/vitest.config.base.ts"],
+      "inputs": ["default", "nodeVersion", "{projectRoot}/vitest.config.ts", "{workspaceRoot}/vitest.config.base.ts"],
       "cache": true
     }
   },
   "namedInputs": {
-    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
+    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"],
+    "nodeVersion": [{ "runtime": "node -p \"process.versions.node.split('.').slice(0, 2).join('.')\"" }]
   },
   "defaultBase": "main",
   "nxCloudAccessToken": "ZDU3OTNkMTItNWIwZi00N2U4LTk2MjYtNzJkYzA0YzgwNWNlfHJlYWQ=",

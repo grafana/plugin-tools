@@ -26,6 +26,18 @@ describe('findSourceMapFiles', () => {
     expect(files).toHaveLength(2);
   });
 
+  it('ignores source map files inside node_modules', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'react-detect-test-'));
+    mkdirSync(join(dir, 'node_modules', 'pkg'), { recursive: true });
+    writeFileSync(join(dir, 'a.js.map'), '{}');
+    writeFileSync(join(dir, 'node_modules', 'pkg', 'b.js.map'), '{}');
+
+    const files = await findSourceMapFiles(dir);
+
+    expect(files).toHaveLength(1);
+    expect(files[0]).toContain('a.js.map');
+  });
+
   it('returns empty array when no source map files exist', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'react-detect-test-'));
 
