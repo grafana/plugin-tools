@@ -20,7 +20,7 @@ This guide shows you how to set up plugin docs, preview and validate them and pu
 
 :::important
 
-Plugin docs are an experimental feature. Breaking changes might happen without notice, such as renamed commands, changed validation rules or a different file structure. Panel and data source plugins are the only supported plugin types for the moment.
+Plugin docs are an experimental feature. Breaking changes might happen without notice, such as renamed commands, changed validation rules or a different file structure.
 
 :::
 
@@ -37,12 +37,6 @@ Plugin docs are an experimental feature. Breaking changes might happen without n
 
 - A plugin scaffolded with [`create-plugin`](../get-started.md).
 - [Node.js](https://nodejs.org/) installed.
-
-:::note
-
-The `add docs` codemod supports panel, data source and app plugins.
-
-:::
 
 ## Get started
 
@@ -101,6 +95,28 @@ The codemod adds these files, depending on your plugin type:
 │   ├── annotations.md        # only when plugin.json has "annotations": true
 │   ├── alerting.md           # only when plugin.json has "alerting": true
 │   ├── dashboards.md         # only when plugin.json includes a dashboard
+│   ├── troubleshooting.md
+│   ├── README.md             # notes for you, not published
+│   ├── AGENTS.md             # instructions for coding agents, not published
+│   └── CLAUDE.md             # points Claude Code at AGENTS.md
+├── .github/workflows/
+│   └── validate-docs.yml     # validates docs on pull requests
+├── .config/AGENTS/
+│   └── instructions.md       # gets a Plugin docs section pointing at catalog-docs/AGENTS.md
+└── package.json              # adds @grafana/plugin-docs-cli and the docs:* scripts
+```
+
+</TabItem>
+<TabItem value="app" label="App">
+
+```text
+.
+├── catalog-docs/
+│   ├── index.md              # landing page of the Documentation tab, with setup
+│   ├── configure.md          # only when the app has a config page
+│   ├── <page>.md             # one for each page of your app, or in features/ for more than three
+│   ├── dashboards.md         # only when plugin.json includes a dashboard
+│   ├── permissions.md        # only when plugin.json has roles, iam or page roles
 │   ├── troubleshooting.md
 │   ├── README.md             # notes for you, not published
 │   ├── AGENTS.md             # instructions for coding agents, not published
