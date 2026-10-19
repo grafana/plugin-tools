@@ -1421,6 +1421,34 @@ describe('docs codemod', () => {
       expect(context.doesFileExist('docs/configure.md')).toBe(false);
     });
 
+    // plugin-docs-cli only compares pages in the same folder, but the sidebar also sorts a folder by its index.md
+    it.each([3, 4, 8])(
+      'keeps sidebar positions unique in every folder with %i app pages and every gated page',
+      (count) => {
+        const includes = [
+          ...(FULL_PLUGIN_JSON.app.includes as Array<Record<string, unknown>>).filter((i) => i.type !== 'page'),
+          ...Array.from({ length: count }, (_, i) => page(`Page ${i + 1}x`, `/a/%PLUGIN_ID%/p${i + 1}`)),
+        ];
+        const context = scaffold({ ...FULL_PLUGIN_JSON.app, includes });
+        const positionOf = (file: string) =>
+          Number(/\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1]);
+        const pages = docsFiles(context).filter((file) => !['AGENTS.md', 'CLAUDE.md', 'README.md'].includes(file));
+
+        const byFolder = Object.groupBy(pages, (file) => file.split('/').slice(0, -1).join('/'));
+        for (const [folder, files] of Object.entries(byFolder)) {
+          const positions = (files ?? []).map(positionOf);
+          expect(positions.every(Number.isInteger), folder).toBe(true);
+          expect(new Set(positions).size, `duplicate positions in "${folder}"`).toBe(positions.length);
+        }
+
+        // in the sidebar a folder sits among the root pages at the position of its index.md
+        const rootPositions = pages
+          .filter((file) => !file.includes('/') || file === 'features/index.md')
+          .map(positionOf);
+        expect(new Set(rootPositions).size, 'a folder shares a root position').toBe(rootPositions.length);
+      }
+    );
+
     it('keeps every root position unique with three app pages and every gated page', () => {
       const includes = [
         ...(FULL_PLUGIN_JSON.app.includes as Array<Record<string, unknown>>),
