@@ -118,7 +118,8 @@ jobs:
           path: ./packed-artifacts
 
       - name: Install npm packages globally
-        run: for file in *.tgz; do npm install -g "$file"; done
+        # One install, so plugin-docs-cli uses the packed plugin-docs-parser instead of the registry copy.
+        run: npm install -g ./*.tgz
         working-directory: ./packed-artifacts
 
       - name: Generate plugin
