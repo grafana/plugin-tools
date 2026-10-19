@@ -5,10 +5,10 @@ keywords:
   - "{{{yamlEscape pluginName}}}"
   - app
   - troubleshooting
-sidebar_position: 9
+sidebar_position: 8
 ---
 
-This page explains how to fix common issues when you set up or use {{{pluginName}}}. For setup instructions, refer to [Get started](./get-started.md).
+This page explains how to fix common issues when you set up or use {{{pluginName}}}. For setup instructions, refer to the [Introduction](./index.md).
 
 <!-- section-brief
 Fill this in: Never guess failures. Each symptom must come from an error or empty-state message in source, a known issue in the README or other docs or a reported issue.
@@ -16,7 +16,7 @@ Fill this in: Never guess failures. Each symptom must come from an error or empt
 Replace this brief with one H2 per category that has real failures, in this order:
 
 - `## Setup errors`: the app won't enable, or its settings don't save or don't connect.
-- `## Missing data`: pages that load but show no data, linking to the setup steps in [Get started](./get-started.md).
+- `## Missing data`: pages that load but show no data, linking to the setup steps in the [Introduction](./index.md).
 {{#if hasPermissions}}
 - `## Permission errors`: users who can't see a page or an action, linking to [Permissions](./permissions.md).
 {{/if}}

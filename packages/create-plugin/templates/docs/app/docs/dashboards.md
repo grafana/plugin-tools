@@ -5,7 +5,7 @@ keywords:
   - "{{{yamlEscape pluginName}}}"
   - app
   - dashboards
-sidebar_position: 7
+sidebar_position: 6
 ---
 
 {{{pluginName}}} ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).

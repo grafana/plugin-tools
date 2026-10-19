@@ -73,7 +73,7 @@ const PAGES_BY_TYPE: Record<string, string[]> = {
     'dashboards',
     'troubleshooting',
   ],
-  app: ['index', 'get-started', 'configure', 'overview', 'dashboards', 'permissions', 'troubleshooting'],
+  app: ['index', 'configure', 'overview', 'dashboards', 'permissions', 'troubleshooting'],
 };
 const PLUGIN_TYPES = Object.keys(PAGES_BY_TYPE);
 
@@ -833,18 +833,17 @@ describe('docs codemod', () => {
         ],
       },
       app: {
-        'get-started': [
-          "This document explains how to set up My Plugin so it's ready to use.",
+        index: [
           'Before you set up the app, ensure you have:',
           '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can enable and configure apps.',
           'To enable My Plugin:',
           '1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click **Enable**.',
-          'After you enable the app, configure it. For each setting, refer to [Configure](./configure.md).',
+          'After you enable the app, refer to [Configure](./configure.md) for its settings.',
         ],
         configure: [
           'This document explains how to configure My Plugin after you enable it.',
           'Before you configure the app, ensure you have:',
-          '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can configure apps.\n- **The app enabled:** Follow [Get started](./get-started.md).',
+          '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can configure apps.\n- **The app enabled:** Follow [Enable the app](./index.md#enable-the-app).',
           'To open the My Plugin configuration page:',
           '1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.',
           'You can provision My Plugin as code with a Grafana provisioning file. For more information, refer to [Provision Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins).',
@@ -861,7 +860,7 @@ describe('docs codemod', () => {
           'To assign a role to a user, team or service account, refer to [Assign RBAC roles](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/assign-rbac-roles/).',
         ],
         troubleshooting: [
-          'This page explains how to fix common issues when you set up or use My Plugin. For setup instructions, refer to [Get started](./get-started.md).',
+          'This page explains how to fix common issues when you set up or use My Plugin. For setup instructions, refer to the [Introduction](./index.md).',
           'For errors in the app, open the developer tools in your browser and check the console.',
           'In self-managed Grafana, you can also find more detail in the Grafana server logs:',
           "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-app`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
@@ -1127,14 +1126,7 @@ describe('docs codemod', () => {
 
     it('scaffolds the pages every app needs, and no gated pages when the app declares nothing', () => {
       const context = scaffold(app);
-      expect(docsFiles(context)).toEqual([
-        'AGENTS.md',
-        'CLAUDE.md',
-        'README.md',
-        'get-started.md',
-        'index.md',
-        'troubleshooting.md',
-      ]);
+      expect(docsFiles(context)).toEqual(['AGENTS.md', 'CLAUDE.md', 'README.md', 'index.md', 'troubleshooting.md']);
     });
 
     it.each([
@@ -1175,7 +1167,6 @@ describe('docs codemod', () => {
         'CLAUDE.md',
         'README.md',
         'configure.md',
-        'get-started.md',
         'home.md',
         'index.md',
         'traces.md',
@@ -1196,13 +1187,12 @@ describe('docs codemod', () => {
       });
       const position = (file: string) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1];
       expect(docsFiles(context).some((file) => file.startsWith('features/'))).toBe(false);
-      expect(position('overview.md')).toBe('4');
-      expect(position('time-travel.md')).toBe('5');
-      expect(position('queries.md')).toBe('6');
+      expect(position('overview.md')).toBe('3');
+      expect(position('time-travel.md')).toBe('4');
+      expect(position('queries.md')).toBe('5');
       expect(context.getFile('docs/time-travel.md')).toContain('title: "Time Travel"');
       expect(context.getFile('docs/time-travel.md')).toContain('`/a/acme-test-app/timetravel`');
       expect(context.getFile('docs/index.md')).toContain('](./overview.md)');
-      expect(context.getFile('docs/get-started.md')).toContain('[Overview](./overview.md)');
     });
 
     it('moves the app pages into a features folder from the fourth page', () => {
@@ -1224,11 +1214,10 @@ describe('docs codemod', () => {
         'features/time-travel.md',
       ]);
       expect(docsFiles(context)).not.toContain('overview.md');
-      expect(position('features/index.md')).toBe('4');
-      expect(position('features/overview.md')).toBe('5');
-      expect(position('features/merges.md')).toBe('8');
+      expect(position('features/index.md')).toBe('3');
+      expect(position('features/overview.md')).toBe('4');
+      expect(position('features/merges.md')).toBe('7');
       expect(context.getFile('docs/index.md')).toContain('](./features/overview.md)');
-      expect(context.getFile('docs/get-started.md')).toContain('[Overview](./features/overview.md)');
     });
 
     it('leaves out a root app page that would take the file name of another page', () => {
@@ -1277,7 +1266,7 @@ describe('docs codemod', () => {
 
     it('lists every app page in the docs AGENTS.md', () => {
       const content = scaffold(app).getFile('docs/AGENTS.md') ?? '';
-      for (const file of ['index', 'get-started', 'configure', 'features/index', 'dashboards', 'permissions']) {
+      for (const file of ['index', 'configure', 'features/index', 'dashboards', 'permissions']) {
         expect(content).toContain(`| \`${file}.md\``);
       }
       expect(content).toContain('| App pages');
@@ -1337,14 +1326,7 @@ describe('docs codemod', () => {
 
     it('ignores a page whose name is not a string', () => {
       const context = scaffold({ ...app, includes: [{ type: 'page', name: 123, path: '/a/%PLUGIN_ID%/x' }] });
-      expect(docsFiles(context)).toEqual([
-        'AGENTS.md',
-        'CLAUDE.md',
-        'README.md',
-        'get-started.md',
-        'index.md',
-        'troubleshooting.md',
-      ]);
+      expect(docsFiles(context)).toEqual(['AGENTS.md', 'CLAUDE.md', 'README.md', 'index.md', 'troubleshooting.md']);
     });
 
     it('does not count a commented-out addConfigPage as a config page', () => {
@@ -1362,7 +1344,7 @@ describe('docs codemod', () => {
       const positions = docsFiles(context)
         .filter((file) => !file.includes('/') && !['AGENTS.md', 'CLAUDE.md', 'README.md'].includes(file))
         .map((file) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1]);
-      expect(positions).toHaveLength(9);
+      expect(positions).toHaveLength(8);
       expect(positions.every(Boolean)).toBe(true);
       expect(new Set(positions).size).toBe(positions.length);
     });

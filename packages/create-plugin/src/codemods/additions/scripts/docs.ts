@@ -484,8 +484,8 @@ function slugify(name: string): string {
 // more app pages than this go in a features/ folder, so a small app has no folder with one page in it
 const MAX_FLAT_PAGES = 3;
 // the root pages that come before the app pages, which take the positions after it
-const FIRST_PAGE_POSITION = 4;
-const FIXED_PAGE_SLUGS = ['index', 'get-started', 'configure', 'dashboards', 'permissions', 'troubleshooting'];
+const FIRST_PAGE_POSITION = 3;
+const FIXED_PAGE_SLUGS = ['index', 'configure', 'dashboards', 'permissions', 'troubleshooting'];
 
 // file names an app page can't take, because another page or plugin-docs-cli uses them
 function getReservedPageSlugs(): string[] {

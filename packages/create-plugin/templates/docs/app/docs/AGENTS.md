@@ -31,8 +31,7 @@ in those components too.
 
 | Page                 | Source of truth                                                                                                                                   |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `index.md`           | Nothing - it is a curated router. Update it when pages are added or removed.                                                                      |
-| `get-started.md`     | `dependencies` in `src/plugin.json`, the setup sections of the README and `provisioning/`                                                         |
+| `index.md`           | `dependencies` in `src/plugin.json`, the setup sections of the README and `provisioning/`. Update the links when pages are added or removed.                                                         |
 | `configure.md`       | The components passed to `addConfigPage` and the settings type, including `jsonData` and `secureJsonData`. With a backend, also how it reads them |
 | `features/index.md`  | Nothing - it is a curated router for the pages in `features/`, if the folder exists. Update it when pages are added or removed.                   |
 | App pages            | The component the root page routes the page's path to. Screenshots from `info.screenshots` in `src/plugin.json` whose name matches the page       |
@@ -67,10 +66,10 @@ Each section of a scaffolded page has a brief telling you what belongs there. A 
 that starts with `section-brief`. Search the docs folder for `section-brief` to find what is left to write:
 
 ```markdown
-## Send data to {{{pluginName}}}
+## Connect your data
 
 <!-- section-brief
-Fill this in: The steps to send the app the data it shows.
+Fill this in: The steps to get the data the app shows into Grafana.
 
 If the app needs no data of its own, remove this section entirely.
 -->

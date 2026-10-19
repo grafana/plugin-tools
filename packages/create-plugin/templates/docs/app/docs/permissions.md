@@ -6,7 +6,7 @@ keywords:
   - app
   - permissions
   - RBAC
-sidebar_position: 8
+sidebar_position: 7
 ---
 
 This document explains who can use each part of {{{pluginName}}} and what the app can access. For general information, refer to [Role-based access control for app plugins](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/rbac-for-app-plugins/).

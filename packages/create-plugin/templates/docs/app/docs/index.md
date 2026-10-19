@@ -1,20 +1,50 @@
 ---
 title: Introduction
-description: "Where to start and what to read next in the {{{yamlEscape pluginName}}} docs."
+description: "Set up {{{yamlEscape pluginName}}} and find what to read next in the docs."
 keywords:
   - "{{{yamlEscape pluginName}}}"
   - app
+  - setup
 sidebar_position: 1
 ---
 
 <!-- section-brief
-Fill this in: Write a short orientation for someone who already has {{{pluginName}}} installed and landed here from the Documentation tab. One or two sentences on what this section covers and how it's organized. Do not restate what the app does, its feature list or its requirements - that's the README's job on the Overview tab, and this reader has already seen it there. Do not list every page in this folder either - the sidebar already does that; use prose to say what to read first and why.
+Fill this in: Write a short orientation for someone who already has {{{pluginName}}} installed and landed here from the Documentation tab. One or two sentences on what this section covers and how it's organized. Do not restate what the app does or its feature list - that's the README's job on the Overview tab, and this reader has already seen it there. Do not list every page in this folder either - the sidebar already does that; use prose to say what to read first and why.
 -->
 
-## Recommended path
+## Before you begin
+
+Before you set up the app, ensure you have:
+
+- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can enable and configure apps.
 
 <!-- section-brief
-Fill this in: Give a short, ordered reading path for someone new to {{{pluginName}}} - two or three sentences, not a repeat of the sidebar. Most readers need to set up the app before anything else, e.g. "Start with **Get started** to enable {{{pluginName}}} and send it data, then read **{{#if defaultFeaturePage}}{{{defaultFeaturePage.name}}}{{else}}Features{{/if}}** to find your way around the app."
+Fill this in: Keep the list above. Add a bullet in the same **Label:** form for each other thing the reader needs: the Grafana version from `dependencies.grafanaDependency` in `src/plugin.json`, each plugin in `dependencies.plugins` linked to its catalog page at `https://grafana.com/grafana/plugins/<id>/`, and anything `src/plugin.json` doesn't declare, such as an external service, a telemetry pipeline or a license. Never cover installing the plugin itself, because the Installation tab on the plugin page owns it.
+-->
+
+## Enable the app
+
+To enable {{{pluginName}}}:
+
+1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.
+1. Enter `{{{pluginName}}}` in the search bar.
+1. Select **{{{pluginName}}}**.
+1. Click **Enable**.
+
+<!-- section-brief
+Fill this in: If `src/plugin.json` sets `"autoEnabled": true`, the app is enabled when it's installed, so remove this section. Otherwise keep the steps above and remove only this brief.
+-->
+{{#if hasConfigPage}}
+
+After you enable the app, refer to [Configure](./configure.md) for its settings.
+{{/if}}
+
+## Connect your data
+
+<!-- section-brief
+Fill this in: The steps to get the data the app shows into Grafana, such as adding a data source, setting up an agent, setting environment variables or configuring a telemetry exporter. Take them from the README's setup sections and from what the app queries in source. Give each step the commands or settings to copy, and say how the reader can tell the data has arrived. Change the heading if necessary to name the task, such as "Add a data source". Never include steps to install the plugin itself, because the Installation tab on the plugin page owns them.
+
+If the app works without any setup of its own, remove this section entirely.
 -->
 
 ## Common tasks
@@ -22,7 +52,6 @@ Fill this in: Give a short, ordered reading path for someone new to {{{pluginNam
 <!-- section-brief
 Fill this in: List the jobs someone lands here to do, phrased as tasks rather than page titles, each linked to the page that answers it. For a typical app this might look like:
 
-- [Set up {{{pluginName}}} and send it data](./get-started.md)
 {{#if hasConfigPage}}
 - [Change the app settings](./configure.md)
 {{/if}}

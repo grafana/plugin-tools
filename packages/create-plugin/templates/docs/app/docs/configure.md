@@ -6,7 +6,7 @@ keywords:
   - app
   - configuration
   - provisioning
-sidebar_position: 3
+sidebar_position: 2
 ---
 
 This document explains how to configure {{{pluginName}}} after you enable it.
@@ -16,7 +16,7 @@ This document explains how to configure {{{pluginName}}} after you enable it.
 Before you configure the app, ensure you have:
 
 - **Grafana permissions:** The `Organization administrator` role. Only organization administrators can configure apps.
-- **The app enabled:** Follow [Get started](./get-started.md).
+- **The app enabled:** Follow [Enable the app](./index.md#enable-the-app).
 
 ## Open the configuration page
 
