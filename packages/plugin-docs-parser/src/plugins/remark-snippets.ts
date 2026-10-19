@@ -47,8 +47,11 @@ export function readSnippetBlocks(tree: Root): { blocks: SnippetBlock[]; problem
 
   tree.children.forEach((node, i) => {
     const line = lineOf(node);
-    if (open && node.type === 'heading') {
-      problems.push({ kind: 'heading', line, name: open.name });
+    if (open) {
+      const openName = open.name;
+      visit(node, 'heading', (heading) => {
+        problems.push({ kind: 'heading', line: heading.position?.start.line ?? 0, name: openName });
+      });
     }
     const marker = node.type === 'html' ? parseSnippetMarker(node.value) : undefined;
     if (node.type !== 'html' || !marker) {
