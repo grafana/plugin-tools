@@ -40,7 +40,7 @@ Plugin docs are an experimental feature. Breaking changes might happen without n
 
 :::note
 
-The `add docs` codemod only supports panel and data source plugins so far.
+The `add docs` codemod supports panel, data source and app plugins.
 
 :::
 
