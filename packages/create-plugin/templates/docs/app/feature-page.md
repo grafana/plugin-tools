@@ -15,6 +15,10 @@ Fill this in: One or two sentences on what the {{{page.name}}} page is for and w
 ## Before you begin
 
 - **Grafana permissions:** At least the `{{page.role}}` role.
+
+<!-- section-brief
+Fill this in: Keep the bullet above. Add a bullet in the same **Label:** form only for something the reader needs before they can use this page and wouldn't guess, such as a feature flag that must be on or data that must exist. Never repeat setup from the Introduction or from another page, and don't link back to them. If this section would only point at another page, it adds nothing, so remove it, including its heading and the bullet above.
+-->
 {{/if}}
 
 <!-- section-brief

@@ -469,7 +469,8 @@ function getAppFeaturePages(
     if (!slug) {
       continue;
     }
-    const role = typeof include.role === 'string' ? include.role : undefined;
+    // Viewer is the lowest role, so a page that needs only that has nothing to tell the reader
+    const role = typeof include.role === 'string' && include.role !== 'Viewer' ? include.role : undefined;
     // an in-app page named like the config page takes its place, the way data sources name it
     if (!hasConfigPage && !configPage && CONFIG_PAGE_SLUGS.includes(slug)) {
       configPage = { name, slug: 'configure', path, role };

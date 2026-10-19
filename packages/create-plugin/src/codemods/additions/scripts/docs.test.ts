@@ -55,7 +55,7 @@ const FULL_PLUGIN_JSON: Record<string, Record<string, unknown>> = {
     backend: true,
     roles: [],
     includes: [
-      { type: 'page', name: 'Overview', path: '/a/%PLUGIN_ID%/overview', role: 'Viewer', defaultNav: true },
+      { type: 'page', name: 'Overview', path: '/a/%PLUGIN_ID%/overview', role: 'Editor', defaultNav: true },
       { type: 'page', name: 'Configuration', path: '/plugins/%PLUGIN_ID%', role: 'Admin' },
       { type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' },
     ],
@@ -848,7 +848,7 @@ describe('docs codemod', () => {
           '1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.',
           'You can provision My Plugin as code with a Grafana provisioning file. For more information, refer to [Provision Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins).',
         ],
-        overview: ['- **Grafana permissions:** At least the `Viewer` role.'],
+        overview: ['- **Grafana permissions:** At least the `Editor` role.'],
         dashboards: [
           'My Plugin ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).',
           'To import a dashboard that ships with My Plugin:',
@@ -1260,13 +1260,19 @@ describe('docs codemod', () => {
       expect(context.getMessage()).toBeUndefined();
     });
 
-    it('adds a role line to a feature page only when the page sets a role', () => {
+    it('adds a before you begin section to an app page only for a role above Viewer', () => {
       const context = scaffold({
         ...app,
-        includes: [page('Admin Tools', '/a/%PLUGIN_ID%/admin', { role: 'Admin' }), page('Open', '/a/%PLUGIN_ID%/open')],
+        includes: [
+          page('Admin Tools', '/a/%PLUGIN_ID%/admin', { role: 'Admin' }),
+          page('Open', '/a/%PLUGIN_ID%/open'),
+          page('Reader', '/a/%PLUGIN_ID%/reader', { role: 'Viewer' }),
+        ],
       });
+      expect(context.getFile('docs/reader.md')).not.toContain('## Before you begin');
       expect(context.getFile('docs/admin-tools.md')).toContain('At least the `Admin` role.');
       expect(context.getFile('docs/open.md')).not.toContain('## Before you begin');
+      expect(context.getFile('docs/admin-tools.md')).toContain('remove it, including its heading');
     });
 
     it.each([
