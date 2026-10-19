@@ -48,6 +48,18 @@ const FULL_PLUGIN_JSON: Record<string, Record<string, unknown>> = {
     alerting: true,
     includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }],
   },
+  app: {
+    type: 'app',
+    id: 'acme-test-app',
+    name: 'My Plugin',
+    backend: true,
+    roles: [],
+    includes: [
+      { type: 'page', name: 'Overview', path: '/a/%PLUGIN_ID%/overview', role: 'Viewer', defaultNav: true },
+      { type: 'page', name: 'Configuration', path: '/plugins/%PLUGIN_ID%', role: 'Admin' },
+      { type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' },
+    ],
+  },
 };
 const PAGES_BY_TYPE: Record<string, string[]> = {
   panel: ['index', 'options', 'data-formats', 'examples', 'troubleshooting'],
@@ -61,8 +73,34 @@ const PAGES_BY_TYPE: Record<string, string[]> = {
     'dashboards',
     'troubleshooting',
   ],
+  app: ['index', 'get-started', 'configure', 'overview', 'dashboards', 'permissions', 'troubleshooting'],
 };
 const PLUGIN_TYPES = Object.keys(PAGES_BY_TYPE);
+
+// scaffolds once and writes it to disk, so the re-run sees a plugin that is already fully set up
+function scaffoldThenRerun(
+  pluginJson: Record<string, unknown>,
+  addFeature: Record<string, unknown>,
+  docsFile?: string
+) {
+  const root = mkdtempSync(join(tmpdir(), 'docs-rerun-feature-'));
+  writeFileSync(join(root, 'package.json'), JSON.stringify({ scripts: {}, devDependencies: {} }));
+  mkdirSync(join(root, 'src'), { recursive: true });
+  writeFileSync(join(root, 'src', 'plugin.json'), JSON.stringify(pluginJson));
+  const first = new Context(root);
+  docs(first, { docsPath: 'docs' });
+  flushChanges(first);
+  writeFileSync(join(root, 'src', 'plugin.json'), JSON.stringify({ ...pluginJson, docsPath: 'docs', ...addFeature }));
+  if (docsFile) {
+    mkdirSync(join(root, 'docs', docsFile, '..'), { recursive: true });
+    writeFileSync(join(root, 'docs', docsFile), '# Mine\n');
+  }
+
+  const context = new Context(root);
+  docs(context, { docsPath: 'docs' });
+  rmSync(root, { recursive: true, force: true });
+  return { context, body: stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n')) };
+}
 
 describe('docs scaffolding', () => {
   const tempDirs: string[] = [];
@@ -339,11 +377,9 @@ describe('docs scaffolding', () => {
       expect(assertSupportedPluginType(context)).toBe('datasource');
     });
 
-    it('reports app as not supported yet', () => {
-      const context = makeContext({ type: 'app', name: 'X' });
-      expect(() => assertSupportedPluginType(context)).toThrow(
-        /does not support 'app' plugins yet.*Supported so far: panel, datasource/s
-      );
+    it('returns app for an app plugin', () => {
+      const context = makeContext({ type: 'app', id: 'acme-test-app', name: 'X' });
+      expect(assertSupportedPluginType(context)).toBe('app');
     });
 
     it('reports an unset type against the supported list', () => {
@@ -619,12 +655,6 @@ describe('docs codemod', () => {
   });
 
   describe('plugin type support', () => {
-    it('refuses an app plugin until its templates exist', () => {
-      const context = new Context('/virtual');
-      context.addFile('src/plugin.json', JSON.stringify({ type: 'app', name: 'X' }));
-      expect(() => docs(context, { docsPath: 'docs' })).toThrow(/does not support 'app' plugins yet/);
-    });
-
     it('refuses a plugin with no type set', () => {
       const context = new Context('/virtual');
       context.addFile('src/plugin.json', JSON.stringify({ name: 'X' }));
@@ -800,6 +830,45 @@ describe('docs codemod', () => {
           '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
           'When you report an issue, include:',
           '- The Grafana and plugin versions.\n- The error message, with sensitive information removed.\n- The steps to reproduce the issue.\n- The relevant data source settings, with credentials removed.',
+        ],
+      },
+      app: {
+        'get-started': [
+          "This document explains how to set up My Plugin so it's ready to use.",
+          'Before you set up the app, ensure you have:',
+          '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can enable and configure apps.',
+          'To enable My Plugin:',
+          '1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click **Enable**.',
+          'After you enable the app, configure it. For each setting, refer to [Configure](./configure.md).',
+        ],
+        configure: [
+          'This document explains how to configure My Plugin after you enable it.',
+          'Before you configure the app, ensure you have:',
+          '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can configure apps.\n- **The app enabled:** Follow [Get started](./get-started.md).',
+          'To open the My Plugin configuration page:',
+          '1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.',
+          'You can provision My Plugin as code with a Grafana provisioning file. For more information, refer to [Provision Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins).',
+        ],
+        overview: ['- **Grafana permissions:** At least the `Viewer` role.'],
+        dashboards: [
+          'My Plugin ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).',
+          'To import a dashboard that ships with My Plugin:',
+          '1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click the **Dashboards** tab.\n1. Click **Import** next to the dashboard.',
+          "Imported dashboards don't update when you upgrade the plugin. When a plugin upgrade ships a newer version of a dashboard, click **Update** next to it. This overwrites any changes you made to it.",
+        ],
+        permissions: [
+          'This document explains who can use each part of My Plugin and what the app can access. For general information, refer to [Role-based access control for app plugins](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/rbac-for-app-plugins/).',
+          'To assign a role to a user, team or service account, refer to [Assign RBAC roles](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/assign-rbac-roles/).',
+        ],
+        troubleshooting: [
+          'This page explains how to fix common issues when you set up or use My Plugin. For setup instructions, refer to [Get started](./get-started.md).',
+          'For errors in the app, open the developer tools in your browser and check the console.',
+          'In self-managed Grafana, you can also find more detail in the Grafana server logs:',
+          "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-app`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
+          "If this page doesn't solve your problem:",
+          '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
+          'When you report an issue, include:',
+          '- The Grafana and plugin versions.\n- The error message, with sensitive information removed.\n- The steps to reproduce the issue.\n- The app page where it happens and the relevant app settings, with credentials removed.',
         ],
       },
     };
@@ -1001,34 +1070,6 @@ describe('docs codemod', () => {
       expect(content).not.toContain('setPanelOptions');
     });
 
-    // scaffolds once and writes it to disk, so the re-run sees a plugin that is already fully set up
-    function scaffoldThenRerun(
-      pluginJson: Record<string, unknown>,
-      addFeature: Record<string, unknown>,
-      docsFile?: string
-    ) {
-      const root = mkdtempSync(join(tmpdir(), 'docs-rerun-feature-'));
-      writeFileSync(join(root, 'package.json'), JSON.stringify({ scripts: {}, devDependencies: {} }));
-      mkdirSync(join(root, 'src'), { recursive: true });
-      writeFileSync(join(root, 'src', 'plugin.json'), JSON.stringify(pluginJson));
-      const first = new Context(root);
-      docs(first, { docsPath: 'docs' });
-      flushChanges(first);
-      writeFileSync(
-        join(root, 'src', 'plugin.json'),
-        JSON.stringify({ ...pluginJson, docsPath: 'docs', ...addFeature })
-      );
-      if (docsFile) {
-        mkdirSync(join(root, 'docs', docsFile, '..'), { recursive: true });
-        writeFileSync(join(root, 'docs', docsFile), '# Mine\n');
-      }
-
-      const context = new Context(root);
-      docs(context, { docsPath: 'docs' });
-      rmSync(root, { recursive: true, force: true });
-      return { context, body: stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n')) };
-    }
-
     it('warns about a feature page on a re-run that changes nothing else, without adding it', () => {
       const { context, body } = scaffoldThenRerun(datasource, { annotations: true });
       expect(context.hasChanges()).toBe(false);
@@ -1054,6 +1095,295 @@ describe('docs codemod', () => {
         alerting: true,
         includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }],
       });
+      expect(context.getMessage()).toBeUndefined();
+    });
+  });
+
+  describe('app pages', () => {
+    const app = { type: 'app', id: 'acme-test-app', name: 'My App' };
+    const gatedPages = ['configure.md', 'dashboards.md', 'permissions.md', 'traces.md'];
+    const page = (name: string, path?: string, extra: Record<string, unknown> = {}) => ({
+      type: 'page',
+      name,
+      path,
+      ...extra,
+    });
+
+    function scaffold(pluginJson: Record<string, unknown>, files: Record<string, string> = {}) {
+      const context = makeContext(pluginJson);
+      for (const [file, content] of Object.entries(files)) {
+        context.addFile(file, content);
+      }
+      docs(context, { docsPath: 'docs' });
+      return context;
+    }
+
+    function docsFiles(context: Context): string[] {
+      return Object.keys(context.listChanges())
+        .filter((file) => file.startsWith('docs/') && file.endsWith('.md'))
+        .map((file) => file.slice('docs/'.length))
+        .sort();
+    }
+
+    it('scaffolds the pages every app needs, and no gated pages when the app declares nothing', () => {
+      const context = scaffold(app);
+      expect(docsFiles(context)).toEqual([
+        'AGENTS.md',
+        'CLAUDE.md',
+        'README.md',
+        'get-started.md',
+        'index.md',
+        'troubleshooting.md',
+      ]);
+    });
+
+    it.each([
+      [
+        'configure.md',
+        { 'src/module.tsx': 'export const plugin = new AppPlugin().addConfigPage({ title: "Config" });' },
+        {},
+      ],
+      ['configure.md', { 'src/module.ts': 'new AppPlugin()\n  .addConfigPage({ title: "Config" })' }, {}],
+      ['configure.md', {}, { includes: [page('Configuration', '/plugins/%PLUGIN_ID%')] }],
+      ['configure.md', {}, { includes: [page('Configuration', '/plugins/acme-test-app')] }],
+      ['dashboards.md', {}, { includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }] }],
+      ['permissions.md', {}, { roles: [{ role: { name: 'plugins:acme-test-app:reader' }, grants: ['Viewer'] }] }],
+      ['permissions.md', {}, { iam: { permissions: [{ action: 'datasources:read', scope: 'datasources:*' }] } }],
+      ['traces.md', {}, { includes: [page('Traces', '/a/acme-test-app/traces')] }],
+    ])('scaffolds %s when the app declares it (%j %j)', (expected, files, feature) => {
+      const context = scaffold({ ...app, ...feature }, files);
+      for (const file of gatedPages) {
+        expect(context.doesFileExist(`docs/${file}`), file).toBe(file === expected);
+      }
+    });
+
+    it('gives a page only to app pages, not to the config page, dashboard links or example pages', () => {
+      const context = scaffold({
+        ...app,
+        includes: [
+          page('Traces', '/a/acme-test-app/traces'),
+          page('Home', '/a/%PLUGIN_ID%/'),
+          page('Configuration', '/plugins/%PLUGIN_ID%'),
+          page('Redis CLI', '/d/_SGxCBNGk'),
+          page('Page One', '/a/%PLUGIN_ID%/one'),
+          page('Elsewhere', '/a/other-app/elsewhere'),
+          page('No path'),
+        ],
+      });
+      expect(docsFiles(context)).toEqual([
+        'AGENTS.md',
+        'CLAUDE.md',
+        'README.md',
+        'configure.md',
+        'get-started.md',
+        'home.md',
+        'index.md',
+        'traces.md',
+        'troubleshooting.md',
+      ]);
+      const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n'));
+      expect(body).toContain('Page One (/a/%PLUGIN_ID%/one, an example page from the create-plugin app template)');
+    });
+
+    it('puts up to three app pages at the root, in the order of the nav, with no features folder', () => {
+      const context = scaffold({
+        ...app,
+        includes: [
+          page('Time Travel', '/a/%PLUGIN_ID%/timetravel'),
+          page('Overview', '/a/%PLUGIN_ID%/overview', { defaultNav: true }),
+          page('Queries', '/a/%PLUGIN_ID%/queries'),
+        ],
+      });
+      const position = (file: string) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1];
+      expect(docsFiles(context).some((file) => file.startsWith('features/'))).toBe(false);
+      expect(position('overview.md')).toBe('4');
+      expect(position('time-travel.md')).toBe('5');
+      expect(position('queries.md')).toBe('6');
+      expect(context.getFile('docs/time-travel.md')).toContain('title: "Time Travel"');
+      expect(context.getFile('docs/time-travel.md')).toContain('`/a/acme-test-app/timetravel`');
+      expect(context.getFile('docs/index.md')).toContain('](./overview.md)');
+      expect(context.getFile('docs/get-started.md')).toContain('[Overview](./overview.md)');
+    });
+
+    it('moves the app pages into a features folder from the fourth page', () => {
+      const context = scaffold({
+        ...app,
+        includes: [
+          page('Overview', '/a/%PLUGIN_ID%/overview', { defaultNav: true }),
+          page('Time Travel', '/a/%PLUGIN_ID%/timetravel'),
+          page('Queries', '/a/%PLUGIN_ID%/queries'),
+          page('Merges', '/a/%PLUGIN_ID%/merges'),
+        ],
+      });
+      const position = (file: string) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1];
+      expect(docsFiles(context).filter((file) => file.startsWith('features/'))).toEqual([
+        'features/index.md',
+        'features/merges.md',
+        'features/overview.md',
+        'features/queries.md',
+        'features/time-travel.md',
+      ]);
+      expect(docsFiles(context)).not.toContain('overview.md');
+      expect(position('features/index.md')).toBe('4');
+      expect(position('features/overview.md')).toBe('5');
+      expect(position('features/merges.md')).toBe('8');
+      expect(context.getFile('docs/index.md')).toContain('](./features/overview.md)');
+      expect(context.getFile('docs/get-started.md')).toContain('[Overview](./features/overview.md)');
+    });
+
+    it('leaves out a root app page that would take the file name of another page', () => {
+      const context = scaffold({ ...app, includes: [page('Configure', '/a/%PLUGIN_ID%/configure')] });
+      expect(context.doesFileExist('docs/configure.md')).toBe(false);
+      expect(context.getFile('docs/index.md')).not.toContain('](./configure.md)');
+      const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n'));
+      expect(body).toContain('Configure (/a/%PLUGIN_ID%/configure, its file name is used by another page)');
+    });
+
+    it('adds a role line to a feature page only when the page sets a role', () => {
+      const context = scaffold({
+        ...app,
+        includes: [page('Admin Tools', '/a/%PLUGIN_ID%/admin', { role: 'Admin' }), page('Open', '/a/%PLUGIN_ID%/open')],
+      });
+      expect(context.getFile('docs/admin-tools.md')).toContain('At least the `Admin` role.');
+      expect(context.getFile('docs/open.md')).not.toContain('## Before you begin');
+    });
+
+    it.each([
+      ['no feature', app],
+      ['every feature', FULL_PLUGIN_JSON.app],
+    ])('links only scaffolded pages and leaves no template syntax with %s', (_, pluginJson) => {
+      const context = scaffold(pluginJson);
+      for (const file of docsFiles(context)) {
+        const content = context.getFile(`docs/${file}`) ?? '';
+        expect(content, file).not.toContain('{{');
+        expect(content, file).not.toMatch(/\n\n\n/);
+        if (file === 'AGENTS.md') {
+          continue;
+        }
+        for (const [, link] of content.matchAll(/\]\(\.\/([\w/-]+\.md)\)/g)) {
+          expect(context.doesFileExist(`docs/${link}`), `${file} -> ${link}`).toBe(true);
+        }
+      }
+    });
+
+    it('gives every root page a unique sidebar_position', () => {
+      const context = scaffold(FULL_PLUGIN_JSON.app);
+      const positions = PAGES_BY_TYPE.app.map(
+        (file) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}.md`) ?? '')?.[1]
+      );
+      expect(positions.every(Boolean)).toBe(true);
+      expect(new Set(positions).size).toBe(positions.length);
+    });
+
+    it('lists every app page in the docs AGENTS.md', () => {
+      const content = scaffold(app).getFile('docs/AGENTS.md') ?? '';
+      for (const file of ['index', 'get-started', 'configure', 'features/index', 'dashboards', 'permissions']) {
+        expect(content).toContain(`| \`${file}.md\``);
+      }
+      expect(content).toContain('| App pages');
+      expect(content).not.toContain('setConfigEditor');
+    });
+
+    it('warns about a new app page on a re-run, without adding it', () => {
+      const { context, body } = scaffoldThenRerun(
+        { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] },
+        { includes: [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Logs', '/a/%PLUGIN_ID%/logs')] }
+      );
+      expect(context.hasChanges()).toBe(false);
+      expect(context.doesFileExist('docs/logs.md')).toBe(false);
+      expect(body).toContain('such as docs/logs.md');
+      expect(body).toContain('Optional pages in docs/AGENTS.md');
+    });
+
+    it('finds the app pages of a root layout after a fourth page moves the layout to features/', () => {
+      const three = ['One', 'Two', 'Three'].map((name) => page(name, `/a/%PLUGIN_ID%/${name.toLowerCase()}`));
+      const { context, body } = scaffoldThenRerun(
+        { ...app, includes: three },
+        { includes: [...three, page('Four', '/a/%PLUGIN_ID%/four')] }
+      );
+      expect(context.hasChanges()).toBe(false);
+      expect(body).toContain('such as docs/features/four.md');
+      expect(body).not.toContain('one.md');
+    });
+
+    it('finds an app page that the author turned into a folder', () => {
+      const pluginJson = { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] };
+      const { context } = scaffoldThenRerun(pluginJson, {}, 'traces/index.md');
+      expect(context.getMessage()).toBeUndefined();
+    });
+
+    it.each([
+      [
+        'pages with the same file name',
+        [page('Foo Bar', '/a/%PLUGIN_ID%/a'), page('foo-bar', '/a/%PLUGIN_ID%/b')],
+        'foo-bar (/a/%PLUGIN_ID%/b, its file name',
+      ],
+      [
+        'a name that is a docs-cli meta file',
+        [page('README', '/a/%PLUGIN_ID%/readme')],
+        'README (/a/%PLUGIN_ID%/readme, its file name',
+      ],
+      [
+        'a name that is the features index',
+        [page('Index', '/a/%PLUGIN_ID%/index')],
+        'Index (/a/%PLUGIN_ID%/index, its file name',
+      ],
+    ])('leaves out %s and says so', (_, includes, expected) => {
+      const context = scaffold({ ...app, includes });
+      const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n'));
+      expect(body).toContain(expected);
+      expect(docsFiles(context)).not.toContain('readme.md');
+    });
+
+    it('ignores a page whose name is not a string', () => {
+      const context = scaffold({ ...app, includes: [{ type: 'page', name: 123, path: '/a/%PLUGIN_ID%/x' }] });
+      expect(docsFiles(context)).toEqual([
+        'AGENTS.md',
+        'CLAUDE.md',
+        'README.md',
+        'get-started.md',
+        'index.md',
+        'troubleshooting.md',
+      ]);
+    });
+
+    it('does not count a commented-out addConfigPage as a config page', () => {
+      const context = scaffold(app, { 'src/module.ts': '// plugin.addConfigPage({})\n/* .addConfigPage(x) */\n' });
+      expect(context.doesFileExist('docs/configure.md')).toBe(false);
+    });
+
+    it('keeps every root position unique with three app pages and every gated page', () => {
+      const includes = [
+        ...(FULL_PLUGIN_JSON.app.includes as Array<Record<string, unknown>>),
+        page('Two', '/a/%PLUGIN_ID%/two'),
+        page('Three', '/a/%PLUGIN_ID%/three'),
+      ];
+      const context = scaffold({ ...FULL_PLUGIN_JSON.app, includes });
+      const positions = docsFiles(context)
+        .filter((file) => !file.includes('/') && !['AGENTS.md', 'CLAUDE.md', 'README.md'].includes(file))
+        .map((file) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1]);
+      expect(positions).toHaveLength(9);
+      expect(positions.every(Boolean)).toBe(true);
+      expect(new Set(positions).size).toBe(positions.length);
+    });
+
+    it.each([
+      ['a flat layout', FULL_PLUGIN_JSON.app],
+      [
+        'a features folder',
+        {
+          ...FULL_PLUGIN_JSON.app,
+          includes: ['One', 'Two', 'Three', 'Four'].map((name) => page(name, `/a/%PLUGIN_ID%/${name.toLowerCase()}`)),
+        },
+      ],
+    ])('is idempotent with %s', async (_, pluginJson) => {
+      const context = makeContext(pluginJson);
+      await expect((ctx: Context) => docs(ctx, { docsPath: 'docs' })).toBeIdempotent(context);
+    });
+
+    it('says nothing on a re-run when every app page has a docs page', () => {
+      const pluginJson = { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] };
+      const { context } = scaffoldThenRerun(pluginJson, {});
       expect(context.getMessage()).toBeUndefined();
     });
   });

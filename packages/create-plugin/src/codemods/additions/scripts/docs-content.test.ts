@@ -87,6 +87,12 @@ describe('docs-content', () => {
   });
 
   it('should name docs-content when the plugin type is not supported', () => {
+    const context = makeContext({ ...wiredPanel, type: 'renderer' }, { 'catalog-docs/index.md': '# Renderer\n' });
+
+    expect(() => docsContent(context)).toThrow('create-plugin add docs-content needs a plugin type of panel');
+  });
+
+  it('should not support app plugins until the prompt has app guidance', () => {
     const context = makeContext({ ...wiredPanel, type: 'app' }, { 'catalog-docs/index.md': '# App\n' });
 
     expect(() => docsContent(context)).toThrow("create-plugin add docs-content does not support 'app' plugins yet");

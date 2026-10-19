@@ -57,7 +57,7 @@ type Options = v.InferOutput<typeof schema>;
 const PLUGIN_DOCS_CLI_VERSION = '^0.8.0';
 
 // each type needs a template set under `templates/docs/<type>/`
-const SUPPORTED_PLUGIN_TYPES = ['panel', 'datasource'] as const;
+const SUPPORTED_PLUGIN_TYPES = ['panel', 'datasource', 'app'] as const;
 type SupportedPluginType = (typeof SUPPORTED_PLUGIN_TYPES)[number];
 
 export default function docs(context: Context, options: Options): Context {
@@ -69,6 +69,7 @@ export default function docs(context: Context, options: Options): Context {
     templateDir: join(TEMPLATES_DIR, 'docs', pluginType),
     commonTemplateDir: join(TEMPLATES_DIR, 'docs', 'common'),
     featurePages: FEATURE_PAGES_BY_TYPE[pluginType],
+    pageStubs: pluginType === 'app' ? getAppFeaturePageStubs : undefined,
   });
 }
 
@@ -79,8 +80,18 @@ interface PluginJson {
   docsPath?: string;
   annotations?: boolean;
   alerting?: boolean;
-  includes?: Array<{ type?: string }>;
+  includes?: PluginInclude[];
+  roles?: unknown;
+  iam?: unknown;
   [key: string]: unknown;
+}
+
+interface PluginInclude {
+  type?: string;
+  name?: string;
+  path?: string;
+  role?: string;
+  defaultNav?: boolean;
 }
 
 export interface DocsSetupOptions {
@@ -93,13 +104,32 @@ export interface DocsSetupOptions {
   commonTemplateDir: string;
   /** Pages scaffolded only when `src/plugin.json` declares the feature they document. */
   featurePages?: FeaturePage[];
+  /** Pages rendered from one template per entry, such as a page for each app page in `src/plugin.json`. */
+  pageStubs?: (pluginJson: PluginJson) => PageStubs;
 }
 
 interface FeaturePage {
   /** Page name without `.md`. Plugin-docs-cli also accepts it as a folder of that name. */
   page: string;
   templateFlag: string;
-  hasFeature: (pluginJson: PluginJson) => boolean;
+  hasFeature: (pluginJson: PluginJson, context: Context) => boolean;
+}
+
+interface PageStubs {
+  /** Rendered into the template data of every page, so the fixed pages can link to the stubs. */
+  data: Record<string, unknown>;
+  stubs: PageStub[];
+  /** Entries in `src/plugin.json` that get no page, as `name (path)`. */
+  skipped: string[];
+}
+
+interface PageStub {
+  templatePath: string;
+  /** Relative to the docs folder. */
+  file: string;
+  /** Set for a page of the app, which a re-run finds in either layout and as a file or a folder. */
+  slug?: string;
+  data: Record<string, unknown>;
 }
 
 export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
@@ -144,8 +174,9 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   const featurePages = (opts.featurePages ?? []).map(({ page, templateFlag, hasFeature }) => ({
     page,
     templateFlag,
-    isEnabled: hasFeature(pluginJson),
+    isEnabled: hasFeature(pluginJson, context),
   }));
+  const pageStubs = opts.pageStubs?.(pluginJson) ?? { data: {}, stubs: [], skipped: [] };
   const { packageManagerName, packageManagerVersion } = templateData;
   const createPluginCmd = `${getPackageManagerExecCmd(packageManagerName, packageManagerVersion)}@latest`;
   const data = {
@@ -155,6 +186,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     createPluginCmd,
     lockFile: LOCK_FILES[packageManagerName],
     ...Object.fromEntries(featurePages.map(({ templateFlag, isEnabled }) => [templateFlag, isEnabled])),
+    ...pageStubs.data,
   };
 
   addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': PLUGIN_DOCS_CLI_VERSION });
@@ -170,6 +202,25 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     data,
     include: (file) => SCAFFOLD_META_FILES.includes(file) || (!hasPages && !disabledPageFiles.includes(file)),
   });
+  const missingPageStubs: string[] = [];
+  for (const stub of pageStubs.stubs) {
+    const filePath = `${docsPath}/${stub.file}`;
+    if (hasPages) {
+      // the author may have moved the pages between the root and features/ since the first scaffold
+      const isMissing =
+        stub.slug !== undefined &&
+        [stub.slug, `features/${stub.slug}`].every(
+          (name) => !context.doesFileExist(`${docsPath}/${name}.md`) && !context.doesFileExist(`${docsPath}/${name}`)
+        );
+      if (isMissing) {
+        missingPageStubs.push(filePath);
+      }
+    } else if (context.doesFileExist(filePath)) {
+      additionsDebug(`${filePath} already exists, skipping`);
+    } else {
+      context.addFile(filePath, renderTemplate(stub.templatePath, false, { ...data, ...stub.data }));
+    }
+  }
   // a feature turned on after the first scaffold gets no page, so point the author at it instead
   const missingFeaturePages = hasPages
     ? featurePages
@@ -198,7 +249,8 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   appendDocsPointerToInstructions(context, docsPath);
 
   // deferred so it prints after the runner's change list, and only when there is something to report
-  if (context.hasChanges() || missingFeaturePages.length > 0) {
+  const skippedPages = hasPages ? [] : pageStubs.skipped;
+  if (context.hasChanges() || missingFeaturePages.length > 0 || missingPageStubs.length > 0) {
     context.setMessage(
       buildNextStepsMessage({
         docsPath,
@@ -207,6 +259,8 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
         pluginActions,
         linkedRootFiles,
         missingFeaturePages,
+        missingPageStubs,
+        skippedPages,
       })
     );
   }
@@ -221,8 +275,11 @@ function buildNextStepsMessage(opts: {
   pluginActions: BumpActionRefsResult;
   linkedRootFiles: string[];
   missingFeaturePages: string[];
+  missingPageStubs: string[];
+  skippedPages: string[];
 }): ContextMessage {
   const { docsPath, packageManagerName, createPluginCmd, pluginActions, linkedRootFiles, missingFeaturePages } = opts;
+  const { missingPageStubs, skippedPages } = opts;
   const run = (script: string) => output.formatCode(`${packageManagerName} run ${script}`);
 
   const steps: NextStep[] = [
@@ -264,6 +321,18 @@ function buildNextStepsMessage(opts: {
       detail: `If it needs docs, add the page as described under Optional pages in ${docsPath}/AGENTS.md. If you deleted it on purpose, ignore this.`,
     });
   }
+  if (missingPageStubs.length > 0) {
+    warnings.push({
+      title: `src/plugin.json has pages with no docs page, such as ${missingPageStubs[0]}`,
+      detail: `If they need docs, add them as described under Optional pages in ${docsPath}/AGENTS.md. If you deleted them on purpose, ignore this.`,
+    });
+  }
+  if (skippedPages.length > 0) {
+    warnings.push({
+      title: `Left out of the docs: ${skippedPages.join(', ')}`,
+      detail: `If they need docs, add them as described under Optional pages in ${docsPath}/AGENTS.md.`,
+    });
+  }
   for (const file of linkedRootFiles) {
     warnings.push({
       title: `Added a pointer to ${AGENT_INSTRUCTIONS_PATH} at the end of ${file}`,
@@ -296,11 +365,6 @@ export function assertSupportedPluginType(context: Context, additionName = 'docs
   }
 
   const supported = SUPPORTED_PLUGIN_TYPES.join(', ');
-  if (type === 'app') {
-    throw new Error(
-      `create-plugin add ${additionName} does not support '${type}' plugins yet. Supported so far: ${supported}.`
-    );
-  }
   throw new Error(
     `create-plugin add ${additionName} needs a plugin type of ${supported} in src/plugin.json, but found '${type ?? 'unset'}'.`
   );
@@ -314,18 +378,161 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
 const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
 // the scaffold's files that aren't pages, so they're added on every run
 const SCAFFOLD_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
+const DASHBOARDS_PAGE: FeaturePage = {
+  page: 'dashboards',
+  templateFlag: 'hasDashboards',
+  hasFeature: (p) => getIncludes(p).some((i) => i.type === 'dashboard'),
+};
 const FEATURE_PAGES_BY_TYPE: Record<SupportedPluginType, FeaturePage[]> = {
   panel: [],
   datasource: [
     { page: 'annotations', templateFlag: 'hasAnnotations', hasFeature: (p) => p.annotations === true },
     { page: 'alerting', templateFlag: 'hasAlerting', hasFeature: (p) => p.alerting === true },
+    DASHBOARDS_PAGE,
+  ],
+  app: [
+    { page: 'configure', templateFlag: 'hasConfigPage', hasFeature: hasAppConfigPage },
+    DASHBOARDS_PAGE,
     {
-      page: 'dashboards',
-      templateFlag: 'hasDashboards',
-      hasFeature: (p) => Array.isArray(p.includes) && p.includes.some((i) => i?.type === 'dashboard'),
+      page: 'permissions',
+      templateFlag: 'hasPermissions',
+      hasFeature: (p) => p.roles !== undefined || p.iam !== undefined,
     },
   ],
 };
+
+function getIncludes(pluginJson: PluginJson): PluginInclude[] {
+  return Array.isArray(pluginJson.includes)
+    ? pluginJson.includes.filter((i): i is PluginInclude => typeof i === 'object' && i !== null)
+    : [];
+}
+
+// app page paths may use the %PLUGIN_ID% placeholder that the build replaces
+function isAppPath(path: string | undefined, pluginId: string | undefined, prefix: string): boolean {
+  return [pluginId, '%PLUGIN_ID%'].some(
+    (id) => id && (path === `${prefix}${id}` || path?.startsWith(`${prefix}${id}/`))
+  );
+}
+
+const APP_MODULE_FILES = ['src/module.ts', 'src/module.tsx'];
+
+function stripComments(source: string): string {
+  return source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+}
+
+function hasAppConfigPage(pluginJson: PluginJson, context: Context): boolean {
+  return (
+    APP_MODULE_FILES.some((file) => /\.addConfigPage\s*\(/.test(stripComments(context.getFile(file) ?? ''))) ||
+    getIncludes(pluginJson).some((i) => i.type === 'page' && isAppPath(i.path, pluginJson.id, '/plugins/'))
+  );
+}
+
+// the example pages templates/app/src/plugin.json ships, which only document the scaffold
+const TEMPLATE_DEFAULT_PAGES: Record<string, string> = {
+  'Page One': '/one',
+  'Page Two': '/two',
+  'Page Three': '/three',
+  'Page Four': '/four',
+};
+
+interface AppFeaturePage {
+  name: string;
+  slug: string;
+  path: string;
+  role?: string;
+}
+
+// pages under /plugins/ are the config page and pages under /d/ link to a bundled dashboard, so neither gets a page
+function getAppFeaturePages(pluginJson: PluginJson): { pages: AppFeaturePage[]; skipped: string[] } {
+  const pages: AppFeaturePage[] = [];
+  const skipped: string[] = [];
+  const appPages = getIncludes(pluginJson)
+    .filter((i) => i.type === 'page' && typeof i.name === 'string' && isAppPath(i.path, pluginJson.id, '/a/'))
+    .sort((a, b) => Number(b.defaultNav === true) - Number(a.defaultNav === true));
+  const takenSlugs = new Set(getReservedPageSlugs());
+  for (const include of appPages) {
+    const name = include.name as string;
+    const path = (include.path as string).replaceAll('%PLUGIN_ID%', pluginJson.id ?? '');
+    const defaultPath = TEMPLATE_DEFAULT_PAGES[name];
+    if (defaultPath !== undefined && path.endsWith(defaultPath)) {
+      additionsDebug(`${name} is an example page from the create-plugin app template, skipping`);
+      skipped.push(`${name} (${include.path}, an example page from the create-plugin app template)`);
+      continue;
+    }
+    const slug = slugify(name);
+    if (!slug) {
+      continue;
+    }
+    if (takenSlugs.has(slug)) {
+      additionsDebug(`${name} would be written to ${slug}.md, which another page uses, skipping`);
+      skipped.push(`${name} (${include.path}, its file name is used by another page)`);
+      continue;
+    }
+    takenSlugs.add(slug);
+    pages.push({ name, slug, path, role: typeof include.role === 'string' ? include.role : undefined });
+  }
+  return { pages, skipped };
+}
+
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+// more app pages than this go in a features/ folder, so a small app has no folder with one page in it
+const MAX_FLAT_PAGES = 3;
+// the root pages that come before the app pages, which take the positions after it
+const FIRST_PAGE_POSITION = 4;
+const FIXED_PAGE_SLUGS = ['index', 'get-started', 'configure', 'dashboards', 'permissions', 'troubleshooting'];
+
+// file names an app page can't take, because another page or plugin-docs-cli uses them
+function getReservedPageSlugs(): string[] {
+  return [
+    ...FIXED_PAGE_SLUGS,
+    ...DOCS_CLI_META_FILES.map((file) => file.slice(0, -'.MD'.length).toLowerCase().replaceAll('_', '-')),
+  ];
+}
+
+function getAppFeaturePageStubs(pluginJson: PluginJson): PageStubs {
+  const { pages, skipped } = getAppFeaturePages(pluginJson);
+  const templateDir = join(TEMPLATES_DIR, 'docs', 'app');
+  const pageTemplate = join(templateDir, 'feature-page.md');
+
+  if (pages.length > MAX_FLAT_PAGES) {
+    return {
+      data: { defaultFeaturePage: { ...pages[0], file: `features/${pages[0].slug}` } },
+      stubs: [
+        {
+          templatePath: join(templateDir, 'features-index.md'),
+          file: 'features/index.md',
+          data: { position: FIRST_PAGE_POSITION },
+        },
+        // plugin-docs-cli compares a folder's index.md with the pages inside it, so these start after it
+        ...pages.map((page, i) => ({
+          templatePath: pageTemplate,
+          file: `features/${page.slug}.md`,
+          slug: page.slug,
+          data: { page: { ...page, position: FIRST_PAGE_POSITION + 1 + i } },
+        })),
+      ],
+      skipped,
+    };
+  }
+
+  return {
+    data: pages.length > 0 ? { defaultFeaturePage: { ...pages[0], file: pages[0].slug } } : {},
+    stubs: pages.map((page, i) => ({
+      templatePath: pageTemplate,
+      file: `${page.slug}.md`,
+      slug: page.slug,
+      data: { page: { ...page, position: FIRST_PAGE_POSITION + i } },
+    })),
+    skipped,
+  };
+}
+
 // mirrors isMetaFile in @grafana/plugin-docs-cli, so both tools agree on what counts as a page
 const DOCS_CLI_META_FILES = [
   'README.MD',
