@@ -81,7 +81,8 @@ const PLUGIN_TYPES = Object.keys(PAGES_BY_TYPE);
 function scaffoldThenRerun(
   pluginJson: Record<string, unknown>,
   addFeature: Record<string, unknown>,
-  docsFile?: string
+  docsFile?: string,
+  deleteFiles: string[] = []
 ) {
   const root = mkdtempSync(join(tmpdir(), 'docs-rerun-feature-'));
   writeFileSync(join(root, 'package.json'), JSON.stringify({ scripts: {}, devDependencies: {} }));
@@ -90,6 +91,9 @@ function scaffoldThenRerun(
   const first = new Context(root);
   docs(first, { docsPath: 'docs' });
   flushChanges(first);
+  for (const file of deleteFiles) {
+    rmSync(join(root, 'docs', file));
+  }
   writeFileSync(join(root, 'src', 'plugin.json'), JSON.stringify({ ...pluginJson, docsPath: 'docs', ...addFeature }));
   if (docsFile) {
     mkdirSync(join(root, 'docs', docsFile, '..'), { recursive: true });
@@ -1476,6 +1480,17 @@ describe('docs codemod', () => {
     ])('is idempotent with %s', async (_, pluginJson) => {
       const context = makeContext(pluginJson);
       await expect((ctx: Context) => docs(ctx, { docsPath: 'docs' })).toBeIdempotent(context);
+    });
+
+    it('warns about a features index that an app with four pages has lost, and names the page first when both are missing', () => {
+      const four = ['One', 'Two', 'Three', 'Four'].map((n) => page(n, `/a/%PLUGIN_ID%/${n.toLowerCase()}`));
+      const lostIndex = scaffoldThenRerun({ ...app, includes: four }, {}, undefined, ['features/index.md']);
+      expect(lostIndex.context.hasChanges()).toBe(false);
+      expect(lostIndex.body).toContain('such as docs/features/index.md');
+
+      const three = four.slice(0, 3);
+      const movedLayout = scaffoldThenRerun({ ...app, includes: three }, { includes: four });
+      expect(movedLayout.body).toContain('such as docs/features/four.md');
     });
 
     it('says nothing on a re-run when every app page has a docs page', () => {

@@ -272,16 +272,18 @@ function scaffoldPageStubs(opts: {
   hasPages: boolean;
 }): string[] {
   const { context, docsPath, stubs, data, hasPages } = opts;
-  const missing: string[] = [];
+  const missingPages: string[] = [];
+  const missingIndexes: string[] = [];
   for (const stub of stubs) {
     const filePath = `${docsPath}/${stub.file}`;
     if (hasPages) {
       // the author may have moved the pages between the root and features/ since the first scaffold
-      if (
-        (stub.slug !== undefined && !pageExists(context, docsPath, [stub.slug, `features/${stub.slug}`])) ||
-        (stub.slug === undefined && !context.doesFileExist(filePath))
-      ) {
-        missing.push(filePath);
+      if (stub.slug !== undefined) {
+        if (!pageExists(context, docsPath, [stub.slug, `features/${stub.slug}`])) {
+          missingPages.push(filePath);
+        }
+      } else if (!context.doesFileExist(filePath)) {
+        missingIndexes.push(filePath);
       }
     } else if (context.doesFileExist(filePath)) {
       additionsDebug(`${filePath} already exists, skipping`);
@@ -289,6 +291,8 @@ function scaffoldPageStubs(opts: {
       context.addFile(filePath, renderTemplate(stub.templatePath, false, { ...data, ...stub.data }));
     }
   }
+  // the message names the first one, and a page tells the author more than a folder index
+  const missing = [...missingPages, ...missingIndexes];
   return missing;
 }
 
