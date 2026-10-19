@@ -4,12 +4,7 @@ import { assertSupportedPluginType, assertValidDocsPath, hasDocsPages } from './
 
 // the agent step does the writing. this only stops it from starting on a plugin with no docs pages to fill
 export default function docsContent(context: Context): Context {
-  // the prompt has no app guidance yet
-  if (assertSupportedPluginType(context, 'docs-content') === 'app') {
-    throw new Error(
-      "create-plugin add docs-content does not support 'app' plugins yet. Supported so far: panel, datasource."
-    );
-  }
+  assertSupportedPluginType(context, 'docs-content');
 
   const { docsPath } = readJsonFile<{ docsPath?: unknown }>(context, 'src/plugin.json');
   if (docsPath === undefined) {

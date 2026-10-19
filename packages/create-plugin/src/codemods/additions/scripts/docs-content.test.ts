@@ -26,6 +26,15 @@ describe('docs-content', () => {
     expect(result.listChanges()).toEqual(changesBefore);
   });
 
+  it.each(['panel', 'datasource', 'app'])('should accept a %s plugin with catalog docs', (type) => {
+    const context = makeContext(
+      { ...wiredPanel, type },
+      { 'catalog-docs/index.md': '# Intro\n', 'catalog-docs/AGENTS.md': '# Agents\n' }
+    );
+
+    expect(() => docsContent(context)).not.toThrow();
+  });
+
   it('should be idempotent', async () => {
     const context = makeContext(wiredPanel, {
       'catalog-docs/index.md': '# Clock\n',
@@ -90,11 +99,5 @@ describe('docs-content', () => {
     const context = makeContext({ ...wiredPanel, type: 'renderer' }, { 'catalog-docs/index.md': '# Renderer\n' });
 
     expect(() => docsContent(context)).toThrow('create-plugin add docs-content needs a plugin type of panel');
-  });
-
-  it('should not support app plugins until the prompt has app guidance', () => {
-    const context = makeContext({ ...wiredPanel, type: 'app' }, { 'catalog-docs/index.md': '# App\n' });
-
-    expect(() => docsContent(context)).toThrow("create-plugin add docs-content does not support 'app' plugins yet");
   });
 });
