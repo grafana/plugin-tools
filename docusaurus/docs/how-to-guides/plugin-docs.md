@@ -191,7 +191,7 @@ Pages use [CommonMark](https://commonmark.org/) plus [GitHub Flavored Markdown](
 
 There's no MDX and no templating, and the only HTML you can use is for collapsible sections, line breaks and horizontal rules. What you write renders the same way in the catalog, in the local preview and on GitHub.
 
-Every page starts with frontmatter that sets at least `title` and `description`. Use `sidebar_position` to order pages within a folder.
+Every page starts with frontmatter that sets at least `title` and `description`. Use `sidebar_position` to order pages within a folder and `keywords` to add a list of search keywords.
 
 For everything you can write, refer to [Supported markdown](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/supported-markdown.md).
 

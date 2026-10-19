@@ -27,13 +27,16 @@ reach it.
 
 ## Page shape
 
-Every page is a Markdown file with a frontmatter block. `title` and `description` are required; `sidebar_position` is optional and controls order within a folder.
+Every page is a Markdown file with a frontmatter block. `title` and `description` are required; `sidebar_position` is optional and controls order within a folder. `keywords` is an optional list of search keywords.
 
 ```yaml
 ---
 title: Configuration
 description: Learn how to configure the panel's axis and legend options.
 sidebar_position: 2
+keywords:
+  - configuration
+  - legend
 ---
 ```
 

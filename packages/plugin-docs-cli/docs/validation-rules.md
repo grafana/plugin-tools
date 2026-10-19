@@ -60,7 +60,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `frontmatter-block-exists`       | The page must start with a frontmatter block.                                                                                                                  | Error    |
 | `frontmatter-valid-yaml`         | The frontmatter must be valid YAML.                                                                                                                            | Error    |
 | `frontmatter-required-fields`    | `title` and `description` must be present.                                                                                                                     | Error    |
-| `frontmatter-field-types`        | `title` and `description` must be strings, and `sidebar_position` (if set) must be a number.                                                                   | Error    |
+| `frontmatter-field-types`        | `title` and `description` must be strings, `sidebar_position` (if set) must be a number and `keywords` (if set) must be a list of non-empty strings.           | Error    |
 | `frontmatter-valid-slug`         | A custom `slug` field must only use letters, digits, underscores, hyphens and forward slashes.                                                                 | Warning  |
 | `root-index-no-custom-slug`      | Your root `index.md` can't set a custom `slug`. It's your documentation landing page, and renaming it hides the Documentation tab on grafana.com.              | Error    |
 | `no-h1-heading`                  | Don't add a `# Heading` in the page body - the page title already comes from frontmatter, and any h1 you add will be stripped and replaced. Use `##` or lower. | Warning  |
