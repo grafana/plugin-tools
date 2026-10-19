@@ -19,6 +19,8 @@ import {
 } from '../../utils.agents.js';
 import { type BumpActionRefsResult, bumpActionRefs } from '../../utils.workflows.js';
 import { getPackageManagerExecCmd } from '../../../utils/utils.packageManager.js';
+import * as recast from 'recast';
+import * as babelTsParser from 'recast/parsers/babel-ts.js';
 
 // an allowlist, because the value becomes a path on disk and is embedded unescaped in a YAML workflow
 const DOCS_PATH_RE = /^[a-zA-Z0-9](?:[a-zA-Z0-9_-]|\/[a-zA-Z0-9_-])*$/;
@@ -91,6 +93,7 @@ interface PluginInclude {
   name?: string;
   path?: string;
   role?: string;
+  action?: string;
   defaultNav?: boolean;
 }
 
@@ -105,7 +108,8 @@ export interface DocsSetupOptions {
   /** Pages scaffolded only when `src/plugin.json` declares the feature they document. */
   featurePages?: FeaturePage[];
   /** Pages rendered from one template per entry, such as a page for each app page in `src/plugin.json`. */
-  pageStubs?: (pluginJson: PluginJson, context: Context) => PageStubs;
+  /** Gets each feature page's `templateFlag`, so the stubs agree with the pages scaffolded for those features. */
+  pageStubs?: (pluginJson: PluginJson, featureFlags: Record<string, boolean>) => PageStubs;
 }
 
 interface FeaturePage {
@@ -176,7 +180,8 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     templateFlag,
     isEnabled: hasFeature(pluginJson, context),
   }));
-  const pageStubs = opts.pageStubs?.(pluginJson, context) ?? { data: {}, stubs: [], skipped: [] };
+  const featureFlags = Object.fromEntries(featurePages.map(({ templateFlag, isEnabled }) => [templateFlag, isEnabled]));
+  const pageStubs = opts.pageStubs?.(pluginJson, featureFlags) ?? { data: {}, stubs: [], skipped: [] };
   const { packageManagerName, packageManagerVersion } = templateData;
   const createPluginCmd = `${getPackageManagerExecCmd(packageManagerName, packageManagerVersion)}@latest`;
   const data = {
@@ -185,7 +190,7 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     docsPath,
     createPluginCmd,
     lockFile: LOCK_FILES[packageManagerName],
-    ...Object.fromEntries(featurePages.map(({ templateFlag, isEnabled }) => [templateFlag, isEnabled])),
+    ...featureFlags,
     ...pageStubs.data,
   };
 
@@ -396,7 +401,10 @@ const FEATURE_PAGES_BY_TYPE: Record<SupportedPluginType, FeaturePage[]> = {
     {
       page: 'permissions',
       templateFlag: 'hasPermissions',
-      hasFeature: (p) => p.roles !== undefined || p.iam !== undefined,
+      hasFeature: (p) =>
+        p.roles !== undefined ||
+        p.iam !== undefined ||
+        getIncludes(p).some((i) => (i.role !== undefined && i.role !== 'Viewer') || i.action !== undefined),
     },
   ],
 };
@@ -414,17 +422,44 @@ function isAppPath(path: string | undefined, pluginId: string | undefined, prefi
   );
 }
 
-const APP_MODULE_FILES = ['src/module.ts', 'src/module.tsx'];
-
-function stripComments(source: string): string {
-  return source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-}
+const APP_MODULE_FILES = ['src/module.ts', 'src/module.tsx', 'src/module.js', 'src/module.jsx'];
 
 function hasAppConfigPage(pluginJson: PluginJson, context: Context): boolean {
   return (
-    APP_MODULE_FILES.some((file) => /\.addConfigPage\s*\(/.test(stripComments(context.getFile(file) ?? ''))) ||
+    APP_MODULE_FILES.some((file) => callsAddConfigPage(context.getFile(file))) ||
     getIncludes(pluginJson).some((i) => i.type === 'page' && isAppPath(i.path, pluginJson.id, '/plugins/'))
   );
+}
+
+function callsAddConfigPage(source: string | undefined): boolean {
+  if (!source) {
+    return false;
+  }
+  // babel-ts parses JSX as well as TypeScript, since app modules are often .tsx
+  let ast: recast.types.ASTNode;
+  try {
+    ast = recast.parse(source, { parser: babelTsParser });
+  } catch (error) {
+    additionsDebug(`Failed to parse the app module, so it can't tell whether it has a config page: ${error}`);
+    return false;
+  }
+  let isFound = false;
+  recast.visit(ast, {
+    visitCallExpression(path) {
+      const { callee } = path.node;
+      if (
+        callee.type === 'MemberExpression' &&
+        callee.property.type === 'Identifier' &&
+        callee.property.name === 'addConfigPage'
+      ) {
+        isFound = true;
+        return false;
+      }
+      this.traverse(path);
+      return undefined;
+    },
+  });
+  return isFound;
 }
 
 // the example pages templates/app/src/plugin.json ships, which only document the scaffold
@@ -467,6 +502,8 @@ function getAppFeaturePages(
     }
     const slug = slugify(name);
     if (!slug) {
+      additionsDebug(`${name} has no letters or digits for a file name, skipping`);
+      skipped.push(`${name} (${include.path}, its name has no letters or digits for a file name)`);
       continue;
     }
     // Viewer is the lowest role, so a page that needs only that has nothing to tell the reader
@@ -474,7 +511,6 @@ function getAppFeaturePages(
     // an in-app page named like the config page takes its place, the way data sources name it
     if (!hasConfigPage && !configPage && CONFIG_PAGE_SLUGS.includes(slug)) {
       configPage = { name, slug: 'configure', path, role };
-      takenSlugs.add('configure');
       continue;
     }
     if (takenSlugs.has(slug)) {
@@ -490,6 +526,8 @@ function getAppFeaturePages(
 
 function slugify(name: string): string {
   return name
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
@@ -510,55 +548,46 @@ function getReservedPageSlugs(): string[] {
   ];
 }
 
-function getAppFeaturePageStubs(pluginJson: PluginJson, context: Context): PageStubs {
-  const { pages, configPage, skipped } = getAppFeaturePages(pluginJson, hasAppConfigPage(pluginJson, context));
+function getAppFeaturePageStubs(pluginJson: PluginJson, featureFlags: Record<string, boolean>): PageStubs {
+  const { pages, configPage, skipped } = getAppFeaturePages(pluginJson, featureFlags.hasConfigPage === true);
   const templateDir = join(TEMPLATES_DIR, 'docs', 'app');
   const pageTemplate = join(templateDir, 'feature-page.md');
-  const configStubs: PageStub[] = configPage
-    ? [
-        {
-          templatePath: pageTemplate,
-          file: 'configure.md',
-          slug: 'configure',
-          data: { page: { ...configPage, position: CONFIG_PAGE_POSITION } },
-        },
-      ]
-    : [];
-  const configData = configPage ? { hasConfigPage: true } : {};
-
-  if (pages.length > MAX_FLAT_PAGES) {
-    return {
-      data: { ...configData, defaultFeaturePage: { ...pages[0], file: `features/${pages[0].slug}` } },
-      stubs: [
-        ...configStubs,
-        {
-          templatePath: join(templateDir, 'features-index.md'),
-          file: 'features/index.md',
-          data: { position: FIRST_PAGE_POSITION },
-        },
-        // plugin-docs-cli compares a folder's index.md with the pages inside it, so these start after it
-        ...pages.map((page, i) => ({
-          templatePath: pageTemplate,
-          file: `features/${page.slug}.md`,
-          slug: page.slug,
-          data: { page: { ...page, position: FIRST_PAGE_POSITION + 1 + i } },
-        })),
-      ],
-      skipped,
-    };
+  const stubs: PageStub[] = [];
+  if (configPage) {
+    stubs.push({
+      templatePath: pageTemplate,
+      file: 'configure.md',
+      slug: 'configure',
+      data: { page: { ...configPage, position: CONFIG_PAGE_POSITION } },
+    });
   }
 
+  const isInFolder = pages.length > MAX_FLAT_PAGES;
+  const folder = isInFolder ? 'features/' : '';
+  if (isInFolder) {
+    stubs.push({
+      templatePath: join(templateDir, 'features-index.md'),
+      file: 'features/index.md',
+      data: { position: FIRST_PAGE_POSITION },
+    });
+  }
+  // plugin-docs-cli compares a folder's index.md with the pages inside it, so these start after it
+  const firstPosition = isInFolder ? FIRST_PAGE_POSITION + 1 : FIRST_PAGE_POSITION;
+  pages.forEach((page, i) => {
+    stubs.push({
+      templatePath: pageTemplate,
+      file: `${folder}${page.slug}.md`,
+      slug: page.slug,
+      data: { page: { ...page, position: firstPosition + i } },
+    });
+  });
+
   return {
-    data: { ...configData, ...(pages.length > 0 ? { defaultFeaturePage: { ...pages[0], file: pages[0].slug } } : {}) },
-    stubs: [
-      ...configStubs,
-      ...pages.map((page, i) => ({
-        templatePath: pageTemplate,
-        file: `${page.slug}.md`,
-        slug: page.slug,
-        data: { page: { ...page, position: FIRST_PAGE_POSITION + i } },
-      })),
-    ],
+    data: {
+      ...(configPage ? { hasConfigPage: true } : {}),
+      ...(pages.length > 0 ? { defaultFeaturePage: { ...pages[0], file: `${folder}${pages[0].slug}` } } : {}),
+    },
+    stubs,
     skipped,
   };
 }

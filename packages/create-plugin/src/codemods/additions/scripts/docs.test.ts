@@ -1367,6 +1367,55 @@ describe('docs codemod', () => {
       expect(docsFiles(context)).toEqual(['AGENTS.md', 'CLAUDE.md', 'README.md', 'index.md', 'troubleshooting.md']);
     });
 
+    it.each([
+      ['a trailing comment', 'new AppPlugin().setRootPage(App); // .addConfigPage({})'],
+      ['a string', "const help = 'call .addConfigPage( to add one';"],
+    ])('does not count addConfigPage in %s as a config page', (_, source) => {
+      const context = scaffold(app, { 'src/module.tsx': source });
+      expect(context.doesFileExist('docs/configure.md')).toBe(false);
+    });
+
+    it.each([
+      [
+        'a glob string before it',
+        "const files = '**/*.svg';\nnew AppPlugin().addConfigPage({ title: 'Config' });",
+        'src/module.ts',
+      ],
+      [
+        'JSX',
+        "export const plugin = new AppPlugin().addConfigPage({ title: 'Config', body: () => <div /> });",
+        'src/module.tsx',
+      ],
+      [
+        'a JavaScript module',
+        "export const plugin = new AppPlugin().addConfigPage({ title: 'Config' });",
+        'src/module.js',
+      ],
+    ])('finds addConfigPage after %s', (_, source, file) => {
+      const context = scaffold(app, { [file]: source });
+      expect(context.doesFileExist('docs/configure.md')).toBe(true);
+    });
+
+    it('gives an app page with accented letters a readable file name', () => {
+      const context = scaffold({ ...app, includes: [page('Übersicht', '/a/%PLUGIN_ID%/overview')] });
+      expect(docsFiles(context)).toContain('ubersicht.md');
+    });
+
+    it('leaves out an app page whose name has no letters or digits for a file name, and says so', () => {
+      const context = scaffold({ ...app, includes: [page('概览', '/a/%PLUGIN_ID%/overview')] });
+      const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n'));
+      expect(body).toContain('概览 (/a/%PLUGIN_ID%/overview, its name has no letters or digits for a file name)');
+    });
+
+    it.each([
+      ['a role above Viewer', { role: 'Admin' }, true],
+      ['an action', { action: 'plugins.app:access' }, true],
+      ['the Viewer role', { role: 'Viewer' }, false],
+    ])('scaffolds permissions.md for a page with %s', (_, extra, expected) => {
+      const context = scaffold({ ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces', extra)] });
+      expect(context.doesFileExist('docs/permissions.md')).toBe(expected);
+    });
+
     it('does not count a commented-out addConfigPage as a config page', () => {
       const context = scaffold(app, { 'src/module.ts': '// plugin.addConfigPage({})\n/* .addConfigPage(x) */\n' });
       expect(context.doesFileExist('docs/configure.md')).toBe(false);
