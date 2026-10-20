@@ -78,16 +78,19 @@ function findH1Lines(raw: string): number[] {
     if (!passedFrontmatter) {
       continue;
     }
-    const fenceMatch = /^(```+|~~~+)/.exec(lines[i].trim());
-    if (fenceMatch) {
-      if (!fence) {
-        fence = fenceMatch[1][0];
-      } else if (lines[i].trim().startsWith(fence)) {
+    if (fence) {
+      const closer = /^ {0,3}(`{3,}|~{3,})\s*$/.exec(lines[i]);
+      if (closer && closer[1][0] === fence[0] && closer[1].length >= fence.length) {
         fence = undefined;
       }
       continue;
     }
-    if (!fence && /^# /.test(lines[i])) {
+    const opener = /^ {0,3}(```+|~~~+)/.exec(lines[i]);
+    if (opener) {
+      fence = opener[1];
+      continue;
+    }
+    if (/^# /.test(lines[i])) {
       result.push(i + 1);
     }
   }

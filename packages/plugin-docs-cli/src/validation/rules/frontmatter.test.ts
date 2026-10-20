@@ -191,6 +191,19 @@ describe('checkFrontmatter', () => {
     expect(h1!.line).toBe(11);
   });
 
+  it('should not close an outer fence on a shorter nested fence inside a markdown example', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(
+      join(tmp, 'page.md'),
+      `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\nsidebar_position: 1\n---\n\n` +
+        '````markdown\n```bash\n# not a heading\n```\n````\n\n' +
+        `${LONG_BODY}\n`
+    );
+
+    const findings = await checkFrontmatter(input(tmp));
+    expect(findings.find((f) => f.rule === Rule.NoH1)).toBeUndefined();
+  });
+
   it('should check files in subdirectories', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     await mkdir(join(tmp, 'sub'));
