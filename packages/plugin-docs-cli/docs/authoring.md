@@ -118,6 +118,9 @@ Validation can't catch these, so they are on you:
 
 - Don't invent query fields, options or behavior. On a page backed by source code, document only what
   you can see in the source.
+- Don't describe how a standard Grafana feature affects this plugin, such as thresholds, Min and Max, units
+  or overrides, from general knowledge. Read how the plugin's code uses it. The plugin may call it in a
+  mode that changes the answer.
 - Don't generate images. Flag missing images for the author to add.
 - Don't write installation instructions, such as `grafana-cli plugins install`, a download or a Docker
   setup. The Installation tab on the plugin page owns them, and your docs start from a plugin that is
@@ -132,6 +135,6 @@ Validation can't catch these, so they are on you:
 ## Validate
 
 Run `docs:validate` after every page you write or change and fix what it reports. You are done when it
-reports no warnings and no `section-brief` suggestions. A bare empty heading remains a warning; a current brief never renders, so a section with only that brief and a brief left in place are suggestions. A passing exit code alone doesn't mean the docs are done.
+reports no warnings and no `section-brief` suggestions. A bare empty heading remains a warning; a current brief never renders, so a section with only that brief and a brief left in place are suggestions. A passing exit code alone doesn't mean the docs are done, because validation checks the structure of the pages, not whether they are true. Re-read each page you wrote and make sure every claim about the plugin, such as a default, a behavior or what an example produces, is something you saw in its source.
 
 For the commands, refer to [Scripts](https://grafana.com/developers/plugin-tools/how-to-guides/plugin-docs#scripts).

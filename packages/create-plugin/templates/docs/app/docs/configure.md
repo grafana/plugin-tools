@@ -38,7 +38,7 @@ Fill this in: An H3 for each section of the config page, named and ordered as th
 | Setting | Description | Required |
 | ------- | ----------- | -------- |
 
-Use the field labels from the config page, in bold. If the config page has no settings of its own, such as when it only turns the app on or off, say so in one sentence and document what its buttons do instead of a table. Find the settings in the components passed to `addConfigPage` and the settings type, including `jsonData` and `secureJsonData`. In a description, say when a field only appears for some choice and when it affects another setting. Use a `> [!NOTE]` callout for a setting that's only available in Grafana Cloud or Grafana Enterprise.
+Use the field labels from the config page, in bold. If the config page has no settings of its own, such as when it only turns the app on or off, say so in one sentence and document what its buttons do instead of a table. Find the settings in the components passed to `addConfigPage` and the settings type, including `jsonData` and `secureJsonData`. When a field's default matches none of the values it offers, such as a different case, give what the page actually does with it. In a description, say when a field only appears for some choice and when it affects another setting. Use a `> [!NOTE]` callout for a setting that's only available in Grafana Cloud or Grafana Enterprise.
 
 End with the button that saves the settings and what the reader sees when it works.
 -->

@@ -72,7 +72,7 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
    **Read the files, don't search them.** Build the list of what a page shows by reading the component and the helpers it calls, not by searching for literal strings such as `setTitle(`, because titles and labels are often passed through a helper. When two pages share a helper or a structure, compare them before you write the second one, and don't write a shorter summary unless the source shows it has less.
 
    **Contradiction rule.** Flag contradictions rather than resolving them, and add each one to the gaps summary in step 10 with file and line references. The author resolves them. There are three kinds:
-   - Source contradicts itself. For example, a `description:` string lists option values that don't appear in the matching `options:` array or describes a constraint nothing enforces, or a `defaultValue` matches none of the values its option offers, which is likely a bug. Keep the source text verbatim. Don't paraphrase the discrepancy away or invent corrected wording.
+   - Source contradicts itself. For example, a `description:` string lists option values that don't appear in the matching `options:` array or describes a constraint nothing enforces, or a `defaultValue` matches none of the values its option offers, which is likely a bug. Keep the source text verbatim in the cell it comes from, such as an option's Description. Don't paraphrase the discrepancy away or invent corrected wording. Where the page states what the plugin does, such as a default or which options exist, write what the code does, so the page never repeats the wrong claim. Then flag it for the author.
    - A provisioning file and the settings type disagree. For example, a provisioning example sets a field that the settings type doesn't have, or the type has a required field that the example leaves out. Write the page's example from the settings type, leave the unknown field out and flag the mismatch. Don't invent a field to make the two match.
    - The README or linked docs contradict source. For example, they describe an option, a value or a behaviour that the code doesn't have, or that works differently. Document what source does. Check every claim you carry over from the README or linked docs against source before you write it.
 
@@ -126,6 +126,8 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
 ## Verify
 
 `docs:validate` reports no warnings and no `section-brief` suggestions, as step 9 says. Limit fixes to problems in pages you wrote or changed.
+
+A passing `docs:validate` checks the structure of the pages, not whether they are true. After it passes, re-read every page you wrote. For each claim about what the plugin does, such as a default, a behavior, an option's effect or what an example produces, name the source line that shows it. Fix or delete any claim you can't trace to source. Don't describe how a standard Grafana feature affects this plugin, such as thresholds, Min and Max, units or overrides, from general knowledge. Read how the plugin's code uses it, because the plugin may call it in a mode that changes the answer.
 
 ## Out of scope
 

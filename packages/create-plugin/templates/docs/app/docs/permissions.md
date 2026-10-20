@@ -19,7 +19,7 @@ Fill this in: A table with one row per entry in `roles` in `src/plugin.json`:
 | Role | Description | Granted by default to |
 | ---- | ----------- | --------------------- |
 
-Use the role's display name, or its name if it has none, and take the defaults from `grants`. After the table, say what each role lets a user do in the app, in terms of its pages and actions rather than the raw permission names.
+Use the role's display name, or its name if it has none, and take the defaults from `grants`. After the table, say what each role lets a user do in the app, based on the role's permissions and the `role` and `action` gates on `includes` entries in `src/plugin.json`, together with any checks in the app's code, not on the role's name. Describe access in terms of pages and actions rather than raw permission names.
 
 If `src/plugin.json` has no `roles`, remove this section and Assign a role below.
 -->
