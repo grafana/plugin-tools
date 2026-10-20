@@ -24,7 +24,7 @@ Fill this in: Keep the list above. Add a bullet in the same **Label:** form for 
 ## Set up access in {{{pluginName}}}
 
 <!-- section-brief
-Fill this in: Steps the reader follows in the service {{{pluginName}}} connects to before adding the data source, such as creating a user, an API token or a cloud role. Take what's needed from the credential fields in the config editor, and work out the least access that works from what the backend calls, such as API endpoints, SQL statements or settings it changes. Say what fails if a permission is missing. Change the heading if necessary to name the task, such as "Create a read-only user". Leave the Grafana fields to Configure settings below.
+Fill this in: Steps the reader follows in the service {{{pluginName}}} connects to before adding the data source, such as creating a user, an API token or a cloud role. Take what's needed from the credential fields in the config editor, and work out the least access that works from what the backend calls, such as API endpoints, SQL statements or settings it changes. Say what fails if a permission is missing. Take each permission from what the source calls, not from general knowledge of the service. Change the heading if necessary to name the task, such as "Create a read-only user". Leave the Grafana fields to Configure settings below.
 
 If the reader only needs credentials they already have, remove this section and keep them as a bullet in Before you begin.
 -->
@@ -47,7 +47,7 @@ Fill this in: An H3 for each section of the config editor, named and ordered as 
 | Setting | Description | Required |
 | ------- | ----------- | -------- |
 
-Start the first table with **Name** and **Default**. Use the field labels from the config editor, in bold. Find the settings in the config editor component and the options type, including `jsonData` and `secureJsonData`.
+Start the first table with **Name** and **Default**. Use the field labels from the config editor, in bold. Find the settings in the config editor component and the options type, including `jsonData` and `secureJsonData`. When a field's default matches none of the values it offers, such as a different case, give what the editor actually does with it.
 
 In a description, say when a field only appears for some choice, such as a protocol, and when it affects another setting, such as a port that must change when TLS is turned on. If source shows the editor lacks an option readers expect, such as TLS settings, say so and what to do instead. For each authentication method, say when to use it. Use a `> [!NOTE]` callout for a method or setting that's only available in Grafana Cloud or Grafana Enterprise.
 
