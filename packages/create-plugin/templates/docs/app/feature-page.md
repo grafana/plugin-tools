@@ -1,14 +1,16 @@
 ---
-title: "{{{yamlEscape page.name}}}"
-description: "Use the {{{yamlEscape page.name}}} page in {{{yamlEscape pluginName}}}."
+title: "{{{yamlEscape page.title}}}"
+description: "{{#if page.isOnlyPage}}Use {{{yamlEscape pluginName}}} in Grafana.{{else}}Use the {{{yamlEscape page.title}}} page in {{{yamlEscape pluginName}}}.{{/if}}"
 keywords:
   - "{{{yamlEscape pluginName}}}"
-  - "{{{yamlEscape page.name}}}"
+{{#unless page.isOnlyPage}}
+  - "{{{yamlEscape page.title}}}"
+{{/unless}}
 sidebar_position: {{page.position}}
 ---
 
 <!-- section-brief
-Fill this in: One or two sentences on what the {{{page.name}}} page is for and when someone opens it. The app shows it at `{{{page.path}}}`. Pair it with a screenshot of the page if `info.screenshots` in `src/plugin.json` has one.
+Fill this in: One or two sentences on what {{#if page.isOnlyPage}}{{{pluginName}}} shows{{else}}the {{{page.title}}} page is for{{/if}} and when someone opens it. The app shows it at `{{{page.path}}}`, which its navigation calls {{{page.name}}}. Pair it with a screenshot of the page if `info.screenshots` in `src/plugin.json` has one.
 -->
 {{#if page.role}}
 
@@ -22,5 +24,5 @@ Fill this in: Keep the bullet above. Add a bullet in the same **Label:** form on
 {{/if}}
 
 <!-- section-brief
-Fill this in: Replace this brief with one H2 per task someone does on the {{{page.name}}} page, named after the task, such as "Filter by service" or "Compare two time ranges". Under each, give the steps with the UI labels in bold, and say what each part of the page shows when it helps the task. Find the tasks in the component that renders `{{{page.path}}}`, including its tabs and drilldowns, which `src/plugin.json` doesn't list. Describe UI that only appears behind a feature flag or a condition as "when X is enabled".
+Fill this in: Replace this brief with one H2 per task someone does {{#if page.isOnlyPage}}in {{{pluginName}}}{{else}}on the {{{page.title}}} page{{/if}}, named after the task, such as "Filter by service" or "Compare two time ranges". Under each, give the steps with the UI labels in bold, and say what each part of the page shows when it helps the task. Find the tasks in the component that renders `{{{page.path}}}`, including its tabs and drilldowns, which `src/plugin.json` doesn't list. Describe UI that only appears behind a feature flag or a condition as "when X is enabled".
 -->

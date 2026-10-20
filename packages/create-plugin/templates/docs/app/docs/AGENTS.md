@@ -52,6 +52,8 @@ a `sidebar_position` that puts it where it belongs and link it from `index.md`.
 | An `includes` entry of type `dashboard`                                | `dashboards.md`  | What each bundled dashboard shows and how to import it.                                                                                                                                  |
 | `roles` or `iam` in `src/plugin.json`                                  | `permissions.md` | What each role grants, default assignments and what the app can access.                                                                                                                  |
 
+An app with a single page names that page after the app, because its navigation label is often a generic one such as Overview or Home. Keep that name when you add a second page only if it still describes the page, and otherwise rename the page after what it shows.
+
 When an app page grows too long, turn it into a folder of the same name with an `index.md` and
 split it into pages there. Keep every page within three folder levels of this one.
 

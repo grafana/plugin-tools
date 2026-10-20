@@ -494,7 +494,11 @@ const TEMPLATE_DEFAULT_PAGES: Record<string, string> = {
 const CONFIG_PAGE_SLUGS = ['configuration', 'configure'];
 
 interface AppFeaturePage {
+  /** The name in plugin.json, which is how the app's own navigation labels the page. */
   name: string;
+  /** What the docs call the page, which is the app's name when it has no other page. */
+  title: string;
+  isOnlyPage?: boolean;
   slug: string;
   path: string;
   role?: string;
@@ -531,7 +535,7 @@ function getAppFeaturePages(
     const role = typeof include.role === 'string' && include.role !== 'Viewer' ? include.role : undefined;
     // an in-app page named like the config page takes its place, the way data sources name it
     if (!hasConfigPage && !configPage && CONFIG_PAGE_SLUGS.includes(slug)) {
-      configPage = { name, slug: 'configure', path, role };
+      configPage = { name, title: name, slug: 'configure', path, role };
       continue;
     }
     if (takenSlugs.has(slug)) {
@@ -540,7 +544,13 @@ function getAppFeaturePages(
       continue;
     }
     takenSlugs.add(slug);
-    pages.push({ name, slug, path, role });
+    pages.push({ name, title: name, slug, path, role });
+  }
+
+  // a single page is the whole app, and its navigation label is often a generic one such as Overview or Home
+  const appSlug = slugify(pluginJson.name ?? '');
+  if (pages.length === 1 && appSlug && !getReservedPageSlugs().includes(appSlug)) {
+    pages[0] = { ...pages[0], title: pluginJson.name as string, slug: appSlug, isOnlyPage: true };
   }
   return { pages, configPage, skipped };
 }

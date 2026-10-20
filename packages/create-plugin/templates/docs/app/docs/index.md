@@ -56,7 +56,7 @@ Fill this in: List the jobs someone lands here to do, phrased as tasks rather th
 - [Change the app settings](./configure.md)
 {{/if}}
 {{#if defaultFeaturePage}}
-- [Find your way around {{{defaultFeaturePage.name}}}](./{{defaultFeaturePage.file}}.md)
+- [Find your way around {{{defaultFeaturePage.title}}}](./{{defaultFeaturePage.file}}.md)
 {{/if}}
 {{#if hasDashboards}}
 - [Import the dashboards that ship with the app](./dashboards.md)

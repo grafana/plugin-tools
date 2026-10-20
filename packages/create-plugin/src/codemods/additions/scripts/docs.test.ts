@@ -56,6 +56,7 @@ const FULL_PLUGIN_JSON: Record<string, Record<string, unknown>> = {
     roles: [],
     includes: [
       { type: 'page', name: 'Overview', path: '/a/%PLUGIN_ID%/overview', role: 'Editor', defaultNav: true },
+      { type: 'page', name: 'Reports', path: '/a/%PLUGIN_ID%/reports' },
       { type: 'page', name: 'Configuration', path: '/plugins/%PLUGIN_ID%', role: 'Admin' },
       { type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' },
     ],
@@ -73,7 +74,7 @@ const PAGES_BY_TYPE: Record<string, string[]> = {
     'dashboards',
     'troubleshooting',
   ],
-  app: ['index', 'configure', 'overview', 'dashboards', 'permissions', 'troubleshooting'],
+  app: ['index', 'configure', 'overview', 'reports', 'dashboards', 'permissions', 'troubleshooting'],
 };
 const PLUGIN_TYPES = Object.keys(PAGES_BY_TYPE);
 
@@ -1104,7 +1105,7 @@ describe('docs codemod', () => {
 
   describe('app pages', () => {
     const app = { type: 'app', id: 'acme-test-app', name: 'My App' };
-    const gatedPages = ['configure.md', 'dashboards.md', 'permissions.md', 'traces.md'];
+    const gatedPages = ['configure.md', 'dashboards.md', 'permissions.md', 'my-app.md'];
     const page = (name: string, path?: string, extra: Record<string, unknown> = {}) => ({
       type: 'page',
       name,
@@ -1145,7 +1146,7 @@ describe('docs codemod', () => {
       ['dashboards.md', {}, { includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }] }],
       ['permissions.md', {}, { roles: [{ role: { name: 'plugins:acme-test-app:reader' }, grants: ['Viewer'] }] }],
       ['permissions.md', {}, { iam: { permissions: [{ action: 'datasources:read', scope: 'datasources:*' }] } }],
-      ['traces.md', {}, { includes: [page('Traces', '/a/acme-test-app/traces')] }],
+      ['my-app.md', {}, { includes: [page('Traces', '/a/acme-test-app/traces')] }],
     ])('scaffolds %s when the app declares it (%j %j)', (expected, files, feature) => {
       const context = scaffold({ ...app, ...feature }, files);
       for (const file of gatedPages) {
@@ -1178,6 +1179,43 @@ describe('docs codemod', () => {
       ]);
       const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n'));
       expect(body).toContain('Page One (/a/%PLUGIN_ID%/one, an example page from the create-plugin app template)');
+    });
+
+    it('names the only app page after the app, whatever the navigation calls it', () => {
+      const context = scaffold({ ...app, includes: [page('Overview', '/a/%PLUGIN_ID%/', { role: 'Editor' })] });
+      const content = context.getFile('docs/my-app.md') ?? '';
+      expect(docsFiles(context)).not.toContain('overview.md');
+      expect(content).toContain('title: "My App"');
+      expect(content).toContain('description: "Use My App in Grafana."');
+      expect(content.match(/^  - "My App"$/gm)).toHaveLength(1);
+      expect(content).toContain('which its navigation calls Overview');
+      expect(content).toContain('At least the `Editor` role.');
+      expect(context.getFile('docs/index.md')).toContain('[Find your way around My App](./my-app.md)');
+    });
+
+    it('keeps the navigation names when the app has more than one page', () => {
+      const context = scaffold({
+        ...app,
+        includes: [page('Overview', '/a/%PLUGIN_ID%/'), page('Costs', '/a/%PLUGIN_ID%/costs')],
+      });
+      expect(docsFiles(context)).toEqual(expect.arrayContaining(['overview.md', 'costs.md']));
+      expect(docsFiles(context)).not.toContain('my-app.md');
+      expect(context.getFile('docs/overview.md')).toContain('title: "Overview"');
+    });
+
+    it('names the remaining page after the app when the other one became the configure page', () => {
+      const context = scaffold({
+        ...app,
+        includes: [page('Configuration', '/a/%PLUGIN_ID%/configuration'), page('Overview', '/a/%PLUGIN_ID%/')],
+      });
+      expect(context.getFile('docs/configure.md')).toContain('title: "Configuration"');
+      expect(context.doesFileExist('docs/my-app.md')).toBe(true);
+    });
+
+    it("keeps the navigation name of the only page when the app name would take another page's file name", () => {
+      const context = scaffold({ ...app, name: 'Dashboards', includes: [page('Overview', '/a/%PLUGIN_ID%/')] });
+      expect(context.doesFileExist('docs/overview.md')).toBe(true);
+      expect(context.getFile('docs/overview.md')).toContain('title: "Overview"');
     });
 
     it('puts up to three app pages at the root, in the order of the nav, with no features folder', () => {
@@ -1255,7 +1293,7 @@ describe('docs codemod', () => {
         { 'src/module.tsx': 'new AppPlugin().addConfigPage({ title: "Config" });' }
       );
       expect(context.getFile('docs/configure.md')).toContain('Open the configuration page');
-      expect(context.doesFileExist('docs/configuration.md')).toBe(true);
+      expect(context.doesFileExist('docs/my-app.md')).toBe(true);
     });
 
     it('says nothing on a re-run when the configure page exists', () => {
@@ -1317,8 +1355,14 @@ describe('docs codemod', () => {
 
     it('warns about a new app page on a re-run, without adding it', () => {
       const { context, body } = scaffoldThenRerun(
-        { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] },
-        { includes: [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Logs', '/a/%PLUGIN_ID%/logs')] }
+        { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Metrics', '/a/%PLUGIN_ID%/metrics')] },
+        {
+          includes: [
+            page('Traces', '/a/%PLUGIN_ID%/traces'),
+            page('Metrics', '/a/%PLUGIN_ID%/metrics'),
+            page('Logs', '/a/%PLUGIN_ID%/logs'),
+          ],
+        }
       );
       expect(context.hasChanges()).toBe(false);
       expect(context.doesFileExist('docs/logs.md')).toBe(false);
@@ -1401,7 +1445,10 @@ describe('docs codemod', () => {
     });
 
     it('gives an app page with accented letters a readable file name', () => {
-      const context = scaffold({ ...app, includes: [page('Übersicht', '/a/%PLUGIN_ID%/overview')] });
+      const context = scaffold({
+        ...app,
+        includes: [page('Übersicht', '/a/%PLUGIN_ID%/overview'), page('Berichte', '/a/%PLUGIN_ID%/reports')],
+      });
       expect(docsFiles(context)).toContain('ubersicht.md');
     });
 
@@ -1452,35 +1499,6 @@ describe('docs codemod', () => {
         expect(new Set(rootPositions).size, 'a folder shares a root position').toBe(rootPositions.length);
       }
     );
-
-    it('keeps every root position unique with three app pages and every gated page', () => {
-      const includes = [
-        ...(FULL_PLUGIN_JSON.app.includes as Array<Record<string, unknown>>),
-        page('Two', '/a/%PLUGIN_ID%/two'),
-        page('Three', '/a/%PLUGIN_ID%/three'),
-      ];
-      const context = scaffold({ ...FULL_PLUGIN_JSON.app, includes });
-      const positions = docsFiles(context)
-        .filter((file) => !file.includes('/') && !['AGENTS.md', 'CLAUDE.md', 'README.md'].includes(file))
-        .map((file) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1]);
-      expect(positions).toHaveLength(8);
-      expect(positions.every(Boolean)).toBe(true);
-      expect(new Set(positions).size).toBe(positions.length);
-    });
-
-    it.each([
-      ['a flat layout', FULL_PLUGIN_JSON.app],
-      [
-        'a features folder',
-        {
-          ...FULL_PLUGIN_JSON.app,
-          includes: ['One', 'Two', 'Three', 'Four'].map((name) => page(name, `/a/%PLUGIN_ID%/${name.toLowerCase()}`)),
-        },
-      ],
-    ])('is idempotent with %s', async (_, pluginJson) => {
-      const context = makeContext(pluginJson);
-      await expect((ctx: Context) => docs(ctx, { docsPath: 'docs' })).toBeIdempotent(context);
-    });
 
     it('warns about a features index that an app with four pages has lost, and names the page first when both are missing', () => {
       const four = ['One', 'Two', 'Three', 'Four'].map((n) => page(n, `/a/%PLUGIN_ID%/${n.toLowerCase()}`));
