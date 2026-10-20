@@ -221,8 +221,9 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     skippedPages: hasPages ? [] : pageStubs.skipped,
   };
   const { appPageSlug } = pageStubs;
-  if (appPageSlug && report.missingPageStubs.length > 0 && pageExists(context, docsPath, [appPageSlug])) {
-    report.appNamedPage = `${docsPath}/${appPageSlug}.md`;
+  if (appPageSlug && report.missingPageStubs.length > 0) {
+    // the author may have moved it into features/ or turned it into a folder
+    report.appNamedPage = findPage(context, docsPath, [appPageSlug, `features/${appPageSlug}`]);
   }
 
   // left alone when it exists, since the author may have customized it
@@ -263,9 +264,20 @@ interface PageReport {
 
 // a page counts as there as a file or as a folder, so authors can turn a page into a folder
 function pageExists(context: Context, docsPath: string, pageNames: string[]): boolean {
-  return pageNames.some(
-    (name) => context.doesFileExist(`${docsPath}/${name}.md`) || context.doesFileExist(`${docsPath}/${name}`)
-  );
+  return findPage(context, docsPath, pageNames) !== undefined;
+}
+
+/** The path of the first page that exists, as `<name>.md` or as the folder `<name>/`. */
+function findPage(context: Context, docsPath: string, pageNames: string[]): string | undefined {
+  for (const name of pageNames) {
+    if (context.doesFileExist(`${docsPath}/${name}.md`)) {
+      return `${docsPath}/${name}.md`;
+    }
+    if (context.doesFileExist(`${docsPath}/${name}`)) {
+      return `${docsPath}/${name}/`;
+    }
+  }
+  return undefined;
 }
 
 /**

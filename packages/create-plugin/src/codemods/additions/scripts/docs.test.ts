@@ -1521,6 +1521,20 @@ describe('docs codemod', () => {
       expect(body).toContain('Rename it after the page it documents');
     });
 
+    it.each([
+      ['moved into features/', 'features/my-app.md', 'docs/features/my-app.md is named after the app'],
+      ['turned into a folder', 'my-app/index.md', 'docs/my-app/ is named after the app'],
+    ])('names the page named after the app where it is after the author %s', (_, docsFile, expected) => {
+      const { body } = scaffoldThenRerun(
+        { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] },
+        { includes: [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Logs', '/a/%PLUGIN_ID%/logs')] },
+        docsFile,
+        ['my-app.md']
+      );
+      expect(body).toContain(expected);
+      expect(body).not.toContain('docs/my-app.md');
+    });
+
     it('gives the usual warning when a page is missing and nothing is named after the app', () => {
       const two = [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Metrics', '/a/%PLUGIN_ID%/metrics')];
       const { body } = scaffoldThenRerun(
