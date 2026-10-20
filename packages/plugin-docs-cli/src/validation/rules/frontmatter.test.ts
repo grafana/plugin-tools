@@ -163,6 +163,34 @@ describe('checkFrontmatter', () => {
     expect(findings.find((f) => f.rule === Rule.NoH1)).toBeUndefined();
   });
 
+  it('should not report a shell comment inside a fenced code block as an h1', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(
+      join(tmp, 'page.md'),
+      `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\nsidebar_position: 1\n---\n\n` +
+        '```bash\n# Enable Claude Code telemetry\nexport FOO=1\n```\n\n' +
+        `${LONG_BODY}\n`
+    );
+
+    const findings = await checkFrontmatter(input(tmp));
+    expect(findings.find((f) => f.rule === Rule.NoH1)).toBeUndefined();
+  });
+
+  it('should still report an h1 that follows a closed code block', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(
+      join(tmp, 'page.md'),
+      `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\nsidebar_position: 1\n---\n\n` +
+        '```bash\n# not a heading\n```\n\n# Real Heading\n\n' +
+        `${LONG_BODY}\n`
+    );
+
+    const findings = await checkFrontmatter(input(tmp));
+    const h1 = findings.find((f) => f.rule === Rule.NoH1);
+    expect(h1).toBeDefined();
+    expect(h1!.line).toBe(11);
+  });
+
   it('should check files in subdirectories', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     await mkdir(join(tmp, 'sub'));

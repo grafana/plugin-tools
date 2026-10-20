@@ -57,15 +57,17 @@ function findFieldLine(raw: string, key: string): number | undefined {
 
 /**
  * Finds the 1-based line numbers of all h1 headings (# ) in the markdown body.
- * The body starts after the closing --- of frontmatter.
+ * The body starts after the closing --- of frontmatter. Lines inside fenced code
+ * blocks (``` or ~~~) are skipped, since a shell comment like "# foo" isn't a heading.
  */
 function findH1Lines(raw: string): number[] {
   const lines = raw.split('\n');
   let inFrontmatter = false;
   let passedFrontmatter = false;
+  let fence: string | undefined;
   const result: number[] = [];
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].trim() === '---') {
+    if (!passedFrontmatter && lines[i].trim() === '---') {
       if (!inFrontmatter) {
         inFrontmatter = true;
       } else {
@@ -73,7 +75,19 @@ function findH1Lines(raw: string): number[] {
       }
       continue;
     }
-    if (passedFrontmatter && /^# /.test(lines[i])) {
+    if (!passedFrontmatter) {
+      continue;
+    }
+    const fenceMatch = /^(```+|~~~+)/.exec(lines[i].trim());
+    if (fenceMatch) {
+      if (!fence) {
+        fence = fenceMatch[1][0];
+      } else if (lines[i].trim().startsWith(fence)) {
+        fence = undefined;
+      }
+      continue;
+    }
+    if (!fence && /^# /.test(lines[i])) {
       result.push(i + 1);
     }
   }
