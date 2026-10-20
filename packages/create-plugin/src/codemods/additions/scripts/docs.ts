@@ -620,6 +620,7 @@ function getAppFeaturePageStubs(pluginJson: PluginJson, featureFlags: Record<str
     });
   }
 
+  const appPageSlug = getAppPageSlug(pluginJson);
   const isInFolder = pages.length > MAX_FLAT_PAGES;
   const folder = isInFolder ? 'features/' : '';
   if (isInFolder) {
@@ -647,7 +648,8 @@ function getAppFeaturePageStubs(pluginJson: PluginJson, featureFlags: Record<str
     },
     stubs,
     skipped,
-    appPageSlug: getAppPageSlug(pluginJson),
+    // a page that is already called like the app is the page the author wants, not one to rename
+    appPageSlug: pages.some((page) => page.slug === appPageSlug) ? undefined : appPageSlug,
   };
 }
 

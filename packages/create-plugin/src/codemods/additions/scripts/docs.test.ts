@@ -1535,6 +1535,16 @@ describe('docs codemod', () => {
       expect(body).not.toContain('docs/my-app.md');
     });
 
+    it('does not call a page named like the app a leftover when the app has more pages', () => {
+      const two = [page('My App', '/a/%PLUGIN_ID%/home'), page('Metrics', '/a/%PLUGIN_ID%/metrics')];
+      const { body } = scaffoldThenRerun(
+        { ...app, includes: two },
+        { includes: [...two, page('Logs', '/a/%PLUGIN_ID%/logs')] }
+      );
+      expect(body).toContain('such as docs/logs.md');
+      expect(body).not.toContain('named after the app');
+    });
+
     it('gives the usual warning when a page is missing and nothing is named after the app', () => {
       const two = [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Metrics', '/a/%PLUGIN_ID%/metrics')];
       const { body } = scaffoldThenRerun(
