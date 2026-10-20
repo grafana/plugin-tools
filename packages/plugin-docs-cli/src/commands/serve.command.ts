@@ -8,7 +8,8 @@ export const serve = async (
   argv: minimist.ParsedArgs,
   docsPath: string,
   pluginType?: string,
-  readmePaths?: string[]
+  readmePaths?: string[],
+  docsPathSetting?: string
 ) => {
   debug('Serve command invoked with args: %O', argv);
 
@@ -28,6 +29,7 @@ export const serve = async (
       port,
       liveReload,
       pluginType,
+      docsPathSetting,
     });
   } catch (error) {
     debug('Failed to start server: %O', error);

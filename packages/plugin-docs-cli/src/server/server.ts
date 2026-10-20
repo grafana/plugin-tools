@@ -40,6 +40,8 @@ export interface ServerOptions {
   port: number;
   liveReload?: boolean;
   pluginType?: string;
+  /** The `docsPath` as written in plugin.json, for the `docs-path-valid` rule. */
+  docsPathSetting?: string;
 }
 
 export interface Server {
@@ -71,7 +73,7 @@ interface RenderNavItem extends NavItem {
  * the active page's h2/h3 nested underneath.
  */
 export async function startServer(options: ServerOptions): Promise<Server> {
-  const { docsPath, readmePaths = [], port = 3001, liveReload = false, pluginType } = options;
+  const { docsPath, readmePaths = [], port = 3001, liveReload = false, pluginType, docsPathSetting } = options;
 
   debug('Starting server with options: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
 
@@ -87,7 +89,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // author actually has to fix.
   const runValidation = async () => {
     try {
-      const result = await validate({ docsPath, pluginType }, allRules);
+      const result = await validate({ docsPath, pluginType, docsPathSetting }, allRules);
       const styleFindings = result.diagnostics.filter((d) => d.rule.startsWith('style-'));
       const rest = { ...result, diagnostics: result.diagnostics.filter((d) => !d.rule.startsWith('style-')) };
 

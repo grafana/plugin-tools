@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import request from 'supertest';
 import { join } from 'node:path';
 import { mkdir, mkdtemp, unlink, writeFile } from 'node:fs/promises';
@@ -19,6 +19,18 @@ describe('startServer', () => {
     if (server) {
       await server.close();
       server = null;
+    }
+  });
+
+  it('should report a docsPath that is not a plain folder when it starts', async () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    try {
+      server = await startServer({ docsPath: testDocsPath, port: 0, docsPathSetting: './docs' });
+
+      const output = logSpy.mock.calls.map((call) => String(call[0])).join('\n');
+      expect(output).toContain('docsPath is not a plain folder');
+    } finally {
+      logSpy.mockRestore();
     }
   });
 

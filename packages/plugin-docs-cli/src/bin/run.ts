@@ -89,7 +89,7 @@ async function main() {
           reload: false,
         },
       });
-      await serve(serveArgv, docsPath, pluginType, readmeCandidates());
+      await serve(serveArgv, docsPath, pluginType, readmeCandidates(), docsPathSetting);
       break;
     }
     case 'build': {
