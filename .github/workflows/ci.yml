@@ -117,12 +117,17 @@ jobs:
           name: packed-artifacts
           path: ./packed-artifacts
 
-      - name: Install npm packages globally
-        run: for file in *.tgz; do npm install -g "$file"; done
+      - name: Install packed packages
+        # Install all tarballs into one local project so workspace deps resolve to their packed siblings
+        # instead of the registry (release PRs bump versions that aren't published yet).
+        run: |
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund ./*.tgz
+          echo "$PWD/node_modules/.bin" >> "$GITHUB_PATH"
         working-directory: ./packed-artifacts
 
       - name: Generate plugin
-        run: npx create-plugin --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
+        run: create-plugin --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
@@ -294,12 +299,17 @@ jobs:
           name: packed-artifacts
           path: ./packed-artifacts
 
-      - name: Install npm packages globally
-        run: for file in *.tgz; do npm install -g "$file"; done
+      - name: Install packed packages
+        # Install all tarballs into one local project so workspace deps resolve to their packed siblings
+        # instead of the registry (release PRs bump versions that aren't published yet).
+        run: |
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund ./*.tgz
+          echo "$PWD/node_modules/.bin" >> "$GITHUB_PATH"
         working-directory: ./packed-artifacts
 
       - name: Test create-plugin update command
-        run: npx create-plugin update --force
+        run: create-plugin update --force
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Lint plugin frontend
@@ -403,12 +413,17 @@ jobs:
           name: packed-artifacts
           path: ./packed-artifacts
 
-      - name: Install npm packages globally
-        run: for file in *.tgz; do npm install -g "$file"; done
+      - name: Install packed packages
+        # Install all tarballs into one local project so workspace deps resolve to their packed siblings
+        # instead of the registry (release PRs bump versions that aren't published yet).
+        run: |
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund ./*.tgz
+          echo "$PWD/node_modules/.bin" >> "$GITHUB_PATH"
         working-directory: ./packed-artifacts
 
       - name: Generate plugin
-        run: npx create-plugin ${{ matrix.cmdArgs }}
+        run: create-plugin ${{ matrix.cmdArgs }}
 
       - name: Install generated plugin dependencies
         run: npm install --no-audit
