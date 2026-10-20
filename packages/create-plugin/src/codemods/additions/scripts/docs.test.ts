@@ -1511,6 +1511,26 @@ describe('docs codemod', () => {
       expect(movedLayout.body).toContain('such as docs/features/four.md');
     });
 
+    it('tells the author to rename the page named after the app when the app grows past one page', () => {
+      const { context, body } = scaffoldThenRerun(
+        { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] },
+        { includes: [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Logs', '/a/%PLUGIN_ID%/logs')] }
+      );
+      expect(context.hasChanges()).toBe(false);
+      expect(body).toContain('docs/my-app.md is named after the app');
+      expect(body).toContain('Rename it after the page it documents');
+    });
+
+    it('gives the usual warning when a page is missing and nothing is named after the app', () => {
+      const two = [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Metrics', '/a/%PLUGIN_ID%/metrics')];
+      const { body } = scaffoldThenRerun(
+        { ...app, includes: two },
+        { includes: [...two, page('Logs', '/a/%PLUGIN_ID%/logs')] }
+      );
+      expect(body).toContain('such as docs/logs.md');
+      expect(body).not.toContain('named after the app');
+    });
+
     it('says nothing on a re-run when every app page has a docs page', () => {
       const pluginJson = { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] };
       const { context } = scaffoldThenRerun(pluginJson, {});

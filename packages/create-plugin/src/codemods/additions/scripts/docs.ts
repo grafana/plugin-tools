@@ -125,6 +125,8 @@ interface PageStubs {
   stubs: PageStub[];
   /** Entries in `src/plugin.json` that get no page, as `name (path)`. */
   skipped: string[];
+  /** The file name an app's only page gets, which is still there when the app grows to more pages. */
+  appPageSlug?: string;
 }
 
 interface PageStub {
@@ -218,6 +220,10 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
     // a re-run has no pages to compare against, so it only reports what the first scaffold left out
     skippedPages: hasPages ? [] : pageStubs.skipped,
   };
+  const { appPageSlug } = pageStubs;
+  if (appPageSlug && report.missingPageStubs.length > 0 && pageExists(context, docsPath, [appPageSlug])) {
+    report.appNamedPage = `${docsPath}/${appPageSlug}.md`;
+  }
 
   // left alone when it exists, since the author may have customized it
   const workflowPath = '.github/workflows/validate-docs.yml';
@@ -251,6 +257,8 @@ interface PageReport {
   missingPageStubs: string[];
   /** Entries in plugin.json that got no page on the first scaffold, with the reason. */
   skippedPages: string[];
+  /** The page named after the app, when the app has grown past one page and pages are missing. */
+  appNamedPage?: string;
 }
 
 // a page counts as there as a file or as a folder, so authors can turn a page into a folder
@@ -305,7 +313,7 @@ function buildNextStepsMessage(opts: {
   report: PageReport;
 }): ContextMessage {
   const { docsPath, packageManagerName, createPluginCmd, pluginActions, linkedRootFiles } = opts;
-  const { missingFeaturePages, missingPageStubs, skippedPages } = opts.report;
+  const { missingFeaturePages, missingPageStubs, skippedPages, appNamedPage } = opts.report;
   const run = (script: string) => output.formatCode(`${packageManagerName} run ${script}`);
 
   const steps: NextStep[] = [
@@ -350,7 +358,9 @@ function buildNextStepsMessage(opts: {
   if (missingPageStubs.length > 0) {
     warnings.push({
       title: `src/plugin.json has pages with no docs page, such as ${missingPageStubs[0]}`,
-      detail: `If they need docs, add them as described under Optional pages in ${docsPath}/AGENTS.md. If you deleted them on purpose, ignore this.`,
+      detail: appNamedPage
+        ? `${appNamedPage} is named after the app, which happens while the app has one page. Rename it after the page it documents, then add pages for the others as described under Optional pages in ${docsPath}/AGENTS.md. If you deleted pages on purpose, ignore this.`
+        : `If they need docs, add them as described under Optional pages in ${docsPath}/AGENTS.md. If you deleted them on purpose, ignore this.`,
     });
   }
   if (skippedPages.length > 0) {
@@ -548,11 +558,16 @@ function getAppFeaturePages(
   }
 
   // a single page is the whole app, and its navigation label is often a generic one such as Overview or Home
-  const appSlug = slugify(pluginJson.name ?? '');
-  if (pages.length === 1 && appSlug && !getReservedPageSlugs().includes(appSlug)) {
+  const appSlug = getAppPageSlug(pluginJson);
+  if (pages.length === 1 && appSlug) {
     pages[0] = { ...pages[0], title: pluginJson.name as string, slug: appSlug, isOnlyPage: true };
   }
   return { pages, configPage, skipped };
+}
+
+function getAppPageSlug(pluginJson: PluginJson): string | undefined {
+  const slug = slugify(pluginJson.name ?? '');
+  return slug && !getReservedPageSlugs().includes(slug) ? slug : undefined;
 }
 
 function slugify(name: string): string {
@@ -620,6 +635,7 @@ function getAppFeaturePageStubs(pluginJson: PluginJson, featureFlags: Record<str
     },
     stubs,
     skipped,
+    appPageSlug: getAppPageSlug(pluginJson),
   };
 }
 
