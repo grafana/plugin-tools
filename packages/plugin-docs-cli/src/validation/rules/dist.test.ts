@@ -175,6 +175,29 @@ describe('checkDistManifest', () => {
       expect(findings.filter((f) => f.rule === Rule.DistManifestMatchesDocs)).toHaveLength(1);
     });
 
+    it.each(['', 'Something else'])('reports a page title of %j that differs from the page', async (title) => {
+      const manifest = await readManifest();
+      findPage(manifest.pages, 'home').title = title;
+      await writeManifest(manifest);
+
+      const findings = await checkDistManifest(input());
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0]).toMatchObject({ rule: Rule.DistManifestMatchesDocs, severity: 'error', file: 'home.md' });
+    });
+
+    it('reports a page that the manifest lists twice', async () => {
+      const manifest = await readManifest();
+      manifest.pages.push(findPage(manifest.pages, 'home'));
+      await writeManifest(manifest);
+
+      const findings = await checkDistManifest(input());
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0].title).toBe('Manifest lists the same page more than once');
+      expect(findings[0].detail).toContain('home.md');
+    });
+
     it('reports a page that is in the manifest but not in the built docs', async () => {
       const manifest = await readManifest();
       manifest.pages.push({ ...findPage(manifest.pages, 'home'), slug: 'ghost', file: 'ghost.md' });

@@ -52,12 +52,25 @@ describe('resolveBuiltPluginJson', () => {
     await expect(resolveBuiltPluginJson(root)).rejects.toThrow('"docsPath" is not set in plugin.json');
   });
 
-  it.each(['../docs', '/etc', '.', 'docs/../..'])(
-    'should throw when docsPath %s is outside the plugin',
+  // GCOM looks up the literal path in the archive, so anything that is not a plain folder is not found there
+  it.each(['../docs', '.', './docs', 'docs/../docs', 'docs/./x', 'a//b', 'docs/..', '..'])(
+    'should throw when docsPath %s is not a plain folder',
     async (docsPath) => {
       const root = await writePlugin({ docsPath });
 
-      await expect(resolveBuiltPluginJson(root)).rejects.toThrow('must point to a folder inside');
+      await expect(resolveBuiltPluginJson(root)).rejects.toThrow('must be a plain folder');
     }
   );
+
+  it.each([
+    ['/docs', 'docs'],
+    ['docs/', 'docs'],
+    ['/docs/', 'docs'],
+    ['..docs', '..docs'],
+    ['catalog/docs', join('catalog', 'docs')],
+  ])('should resolve docsPath %s the way GCOM does', async (docsPath, folder) => {
+    const root = await writePlugin({ docsPath });
+
+    expect((await resolveBuiltPluginJson(root)).docsPath).toBe(join(root, folder));
+  });
 });

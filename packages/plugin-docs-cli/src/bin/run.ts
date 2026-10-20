@@ -6,7 +6,7 @@ import { resolve } from 'node:path';
 import { readmeCandidates, resolveBuiltPluginJson, resolvePluginJson } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
 import { buildDocs } from '../commands/build.command.js';
-import { validateCommand } from '../commands/validate.command.js';
+import { reportUnresolvedBuiltDocs, validateCommand } from '../commands/validate.command.js';
 
 const debug = createDebug('plugin-docs-cli:main');
 
@@ -45,7 +45,12 @@ async function main() {
   try {
     ({ docsPath, pluginType } = distRoot ? await resolveBuiltPluginJson(distRoot) : await resolvePluginJson());
   } catch (error) {
-    console.error(`Error: ${error instanceof Error ? error.message : error}`);
+    const message = error instanceof Error ? error.message : String(error);
+    if (distRoot && validateArgv.json) {
+      reportUnresolvedBuiltDocs(message);
+      return;
+    }
+    console.error(`Error: ${message}`);
     process.exit(1);
   }
 

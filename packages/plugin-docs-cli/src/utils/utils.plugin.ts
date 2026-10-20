@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { isAbsolute, join, relative, resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 import createDebug from 'debug';
 
 const debug = createDebug('plugin-docs-cli:utils:plugin');
@@ -59,7 +59,7 @@ export async function resolvePluginJson(projectRoot?: string): Promise<PluginJso
  *
  * @param distRoot - The root of the built plugin
  * @returns The resolved absolute path to the built docs directory, and the plugin's type
- * @throws {Error} If plugin.json is missing, lacks docsPath or points outside distRoot
+ * @throws {Error} If plugin.json is missing, lacks docsPath or its docsPath is not a plain folder name
  */
 export async function resolveBuiltPluginJson(distRoot: string): Promise<PluginJson> {
   const root = resolve(distRoot);
@@ -69,11 +69,16 @@ export async function resolveBuiltPluginJson(distRoot: string): Promise<PluginJs
     `Could not find plugin.json in ${root}. Build the plugin and run the docs build first.`
   );
 
-  const resolved = resolve(root, docsPath);
-  if (resolved === root || relative(root, resolved).startsWith('..') || isAbsolute(relative(root, resolved))) {
-    throw new Error(`"docsPath" in ${join(root, 'plugin.json')} must point to a folder inside ${root}`);
+  // GCOM trims the slashes and looks up the literal path in the archive, so `./docs` or `docs/../docs`
+  // never find the manifest even though they resolve to a real folder
+  const folder = docsPath.replace(/^\/+|\/+$/g, '');
+  if (folder.split('/').some((segment) => segment === '' || segment === '.' || segment === '..')) {
+    throw new Error(
+      `"docsPath" in ${join(root, 'plugin.json')} must be a plain folder such as "docs", but is "${docsPath}"`
+    );
   }
 
+  const resolved = join(root, folder);
   debug('Resolved built docsPath: %s -> %s', docsPath, resolved);
   return { docsPath: resolved, pluginType };
 }

@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { buildDocs } from './build.command.js';
-import { validateCommand } from './validate.command.js';
+import { reportUnresolvedBuiltDocs, validateCommand } from './validate.command.js';
 import { guidesLocation } from '../utils/utils.guides.js';
 
 describe('validateCommand', () => {
@@ -70,6 +70,17 @@ describe('validateCommand', () => {
     } finally {
       await rm(builtRoot, { recursive: true, force: true });
     }
+  });
+
+  it('reports built docs that cannot be found as JSON', () => {
+    reportUnresolvedBuiltDocs('Could not find plugin.json');
+
+    const output = JSON.parse(logSpy.mock.calls[0][0] as string);
+    expect(output).toMatchObject({ valid: false, guide: guidesLocation() });
+    expect(output.diagnostics).toEqual([
+      expect.objectContaining({ rule: 'docs-path-exists', severity: 'error', detail: 'Could not find plugin.json' }),
+    ]);
+    expect(process.exitCode).toBe(1);
   });
 
   it('sets the exit code from the validation result', async () => {

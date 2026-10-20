@@ -6,7 +6,7 @@ Your docs folder is checked against the rules below in two places, with the same
   prints what it finds, but never blocks your preview.
 - **`validate`** - what runs in CI, and what `plugin-validator` runs against your plugin before it
   can be published. It fails on any error. Run it with `--dist` to check the docs your plugin build
-  ships instead of the docs folder in your repository, which is what the release pipeline does.
+  ships instead of the docs folder in your repository.
 
 An error you see while writing in `serve` will block publishing, so fix it before you submit your
 plugin.
@@ -178,14 +178,13 @@ page missing its `title`), rather than something to fix directly.
 
 ## Built docs
 
-These rules only run on the docs your plugin build ships, which the release pipeline checks with
-`validate --dist`. All the rules above run on the built docs as well, so what the catalog serves is
-what was checked. If one of these fails, build the plugin and then build the docs again, because the
+These rules only run with `validate --dist`, on the docs your plugin build ships. All the rules above
+run on the built docs as well, so what the catalog serves is what was checked. If one of these fails, build the plugin and then build the docs again, because the
 plugin build clears the `dist` folder.
 
-| Rule                         | What it checks                                                                                                                | Severity |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `dist-manifest-exists`       | The built docs have a `manifest.json` that parses.                                                                            | Error    |
-| `dist-manifest-valid`        | Every manifest page has a title, slug and file, and a page with a file has its content and frontmatter. The root page exists. | Error    |
-| `dist-manifest-matches-docs` | The manifest lists the same pages as the built docs folder, with the same content and frontmatter.                            | Error    |
-| `dist-manifest-stale`        | The slugs, headings and page tree in the manifest match what this version of the docs CLI generates.                          | Warning  |
+| Rule                         | What it checks                                                                                                                                                          | Severity |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `dist-manifest-exists`       | The built docs have a `manifest.json` that parses.                                                                                                                      | Error    |
+| `dist-manifest-valid`        | Every manifest page has a title, slug and file, and a page with a file has its content and frontmatter. The root page exists. An unknown manifest version is a warning. | Error    |
+| `dist-manifest-matches-docs` | The manifest lists each page of the built docs folder once, with the same title, content and frontmatter.                                                               | Error    |
+| `dist-manifest-stale`        | The slugs, headings and page tree in the manifest match what this version of the docs CLI generates.                                                                    | Warning  |

@@ -127,20 +127,32 @@ interface FlatPage {
  * Pages in a tree by key: the page's file or, for a folder without an index.md, a key built from its
  * position. Keyed rather than ordered, so a manifest built on another operating system still compares equal.
  */
-function flatten(pages: Page[], parent: string, into: Map<string, FlatPage>): Map<string, FlatPage> {
+function flatten(
+  pages: Page[],
+  parent: string,
+  into: Map<string, FlatPage>,
+  duplicates: string[] = []
+): Map<string, FlatPage> {
   for (const page of pages) {
     const key = page.file || `category:${parent}/${page.slug}`;
+    if (into.has(key)) {
+      duplicates.push(key);
+    }
     into.set(key, { key, parent, page });
     if (page.children) {
-      flatten(page.children, key, into);
+      flatten(page.children, key, into, duplicates);
     }
   }
   return into;
 }
 
-// values that went through a JSON round trip, which is what a manifest read from disk has been through
-function viaJson<T>(value: T): T {
-  return JSON.parse(JSON.stringify(value ?? null));
+// a scanned value as it reads back from a manifest on disk, where Dates are strings and undefined is gone
+function asManifestValue(scanned: unknown): unknown {
+  return JSON.parse(JSON.stringify(scanned ?? null));
+}
+
+function sameAsScanned(fromManifest: unknown, scanned: unknown): boolean {
+  return isDeepStrictEqual(fromManifest ?? null, asManifestValue(scanned));
 }
 
 function summarise(items: string[]): string {
@@ -157,9 +169,19 @@ async function checkMatchesDocs(docsPath: string, manifest: Manifest): Promise<D
     return [];
   }
 
-  const inManifest = flatten(manifest.pages, '', new Map());
+  const listedTwice: string[] = [];
+  const inManifest = flatten(manifest.pages, '', new Map(), listedTwice);
   const inDocs = flatten(scanned.pages, '', new Map());
   const diagnostics: Diagnostic[] = [];
+
+  if (listedTwice.length > 0) {
+    diagnostics.push({
+      rule: Rule.DistManifestMatchesDocs,
+      severity: 'error',
+      title: 'Manifest lists the same page more than once',
+      detail: `${MANIFEST_FILE} has ${summarise(listedTwice)} more than once. The catalog would show a duplicate entry in the sidebar. Run the docs build again.`,
+    });
+  }
 
   const pageFiles = (pages: Map<string, FlatPage>) => [...pages.values()].filter((p) => p.page.file).map((p) => p.key);
   const manifestFiles = pageFiles(inManifest);
@@ -191,7 +213,8 @@ async function checkMatchesDocs(docsPath: string, manifest: Manifest): Promise<D
       fromManifest &&
       fromDocs &&
       (fromManifest.content !== fromDocs.content ||
-        !isDeepStrictEqual(viaJson(fromManifest.frontmatter), viaJson(fromDocs.frontmatter)))
+        fromManifest.title !== fromDocs.title ||
+        !sameAsScanned(fromManifest.frontmatter, fromDocs.frontmatter))
     );
   });
   for (const file of different) {
@@ -200,7 +223,7 @@ async function checkMatchesDocs(docsPath: string, manifest: Manifest): Promise<D
       severity: 'error',
       file,
       title: 'Manifest content differs from the built page',
-      detail: `The content or frontmatter of "${file}" in ${MANIFEST_FILE} is not what the file in the built docs says. The catalog renders the manifest, so what was validated is not what readers would see. Run the docs build again.`,
+      detail: `The title, content or frontmatter of "${file}" in ${MANIFEST_FILE} is not what the file in the built docs says. The catalog renders the manifest, so what was validated is not what readers would see. Run the docs build again.`,
     });
   }
 
@@ -212,7 +235,8 @@ async function checkMatchesDocs(docsPath: string, manifest: Manifest): Promise<D
       actual &&
       (actual.page.slug !== expected.page.slug ||
         actual.parent !== expected.parent ||
-        !isDeepStrictEqual(viaJson(actual.page.headings), viaJson(expected.page.headings)))
+        (!expected.page.file && actual.page.title !== expected.page.title) ||
+        !sameAsScanned(actual.page.headings, expected.page.headings))
     ) {
       stale.push(key);
     }
