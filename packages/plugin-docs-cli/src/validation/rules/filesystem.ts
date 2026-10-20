@@ -2,6 +2,7 @@ import { readdir, stat } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, extname, relative, sep } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
+import { hasPlainSegments } from '../../utils/utils.plugin.js';
 import { formatBytes, isMetaFile } from './utils.js';
 
 // slug-safe: lowercase letters, digits and hyphens only
@@ -25,6 +26,32 @@ export const ALLOWED_VIDEO_EXTENSIONS = new Set(['.mp4', '.webm']);
 // allowed file extensions in the docs folder (.md + permitted image and video formats)
 export const ALLOWED_EXTENSIONS = new Set(['.md', ...ALLOWED_IMAGE_EXTENSIONS, ...ALLOWED_VIDEO_EXTENSIONS]);
 
+/**
+ * The catalog looks the manifest up at the literal `docsPath` in the plugin archive, while `build` writes
+ * to the normalised path. They only agree when `docsPath` is a plain relative folder. Built docs are
+ * checked when `--dist` resolves the plugin, so this only runs on the source.
+ */
+export function checkDocsPathSetting(input: ValidationInput): Diagnostic[] {
+  const setting = input.docsPathSetting;
+  if (setting === undefined || input.mode === 'dist') {
+    return [];
+  }
+
+  const folder = setting.replace(/\/$/, '');
+  if (!setting.startsWith('/') && !setting.includes('\\') && !/^[a-z]:/i.test(setting) && hasPlainSegments(folder)) {
+    return [];
+  }
+
+  return [
+    {
+      rule: Rule.ValidDocsPath,
+      severity: 'error',
+      title: 'docsPath is not a plain folder',
+      detail: `"docsPath" in src/plugin.json is "${setting}". The catalog looks for your docs at exactly that path in the plugin, so a leading "/", a backslash or "." and ".." segments mean it never finds them. Use a plain relative folder such as "docs".`,
+    },
+  ];
+}
+
 export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];
 
@@ -36,6 +63,10 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     // readable). Every other filesystem/frontmatter/asset check is meaningless without it, so
     // report just this and stop.
     const code = (err as NodeJS.ErrnoException | undefined)?.code;
+    const fix =
+      input.mode === 'dist'
+        ? 'Build the plugin and run the docs build first.'
+        : 'Check that "docsPath" in src/plugin.json points to an existing directory.';
 
     diagnostics.push({
       rule: Rule.DocsPathExists,
@@ -48,7 +79,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
             : 'docsPath is not readable',
       detail:
         code === 'ENOENT'
-          ? `"${input.docsPath}" does not exist. Check that "docsPath" in src/plugin.json points to an existing directory.`
+          ? `"${input.docsPath}" does not exist. ${fix}`
           : `"${input.docsPath}" could not be read (${code ?? 'unknown error'}). Check that it is a directory and that you have permission to read it.`,
     });
 
@@ -60,7 +91,12 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   const mdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() === '.md' && !isMetaFile(e.name));
   const dirs = entries.filter((e) => e.isDirectory());
   const symlinks = entries.filter((e) => e.isSymbolicLink());
-  const nonMdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() !== '.md');
+  // the manifest `build` generates sits next to the pages in built docs, and is not authored content
+  const isGeneratedManifest = (e: Dirent) =>
+    input.mode === 'dist' && e.name === 'manifest.json' && e.parentPath === input.docsPath;
+  const nonMdFiles = entries.filter(
+    (e) => e.isFile() && extname(e.name).toLowerCase() !== '.md' && !isGeneratedManifest(e)
+  );
 
   // no-symlinks
   for (const link of symlinks) {
@@ -129,7 +165,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   // max-total-docs-size
   let totalSize = 0;
   for (const file of entries) {
-    if (!file.isFile()) {
+    if (!file.isFile() || isGeneratedManifest(file)) {
       continue;
     }
     try {

@@ -1,9 +1,11 @@
-import { readdir } from 'node:fs/promises';
+import { readdir, stat } from 'node:fs/promises';
 import { relative, join, sep } from 'node:path';
 import type { Dirent } from 'node:fs';
 import type { Page } from '@grafana/plugin-docs-parser';
 import { scanDocsFolder } from '../../scanner.js';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
+import { MANIFEST_FILE } from './dist.js';
+import { formatBytes } from './utils.js';
 
 /**
  * Collects all file references from a manifest page tree.
@@ -129,4 +131,36 @@ export async function checkManifest(input: ValidationInput): Promise<Diagnostic[
   }
 
   return diagnostics;
+}
+
+// GCOM drops a manifest larger than this without failing the release, so the Documentation tab never appears
+const MAX_MANIFEST_SIZE = 1024 * 1024;
+
+export async function checkManifestSize(input: ValidationInput): Promise<Diagnostic[]> {
+  let size: number;
+  try {
+    if (input.mode === 'dist') {
+      size = (await stat(join(input.docsPath, MANIFEST_FILE))).size;
+    } else {
+      const { manifest } = await scanDocsFolder(input.docsPath);
+      // the same serialisation `build` writes
+      size = Buffer.byteLength(JSON.stringify(manifest, null, 2) + '\n');
+    }
+  } catch {
+    // no pages or no manifest: other rules report it
+    return [];
+  }
+
+  if (size <= MAX_MANIFEST_SIZE) {
+    return [];
+  }
+
+  return [
+    {
+      rule: Rule.MaxManifestSize,
+      severity: 'error',
+      title: `Manifest exceeds ${formatBytes(MAX_MANIFEST_SIZE)} limit`,
+      detail: `The manifest of your docs is ${formatBytes(size)}, and the catalog ignores one over ${formatBytes(MAX_MANIFEST_SIZE)}. It holds the text of every page, so shorten or remove pages.`,
+    },
+  ];
 }

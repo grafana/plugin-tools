@@ -2,8 +2,39 @@ import { describe, it, expect } from 'vitest';
 import { join } from 'node:path';
 import { mkdir, mkdtemp, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { checkFilesystem } from './filesystem.js';
+import { checkDocsPathSetting, checkFilesystem } from './filesystem.js';
 import { Rule } from '../types.js';
+
+describe('checkDocsPathSetting', () => {
+  it.each(['docs', 'docs/', 'catalog-docs', 'docs/plugin', '..docs'])('accepts %s', (docsPathSetting) => {
+    expect(checkDocsPathSetting({ docsPath: '/x', docsPathSetting })).toEqual([]);
+  });
+
+  it.each([
+    './docs',
+    'docs/../docs',
+    'docs/./x',
+    'a//b',
+    'docs//',
+    '../docs',
+    '..',
+    '/docs',
+    'docs\\guide',
+    'C:docs',
+    'c:/docs',
+  ])('reports %s', (docsPathSetting) => {
+    const findings = checkDocsPathSetting({ docsPath: '/x', docsPathSetting });
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({ rule: Rule.ValidDocsPath, severity: 'error' });
+    expect(findings[0].detail).toContain(docsPathSetting);
+  });
+
+  it('reports nothing without a setting or in dist mode', () => {
+    expect(checkDocsPathSetting({ docsPath: '/x' })).toEqual([]);
+    expect(checkDocsPathSetting({ docsPath: '/x', docsPathSetting: './docs', mode: 'dist' })).toEqual([]);
+  });
+});
 
 describe('checkFilesystem', () => {
   const testDocsPath = join(__dirname, '..', '..', '__fixtures__', 'test-docs');
@@ -204,6 +235,30 @@ describe('checkFilesystem', () => {
     expect(finding).toBeDefined();
     expect(finding!.severity).toBe('error');
     expect(finding!.file).toContain('config.json');
+  });
+
+  it('should ignore the generated manifest.json in dist mode only', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await writeFile(join(tmp, 'manifest.json'), '{}');
+
+    const dist = await checkFilesystem({ docsPath: tmp, mode: 'dist' });
+    const source = await checkFilesystem({ docsPath: tmp });
+
+    expect(dist.find((f) => f.rule === Rule.AllowedFileTypes)).toBeUndefined();
+    expect(source.find((f) => f.rule === Rule.AllowedFileTypes)).toBeDefined();
+  });
+
+  it('should still report other disallowed files, and a nested manifest.json, in dist mode', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await mkdir(join(tmp, 'sub'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await writeFile(join(tmp, 'config.json'), '{}');
+    await writeFile(join(tmp, 'sub', 'manifest.json'), '{}');
+
+    const findings = await checkFilesystem({ docsPath: tmp, mode: 'dist' });
+
+    expect(findings.filter((f) => f.rule === Rule.AllowedFileTypes)).toHaveLength(2);
   });
 
   it('should not report allowed-file-types for permitted image formats', async () => {

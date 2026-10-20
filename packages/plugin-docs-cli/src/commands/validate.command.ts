@@ -3,19 +3,51 @@ import { validate } from '../validation/engine.js';
 import { formatResult } from '../validation/format.js';
 import { allRules } from '../validation/rules/index.js';
 import { guidesLocation } from '../utils/utils.guides.js';
+import { Rule } from '../validation/types.js';
 
 const debug = createDebug('plugin-docs-cli:validate');
+
+/**
+ * Reports that the built docs could not be located at all, in the same JSON shape as a validation run
+ * so a consumer of `--json` never has to parse stderr.
+ */
+export function reportUnresolvedBuiltDocs(detail: string): void {
+  console.log(
+    JSON.stringify(
+      {
+        valid: false,
+        diagnostics: [{ rule: Rule.DocsPathExists, severity: 'error', title: 'Built docs not found', detail }],
+        guide: guidesLocation(),
+      },
+      null,
+      2
+    )
+  );
+  process.exitCode = 1;
+}
 
 export async function validateCommand(
   docsPath: string,
   options: {
     json: boolean;
     pluginType?: string;
+    mode?: 'source' | 'dist';
+    docsPathSetting?: string;
   } = { json: false }
 ): Promise<void> {
-  debug('Validating docs at: %s (json: %s, pluginType: %s)', docsPath, options.json, options.pluginType);
+  const mode = options.mode ?? 'source';
+  debug(
+    'Validating docs at: %s (json: %s, pluginType: %s, mode: %s)',
+    docsPath,
+    options.json,
+    options.pluginType,
+    mode
+  );
 
-  const result = await validate({ docsPath, pluginType: options.pluginType }, allRules);
+  const result = await validate(
+    { docsPath, pluginType: options.pluginType, mode, docsPathSetting: options.docsPathSetting },
+    allRules
+  );
 
   const guide = guidesLocation();
   if (options.json) {

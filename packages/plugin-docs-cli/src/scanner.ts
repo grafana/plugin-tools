@@ -223,9 +223,13 @@ function treeToPages(node: TreeNode): Page[] {
     if (b[0] === 'index.md') {
       return 1;
     }
-    return (
-      (a[1].file?.frontmatter.sidebar_position ?? Infinity) - (b[1].file?.frontmatter.sidebar_position ?? Infinity)
-    );
+    const positionA = a[1].file?.frontmatter.sidebar_position ?? Infinity;
+    const positionB = b[1].file?.frontmatter.sidebar_position ?? Infinity;
+    if (positionA !== positionB) {
+      return positionA < positionB ? -1 : 1;
+    }
+    // readdir order differs between operating systems, so break ties by name
+    return a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0;
   });
 
   for (const [name, child] of sortedEntries) {

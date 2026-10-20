@@ -30,5 +30,6 @@ prints a GitHub URL pinned to the installed version instead.
 ## Validation rules
 
 `validate` and `serve` check your docs folder against a set of rules covering file structure,
-frontmatter, images and links. See [docs/validation-rules.md](./docs/validation-rules.md) for the
+frontmatter, images and links. `validate --dist` checks the docs your plugin build ships instead,
+including `manifest.json`. See [docs/validation-rules.md](./docs/validation-rules.md) for the
 full list and what each one checks.
