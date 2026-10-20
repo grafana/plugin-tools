@@ -220,8 +220,8 @@ The agent files don't affect your docs or how they're published. If you don't us
 Docs publish as part of a plugin release:
 
 1. `validate-docs.yml` runs `docs:validate` on every pull request that changes your docs folder or `src/plugin.json`. Warnings don't fail it, so you can merge docs in progress.
-1. When you release, the plugin validator checks your docs again. Errors fail the release. Warnings don't, so check that `docs:validate` reports none before you release.
 1. The docs are built into the plugin archive.
+1. When you release, the plugin validator checks the docs in the archive again, including the `manifest.json` the catalog reads. Errors fail the release. Warnings don't, so check that `docs:validate` reports none before you release.
 1. When you submit the new version, Grafana reviews the docs as part of the plugin submission.
 1. Once the version is approved, the docs appear in the catalog.
 

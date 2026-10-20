@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
+import { mkdtemp, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { resolvePluginJson } from './utils.plugin.js';
+import { resolveBuiltPluginJson, resolvePluginJson } from './utils.plugin.js';
 
 describe('resolvePluginJson', () => {
   const fixturesPath = join(__dirname, '..', '__fixtures__');
@@ -23,4 +25,39 @@ describe('resolvePluginJson', () => {
 
     await expect(resolvePluginJson(projectRoot)).rejects.toThrow('"docsPath" is not set in src/plugin.json');
   });
+});
+
+describe('resolveBuiltPluginJson', () => {
+  const writePlugin = async (pluginJson: unknown) => {
+    const root = await mkdtemp(join(tmpdir(), 'built-plugin-'));
+    await writeFile(join(root, 'plugin.json'), JSON.stringify(pluginJson));
+    return root;
+  };
+
+  it('should resolve docsPath and pluginType from plugin.json at the root', async () => {
+    const root = await writePlugin({ docsPath: 'docs', type: 'panel' });
+
+    expect(await resolveBuiltPluginJson(root)).toEqual({ docsPath: join(root, 'docs'), pluginType: 'panel' });
+  });
+
+  it('should throw with a build hint when plugin.json is missing', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'built-plugin-'));
+
+    await expect(resolveBuiltPluginJson(root)).rejects.toThrow('Build the plugin and run the docs build first');
+  });
+
+  it('should throw when docsPath is not set', async () => {
+    const root = await writePlugin({ type: 'panel' });
+
+    await expect(resolveBuiltPluginJson(root)).rejects.toThrow('"docsPath" is not set in plugin.json');
+  });
+
+  it.each(['../docs', '/etc', '.', 'docs/../..'])(
+    'should throw when docsPath %s is outside the plugin',
+    async (docsPath) => {
+      const root = await writePlugin({ docsPath });
+
+      await expect(resolveBuiltPluginJson(root)).rejects.toThrow('must point to a folder inside');
+    }
+  );
 });

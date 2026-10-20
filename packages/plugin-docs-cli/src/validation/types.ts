@@ -60,6 +60,12 @@ export const Rule = {
   // manifest rules
   ManifestValid: 'manifest-valid',
   ManifestRefsExist: 'manifest-refs-exist',
+  MaxManifestSize: 'max-manifest-size',
+  // built-docs rules, only run with `validate --dist`
+  DistManifestExists: 'dist-manifest-exists',
+  DistManifestValid: 'dist-manifest-valid',
+  DistManifestMatchesDocs: 'dist-manifest-matches-docs',
+  DistManifestStale: 'dist-manifest-stale',
 } as const;
 
 export type Rule = (typeof Rule)[keyof typeof Rule];
@@ -94,6 +100,12 @@ export interface Diagnostic {
  */
 export interface ValidationInput {
   docsPath: string;
+  /**
+   * `source` checks the docs folder in the plugin repository. `dist` checks the built docs that ship
+   * in the plugin archive, where `docsPath` is the folder `build` wrote the pages and `manifest.json`
+   * to. Defaults to `source`.
+   */
+  mode?: 'source' | 'dist';
   /**
    * The plugin's `type` from `plugin.json`, such as `panel` or `datasource`. Drives the
    * `required-pages` rule, which reports nothing when this is unset.

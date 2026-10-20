@@ -36,6 +36,10 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
     // readable). Every other filesystem/frontmatter/asset check is meaningless without it, so
     // report just this and stop.
     const code = (err as NodeJS.ErrnoException | undefined)?.code;
+    const fix =
+      input.mode === 'dist'
+        ? 'Build the plugin and run the docs build first.'
+        : 'Check that "docsPath" in src/plugin.json points to an existing directory.';
 
     diagnostics.push({
       rule: Rule.DocsPathExists,
@@ -48,7 +52,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
             : 'docsPath is not readable',
       detail:
         code === 'ENOENT'
-          ? `"${input.docsPath}" does not exist. Check that "docsPath" in src/plugin.json points to an existing directory.`
+          ? `"${input.docsPath}" does not exist. ${fix}`
           : `"${input.docsPath}" could not be read (${code ?? 'unknown error'}). Check that it is a directory and that you have permission to read it.`,
     });
 
@@ -60,7 +64,12 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   const mdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() === '.md' && !isMetaFile(e.name));
   const dirs = entries.filter((e) => e.isDirectory());
   const symlinks = entries.filter((e) => e.isSymbolicLink());
-  const nonMdFiles = entries.filter((e) => e.isFile() && extname(e.name).toLowerCase() !== '.md');
+  // the manifest `build` generates sits next to the pages in built docs, and is not authored content
+  const isGeneratedManifest = (e: Dirent) =>
+    input.mode === 'dist' && e.name === 'manifest.json' && e.parentPath === input.docsPath;
+  const nonMdFiles = entries.filter(
+    (e) => e.isFile() && extname(e.name).toLowerCase() !== '.md' && !isGeneratedManifest(e)
+  );
 
   // no-symlinks
   for (const link of symlinks) {
@@ -129,7 +138,7 @@ export async function checkFilesystem(input: ValidationInput): Promise<Diagnosti
   // max-total-docs-size
   let totalSize = 0;
   for (const file of entries) {
-    if (!file.isFile()) {
+    if (!file.isFile() || isGeneratedManifest(file)) {
       continue;
     }
     try {

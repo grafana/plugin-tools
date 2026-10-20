@@ -3,7 +3,8 @@ import { checkAssets } from './assets.js';
 import { checkCrossFile } from './cross-file.js';
 import { checkFilesystem } from './filesystem.js';
 import { checkFrontmatter } from './frontmatter.js';
-import { checkManifest } from './manifest.js';
+import { checkDistManifest } from './dist.js';
+import { checkManifest, checkManifestSize } from './manifest.js';
 import { checkMarkdown } from './markdown.js';
 import { checkRequiredPages } from './required-pages.js';
 import { checkStubContent } from './stub-content.js';
@@ -18,6 +19,8 @@ export const allRules: RuleRunner[] = [
   checkStubContent,
   checkCrossFile,
   checkManifest,
+  checkManifestSize,
+  checkDistManifest,
   // last, so writing-style advice renders below the findings an author has to act on
   checkWritingStyle,
 ];

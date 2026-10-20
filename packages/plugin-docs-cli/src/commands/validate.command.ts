@@ -11,11 +11,19 @@ export async function validateCommand(
   options: {
     json: boolean;
     pluginType?: string;
+    mode?: 'source' | 'dist';
   } = { json: false }
 ): Promise<void> {
-  debug('Validating docs at: %s (json: %s, pluginType: %s)', docsPath, options.json, options.pluginType);
+  const mode = options.mode ?? 'source';
+  debug(
+    'Validating docs at: %s (json: %s, pluginType: %s, mode: %s)',
+    docsPath,
+    options.json,
+    options.pluginType,
+    mode
+  );
 
-  const result = await validate({ docsPath, pluginType: options.pluginType }, allRules);
+  const result = await validate({ docsPath, pluginType: options.pluginType, mode }, allRules);
 
   const guide = guidesLocation();
   if (options.json) {

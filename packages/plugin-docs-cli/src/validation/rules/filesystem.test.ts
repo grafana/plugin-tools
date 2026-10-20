@@ -206,6 +206,30 @@ describe('checkFilesystem', () => {
     expect(finding!.file).toContain('config.json');
   });
 
+  it('should ignore the generated manifest.json in dist mode only', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await writeFile(join(tmp, 'manifest.json'), '{}');
+
+    const dist = await checkFilesystem({ docsPath: tmp, mode: 'dist' });
+    const source = await checkFilesystem({ docsPath: tmp });
+
+    expect(dist.find((f) => f.rule === Rule.AllowedFileTypes)).toBeUndefined();
+    expect(source.find((f) => f.rule === Rule.AllowedFileTypes)).toBeDefined();
+  });
+
+  it('should still report other disallowed files, and a nested manifest.json, in dist mode', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
+    await mkdir(join(tmp, 'sub'));
+    await writeFile(join(tmp, 'index.md'), '---\ntitle: Home\n---\n');
+    await writeFile(join(tmp, 'config.json'), '{}');
+    await writeFile(join(tmp, 'sub', 'manifest.json'), '{}');
+
+    const findings = await checkFilesystem({ docsPath: tmp, mode: 'dist' });
+
+    expect(findings.filter((f) => f.rule === Rule.AllowedFileTypes)).toHaveLength(2);
+  });
+
   it('should not report allowed-file-types for permitted image formats', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'docs-test-'));
     await mkdir(join(tmp, 'img'));
