@@ -52,6 +52,21 @@ Body text here.`;
     expect(html).toContain('<p>Body text here.</p>');
   });
 
+  it('should extract keywords from frontmatter', () => {
+    const markdown = `---
+title: Test Page
+description: A test page
+keywords:
+  - data source
+  - configuration
+---
+## Content`;
+
+    const result = parseMarkdown(markdown);
+
+    expect(result.frontmatter.keywords).toEqual(['data source', 'configuration']);
+  });
+
   it('should handle GitHub Flavored Markdown tables', () => {
     const markdown = `| Header 1 | Header 2 |
 |----------|----------|

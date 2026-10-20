@@ -27,13 +27,14 @@ shortcodes, frontmatter and links. For everything plugin docs support, refer to
 
 ## 2. Convert frontmatter
 
-| Docs website field                                      | Plugin docs                                                                                    |
-| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `title` and `description`                               | Keep. Both are required. Keep `title` to 60 characters and `description` to 20-160 characters. |
-| `weight`                                                | Becomes `sidebar_position`. Every page in a folder needs a different value.                    |
-| `slug`                                                  | Keep, except on the root `index.md`.                                                           |
-| `refs`                                                  | Use it to rewrite `ref:` links, then remove it.                                                |
-| `menuTitle`, `aliases`, `keywords`, `labels` and others | Remove. The sidebar uses `title`, and there are no redirects.                                  |
+| Docs website field                          | Plugin docs                                                                                    |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `title` and `description`                   | Keep. Both are required. Keep `title` to 60 characters and `description` to 20-160 characters. |
+| `weight`                                    | Becomes `sidebar_position`. Every page in a folder needs a different value.                    |
+| `slug`                                      | Keep, except on the root `index.md`.                                                           |
+| `refs`                                      | Use it to rewrite `ref:` links, then remove it.                                                |
+| `keywords`                                  | Keep. It must be a list of strings.                                                            |
+| `menuTitle`, `aliases`, `labels` and others | Remove. The sidebar uses `title`, and there are no redirects.                                  |
 
 ## 3. Replace shortcodes
 

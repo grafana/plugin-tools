@@ -72,6 +72,17 @@ describe('scanDocsFolder', () => {
     expect(home?.content).toBe(result.files[home!.file]);
   });
 
+  it('should pass keywords through to the page frontmatter', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'scan-keywords-'));
+    await writeFile(
+      join(tmp, 'index.md'),
+      '---\ntitle: Home\ndescription: Welcome to the docs\nkeywords:\n  - data source\n  - configuration\n---\n\n## Hello\n'
+    );
+
+    const result = await scanDocsFolder(tmp);
+    expect(result.manifest.pages[0].frontmatter?.keywords).toEqual(['data source', 'configuration']);
+  });
+
   it('should include file reference in page object', async () => {
     const result = await scanDocsFolder(testDocsPath);
 

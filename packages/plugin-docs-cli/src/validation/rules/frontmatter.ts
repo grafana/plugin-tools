@@ -21,6 +21,10 @@ const MAX_DESCRIPTION_LENGTH = 160;
 // below this, a page body is almost certainly a stub rather than real content
 const MIN_CONTENT_LENGTH = 150;
 
+function isStringList(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string' && item.trim() !== '');
+}
+
 /**
  * Checks whether a custom slug is safe for use in URLs.
  * Mirrors the logic in scanner.ts normalizeCustomSlug.
@@ -203,6 +207,17 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
           detail: `"${key}" should be a ${type} but got ${typeof data[key]}.`,
         });
       }
+    }
+
+    if ('keywords' in data && !isStringList(data.keywords)) {
+      diagnostics.push({
+        rule: Rule.FieldTypes,
+        severity: 'error',
+        file: relativePath,
+        line: findFieldLine(raw, 'keywords'),
+        title: 'Wrong type for field: keywords',
+        detail: '"keywords" should be a list of non-empty strings.',
+      });
     }
 
     // frontmatter-title-length: search engines truncate long titles in results

@@ -40,6 +40,7 @@ sidebar_position: 2
 | `description`      | Yes      | Used for search engines and link previews.                                                           |
 | `sidebar_position` | No       | Orders pages within a folder, lowest first. Pages without one come last. `index.md` is always first. |
 | `slug`             | No       | Overrides the URL segment generated from the file name. Not allowed on the root `index.md`.          |
+| `keywords`         | No       | A list of search keywords for the page, for example `- data source`.                                 |
 
 ## Headings
 

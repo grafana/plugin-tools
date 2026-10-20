@@ -397,6 +397,36 @@ describe('checkFrontmatter', () => {
     expect(findings.find((f) => f.rule === Rule.DescriptionLength)).toBeUndefined();
   });
 
+  it('should accept keywords as a list of strings', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(
+      join(tmp, 'page.md'),
+      `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\nkeywords:\n  - data source\n  - configuration\n---\n\n${LONG_BODY}\n`
+    );
+
+    const findings = await checkFrontmatter(input(tmp));
+    expect(findings.filter((f) => f.rule === Rule.FieldTypes)).toHaveLength(0);
+  });
+
+  it.each([
+    ['a string', 'keywords: data source'],
+    ['a list with a number', 'keywords:\n  - data source\n  - 42'],
+    ['a list with an empty string', 'keywords:\n  - data source\n  - ""'],
+  ])('should report keywords that are %s', async (_name, keywords) => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(
+      join(tmp, 'page.md'),
+      `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\n${keywords}\n---\n\n${LONG_BODY}\n`
+    );
+
+    const findings = await checkFrontmatter(input(tmp));
+    const typeErrors = findings.filter((f) => f.rule === Rule.FieldTypes);
+    expect(typeErrors).toHaveLength(1);
+    expect(typeErrors[0].title).toBe('Wrong type for field: keywords');
+    expect(typeErrors[0].severity).toBe('error');
+    expect(typeErrors[0].line).toBe(4);
+  });
+
   it('should report min-content-length for a very short page', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     await writeFile(join(tmp, 'page.md'), `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\n---\n\nToo short.\n`);
