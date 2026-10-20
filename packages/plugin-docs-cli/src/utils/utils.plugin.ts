@@ -82,7 +82,7 @@ export async function resolveBuiltPluginJson(distRoot: string): Promise<PluginJs
   // GCOM trims the slashes and looks up the literal path in the archive, so `./docs` or `docs/../docs`
   // never find the manifest even though they resolve to a real folder
   const folder = docsPath.replace(/^\/+|\/+$/g, '');
-  if (!hasPlainSegments(folder)) {
+  if (folder.includes('\\') || !hasPlainSegments(folder)) {
     throw new Error(
       `"docsPath" in ${join(root, 'plugin.json')} must be a plain folder such as "docs", but is "${docsPath}"`
     );
