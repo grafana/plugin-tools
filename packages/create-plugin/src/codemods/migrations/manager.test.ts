@@ -339,5 +339,15 @@ describe('Migrations', () => {
 
       expect(setRootConfig).not.toHaveBeenCalled();
     });
+
+    it('should NOT update version in ".config/.cprc.json" if no migrations made changes', async () => {
+      migrationOneFn.mockImplementation(async (context: Context) => context);
+      migrationTwoFn.mockImplementation(async (context: Context) => context);
+
+      const didMigrationsChangeFiles = await runMigrations(migrations);
+
+      expect(didMigrationsChangeFiles).toBe(false);
+      expect(setRootConfig).not.toHaveBeenCalled();
+    });
   });
 });
