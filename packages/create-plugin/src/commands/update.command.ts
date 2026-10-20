@@ -43,10 +43,18 @@ export const update = async (argv: minimist.ParsedArgs) => {
 
     // filter out minimist internal properties (_ and $0) before passing to codemod
     const { _, $0, ...codemodOptions } = argv;
-    await runMigrations(migrations, {
+    const didMigrationsChangeFiles = await runMigrations(migrations, {
       commitEachMigration: !!argv.commit,
       codemodOptions,
     });
+
+    if (!didMigrationsChangeFiles) {
+      output.log({
+        title: 'No migrations resulted in changes.',
+      });
+      process.exit(0);
+    }
+
     output.success({
       title: `Successfully updated create-plugin from ${version} to ${CURRENT_APP_VERSION}.`,
     });
