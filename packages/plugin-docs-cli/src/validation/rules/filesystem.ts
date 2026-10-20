@@ -2,6 +2,7 @@ import { readdir, stat } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, extname, relative, sep } from 'node:path';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
+import { hasPlainSegments } from '../../utils/utils.plugin.js';
 import { formatBytes, isMetaFile } from './utils.js';
 
 // slug-safe: lowercase letters, digits and hyphens only
@@ -24,6 +25,32 @@ export const ALLOWED_VIDEO_EXTENSIONS = new Set(['.mp4', '.webm']);
 
 // allowed file extensions in the docs folder (.md + permitted image and video formats)
 export const ALLOWED_EXTENSIONS = new Set(['.md', ...ALLOWED_IMAGE_EXTENSIONS, ...ALLOWED_VIDEO_EXTENSIONS]);
+
+/**
+ * The catalog looks the manifest up at the literal `docsPath` in the plugin archive, while `build` writes
+ * to the normalised path. They only agree when `docsPath` is a plain relative folder. Built docs are
+ * checked when `--dist` resolves the plugin, so this only runs on the source.
+ */
+export function checkDocsPathSetting(input: ValidationInput): Diagnostic[] {
+  const setting = input.docsPathSetting;
+  if (setting === undefined || input.mode === 'dist') {
+    return [];
+  }
+
+  const folder = setting.replace(/\/$/, '');
+  if (!setting.startsWith('/') && !setting.includes('\\') && hasPlainSegments(folder)) {
+    return [];
+  }
+
+  return [
+    {
+      rule: Rule.ValidDocsPath,
+      severity: 'error',
+      title: 'docsPath is not a plain folder',
+      detail: `"docsPath" in src/plugin.json is "${setting}". The catalog looks for your docs at exactly that path in the plugin, so a leading "/", a backslash or "." and ".." segments mean it never finds them. Use a plain relative folder such as "docs".`,
+    },
+  ];
+}
 
 export async function checkFilesystem(input: ValidationInput): Promise<Diagnostic[]> {
   const diagnostics: Diagnostic[] = [];

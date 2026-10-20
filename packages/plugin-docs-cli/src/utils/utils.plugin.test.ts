@@ -11,7 +11,11 @@ describe('resolvePluginJson', () => {
     const projectRoot = join(fixturesPath, 'test-plugin');
     const result = await resolvePluginJson(projectRoot);
 
-    expect(result).toEqual({ docsPath: join(projectRoot, 'docs'), pluginType: 'datasource' });
+    expect(result).toEqual({
+      docsPath: join(projectRoot, 'docs'),
+      docsPathSetting: 'docs',
+      pluginType: 'datasource',
+    });
   });
 
   it('should throw when src/plugin.json is missing', async () => {
@@ -37,7 +41,11 @@ describe('resolveBuiltPluginJson', () => {
   it('should resolve docsPath and pluginType from plugin.json at the root', async () => {
     const root = await writePlugin({ docsPath: 'docs', type: 'panel' });
 
-    expect(await resolveBuiltPluginJson(root)).toEqual({ docsPath: join(root, 'docs'), pluginType: 'panel' });
+    expect(await resolveBuiltPluginJson(root)).toEqual({
+      docsPath: join(root, 'docs'),
+      docsPathSetting: 'docs',
+      pluginType: 'panel',
+    });
   });
 
   it('should throw with a build hint when plugin.json is missing', async () => {

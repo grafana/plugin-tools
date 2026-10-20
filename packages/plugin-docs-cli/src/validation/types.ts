@@ -12,6 +12,7 @@ export const Rule = {
   AllowedFileTypes: 'allowed-file-types',
   MaxNestingDepth: 'max-nesting-depth',
   DocsPathExists: 'docs-path-exists',
+  ValidDocsPath: 'docs-path-valid',
   MaxTotalDocsSize: 'max-total-docs-size',
   MaxTotalPages: 'max-total-pages',
   // plugin-type rules
@@ -106,6 +107,11 @@ export interface ValidationInput {
    * to. Defaults to `source`.
    */
   mode?: 'source' | 'dist';
+  /**
+   * The `docsPath` exactly as written in `plugin.json`. Drives the `docs-path-valid` rule, which reports
+   * nothing when this is unset.
+   */
+  docsPathSetting?: string;
   /**
    * The plugin's `type` from `plugin.json`, such as `panel` or `datasource`. Drives the
    * `required-pages` rule, which reports nothing when this is unset.

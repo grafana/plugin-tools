@@ -6,7 +6,17 @@ const debug = createDebug('plugin-docs-cli:utils:plugin');
 
 export interface PluginJson {
   docsPath: string;
+  /** The `docsPath` exactly as written in plugin.json, while `docsPath` is resolved to an absolute path. */
+  docsPathSetting: string;
   pluginType?: string;
+}
+
+/**
+ * True when a folder path has no empty, `.` or `..` segments. GCOM looks the manifest up at the literal
+ * `<docsPath>/manifest.json` in the plugin archive, so only such a path is found there.
+ */
+export function hasPlainSegments(folder: string): boolean {
+  return folder.split('/').every((segment) => segment !== '' && segment !== '.' && segment !== '..');
 }
 
 async function readPluginJson(pluginJsonPath: string, label: string, notFoundMessage: string) {
@@ -50,7 +60,7 @@ export async function resolvePluginJson(projectRoot?: string): Promise<PluginJso
 
   const resolved = resolve(root, docsPath);
   debug('Resolved docsPath from plugin.json: %s -> %s', docsPath, resolved);
-  return { docsPath: resolved, pluginType };
+  return { docsPath: resolved, docsPathSetting: docsPath, pluginType };
 }
 
 /**
@@ -72,7 +82,7 @@ export async function resolveBuiltPluginJson(distRoot: string): Promise<PluginJs
   // GCOM trims the slashes and looks up the literal path in the archive, so `./docs` or `docs/../docs`
   // never find the manifest even though they resolve to a real folder
   const folder = docsPath.replace(/^\/+|\/+$/g, '');
-  if (folder.split('/').some((segment) => segment === '' || segment === '.' || segment === '..')) {
+  if (!hasPlainSegments(folder)) {
     throw new Error(
       `"docsPath" in ${join(root, 'plugin.json')} must be a plain folder such as "docs", but is "${docsPath}"`
     );
@@ -80,7 +90,7 @@ export async function resolveBuiltPluginJson(distRoot: string): Promise<PluginJs
 
   const resolved = join(root, folder);
   debug('Resolved built docsPath: %s -> %s', docsPath, resolved);
-  return { docsPath: resolved, pluginType };
+  return { docsPath: resolved, docsPathSetting: docsPath, pluginType };
 }
 
 /**

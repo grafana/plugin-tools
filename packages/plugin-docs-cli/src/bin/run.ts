@@ -41,9 +41,12 @@ async function main() {
 
   // resolve docs path and plugin type once for all commands.
   let docsPath: string;
+  let docsPathSetting: string;
   let pluginType: string | undefined;
   try {
-    ({ docsPath, pluginType } = distRoot ? await resolveBuiltPluginJson(distRoot) : await resolvePluginJson());
+    ({ docsPath, docsPathSetting, pluginType } = distRoot
+      ? await resolveBuiltPluginJson(distRoot)
+      : await resolvePluginJson());
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     if (distRoot && validateArgv.json) {
@@ -98,6 +101,7 @@ async function main() {
         json: validateArgv.json,
         pluginType,
         mode: distRoot ? 'dist' : 'source',
+        docsPathSetting,
       });
       break;
     }

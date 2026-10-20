@@ -21,20 +21,21 @@ For what you can write in a page, refer to [Supported markdown](./supported-mark
 
 ## Folder & file structure
 
-| Rule                   | What it checks                                                                                                                              | Severity |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `has-markdown-files`   | Your docs folder must contain at least one markdown page.                                                                                   | Error    |
-| `root-index-exists`    | Your docs folder must have an `index.md` at its root - this is the landing page for your documentation.                                     | Error    |
-| `nested-dir-has-index` | A subfolder that contains pages needs its own `index.md`. Without one, the sidebar shows an unnamed category using the folder name instead. | Warning  |
-| `no-spaces-in-names`   | File and folder names can't contain spaces - they break the URL for that page. Use hyphens instead.                                         | Error    |
-| `valid-file-naming`    | File and folder names should use only lowercase letters, digits and hyphens, for clean URLs.                                                | Error    |
-| `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it.                                                                       | Error    |
-| `no-symlinks`          | Symbolic links aren't allowed in the docs folder - use real files.                                                                          | Error    |
-| `allowed-file-types`   | Only markdown files, images (`png`, `jpg`, `jpeg`, `webp`, `gif`) and videos (`mp4`, `webm`) are allowed in the docs folder.                | Error    |
-| `max-nesting-depth`    | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages.                | Error    |
-| `docs-path-exists`     | The `docsPath` in `src/plugin.json` must point at a folder that exists.                                                                     | Error    |
-| `max-total-pages`      | A docs folder shouldn't have more than 50 pages. Consolidate related pages, or move the long tail to an external resource.                  | Error    |
-| `max-total-docs-size`  | The whole docs folder should stay under 10MB, including images - it ships inside the plugin archive.                                        | Warning  |
+| Rule                   | What it checks                                                                                                                                                                                     | Severity |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `has-markdown-files`   | Your docs folder must contain at least one markdown page.                                                                                                                                          | Error    |
+| `root-index-exists`    | Your docs folder must have an `index.md` at its root - this is the landing page for your documentation.                                                                                            | Error    |
+| `nested-dir-has-index` | A subfolder that contains pages needs its own `index.md`. Without one, the sidebar shows an unnamed category using the folder name instead.                                                        | Warning  |
+| `no-spaces-in-names`   | File and folder names can't contain spaces - they break the URL for that page. Use hyphens instead.                                                                                                | Error    |
+| `valid-file-naming`    | File and folder names should use only lowercase letters, digits and hyphens, for clean URLs.                                                                                                       | Error    |
+| `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it.                                                                                                                              | Error    |
+| `no-symlinks`          | Symbolic links aren't allowed in the docs folder - use real files.                                                                                                                                 | Error    |
+| `allowed-file-types`   | Only markdown files, images (`png`, `jpg`, `jpeg`, `webp`, `gif`) and videos (`mp4`, `webm`) are allowed in the docs folder.                                                                       | Error    |
+| `max-nesting-depth`    | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages.                                                                       | Error    |
+| `docs-path-exists`     | The `docsPath` in `src/plugin.json` must point at a folder that exists.                                                                                                                            | Error    |
+| `docs-path-valid`      | The `docsPath` in `src/plugin.json` must be a plain relative folder such as `docs`, with no leading `/`, backslash or `.` and `..` segments. The catalog looks for your docs at exactly that path. | Error    |
+| `max-total-pages`      | A docs folder shouldn't have more than 50 pages. Consolidate related pages, or move the long tail to an external resource.                                                                         | Error    |
+| `max-total-docs-size`  | The whole docs folder should stay under 10MB, including images - it ships inside the plugin archive.                                                                                               | Warning  |
 
 ## Required pages
 

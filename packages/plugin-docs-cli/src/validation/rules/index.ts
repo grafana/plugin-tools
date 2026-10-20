@@ -1,7 +1,7 @@
 import type { RuleRunner } from '../types.js';
 import { checkAssets } from './assets.js';
 import { checkCrossFile } from './cross-file.js';
-import { checkFilesystem } from './filesystem.js';
+import { checkDocsPathSetting, checkFilesystem } from './filesystem.js';
 import { checkFrontmatter } from './frontmatter.js';
 import { checkDistManifest } from './dist.js';
 import { checkManifest, checkManifestSize } from './manifest.js';
@@ -11,6 +11,7 @@ import { checkStubContent } from './stub-content.js';
 import { checkWritingStyle } from './style.js';
 
 export const allRules: RuleRunner[] = [
+  checkDocsPathSetting,
   checkFilesystem,
   checkRequiredPages,
   checkFrontmatter,

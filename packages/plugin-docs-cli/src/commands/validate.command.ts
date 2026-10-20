@@ -32,6 +32,7 @@ export async function validateCommand(
     json: boolean;
     pluginType?: string;
     mode?: 'source' | 'dist';
+    docsPathSetting?: string;
   } = { json: false }
 ): Promise<void> {
   const mode = options.mode ?? 'source';
@@ -43,7 +44,10 @@ export async function validateCommand(
     mode
   );
 
-  const result = await validate({ docsPath, pluginType: options.pluginType, mode }, allRules);
+  const result = await validate(
+    { docsPath, pluginType: options.pluginType, mode, docsPathSetting: options.docsPathSetting },
+    allRules
+  );
 
   const guide = guidesLocation();
   if (options.json) {

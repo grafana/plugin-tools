@@ -2,8 +2,30 @@ import { describe, it, expect } from 'vitest';
 import { join } from 'node:path';
 import { mkdir, mkdtemp, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { checkFilesystem } from './filesystem.js';
+import { checkDocsPathSetting, checkFilesystem } from './filesystem.js';
 import { Rule } from '../types.js';
+
+describe('checkDocsPathSetting', () => {
+  it.each(['docs', 'docs/', 'catalog-docs', 'docs/plugin', '..docs'])('accepts %s', (docsPathSetting) => {
+    expect(checkDocsPathSetting({ docsPath: '/x', docsPathSetting })).toEqual([]);
+  });
+
+  it.each(['./docs', 'docs/../docs', 'docs/./x', 'a//b', 'docs//', '../docs', '..', '/docs', 'docs\\guide'])(
+    'reports %s',
+    (docsPathSetting) => {
+      const findings = checkDocsPathSetting({ docsPath: '/x', docsPathSetting });
+
+      expect(findings).toHaveLength(1);
+      expect(findings[0]).toMatchObject({ rule: Rule.ValidDocsPath, severity: 'error' });
+      expect(findings[0].detail).toContain(docsPathSetting);
+    }
+  );
+
+  it('reports nothing without a setting or in dist mode', () => {
+    expect(checkDocsPathSetting({ docsPath: '/x' })).toEqual([]);
+    expect(checkDocsPathSetting({ docsPath: '/x', docsPathSetting: './docs', mode: 'dist' })).toEqual([]);
+  });
+});
 
 describe('checkFilesystem', () => {
   const testDocsPath = join(__dirname, '..', '..', '__fixtures__', 'test-docs');
