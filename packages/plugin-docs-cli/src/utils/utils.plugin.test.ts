@@ -61,7 +61,7 @@ describe('resolveBuiltPluginJson', () => {
   });
 
   // GCOM looks up the literal path in the archive, so anything that is not a plain folder is not found there
-  it.each(['../docs', '.', './docs', 'docs/../docs', 'docs/./x', 'a//b', 'docs/..', '..'])(
+  it.each(['../docs', '.', './docs', 'docs/../docs', 'docs/./x', 'a//b', 'docs/..', '..', 'docs\\guide'])(
     'should throw when docsPath %s is not a plain folder',
     async (docsPath) => {
       const root = await writePlugin({ docsPath });

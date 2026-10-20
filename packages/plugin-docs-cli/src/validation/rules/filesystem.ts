@@ -38,12 +38,7 @@ export function checkDocsPathSetting(input: ValidationInput): Diagnostic[] {
   }
 
   const folder = setting.replace(/\/$/, '');
-  if (
-    !setting.startsWith('/') &&
-    !setting.includes('\\') &&
-    !/^[a-z]:/i.test(setting) &&
-    hasPlainSegments(folder)
-  ) {
+  if (!setting.startsWith('/') && !setting.includes('\\') && !/^[a-z]:/i.test(setting) && hasPlainSegments(folder)) {
     return [];
   }
 

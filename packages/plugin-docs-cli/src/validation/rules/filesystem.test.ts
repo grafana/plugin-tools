@@ -10,16 +10,25 @@ describe('checkDocsPathSetting', () => {
     expect(checkDocsPathSetting({ docsPath: '/x', docsPathSetting })).toEqual([]);
   });
 
-  it.each(['./docs', 'docs/../docs', 'docs/./x', 'a//b', 'docs//', '../docs', '..', '/docs', 'docs\\guide'])(
-    'reports %s',
-    (docsPathSetting) => {
-      const findings = checkDocsPathSetting({ docsPath: '/x', docsPathSetting });
+  it.each([
+    './docs',
+    'docs/../docs',
+    'docs/./x',
+    'a//b',
+    'docs//',
+    '../docs',
+    '..',
+    '/docs',
+    'docs\\guide',
+    'C:docs',
+    'c:/docs',
+  ])('reports %s', (docsPathSetting) => {
+    const findings = checkDocsPathSetting({ docsPath: '/x', docsPathSetting });
 
-      expect(findings).toHaveLength(1);
-      expect(findings[0]).toMatchObject({ rule: Rule.ValidDocsPath, severity: 'error' });
-      expect(findings[0].detail).toContain(docsPathSetting);
-    }
-  );
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({ rule: Rule.ValidDocsPath, severity: 'error' });
+    expect(findings[0].detail).toContain(docsPathSetting);
+  });
 
   it('reports nothing without a setting or in dist mode', () => {
     expect(checkDocsPathSetting({ docsPath: '/x' })).toEqual([]);
