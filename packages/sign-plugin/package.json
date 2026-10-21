@@ -39,5 +39,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "overrides": {
+    "basic-ftp": "^6.2.1"
   }
 }
