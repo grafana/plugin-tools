@@ -20,7 +20,7 @@ Publishing your plugin to the [Grafana plugin catalog](https://grafana.com/plugi
 
 :::note
 
-You can also **distribute your plugins through the Grafana Marketplace** and earn revenue from the extensions you build for Grafana. The Grafana Marketplace is a paid label inside the Grafana plugin catalog open to all trusted vendors. For more details refer to [Monetize your plugin](#monetize-your-plugin).
+You can also **distribute your plugins through the Grafana Marketplace** and earn revenue from the extensions you build for Grafana. The Grafana Marketplace is a paid label inside the Grafana plugin catalog open to all contributors. For more details refer to [Monetize your plugin](#monetize-your-plugin).
 
 :::
 
