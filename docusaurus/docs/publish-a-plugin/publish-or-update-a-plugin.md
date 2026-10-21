@@ -20,7 +20,7 @@ Publishing your plugin to the [Grafana plugin catalog](https://grafana.com/plugi
 
 :::note
 
-Starting in April 2026, you can **offer your plugins through the Grafana Marketplace**, an optional way to monetize your plugin. Grafana Marketplace is part of the Grafana Plugin Catalog and allows eligible developers to distribute and sell their plugins. For more details refer to [Monetize your plugin](#monetize-your-plugin).
+You can also **distribute your plugins through the Grafana Marketplace** and earn revenue from the extensions you build for Grafana. The Grafana Marketplace is a paid label inside the Grafana plugin catalog open to all contributors. For more details refer to [Monetize your plugin](#monetize-your-plugin).
 
 :::
 
@@ -86,11 +86,11 @@ All plugin submissions, new or updates, go through the same automated and rigoro
 
 ## Monetize your plugin
 
-Grafana Marketplace provides an optional path for plugin developers, independent software vendors, and partners to sell and distribute commercial plugins through the Grafana plugin catalog, subject to the approval and discretion of Grafana Labs. 
+The Grafana Marketplace provides an optional path for plugin developers, independent software vendors, and partners to sell and distribute commercial plugins through the Grafana plugin catalog, subject to the approval and discretion of Grafana Labs. 
 
 Marketplace plugins are published in the Grafana Catalog with a `Marketplace` label, and can be proprietary. Paid Marketplace plugins can help you fund ongoing development, maintenance, updates, and support.
 
-For more background, refer to the [Grafana Marketplace pilot announcement](https://grafana.com/blog/grafana-marketplace-pilot/). 
+For more background, refer to the [Grafana Labs Opens the Grafana Marketplace](https://grafana.com/press/2026/10/20/marketplace-ga/) press release. 
 
 :::caution
 
