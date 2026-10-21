@@ -1,10 +1,10 @@
 import type { Context } from '../../context.js';
 import * as recast from 'recast';
 import * as typeScriptParser from 'recast/parsers/typescript.js';
+import { parseAsTypescript } from '../../utils.ast.js';
 import { removeDependenciesFromPackageJson } from '../../utils.js';
 
-const targetFnBody = (() => {
-  const raw = `export async function getEntries() {
+const GET_ENTRIES_SOURCE = `export async function getEntries() {
   const plugins: string[][] = [];
   for await (const pluginJson of glob('**/src/**/plugin.json')) {
     const folder = path.dirname(pluginJson);
@@ -26,19 +26,22 @@ const targetFnBody = (() => {
     }, result);
   }, {});
 }`;
-  const ast = recast.parse(raw, {
-    parser: typeScriptParser,
-  });
-  let out: any = undefined;
-  recast.visit(ast, {
-    visitFunctionDeclaration(path) {
-      const { node } = path;
-      out = node.body;
-      return false;
-    },
-  });
-  return out;
-})();
+
+function getTargetFnBody() {
+  const parsed = parseAsTypescript(GET_ENTRIES_SOURCE);
+
+  if (!parsed.success) {
+    throw parsed.error;
+  }
+
+  const [statement] = parsed.ast.program.body;
+
+  if (statement?.type !== 'ExportNamedDeclaration' || statement.declaration?.type !== 'FunctionDeclaration') {
+    throw new Error('Failed to parse target function body');
+  }
+
+  return statement.declaration.body;
+}
 
 function updateUtils(context: Context, target: string) {
   const webpackConfigContent = context.getFile(target);
@@ -62,8 +65,8 @@ function updateUtils(context: Context, target: string) {
     },
     visitFunctionDeclaration(path) {
       const { node } = path;
-      if (node.id && node.id.name === 'getEntries') {
-        node.body = targetFnBody;
+      if (node.id?.name === 'getEntries') {
+        node.body = getTargetFnBody();
       }
       return this.traverse(path);
     },
@@ -81,9 +84,9 @@ function updateUtils(context: Context, target: string) {
 }
 
 export default function migrate(context: Context) {
-  for (const f of ['.config/webpack/utils.ts', '.config/bundler/utils.ts']) {
-    if (context.doesFileExist(f)) {
-      updateUtils(context, f);
+  for (const filePath of ['.config/webpack/utils.ts', '.config/bundler/utils.ts']) {
+    if (context.doesFileExist(filePath)) {
+      updateUtils(context, filePath);
     }
   }
 
