@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-x64
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Run unit tests
+    outputs:
+      node-version: ${{ steps.setup-node.outputs.node-version }}
     permissions:
       contents: read
       id-token: write
@@ -46,6 +48,7 @@ jobs:
 
       - uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
       - name: Setup nodejs
+        id: setup-node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: '.nvmrc'
@@ -91,10 +94,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version:
-          - 22
-          - 24
-          - 26
+        include:
+          - node-version: 22
+            test-signing: false
+          - node-version: 24
+            test-signing: false
+          - node-version: 26
+            test-signing: true
+          - node-version: ${{ needs.test.outputs.node-version }}
+            test-signing: true
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
@@ -219,7 +227,7 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
-        if: ${{ github.event.pull_request.head.repo.fork != true }}
+        if: ${{ github.event.pull_request.head.repo.fork != true && matrix.test-signing }}
         env:
           # Step env is evaluated even when the step is skipped, so fall back to '{}'
           # to keep fromJSON from failing the job on fork PRs where get-secrets is skipped.

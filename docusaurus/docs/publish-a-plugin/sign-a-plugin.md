@@ -19,6 +19,14 @@ Refer to [Plugin signatures](https://grafana.com/docs/grafana/latest/administrat
 
 ## Before you begin
 
+:::caution Breaking changes
+
+`@grafana/sign-plugin` now requires Node.js 24.15.0 or later. PAC files, SOCKS proxies, and the `ALL_PROXY` environment variable are no longer supported.
+
+Before upgrading, review [Migrate from earlier versions](#migrate-from-earlier-versions) for the required proxy configuration changes.
+
+:::
+
 ### Signatures during plugin development
 
 You don't need to sign a plugin during development or when you submit a plugin for review for the first time. The [Docker development environment](../set-up/) that `@grafana/create-plugin` scaffolds is configured by default to run in [development mode](https://github.com/grafana/grafana/blob/main/contribute/developer-guide.md#configure-grafana-for-development), which allows you to load the plugin without a signature.
@@ -90,6 +98,28 @@ The Grafana team needs to review public plugins before you can sign them.
    ```shell npm2yarn
    npm run sign -- --rootUrls https://example.com/grafana
    ```
+
+## Sign through a proxy
+
+To sign through an HTTP or HTTPS proxy, set `HTTPS_PROXY` before running `npm run sign`:
+
+```sh
+export HTTPS_PROXY=http://proxy.example.com:8080
+export NO_PROXY=localhost,127.0.0.1
+npm run sign
+```
+
+Proxy URLs must include `http://` or `https://`. For Basic proxy authentication, use a URL such as `http://username:password@proxy.example.com:8080`. Lowercase `https_proxy` and `no_proxy` take precedence over their uppercase equivalents. You don't need to set `NODE_USE_ENV_PROXY`.
+
+### Migrate from earlier versions
+
+`@grafana/sign-plugin` now uses Node.js built-in proxy support:
+
+- Upgrade to Node.js 24.15.0 or later.
+- Replace PAC or SOCKS configuration with a direct HTTP or HTTPS proxy URL.
+- If you use `ALL_PROXY`, move the HTTP or HTTPS proxy URL to `HTTPS_PROXY`. `ALL_PROXY` is no longer read, and `HTTP_PROXY` alone doesn't configure HTTPS signing requests.
+- Add `http://` or `https://` to proxy URLs that don't have a scheme.
+- Separate `NO_PROXY` entries with commas, not spaces. For supported host patterns, refer to the [Node.js proxy documentation](https://nodejs.org/docs/latest-v24.x/api/http.html#built-in-proxy-support).
 
 ## Add a plugin manifest for verification
 
