@@ -108,3 +108,27 @@ export function insertImports(
     ast.program.body.unshift(...imports);
   }
 }
+
+export function findImports(
+  ast: recast.types.namedTypes.File,
+  packageName: string
+): recast.types.namedTypes.ImportDeclaration[] {
+  return ast.program.body.filter(
+    (node): node is recast.types.namedTypes.ImportDeclaration =>
+      node.type === 'ImportDeclaration' && node.source.value === packageName
+  );
+}
+
+export function findNamedImport(ast: recast.types.namedTypes.File, packageName: string, importedName: string) {
+  for (const declaration of findImports(ast, packageName)) {
+    const specifier = declaration.specifiers?.find(
+      (candidate): candidate is recast.types.namedTypes.ImportSpecifier =>
+        candidate.type === 'ImportSpecifier' && candidate.imported.name === importedName
+    );
+    if (specifier) {
+      return { declaration, specifier };
+    }
+  }
+
+  return undefined;
+}
