@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.12.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.11.0...@grafana/plugin-docs-cli@0.12.0) (2026-10-21)
+
+
+### Features
+
+* **plugin-docs-parser:** render shared snippets in plugin docs ([#2995](https://github.com/grafana/plugin-tools/issues/2995)) ([3d8f526](https://github.com/grafana/plugin-tools/commit/3d8f526ccc7b9c3e18023a4e5c7d5e3f10257eae))
+
+
+### Bug Fixes
+
+* **deps:** Update dependency ejs to v7.0.2 ([#3012](https://github.com/grafana/plugin-tools/issues/3012)) ([9fc2dea](https://github.com/grafana/plugin-tools/commit/9fc2dea7d3892d8ea7ea37d90e81428bd0c78b7c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 0.5.0 to 0.6.0
+
 ## [0.11.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.10.0...@grafana/plugin-docs-cli@0.11.0) (2026-10-21)
 
 
