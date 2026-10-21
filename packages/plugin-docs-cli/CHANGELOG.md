@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.11.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.10.0...@grafana/plugin-docs-cli@0.11.0) (2026-10-21)
+
+
+### Features
+
+* **plugin-docs-cli:** add validate --dist for built docs ([#3007](https://github.com/grafana/plugin-tools/issues/3007)) ([d1b68c9](https://github.com/grafana/plugin-tools/commit/d1b68c9a6d020aa0261989efc094fa7fd9ab4505))
+* **plugin-docs-cli:** support keywords frontmatter ([#3001](https://github.com/grafana/plugin-tools/issues/3001)) ([9e837c0](https://github.com/grafana/plugin-tools/commit/9e837c019d3749e5d551293c7e4ee371423bc928))
+
+
+### Bug Fixes
+
+* **plugin-docs-cli:** skip fenced code blocks when checking for h1 headings ([#3002](https://github.com/grafana/plugin-tools/issues/3002)) ([5e22c65](https://github.com/grafana/plugin-tools/commit/5e22c6568edaebd308e1c61825081a56b11aaa32))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 0.4.1 to 0.5.0
+
 ## [0.10.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.9.0...@grafana/plugin-docs-cli@0.10.0) (2026-10-19)
 
 

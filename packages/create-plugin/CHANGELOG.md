@@ -1,5 +1,15 @@
 # Changelog
 
+## [7.15.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.15.0...@grafana/create-plugin@7.15.1) (2026-10-21)
+
+
+### Bug Fixes
+
+* **create-plugin:** docs codemod follow-up fixes ([#3004](https://github.com/grafana/plugin-tools/issues/3004)) ([ffb1870](https://github.com/grafana/plugin-tools/commit/ffb1870696fa0ff27bfa21f7823b1aa29d85e313))
+* **deps:** Update grafana patch dependencies to v13.2.4 ([#3006](https://github.com/grafana/plugin-tools/issues/3006)) ([8763e30](https://github.com/grafana/plugin-tools/commit/8763e307eaa5eaf2d9137369ea5214c7d6921e94))
+* don't bump .cprc.json version when migrations make no changes ([#3005](https://github.com/grafana/plugin-tools/issues/3005)) ([1ab74b4](https://github.com/grafana/plugin-tools/commit/1ab74b4547ff5bfbd2bed656e5d897909361e887))
+* **templates:** Update dependency @grafana/plugin-e2e to v3.15.1 ([#2997](https://github.com/grafana/plugin-tools/issues/2997)) ([24bf0c4](https://github.com/grafana/plugin-tools/commit/24bf0c44f788a5d2bc8ffe8dcd89299fa2dc9c09))
+
 ## [7.15.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.14.0...@grafana/create-plugin@7.15.0) (2026-10-19)
 
 

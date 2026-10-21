@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.4.1...@grafana/plugin-docs-parser@0.5.0) (2026-10-21)
+
+
+### Features
+
+* **plugin-docs-cli:** support keywords frontmatter ([#3001](https://github.com/grafana/plugin-tools/issues/3001)) ([9e837c0](https://github.com/grafana/plugin-tools/commit/9e837c019d3749e5d551293c7e4ee371423bc928))
+
 ## [0.4.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.4.0...@grafana/plugin-docs-parser@0.4.1) (2026-10-15)
 
 
