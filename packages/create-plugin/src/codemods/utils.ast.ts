@@ -45,6 +45,25 @@ export function findVariableDeclaration(
   return found;
 }
 
+export function findFunctionDeclaration(
+  ast: recast.types.ASTNode,
+  functionName: string
+): recast.types.namedTypes.FunctionDeclaration | null {
+  let found = null;
+
+  recast.types.visit(ast, {
+    visitFunctionDeclaration(path) {
+      if (path.node.id?.name === functionName) {
+        found = path.node;
+        return false; // Stop traversal
+      }
+      return this.traverse(path);
+    },
+  });
+
+  return found;
+}
+
 export function isProperty(
   node: recast.types.ASTNode
 ): node is recast.types.namedTypes.Property | recast.types.namedTypes.ObjectProperty {

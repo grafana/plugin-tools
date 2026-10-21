@@ -9,6 +9,7 @@ import {
   insertImports,
   findImports,
   findNamedImport,
+  findFunctionDeclaration,
 } from './utils.ast.js';
 
 // Helper to create a simple test AST from source code
@@ -33,6 +34,32 @@ function findFirstNode<T extends recast.types.namedTypes.Node>(ast: recast.types
 }
 
 describe('utils.ast', () => {
+  describe('Declaration Utilities', () => {
+    describe('findFunctionDeclaration', () => {
+      it('should find a function declaration by name', () => {
+        const ast = createTestAST(`function foo() {}\nfunction bar() {}`);
+
+        const declaration = findFunctionDeclaration(ast, 'bar');
+
+        expect(declaration?.id?.name).toBe('bar');
+      });
+
+      it('should find an exported function declaration', () => {
+        const ast = createTestAST(`export async function getEntries() {}`);
+
+        const declaration = findFunctionDeclaration(ast, 'getEntries');
+
+        expect(declaration?.async).toBe(true);
+      });
+
+      it('should return null when the function is not declared', () => {
+        const ast = createTestAST(`const getEntries = () => {};`);
+
+        expect(findFunctionDeclaration(ast, 'getEntries')).toBeNull();
+      });
+    });
+  });
+
   describe('Property Utilities', () => {
     describe('isProperty', () => {
       it('should return true for Property nodes', () => {
