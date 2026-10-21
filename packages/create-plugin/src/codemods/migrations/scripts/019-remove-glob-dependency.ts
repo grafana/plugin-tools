@@ -1,8 +1,7 @@
 import type { Context } from '../../context.js';
 import * as recast from 'recast';
-import * as typeScriptParser from 'recast/parsers/typescript.js';
-import { parseAsTypescript } from '../../utils.ast.js';
-import { removeDependenciesFromPackageJson } from '../../utils.js';
+import { parseAsTypescript, printAST } from '../../utils.ast.js';
+import { migrationsDebug, removeDependenciesFromPackageJson } from '../../utils.js';
 
 const GET_ENTRIES_SOURCE = `export async function getEntries() {
   const plugins: string[][] = [];
@@ -43,18 +42,21 @@ function getTargetFnBody() {
   return statement.declaration.body;
 }
 
-function updateUtils(context: Context, target: string) {
-  const webpackConfigContent = context.getFile(target);
-  if (!webpackConfigContent) {
+function updateUtils(context: Context, configFilePath: string) {
+  const configFileSrc = context.getFile(configFilePath);
+  if (!configFileSrc) {
     return;
   }
 
-  const ast = recast.parse(webpackConfigContent, {
-    parser: typeScriptParser,
-  });
+  const parsed = parseAsTypescript(configFileSrc);
 
-  let hasChanges = true;
-  recast.visit(ast, {
+  if (!parsed.success) {
+    migrationsDebug(`Failed to parse ${configFilePath}: ${parsed.error.message}`);
+    return;
+  }
+
+  let hasChanges = false;
+  recast.visit(parsed.ast, {
     visitImportDeclaration(path) {
       const { node } = path;
       if (node.source.value === 'glob') {
@@ -74,12 +76,7 @@ function updateUtils(context: Context, target: string) {
 
   // Only update the file if we made changes
   if (hasChanges) {
-    const output = recast.print(ast, {
-      tabWidth: 2,
-      trailingComma: true,
-      lineTerminator: '\n',
-    });
-    context.updateFile(target, output.code);
+    context.updateFile(configFilePath, printAST(parsed.ast));
   }
 }
 
