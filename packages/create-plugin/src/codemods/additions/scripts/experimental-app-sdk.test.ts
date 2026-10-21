@@ -245,6 +245,62 @@ describe('experimental-app-sdk addition', () => {
     });
   });
 
+  describe('grafana version override', () => {
+    it('adds the image and version build args', () => {
+      const result = appSdk(createAppContext());
+
+      const compose = result.getFile('docker-compose.yaml') ?? '';
+      expect(compose).toContain('grafana_image: ${GRAFANA_IMAGE:-grafana}');
+      expect(compose).toContain('grafana_version: ${GRAFANA_VERSION:-nightly}');
+    });
+
+    it('adds the build args even when the base compose file already enables the toggles', () => {
+      const context = createAppContext();
+      context.addFile(
+        '.config/docker-compose-base.yaml',
+        `services:
+  grafana:
+    environment:
+      GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest,appplugins.registerAPIServer,grafana.useRouterMiddleware
+`
+      );
+
+      const result = appSdk(context);
+
+      expect(result.getFile('docker-compose.yaml')).toContain('grafana_version: ${GRAFANA_VERSION:-nightly}');
+    });
+
+    it('keeps build args the user already set', () => {
+      const context = createAppContext({
+        compose: `services:
+  grafana:
+    extends:
+      file: .config/docker-compose-base.yaml
+      service: grafana
+    build:
+      args:
+        grafana_version: 12.0.0
+`,
+      });
+
+      const result = appSdk(context);
+
+      const compose = result.getFile('docker-compose.yaml') ?? '';
+      expect(compose).toContain('grafana_version: 12.0.0');
+      expect(compose).not.toContain('GRAFANA_VERSION');
+      expect(compose).toContain('grafana_image: ${GRAFANA_IMAGE:-grafana}');
+    });
+
+    it('is idempotent', () => {
+      const once = appSdk(createAppContext());
+      const compose = once.getFile('docker-compose.yaml');
+
+      const twice = appSdk(once);
+
+      expect(twice.getFile('docker-compose.yaml')).toBe(compose);
+    });
+  });
+
   describe('feature toggle', () => {
     it('enables the app-sdk manifest toggle', () => {
       const context = createAppContext();
@@ -328,7 +384,7 @@ describe('experimental-app-sdk addition', () => {
 
       const result = appSdk(context);
 
-      expect(result.getFile('docker-compose.yaml')).toBe(STOCK_COMPOSE);
+      expect(result.getFile('docker-compose.yaml')).not.toContain('GF_FEATURE_TOGGLES_ENABLE');
     });
 
     it('leaves a list-style environment block alone', () => {
@@ -341,7 +397,8 @@ describe('experimental-app-sdk addition', () => {
 
       const result = appSdk(context);
 
-      expect(result.getFile('docker-compose.yaml')).toBe(listCompose);
+      expect(result.getFile('docker-compose.yaml')).toContain('- GF_FEATURE_TOGGLES_ENABLE=someOtherToggle');
+      expect(result.getFile('docker-compose.yaml')).not.toContain('appplugins.loadAppManifest');
       // The rest of the addition still applies.
       expect(result.doesFileExist('kinds/config.cue')).toBe(true);
     });
