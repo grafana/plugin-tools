@@ -19,9 +19,9 @@ Refer to [Plugin signatures](https://grafana.com/docs/grafana/latest/administrat
 
 ## Before you begin
 
-:::caution Breaking changes
+:::caution Breaking changes in v4
 
-`@grafana/sign-plugin` now requires Node.js 24.15.0 or later. PAC files, SOCKS proxies, and the `ALL_PROXY` environment variable are no longer supported.
+Starting with v4, `@grafana/sign-plugin` requires Node.js 24.15.0 or later. PAC files, SOCKS proxies, and the `ALL_PROXY` environment variable are no longer supported.
 
 Before upgrading, review [Migrate from earlier versions](#migrate-from-earlier-versions) for the required proxy configuration changes.
 
@@ -113,7 +113,7 @@ Proxy URLs must include `http://` or `https://`. For Basic proxy authentication,
 
 ### Migrate from earlier versions
 
-`@grafana/sign-plugin` now uses Node.js built-in proxy support:
+Starting with v4, `@grafana/sign-plugin` uses Node.js built-in proxy support. To migrate from v3 or earlier:
 
 - Upgrade to Node.js 24.15.0 or later.
 - Replace PAC or SOCKS configuration with a direct HTTP or HTTPS proxy URL.

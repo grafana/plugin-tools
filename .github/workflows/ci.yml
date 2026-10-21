@@ -16,8 +16,6 @@ jobs:
     runs-on: ubuntu-x64
     if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Run unit tests
-    outputs:
-      node-version: ${{ steps.setup-node.outputs.node-version }}
     permissions:
       contents: read
       id-token: write
@@ -48,7 +46,6 @@ jobs:
 
       - uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
       - name: Setup nodejs
-        id: setup-node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: '.nvmrc'
@@ -98,10 +95,8 @@ jobs:
           - node-version: 22
             test-signing: false
           - node-version: 24
-            test-signing: false
-          - node-version: 26
             test-signing: true
-          - node-version: ${{ needs.test.outputs.node-version }}
+          - node-version: 26
             test-signing: true
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
