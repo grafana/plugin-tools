@@ -49,6 +49,13 @@ const additions: Addition[] = [
     description: 'Scaffolds plugin docs for a Grafana plugin',
     scriptPath: import.meta.resolve('./scripts/docs.js'),
   },
+  {
+    name: 'docs-content',
+    description: 'Drafts the plugin docs pages from source code and existing docs with an AI agent',
+    scriptPath: import.meta.resolve('./scripts/docs-content.js'),
+    prompt: import.meta.resolve('./prompts/docs-content.md'),
+    verify: ['docs:validate'],
+  },
 ];
 
 export default additions;

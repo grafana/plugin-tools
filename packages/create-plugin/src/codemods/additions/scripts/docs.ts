@@ -18,6 +18,9 @@ import {
   ensureRootAgentFiles,
 } from '../../utils.agents.js';
 import { type BumpActionRefsResult, bumpActionRefs } from '../../utils.workflows.js';
+import { getPackageManagerExecCmd } from '../../../utils/utils.packageManager.js';
+import * as recast from 'recast';
+import * as babelTsParser from 'recast/parsers/babel-ts.js';
 
 // an allowlist, because the value becomes a path on disk and is embedded unescaped in a YAML workflow
 const DOCS_PATH_RE = /^[a-zA-Z0-9](?:[a-zA-Z0-9_-]|\/[a-zA-Z0-9_-])*$/;
@@ -56,7 +59,7 @@ type Options = v.InferOutput<typeof schema>;
 const PLUGIN_DOCS_CLI_VERSION = '^0.8.0';
 
 // each type needs a template set under `templates/docs/<type>/`
-const SUPPORTED_PLUGIN_TYPES = ['panel'] as const;
+const SUPPORTED_PLUGIN_TYPES = ['panel', 'datasource', 'app'] as const;
 type SupportedPluginType = (typeof SUPPORTED_PLUGIN_TYPES)[number];
 
 export default function docs(context: Context, options: Options): Context {
@@ -67,6 +70,8 @@ export default function docs(context: Context, options: Options): Context {
     // `templates/docs` is left out of TEMPLATE_PATHS so `generate` ignores it
     templateDir: join(TEMPLATES_DIR, 'docs', pluginType),
     commonTemplateDir: join(TEMPLATES_DIR, 'docs', 'common'),
+    featurePages: FEATURE_PAGES_BY_TYPE[pluginType],
+    pageStubs: pluginType === 'app' ? getAppFeaturePageStubs : undefined,
   });
 }
 
@@ -75,7 +80,21 @@ interface PluginJson {
   name?: string;
   id?: string;
   docsPath?: string;
+  annotations?: boolean;
+  alerting?: boolean;
+  includes?: PluginInclude[];
+  roles?: unknown;
+  iam?: unknown;
   [key: string]: unknown;
+}
+
+interface PluginInclude {
+  type?: string;
+  name?: string;
+  path?: string;
+  role?: string;
+  action?: string;
+  defaultNav?: boolean;
 }
 
 export interface DocsSetupOptions {
@@ -86,6 +105,37 @@ export interface DocsSetupOptions {
   templateDir: string;
   /** Templates shared by every plugin type, under `templates/docs/common/`. */
   commonTemplateDir: string;
+  /** Pages scaffolded only when `src/plugin.json` declares the feature they document. */
+  featurePages?: FeaturePage[];
+  /** Pages rendered from one template per entry, such as a page for each app page in `src/plugin.json`. */
+  /** Gets each feature page's `templateFlag`, so the stubs agree with the pages scaffolded for those features. */
+  pageStubs?: (pluginJson: PluginJson, featureFlags: Record<string, boolean>) => PageStubs;
+}
+
+interface FeaturePage {
+  /** Page name without `.md`. Plugin-docs-cli also accepts it as a folder of that name. */
+  page: string;
+  templateFlag: string;
+  hasFeature: (pluginJson: PluginJson, context: Context) => boolean;
+}
+
+interface PageStubs {
+  /** Rendered into the template data of every page, so the fixed pages can link to the stubs. */
+  data: Record<string, unknown>;
+  stubs: PageStub[];
+  /** Entries in `src/plugin.json` that get no page, as `name (path)`. */
+  skipped: string[];
+  /** The file name an app's only page gets, which is still there when the app grows to more pages. */
+  appPageSlug?: string;
+}
+
+interface PageStub {
+  templatePath: string;
+  /** Relative to the docs folder. */
+  file: string;
+  /** Set for a page of the app, which a re-run finds in either layout and as a file or a folder. */
+  slug?: string;
+  data: Record<string, unknown>;
 }
 
 export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
@@ -127,8 +177,24 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   }
 
   const templateData = getTemplateDataFromContext(context);
-  const data = { ...templateData, pluginId, docsPath, lockFile: LOCK_FILES[templateData.packageManagerName] };
-  const { packageManagerName } = data;
+  const featurePages = (opts.featurePages ?? []).map(({ page, templateFlag, hasFeature }) => ({
+    page,
+    templateFlag,
+    isEnabled: hasFeature(pluginJson, context),
+  }));
+  const featureFlags = Object.fromEntries(featurePages.map(({ templateFlag, isEnabled }) => [templateFlag, isEnabled]));
+  const pageStubs = opts.pageStubs?.(pluginJson, featureFlags) ?? { data: {}, stubs: [], skipped: [] };
+  const { packageManagerName, packageManagerVersion } = templateData;
+  const createPluginCmd = `${getPackageManagerExecCmd(packageManagerName, packageManagerVersion)}@latest`;
+  const data = {
+    ...templateData,
+    pluginId,
+    docsPath,
+    createPluginCmd,
+    lockFile: LOCK_FILES[packageManagerName],
+    ...featureFlags,
+    ...pageStubs.data,
+  };
 
   addDependenciesToPackageJson(context, {}, { '@grafana/plugin-docs-cli': PLUGIN_DOCS_CLI_VERSION });
 
@@ -136,12 +202,29 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
 
   // pages are only rendered into a folder without any, so pages the author deleted stay deleted
   const hasPages = hasDocsPages(context, docsPath);
+  const disabledPageFiles = featurePages.filter(({ isEnabled }) => !isEnabled).map(({ page }) => `${page}.md`);
   addTemplateFolder(context, {
     folderPath: join(templateDir, 'docs'),
     targetPath: docsPath,
     data,
-    include: (file) => !hasPages || SCAFFOLD_META_FILES.includes(file),
+    include: (file) => SCAFFOLD_META_FILES.includes(file) || (!hasPages && !disabledPageFiles.includes(file)),
   });
+  const report: PageReport = {
+    missingPageStubs: scaffoldPageStubs({ context, docsPath, stubs: pageStubs.stubs, data, hasPages }),
+    // a feature turned on after the first scaffold gets no page, so point the author at it instead
+    missingFeaturePages: hasPages
+      ? featurePages
+          .filter(({ page, isEnabled }) => isEnabled && !pageExists(context, docsPath, [page]))
+          .map(({ page }) => `${page}.md`)
+      : [],
+    // a re-run has no pages to compare against, so it only reports what the first scaffold left out
+    skippedPages: hasPages ? [] : pageStubs.skipped,
+  };
+  const { appPageSlug } = pageStubs;
+  if (appPageSlug && report.missingPageStubs.length > 0) {
+    // the author may have moved it into features/ or turned it into a folder
+    report.appNamedPage = findPage(context, docsPath, [appPageSlug, `features/${appPageSlug}`]);
+  }
 
   // left alone when it exists, since the author may have customized it
   const workflowPath = '.github/workflows/validate-docs.yml';
@@ -158,21 +241,91 @@ export function setupDocsScaffolding(opts: DocsSetupOptions): Context {
   ensureConfigAgentFiles(context, TEMPLATE_PATHS.common, CONFIG_AGENT_FILES, data);
   appendDocsPointerToInstructions(context, docsPath);
 
-  // deferred so it prints after the runner's change list, and only when something changed
-  if (context.hasChanges()) {
-    context.setMessage(buildNextStepsMessage({ docsPath, packageManagerName, pluginActions, linkedRootFiles }));
+  // deferred so it prints after the runner's change list, and only when there is something to report
+  if (context.hasChanges() || report.missingFeaturePages.length > 0 || report.missingPageStubs.length > 0) {
+    context.setMessage(
+      buildNextStepsMessage({ docsPath, packageManagerName, createPluginCmd, pluginActions, linkedRootFiles, report })
+    );
   }
 
   return context;
 }
 
+interface PageReport {
+  /** Feature pages that plugin.json declares and the docs folder doesn't have, as `<page>.md`. */
+  missingFeaturePages: string[];
+  /** Pages from `pageStubs` that the docs folder doesn't have, as paths. */
+  missingPageStubs: string[];
+  /** Entries in plugin.json that got no page on the first scaffold, with the reason. */
+  skippedPages: string[];
+  /** The page named after the app, when the app has grown past one page and pages are missing. */
+  appNamedPage?: string;
+}
+
+// a page counts as there as a file or as a folder, so authors can turn a page into a folder
+function pageExists(context: Context, docsPath: string, pageNames: string[]): boolean {
+  return findPage(context, docsPath, pageNames) !== undefined;
+}
+
+/** The path of the first page that exists, as `<name>.md` or as the folder `<name>/`. */
+function findPage(context: Context, docsPath: string, pageNames: string[]): string | undefined {
+  for (const name of pageNames) {
+    if (context.doesFileExist(`${docsPath}/${name}.md`)) {
+      return `${docsPath}/${name}.md`;
+    }
+    if (context.doesFileExist(`${docsPath}/${name}`)) {
+      return `${docsPath}/${name}/`;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Renders each stub into a docs folder that has no pages yet. When the folder has pages it adds nothing and
+ * returns the stubs it doesn't have, so a page the author deleted stays deleted.
+ */
+function scaffoldPageStubs(opts: {
+  context: Context;
+  docsPath: string;
+  stubs: PageStub[];
+  data: Record<string, unknown>;
+  hasPages: boolean;
+}): string[] {
+  const { context, docsPath, stubs, data, hasPages } = opts;
+  const missingPages: string[] = [];
+  const missingIndexes: string[] = [];
+  for (const stub of stubs) {
+    const filePath = `${docsPath}/${stub.file}`;
+    if (hasPages) {
+      // the author may have moved the pages between the root and features/ since the first scaffold
+      if (stub.slug !== undefined) {
+        if (!pageExists(context, docsPath, [stub.slug, `features/${stub.slug}`])) {
+          missingPages.push(filePath);
+        }
+      } else if (!context.doesFileExist(filePath)) {
+        missingIndexes.push(filePath);
+      }
+    } else if (context.doesFileExist(filePath)) {
+      additionsDebug(`${filePath} already exists, skipping`);
+    } else {
+      context.addFile(filePath, renderTemplate(stub.templatePath, false, { ...data, ...stub.data }));
+    }
+  }
+  // the message names the first one, and a page tells the author more than a folder index
+  const missing = [...missingPages, ...missingIndexes];
+  return missing;
+}
+
 function buildNextStepsMessage(opts: {
   docsPath: string;
   packageManagerName: string;
+  createPluginCmd: string;
   pluginActions: BumpActionRefsResult;
   linkedRootFiles: string[];
+  report: PageReport;
 }): ContextMessage {
-  const { docsPath, packageManagerName, pluginActions, linkedRootFiles } = opts;
+  const { docsPath, packageManagerName, createPluginCmd, pluginActions, linkedRootFiles } = opts;
+  const { missingFeaturePages, missingPageStubs, skippedPages, appNamedPage } = opts.report;
   const run = (script: string) => output.formatCode(`${packageManagerName} run ${script}`);
 
   const steps: NextStep[] = [
@@ -181,8 +334,17 @@ function buildNextStepsMessage(opts: {
       detail: 'It has the commands and a link to the plugin docs guide.',
     },
     {
-      title: `Fill in or review the pages under ${docsPath}/`,
-      detail: `Preview them with ${run('docs:serve')}, which also warns about every section left to fill.`,
+      title: 'Write the pages, yourself or with an AI agent',
+      detail: [
+        `Fill in or review the pages under ${docsPath}/ by hand.`,
+        'Or commit these changes, then have an agent draft them from your source code and README:',
+        output.formatCode(`${createPluginCmd} add docs-content`),
+        'Review its work either way.',
+      ],
+    },
+    {
+      title: 'Preview the pages',
+      detail: `Run ${run('docs:serve')}, which also lists every section left to fill.`,
     },
   ];
 
@@ -197,6 +359,26 @@ function buildNextStepsMessage(opts: {
     warnings.push({
       title: `${RELEASE_WORKFLOW_PATH} pins ${action} to a branch or commit, so it was left as is`,
       detail: `Docs need ${REQUIRED_ACTION_REFS[action]} or later.`,
+    });
+  }
+  for (const page of missingFeaturePages) {
+    warnings.push({
+      title: `src/plugin.json declares the feature ${docsPath}/${page} documents, but the page doesn't exist`,
+      detail: `If it needs docs, add the page as described under Optional pages in ${docsPath}/AGENTS.md. If you deleted it on purpose, ignore this.`,
+    });
+  }
+  if (missingPageStubs.length > 0) {
+    warnings.push({
+      title: `src/plugin.json has pages with no docs page, such as ${missingPageStubs[0]}`,
+      detail: appNamedPage
+        ? `${appNamedPage} is named after the app, which happens while the app has one page. Rename it after the page it documents, then add pages for the others as described under Optional pages in ${docsPath}/AGENTS.md. If you deleted pages on purpose, ignore this.`
+        : `If they need docs, add them as described under Optional pages in ${docsPath}/AGENTS.md. If you deleted them on purpose, ignore this.`,
+    });
+  }
+  if (skippedPages.length > 0) {
+    warnings.push({
+      title: `Left out of the docs: ${skippedPages.join(', ')}`,
+      detail: `If they need docs, add them as described under Optional pages in ${docsPath}/AGENTS.md.`,
     });
   }
   for (const file of linkedRootFiles) {
@@ -215,18 +397,15 @@ function buildNextStepsMessage(opts: {
 
 interface NextStep {
   title: string;
-  detail?: string;
+  detail?: string | string[];
 }
 
 function formatNextStep({ title, detail }: NextStep, marker: string): string[] {
-  const lines = [`${marker}${title}`];
-  if (detail) {
-    lines.push(`${' '.repeat(marker.length)}${detail}`);
-  }
-  return lines;
+  const indent = ' '.repeat(marker.length);
+  return [`${marker}${title}`, ...[detail ?? []].flat().map((line) => `${indent}${line}`)];
 }
 
-export function assertSupportedPluginType(context: Context): SupportedPluginType {
+export function assertSupportedPluginType(context: Context, additionName = 'docs'): SupportedPluginType {
   const { type } = readJsonFile<PluginJson>(context, 'src/plugin.json');
 
   if (isSupportedPluginType(type)) {
@@ -234,11 +413,8 @@ export function assertSupportedPluginType(context: Context): SupportedPluginType
   }
 
   const supported = SUPPORTED_PLUGIN_TYPES.join(', ');
-  if (type === 'app' || type === 'datasource') {
-    throw new Error(`create-plugin add docs does not support '${type}' plugins yet. Supported so far: ${supported}.`);
-  }
   throw new Error(
-    `create-plugin add docs needs a plugin type of ${supported} in src/plugin.json, but found '${type ?? 'unset'}'.`
+    `create-plugin add ${additionName} needs a plugin type of ${supported} in src/plugin.json, but found '${type ?? 'unset'}'.`
   );
 }
 
@@ -250,6 +426,233 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
 const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
 // the scaffold's files that aren't pages, so they're added on every run
 const SCAFFOLD_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
+const DASHBOARDS_PAGE: FeaturePage = {
+  page: 'dashboards',
+  templateFlag: 'hasDashboards',
+  hasFeature: (p) => getIncludes(p).some((i) => i.type === 'dashboard'),
+};
+const FEATURE_PAGES_BY_TYPE: Record<SupportedPluginType, FeaturePage[]> = {
+  panel: [],
+  datasource: [
+    { page: 'annotations', templateFlag: 'hasAnnotations', hasFeature: (p) => p.annotations === true },
+    { page: 'alerting', templateFlag: 'hasAlerting', hasFeature: (p) => p.alerting === true },
+    DASHBOARDS_PAGE,
+  ],
+  app: [
+    { page: 'configure', templateFlag: 'hasConfigPage', hasFeature: hasAppConfigPage },
+    DASHBOARDS_PAGE,
+    {
+      page: 'permissions',
+      templateFlag: 'hasPermissions',
+      hasFeature: (p) =>
+        p.roles !== undefined ||
+        p.iam !== undefined ||
+        getIncludes(p).some((i) => (i.role !== undefined && i.role !== 'Viewer') || i.action !== undefined),
+    },
+  ],
+};
+
+function getIncludes(pluginJson: PluginJson): PluginInclude[] {
+  return Array.isArray(pluginJson.includes)
+    ? pluginJson.includes.filter((i): i is PluginInclude => typeof i === 'object' && i !== null)
+    : [];
+}
+
+// app page paths may use the %PLUGIN_ID% placeholder that the build replaces
+function isAppPath(path: string | undefined, pluginId: string | undefined, prefix: string): boolean {
+  return [pluginId, '%PLUGIN_ID%'].some(
+    (id) => id && (path === `${prefix}${id}` || path?.startsWith(`${prefix}${id}/`))
+  );
+}
+
+const APP_MODULE_FILES = ['src/module.ts', 'src/module.tsx', 'src/module.js', 'src/module.jsx'];
+
+function hasAppConfigPage(pluginJson: PluginJson, context: Context): boolean {
+  return (
+    APP_MODULE_FILES.some((file) => callsAddConfigPage(context.getFile(file))) ||
+    getIncludes(pluginJson).some((i) => i.type === 'page' && isAppPath(i.path, pluginJson.id, '/plugins/'))
+  );
+}
+
+function callsAddConfigPage(source: string | undefined): boolean {
+  if (!source) {
+    return false;
+  }
+  // babel-ts parses JSX as well as TypeScript, since app modules are often .tsx
+  let ast: recast.types.ASTNode;
+  try {
+    ast = recast.parse(source, { parser: babelTsParser });
+  } catch (error) {
+    additionsDebug(`Failed to parse the app module, so it can't tell whether it has a config page: ${error}`);
+    return false;
+  }
+  let isFound = false;
+  recast.visit(ast, {
+    visitCallExpression(path) {
+      const { callee } = path.node;
+      if (
+        callee.type === 'MemberExpression' &&
+        callee.property.type === 'Identifier' &&
+        callee.property.name === 'addConfigPage'
+      ) {
+        isFound = true;
+        return false;
+      }
+      this.traverse(path);
+      return undefined;
+    },
+  });
+  return isFound;
+}
+
+// the example pages templates/app/src/plugin.json ships, which only document the scaffold
+const TEMPLATE_DEFAULT_PAGES: Record<string, string> = {
+  'Page One': '/one',
+  'Page Two': '/two',
+  'Page Three': '/three',
+  'Page Four': '/four',
+};
+
+const CONFIG_PAGE_SLUGS = ['configuration', 'configure'];
+
+interface AppFeaturePage {
+  /** The name in plugin.json, which is how the app's own navigation labels the page. */
+  name: string;
+  /** What the docs call the page, which is the app's name when it has no other page. */
+  title: string;
+  isOnlyPage?: boolean;
+  slug: string;
+  path: string;
+  role?: string;
+}
+
+// pages under /plugins/ are the config page and pages under /d/ link to a bundled dashboard, so neither gets a page
+function getAppFeaturePages(
+  pluginJson: PluginJson,
+  hasConfigPage: boolean
+): { pages: AppFeaturePage[]; configPage?: AppFeaturePage; skipped: string[] } {
+  const pages: AppFeaturePage[] = [];
+  let configPage: AppFeaturePage | undefined;
+  const skipped: string[] = [];
+  const appPages = getIncludes(pluginJson)
+    .filter((i) => i.type === 'page' && typeof i.name === 'string' && isAppPath(i.path, pluginJson.id, '/a/'))
+    .sort((a, b) => Number(b.defaultNav === true) - Number(a.defaultNav === true));
+  const takenSlugs = new Set(getReservedPageSlugs());
+  for (const include of appPages) {
+    const name = include.name as string;
+    const path = (include.path as string).replaceAll('%PLUGIN_ID%', pluginJson.id ?? '');
+    const defaultPath = TEMPLATE_DEFAULT_PAGES[name];
+    if (defaultPath !== undefined && path.endsWith(defaultPath)) {
+      additionsDebug(`${name} is an example page from the create-plugin app template, skipping`);
+      skipped.push(`${name} (${include.path}, an example page from the create-plugin app template)`);
+      continue;
+    }
+    const slug = slugify(name);
+    if (!slug) {
+      additionsDebug(`${name} has no letters or digits for a file name, skipping`);
+      skipped.push(`${name} (${include.path}, its name has no letters or digits for a file name)`);
+      continue;
+    }
+    // Viewer is the lowest role, so a page that needs only that has nothing to tell the reader
+    const role = typeof include.role === 'string' && include.role !== 'Viewer' ? include.role : undefined;
+    // an in-app page named like the config page takes its place, the way data sources name it
+    if (!hasConfigPage && !configPage && CONFIG_PAGE_SLUGS.includes(slug)) {
+      configPage = { name, title: name, slug: 'configure', path, role };
+      continue;
+    }
+    if (takenSlugs.has(slug)) {
+      additionsDebug(`${name} would be written to ${slug}.md, which another page uses, skipping`);
+      skipped.push(`${name} (${include.path}, its file name is used by another page)`);
+      continue;
+    }
+    takenSlugs.add(slug);
+    pages.push({ name, title: name, slug, path, role });
+  }
+
+  // a single page is the whole app, and its navigation label is often a generic one such as Overview or Home
+  const appSlug = getAppPageSlug(pluginJson);
+  if (pages.length === 1 && appSlug) {
+    pages[0] = { ...pages[0], title: pluginJson.name as string, slug: appSlug, isOnlyPage: true };
+  }
+  return { pages, configPage, skipped };
+}
+
+function getAppPageSlug(pluginJson: PluginJson): string | undefined {
+  const slug = slugify(pluginJson.name ?? '');
+  return slug && !getReservedPageSlugs().includes(slug) ? slug : undefined;
+}
+
+function slugify(name: string): string {
+  return name
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+// more app pages than this go in a features/ folder, so a small app has no folder with one page in it
+const MAX_FLAT_PAGES = 3;
+// the root pages that come before the app pages, which take the positions after it
+const FIRST_PAGE_POSITION = 3;
+const CONFIG_PAGE_POSITION = 2;
+const FIXED_PAGE_SLUGS = ['index', 'configure', 'dashboards', 'permissions', 'troubleshooting'];
+
+// file names an app page can't take, because another page or plugin-docs-cli uses them
+function getReservedPageSlugs(): string[] {
+  return [
+    ...FIXED_PAGE_SLUGS,
+    ...DOCS_CLI_META_FILES.map((file) => file.slice(0, -'.MD'.length).toLowerCase().replaceAll('_', '-')),
+  ];
+}
+
+function getAppFeaturePageStubs(pluginJson: PluginJson, featureFlags: Record<string, boolean>): PageStubs {
+  const { pages, configPage, skipped } = getAppFeaturePages(pluginJson, featureFlags.hasConfigPage === true);
+  const templateDir = join(TEMPLATES_DIR, 'docs', 'app');
+  const pageTemplate = join(templateDir, 'feature-page.md');
+  const stubs: PageStub[] = [];
+  if (configPage) {
+    stubs.push({
+      templatePath: pageTemplate,
+      file: 'configure.md',
+      slug: 'configure',
+      data: { page: { ...configPage, position: CONFIG_PAGE_POSITION } },
+    });
+  }
+
+  const appPageSlug = getAppPageSlug(pluginJson);
+  const isInFolder = pages.length > MAX_FLAT_PAGES;
+  const folder = isInFolder ? 'features/' : '';
+  if (isInFolder) {
+    stubs.push({
+      templatePath: join(templateDir, 'features-index.md'),
+      file: 'features/index.md',
+      data: { position: FIRST_PAGE_POSITION },
+    });
+  }
+  // plugin-docs-cli compares a folder's index.md with the pages inside it, so these start after it
+  const firstPosition = isInFolder ? FIRST_PAGE_POSITION + 1 : FIRST_PAGE_POSITION;
+  pages.forEach((page, i) => {
+    stubs.push({
+      templatePath: pageTemplate,
+      file: `${folder}${page.slug}.md`,
+      slug: page.slug,
+      data: { page: { ...page, position: firstPosition + i } },
+    });
+  });
+
+  return {
+    data: {
+      ...(configPage ? { hasConfigPage: true } : {}),
+      ...(pages.length > 0 ? { defaultFeaturePage: { ...pages[0], file: `${folder}${pages[0].slug}` } } : {}),
+    },
+    stubs,
+    skipped,
+    // a page that is already called like the app is the page the author wants, not one to rename
+    appPageSlug: pages.some((page) => page.slug === appPageSlug) ? undefined : appPageSlug,
+  };
+}
+
 // mirrors isMetaFile in @grafana/plugin-docs-cli, so both tools agree on what counts as a page
 const DOCS_CLI_META_FILES = [
   'README.MD',

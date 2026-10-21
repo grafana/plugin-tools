@@ -57,15 +57,23 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
 
   output.log({ title: 'Running the following migrations:', body: migrationListBody });
 
+  let hasAnyChanges = false;
+
   // run migrations sequentially in version order where lowest version runs first
   for (const migration of migrations) {
     const context = await runCodemod(migration, options.codemodOptions);
     const shouldCommit = options.commitEachMigration && context.hasChanges();
 
+    hasAnyChanges ||= context.hasChanges();
+
     if (shouldCommit) {
       // for conventional commits we need to add a newline between the title and the description
       await gitCommitNoVerify(`chore: run create-plugin migration - ${migration.name}\n\n${migration.description}`);
     }
+  }
+
+  if (!hasAnyChanges) {
+    return false;
   }
 
   await setRootConfig({ version: CURRENT_APP_VERSION });
@@ -74,4 +82,6 @@ export async function runMigrations(migrations: Migration[], options: RunMigrati
   if (options.commitEachMigration && !(await isGitDirectoryClean())) {
     await gitCommitNoVerify(`chore: update .config/.cprc.json to version ${CURRENT_APP_VERSION}.`);
   }
+
+  return true;
 }

@@ -21,6 +21,10 @@ const MAX_DESCRIPTION_LENGTH = 160;
 // below this, a page body is almost certainly a stub rather than real content
 const MIN_CONTENT_LENGTH = 150;
 
+function isStringList(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string' && item.trim() !== '');
+}
+
 /**
  * Checks whether a custom slug is safe for use in URLs.
  * Mirrors the logic in scanner.ts normalizeCustomSlug.
@@ -57,15 +61,17 @@ function findFieldLine(raw: string, key: string): number | undefined {
 
 /**
  * Finds the 1-based line numbers of all h1 headings (# ) in the markdown body.
- * The body starts after the closing --- of frontmatter.
+ * The body starts after the closing --- of frontmatter. Lines inside fenced code
+ * blocks (``` or ~~~) are skipped, since a shell comment like "# foo" isn't a heading.
  */
 function findH1Lines(raw: string): number[] {
   const lines = raw.split('\n');
   let inFrontmatter = false;
   let passedFrontmatter = false;
+  let fence: string | undefined;
   const result: number[] = [];
   for (let i = 0; i < lines.length; i++) {
-    if (lines[i].trim() === '---') {
+    if (!passedFrontmatter && lines[i].trim() === '---') {
       if (!inFrontmatter) {
         inFrontmatter = true;
       } else {
@@ -73,7 +79,22 @@ function findH1Lines(raw: string): number[] {
       }
       continue;
     }
-    if (passedFrontmatter && /^# /.test(lines[i])) {
+    if (!passedFrontmatter) {
+      continue;
+    }
+    if (fence) {
+      const closer = /^ {0,3}(`{3,}|~{3,})\s*$/.exec(lines[i]);
+      if (closer && closer[1][0] === fence[0] && closer[1].length >= fence.length) {
+        fence = undefined;
+      }
+      continue;
+    }
+    const opener = /^ {0,3}(```+|~~~+)/.exec(lines[i]);
+    if (opener) {
+      fence = opener[1];
+      continue;
+    }
+    if (/^# /.test(lines[i])) {
       result.push(i + 1);
     }
   }
@@ -186,6 +207,17 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
           detail: `"${key}" should be a ${type} but got ${typeof data[key]}.`,
         });
       }
+    }
+
+    if ('keywords' in data && !isStringList(data.keywords)) {
+      diagnostics.push({
+        rule: Rule.FieldTypes,
+        severity: 'error',
+        file: relativePath,
+        line: findFieldLine(raw, 'keywords'),
+        title: 'Wrong type for field: keywords',
+        detail: '"keywords" should be a list of non-empty strings.',
+      });
     }
 
     // frontmatter-title-length: search engines truncate long titles in results

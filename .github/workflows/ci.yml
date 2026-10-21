@@ -118,7 +118,8 @@ jobs:
           path: ./packed-artifacts
 
       - name: Install npm packages globally
-        # One install, so plugin-docs-cli uses the packed plugin-docs-parser instead of the registry copy.
+        # Install all tarballs in one command so workspace deps resolve to their packed siblings
+        # instead of the registry (release PRs bump versions that aren't published yet).
         run: npm install -g ./*.tgz
         working-directory: ./packed-artifacts
 
@@ -296,7 +297,9 @@ jobs:
           path: ./packed-artifacts
 
       - name: Install npm packages globally
-        run: for file in *.tgz; do npm install -g "$file"; done
+        # Install all tarballs in one command so workspace deps resolve to their packed siblings
+        # instead of the registry (release PRs bump versions that aren't published yet).
+        run: npm install -g ./*.tgz
         working-directory: ./packed-artifacts
 
       - name: Test create-plugin update command
@@ -405,7 +408,9 @@ jobs:
           path: ./packed-artifacts
 
       - name: Install npm packages globally
-        run: for file in *.tgz; do npm install -g "$file"; done
+        # Install all tarballs in one command so workspace deps resolve to their packed siblings
+        # instead of the registry (release PRs bump versions that aren't published yet).
+        run: npm install -g ./*.tgz
         working-directory: ./packed-artifacts
 
       - name: Generate plugin

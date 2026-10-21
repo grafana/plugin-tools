@@ -10,6 +10,7 @@ export const serve = async (
   docsPath: string,
   pluginType?: string,
   readmePaths?: string[],
+  docsPathSetting?: string,
   snippetValues?: SnippetValues
 ) => {
   debug('Serve command invoked with args: %O', argv);
@@ -30,6 +31,7 @@ export const serve = async (
       port,
       liveReload,
       pluginType,
+      docsPathSetting,
       snippetValues,
     });
   } catch (error) {

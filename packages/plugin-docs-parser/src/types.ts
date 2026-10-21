@@ -111,7 +111,7 @@ export interface Frontmatter {
   slug?: string;
 
   /**
-   * Optional tags for SEO and categorization.
+   * Optional search keywords for the page.
    */
-  tags?: string[];
+  keywords?: string[];
 }

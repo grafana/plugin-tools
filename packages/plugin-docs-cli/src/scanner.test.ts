@@ -25,6 +25,23 @@ describe('scanDocsFolder', () => {
     expect(result.manifest.pages[0].file).toBe('index.md');
   });
 
+  it('should sort pages without sidebar_position by file name', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'scanner-order-'));
+    const md = (title: string) => `---\ntitle: ${title}\ndescription: A page about ${title}\n---\nBody`;
+    await writeFile(join(tmp, 'index.md'), md('Home'));
+    await writeFile(join(tmp, 'zebra.md'), md('Zebra'));
+    await writeFile(join(tmp, 'apple.md'), md('Apple'));
+    await writeFile(join(tmp, 'mango.md'), md('Mango'));
+    await writeFile(
+      join(tmp, 'positioned.md'),
+      `---\ntitle: Positioned\ndescription: A page about it\nsidebar_position: 1\n---\nBody`
+    );
+
+    const result = await scanDocsFolder(tmp);
+
+    expect(result.manifest.pages.map((p: Page) => p.slug)).toEqual(['index', 'positioned', 'apple', 'mango', 'zebra']);
+  });
+
   it('should sort pages by sidebar_position', async () => {
     const result = await scanDocsFolder(testDocsPath);
 
@@ -70,6 +87,17 @@ describe('scanDocsFolder', () => {
     expect(home?.content).not.toContain('---');
     // page.content matches what the flat files map holds for the same file
     expect(home?.content).toBe(result.files[home!.file]);
+  });
+
+  it('should pass keywords through to the page frontmatter', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'scan-keywords-'));
+    await writeFile(
+      join(tmp, 'index.md'),
+      '---\ntitle: Home\ndescription: Welcome to the docs\nkeywords:\n  - data source\n  - configuration\n---\n\n## Hello\n'
+    );
+
+    const result = await scanDocsFolder(tmp);
+    expect(result.manifest.pages[0].frontmatter?.keywords).toEqual(['data source', 'configuration']);
   });
 
   it('should include file reference in page object', async () => {

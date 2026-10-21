@@ -3,10 +3,11 @@ import { stat } from 'node:fs/promises';
 import minimist from 'minimist';
 import createDebug from 'debug';
 import type { SnippetValues } from '@grafana/plugin-docs-parser';
-import { readmeCandidates, resolvePluginJson } from '../utils/utils.plugin.js';
+import { resolve } from 'node:path';
+import { readmeCandidates, resolveBuiltPluginJson, resolvePluginJson } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
 import { buildDocs } from '../commands/build.command.js';
-import { validateCommand } from '../commands/validate.command.js';
+import { reportUnresolvedBuiltDocs, validateCommand } from '../commands/validate.command.js';
 
 const debug = createDebug('plugin-docs-cli:main');
 
@@ -24,17 +25,37 @@ async function main() {
     console.error('  serve      Start the local docs preview server');
     console.error('  build      Build docs for publishing (generates manifest, copies to dist/)');
     console.error('  validate   Validate documentation (--json for machine-readable output)');
+    console.error('             --dist [dir] validates the built docs of the plugin in dir (default: dist)');
     process.exit(1);
   }
 
+  const validateArgv = minimist(process.argv.slice(3), {
+    boolean: ['json'],
+    string: ['dist'],
+    default: {
+      json: false,
+    },
+  });
+  // a bare `--dist` checks `./dist`, and `--dist <dir>` the built plugin in <dir>
+  const distRoot =
+    command === 'validate' && validateArgv.dist !== undefined ? resolve(validateArgv.dist || 'dist') : undefined;
+
   // resolve docs path, plugin type and snippet values once for all commands.
   let docsPath: string;
+  let docsPathSetting: string;
   let pluginType: string | undefined;
   let snippetValues: SnippetValues | undefined;
   try {
-    ({ docsPath, pluginType, snippetValues } = await resolvePluginJson());
+    ({ docsPath, docsPathSetting, pluginType, snippetValues } = distRoot
+      ? await resolveBuiltPluginJson(distRoot)
+      : await resolvePluginJson());
   } catch (error) {
-    console.error(`Error: ${error instanceof Error ? error.message : error}`);
+    const message = error instanceof Error ? error.message : String(error);
+    if (distRoot && validateArgv.json) {
+      reportUnresolvedBuiltDocs(message);
+      return;
+    }
+    console.error(`Error: ${message}`);
     process.exit(1);
   }
 
@@ -70,7 +91,7 @@ async function main() {
           reload: false,
         },
       });
-      await serve(serveArgv, docsPath, pluginType, readmeCandidates(), snippetValues);
+      await serve(serveArgv, docsPath, pluginType, readmeCandidates(), docsPathSetting, snippetValues);
       break;
     }
     case 'build': {
@@ -78,15 +99,11 @@ async function main() {
       break;
     }
     case 'validate': {
-      const validateArgv = minimist(process.argv.slice(3), {
-        boolean: ['json'],
-        default: {
-          json: false,
-        },
-      });
       await validateCommand(docsPath, {
         json: validateArgv.json,
         pluginType,
+        mode: distRoot ? 'dist' : 'source',
+        docsPathSetting,
         snippetValues,
       });
       break;

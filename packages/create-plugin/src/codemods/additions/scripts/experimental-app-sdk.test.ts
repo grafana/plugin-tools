@@ -252,7 +252,7 @@ describe('experimental-app-sdk addition', () => {
       const result = appSdk(context);
 
       expect(result.getFile('docker-compose.yaml')).toContain(
-        'GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest,appplugins.registerAPIServer'
+        'GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest,appplugins.registerAPIServer,grafana.useRouterMiddleware'
       );
     });
 
@@ -274,6 +274,7 @@ describe('experimental-app-sdk addition', () => {
       expect(compose).toContain('someOtherToggle');
       expect(compose).toContain('appplugins.loadAppManifest');
       expect(compose).toContain('appplugins.registerAPIServer');
+      expect(compose).toContain('grafana.useRouterMiddleware');
     });
 
     it('does not duplicate the toggles when they are already set', () => {
@@ -284,7 +285,7 @@ describe('experimental-app-sdk addition', () => {
       file: .config/docker-compose-base.yaml
       service: grafana
     environment:
-      GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest,appplugins.registerAPIServer
+      GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest,appplugins.registerAPIServer,grafana.useRouterMiddleware
 `,
       });
 
@@ -321,7 +322,7 @@ describe('experimental-app-sdk addition', () => {
         `services:
   grafana:
     environment:
-      GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest,appplugins.registerAPIServer
+      GF_FEATURE_TOGGLES_ENABLE: appplugins.loadAppManifest,appplugins.registerAPIServer,grafana.useRouterMiddleware
 `
       );
 

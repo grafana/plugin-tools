@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { resolve, join } from 'node:path';
+import { join, resolve } from 'node:path';
 import createDebug from 'debug';
 import type { SnippetValues } from '@grafana/plugin-docs-parser';
 
@@ -7,9 +7,46 @@ const debug = createDebug('plugin-docs-cli:utils:plugin');
 
 export interface PluginJson {
   docsPath: string;
+  /** The `docsPath` exactly as written in plugin.json, while `docsPath` is resolved to an absolute path. */
+  docsPathSetting: string;
   pluginType?: string;
   /** Unset when `plugin.json` has no `name` or `id`. */
   snippetValues?: SnippetValues;
+}
+
+/**
+ * True when a folder path has no empty, `.` or `..` segments. GCOM looks the manifest up at the literal
+ * `<docsPath>/manifest.json` in the plugin archive, so only such a path is found there.
+ */
+export function hasPlainSegments(folder: string): boolean {
+  return folder.split('/').every((segment) => segment !== '' && segment !== '.' && segment !== '..');
+}
+
+async function readPluginJson(pluginJsonPath: string, label: string, notFoundMessage: string) {
+  debug('Looking for plugin.json at: %s', pluginJsonPath);
+
+  let raw: string;
+  try {
+    raw = await readFile(pluginJsonPath, 'utf-8');
+  } catch {
+    throw new Error(notFoundMessage);
+  }
+
+  let pluginJson: { docsPath?: string; type?: string; name?: unknown; id?: unknown };
+  try {
+    pluginJson = JSON.parse(raw);
+  } catch (error) {
+    throw new Error(`Failed to parse ${pluginJsonPath}: ${error instanceof Error ? error.message : error}`);
+  }
+
+  if (!pluginJson.docsPath) {
+    throw new Error(`"docsPath" is not set in ${label}`);
+  }
+
+  const { name, id } = pluginJson;
+  const snippetValues =
+    typeof name === 'string' && typeof id === 'string' ? { pluginName: name, pluginId: id } : undefined;
+  return { docsPath: pluginJson.docsPath, pluginType: pluginJson.type, snippetValues };
 }
 
 /**
@@ -21,38 +58,45 @@ export interface PluginJson {
  */
 export async function resolvePluginJson(projectRoot?: string): Promise<PluginJson> {
   const root = projectRoot || process.cwd();
-  const pluginJsonPath = join(root, 'src', 'plugin.json');
-  debug('Looking for plugin.json at: %s', pluginJsonPath);
+  const { docsPath, pluginType, snippetValues } = await readPluginJson(
+    join(root, 'src', 'plugin.json'),
+    'src/plugin.json',
+    `Could not find src/plugin.json in ${root}`
+  );
 
-  let raw: string;
-  try {
-    raw = await readFile(pluginJsonPath, 'utf-8');
-  } catch {
-    throw new Error(`Could not find src/plugin.json in ${root}`);
+  const resolved = resolve(root, docsPath);
+  debug('Resolved docsPath from plugin.json: %s -> %s', docsPath, resolved);
+  return { docsPath: resolved, docsPathSetting: docsPath, pluginType, snippetValues };
+}
+
+/**
+ * Resolves the built docs folder of a built plugin, where `plugin.json` sits at the root. This is the
+ * layout of `dist/` after a plugin build and of an extracted plugin archive.
+ *
+ * @param distRoot - The root of the built plugin
+ * @returns The resolved absolute path to the built docs directory, and the plugin's type
+ * @throws {Error} If plugin.json is missing, lacks docsPath or its docsPath is not a plain folder name
+ */
+export async function resolveBuiltPluginJson(distRoot: string): Promise<PluginJson> {
+  const root = resolve(distRoot);
+  const { docsPath, pluginType, snippetValues } = await readPluginJson(
+    join(root, 'plugin.json'),
+    'plugin.json',
+    `Could not find plugin.json in ${root}. Build the plugin and run the docs build first.`
+  );
+
+  // GCOM trims the slashes and looks up the literal path in the archive, so `./docs` or `docs/../docs`
+  // never find the manifest even though they resolve to a real folder
+  const folder = docsPath.replace(/^\/+|\/+$/g, '');
+  if (folder.includes('\\') || !hasPlainSegments(folder)) {
+    throw new Error(
+      `"docsPath" in ${join(root, 'plugin.json')} must be a plain folder such as "docs", but is "${docsPath}"`
+    );
   }
 
-  let pluginJson: {
-    docsPath?: string;
-    type?: string;
-    name?: unknown;
-    id?: unknown;
-  };
-  try {
-    pluginJson = JSON.parse(raw);
-  } catch (error) {
-    throw new Error(`Failed to parse ${pluginJsonPath}: ${error instanceof Error ? error.message : error}`);
-  }
-
-  if (!pluginJson.docsPath) {
-    throw new Error('"docsPath" is not set in src/plugin.json');
-  }
-
-  const docsPath = resolve(root, pluginJson.docsPath);
-  debug('Resolved docsPath from plugin.json: %s -> %s', pluginJson.docsPath, docsPath);
-  const { name, id } = pluginJson;
-  const snippetValues =
-    typeof name === 'string' && typeof id === 'string' ? { pluginName: name, pluginId: id } : undefined;
-  return { docsPath, pluginType: pluginJson.type, snippetValues };
+  const resolved = join(root, folder);
+  debug('Resolved built docsPath: %s -> %s', docsPath, resolved);
+  return { docsPath: resolved, docsPathSetting: docsPath, pluginType, snippetValues };
 }
 
 /**

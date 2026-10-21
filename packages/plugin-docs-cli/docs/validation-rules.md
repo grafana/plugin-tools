@@ -5,7 +5,8 @@ Your docs folder is checked against the rules below in two places, with the same
 - **`serve`** - the local preview server you run while writing. It re-validates on every save and
   prints what it finds, but never blocks your preview.
 - **`validate`** - what runs in CI, and what `plugin-validator` runs against your plugin before it
-  can be published. It fails on any error.
+  can be published. It fails on any error. Run it with `--dist` to check the docs your plugin build
+  ships instead of the docs folder in your repository.
 
 An error you see while writing in `serve` will block publishing, so fix it before you submit your
 plugin.
@@ -20,20 +21,21 @@ For what you can write in a page, refer to [Supported markdown](./supported-mark
 
 ## Folder & file structure
 
-| Rule                   | What it checks                                                                                                                              | Severity |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `has-markdown-files`   | Your docs folder must contain at least one markdown page.                                                                                   | Error    |
-| `root-index-exists`    | Your docs folder must have an `index.md` at its root - this is the landing page for your documentation.                                     | Error    |
-| `nested-dir-has-index` | A subfolder that contains pages needs its own `index.md`. Without one, the sidebar shows an unnamed category using the folder name instead. | Warning  |
-| `no-spaces-in-names`   | File and folder names can't contain spaces - they break the URL for that page. Use hyphens instead.                                         | Error    |
-| `valid-file-naming`    | File and folder names should use only lowercase letters, digits and hyphens, for clean URLs.                                                | Error    |
-| `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it.                                                                       | Error    |
-| `no-symlinks`          | Symbolic links aren't allowed in the docs folder - use real files.                                                                          | Error    |
-| `allowed-file-types`   | Only markdown files, images (`png`, `jpg`, `jpeg`, `webp`, `gif`) and videos (`mp4`, `webm`) are allowed in the docs folder.                | Error    |
-| `max-nesting-depth`    | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages.                | Error    |
-| `docs-path-exists`     | The `docsPath` in `src/plugin.json` must point at a folder that exists.                                                                     | Error    |
-| `max-total-pages`      | A docs folder shouldn't have more than 50 pages. Consolidate related pages, or move the long tail to an external resource.                  | Error    |
-| `max-total-docs-size`  | The whole docs folder should stay under 10MB, including images - it ships inside the plugin archive.                                        | Warning  |
+| Rule                   | What it checks                                                                                                                                                                                     | Severity |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `has-markdown-files`   | Your docs folder must contain at least one markdown page.                                                                                                                                          | Error    |
+| `root-index-exists`    | Your docs folder must have an `index.md` at its root - this is the landing page for your documentation.                                                                                            | Error    |
+| `nested-dir-has-index` | A subfolder that contains pages needs its own `index.md`. Without one, the sidebar shows an unnamed category using the folder name instead.                                                        | Warning  |
+| `no-spaces-in-names`   | File and folder names can't contain spaces - they break the URL for that page. Use hyphens instead.                                                                                                | Error    |
+| `valid-file-naming`    | File and folder names should use only lowercase letters, digits and hyphens, for clean URLs.                                                                                                       | Error    |
+| `no-empty-directories` | A folder with no pages or images in it serves no purpose - remove it.                                                                                                                              | Error    |
+| `no-symlinks`          | Symbolic links aren't allowed in the docs folder - use real files.                                                                                                                                 | Error    |
+| `allowed-file-types`   | Only markdown files, images (`png`, `jpg`, `jpeg`, `webp`, `gif`) and videos (`mp4`, `webm`) are allowed in the docs folder.                                                                       | Error    |
+| `max-nesting-depth`    | A page shouldn't be nested more than 3 folders deep, or it becomes hard to find in the sidebar. Flatten deeply nested pages.                                                                       | Error    |
+| `docs-path-exists`     | The `docsPath` in `src/plugin.json` must point at a folder that exists.                                                                                                                            | Error    |
+| `docs-path-valid`      | The `docsPath` in `src/plugin.json` must be a plain relative folder such as `docs`, with no leading `/`, backslash or `.` and `..` segments. The catalog looks for your docs at exactly that path. | Error    |
+| `max-total-pages`      | A docs folder shouldn't have more than 50 pages. Consolidate related pages, or move the long tail to an external resource.                                                                         | Error    |
+| `max-total-docs-size`  | The whole docs folder should stay under 10MB, including images - it ships inside the plugin archive.                                                                                               | Warning  |
 
 ## Required pages
 
@@ -44,6 +46,8 @@ docs folder.
 
 - **Panel:** `options` and `data-formats`
 - **Data source:** `query-editor` and `configure`
+
+App plugins have no required pages, because what an app does varies too much for a fixed set of topics.
 
 | Rule             | What it checks                                                                   | Severity |
 | ---------------- | -------------------------------------------------------------------------------- | -------- |
@@ -58,7 +62,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `frontmatter-block-exists`       | The page must start with a frontmatter block.                                                                                                                  | Error    |
 | `frontmatter-valid-yaml`         | The frontmatter must be valid YAML.                                                                                                                            | Error    |
 | `frontmatter-required-fields`    | `title` and `description` must be present.                                                                                                                     | Error    |
-| `frontmatter-field-types`        | `title` and `description` must be strings, and `sidebar_position` (if set) must be a number.                                                                   | Error    |
+| `frontmatter-field-types`        | `title` and `description` must be strings, `sidebar_position` (if set) must be a number and `keywords` (if set) must be a list of non-empty strings.           | Error    |
 | `frontmatter-valid-slug`         | A custom `slug` field must only use letters, digits, underscores, hyphens and forward slashes.                                                                 | Warning  |
 | `root-index-no-custom-slug`      | Your root `index.md` can't set a custom `slug`. It's your documentation landing page, and renaming it hides the Documentation tab on grafana.com.              | Error    |
 | `no-h1-heading`                  | Don't add a `# Heading` in the page body - the page title already comes from frontmatter, and any h1 you add will be stripped and replaced. Use `##` or lower. | Warning  |
@@ -178,7 +182,21 @@ These rules check the page manifest the CLI generates from your folder structure
 normally see these - if you do, it's almost always a symptom of one of the rules above (e.g. a
 page missing its `title`), rather than something to fix directly.
 
-| Rule                  | What it checks                                                                                 | Severity |
-| --------------------- | ---------------------------------------------------------------------------------------------- | -------- |
-| `manifest-valid`      | Every generated page entry has a title and a slug, and the manifest as a whole is well-formed. | Error    |
-| `manifest-refs-exist` | Every file the manifest points to actually exists on disk.                                     | Error    |
+| Rule                  | What it checks                                                                                       | Severity |
+| --------------------- | ---------------------------------------------------------------------------------------------------- | -------- |
+| `manifest-valid`      | Every generated page entry has a title and a slug, and the manifest as a whole is well-formed.       | Error    |
+| `manifest-refs-exist` | Every file the manifest points to actually exists on disk.                                           | Error    |
+| `max-manifest-size`   | The manifest stays under 1MB. It holds the text of every page, and the catalog ignores a larger one. | Error    |
+
+## Built docs
+
+These rules only run with `validate --dist`, on the docs your plugin build ships. All the rules above
+run on the built docs as well, so what the catalog serves is what was checked. If one of these fails, build the plugin and then build the docs again, because the
+plugin build clears the `dist` folder.
+
+| Rule                         | What it checks                                                                                                                                                          | Severity |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `dist-manifest-exists`       | The built docs have a `manifest.json` that parses.                                                                                                                      | Error    |
+| `dist-manifest-valid`        | Every manifest page has a title, slug and file, and a page with a file has its content and frontmatter. The root page exists. An unknown manifest version is a warning. | Error    |
+| `dist-manifest-matches-docs` | The manifest lists each page of the built docs folder once, with the same title, content and frontmatter.                                                               | Error    |
+| `dist-manifest-stale`        | The slugs, headings and page tree in the manifest match what this version of the docs CLI generates.                                                                    | Warning  |

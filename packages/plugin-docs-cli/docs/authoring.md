@@ -27,13 +27,16 @@ reach it.
 
 ## Page shape
 
-Every page is a Markdown file with a frontmatter block. `title` and `description` are required; `sidebar_position` is optional and controls order within a folder.
+Every page is a Markdown file with a frontmatter block. `title` and `description` are required; `sidebar_position` is optional and controls order within a folder. `keywords` is an optional list of search keywords.
 
 ```yaml
 ---
 title: Configuration
 description: Learn how to configure the panel's axis and legend options.
 sidebar_position: 2
+keywords:
+  - configuration
+  - legend
 ---
 ```
 
@@ -82,6 +85,9 @@ Describe every option the plugin registers, one row per option.
 
 Briefs aren't shown in the catalog or the preview. Write the section, then delete the whole comment.
 
+Text outside a brief is part of the scaffold, such as a page's opening sentence or steps that are the same
+for every plugin. Keep it, and change it only where it's wrong for your plugin.
+
 Validation warns about a section that only has its brief, and about a brief left in a section that has
 content. It also warns about any heading with no content before the next heading, so write the section or
 remove the heading. A heading followed directly by a deeper heading is fine. Finish with none of these
@@ -118,13 +124,23 @@ Validation can't catch these, so they are on you:
 
 - Don't invent query fields, options or behavior. On a page backed by source code, document only what
   you can see in the source.
+- Don't describe how a standard Grafana feature affects this plugin, such as thresholds, Min and Max, units
+  or overrides, from general knowledge. Read how the plugin's code uses it. The plugin may call it in a
+  mode that changes the answer.
 - Don't generate images. Flag missing images for the author to add.
+- Don't write installation instructions, such as `grafana-cli plugins install`, a download or a Docker
+  setup. The Installation tab on the plugin page owns them, and your docs start from a plugin that is
+  already installed. This applies to every plugin type.
+- Don't change a UI label to satisfy a style warning. Quote the label as the UI shows it, because readers
+  search for what they see, and tell the author about the warning.
+- Don't leave links broken when you move, rename or split a page. Update the links to it in every other
+  page, including the pages `create-plugin` scaffolded. Validation reports links that no longer resolve.
 - Don't mention one-click installation. It has been removed from the plugin catalog.
 - Don't link to internal-only URLs, anything on `*.grafana-ops.net` or a staging environment.
 
 ## Validate
 
 Run `docs:validate` after every page you write or change and fix what it reports. You are done when it
-reports no warnings and no `section-brief` suggestions. A bare empty heading remains a warning; a current brief never renders, so a section with only that brief and a brief left in place are suggestions. A passing exit code alone doesn't mean the docs are done.
+reports no warnings and no `section-brief` suggestions. A bare empty heading remains a warning; a current brief never renders, so a section with only that brief and a brief left in place are suggestions. A passing exit code alone doesn't mean the docs are done, because validation checks the structure of the pages, not whether they are true. Re-read each page you wrote and make sure every claim about the plugin, such as a default, a behavior or what an example produces, is something you saw in its source.
 
 For the commands, refer to [Scripts](https://grafana.com/developers/plugin-tools/how-to-guides/plugin-docs#scripts).

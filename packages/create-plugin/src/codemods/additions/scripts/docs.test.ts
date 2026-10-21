@@ -6,6 +6,7 @@ import * as v from 'valibot';
 import { parse as parseYaml } from 'yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../context.js';
+import { flushChanges } from '../../utils.js';
 import { getPackageManagerWithFallback } from '../../../utils/utils.packageManager.js';
 import docs, { assertSupportedPluginType, schema, setupDocsScaffolding } from './docs.js';
 
@@ -33,6 +34,77 @@ function makeContext(
   context.addFile('package.json', JSON.stringify({ scripts: {}, devDependencies: {} }));
   context.addFile('.github/workflows/release.yml', 'uses: grafana/plugin-actions/build-plugin@v1.0.2\n');
   return context;
+}
+
+// a plugin.json per type with every feature that adds a page turned on, so every template is rendered
+const FULL_PLUGIN_JSON: Record<string, Record<string, unknown>> = {
+  panel: { type: 'panel', id: 'acme-test-panel', name: 'My Plugin' },
+  datasource: {
+    type: 'datasource',
+    id: 'acme-test-datasource',
+    name: 'My Plugin',
+    backend: true,
+    annotations: true,
+    alerting: true,
+    includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }],
+  },
+  app: {
+    type: 'app',
+    id: 'acme-test-app',
+    name: 'My Plugin',
+    backend: true,
+    roles: [],
+    includes: [
+      { type: 'page', name: 'Overview', path: '/a/%PLUGIN_ID%/overview', role: 'Editor', defaultNav: true },
+      { type: 'page', name: 'Reports', path: '/a/%PLUGIN_ID%/reports' },
+      { type: 'page', name: 'Configuration', path: '/plugins/%PLUGIN_ID%', role: 'Admin' },
+      { type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' },
+    ],
+  },
+};
+const PAGES_BY_TYPE: Record<string, string[]> = {
+  panel: ['index', 'options', 'data-formats', 'examples', 'troubleshooting'],
+  datasource: [
+    'index',
+    'configure',
+    'query-editor',
+    'template-variables',
+    'annotations',
+    'alerting',
+    'dashboards',
+    'troubleshooting',
+  ],
+  app: ['index', 'configure', 'overview', 'reports', 'dashboards', 'permissions', 'troubleshooting'],
+};
+const PLUGIN_TYPES = Object.keys(PAGES_BY_TYPE);
+
+// scaffolds once and writes it to disk, so the re-run sees a plugin that is already fully set up
+function scaffoldThenRerun(
+  pluginJson: Record<string, unknown>,
+  addFeature: Record<string, unknown>,
+  docsFile?: string,
+  deleteFiles: string[] = []
+) {
+  const root = mkdtempSync(join(tmpdir(), 'docs-rerun-feature-'));
+  writeFileSync(join(root, 'package.json'), JSON.stringify({ scripts: {}, devDependencies: {} }));
+  mkdirSync(join(root, 'src'), { recursive: true });
+  writeFileSync(join(root, 'src', 'plugin.json'), JSON.stringify(pluginJson));
+  const first = new Context(root);
+  docs(first, { docsPath: 'docs' });
+  flushChanges(first);
+  for (const file of deleteFiles) {
+    rmSync(join(root, 'docs', file));
+  }
+  writeFileSync(join(root, 'src', 'plugin.json'), JSON.stringify({ ...pluginJson, docsPath: 'docs', ...addFeature }));
+  if (docsFile) {
+    mkdirSync(join(root, 'docs', docsFile, '..'), { recursive: true });
+    writeFileSync(join(root, 'docs', docsFile), '# Mine\n');
+  }
+
+  const context = new Context(root);
+  docs(context, { docsPath: 'docs' });
+  rmSync(root, { recursive: true, force: true });
+  return { context, body: stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n')) };
 }
 
 describe('docs scaffolding', () => {
@@ -305,11 +377,14 @@ describe('docs scaffolding', () => {
       expect(assertSupportedPluginType(context)).toBe('panel');
     });
 
-    it.each(['app', 'datasource'])('reports %s as not supported yet', (type) => {
-      const context = makeContext({ type, name: 'X' });
-      expect(() => assertSupportedPluginType(context)).toThrow(
-        new RegExp(`does not support '${type}' plugins yet.*Supported so far: panel`, 's')
-      );
+    it('returns datasource for a data source plugin', () => {
+      const context = makeContext({ type: 'datasource', id: 'acme-test-datasource', name: 'X' });
+      expect(assertSupportedPluginType(context)).toBe('datasource');
+    });
+
+    it('returns app for an app plugin', () => {
+      const context = makeContext({ type: 'app', id: 'acme-test-app', name: 'X' });
+      expect(assertSupportedPluginType(context)).toBe('app');
     });
 
     it('reports an unset type against the supported list', () => {
@@ -550,17 +625,22 @@ describe('docs codemod', () => {
       expect(index).not.toMatch(/&amp;|&#x27;/);
     });
 
-    it('keeps every page frontmatter valid YAML when the plugin name contains YAML syntax', () => {
-      const name = 'Clock: "Analog" #2 \\ *';
-      const context = makeContext({ type: 'panel', id: 'acme-test-panel', name });
-      docs(context, { docsPath: 'docs' });
-      const pages = ['index.md', 'options.md', 'data-formats.md', 'examples.md', 'troubleshooting.md'];
-      for (const page of pages) {
-        const frontmatter = /^---\n([\s\S]*?)\n---/.exec(context.getFile(`docs/${page}`) ?? '')?.[1] ?? '';
-        const { description } = parseYaml(frontmatter);
-        expect(description, page).toContain(name);
+    it.each(PLUGIN_TYPES)(
+      'keeps every %s page frontmatter valid YAML when the plugin name contains YAML syntax',
+      (type) => {
+        const name = 'Clock: "Analog" #2 \\ *';
+        const context = makeContext({ ...FULL_PLUGIN_JSON[type], name });
+        docs(context, { docsPath: 'docs' });
+        for (const page of PAGES_BY_TYPE[type]) {
+          const frontmatter = /^---\n([\s\S]*?)\n---/.exec(context.getFile(`docs/${page}.md`) ?? '')?.[1] ?? '';
+          const { description, keywords } = parseYaml(frontmatter);
+          expect(description, page).toContain(name);
+          if (type === 'datasource') {
+            expect(keywords, page).toContain(name);
+          }
+        }
       }
-    });
+    );
 
     it('gives the landing page a title that stays short whatever the plugin is called', () => {
       const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'A'.repeat(80) });
@@ -580,12 +660,6 @@ describe('docs codemod', () => {
   });
 
   describe('plugin type support', () => {
-    it.each(['app', 'datasource'])('refuses a %s plugin until its templates exist', (type) => {
-      const context = new Context('/virtual');
-      context.addFile('src/plugin.json', JSON.stringify({ type, name: 'X' }));
-      expect(() => docs(context, { docsPath: 'docs' })).toThrow(new RegExp(`does not support '${type}' plugins yet`));
-    });
-
     it('refuses a plugin with no type set', () => {
       const context = new Context('/virtual');
       context.addFile('src/plugin.json', JSON.stringify({ name: 'X' }));
@@ -668,10 +742,10 @@ describe('docs codemod', () => {
       expect(context.getFile('docs/options.md') ?? '').toContain('<!-- section-brief\nFill this in:');
     });
 
-    it('closes every brief and never nests a comment inside one', () => {
-      const context = makeContext();
+    it.each(PLUGIN_TYPES)('closes every %s brief and never nests a comment inside one', (type) => {
+      const context = makeContext(FULL_PLUGIN_JSON[type]);
       docs(context, { docsPath: 'docs' });
-      for (const page of ['index', 'options', 'data-formats', 'examples', 'troubleshooting']) {
+      for (const page of PAGES_BY_TYPE[type]) {
         const content = context.getFile(`docs/${page}.md`) ?? '';
         const briefs = content.match(/<!-- section-brief\n[\s\S]*?-->/g) ?? [];
         expect(briefs.length, page).toBeGreaterThan(0);
@@ -681,50 +755,146 @@ describe('docs codemod', () => {
     });
 
     // text the scaffold keeps on purpose, which agents leave in place
-    const FIXED_TEXT: Record<string, string[]> = {
-      index: [
-        "- [Shape your query results for My Plugin](./data-formats.md)\n- [Configure panel and field options](./options.md)\n- [See worked dashboard.json examples](./examples.md)\n- [Fix a panel that isn't rendering correctly](./troubleshooting.md)",
-      ],
-      options: [
-        'To change these options, edit the panel and use the options pane.',
-        'For what each standard option does, refer to [Configure standard options](https://grafana.com/docs/grafana/latest/panels-visualizations/configure-standard-options/).',
-      ],
-      'data-formats': [
-        'This document explains the data the My Plugin panel needs from a query, so you can build a matching query or check your test data.',
-        'To see the data the panel receives, open the panel editor, click **Query inspector** and select the **Data** tab. You can also turn on **Table view** at the top of the panel editor to see the data as a table.',
-        'If a query returns data in a different shape, you can reshape it without changing the query. Select the **Transform data** tab in the panel editor and add a transformation. For more information, refer to [Transform data](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/).',
-      ],
-      examples: [
-        'To use an example, open your dashboard and go to **Dashboard settings** > **JSON Model**. Paste the excerpt into the `panels` array and click **Save changes**.',
-        'A panel excerpt in dashboard JSON has this shape:',
-        '```json\n{\n  "type": "acme-test-panel",\n  "options": {},\n  "targets": []\n}\n```',
-      ],
-      troubleshooting: [
-        'This page explains how to fix common issues when you use the My Plugin panel. For the data the panel expects, refer to [Data formats](./data-formats.md).',
-        'To see the data the panel receives, open the panel editor, click **Query inspector** and select the **Data** tab.',
-        'For errors in the panel itself, open the developer tools in your browser and check the console.',
-        "If this page doesn't solve your problem:",
-        '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
-        'When you report an issue, include:',
-        '- The Grafana and plugin versions.\n- The error message, with sensitive information removed.\n- The steps to reproduce the issue.\n- The panel options and a sample of the data it shows, with sensitive information removed.',
-      ],
+    const FIXED_TEXT: Record<string, Record<string, string[]>> = {
+      panel: {
+        index: [
+          "- [Shape your query results for My Plugin](./data-formats.md)\n- [Configure panel and field options](./options.md)\n- [See worked dashboard.json examples](./examples.md)\n- [Fix a panel that isn't rendering correctly](./troubleshooting.md)",
+        ],
+        options: [
+          'To change these options, edit the panel and use the options pane.',
+          'For what each standard option does, refer to [Configure standard options](https://grafana.com/docs/grafana/latest/panels-visualizations/configure-standard-options/).',
+        ],
+        'data-formats': [
+          'This document explains the data the My Plugin panel needs from a query, so you can build a matching query or check your test data.',
+          'To see the data the panel receives, open the panel editor, click **Query inspector** and select the **Data** tab. You can also turn on **Table view** at the top of the panel editor to see the data as a table.',
+          'If a query returns data in a different shape, you can reshape it without changing the query. Select the **Transform data** tab in the panel editor and add a transformation. For more information, refer to [Transform data](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/).',
+        ],
+        examples: [
+          'To use an example, open your dashboard and go to **Dashboard settings** > **JSON Model**. Paste the excerpt into the `panels` array and click **Save changes**.',
+          'A panel excerpt in dashboard JSON has this shape:',
+          '```json\n{\n  "type": "acme-test-panel",\n  "options": {},\n  "targets": []\n}\n```',
+        ],
+        troubleshooting: [
+          'This page explains how to fix common issues when you use the My Plugin panel. For the data the panel expects, refer to [Data formats](./data-formats.md).',
+          'To see the data the panel receives, open the panel editor, click **Query inspector** and select the **Data** tab.',
+          'For errors in the panel itself, open the developer tools in your browser and check the console.',
+          "If this page doesn't solve your problem:",
+          '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
+          'When you report an issue, include:',
+          '- The Grafana and plugin versions.\n- The error message, with sensitive information removed.\n- The steps to reproduce the issue.\n- The panel options and a sample of the data it shows, with sensitive information removed.',
+        ],
+      },
+      datasource: {
+        configure: [
+          'This document explains how to add and configure the My Plugin data source in Grafana. After you configure the data source, refer to the [My Plugin query editor](./query-editor.md) to start querying your data.',
+          'Before you configure the data source, ensure you have:',
+          '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can add data sources.',
+          'To add the My Plugin data source:',
+          '1. Click **Connections** in the left-side menu.\n1. Click **Add new connection**.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click **Add new data source**.',
+          'Click **Save & test** to verify the connection.',
+          'You can provision the My Plugin data source as code, with a Grafana provisioning file or with the Grafana Terraform provider.',
+          'You can define the data source in a YAML file as part of the Grafana provisioning system. For more information, refer to [Provision Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources).',
+          'You can provision the data source with the [Grafana Terraform provider](https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/data_source) using the `grafana_data_source` resource.',
+        ],
+        'template-variables': [
+          'Use template variables to create dynamic, reusable dashboards that let you change query parameters without editing individual panels. For general information about template variables, refer to [Templates and variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).',
+          '- [Configure the My Plugin data source](./configure.md).\n- Understand [Grafana template variables](https://grafana.com/docs/grafana/latest/dashboards/variables/).\n- Know how to write queries in the [My Plugin query editor](./query-editor.md).',
+          'The My Plugin data source supports the following variable types:',
+          'A query variable fills its drop-down by running a query against My Plugin, so its options stay current with your data. Use one to let viewers pick a value, such as a host, a table or a project, and update every panel that uses it.',
+          'To create a query variable:',
+          '1. Navigate to **Dashboard settings** > **Variables**.\n1. Click **Add variable**.\n1. Select **Query** as the variable type.\n1. Select the **My Plugin** data source.',
+        ],
+        alerting: [
+          'You can create alert rules that run My Plugin queries on a schedule and fire when the result meets a condition, such as a value above a threshold. For general information about alerting, refer to [Grafana Alerting](https://grafana.com/docs/grafana/latest/alerting/).',
+          '- [Configure the My Plugin data source](./configure.md).',
+          'To create an alert rule from a My Plugin query:',
+          '1. Navigate to **Alerting** > **Alert rules**.\n1. Click **New alert rule**.\n1. Enter a **Name** for the rule.\n1. Select the **My Plugin** data source.',
+        ],
+        annotations: [
+          'Annotations overlay event markers on time series panels, so you can correlate events from My Plugin, such as deployments or incidents, with the metrics on your dashboards. For general information about annotations, refer to [Annotate visualizations](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/annotate-visualizations/).',
+          '- [Configure the My Plugin data source](./configure.md).',
+          'To add an annotation query to a dashboard:',
+          '1. Navigate to **Dashboard settings** > **Annotations**.\n1. Click **Add annotation query**.\n1. Enter a **Name** for the annotation.\n1. Select the **My Plugin** data source.',
+        ],
+        dashboards: [
+          'My Plugin ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).',
+          'To import a dashboard that ships with My Plugin:',
+          '1. Click **Connections** > **Data sources** in the left-side menu.\n1. Select your My Plugin data source.\n1. Click the **Dashboards** tab.\n1. Click **Import** next to the dashboard.',
+          "Imported dashboards don't update when you upgrade the plugin. When a plugin upgrade ships a newer version of a dashboard, click **Update** next to it. This overwrites any changes you made to it.",
+        ],
+        'query-editor': [
+          'This document explains how to use the My Plugin query editor to build queries and visualize My Plugin data in Grafana dashboards.',
+          '- [Configure the My Plugin data source](./configure.md).',
+        ],
+        troubleshooting: [
+          'This page explains how to fix common issues when you configure or use the My Plugin data source. For setup instructions, refer to [Configure the My Plugin data source](./configure.md).',
+          'To see the raw request and response for a panel, open the panel editor and click **Query inspector**.',
+          'In self-managed Grafana, you can also find more detail in the Grafana server logs:',
+          "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-datasource`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
+          "If this page doesn't solve your problem:",
+          '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
+          'When you report an issue, include:',
+          '- The Grafana and plugin versions.\n- The error message, with sensitive information removed.\n- The steps to reproduce the issue.\n- The relevant data source settings, with credentials removed.',
+        ],
+      },
+      app: {
+        index: [
+          'Before you set up the app, ensure you have:',
+          '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can enable and configure apps.',
+          'To enable My Plugin:',
+          '1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click **Enable**.',
+          'After you enable the app, refer to [Configure](./configure.md) for its settings.',
+        ],
+        configure: [
+          'This document explains how to configure My Plugin after you enable it.',
+          'Before you configure the app, ensure you have:',
+          '- **Grafana permissions:** The `Organization administrator` role. Only organization administrators can configure apps.\n- **The app enabled:** Follow [Enable the app](./index.md#enable-the-app).',
+          'To open the My Plugin configuration page:',
+          '1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.',
+          'You can provision My Plugin as code with a Grafana provisioning file. For more information, refer to [Provision Grafana](https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins).',
+        ],
+        overview: ['- **Grafana permissions:** At least the `Editor` role.'],
+        dashboards: [
+          'My Plugin ships with ready-made dashboards that you can import and use as they are, or as a starting point for your own. For general information about dashboards, refer to [Dashboards](https://grafana.com/docs/grafana/latest/dashboards/).',
+          'To import a dashboard that ships with My Plugin:',
+          '1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.\n1. Enter `My Plugin` in the search bar.\n1. Select **My Plugin**.\n1. Click the **Dashboards** tab.\n1. Click **Import** next to the dashboard.',
+          "Imported dashboards don't update when you upgrade the plugin. When a plugin upgrade ships a newer version of a dashboard, click **Update** next to it. This overwrites any changes you made to it.",
+        ],
+        permissions: [
+          'This document explains who can use each part of My Plugin and what the app can access. For general information, refer to [Role-based access control for app plugins](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/rbac-for-app-plugins/).',
+          'To assign a role to a user, team or service account, refer to [Assign RBAC roles](https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/access-control/assign-rbac-roles/).',
+        ],
+        troubleshooting: [
+          'This page explains how to fix common issues when you set up or use My Plugin. For setup instructions, refer to the [Introduction](./index.md).',
+          'For errors in the app, open the developer tools in your browser and check the console.',
+          'In self-managed Grafana, you can also find more detail in the Grafana server logs:',
+          "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-app`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
+          "If this page doesn't solve your problem:",
+          '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
+          'When you report an issue, include:',
+          '- The Grafana and plugin versions.\n- The error message, with sensitive information removed.\n- The steps to reproduce the issue.\n- The app page where it happens and the relevant app settings, with credentials removed.',
+        ],
+      },
     };
 
-    it('scaffolds pages where every section is only a brief or fixed text, so an untouched scaffold is all stubs', () => {
-      const context = makeContext();
-      docs(context, { docsPath: 'docs' });
-      for (const page of ['index', 'options', 'data-formats', 'examples', 'troubleshooting']) {
-        let left = (context.getFile(`docs/${page}.md`) ?? '')
-          .replace(/^---\n[\s\S]*?\n---\n/, '')
-          .replace(/<!-- section-brief\n[\s\S]*?-->/g, '')
-          .replace(/^#{1,6} .*$/gm, '');
-        for (const text of FIXED_TEXT[page] ?? []) {
-          expect(left, page).toContain(text);
-          left = left.replace(text, '');
+    it.each(PLUGIN_TYPES)(
+      'scaffolds %s pages where every section is only a brief or fixed text, so an untouched scaffold is all stubs',
+      (type) => {
+        const context = makeContext(FULL_PLUGIN_JSON[type]);
+        docs(context, { docsPath: 'docs' });
+        for (const page of PAGES_BY_TYPE[type]) {
+          let left = (context.getFile(`docs/${page}.md`) ?? '')
+            .replace(/^---\n[\s\S]*?\n---\n/, '')
+            .replace(/<!-- section-brief\n[\s\S]*?-->/g, '')
+            .replace(/^#{1,6} .*$/gm, '');
+          for (const text of FIXED_TEXT[type][page] ?? []) {
+            expect(left, page).toContain(text);
+            left = left.replace(text, '');
+          }
+          expect(left.trim(), page).toBe('');
         }
-        expect(left.trim(), page).toBe('');
       }
-    });
+    );
 
     it('interpolates pluginName into the index page', () => {
       const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'My Panel' });
@@ -780,6 +950,618 @@ describe('docs codemod', () => {
     });
   });
 
+  describe('datasource pages', () => {
+    const datasource = { type: 'datasource', id: 'acme-test-datasource', name: 'My Data Source' };
+    const conditionalPages = ['annotations.md', 'alerting.md', 'dashboards.md'];
+
+    it('scaffolds the pages every data source needs, and no feature pages when plugin.json declares none', () => {
+      const context = makeContext(datasource);
+      docs(context, { docsPath: 'docs' });
+      const files = [
+        ...PAGES_BY_TYPE.datasource.map((page) => `${page}.md`).filter((file) => !conditionalPages.includes(file)),
+        'README.md',
+        'AGENTS.md',
+        'CLAUDE.md',
+      ];
+      for (const file of files) {
+        expect(context.doesFileExist(`docs/${file}`), file).toBe(true);
+      }
+      for (const file of conditionalPages) {
+        expect(context.doesFileExist(`docs/${file}`), file).toBe(false);
+      }
+    });
+
+    it.each([
+      ['annotations.md', { annotations: true }],
+      ['alerting.md', { alerting: true }],
+      ['dashboards.md', { includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }] }],
+    ])('scaffolds %s when plugin.json declares the feature', (page, feature) => {
+      const context = makeContext({ ...datasource, ...feature });
+      docs(context, { docsPath: 'docs' });
+      for (const file of conditionalPages) {
+        expect(context.doesFileExist(`docs/${file}`), file).toBe(file === page);
+      }
+    });
+
+    it.each([{ annotations: false }, { alerting: 'true' }, { includes: [{ type: 'page' }, { type: 'datasource' }] }])(
+      'scaffolds no feature page for %j',
+      (feature) => {
+        const context = makeContext({ ...datasource, ...feature });
+        docs(context, { docsPath: 'docs' });
+        for (const file of conditionalPages) {
+          expect(context.doesFileExist(`docs/${file}`), file).toBe(false);
+        }
+      }
+    );
+
+    it.each([
+      ['no feature', datasource],
+      ['every feature', FULL_PLUGIN_JSON.datasource],
+    ])('links only scaffolded pages from index.md with %s pages', (_, pluginJson) => {
+      const context = makeContext(pluginJson);
+      docs(context, { docsPath: 'docs' });
+      const links = [...(context.getFile('docs/index.md') ?? '').matchAll(/\]\(\.\/([\w-]+\.md)\)/g)].map(
+        ([, file]) => file
+      );
+      expect(links).toContain('configure.md');
+      for (const file of links) {
+        expect(context.doesFileExist(`docs/${file}`), file).toBe(true);
+      }
+    });
+
+    it.each([
+      ['query-editor', '## Macros'],
+      ['configure', '## Private data source connect'],
+      ['troubleshooting', '## Private data source connect errors'],
+      ['troubleshooting', 'level = debug'],
+    ])('renders %s.md "%s" only for a backend data source', (page, heading) => {
+      for (const backend of [true, false]) {
+        const context = makeContext({ ...datasource, backend });
+        docs(context, { docsPath: 'docs' });
+        const content = context.getFile(`docs/${page}.md`) ?? '';
+        expect(content.includes(heading), `backend: ${backend}`).toBe(backend);
+        expect(content).not.toContain('{{');
+        expect(content).not.toMatch(/\n\n\n/);
+      }
+    });
+
+    it.each([
+      ['annotations', '## Annotation errors'],
+      ['alerting', '## Alerting errors'],
+    ])('renders troubleshooting.md "%s" only when plugin.json sets %s', (flag, heading) => {
+      for (const enabled of [true, false]) {
+        const context = makeContext({ ...datasource, [flag]: enabled });
+        docs(context, { docsPath: 'docs' });
+        const content = context.getFile('docs/troubleshooting.md') ?? '';
+        expect(content.includes(heading), `${flag}: ${enabled}`).toBe(enabled);
+        expect(content).not.toContain('{{');
+        expect(content).not.toMatch(/\n\n\n/);
+      }
+    });
+
+    it('keeps the template conditionals out of index.md', () => {
+      const context = makeContext(FULL_PLUGIN_JSON.datasource);
+      docs(context, { docsPath: 'docs' });
+      const index = context.getFile('docs/index.md') ?? '';
+      expect(index).not.toContain('{{');
+      expect(index).not.toMatch(/\n\n\n/);
+    });
+
+    it('scaffolds configure.md, the page plugin-docs-cli requires for data sources', () => {
+      const context = makeContext(datasource);
+      docs(context, { docsPath: 'docs' });
+      expect(context.doesFileExist('docs/configuration.md')).toBe(false);
+      expect(context.getFile('docs/configure.md') ?? '').toContain('## Provision the data source');
+    });
+
+    it('gives every page a unique sidebar_position', () => {
+      const context = makeContext(FULL_PLUGIN_JSON.datasource);
+      docs(context, { docsPath: 'docs' });
+      const positions = PAGES_BY_TYPE.datasource.map(
+        (page) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${page}.md`) ?? '')?.[1]
+      );
+      expect(positions.every(Boolean)).toBe(true);
+      expect(new Set(positions).size).toBe(positions.length);
+    });
+
+    it('lists every data source page in the docs AGENTS.md', () => {
+      const context = makeContext(datasource);
+      docs(context, { docsPath: 'docs' });
+      const content = context.getFile('docs/AGENTS.md') ?? '';
+      for (const page of PAGES_BY_TYPE.datasource) {
+        expect(content).toContain(`| \`${page}.md\``);
+      }
+      expect(content).not.toContain('setPanelOptions');
+    });
+
+    it('warns about a feature page on a re-run that changes nothing else, without adding it', () => {
+      const { context, body } = scaffoldThenRerun(datasource, { annotations: true });
+      expect(context.hasChanges()).toBe(false);
+      expect(context.doesFileExist('docs/annotations.md')).toBe(false);
+      expect(body).toContain('docs/annotations.md documents');
+      expect(body).toContain('Optional pages in docs/AGENTS.md');
+      expect(body).not.toContain('alerting.md');
+    });
+
+    it.each(['annotations.md', 'annotations/index.md'])(
+      'says nothing about a feature page at %s on a re-run',
+      (file) => {
+        const { context, body } = scaffoldThenRerun(datasource, { annotations: true }, file);
+        expect(context.getMessage()).toBeUndefined();
+        expect(body).not.toContain('annotations.md');
+      }
+    );
+
+    it('never warns about data source feature pages for a panel', () => {
+      const panel = { type: 'panel', id: 'acme-test-panel', name: 'My Plugin' };
+      const { context } = scaffoldThenRerun(panel, {
+        annotations: true,
+        alerting: true,
+        includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }],
+      });
+      expect(context.getMessage()).toBeUndefined();
+    });
+  });
+
+  describe('app pages', () => {
+    const app = { type: 'app', id: 'acme-test-app', name: 'My App' };
+    const gatedPages = ['configure.md', 'dashboards.md', 'permissions.md', 'my-app.md'];
+    const page = (name: string, path?: string, extra: Record<string, unknown> = {}) => ({
+      type: 'page',
+      name,
+      path,
+      ...extra,
+    });
+
+    function scaffold(pluginJson: Record<string, unknown>, files: Record<string, string> = {}) {
+      const context = makeContext(pluginJson);
+      for (const [file, content] of Object.entries(files)) {
+        context.addFile(file, content);
+      }
+      docs(context, { docsPath: 'docs' });
+      return context;
+    }
+
+    function docsFiles(context: Context): string[] {
+      return Object.keys(context.listChanges())
+        .filter((file) => file.startsWith('docs/') && file.endsWith('.md'))
+        .map((file) => file.slice('docs/'.length))
+        .sort();
+    }
+
+    it('scaffolds the pages every app needs, and no gated pages when the app declares nothing', () => {
+      const context = scaffold(app);
+      expect(docsFiles(context)).toEqual(['AGENTS.md', 'CLAUDE.md', 'README.md', 'index.md', 'troubleshooting.md']);
+    });
+
+    it.each([
+      [
+        'configure.md',
+        { 'src/module.tsx': 'export const plugin = new AppPlugin().addConfigPage({ title: "Config" });' },
+        {},
+      ],
+      ['configure.md', { 'src/module.ts': 'new AppPlugin()\n  .addConfigPage({ title: "Config" })' }, {}],
+      ['configure.md', {}, { includes: [page('Configuration', '/plugins/%PLUGIN_ID%')] }],
+      ['configure.md', {}, { includes: [page('Configuration', '/plugins/acme-test-app')] }],
+      ['dashboards.md', {}, { includes: [{ type: 'dashboard', name: 'Overview', path: 'dashboards/overview.json' }] }],
+      ['permissions.md', {}, { roles: [{ role: { name: 'plugins:acme-test-app:reader' }, grants: ['Viewer'] }] }],
+      ['permissions.md', {}, { iam: { permissions: [{ action: 'datasources:read', scope: 'datasources:*' }] } }],
+      ['my-app.md', {}, { includes: [page('Traces', '/a/acme-test-app/traces')] }],
+    ])('scaffolds %s when the app declares it (%j %j)', (expected, files, feature) => {
+      const context = scaffold({ ...app, ...feature }, files);
+      for (const file of gatedPages) {
+        expect(context.doesFileExist(`docs/${file}`), file).toBe(file === expected);
+      }
+    });
+
+    it('gives a page only to app pages, not to the config page, dashboard links or example pages', () => {
+      const context = scaffold({
+        ...app,
+        includes: [
+          page('Traces', '/a/acme-test-app/traces'),
+          page('Home', '/a/%PLUGIN_ID%/'),
+          page('Configuration', '/plugins/%PLUGIN_ID%'),
+          page('Redis CLI', '/d/_SGxCBNGk'),
+          page('Page One', '/a/%PLUGIN_ID%/one'),
+          page('Elsewhere', '/a/other-app/elsewhere'),
+          page('No path'),
+        ],
+      });
+      expect(docsFiles(context)).toEqual([
+        'AGENTS.md',
+        'CLAUDE.md',
+        'README.md',
+        'configure.md',
+        'home.md',
+        'index.md',
+        'traces.md',
+        'troubleshooting.md',
+      ]);
+      const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n'));
+      expect(body).toContain('Page One (/a/%PLUGIN_ID%/one, an example page from the create-plugin app template)');
+    });
+
+    it('names the only app page after the app, whatever the navigation calls it', () => {
+      const context = scaffold({ ...app, includes: [page('Overview', '/a/%PLUGIN_ID%/', { role: 'Editor' })] });
+      const content = context.getFile('docs/my-app.md') ?? '';
+      expect(docsFiles(context)).not.toContain('overview.md');
+      expect(content).toContain('title: "My App"');
+      expect(content).toContain('description: "Use My App in Grafana."');
+      expect(content.match(/^  - "My App"$/gm)).toHaveLength(1);
+      expect(content).toContain('which its navigation calls Overview');
+      expect(content).toContain('At least the `Editor` role.');
+      expect(context.getFile('docs/index.md')).toContain('[Find your way around My App](./my-app.md)');
+    });
+
+    it('keeps the navigation names when the app has more than one page', () => {
+      const context = scaffold({
+        ...app,
+        includes: [page('Overview', '/a/%PLUGIN_ID%/'), page('Costs', '/a/%PLUGIN_ID%/costs')],
+      });
+      expect(docsFiles(context)).toEqual(expect.arrayContaining(['overview.md', 'costs.md']));
+      expect(docsFiles(context)).not.toContain('my-app.md');
+      expect(context.getFile('docs/overview.md')).toContain('title: "Overview"');
+    });
+
+    it('names the remaining page after the app when the other one became the configure page', () => {
+      const context = scaffold({
+        ...app,
+        includes: [page('Configuration', '/a/%PLUGIN_ID%/configuration'), page('Overview', '/a/%PLUGIN_ID%/')],
+      });
+      expect(context.getFile('docs/configure.md')).toContain('title: "Configuration"');
+      expect(context.doesFileExist('docs/my-app.md')).toBe(true);
+    });
+
+    it("keeps the navigation name of the only page when the app name would take another page's file name", () => {
+      const context = scaffold({ ...app, name: 'Dashboards', includes: [page('Overview', '/a/%PLUGIN_ID%/')] });
+      expect(context.doesFileExist('docs/overview.md')).toBe(true);
+      expect(context.getFile('docs/overview.md')).toContain('title: "Overview"');
+    });
+
+    it('puts up to three app pages at the root, in the order of the nav, with no features folder', () => {
+      const context = scaffold({
+        ...app,
+        includes: [
+          page('Time Travel', '/a/%PLUGIN_ID%/timetravel'),
+          page('Overview', '/a/%PLUGIN_ID%/overview', { defaultNav: true }),
+          page('Queries', '/a/%PLUGIN_ID%/queries'),
+        ],
+      });
+      const position = (file: string) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1];
+      expect(docsFiles(context).some((file) => file.startsWith('features/'))).toBe(false);
+      expect(position('overview.md')).toBe('3');
+      expect(position('time-travel.md')).toBe('4');
+      expect(position('queries.md')).toBe('5');
+      expect(context.getFile('docs/time-travel.md')).toContain('title: "Time Travel"');
+      expect(context.getFile('docs/time-travel.md')).toContain('`/a/acme-test-app/timetravel`');
+      expect(context.getFile('docs/index.md')).toContain('](./overview.md)');
+    });
+
+    it('moves the app pages into a features folder from the fourth page', () => {
+      const context = scaffold({
+        ...app,
+        includes: [
+          page('Overview', '/a/%PLUGIN_ID%/overview', { defaultNav: true }),
+          page('Time Travel', '/a/%PLUGIN_ID%/timetravel'),
+          page('Queries', '/a/%PLUGIN_ID%/queries'),
+          page('Merges', '/a/%PLUGIN_ID%/merges'),
+        ],
+      });
+      const position = (file: string) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1];
+      expect(docsFiles(context).filter((file) => file.startsWith('features/'))).toEqual([
+        'features/index.md',
+        'features/merges.md',
+        'features/overview.md',
+        'features/queries.md',
+        'features/time-travel.md',
+      ]);
+      expect(docsFiles(context)).not.toContain('overview.md');
+      expect(position('features/index.md')).toBe('3');
+      expect(position('features/overview.md')).toBe('4');
+      expect(position('features/merges.md')).toBe('7');
+      expect(context.getFile('docs/index.md')).toContain('](./features/overview.md)');
+    });
+
+    it('leaves out an app page that would take the file name of another page', () => {
+      const context = scaffold({ ...app, includes: [page('Permissions', '/a/%PLUGIN_ID%/permissions')] });
+      expect(context.doesFileExist('docs/permissions.md')).toBe(false);
+      expect(context.getFile('docs/index.md')).not.toContain('](./permissions.md)');
+      const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n'));
+      expect(body).toContain('Permissions (/a/%PLUGIN_ID%/permissions, its file name is used by another page)');
+    });
+
+    it.each(['Configuration', 'Configure'])('uses an app page named %s as the root configure page', (name) => {
+      const includes = ['One', 'Two', 'Three', 'Four'].map((n) => page(n, `/a/%PLUGIN_ID%/${n.toLowerCase()}`));
+      const context = scaffold({
+        ...app,
+        includes: [page(name, '/a/%PLUGIN_ID%/configuration', { role: 'Editor' }), ...includes],
+      });
+      const content = context.getFile('docs/configure.md') ?? '';
+      expect(content).toContain(`title: "${name}"`);
+      expect(content).toContain('/a/acme-test-app/configuration');
+      expect(content).toContain('At least the `Editor` role.');
+      expect(content).toMatch(/\nsidebar_position: 2\n/);
+      expect(content).not.toContain('Administration');
+      expect(docsFiles(context)).not.toContain(`features/${name.toLowerCase()}.md`);
+      expect(docsFiles(context)).toContain('features/one.md');
+      expect(context.getFile('docs/index.md')).toContain('](./configure.md)');
+    });
+
+    it('keeps an app page named Configuration among the app pages when the app has a config page', () => {
+      const context = scaffold(
+        { ...app, includes: [page('Configuration', '/a/%PLUGIN_ID%/configuration')] },
+        { 'src/module.tsx': 'new AppPlugin().addConfigPage({ title: "Config" });' }
+      );
+      expect(context.getFile('docs/configure.md')).toContain('Open the configuration page');
+      expect(context.doesFileExist('docs/my-app.md')).toBe(true);
+    });
+
+    it('says nothing on a re-run when the configure page exists', () => {
+      const pluginJson = { ...app, includes: [page('Configuration', '/a/%PLUGIN_ID%/configuration')] };
+      const { context } = scaffoldThenRerun(pluginJson, {});
+      expect(context.getMessage()).toBeUndefined();
+    });
+
+    it('adds a before you begin section to an app page only for a role above Viewer', () => {
+      const context = scaffold({
+        ...app,
+        includes: [
+          page('Admin Tools', '/a/%PLUGIN_ID%/admin', { role: 'Admin' }),
+          page('Open', '/a/%PLUGIN_ID%/open'),
+          page('Reader', '/a/%PLUGIN_ID%/reader', { role: 'Viewer' }),
+        ],
+      });
+      expect(context.getFile('docs/reader.md')).not.toContain('## Before you begin');
+      expect(context.getFile('docs/admin-tools.md')).toContain('At least the `Admin` role.');
+      expect(context.getFile('docs/open.md')).not.toContain('## Before you begin');
+      expect(context.getFile('docs/admin-tools.md')).toContain('remove it, including its heading');
+    });
+
+    it.each([
+      ['no feature', app],
+      ['every feature', FULL_PLUGIN_JSON.app],
+    ])('links only scaffolded pages and leaves no template syntax with %s', (_, pluginJson) => {
+      const context = scaffold(pluginJson);
+      for (const file of docsFiles(context)) {
+        const content = context.getFile(`docs/${file}`) ?? '';
+        expect(content, file).not.toContain('{{');
+        expect(content, file).not.toMatch(/\n\n\n/);
+        if (file === 'AGENTS.md') {
+          continue;
+        }
+        for (const [, link] of content.matchAll(/\]\(\.\/([\w/-]+\.md)\)/g)) {
+          expect(context.doesFileExist(`docs/${link}`), `${file} -> ${link}`).toBe(true);
+        }
+      }
+    });
+
+    it('gives every root page a unique sidebar_position', () => {
+      const context = scaffold(FULL_PLUGIN_JSON.app);
+      const positions = PAGES_BY_TYPE.app.map(
+        (file) => /\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}.md`) ?? '')?.[1]
+      );
+      expect(positions.every(Boolean)).toBe(true);
+      expect(new Set(positions).size).toBe(positions.length);
+    });
+
+    it('lists every app page in the docs AGENTS.md', () => {
+      const content = scaffold(app).getFile('docs/AGENTS.md') ?? '';
+      for (const file of ['index', 'configure', 'features/index', 'dashboards', 'permissions']) {
+        expect(content).toContain(`| \`${file}.md\``);
+      }
+      expect(content).toContain('| App pages');
+      expect(content).not.toContain('setConfigEditor');
+    });
+
+    it('warns about a new app page on a re-run, without adding it', () => {
+      const { context, body } = scaffoldThenRerun(
+        { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Metrics', '/a/%PLUGIN_ID%/metrics')] },
+        {
+          includes: [
+            page('Traces', '/a/%PLUGIN_ID%/traces'),
+            page('Metrics', '/a/%PLUGIN_ID%/metrics'),
+            page('Logs', '/a/%PLUGIN_ID%/logs'),
+          ],
+        }
+      );
+      expect(context.hasChanges()).toBe(false);
+      expect(context.doesFileExist('docs/logs.md')).toBe(false);
+      expect(body).toContain('such as docs/logs.md');
+      expect(body).toContain('Optional pages in docs/AGENTS.md');
+    });
+
+    it('finds the app pages of a root layout after a fourth page moves the layout to features/', () => {
+      const three = ['One', 'Two', 'Three'].map((name) => page(name, `/a/%PLUGIN_ID%/${name.toLowerCase()}`));
+      const { context, body } = scaffoldThenRerun(
+        { ...app, includes: three },
+        { includes: [...three, page('Four', '/a/%PLUGIN_ID%/four')] }
+      );
+      expect(context.hasChanges()).toBe(false);
+      expect(body).toContain('such as docs/features/four.md');
+      expect(body).not.toContain('one.md');
+    });
+
+    it('finds an app page that the author turned into a folder', () => {
+      const pluginJson = { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] };
+      const { context } = scaffoldThenRerun(pluginJson, {}, 'traces/index.md');
+      expect(context.getMessage()).toBeUndefined();
+    });
+
+    it.each([
+      [
+        'pages with the same file name',
+        [page('Foo Bar', '/a/%PLUGIN_ID%/a'), page('foo-bar', '/a/%PLUGIN_ID%/b')],
+        'foo-bar (/a/%PLUGIN_ID%/b, its file name',
+      ],
+      [
+        'a name that is a docs-cli meta file',
+        [page('README', '/a/%PLUGIN_ID%/readme')],
+        'README (/a/%PLUGIN_ID%/readme, its file name',
+      ],
+      [
+        'a name that is the features index',
+        [page('Index', '/a/%PLUGIN_ID%/index')],
+        'Index (/a/%PLUGIN_ID%/index, its file name',
+      ],
+    ])('leaves out %s and says so', (_, includes, expected) => {
+      const context = scaffold({ ...app, includes });
+      const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n'));
+      expect(body).toContain(expected);
+      expect(docsFiles(context)).not.toContain('readme.md');
+    });
+
+    it('ignores a page whose name is not a string', () => {
+      const context = scaffold({ ...app, includes: [{ type: 'page', name: 123, path: '/a/%PLUGIN_ID%/x' }] });
+      expect(docsFiles(context)).toEqual(['AGENTS.md', 'CLAUDE.md', 'README.md', 'index.md', 'troubleshooting.md']);
+    });
+
+    it.each([
+      ['a trailing comment', 'new AppPlugin().setRootPage(App); // .addConfigPage({})'],
+      ['a string', "const help = 'call .addConfigPage( to add one';"],
+    ])('does not count addConfigPage in %s as a config page', (_, source) => {
+      const context = scaffold(app, { 'src/module.tsx': source });
+      expect(context.doesFileExist('docs/configure.md')).toBe(false);
+    });
+
+    it.each([
+      [
+        'a glob string before it',
+        "const files = '**/*.svg';\nnew AppPlugin().addConfigPage({ title: 'Config' });",
+        'src/module.ts',
+      ],
+      [
+        'JSX',
+        "export const plugin = new AppPlugin().addConfigPage({ title: 'Config', body: () => <div /> });",
+        'src/module.tsx',
+      ],
+      [
+        'a JavaScript module',
+        "export const plugin = new AppPlugin().addConfigPage({ title: 'Config' });",
+        'src/module.js',
+      ],
+    ])('finds addConfigPage after %s', (_, source, file) => {
+      const context = scaffold(app, { [file]: source });
+      expect(context.doesFileExist('docs/configure.md')).toBe(true);
+    });
+
+    it('gives an app page with accented letters a readable file name', () => {
+      const context = scaffold({
+        ...app,
+        includes: [page('Übersicht', '/a/%PLUGIN_ID%/overview'), page('Berichte', '/a/%PLUGIN_ID%/reports')],
+      });
+      expect(docsFiles(context)).toContain('ubersicht.md');
+    });
+
+    it('leaves out an app page whose name has no letters or digits for a file name, and says so', () => {
+      const context = scaffold({ ...app, includes: [page('概览', '/a/%PLUGIN_ID%/overview')] });
+      const body = stripVTControlCharacters((context.getMessage()?.body ?? []).join('\n'));
+      expect(body).toContain('概览 (/a/%PLUGIN_ID%/overview, its name has no letters or digits for a file name)');
+    });
+
+    it.each([
+      ['a role above Viewer', { role: 'Admin' }, true],
+      ['an action', { action: 'plugins.app:access' }, true],
+      ['the Viewer role', { role: 'Viewer' }, false],
+    ])('scaffolds permissions.md for a page with %s', (_, extra, expected) => {
+      const context = scaffold({ ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces', extra)] });
+      expect(context.doesFileExist('docs/permissions.md')).toBe(expected);
+    });
+
+    it('does not count a commented-out addConfigPage as a config page', () => {
+      const context = scaffold(app, { 'src/module.ts': '// plugin.addConfigPage({})\n/* .addConfigPage(x) */\n' });
+      expect(context.doesFileExist('docs/configure.md')).toBe(false);
+    });
+
+    // plugin-docs-cli only compares pages in the same folder, but the sidebar also sorts a folder by its index.md
+    it.each([3, 4, 8])(
+      'keeps sidebar positions unique in every folder with %i app pages and every gated page',
+      (count) => {
+        const includes = [
+          ...(FULL_PLUGIN_JSON.app.includes as Array<Record<string, unknown>>).filter((i) => i.type !== 'page'),
+          ...Array.from({ length: count }, (_, i) => page(`Page ${i + 1}x`, `/a/%PLUGIN_ID%/p${i + 1}`)),
+        ];
+        const context = scaffold({ ...FULL_PLUGIN_JSON.app, includes });
+        const positionOf = (file: string) =>
+          Number(/\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1]);
+        const pages = docsFiles(context).filter((file) => !['AGENTS.md', 'CLAUDE.md', 'README.md'].includes(file));
+
+        const byFolder = Object.groupBy(pages, (file) => file.split('/').slice(0, -1).join('/'));
+        for (const [folder, files] of Object.entries(byFolder)) {
+          const positions = (files ?? []).map(positionOf);
+          expect(positions.every(Number.isInteger), folder).toBe(true);
+          expect(new Set(positions).size, `duplicate positions in "${folder}"`).toBe(positions.length);
+        }
+
+        // in the sidebar a folder sits among the root pages at the position of its index.md
+        const rootPositions = pages
+          .filter((file) => !file.includes('/') || file === 'features/index.md')
+          .map(positionOf);
+        expect(new Set(rootPositions).size, 'a folder shares a root position').toBe(rootPositions.length);
+      }
+    );
+
+    it('warns about a features index that an app with four pages has lost, and names the page first when both are missing', () => {
+      const four = ['One', 'Two', 'Three', 'Four'].map((n) => page(n, `/a/%PLUGIN_ID%/${n.toLowerCase()}`));
+      const lostIndex = scaffoldThenRerun({ ...app, includes: four }, {}, undefined, ['features/index.md']);
+      expect(lostIndex.context.hasChanges()).toBe(false);
+      expect(lostIndex.body).toContain('such as docs/features/index.md');
+
+      const three = four.slice(0, 3);
+      const movedLayout = scaffoldThenRerun({ ...app, includes: three }, { includes: four });
+      expect(movedLayout.body).toContain('such as docs/features/four.md');
+    });
+
+    it('tells the author to rename the page named after the app when the app grows past one page', () => {
+      const { context, body } = scaffoldThenRerun(
+        { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] },
+        { includes: [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Logs', '/a/%PLUGIN_ID%/logs')] }
+      );
+      expect(context.hasChanges()).toBe(false);
+      expect(body).toContain('docs/my-app.md is named after the app');
+      expect(body).toContain('Rename it after the page it documents');
+    });
+
+    it.each([
+      ['moved into features/', 'features/my-app.md', 'docs/features/my-app.md is named after the app'],
+      ['turned into a folder', 'my-app/index.md', 'docs/my-app/ is named after the app'],
+    ])('names the page named after the app where it is after the author %s', (_, docsFile, expected) => {
+      const { body } = scaffoldThenRerun(
+        { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] },
+        { includes: [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Logs', '/a/%PLUGIN_ID%/logs')] },
+        docsFile,
+        ['my-app.md']
+      );
+      expect(body).toContain(expected);
+      expect(body).not.toContain('docs/my-app.md');
+    });
+
+    it('does not call a page named like the app a leftover when the app has more pages', () => {
+      const two = [page('My App', '/a/%PLUGIN_ID%/home'), page('Metrics', '/a/%PLUGIN_ID%/metrics')];
+      const { body } = scaffoldThenRerun(
+        { ...app, includes: two },
+        { includes: [...two, page('Logs', '/a/%PLUGIN_ID%/logs')] }
+      );
+      expect(body).toContain('such as docs/logs.md');
+      expect(body).not.toContain('named after the app');
+    });
+
+    it('gives the usual warning when a page is missing and nothing is named after the app', () => {
+      const two = [page('Traces', '/a/%PLUGIN_ID%/traces'), page('Metrics', '/a/%PLUGIN_ID%/metrics')];
+      const { body } = scaffoldThenRerun(
+        { ...app, includes: two },
+        { includes: [...two, page('Logs', '/a/%PLUGIN_ID%/logs')] }
+      );
+      expect(body).toContain('such as docs/logs.md');
+      expect(body).not.toContain('named after the app');
+    });
+
+    it('says nothing on a re-run when every app page has a docs page', () => {
+      const pluginJson = { ...app, includes: [page('Traces', '/a/%PLUGIN_ID%/traces')] };
+      const { context } = scaffoldThenRerun(pluginJson, {});
+      expect(context.getMessage()).toBeUndefined();
+    });
+  });
+
   describe('AI authoring assistance', () => {
     it('does not scaffold any skills', () => {
       const context = makeContext();
@@ -810,6 +1592,15 @@ describe('docs codemod', () => {
       for (const page of ['presets.md', 'permissions.md', 'accessibility.md']) {
         expect(content).toContain(`\`${page}\``);
       }
+    });
+
+    it.each(PLUGIN_TYPES)('tells agents never to write installation instructions for a %s', (type) => {
+      const context = makeContext(FULL_PLUGIN_JSON[type]);
+      docs(context, { docsPath: 'docs' });
+      const content = context.getFile('docs/AGENTS.md') ?? '';
+      expect(content).toContain('## What not to write');
+      expect(content).toContain('Never write installation instructions');
+      expect(content).toContain('Installation tab');
     });
 
     it('scaffolds CLAUDE.md in the docs folder as an import of AGENTS.md', () => {
@@ -918,10 +1709,17 @@ describe('docs codemod', () => {
       expect(context.doesFileExist('.config/AGENTS/e2e-testing.md')).toBe(false);
     });
 
-    it('does not point docs/README.md at a skill', () => {
+    it.each([
+      ['npm@10.2.3', 'npx -y @grafana/create-plugin@latest add docs-content'],
+      ['pnpm@9.1.0', 'pnpm dlx @grafana/create-plugin@latest add docs-content'],
+      ['yarn@4.1.0', 'yarn dlx @grafana/create-plugin@latest add docs-content'],
+    ])('points docs/README.md at docs-content with the %s exec command', (packageManager, command) => {
+      const [packageManagerName, packageManagerVersion] = packageManager.split('@');
+      vi.mocked(getPackageManagerWithFallback).mockReturnValueOnce({ packageManagerName, packageManagerVersion });
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
       const content = context.getFile('docs/README.md') ?? '';
+      expect(content).toContain(`\`${command}\``);
       expect(content).not.toContain('bootstrap-plugin-docs');
     });
   });
@@ -950,16 +1748,26 @@ describe('docs codemod', () => {
     it('numbers the steps in the order the author does them', () => {
       expect(nextSteps(makeContext()).filter((line) => /^ \d\. /.test(line))).toEqual([
         ' 1. Read docs/README.md',
-        ' 2. Fill in or review the pages under docs/',
+        ' 2. Write the pages, yourself or with an AI agent',
+        ' 3. Preview the pages',
+      ]);
+    });
+
+    it('tells the author to commit before running docs-content, since add needs a clean tree', () => {
+      const body = nextSteps(makeContext());
+      const step = body.indexOf(' 2. Write the pages, yourself or with an AI agent');
+      expect(body.slice(step + 1, step + 5)).toEqual([
+        '    Fill in or review the pages under docs/ by hand.',
+        '    Or commit these changes, then have an agent draft them from your source code and README:',
+        '    npx -y @grafana/create-plugin@latest add docs-content',
+        '    Review its work either way.',
       ]);
     });
 
     it('indents each detail line under its step', () => {
       const body = nextSteps(makeContext());
-      const step = body.indexOf(' 2. Fill in or review the pages under docs/');
-      expect(body[step + 1]).toBe(
-        '    Preview them with npm run docs:serve, which also warns about every section left to fill.'
-      );
+      const step = body.indexOf(' 3. Preview the pages');
+      expect(body[step + 1]).toBe('    Run npm run docs:serve, which also lists every section left to fill.');
       expect(body.join('\n')).not.toContain('docs:validate:release');
       expect(body.join('\n')).not.toContain('strict');
     });
