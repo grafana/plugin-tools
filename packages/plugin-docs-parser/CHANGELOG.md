@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.5.0...@grafana/plugin-docs-parser@0.6.0) (2026-10-21)
+
+
+### Features
+
+* **plugin-docs-parser:** render shared snippets in plugin docs ([#2995](https://github.com/grafana/plugin-tools/issues/2995)) ([3d8f526](https://github.com/grafana/plugin-tools/commit/3d8f526ccc7b9c3e18023a4e5c7d5e3f10257eae))
+
 ## [0.5.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.4.1...@grafana/plugin-docs-parser@0.5.0) (2026-10-21)
 
 
