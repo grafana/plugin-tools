@@ -2,6 +2,7 @@
 import { stat } from 'node:fs/promises';
 import minimist from 'minimist';
 import createDebug from 'debug';
+import type { SnippetValues } from '@grafana/plugin-docs-parser';
 import { resolve } from 'node:path';
 import { readmeCandidates, resolveBuiltPluginJson, resolvePluginJson } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
@@ -39,12 +40,13 @@ async function main() {
   const distRoot =
     command === 'validate' && validateArgv.dist !== undefined ? resolve(validateArgv.dist || 'dist') : undefined;
 
-  // resolve docs path and plugin type once for all commands.
+  // resolve docs path, plugin type and snippet values once for all commands.
   let docsPath: string;
   let docsPathSetting: string;
   let pluginType: string | undefined;
+  let snippetValues: SnippetValues | undefined;
   try {
-    ({ docsPath, docsPathSetting, pluginType } = distRoot
+    ({ docsPath, docsPathSetting, pluginType, snippetValues } = distRoot
       ? await resolveBuiltPluginJson(distRoot)
       : await resolvePluginJson());
   } catch (error) {
@@ -89,7 +91,7 @@ async function main() {
           reload: false,
         },
       });
-      await serve(serveArgv, docsPath, pluginType, readmeCandidates(), docsPathSetting);
+      await serve(serveArgv, docsPath, pluginType, readmeCandidates(), docsPathSetting, snippetValues);
       break;
     }
     case 'build': {
@@ -102,6 +104,7 @@ async function main() {
         pluginType,
         mode: distRoot ? 'dist' : 'source',
         docsPathSetting,
+        snippetValues,
       });
       break;
     }

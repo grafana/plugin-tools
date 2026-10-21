@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { readFile } from 'node:fs/promises';
+import { SNIPPET_NAMES, getSnippetSource } from '@grafana/plugin-docs-parser';
 import { Rule } from './types.js';
 
 /**
@@ -32,5 +33,27 @@ describe('docs/validation-rules.md', () => {
     const stale = (await documentedRuleIds()).filter((id) => !isStyleRule(id) && !implemented.has(id));
 
     expect(stale, `documented but not implemented: ${stale.join(', ')}`).toEqual([]);
+  });
+});
+
+describe('docs/snippets.md', () => {
+  const docPromise = readFile(new URL('../../docs/snippets.md', import.meta.url), 'utf-8');
+
+  it('lists every snippet the parser knows, and nothing else', async () => {
+    const doc = await docPromise;
+    const table = doc.split('## Available snippets')[1].split('\n## ')[0];
+    const listed = [...table.matchAll(/^\|\s*`([a-z0-9-]+)`/gm)].map((m) => m[1]);
+
+    expect(listed).toEqual([...SNIPPET_NAMES]);
+  });
+
+  it('shows the current text of every snippet', async () => {
+    const doc = await docPromise;
+    const shown = Object.fromEntries(
+      [...doc.matchAll(/^### `([a-z0-9-]+)`\n\n(`{3,})markdown\n([\s\S]*?)\n\2$/gm)].map((m) => [m[1], m[3]])
+    );
+    const current = Object.fromEntries(SNIPPET_NAMES.map((name) => [name, getSnippetSource(name)]));
+
+    expect(shown).toEqual(current);
   });
 });

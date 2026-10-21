@@ -250,6 +250,12 @@ Any **markdown** works here, including code blocks.
 - Attributes other than `open` are removed.
 - GitHub shows collapsible sections the same way.
 
+## Snippets
+
+Pages scaffolded by `create-plugin` can contain snippets: shared text between
+`<!-- snippet:<name> -->` and `<!-- /snippet:<name> -->` markers that Grafana keeps up to date. For how
+they work and what you can change, refer to [Snippets](./snippets.md).
+
 ## Footnotes
 
 ```markdown
@@ -267,6 +273,7 @@ These are removed when your page is rendered, or shown as plain text:
 - **Raw HTML** other than `<details>`, `<summary>`, `<br>` and `<hr>`, for example `<div>`, `<span>` or
   `<iframe>`. Validation reports it as an error, and it's removed when the page is rendered. Write
   it in markdown instead. HTML comments don't show on the page.
+  [Snippet](./snippets.md) markers are comments too.
 - **Docs website shortcodes** such as `{{< figure >}}` or `{{< tabs >}}`. To convert them, refer to
   [Migrate from the docs website](./migrate-from-docs-website.md).
 - **MDX and JSX components.**

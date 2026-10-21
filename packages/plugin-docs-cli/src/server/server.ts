@@ -6,7 +6,7 @@ import createDebug from 'debug';
 import { marked } from 'marked';
 import xss, { type IWhiteList } from 'xss';
 import Slugger from 'github-slugger';
-import { parseMarkdown, type Manifest, type Page } from '@grafana/plugin-docs-parser';
+import { parseMarkdown, type Manifest, type Page, type SnippetValues } from '@grafana/plugin-docs-parser';
 import { toHtml } from 'hast-util-to-html';
 import { scanDocsFolder } from '../scanner.js';
 import { validate } from '../validation/engine.js';
@@ -42,6 +42,7 @@ export interface ServerOptions {
   pluginType?: string;
   /** The `docsPath` as written in plugin.json, for the `docs-path-valid` rule. */
   docsPathSetting?: string;
+  snippetValues?: SnippetValues;
 }
 
 export interface Server {
@@ -73,7 +74,15 @@ interface RenderNavItem extends NavItem {
  * the active page's h2/h3 nested underneath.
  */
 export async function startServer(options: ServerOptions): Promise<Server> {
-  const { docsPath, readmePaths = [], port = 3001, liveReload = false, pluginType, docsPathSetting } = options;
+  const {
+    docsPath,
+    readmePaths = [],
+    port = 3001,
+    liveReload = false,
+    pluginType,
+    docsPathSetting,
+    snippetValues,
+  } = options;
 
   debug('Starting server with options: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
 
@@ -89,7 +98,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // author actually has to fix.
   const runValidation = async () => {
     try {
-      const result = await validate({ docsPath, pluginType, docsPathSetting }, allRules);
+      const result = await validate({ docsPath, pluginType, docsPathSetting, snippetValues }, allRules);
       const styleFindings = result.diagnostics.filter((d) => d.rule.startsWith('style-'));
       const rest = { ...result, diagnostics: result.diagnostics.filter((d) => !d.rule.startsWith('style-')) };
 
@@ -239,6 +248,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
       const parsed = parseMarkdown(page.content, {
         assetBaseUrl: `${DOCS_BASE}/`,
         file: page.file,
+        snippetValues,
       });
       rewriteHast(parsed.hast, page.file, manifest.pages, DOCS_BASE);
 

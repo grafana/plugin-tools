@@ -1,7 +1,10 @@
-export { parseMarkdown } from './parser.js';
-export type { ParsedMarkdown, ParseOptions } from './parser.js';
+export { parseMarkdown, readSnippets } from './parser.js';
+export type { ParsedMarkdown, ParseOptions, SnippetLocation } from './parser.js';
+export type { SnippetProblem } from './plugins/remark-snippets.js';
 export { CALLOUT_TYPES } from './plugins/rehype-callouts.js';
 export type { CalloutType } from './plugins/rehype-callouts.js';
 export { getYouTubeVideoId } from './plugins/rehype-youtube.js';
 export { ALLOWED_HTML_TAGS } from './plugins/rehype-raw-allowlist.js';
+export { SNIPPET_NAMES, getSnippetSource, renderSnippet } from './snippets.js';
+export type { SnippetName, SnippetValues } from './snippets.js';
 export type { Heading, Page, Manifest, MarkdownFiles, Frontmatter } from './types.js';

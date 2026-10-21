@@ -16,6 +16,8 @@ import { rehypeCallouts } from './plugins/rehype-callouts.js';
 import { rehypeYouTube } from './plugins/rehype-youtube.js';
 import { rehypeVideo } from './plugins/rehype-video.js';
 import { rehypeRawAllowlist } from './plugins/rehype-raw-allowlist.js';
+import { readSnippetBlocks, remarkSnippets, type SnippetProblem } from './plugins/remark-snippets.js';
+import type { SnippetValues } from './snippets.js';
 import type { Heading } from './types.js';
 export type { Heading } from './types.js';
 
@@ -38,6 +40,12 @@ export interface ParseOptions {
    * when `assetBaseUrl` is omitted.
    */
   file?: string;
+
+  /**
+   * Values from the plugin's `plugin.json` that snippets show. Without them, a snippet that needs a
+   * value keeps its fallback text.
+   */
+  snippetValues?: SnippetValues;
 }
 
 /**
@@ -83,6 +91,36 @@ function parseFrontmatter(content: string): { data: Record<string, unknown>; con
 }
 
 /**
+ * A snippet in a page, with the 1-based lines of its opening and closing markers.
+ */
+export interface SnippetLocation {
+  name: string;
+  startLine: number;
+  endLine: number;
+}
+
+/**
+ * Reads the snippets in a page the way `parseMarkdown` does, with line numbers in the whole file.
+ * When `problems` isn't empty, `parseMarkdown` shows the fallback text of every snippet on the page.
+ *
+ * @param content - The raw markdown content, frontmatter included
+ */
+export function readSnippets(content: string): { snippets: SnippetLocation[]; problems: SnippetProblem[] } {
+  if (!content.includes('snippet:')) {
+    return { snippets: [], problems: [] };
+  }
+  const body = content.match(FRONTMATTER_RE)?.[2] ?? content;
+  const lineOffset = content.slice(0, content.length - body.length).split('\n').length - 1;
+  const tree = unified().use(remarkParse).use(remarkGfm).parse(body);
+  const { blocks, problems } = readSnippetBlocks(tree);
+  const lineAt = (index: number) => (tree.children[index].position?.start.line ?? 0) + lineOffset;
+  return {
+    snippets: blocks.map((block) => ({ name: block.name, startLine: lineAt(block.start), endLine: lineAt(block.end) })),
+    problems: problems.map((problem) => ({ ...problem, line: problem.line + lineOffset })),
+  };
+}
+
+/**
  * Parses markdown content into a HAST tree with extracted frontmatter and headings.
  *
  * @param content - The raw markdown content to parse
@@ -105,10 +143,12 @@ export function parseMarkdown(content: string, options?: ParseOptions): ParsedMa
   }
 
   // build the unified pipeline: markdown → mdast → hast.
-  // raw HTML is parsed, but only the tags authors may write are kept from it
+  // raw HTML is parsed, but only the tags authors may write are kept from it.
+  // snippets are swapped in before that, since it drops the comments that mark them
   const processor = unified()
     .use(remarkParse)
     .use(remarkGfm)
+    .use(remarkSnippets, { values: options?.snippetValues })
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRawAllowlist)
     .use(rehypeStripH1)

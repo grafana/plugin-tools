@@ -116,6 +116,17 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `empty-section`          | A heading needs content before the next heading, and a heading followed directly by a deeper heading is fine. A section that still has only its `section-brief` comment is a suggestion, because the brief never renders: write it or remove the heading.                                                                                     | Warning or Suggestion |
 | `unfilled-section-brief` | A `section-brief` comment left in a section that already has content is a suggestion. It isn't shown in the catalog, so delete it to keep the page tidy. A page scaffolded earlier may use `<!-- section-brief:start -->` / `<!-- section-brief:end -->` markers instead. Their text is shown, so they are a warning: remove the whole block. | Warning or Suggestion |
 
+## Snippets
+
+These check the [snippets](./snippets.md) in your pages. None of them block publishing, because a page
+whose snippets have a problem still shows their fallback text.
+
+| Rule                   | What it checks                                                                                                                                                                                                                                                                                                                                          | Severity   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `known-snippet`        | A snippet's name must be one that Grafana knows. Check the name against [Available snippets](./snippets.md#available-snippets), or delete both markers to keep the text as your own. A newer `create-plugin` can scaffold a snippet that an older `plugin-docs-cli` doesn't know yet, so update `plugin-docs-cli` if the name is right.                 | Warning    |
+| `valid-snippet-block`  | Each snippet marker must be alone on its own line, with a blank line before it and outside lists, quotes and collapsible sections. Every opening marker needs a closing marker with the same name, snippets can't be nested and a snippet can't contain a heading. While a page has any of these problems, all snippets on it show their fallback text. | Warning    |
+| `snippet-text-current` | The text inside a snippet differs from its current text. The catalog shows the current text, so this only affects what GitHub shows. To update it, copy the text from [Current text](./snippets.md#current-text).                                                                                                                                       | Suggestion |
+
 ## Writing style
 
 These come from the [Grafana Writers' Toolkit](https://grafana.com/docs/writers-toolkit/), the style
