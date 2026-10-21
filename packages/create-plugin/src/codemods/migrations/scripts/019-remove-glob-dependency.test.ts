@@ -1,4 +1,4 @@
-import migrate from './019-webpack-remove-glob-dependency.js';
+import migrate from './019-remove-glob-dependency.js';
 import { createDefaultContext } from '../../test-utils.js';
 
 const originalContent = `

@@ -128,10 +128,10 @@ export default [
     scriptPath: import.meta.resolve('./scripts/018-replace-eslint-webpack-plugin.js'),
   },
   {
-    name: '019-webpack-remove-glob-dependency',
+    name: '019-remove-glob-dependency',
     version: '0.0.0-unreleased', // x-release-please-version
-    description: 'Replace glob npm package with nodejs built in functionality',
-    scriptPath: import.meta.resolve('./scripts/019-webpack-remove-glob-dependency.js'),
+    description: 'Replace glob npm package with nodejs built in fs.glob',
+    scriptPath: import.meta.resolve('./scripts/019-remove-glob-dependency.js'),
   },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
