@@ -90,7 +90,7 @@ The Grafana Marketplace provides an optional path for plugin developers, indepen
 
 Marketplace plugins are published in the Grafana Catalog with a `Marketplace` label, and can be proprietary. Paid Marketplace plugins can help you fund ongoing development, maintenance, updates, and support.
 
-For more background, refer to the [Grafana Labs Opens the Grafana Marketplace](https://grafana.com/press/2026/10/20/marketplace-ga/) blog post. 
+For more background, refer to the [Grafana Labs Opens the Grafana Marketplace](https://grafana.com/press/2026/10/20/marketplace-ga/) press release. 
 
 :::caution
 
