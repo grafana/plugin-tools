@@ -1,12 +1,18 @@
 import { TestFixture } from '@playwright/test';
 import type { AxeResults } from 'axe-core';
-import type { AxeBuilder as AxeBuilderType } from '@axe-core/playwright';
 
 import { PlaywrightArgs, AxeScanContext } from '../types';
 
 export const DEFAULT_A11Y_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa' /* 'best-practice' */];
 
-let AxeBuilder: typeof AxeBuilderType;
+// @axe-core/playwright >=4.14 ships separate types for `import` and `require`. Deriving the type from the
+// dynamic import keeps it on the same resolution as the value we assign to it.
+async function loadAxeBuilder() {
+  const { AxeBuilder } = await import('@axe-core/playwright');
+  return AxeBuilder;
+}
+
+let AxeBuilder: Awaited<ReturnType<typeof loadAxeBuilder>> | undefined;
 
 /**
  * @alpha - the API for accessibility scanning is still being finalized and may change in future releases. Feedback is welcome!
@@ -19,8 +25,7 @@ export const scanForA11yViolations: TestFixture<
   await use(async (context?: AxeScanContext) => {
     if (!AxeBuilder) {
       try {
-        const { AxeBuilder: _AxeBuilder } = await import('@axe-core/playwright');
-        AxeBuilder = _AxeBuilder;
+        AxeBuilder = await loadAxeBuilder();
       } catch (error) {
         throw new Error('@axe-core/playwright must be installed as a peer dependency to use a11y scanning.');
       }
