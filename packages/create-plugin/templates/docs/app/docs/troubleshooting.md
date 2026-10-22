@@ -32,7 +32,9 @@ Open each H2 with one sentence on when its errors occur. Add an H3 per symptom, 
 For errors in the app, open the developer tools in your browser and check the console.
 {{#if hasBackend}}
 
-In self-managed Grafana, you can also find more detail in the Grafana server logs:
+<!-- snippet:server-debug-logs -->
+
+In self-managed Grafana, the Grafana server logs show more detail:
 
 1. Set the log level to `debug` in the Grafana configuration file:
 
@@ -44,6 +46,8 @@ In self-managed Grafana, you can also find more detail in the Grafana server log
 1. Restart Grafana and reproduce the error.
 1. Look for log lines with `logger=plugin.{{{pluginId}}}`.
 1. Set the log level back to `info` when you're done, to keep the logs small.
+
+<!-- /snippet:server-debug-logs -->
 {{/if}}
 
 ## Get additional help

@@ -135,6 +135,8 @@ If your plugin doesn't have them yet, the codemod also creates `.config/AGENTS/i
 
 Each stub page has section notes that say what belongs there. Replace each note with your content, and delete the note when you're done. You can rename, add or remove pages, because the scaffold is a starting point and not a fixed structure.
 
+Some pages include snippets, which is text that is the same for every plugin, between `<!-- snippet:... -->` markers. Grafana keeps the text current, and the Documentation tab shows the latest version of it instead of the text in your file. Leave snippets as they are, or delete a whole snippet, both markers included, when it doesn't apply to your plugin. For details, refer to [Snippets](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/snippets.md).
+
 ## Draft the pages with an agent
 
 This step is optional. To have an AI agent write the first version of your pages, commit the changes from `add docs`, then run:

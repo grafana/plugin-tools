@@ -20,7 +20,7 @@ This usually runs once, after `add docs`. Running it again is safe, because it o
 
 ## Check first
 
-Search the docs folder for `section-brief` comments. A section that still has its brief is yours to write. A section without one has been written by the author, so never rewrite it.
+Search the docs folder for `section-brief` comments. A section that still has its brief is yours to write. A section without one has been written by the author, so never rewrite it. Text between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers is maintained by Grafana, so never edit inside a snippet.
 
 If no briefs remain, the pages are already written. Do steps 1 and 3, adding any README or linked-docs content that isn't on the pages yet without rewriting what is there, then steps 7 to 10. If nothing is left to migrate, say so in the summary and change nothing.
 

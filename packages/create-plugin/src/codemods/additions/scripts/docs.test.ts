@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { stripVTControlCharacters } from 'node:util';
+import { readSnippets, renderSnippet } from '@grafana/plugin-docs-parser';
 import * as v from 'valibot';
 import { parse as parseYaml } from 'yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -77,6 +78,7 @@ const PAGES_BY_TYPE: Record<string, string[]> = {
   app: ['index', 'configure', 'overview', 'reports', 'dashboards', 'permissions', 'troubleshooting'],
 };
 const PLUGIN_TYPES = Object.keys(PAGES_BY_TYPE);
+const SNIPPET_MARKER_RE = /^<!-- \/?snippet:\S+ -->$/gm;
 
 // scaffolds once and writes it to disk, so the re-run sees a plugin that is already fully set up
 function scaffoldThenRerun(
@@ -749,7 +751,7 @@ describe('docs codemod', () => {
         const content = context.getFile(`docs/${page}.md`) ?? '';
         const briefs = content.match(/<!-- section-brief\n[\s\S]*?-->/g) ?? [];
         expect(briefs.length, page).toBeGreaterThan(0);
-        expect(content.match(/<!--/g)?.length, page).toBe(briefs.length);
+        expect(content.replace(SNIPPET_MARKER_RE, '').match(/<!--/g)?.length, page).toBe(briefs.length);
         expect(content, page).not.toContain('section-brief:');
       }
     });
@@ -829,7 +831,7 @@ describe('docs codemod', () => {
         troubleshooting: [
           'This page explains how to fix common issues when you configure or use the My Plugin data source. For setup instructions, refer to [Configure the My Plugin data source](./configure.md).',
           'To see the raw request and response for a panel, open the panel editor and click **Query inspector**.',
-          'In self-managed Grafana, you can also find more detail in the Grafana server logs:',
+          'In self-managed Grafana, the Grafana server logs show more detail:',
           "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-datasource`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
           "If this page doesn't solve your problem:",
           '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
@@ -867,7 +869,7 @@ describe('docs codemod', () => {
         troubleshooting: [
           'This page explains how to fix common issues when you set up or use My Plugin. For setup instructions, refer to the [Introduction](./index.md).',
           'For errors in the app, open the developer tools in your browser and check the console.',
-          'In self-managed Grafana, you can also find more detail in the Grafana server logs:',
+          'In self-managed Grafana, the Grafana server logs show more detail:',
           "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-app`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
           "If this page doesn't solve your problem:",
           '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
@@ -886,6 +888,7 @@ describe('docs codemod', () => {
           let left = (context.getFile(`docs/${page}.md`) ?? '')
             .replace(/^---\n[\s\S]*?\n---\n/, '')
             .replace(/<!-- section-brief\n[\s\S]*?-->/g, '')
+            .replace(SNIPPET_MARKER_RE, '')
             .replace(/^#{1,6} .*$/gm, '');
           for (const text of FIXED_TEXT[type][page] ?? []) {
             expect(left, page).toContain(text);
@@ -895,6 +898,39 @@ describe('docs codemod', () => {
         }
       }
     );
+
+    // when the parser's text for a snippet changes, the fallback in the template must follow
+    it.each(PLUGIN_TYPES)('scaffolds %s snippets whose fallback is the parser current text', (type) => {
+      const pluginJson = FULL_PLUGIN_JSON[type];
+      const context = makeContext(pluginJson);
+      docs(context, { docsPath: 'docs' });
+      const values = { pluginName: String(pluginJson.name), pluginId: String(pluginJson.id) };
+      const collapse = (text: string) => text.replace(/\s+/g, ' ').trim();
+      const names: string[] = [];
+
+      for (const page of PAGES_BY_TYPE[type]) {
+        const content = context.getFile(`docs/${page}.md`) ?? '';
+        const { snippets, problems } = readSnippets(content);
+        expect(problems, page).toEqual([]);
+        const lines = content.split('\n');
+        for (const { name, startLine, endLine } of snippets) {
+          names.push(name);
+          expect(collapse(lines.slice(startLine, endLine - 1).join('\n')), `${page} ${name}`).toBe(
+            collapse(renderSnippet(name, values) ?? '')
+          );
+        }
+      }
+
+      expect(names.length).toBeGreaterThan(0);
+    });
+
+    it.each(['datasource', 'app'])('leaves the server logs snippet out of a %s without a backend', (type) => {
+      const context = makeContext({ ...FULL_PLUGIN_JSON[type], backend: false });
+      docs(context, { docsPath: 'docs' });
+      const content = context.getFile('docs/troubleshooting.md') ?? '';
+      expect(content).not.toContain('snippet:server-debug-logs');
+      expect(readSnippets(content)).toEqual({ snippets: [], problems: [] });
+    });
 
     it('interpolates pluginName into the index page', () => {
       const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'My Panel' });
