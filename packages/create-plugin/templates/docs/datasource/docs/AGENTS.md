@@ -102,25 +102,7 @@ To fill a section:
 Briefs are not shown in the preview or the catalog, so a section you haven't written looks like a bare
 heading. `docs:validate` lists every section that still has only its brief.
 
-## Snippets
-
-Some sections contain a snippet: text that is the same for every plugin, between two markers.
-
-```markdown
-<!-- snippet:add-data-source -->
-
-To add the {{{pluginName}}} data source:
-
-1. Click **Connections** in the left-side menu.
-1. Click **Add new connection**.
-1. Enter `{{{pluginName}}}` in the search bar.
-1. Select **{{{pluginName}}}**.
-1. Click **Add new data source**.
-
-<!-- /snippet:add-data-source -->
-```
-
-Grafana keeps the text inside a snippet up to date, and grafana.com shows its current version instead of the text in the file. Never edit inside a snippet, because the change doesn't show. When a snippet is wrong for this plugin, delete the whole snippet, both markers included. Write plugin-specific text before or after it, and don't continue its list. The snippets guide next to the other guides has the rules.
+Text between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers is maintained by Grafana. Never edit inside it - refer to `snippets.md` in the guides.
 
 ## Validate
 
