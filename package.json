@@ -92,5 +92,5 @@
       "undici": "7.29.1"
     }
   },
-  "packageManager": "npm@12.2.0"
+  "packageManager": "npm@12.2.1"
 }
