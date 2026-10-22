@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.12.0...@grafana/plugin-docs-cli@0.13.0) (2026-10-22)
+
+
+### Features
+
+* **create-plugin:** scaffold docs snippets with fallback text ([#3021](https://github.com/grafana/plugin-tools/issues/3021)) ([7ef65e4](https://github.com/grafana/plugin-tools/commit/7ef65e418a9ed5951d62184954511297196aa0ee))
+
 ## [0.12.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.11.0...@grafana/plugin-docs-cli@0.12.0) (2026-10-21)
 
 

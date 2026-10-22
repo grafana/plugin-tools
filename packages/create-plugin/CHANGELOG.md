@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.16.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.15.1...@grafana/create-plugin@7.16.0) (2026-10-22)
+
+
+### Features
+
+* **create-plugin:** Override the default Grafana version in the experimental-app-sdk addition ([#3014](https://github.com/grafana/plugin-tools/issues/3014)) ([8d35cd5](https://github.com/grafana/plugin-tools/commit/8d35cd55d2213b454f8e465ec7b9e01cc3039010))
+* **create-plugin:** scaffold docs snippets with fallback text ([#3021](https://github.com/grafana/plugin-tools/issues/3021)) ([7ef65e4](https://github.com/grafana/plugin-tools/commit/7ef65e418a9ed5951d62184954511297196aa0ee))
+
 ## [7.15.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.15.0...@grafana/create-plugin@7.15.1) (2026-10-21)
 
 
