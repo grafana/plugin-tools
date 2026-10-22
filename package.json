@@ -89,7 +89,7 @@
     "postcss-selector-parser": "7.1.6",
     "tinypool": "2.2.0",
     "nx": {
-      "undici": "7.29.1"
+      "undici": "8.12.3"
     }
   },
   "packageManager": "npm@12.2.1"
