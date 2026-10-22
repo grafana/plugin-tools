@@ -31,6 +31,8 @@ If the reader only needs credentials they already have, remove this section and 
 
 ## Add the data source
 
+<!-- snippet:add-data-source -->
+
 To add the {{{pluginName}}} data source:
 
 1. Click **Connections** in the left-side menu.
@@ -38,6 +40,8 @@ To add the {{{pluginName}}} data source:
 1. Enter `{{{pluginName}}}` in the search bar.
 1. Select **{{{pluginName}}}**.
 1. Click **Add new data source**.
+
+<!-- /snippet:add-data-source -->
 
 ## Configure settings
 

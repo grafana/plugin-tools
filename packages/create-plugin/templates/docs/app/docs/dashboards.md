@@ -12,6 +12,8 @@ sidebar_position: 6
 
 ## Import a dashboard
 
+<!-- snippet:import-app-dashboard -->
+
 To import a dashboard that ships with {{{pluginName}}}:
 
 1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.
@@ -21,6 +23,8 @@ To import a dashboard that ships with {{{pluginName}}}:
 1. Click **Import** next to the dashboard.
 
 Imported dashboards don't update when you upgrade the plugin. When a plugin upgrade ships a newer version of a dashboard, click **Update** next to it. This overwrites any changes you made to it.
+
+<!-- /snippet:import-app-dashboard -->
 
 ## Included dashboards
 

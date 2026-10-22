@@ -20,11 +20,15 @@ Before you configure the app, ensure you have:
 
 ## Open the configuration page
 
+<!-- snippet:open-app-config -->
+
 To open the {{{pluginName}}} configuration page:
 
 1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.
 1. Enter `{{{pluginName}}}` in the search bar.
 1. Select **{{{pluginName}}}**.
+
+<!-- /snippet:open-app-config -->
 
 <!-- section-brief
 Fill this in: After the list above, add one sentence that names the tab to click, using the `title` of the page passed to `addConfigPage` in `src/module.ts(x)`, such as "Then click the **Configuration** tab." Keep it a sentence rather than another step of the list. If the app adds more than one config page, name each tab and what it holds.

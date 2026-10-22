@@ -92,6 +92,20 @@ To fill a section:
 Briefs are not shown in the preview or the catalog, so a section you haven't written looks like a bare
 heading. `docs:validate` lists every section that still has only its brief.
 
+## Snippets
+
+Some sections contain a snippet: text that is the same for every plugin, between two markers.
+
+```markdown
+<!-- snippet:use-example-json -->
+
+To use an example, open your dashboard and go to **Dashboard settings** > **JSON Model**. Paste the excerpt into the `panels` array and click **Save changes**.
+
+<!-- /snippet:use-example-json -->
+```
+
+Grafana keeps the text inside a snippet up to date, and grafana.com shows its current version instead of the text in the file. Never edit inside a snippet, because the change doesn't show. When a snippet is wrong for this plugin, delete the whole snippet, both markers included. Write plugin-specific text before or after it, and don't continue its list. The snippets guide next to the other guides has the rules.
+
 ## Validate
 
 ```bash

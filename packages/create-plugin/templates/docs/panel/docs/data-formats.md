@@ -24,4 +24,8 @@ To see the data the panel receives, open the panel editor, click **Query inspect
 
 ## Reshape data that doesn't match
 
+<!-- snippet:reshape-with-transformations -->
+
 If a query returns data in a different shape, you can reshape it without changing the query. Select the **Transform data** tab in the panel editor and add a transformation. For more information, refer to [Transform data](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/).
+
+<!-- /snippet:reshape-with-transformations -->
