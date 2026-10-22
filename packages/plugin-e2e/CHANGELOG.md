@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.15.3](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.2...@grafana/plugin-e2e@3.15.3) (2026-10-22)
+
+
+### Bug Fixes
+
+* **plugin-e2e:** derive AxeBuilder type from the dynamic import ([#3019](https://github.com/grafana/plugin-tools/issues/3019)) ([7779b05](https://github.com/grafana/plugin-tools/commit/7779b05c3c7e25f123f667c03637ea8f48fa53cb))
+
 ## [3.15.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.1...@grafana/plugin-e2e@3.15.2) (2026-10-19)
 
 
