@@ -27,9 +27,9 @@ Plugin docs are an experimental feature. Breaking changes might happen without n
 ## Why plugin docs
 
 - **Close to your code.** Docs change in the same pull request as the feature they describe, so reviewers see both together and the two don't drift apart.
-- **Plain markdown.** One file per page, folders for sections and frontmatter for titles and order. There's no build step to set up.
+- **Simple by design.** Use standard markdown with one file per page, folders for sections and frontmatter for titles and order. There's no build step to set up.
 - **No styling to maintain.** Grafana handles the layout, so you don't need CSS, a theme or a site to host.
-- **Consistent navigation.** Every plugin's docs share the same layout, so users who know one plugin's docs know where to look in yours.
+- **Consistent by default.** Validation checks structure and naming before you publish, and every plugin's docs share the same layout and navigation. Users who know one plugin's docs know where to look in yours.
 - **Checked before release.** Validation checks structure, links, images and writing style while you write and again before you publish, so broken pages never reach your users.
 - **Agent-friendly.** The scaffold includes instructions for coding agents, so the pages they write follow the conventions and pass validation. An optional codemod has an agent draft the first version of your pages. Structured, topic-based pages also make your plugin easier for assistants such as Grafana Assistant to find and explain.
 
@@ -40,7 +40,7 @@ Plugin docs are an experimental feature. Breaking changes might happen without n
 
 ## Get started
 
-Run the codemod from the root of your plugin:
+Run this script from the root of your plugin to enable plugin docs:
 
 ```bash
 npx @grafana/create-plugin@latest add docs
@@ -131,9 +131,11 @@ The codemod adds these files, depending on your plugin type:
 </TabItem>
 </Tabs>
 
-If your plugin doesn't have them yet, the codemod also creates `.config/AGENTS/instructions.md` and the `AGENTS.md`, `CLAUDE.md` and `GEMINI.md` files in the root of your plugin that point agents at it.
+## Pages
 
-Each stub page has section notes that say what belongs there. Replace each note with your content, and delete the note when you're done. You can rename, add or remove pages, because the scaffold is a starting point and not a fixed structure.
+The script creates different stub pages depending on your plugin type. Some pages are required and others are optional. You can also add more pages and folders for other features of your plugin.
+
+Each stub page has section notes that say what belongs there. Replace each note with your content, and delete the note when you're done.
 
 Some pages include snippets, which is text that is the same for every plugin, between `<!-- snippet:... -->` markers. Grafana keeps the text current, and the Documentation tab shows the latest version of it instead of the text in your file. Leave snippets as they are, or delete a whole snippet, both markers included, when it doesn't apply to your plugin. For details, refer to [Snippets](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/snippets.md).
 
