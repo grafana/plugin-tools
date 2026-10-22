@@ -26,8 +26,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "minimist": "1.2.8",
-    "proxy-agent": "8.0.2"
+    "minimist": "1.2.8"
   },
   "devDependencies": {
     "@libs/find-up": "^1.0.0",
@@ -38,6 +37,6 @@
     "tmp": "0.2.7"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24.5.0"
   }
 }

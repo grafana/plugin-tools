@@ -91,10 +91,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version:
-          - 22
-          - 24
-          - 26
+        include:
+          - node-version: 22
+            test-signing: false
+          - node-version: 24
+            test-signing: true
+          - node-version: 26
+            test-signing: true
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
@@ -136,11 +139,11 @@ jobs:
           npm install ../packed-artifacts/${TSCONFIG_PACKAGE}
         working-directory: ./${{ env.WORKING_DIR }}
 
-      - name: Install packed plugin-e2e and eslint-config
+      - name: Install packed plugin-e2e, eslint-config, and sign-plugin
         run: |
           PLUGIN_E2E_PACKAGE=$(ls ../packed-artifacts/grafana-plugin-e2e-*.tgz | xargs basename)
           ESLINT_CONFIG_PACKAGE=$(ls ../packed-artifacts/grafana-eslint-config-*.tgz | xargs basename)
-          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE} ../packed-artifacts/${ESLINT_CONFIG_PACKAGE}
+          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE} ../packed-artifacts/${ESLINT_CONFIG_PACKAGE} ../packed-artifacts/grafana-sign-plugin-*.tgz
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Lint plugin frontend
@@ -219,12 +222,12 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
-        if: ${{ github.event.pull_request.head.repo.fork != true }}
+        if: ${{ github.event.pull_request.head.repo.fork != true && matrix.test-signing }}
         env:
           # Step env is evaluated even when the step is skipped, so fall back to '{}'
           # to keep fromJSON from failing the job on fork PRs where get-secrets is skipped.
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').GRAFANA_ACCESS_POLICY_TOKEN }}
-        run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        run: npm run sign -- --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ env.WORKING_DIR }}
 
   unit-test-node-versions:
@@ -420,10 +423,10 @@ jobs:
         run: npm install --no-audit
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Install plugin-e2e
+      - name: Install packed plugin-e2e and sign-plugin
         run: |
           PLUGIN_E2E_PACKAGE=$(ls ../packed-artifacts/grafana-plugin-e2e-*.tgz | xargs basename)
-          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE}
+          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE} ../packed-artifacts/grafana-sign-plugin-*.tgz
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Install tsconfig
@@ -580,7 +583,7 @@ jobs:
           # Step env is evaluated even when the step is skipped, so fall back to '{}'
           # to keep fromJSON from failing the job on fork PRs where get-secrets is skipped.
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').GRAFANA_ACCESS_POLICY_TOKEN }}
-        run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        run: npm run sign -- --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Frontend Knip Report
