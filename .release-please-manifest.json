@@ -7,7 +7,7 @@
   "packages/plugin-meta-extractor": "0.13.0",
   "packages/plugin-types-bundler": "0.6.0",
   "packages/react-detect": "0.7.5",
-  "packages/sign-plugin": "3.3.3",
+  "packages/sign-plugin": "4.0.0",
   "packages/tsconfig": "2.2.0",
   "packages/eslint-config": "10.0.0"
 }
