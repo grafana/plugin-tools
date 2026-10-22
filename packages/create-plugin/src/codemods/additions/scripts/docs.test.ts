@@ -924,6 +924,14 @@ describe('docs codemod', () => {
       expect(names.length).toBeGreaterThan(0);
     });
 
+    it.each(['datasource', 'app'])('leaves the server logs snippet out of a %s without a backend', (type) => {
+      const context = makeContext({ ...FULL_PLUGIN_JSON[type], backend: false });
+      docs(context, { docsPath: 'docs' });
+      const content = context.getFile('docs/troubleshooting.md') ?? '';
+      expect(content).not.toContain('snippet:server-debug-logs');
+      expect(readSnippets(content)).toEqual({ snippets: [], problems: [] });
+    });
+
     it('interpolates pluginName into the index page', () => {
       const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'My Panel' });
       docs(context, { docsPath: 'docs' });
