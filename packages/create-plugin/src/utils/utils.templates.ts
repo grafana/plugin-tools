@@ -123,8 +123,8 @@ export function buildTemplateData({
     bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
     scenesVersion: '^8.17.0',
     pluginExecutable: pluginJson.executable,
-    useExperimentalRspack: Boolean(features.useExperimentalRspack),
-    frontendBundler: features.useExperimentalRspack ? 'rspack' : 'webpack',
+    useRspack: Boolean(features.useRspack),
+    frontendBundler: features.useRspack ? 'rspack' : 'webpack',
   };
 }
 
@@ -140,7 +140,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
   const { features } = getConfig();
   const currentVersion = CURRENT_APP_VERSION;
   const bundleGrafanaUI = features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI;
-  const frontendBundler = features.useExperimentalRspack ? 'rspack' : 'webpack';
+  const frontendBundler = features.useRspack ? 'rspack' : 'webpack';
 
   let templateData: TemplateData;
 
@@ -164,7 +164,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs): TemplateData {
       version: currentVersion,
       bundleGrafanaUI,
       scenesVersion: '^8.17.0',
-      useExperimentalRspack: Boolean(features.useExperimentalRspack),
+      useRspack: Boolean(features.useRspack),
       frontendBundler,
     };
     // Updating or migrating a plugin

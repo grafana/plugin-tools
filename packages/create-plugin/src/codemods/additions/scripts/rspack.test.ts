@@ -43,8 +43,8 @@ vi.mock(import('../../utils.js'), async (importOriginal) => {
   };
 });
 
-const RSPACK_TEMPLATE_DATA = { useExperimentalRspack: true, frontendBundler: 'rspack' };
-const WEBPACK_TEMPLATE_DATA = { useExperimentalRspack: false, frontendBundler: 'webpack' };
+const RSPACK_TEMPLATE_DATA = { useRspack: true, frontendBundler: 'rspack' };
+const WEBPACK_TEMPLATE_DATA = { useRspack: false, frontendBundler: 'webpack' };
 
 async function getTemplateDevDependencies(templateData: Record<string, unknown>): Promise<Record<string, string>> {
   const { renderTemplate } = await vi.importActual<typeof import('../../utils.js')>('../../utils.js');
@@ -171,13 +171,33 @@ describe('rspack', () => {
   });
 
   describe('.cprc.json', () => {
-    it('should update existing .cprc.json with useExperimentalRspack flag', () => {
+    it('should set the useRspack feature flag in .config/.cprc.json', () => {
       const context = createBaseContext();
 
       const result = addRspack(context);
       const cprc = JSON.parse(result.getFile('.config/.cprc.json')!);
 
-      expect(cprc.features.useExperimentalRspack).toBe(true);
+      expect(cprc.features.useRspack).toBe(true);
+    });
+
+    it('should remove the experimental rspack flag from both config files', () => {
+      const context = createBaseContext();
+      context.updateFile(
+        '.config/.cprc.json',
+        JSON.stringify({ version: '7.9.0', features: { useExperimentalRspack: true } }, null, 2)
+      );
+      // every generated plugin's own .cprc.json carried the flag as false
+      context.addFile(
+        '.cprc.json',
+        JSON.stringify({ features: { bundleGrafanaUI: false, useExperimentalRspack: false } }, null, 2)
+      );
+
+      const result = addRspack(context);
+      const rootCprc = JSON.parse(result.getFile('.config/.cprc.json')!);
+      const userCprc = JSON.parse(result.getFile('.cprc.json')!);
+
+      expect(rootCprc.features).toEqual({ useRspack: true });
+      expect(userCprc.features).toEqual({ bundleGrafanaUI: false });
     });
 
     it('should preserve existing .cprc.json properties', () => {

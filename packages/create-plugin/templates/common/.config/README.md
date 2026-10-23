@@ -99,7 +99,7 @@ Edit the `tsconfig.json` file in the project root in order to extend the TypeScr
 
 ---
 
-{{#if useExperimentalRspack}}
+{{#if useRspack}}
 ### Extending the Rspack config
 
 Follow these steps to extend the basic Rspack configuration that lives under `.config/`:
