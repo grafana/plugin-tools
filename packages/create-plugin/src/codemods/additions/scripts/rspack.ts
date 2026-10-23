@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { lt, major, minVersion, validRange } from 'semver';
 import type { Context } from '../../context.js';
+import { replaceExperimentalRspackFlag } from '../../utils.rspack.js';
 import { renderHandlebarsTemplate } from '../../../utils/utils.handlebars.js';
 import { getTemplateData } from '../../../utils/utils.templates.js';
 import {
@@ -75,7 +76,7 @@ export default function rspack(context: Context): Context {
   renderTemplateFiles(context, RSPACK_CONFIG_FILES);
   renderTemplateFiles(context, BUNDLER_FILES);
   renderTemplateFiles(context, DOC_FILES, false);
-  updateCprcConfig(context);
+  replaceExperimentalRspackFlag(context, { enable: true });
 
   followUps.push(...addRootRspackConfigStub(context));
   followUps.push(...updatePackageJson(context));
@@ -103,30 +104,6 @@ function reportFollowUps(context: Context, followUps: string[]): void {
     title: 'The rspack addition left some things for you to review.',
     body: followUps,
   });
-}
-
-// useRspack lives in the tool-managed .config/.cprc.json. the experimental flag is removed from both config
-// files: every generated plugin's own .cprc.json has it as false, which would otherwise override the root one
-function updateCprcConfig(context: Context): void {
-  const rootCprcPath = '.config/.cprc.json';
-  const userCprcPath = '.cprc.json';
-
-  if (context.doesFileExist(rootCprcPath)) {
-    const config = readJsonFile(context, rootCprcPath);
-    const { useExperimentalRspack, ...features } = config.features ?? {};
-    context.updateFile(
-      rootCprcPath,
-      JSON.stringify({ ...config, features: { ...features, useRspack: true } }, null, 2)
-    );
-  }
-
-  if (context.doesFileExist(userCprcPath)) {
-    const config = readJsonFile(context, userCprcPath);
-    if (config.features && 'useExperimentalRspack' in config.features) {
-      const { useExperimentalRspack, ...features } = config.features;
-      context.updateFile(userCprcPath, JSON.stringify({ ...config, features }, null, 2));
-    }
-  }
 }
 
 const resolveTemplatePath = (relativePath: string) =>
