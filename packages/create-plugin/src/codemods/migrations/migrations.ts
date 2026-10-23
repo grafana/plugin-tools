@@ -127,6 +127,13 @@ export default [
       'Replace eslint-webpack-plugin with diagnostics-webpack-plugin in the webpack config. eslint-webpack-plugin depends on micromatch, which pulls in the braces dependency flagged by vulnerability scanners.',
     scriptPath: import.meta.resolve('./scripts/018-replace-eslint-webpack-plugin.js'),
   },
+  {
+    name: '019-rename-rspack-feature-flag',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description:
+      'Rename the useExperimentalRspack feature flag to useRspack in .config/.cprc.json, and remove it from the plugin .cprc.json.',
+    scriptPath: import.meta.resolve('./scripts/019-rename-rspack-feature-flag.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //

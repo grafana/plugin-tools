@@ -28,7 +28,7 @@ Your training data about the Grafana API is out of date. Use the official docume
 - **Do not change plugin ID or plugin type** in `plugin.json`.
 - Any modifications to `plugin.json` require a **restart of the Grafana server**. Remind the user of this.
 - Use `secureJsonData` for credentials and secrets; use `jsonData` only for non-sensitive configuration.
-- **You must use webpack** with the configuration provided in `.config/` for frontend builds.
+- **You must use {{frontendBundler}}** with the configuration provided in `.config/` for frontend builds.
 - **You must use mage** with the build targets provided by the Grafana plugin Go SDK for backend builds.
-- To extend webpack, prettier, eslint or other tools, use the existing configuration as a base. Follow the guide: https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations.md
+- To extend {{frontendBundler}}, prettier, eslint or other tools, use the existing configuration as a base. Follow the guide: https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations.md
 - Use **`@grafana/plugin-e2e`** for end-to-end testing. Read @./.config/AGENTS/e2e-testing.md before writing or modifying e2e tests.
