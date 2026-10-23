@@ -4,7 +4,7 @@
 
 This plugin is moving its frontend build to rspack 2. The `create-plugin add rspack` codemod has already done the parts that create-plugin owns:
 
-- Rendered the rspack base config in `.config/rspack/` and the shared helpers in `.config/bundler/`, and set `useExperimentalRspack` in `.config/.cprc.json`.
+- Rendered the rspack base config in `.config/rspack/` and the shared helpers in `.config/bundler/`, and set `useRspack` in `.config/.cprc.json`.
 - Deleted the create-plugin files in `.config/webpack/`. It kept any file there that the plugin added and listed it in its output.
 - Added the rspack packages (`@rspack/core`, `@rspack/cli`, `rspack-merge`, `diagnostics-webpack-plugin` and others) and removed webpack-only packages. It kept any webpack package that a root `webpack.*` or `rspack.*` file still imports and listed it.
 - Rewrote `webpack` commands in `package.json` scripts to `rspack`. It listed any script it could not rewrite.

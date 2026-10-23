@@ -13,7 +13,7 @@ import {
 } from '../../utils.js';
 
 const RSPACK_TEMPLATE_DATA_OVERRIDES = {
-  useExperimentalRspack: true,
+  useRspack: true,
   frontendBundler: 'rspack',
 };
 
@@ -105,20 +105,27 @@ function reportFollowUps(context: Context, followUps: string[]): void {
   });
 }
 
+// useRspack lives in the tool-managed .config/.cprc.json. the experimental flag is removed from both config
+// files: every generated plugin's own .cprc.json has it as false, which would otherwise override the root one
 function updateCprcConfig(context: Context): void {
-  const cprcPath = '.config/.cprc.json';
-  if (context.doesFileExist(cprcPath)) {
-    const config = readJsonFile(context, cprcPath);
+  const rootCprcPath = '.config/.cprc.json';
+  const userCprcPath = '.cprc.json';
 
-    const updated = {
-      ...config,
-      features: {
-        ...config.features,
-        useExperimentalRspack: true,
-      },
-    };
+  if (context.doesFileExist(rootCprcPath)) {
+    const config = readJsonFile(context, rootCprcPath);
+    const { useExperimentalRspack, ...features } = config.features ?? {};
+    context.updateFile(
+      rootCprcPath,
+      JSON.stringify({ ...config, features: { ...features, useRspack: true } }, null, 2)
+    );
+  }
 
-    context.updateFile(cprcPath, JSON.stringify(updated, null, 2));
+  if (context.doesFileExist(userCprcPath)) {
+    const config = readJsonFile(context, userCprcPath);
+    if (config.features && 'useExperimentalRspack' in config.features) {
+      const { useExperimentalRspack, ...features } = config.features;
+      context.updateFile(userCprcPath, JSON.stringify({ ...config, features }, null, 2));
+    }
   }
 }
 
