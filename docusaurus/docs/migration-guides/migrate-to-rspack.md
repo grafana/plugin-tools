@@ -12,11 +12,15 @@ keywords:
   - migration
 ---
 
-import AddRspackNPM from '@shared/createplugin-add-rspack.md';
-
 # Migrate from webpack to Rspack
 
 This guide explains how to move the frontend build of your plugin from webpack to [Rspack](https://rspack.rs) 2 with the `rspack` addition of the `create-plugin` tool. It also applies to plugins that use the experimental Rspack setup from earlier versions of `create-plugin`.
+
+:::note
+
+This guide describes how to make the changes yourself. An AI agent can port a custom build configuration for you instead. To learn how, refer to [Add features to your plugin](../how-to-guides/add-features-to-a-plugin.md).
+
+:::
 
 ## Before you begin
 
@@ -28,9 +32,11 @@ This guide explains how to move the frontend build of your plugin from webpack t
 
 From the root of your plugin, run the `rspack` addition:
 
-<AddRspackNPM />
+```shell npm2yarn
+npx @grafana/create-plugin@latest add rspack --no-agent
+```
 
-If you have a supported AI agent CLI installed, `create-plugin` offers to use it to port a custom build configuration. To make the changes yourself, add the `--no-agent` flag. To learn how the `add` command and agents work, refer to [Add features to your plugin](../how-to-guides/add-features-to-a-plugin.md).
+The command makes the changes listed in [What changes in your project](#what-changes-in-your-project). It then prints the path to an instructions file that describes how to port a custom build configuration.
 
 ## What changes in your project
 
@@ -53,7 +59,7 @@ If your plugin has a `webpack.config.*` file in the project root, the migration 
 [rspack] webpack.config.ts has not been ported to rspack.config.ts yet.
 ```
 
-The error prevents you from releasing a build without your customizations. If an agent applied the addition, it has already replaced this file. Otherwise, port your configuration:
+The error prevents you from releasing a build without your customizations. To port your configuration:
 
 1. Merge your customizations into the base configuration in `rspack.config.ts` with [`rspack-merge`](https://github.com/rstackjs/rspack-merge):
 
@@ -79,7 +85,7 @@ The error prevents you from releasing a build without your customizations. If an
 1. Remove the `[rspack]` error.
 1. Delete the `webpack.config.*` file and any files that only it imports.
 
-If you use the `--no-agent` flag, the command prints the path to the instructions file that an agent follows. It covers more cases than this guide, such as plugins that look up base rules by loader name.
+The instructions file that the command prints covers more cases than this guide, such as configurations that look up base rules by loader name.
 
 ## Migrate from the experimental Rspack setup
 
@@ -96,8 +102,6 @@ npm run typecheck
 npm run build
 npm run dev
 ```
-
-If `create-plugin` started an agent, it has already run the `typecheck` and `build` scripts.
 
 After the build, check that `dist/` contains `module.js`, `plugin.json`, and any file that your plugin refers to by path at runtime.
 
