@@ -1,0 +1,115 @@
+{
+  "uid": "e2e-data-panel",
+  "title": "E2E data panel",
+  "editable": true,
+  "schemaVersion": 39,
+  "version": 1,
+  "tags": [],
+  "time": {
+    "from": "2023-01-01T00:00:00.000Z",
+    "to": "2023-06-01T00:00:00.000Z"
+  },
+  "timezone": "utc",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Table data",
+      "type": "grafana-e2edata-panel",
+      "datasource": {
+        "type": "grafana-test-datasource",
+        "uid": "P6E498B96656A7F9B"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "tableData",
+          "datasource": {
+            "type": "grafana-test-datasource",
+            "uid": "P6E498B96656A7F9B"
+          }
+        }
+      ],
+      "options": {},
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      }
+    },
+    {
+      "id": 2,
+      "title": "Renamed table data",
+      "type": "grafana-e2edata-panel",
+      "datasource": {
+        "type": "grafana-test-datasource",
+        "uid": "P6E498B96656A7F9B"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "tableData",
+          "datasource": {
+            "type": "grafana-test-datasource",
+            "uid": "P6E498B96656A7F9B"
+          }
+        }
+      ],
+      "options": {},
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "time": "month"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Query error",
+      "type": "grafana-e2edata-panel",
+      "datasource": {
+        "type": "grafana-test-datasource",
+        "uid": "P6E498B96656A7F9B"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "queryText": "error",
+          "datasource": {
+            "type": "grafana-test-datasource",
+            "uid": "P6E498B96656A7F9B"
+          }
+        }
+      ],
+      "options": {},
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      }
+    }
+  ]
+}
