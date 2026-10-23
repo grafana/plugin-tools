@@ -45,6 +45,42 @@ export function findVariableDeclaration(
   return found;
 }
 
+export function findFunctionDeclaration(
+  ast: recast.types.ASTNode,
+  functionName: string
+): recast.types.namedTypes.FunctionDeclaration | null {
+  let found = null;
+
+  recast.types.visit(ast, {
+    visitFunctionDeclaration(path) {
+      if (path.node.id?.name === functionName) {
+        found = path.node;
+        return false; // Stop traversal
+      }
+      return this.traverse(path);
+    },
+  });
+
+  return found;
+}
+
+export function callsFunction(ast: recast.types.ASTNode, functionName: string): boolean {
+  let isCalled = false;
+
+  recast.types.visit(ast, {
+    visitCallExpression(path) {
+      const { callee } = path.node;
+      if (callee.type === 'Identifier' && callee.name === functionName) {
+        isCalled = true;
+        return false; // Stop traversal
+      }
+      return this.traverse(path);
+    },
+  });
+
+  return isCalled;
+}
+
 export function isProperty(
   node: recast.types.ASTNode
 ): node is recast.types.namedTypes.Property | recast.types.namedTypes.ObjectProperty {
@@ -107,4 +143,28 @@ export function insertImports(
   } else {
     ast.program.body.unshift(...imports);
   }
+}
+
+export function findImports(
+  ast: recast.types.namedTypes.File,
+  packageName: string
+): recast.types.namedTypes.ImportDeclaration[] {
+  return ast.program.body.filter(
+    (node): node is recast.types.namedTypes.ImportDeclaration =>
+      node.type === 'ImportDeclaration' && node.source.value === packageName
+  );
+}
+
+export function findNamedImport(ast: recast.types.namedTypes.File, packageName: string, importedName: string) {
+  for (const declaration of findImports(ast, packageName)) {
+    const specifier = declaration.specifiers?.find(
+      (candidate): candidate is recast.types.namedTypes.ImportSpecifier =>
+        candidate.type === 'ImportSpecifier' && candidate.imported.name === importedName
+    );
+    if (specifier) {
+      return { declaration, specifier };
+    }
+  }
+
+  return undefined;
 }
