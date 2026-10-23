@@ -64,6 +64,23 @@ export function findFunctionDeclaration(
   return found;
 }
 
+export function callsFunction(ast: recast.types.ASTNode, functionName: string): boolean {
+  let isCalled = false;
+
+  recast.types.visit(ast, {
+    visitCallExpression(path) {
+      const { callee } = path.node;
+      if (callee.type === 'Identifier' && callee.name === functionName) {
+        isCalled = true;
+        return false; // Stop traversal
+      }
+      return this.traverse(path);
+    },
+  });
+
+  return isCalled;
+}
+
 export function isProperty(
   node: recast.types.ASTNode
 ): node is recast.types.namedTypes.Property | recast.types.namedTypes.ObjectProperty {

@@ -10,6 +10,7 @@ import {
   findImports,
   findNamedImport,
   findFunctionDeclaration,
+  callsFunction,
 } from './utils.ast.js';
 
 // Helper to create a simple test AST from source code
@@ -56,6 +57,32 @@ describe('utils.ast', () => {
         const ast = createTestAST(`const getEntries = () => {};`);
 
         expect(findFunctionDeclaration(ast, 'getEntries')).toBeNull();
+      });
+    });
+
+    describe('callsFunction', () => {
+      it('should return true when the function is called', () => {
+        const ast = createTestAST(`async function run() { const files = await glob('**/*.ts'); }`);
+
+        expect(callsFunction(ast, 'glob')).toBe(true);
+      });
+
+      it('should return true for nested calls', () => {
+        const ast = createTestAST(`items.map((item) => wrap(glob(item)));`);
+
+        expect(callsFunction(ast, 'glob')).toBe(true);
+      });
+
+      it('should return false when the function is only referenced', () => {
+        const ast = createTestAST(`const fn = glob;`);
+
+        expect(callsFunction(ast, 'glob')).toBe(false);
+      });
+
+      it('should return false for a method with the same name', () => {
+        const ast = createTestAST(`fs.glob('**/*.ts');`);
+
+        expect(callsFunction(ast, 'glob')).toBe(false);
       });
     });
   });
