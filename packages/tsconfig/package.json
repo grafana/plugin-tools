@@ -23,5 +23,8 @@
   "files": [
     "base.json",
     "tsconfig.json"
-  ]
+  ],
+  "engines": {
+    "node": ">=22"
+  }
 }

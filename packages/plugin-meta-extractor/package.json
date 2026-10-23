@@ -41,5 +41,8 @@
     "@grafana/data": "~13.1.0",
     "@types/node": "^24.10.11",
     "react": "^18.2.0"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

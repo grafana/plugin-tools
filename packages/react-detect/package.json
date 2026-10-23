@@ -40,6 +40,6 @@
     "@types/minimist": "^1.2.5"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   }
 }

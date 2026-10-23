@@ -33,7 +33,7 @@
     "playwright:test": "npx playwright test"
   },
   "engines": {
-    "node": ">=20 <=24"
+    "node": ">=22"
   },
   "peerDependenciesMeta": {
     "@axe-core/playwright": {
