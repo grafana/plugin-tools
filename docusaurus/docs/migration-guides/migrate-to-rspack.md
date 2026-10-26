@@ -16,27 +16,22 @@ keywords:
 
 This guide explains how to move the frontend build of your plugin from webpack to [Rspack](https://rspack.rs) 2 with the `rspack` addition of the `create-plugin` tool. It also applies to plugins that use the experimental Rspack setup from earlier versions of `create-plugin`.
 
-:::note
-
-This guide describes how to make the changes yourself. An AI agent can port a custom build configuration for you instead. To learn how, refer to [Add features to your plugin](../how-to-guides/add-features-to-a-plugin.md).
-
-:::
-
 ## Before you begin
 
 - Commit or stash your changes. The `add` command stops if the repository has uncommitted changes.
 - Use Node.js 22.23 or later. The migration raises `engines.node` in your `package.json` file to `>=22.23` if it allows an older version.
-- Check whether your plugin extends the build configuration with a `webpack.config.*` or `rspack.config.*` file in the project root. If it does, you port that file as part of the migration.
 
 ## Run the migration
 
 From the root of your plugin, run the `rspack` addition:
 
 ```shell npm2yarn
-npx @grafana/create-plugin@latest add rspack --no-agent
+npx @grafana/create-plugin@latest add rspack
 ```
 
-The command makes the changes listed in [What changes in your project](#what-changes-in-your-project). It then prints the path to an instructions file that describes how to port a custom build configuration.
+If you have Claude Code or OpenAI Codex installed, `create-plugin` asks whether to use it. The agent ports any custom build configuration in your project root to `rspack.config.ts`. When it finishes, `create-plugin` runs your `typecheck` and `build` scripts and lists anything the agent marked with a `TODO(rspack):` comment. Review the changes with `git diff` before you commit them.
+
+To learn how agents work with the `add` command, refer to [Add features to your plugin](../how-to-guides/add-features-to-a-plugin.md). If you don't have an agent, or prefer to port the configuration yourself, refer to [Migrate without an agent](#migrate-without-an-agent).
 
 ## What changes in your project
 
@@ -51,7 +46,19 @@ The migration changes these files:
   - Raises `engines.node` to `>=22.23`, if it allows an older version.
 - `.config/.cprc.json`: sets the `useRspack` feature flag, so that later `create-plugin update` runs treat your plugin as an Rspack plugin.
 
-## Port a custom build configuration
+If your plugin uses the experimental Rspack setup, the migration replaces the files in `.config/rspack/` with the Rspack 2 base configuration and upgrades the Rspack packages. If you run `create-plugin update` before the migration, it only renames the `useExperimentalRspack` feature flag to `useRspack`.
+
+## Migrate without an agent
+
+To make the changes without an agent, run the addition with the `--no-agent` flag:
+
+```shell npm2yarn
+npx @grafana/create-plugin@latest add rspack --no-agent
+```
+
+The command makes the changes listed in [What changes in your project](#what-changes-in-your-project), then prints the path to an instructions file. If your plugin has no `webpack.config.*` or `rspack.config.*` file in the project root, the migration is complete. Otherwise, update that file as described in the following sections.
+
+### Port a webpack configuration
 
 If your plugin has a `webpack.config.*` file in the project root, the migration adds an `rspack.config.ts` file that stops the build with an error like this:
 
@@ -87,11 +94,9 @@ The error prevents you from releasing a build without your customizations. To po
 
 The instructions file that the command prints covers more cases than this guide, such as configurations that look up base rules by loader name.
 
-## Migrate from the experimental Rspack setup
+### Upgrade an experimental Rspack configuration
 
-The migration replaces the files in `.config/rspack/` with the Rspack 2 base configuration and upgrades the Rspack packages. It doesn't change the `rspack.config.ts` file in your project root. Update that file for the changes listed in [Migrate from Rspack 1.x](https://rspack.rs/guide/migration/rspack_1.x), and replace `webpack-merge` with `rspack-merge`.
-
-If you run `create-plugin update` before you run the `rspack` addition, it renames the `useExperimentalRspack` feature flag to `useRspack`. It doesn't change your Rspack configuration.
+The migration doesn't change the `rspack.config.ts` file in your project root. Update that file for the changes listed in [Migrate from Rspack 1.x](https://rspack.rs/guide/migration/rspack_1.x), and replace `webpack-merge` with `rspack-merge`.
 
 ## Check the result
 
@@ -109,7 +114,7 @@ After the build, check that `dist/` contains `module.js`, `plugin.json`, and any
 
 ### The build fails with an `[rspack]` error
 
-The build configuration in your project root isn't ported yet. Refer to [Port a custom build configuration](#port-a-custom-build-configuration).
+The build configuration in your project root isn't ported yet. Refer to [Port a webpack configuration](#port-a-webpack-configuration).
 
 ### `ReferenceError: __dirname is not defined`
 
