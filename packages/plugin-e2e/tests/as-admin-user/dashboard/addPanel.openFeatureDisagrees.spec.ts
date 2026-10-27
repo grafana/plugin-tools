@@ -1,9 +1,7 @@
 import * as semver from 'semver';
 import { expect, test } from '../../../src';
 
-// Grafana 13.3+ reads dashboardNewLayouts through OpenFeature, so overriding only the OpenFeature
-// flag renders the legacy toolbar while boot data still reports the layout as on.
-// addPanel must follow the rendered page (grafana/plugin-tools#3016).
+// on 13.3+ the toolbar renders while boot data says on (#3016)
 test.use({ openFeature: { flags: { dashboardNewLayouts: false } } });
 
 test('addPanel follows the rendered layout when only OpenFeature turns dashboardNewLayouts off', async ({

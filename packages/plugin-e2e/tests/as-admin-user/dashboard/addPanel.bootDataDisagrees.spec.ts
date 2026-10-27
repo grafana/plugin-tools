@@ -1,9 +1,7 @@
 import * as semver from 'semver';
 import { expect, test } from '../../../src';
 
-// Grafana 13.3+ reads dashboardNewLayouts through OpenFeature, so overriding only the boot data
-// toggle leaves boot data reporting the layout as off while the sidebar renders.
-// addPanel must follow the rendered page (grafana/plugin-tools#3016).
+// on 13.3+ boot data says off while the sidebar renders (#3016)
 test.use({ featureToggles: { dashboardNewLayouts: false } });
 
 test('addPanel follows the rendered layout when boot data reports dashboardNewLayouts as off', async ({

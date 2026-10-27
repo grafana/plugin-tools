@@ -181,12 +181,7 @@ export class DashboardPage extends GrafanaPage {
   }
 
   /**
-   * Returns which add panel UI the dashboard renders on Grafana 13+: the sidebar
-   * (dashboardNewLayouts on) or the legacy toolbar (toggle off).
-   *
-   * Reads the rendered page rather than the toggle. Grafana 13.3 reads dashboardNewLayouts
-   * through OpenFeature, so boot data can disagree with the UI (grafana/plugin-tools#3016),
-   * and more toggles are migrating the same way.
+   * Returns the add panel UI the page renders. Boot data toggles can disagree with the UI (#3016).
    */
   private async detectDashboardLayout(): Promise<'sidebar' | 'toolbar'> {
     const { components, constants } = this.ctx.selectors;
@@ -195,8 +190,7 @@ export class DashboardPage extends GrafanaPage {
       components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
     );
 
-    // poll each locator's own visibility rather than `sidebar.or(toolbarAddButton).first()`, which can
-    // resolve to an element that is in the DOM but hidden (see PanelEditPage.setVisualization)
+    // `.or().first()` can resolve to a hidden element, so poll each one
     await expect(async () => {
       expect((await sidebar.isVisible()) || (await toolbarAddButton.isVisible())).toBe(true);
     }).toPass();
@@ -244,8 +238,7 @@ export class DashboardPage extends GrafanaPage {
 
     if (useNewSidebarLayout) {
       const newPanelButton = this.getByGrafanaSelector(components.Sidebar.newPanelButton);
-      // a new dashboard opens the add pane on its own, and toggling it while it is still rendering
-      // closes it again, so give it a moment to appear before opening it ourselves
+      // new dashboards open the add pane themselves; toggling it too early closes it
       const isAddPaneOpen = await newPanelButton.waitFor({ state: 'visible', timeout: ADD_PANE_OPEN_TIMEOUT }).then(
         () => true,
         () => false

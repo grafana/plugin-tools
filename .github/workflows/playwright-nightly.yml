@@ -33,8 +33,7 @@ jobs:
           # limit to latest stable + grafana-dev (2 entries total)
           limit: 1
 
-      # e2e-version only resolves grafana-enterprise:nightly, which stopped publishing on
-      # 2026-09-14. Also test grafana:nightly so we see what plugins will see on the next release.
+      # grafana-enterprise:nightly is stale, so also test grafana:nightly
       - name: Add Grafana OSS nightly image
         id: add-oss-nightly
         env:

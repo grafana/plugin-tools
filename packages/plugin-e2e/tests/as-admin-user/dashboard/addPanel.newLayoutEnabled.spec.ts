@@ -1,7 +1,7 @@
 import * as semver from 'semver';
 import { expect, test } from '../../../src';
 
-// Grafana 13.0-13.2 reads the toggle from boot data, 13.3+ reads it through OpenFeature
+// 13.3+ reads the toggle from OpenFeature
 test.use({
   featureToggles: { dashboardNewLayouts: true },
   openFeature: { flags: { dashboardNewLayouts: true } },
