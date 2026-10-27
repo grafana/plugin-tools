@@ -8,6 +8,8 @@ import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { isLegacyFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 
+const ADD_PANE_OPEN_TIMEOUT = 2000;
+
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
   timeRange: TimeRange;
@@ -242,7 +244,13 @@ export class DashboardPage extends GrafanaPage {
 
     if (useNewSidebarLayout) {
       const newPanelButton = this.getByGrafanaSelector(components.Sidebar.newPanelButton);
-      if (!(await newPanelButton.isVisible())) {
+      // a new dashboard opens the add pane on its own, and toggling it while it is still rendering
+      // closes it again, so give it a moment to appear before opening it ourselves
+      const isAddPaneOpen = await newPanelButton.waitFor({ state: 'visible', timeout: ADD_PANE_OPEN_TIMEOUT }).then(
+        () => true,
+        () => false
+      );
+      if (!isAddPaneOpen) {
         await this.getByGrafanaSelector(pages.Dashboard.Sidebar.addButton).click();
       }
       await this.getByGrafanaSelector(components.Sidebar.newPanelButton).click();

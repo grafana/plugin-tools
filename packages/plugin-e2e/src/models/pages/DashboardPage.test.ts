@@ -51,6 +51,7 @@ const ADD_PANEL_GRAFANA_VERSION = '13.2.0';
 
 interface FakeLocator {
   isVisible: ReturnType<typeof vi.fn>;
+  waitFor: ReturnType<typeof vi.fn>;
   click: ReturnType<typeof vi.fn>;
   count: ReturnType<typeof vi.fn>;
   last: () => FakeLocator;
@@ -84,6 +85,15 @@ function createAddPanelHarness(options: { visibleSelectors: Set<string>; bootDat
     }
     const fakeLocator: FakeLocator = {
       isVisible: vi.fn(async () => options.visibleSelectors.has(selector)),
+      waitFor: vi.fn(async ({ timeout = 30_000 }: { timeout?: number } = {}) => {
+        const deadline = Date.now() + timeout;
+        while (!options.visibleSelectors.has(selector)) {
+          if (Date.now() > deadline) {
+            throw new Error(`Timeout ${timeout}ms exceeded waiting for ${selector}`);
+          }
+          await new Promise((resolve) => setTimeout(resolve, 50));
+        }
+      }),
       click: vi.fn(async () => {}),
       count: vi.fn(async () => 0),
       last: () => fakeLocator,
@@ -116,6 +126,7 @@ function createAddPanelHarness(options: { visibleSelectors: Set<string>; bootDat
     toolbarAddSelector,
     sidebarNewPanel: getLocator(resolveGrafanaSelector(components.Sidebar.newPanelButton)),
     sidebarConfigure: getLocator(resolveGrafanaSelector(components.Sidebar.configurePanelButton)),
+    sidebarAddToggle: getLocator(resolveGrafanaSelector(pages.Dashboard.Sidebar.addButton)),
     toolbarAdd: getLocator(toolbarAddSelector),
     toolbarAddViz: getLocator(
       resolveGrafanaSelector(pages.AddDashboard.itemButton(pages.AddDashboard.itemButtonAddViz))
@@ -154,11 +165,38 @@ describe('DashboardPage.addPanel layout detection', () => {
   it('waits for the layout to render before choosing a flow', async () => {
     const visibleSelectors = new Set<string>();
     const harness = createAddPanelHarness({ visibleSelectors, bootDataNewLayouts: false });
-    setTimeout(() => visibleSelectors.add(harness.sidebarSelector), 300);
+    setTimeout(() => {
+      visibleSelectors.add(harness.sidebarSelector);
+      visibleSelectors.add(harness.sidebarNewPanelSelector);
+    }, 300);
 
     await harness.dashboardPage.addPanel();
 
     expect(harness.sidebarConfigure.click).toHaveBeenCalledTimes(1);
     expect(harness.toolbarAdd.click).not.toHaveBeenCalled();
+  });
+
+  // A new dashboard opens the add pane on its own. Toggling it while it is still rendering closes it,
+  // and the new panel button then never appears.
+  it('does not toggle the add pane when it opens shortly after the sidebar', async () => {
+    const visibleSelectors = new Set<string>();
+    const harness = createAddPanelHarness({ visibleSelectors, bootDataNewLayouts: true });
+    visibleSelectors.add(harness.sidebarSelector);
+    setTimeout(() => visibleSelectors.add(harness.sidebarNewPanelSelector), 300);
+
+    await harness.dashboardPage.addPanel();
+
+    expect(harness.sidebarAddToggle.click).not.toHaveBeenCalled();
+    expect(harness.sidebarNewPanel.click).toHaveBeenCalledTimes(1);
+  });
+
+  it('opens the add pane when it stays closed', async () => {
+    const visibleSelectors = new Set<string>();
+    const harness = createAddPanelHarness({ visibleSelectors, bootDataNewLayouts: true });
+    visibleSelectors.add(harness.sidebarSelector);
+
+    await harness.dashboardPage.addPanel();
+
+    expect(harness.sidebarAddToggle.click).toHaveBeenCalledTimes(1);
   });
 });
