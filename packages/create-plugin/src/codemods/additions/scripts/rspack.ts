@@ -334,7 +334,6 @@ export const WEBPACK_ONLY_DEV_DEPENDENCIES = [
 export const BASE_CONFIG_DEV_DEPENDENCIES = [
   '@swc/helpers',
   'css-loader',
-  'glob',
   'imports-loader',
   'replace-in-file-webpack-plugin',
   'sass',
