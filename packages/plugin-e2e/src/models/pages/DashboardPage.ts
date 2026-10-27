@@ -7,7 +7,6 @@ import { PanelEditPage } from './PanelEditPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { isLegacyFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
-import { resolveGrafanaSelector } from '../utils';
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
@@ -180,6 +179,33 @@ export class DashboardPage extends GrafanaPage {
   }
 
   /**
+   * Returns which add panel UI the dashboard renders on Grafana 13+: the sidebar
+   * (dashboardNewLayouts on) or the legacy toolbar (toggle off).
+   *
+   * Reads the rendered page rather than the toggle. Grafana 13.3 reads dashboardNewLayouts
+   * through OpenFeature, so boot data can disagree with the UI (grafana/plugin-tools#3016),
+   * and more toggles are migrating the same way.
+   */
+  private async detectDashboardLayout(): Promise<'sidebar' | 'toolbar'> {
+    const { components, constants } = this.ctx.selectors;
+    const sidebar = this.getByGrafanaSelector(components.Sidebar.container);
+    const toolbarAddButton = this.getByGrafanaSelector(
+      components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
+    );
+
+    // poll each locator's own visibility rather than `sidebar.or(toolbarAddButton).first()`, which can
+    // resolve to an element that is in the DOM but hidden (see PanelEditPage.setVisualization)
+    await expect(async () => {
+      expect((await sidebar.isVisible()) || (await toolbarAddButton.isVisible())).toBe(true);
+    }).toPass();
+
+    if (await sidebar.isVisible()) {
+      return 'sidebar';
+    }
+    return 'toolbar';
+  }
+
+  /**
    * Clicks the buttons to add a new panel and returns the panel edit page for the new panel
    */
   async addPanel(): Promise<PanelEditPage> {
@@ -212,10 +238,9 @@ export class DashboardPage extends GrafanaPage {
     // When the toggle is off, Grafana 13 still renders the legacy toolbar UI, so we
     // fall through to the >= 9.5.0 branch below.
     const useNewSidebarLayout =
-      gte(this.ctx.grafanaVersion, '13.0.0') && (await isLegacyFeatureEnabled(this.ctx.page, 'dashboardNewLayouts'));
+      gte(this.ctx.grafanaVersion, '13.0.0') && (await this.detectDashboardLayout()) === 'sidebar';
 
     if (useNewSidebarLayout) {
-      await this.ctx.page.waitForSelector(resolveGrafanaSelector(this.ctx.selectors.components.Sidebar.container));
       const newPanelButton = this.getByGrafanaSelector(components.Sidebar.newPanelButton);
       if (!(await newPanelButton.isVisible())) {
         await this.getByGrafanaSelector(pages.Dashboard.Sidebar.addButton).click();
