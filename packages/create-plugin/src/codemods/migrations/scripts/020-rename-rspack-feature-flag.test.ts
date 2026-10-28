@@ -20,7 +20,7 @@ function readFeatures(context: Context, path: string) {
   return JSON.parse(context.getFile(path) || '{}').features;
 }
 
-describe('019-rename-rspack-feature-flag', () => {
+describe('020-rename-rspack-feature-flag', () => {
   it('should rename the flag in .config/.cprc.json', () => {
     const result = migrate(setupContext({ root: { version: '7.9.0', features: { useExperimentalRspack: true } } }));
 
