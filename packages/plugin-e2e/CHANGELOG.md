@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.15.4](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.3...@grafana/plugin-e2e@3.15.4) (2026-10-28)
+
+
+### Bug Fixes
+
+* allow node 26 in plugin-e2e engines ([#3024](https://github.com/grafana/plugin-tools/issues/3024)) ([58b1ff9](https://github.com/grafana/plugin-tools/commit/58b1ff9c03ab009b600ed21957fe06c34bf3a5a0))
+* detect dashboard layout from the page in addPanel ([#3031](https://github.com/grafana/plugin-tools/issues/3031)) ([9adcf12](https://github.com/grafana/plugin-tools/commit/9adcf1236d280df48acf325dbfaacaabfcf42a85))
+
 ## [3.15.3](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.2...@grafana/plugin-e2e@3.15.3) (2026-10-22)
 
 

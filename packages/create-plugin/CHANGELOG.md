@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.17.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.16.0...@grafana/create-plugin@7.17.0) (2026-10-28)
+
+
+### Features
+
+* remove dependency on glob ([#2655](https://github.com/grafana/plugin-tools/issues/2655)) ([9db0649](https://github.com/grafana/plugin-tools/commit/9db0649fd4dee9b5745a248ba421998cd9b86764))
+
+
+### Bug Fixes
+
+* **templates:** Update dependency @grafana/plugin-e2e to v3.15.2 ([#3022](https://github.com/grafana/plugin-tools/issues/3022)) ([2115b27](https://github.com/grafana/plugin-tools/commit/2115b27767554a555640300c7b4dc9c9e1842909))
+
 ## [7.16.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.15.1...@grafana/create-plugin@7.16.0) (2026-10-22)
 
 

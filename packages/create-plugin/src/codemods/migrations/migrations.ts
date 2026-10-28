@@ -129,7 +129,7 @@ export default [
   },
   {
     name: '019-remove-glob-dependency',
-    version: '0.0.0-unreleased', // x-release-please-version
+    version: '7.17.0',
     description: 'Replace the glob package with the Node.js built-in fs.glob in bundler utils.',
     scriptPath: import.meta.resolve('./scripts/019-remove-glob-dependency.js'),
   },
