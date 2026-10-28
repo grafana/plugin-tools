@@ -1,7 +1,11 @@
 import * as semver from 'semver';
 import { expect, test } from '../../../src';
 
-test.use({ featureToggles: { dashboardNewLayouts: false } });
+// 13.3+ reads the toggle from OpenFeature
+test.use({
+  featureToggles: { dashboardNewLayouts: false },
+  openFeature: { flags: { dashboardNewLayouts: false } },
+});
 
 // the dashboardNewLayouts toggle was introduced in Grafana 13. Below that the toolbar
 // flow is used regardless, so skipping keeps the assertion meaningful.

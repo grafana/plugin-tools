@@ -7,7 +7,8 @@ import { PanelEditPage } from './PanelEditPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { isLegacyFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
-import { resolveGrafanaSelector } from '../utils';
+
+const ADD_PANE_OPEN_TIMEOUT = 2000;
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
@@ -180,6 +181,27 @@ export class DashboardPage extends GrafanaPage {
   }
 
   /**
+   * Returns the add panel UI the page renders. Boot data toggles can disagree with the UI (#3016).
+   */
+  private async detectDashboardLayout(): Promise<'sidebar' | 'toolbar'> {
+    const { components, constants } = this.ctx.selectors;
+    const sidebar = this.getByGrafanaSelector(components.Sidebar.container);
+    const toolbarAddButton = this.getByGrafanaSelector(
+      components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
+    );
+
+    // `.or().first()` can resolve to a hidden element, so poll each one
+    await expect(async () => {
+      expect((await sidebar.isVisible()) || (await toolbarAddButton.isVisible())).toBe(true);
+    }).toPass();
+
+    if (await sidebar.isVisible()) {
+      return 'sidebar';
+    }
+    return 'toolbar';
+  }
+
+  /**
    * Clicks the buttons to add a new panel and returns the panel edit page for the new panel
    */
   async addPanel(): Promise<PanelEditPage> {
@@ -212,12 +234,18 @@ export class DashboardPage extends GrafanaPage {
     // When the toggle is off, Grafana 13 still renders the legacy toolbar UI, so we
     // fall through to the >= 9.5.0 branch below.
     const useNewSidebarLayout =
-      gte(this.ctx.grafanaVersion, '13.0.0') && (await isLegacyFeatureEnabled(this.ctx.page, 'dashboardNewLayouts'));
+      gte(this.ctx.grafanaVersion, '13.0.0') && (await this.detectDashboardLayout()) === 'sidebar';
 
     if (useNewSidebarLayout) {
-      await this.ctx.page.waitForSelector(resolveGrafanaSelector(this.ctx.selectors.components.Sidebar.container));
       const newPanelButton = this.getByGrafanaSelector(components.Sidebar.newPanelButton);
-      if (!(await newPanelButton.isVisible())) {
+      // new dashboards open the add pane themselves; toggling it too early closes it
+      const isAddPaneOpen = this.dashboard?.uid
+        ? await newPanelButton.isVisible()
+        : await newPanelButton.waitFor({ state: 'visible', timeout: ADD_PANE_OPEN_TIMEOUT }).then(
+            () => true,
+            () => false
+          );
+      if (!isAddPaneOpen) {
         await this.getByGrafanaSelector(pages.Dashboard.Sidebar.addButton).click();
       }
       await this.getByGrafanaSelector(components.Sidebar.newPanelButton).click();

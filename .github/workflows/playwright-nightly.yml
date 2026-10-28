@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-x64
     timeout-minutes: 3
     outputs:
-      matrix: ${{ steps.resolve-versions.outputs.matrix }}
+      matrix: ${{ steps.add-oss-nightly.outputs.matrix }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -32,6 +32,13 @@ jobs:
           skip-grafana-dev-image: false
           # limit to latest stable + grafana-dev (2 entries total)
           limit: 1
+
+      # grafana-enterprise:nightly is stale, so also test grafana:nightly
+      - name: Add Grafana OSS nightly image
+        id: add-oss-nightly
+        env:
+          MATRIX: ${{ steps.resolve-versions.outputs.matrix }}
+        run: echo "matrix=$(jq -c '. + [{"name":"grafana","version":"nightly"}]' <<< "$MATRIX")" >> "$GITHUB_OUTPUT"
 
   playwright-tests:
     needs: resolve-versions
