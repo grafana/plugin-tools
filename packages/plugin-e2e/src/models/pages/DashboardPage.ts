@@ -239,10 +239,12 @@ export class DashboardPage extends GrafanaPage {
     if (useNewSidebarLayout) {
       const newPanelButton = this.getByGrafanaSelector(components.Sidebar.newPanelButton);
       // new dashboards open the add pane themselves; toggling it too early closes it
-      const isAddPaneOpen = await newPanelButton.waitFor({ state: 'visible', timeout: ADD_PANE_OPEN_TIMEOUT }).then(
-        () => true,
-        () => false
-      );
+      const isAddPaneOpen = this.dashboard?.uid
+        ? await newPanelButton.isVisible()
+        : await newPanelButton.waitFor({ state: 'visible', timeout: ADD_PANE_OPEN_TIMEOUT }).then(
+            () => true,
+            () => false
+          );
       if (!isAddPaneOpen) {
         await this.getByGrafanaSelector(pages.Dashboard.Sidebar.addButton).click();
       }
