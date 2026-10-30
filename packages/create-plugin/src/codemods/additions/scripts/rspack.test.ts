@@ -622,6 +622,51 @@ describe('rspack', () => {
     });
   });
 
+  describe('grafanaDependency', () => {
+    function runWithGrafanaDependency(dependencies?: Record<string, string>) {
+      const context = createBaseContext();
+      if (dependencies) {
+        context.addFile('src/plugin.json', JSON.stringify({ id: 'myorg-mypanel-panel', dependencies }, null, 2));
+      }
+      const result = addRspack(context);
+      const pluginJson = result.getFile('src/plugin.json');
+      return { result, dependencies: pluginJson ? JSON.parse(pluginJson).dependencies : undefined };
+    }
+
+    it('should raise grafanaDependency when it allows versions without react/jsx-runtime', () => {
+      const { result, dependencies } = runWithGrafanaDependency({ grafanaDependency: '>=10.0.0', plugins: '[]' });
+
+      expect(dependencies).toEqual({ grafanaDependency: '>=12.2.5', plugins: '[]' });
+      expect(result.getMessage()?.body?.join('\n')).toContain('>=12.2.5');
+    });
+
+    it('should raise grafanaDependency ranges that include backported versions', () => {
+      expect(runWithGrafanaDependency({ grafanaDependency: '>=11.6.11 <12 || >=12.2.5' }).dependencies).toEqual({
+        grafanaDependency: '>=12.2.5',
+      });
+    });
+
+    it('should keep grafanaDependency when it already requires a newer Grafana', () => {
+      expect(runWithGrafanaDependency({ grafanaDependency: '>=13.2.0' }).dependencies).toEqual({
+        grafanaDependency: '>=13.2.0',
+      });
+      expect(runWithGrafanaDependency({ grafanaDependency: '>=12.2.5' }).dependencies).toEqual({
+        grafanaDependency: '>=12.2.5',
+      });
+    });
+
+    it('should not fail when the plugin has no src/plugin.json', () => {
+      expect(runWithGrafanaDependency().dependencies).toBeUndefined();
+    });
+
+    it('should be idempotent', async () => {
+      const context = createBaseContext();
+      context.addFile('src/plugin.json', JSON.stringify({ dependencies: { grafanaDependency: '>=10.0.0' } }, null, 2));
+
+      await expect(addRspack).toBeIdempotent(context);
+    });
+  });
+
   describe('npm lockfile', () => {
     function createLockfile(rspackCoreVersion: string) {
       return JSON.stringify(

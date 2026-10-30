@@ -81,6 +81,7 @@ export default function rspack(context: Context): Context {
 
   followUps.push(...addRootRspackConfigStub(context));
   followUps.push(...updatePackageJson(context));
+  followUps.push(...raiseGrafanaDependency(context));
   followUps.push(...deleteWebpackTemplateFiles(context));
   reportFollowUps(context, followUps);
 
@@ -231,6 +232,34 @@ function raiseNodeEngine(context: Context): void {
 
   const engines = { ...packageJson.engines, node: '>=22.23' };
   context.updateFile('package.json', JSON.stringify({ ...packageJson, engines }, null, 2));
+}
+
+// the base config externalizes react/jsx-runtime, which Grafana provides from 12.2.5
+const MIN_GRAFANA_VERSION = '12.2.5';
+
+function raiseGrafanaDependency(context: Context): string[] {
+  const pluginJsonPath = 'src/plugin.json';
+  if (!context.doesFileExist(pluginJsonPath)) {
+    return [];
+  }
+
+  const pluginJson = readJsonFile<{ dependencies?: Record<string, unknown> }>(context, pluginJsonPath);
+  const grafanaRange = pluginJson.dependencies?.grafanaDependency;
+  if (typeof grafanaRange !== 'string' || !validRange(grafanaRange)) {
+    return [];
+  }
+
+  const lowestAllowedVersion = minVersion(grafanaRange);
+  if (!lowestAllowedVersion || !lt(lowestAllowedVersion, MIN_GRAFANA_VERSION)) {
+    return [];
+  }
+
+  const grafanaDependency = `>=${MIN_GRAFANA_VERSION}`;
+  const dependencies = { ...pluginJson.dependencies, grafanaDependency };
+  context.updateFile(pluginJsonPath, JSON.stringify({ ...pluginJson, dependencies }, null, 2));
+  return [
+    `Raised grafanaDependency in src/plugin.json from ${grafanaRange} to ${grafanaDependency}. Earlier versions of Grafana do not provide react/jsx-runtime, which the rspack config loads from Grafana.`,
+  ];
 }
 
 // npm refuses to move @rspack/cli and @rspack/core from 1 to 2 in one install while the lockfile
