@@ -41,10 +41,17 @@ The migration changes these files:
 - `.config/webpack/`: removes the files that `create-plugin` added. The migration keeps any files of your own in this folder and lists them in the command output.
 - `.config/bundler/`: updates the helpers that the base configuration uses.
 - `package.json`:
-  - Adds the Rspack packages and removes the packages that only the webpack base configuration used. A package stays if a `webpack.*` or `rspack.*` file in the project root still imports it. The `webpack` package always stays, because loaders in the Rspack base configuration depend on it.
+  - Adds the Rspack packages and removes the packages that only the webpack base configuration used. A package stays if a `webpack.*` or `rspack.*` file in the project root still imports it. The `webpack` package always stays, because `diagnostics-webpack-plugin`, which lints your code during development, depends on it.
   - Replaces `webpack` with `rspack` in your scripts. The command output lists any script it can't rewrite.
   - Raises `engines.node` to `>=22.23`, if it allows an older version.
+- `src/plugin.json`: raises `grafanaDependency` to `>=12.2.5`, if it allows an older version. Earlier versions of Grafana don't provide `react/jsx-runtime`, which the Rspack configuration loads from Grafana.
 - `.config/.cprc.json`: sets the `useRspack` feature flag, so that later `create-plugin update` runs treat your plugin as an Rspack plugin.
+
+The Rspack configuration builds the CSS your entry code imports into a `module.css` file next to `module.js`, and Grafana loads it before your plugin code runs. CSS that only lazy-loaded code imports goes into separate files that load with that code, and CSS that several lazy-loaded parts share goes into one file. If your plugin imports no CSS, it has no CSS files. The CSS changes in these ways:
+
+- Files named `*.module.css` or `*.module.scss` are CSS modules. Their class names start with your plugin ID, so they don't clash with other plugins.
+- Other CSS files apply to the whole Grafana page, as before.
+- All of the plugin's CSS is in a cascade layer, so Grafana's own styles win over plugin styles of equal specificity.
 
 If your plugin uses the experimental Rspack setup, the migration replaces the files in `.config/rspack/` with the Rspack 2 base configuration and upgrades the Rspack packages. If you run `create-plugin update` before the migration, it only renames the `useExperimentalRspack` feature flag to `useRspack`.
 
@@ -123,6 +130,12 @@ The build configuration in your project root isn't ported yet. Refer to [Port a 
 ### The build fails because an export doesn't exist
 
 Rspack 2 stops the build when code imports a name that a module doesn't export. In webpack, this was a warning. Fix the import in your code.
+
+### A style no longer applies
+
+The plugin's CSS is in a cascade layer, so a Grafana style with the same specificity now wins over it. Make your selector more specific, or style the element with a CSS module or with the `useStyles2` hook from `@grafana/ui`.
+
+An `@import` rule that loads a style sheet from another URL, such as a web font service, doesn't apply either. Add the files to your plugin and import them from your code instead.
 
 ### A file returns 404 at runtime
 

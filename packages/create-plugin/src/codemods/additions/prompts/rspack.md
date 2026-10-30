@@ -24,8 +24,8 @@ What is left is the plugin's own build customisation, which needs judgement to p
    - No plugin code builds a runtime URL to a file the new base config no longer copies into `dist` (see step 6).
 3. Otherwise, work out the starting point:
    - **From webpack**: there is a root `webpack.config.*`, or `rspack.config.ts` contains the `[rspack]` error. Follow all the steps below.
-   - **From experimental rspack**: there is a root `rspack.config.ts` without the `[rspack]` error, and there is no root `webpack.config.*`. The config is already rspack but may use rspack 1 APIs. Skip step 2 and upgrade that file in place using steps 3 to 7.
-   - **No custom config**: there is neither a root `webpack.config.*` nor a root `rspack.config.ts`. Only step 6 applies.
+   - **From experimental rspack**: there is a root `rspack.config.ts` without the `[rspack]` error, and there is no root `webpack.config.*`. The config is already rspack but may use rspack 1 APIs. Skip step 2 and upgrade that file in place using steps 3 to 8.
+   - **No custom config**: there is neither a root `webpack.config.*` nor a root `rspack.config.ts`. Only steps 6 and 7 apply.
 
 With a custom config, the build is expected to fail at this point with the `[rspack]` error. Do not chase build errors one by one; the steps below drive the work.
 
@@ -50,8 +50,7 @@ With a custom config, the build is expected to fail at this point with the `[rsp
    | `fork-ts-checker-webpack-plugin`                                                                                                                                                 | `TsCheckerRspackPlugin` from `ts-checker-rspack-plugin`                                                                                                                                                                                           |
    | `eslint-webpack-plugin`, `eslint-rspack-plugin`, or `diagnostics-webpack-plugin` used directly                                                                                   | `DiagnosticsRspackPlugin` from `./.config/rspack/DiagnosticsRspackPlugin.ts`, with `checks: [{ use: 'eslint', ... }]`. It wraps `diagnostics-webpack-plugin`, which fails under rspack on its own. `failOnError` and `severity` become `reportAs` |
    | `webpack-livereload-plugin`                                                                                                                                                      | already in the base config for development builds                                                                                                                                                                                                 |
-   | `mini-css-extract-plugin`                                                                                                                                                        | `CssExtractRspackPlugin` from `@rspack/core`                                                                                                                                                                                                      |
-   | `css-minimizer-webpack-plugin`                                                                                                                                                   | `LightningCssMinimizerRspackPlugin` from `@rspack/core`                                                                                                                                                                                           |
+   | `mini-css-extract-plugin`, `css-minimizer-webpack-plugin`                                                                                                                        | not needed: the base config already emits CSS files and minifies them with `LightningCssMinimizerRspackPlugin`                                                                                                                                    |
    | `terser-webpack-plugin` added by the plugin                                                                                                                                      | `SwcJsMinimizerRspackPlugin` from `@rspack/core`, or keep terser                                                                                                                                                                                  |
    | `html-webpack-plugin`                                                                                                                                                            | `HtmlRspackPlugin` from `@rspack/core`                                                                                                                                                                                                            |
    | `tsconfig-paths-webpack-plugin`                                                                                                                                                  | the `resolve.tsConfig` option                                                                                                                                                                                                                     |
@@ -63,6 +62,7 @@ With a custom config, the build is expected to fail at this point with the `[rsp
 
 4. Fix code that depends on how the base config is built. Each of these works in webpack and silently does nothing, or throws, in rspack:
    - **Looking up a rule by loader name**, such as `rule.use.loader === 'swc-loader'`. The base config uses `builtin:swc-loader`, so match that. Prefer merging a rule over mutating the base one.
+   - **CSS rules**: the base config builds CSS natively with `type: 'css/auto'`. It has no `style-loader`, `css-loader` or `mini-css-extract-plugin`, and it emits `module.css`. Remove `style-loader`, `css-loader` and `mini-css-extract-plugin` from ported rules. Keep loaders that transform the CSS, such as `postcss-loader` for Tailwind or `sass-loader`, as `use` on a rule with `type: 'css/auto'`. Move `css-loader` `modules` options to `module.parser['css/auto']` and `module.generator['css/auto']`. A `mergeWithRules` keyed on `use.loader: 'style-loader'` or `'css-loader'` matches nothing.
    - **Looking up a plugin with `instanceof` or `constructor.name`** against webpack plugin classes, such as `CopyWebpackPlugin` or `LiveReloadPlugin`. Use the rspack class names, or merge instead of mutating.
    - **`webpack-merge` rules keyed on old names**: `unique('plugins', ['CopyPlugin'], …)` or `mergeWithRules` matching `use.loader: 'swc-loader'`. Update the names.
    - **A `filter` function on a `CopyWebpackPlugin` pattern**. `CopyRspackPlugin` has no `filter`; use `globOptions: { ignore: [...] }`. The base copy patterns come from `.config/bundler/copyFiles.ts`.
@@ -85,30 +85,32 @@ With a custom config, the build is expected to fail at this point with the `[rsp
    - The base asset rules only cover `png`, `jpg`, `jpeg`, `gif`, `svg` and font files. For other types, such as `webp`, add an `asset/resource` rule in `rspack.config.ts`.
    - Copy the file instead of importing it when the path is built at runtime, for example `` `${base}/img/${name}.svg` ``, or when something outside the bundle refers to it, such as the README, documentation or another plugin. Add a `CopyRspackPlugin` to `rspack.config.ts` for just those files, with a comment saying why they are copied. Do not copy whole folders to be safe: every copied file ends up in the plugin archive.
 
-7. If something has no rspack equivalent, for example a monkey-patch of webpack internals, a custom `RuntimeModule` plugin, or an SWC Wasm plugin whose ABI does not match rspack's built-in SWC:
+7. List the plugin's own global stylesheets: `.css`, `.scss` and `.sass` files outside `node_modules` whose names don't end in `.module.css`, `.module.scss` or `.module.sass`. The base config loads them as plain CSS, so their rules apply to every page in Grafana, not only the plugin. Do not convert them to CSS modules or change the code that imports them. Name each file in your report, so the user can decide whether to scope it.
+
+8. If something has no rspack equivalent, for example a monkey-patch of webpack internals, a custom `RuntimeModule` plugin, or an SWC Wasm plugin whose ABI does not match rspack's built-in SWC:
    - Port what you can.
    - Comment out the rest, keeping the original code in the comment, so it does not run and the build does not fail.
    - Put a `TODO(rspack):` comment above it that says what the code did, why it has no direct equivalent, and a suggested approach.
    - Never drop it silently.
 
-8. Fix any script the codemod reported as not rewritten so it calls `rspack` with `./rspack.config.ts` or `./.config/rspack/rspack.config.ts`, keeping its other commands and flags. Remove the CLI flags rspack does not support: `--progress`, `--color`, `--bail`, `--output-pathinfo`.
+9. Fix any script the codemod reported as not rewritten so it calls `rspack` with `./rspack.config.ts` or `./.config/rspack/rspack.config.ts`, keeping its other commands and flags. Remove the CLI flags rspack does not support: `--progress`, `--color`, `--bail`, `--output-pathinfo`.
 
-9. For each file the codemod kept in `.config/webpack/`, copy what is still needed to a folder outside `.config/` (for example `build/`), port it to rspack, and update the imports. Do not delete the originals; list them so the user can delete them.
+10. For each file the codemod kept in `.config/webpack/`, copy what is still needed to a folder outside `.config/` (for example `build/`), port it to rspack, and update the imports. Do not delete the originals; list them so the user can delete them.
 
-10. Remove the webpack packages the codemod kept, once nothing imports them. Keep `webpack` itself if anything still imports it.
+11. Remove the webpack packages the codemod kept, once nothing imports them. Keep `webpack` itself if anything still imports it.
 
-11. Delete the root `webpack.config.*` and its helper files once everything in them is ported or commented with `TODO(rspack):`.
+12. Delete the root `webpack.config.*` and its helper files once everything in them is ported or commented with `TODO(rspack):`.
 
 ## Verify
 
 1. Install dependencies, then run the `typecheck` and `build` scripts. Both must pass, with any unportable code commented out.
-2. Check that `dist/` contains `module.js`, `plugin.json`, and every file that plugin code or `plugin.json` refers to by path at runtime. Imported images are hashed, so their names change.
+2. Check that `dist/` contains `module.js`, `plugin.json`, `module.css` if the entry code imports any CSS, and every file that plugin code or `plugin.json` refers to by path at runtime. Imported images are hashed, so their names change.
 3. Run the `dev` script briefly and check that it compiles and keeps watching.
 4. Fix only breakage caused by this migration.
 
 ## Report
 
-End with a list of every `TODO(rspack):` comment you added (file, line, one-line reason), every file the user should delete, any duplicate transpiler rule you removed or kept (step 5), every image reference you changed to an import or kept as a copy (step 6), and any `exportsPresence` errors you left for the user.
+End with a list of every `TODO(rspack):` comment you added (file, line, one-line reason), every file the user should delete, any duplicate transpiler rule you removed or kept (step 5), every image reference you changed to an import or kept as a copy (step 6), every global stylesheet (step 7), and any `exportsPresence` errors you left for the user.
 
 ## Out of scope
 

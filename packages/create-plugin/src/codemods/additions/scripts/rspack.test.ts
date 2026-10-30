@@ -222,6 +222,7 @@ describe('rspack', () => {
       expect(result.doesFileExist('.config/rspack/liveReloadPlugin.ts')).toBe(false);
       expect(result.doesFileExist('.config/rspack/LicenseRspackPlugin.ts')).toBe(true);
       expect(result.doesFileExist('.config/rspack/DiagnosticsRspackPlugin.ts')).toBe(true);
+      expect(result.doesFileExist('.config/rspack/PluginCssRspackPlugin.ts')).toBe(true);
     });
   });
 
@@ -245,7 +246,7 @@ describe('rspack', () => {
       const result = addRspack(context);
       const externals = result.getFile('.config/bundler/externals.ts')!;
 
-      expect(externals).toContain('RspackOptions');
+      expect(externals).toContain('ExternalItem[]');
     });
 
     it('should re-render all bundler files', () => {
@@ -253,7 +254,7 @@ describe('rspack', () => {
 
       const result = addRspack(context);
 
-      expect(result.getFile('.config/bundler/externals.ts')).toContain('RspackOptions');
+      expect(result.getFile('.config/bundler/externals.ts')).toContain('ExternalItem[]');
       expect(result.getFile('.config/bundler/constants.ts')).toBe('// rendered template stub');
       expect(result.getFile('.config/bundler/copyFiles.ts')).toBe('// rendered template stub');
       expect(result.getFile('.config/bundler/utils.ts')).toBe('// rendered template stub');
@@ -314,7 +315,45 @@ describe('rspack', () => {
 
       // builtin:swc-loader runs with externalHelpers, so builds import @swc/helpers
       expect(pkg.devDependencies['@swc/helpers']).toBe(rspackDeps['@swc/helpers']);
-      expect(pkg.devDependencies['imports-loader']).toBe(rspackDeps['imports-loader']);
+      expect(pkg.devDependencies['sass-loader']).toBe(rspackDeps['sass-loader']);
+    });
+
+    it('should remove the css loaders that native css replaces', () => {
+      const context = createBaseContext();
+      const pkg = JSON.parse(context.getFile('package.json')!);
+      Object.assign(pkg.devDependencies, {
+        'css-loader': '^7.1.0',
+        'imports-loader': '^5.0.0',
+        'style-loader': '^4.0.0',
+      });
+      context.updateFile('package.json', JSON.stringify(pkg, null, 2));
+
+      const result = addRspack(context);
+      const updated = JSON.parse(result.getFile('package.json')!);
+
+      expect(updated.devDependencies['css-loader']).toBeUndefined();
+      expect(updated.devDependencies['imports-loader']).toBeUndefined();
+      expect(updated.devDependencies['style-loader']).toBeUndefined();
+    });
+
+    it('should keep css loaders a root build file still uses and report them', () => {
+      const context = createBaseContext();
+      const pkg = JSON.parse(context.getFile('package.json')!);
+      Object.assign(pkg.devDependencies, { 'css-loader': '^7.1.0', 'style-loader': '^4.0.0' });
+      context.updateFile('package.json', JSON.stringify(pkg, null, 2));
+      context.addFile(
+        'webpack.config.ts',
+        "export default { module: { rules: [{ use: ['style-loader', 'css-loader'] }] } };"
+      );
+
+      const result = addRspack(context);
+      const updated = JSON.parse(result.getFile('package.json')!);
+
+      expect(updated.devDependencies['css-loader']).toBe('^7.1.0');
+      expect(updated.devDependencies['style-loader']).toBe('^4.0.0');
+      const report = result.getMessage()?.body?.join('\n');
+      expect(report).toContain('css-loader');
+      expect(report).toContain('style-loader');
     });
 
     it('should not change the versions of base config packages the plugin already has', () => {
@@ -580,6 +619,51 @@ describe('rspack', () => {
 
     it('should not add engines when the plugin has none', () => {
       expect(runWithEngines()).toBeUndefined();
+    });
+  });
+
+  describe('grafanaDependency', () => {
+    function runWithGrafanaDependency(dependencies?: Record<string, string>) {
+      const context = createBaseContext();
+      if (dependencies) {
+        context.addFile('src/plugin.json', JSON.stringify({ id: 'myorg-mypanel-panel', dependencies }, null, 2));
+      }
+      const result = addRspack(context);
+      const pluginJson = result.getFile('src/plugin.json');
+      return { result, dependencies: pluginJson ? JSON.parse(pluginJson).dependencies : undefined };
+    }
+
+    it('should raise grafanaDependency when it allows versions without react/jsx-runtime', () => {
+      const { result, dependencies } = runWithGrafanaDependency({ grafanaDependency: '>=10.0.0', plugins: '[]' });
+
+      expect(dependencies).toEqual({ grafanaDependency: '>=12.2.5', plugins: '[]' });
+      expect(result.getMessage()?.body?.join('\n')).toContain('>=12.2.5');
+    });
+
+    it('should raise grafanaDependency ranges that include backported versions', () => {
+      expect(runWithGrafanaDependency({ grafanaDependency: '>=11.6.11 <12 || >=12.2.5' }).dependencies).toEqual({
+        grafanaDependency: '>=12.2.5',
+      });
+    });
+
+    it('should keep grafanaDependency when it already requires a newer Grafana', () => {
+      expect(runWithGrafanaDependency({ grafanaDependency: '>=13.2.0' }).dependencies).toEqual({
+        grafanaDependency: '>=13.2.0',
+      });
+      expect(runWithGrafanaDependency({ grafanaDependency: '>=12.2.5' }).dependencies).toEqual({
+        grafanaDependency: '>=12.2.5',
+      });
+    });
+
+    it('should not fail when the plugin has no src/plugin.json', () => {
+      expect(runWithGrafanaDependency().dependencies).toBeUndefined();
+    });
+
+    it('should be idempotent', async () => {
+      const context = createBaseContext();
+      context.addFile('src/plugin.json', JSON.stringify({ dependencies: { grafanaDependency: '>=10.0.0' } }, null, 2));
+
+      await expect(addRspack).toBeIdempotent(context);
     });
   });
 
