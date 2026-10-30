@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.13.0...@grafana/plugin-docs-cli@0.13.1) (2026-10-30)
+
+
+### Bug Fixes
+
+* **deps:** Update auto-merged patch dependencies ([#3030](https://github.com/grafana/plugin-tools/issues/3030)) ([d61f463](https://github.com/grafana/plugin-tools/commit/d61f4636c20a140ab1a36d45012b0beda64f9fa5))
+
 ## [0.13.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.12.0...@grafana/plugin-docs-cli@0.13.0) (2026-10-22)
 
 

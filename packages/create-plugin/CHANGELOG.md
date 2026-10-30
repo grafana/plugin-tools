@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.18.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.17.0...@grafana/create-plugin@7.18.0) (2026-10-30)
+
+
+### Features
+
+* add AI-agent assisted rspack addition ([#2912](https://github.com/grafana/plugin-tools/issues/2912)) ([250a2d3](https://github.com/grafana/plugin-tools/commit/250a2d362527b10f9aae0c3d7bd62003d2b17819))
+
 ## [7.17.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.16.0...@grafana/create-plugin@7.17.0) (2026-10-28)
 
 

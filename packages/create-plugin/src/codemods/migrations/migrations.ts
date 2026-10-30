@@ -135,7 +135,7 @@ export default [
   },
   {
     name: '020-rename-rspack-feature-flag',
-    version: '0.0.0-unreleased', // x-release-please-version
+    version: '7.18.0', // x-release-please-version
     description:
       'Rename the useExperimentalRspack feature flag to useRspack in .config/.cprc.json, and remove it from the plugin .cprc.json.',
     scriptPath: import.meta.resolve('./scripts/020-rename-rspack-feature-flag.js'),
