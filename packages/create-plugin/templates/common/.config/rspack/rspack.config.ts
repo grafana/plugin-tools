@@ -133,6 +133,18 @@ const config = async (env: Env): Promise<Configuration> => {
 
     optimization: {
       minimize: Boolean(env.production),
+      splitChunks: {
+        cacheGroups: {
+          // CSS used by more than one lazy chunk goes into one shared file instead of a copy per chunk
+          sharedCss: {
+            type: /^css/,
+            chunks: 'async',
+            minChunks: 2,
+            minSize: 0,
+            priority: 10,
+          },
+        },
+      },
       minimizer: [
         new SwcJsMinimizerRspackPlugin({
           extractComments: { banner: false },
