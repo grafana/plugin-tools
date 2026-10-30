@@ -2,8 +2,10 @@ import { Locator } from '@playwright/test';
 import { lt } from '../../utils/version';
 import { PluginTestCtx } from '../../types';
 import { GrafanaPage } from '../pages/GrafanaPage';
+import { getPanelActionsPopoverButtonName } from '../utils';
 
 const ERROR_STATUS = 'error';
+const POPOVER_BUTTON_TIMEOUT_MS = 2000;
 
 export class Panel extends GrafanaPage {
   constructor(
@@ -43,6 +45,12 @@ export class Panel extends GrafanaPage {
    * Click on a menu item in the panel menu.
    *
    * Pass options.parentItem to specify the parent item of the menu item to click.
+   *
+   * When the panel header has no menu button, because the panel actions popover is enabled
+   * (the grafana.panelActionsPopover feature flag), the panel is hovered to open the popover.
+   * Items that moved from the menu to the popover (View, Edit, Explore, Copy, Duplicate and Remove) are clicked
+   * in the popover when options.parentItem isn't set and the popover offers them, e.g. clicking 'View' clicks Expand.
+   * Other items are clicked in the panel menu, which the popover's More actions button opens.
    */
   async clickOnMenuItem(item: string, options?: { parentItem?: string }): Promise<void> {
     let panelMenu = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.menu(''), {
@@ -59,11 +67,59 @@ export class Panel extends GrafanaPage {
       panelMenu = this.locator.getByRole('heading');
       parentMenuItem = this.ctx.page.getByText(options?.parentItem ?? '');
       menuItem = this.ctx.page.getByRole('menu').getByText(item);
+    } else {
+      // the panel menu button renders together with the panel, so its absence means the panel actions popover is used
+      await this.locator.waitFor({ state: 'attached' });
+      if ((await panelMenu.count()) === 0) {
+        const actionsPopover = await this.openActionsPopover();
+        if (!options?.parentItem && (await this.clickOnActionsPopoverButton(actionsPopover, item))) {
+          return;
+        }
+        // the popover's More actions button
+        panelMenu = this.getByGrafanaSelector(this.ctx.selectors.components.Panels.Panel.menu(''), {
+          startsWith: true,
+          root: actionsPopover,
+        });
+      }
     }
 
     await panelMenu.click({ force: true });
     options?.parentItem && (await parentMenuItem.hover());
     await menuItem.click();
+  }
+
+  /**
+   * Hovers the panel to open its panel actions popover, and returns the popover's toolbar.
+   */
+  private async openActionsPopover(): Promise<Locator> {
+    await this.locator.hover();
+    const toolbar = this.ctx.page.getByRole('toolbar', {
+      name: this.ctx.selectors.constants.PanelActionsPopover.toolbar,
+    });
+    await toolbar.waitFor({ state: 'visible' });
+    return toolbar;
+  }
+
+  /**
+   * Clicks the panel actions popover button that replaces the given menu item.
+   * Returns false if the popover doesn't offer one, e.g. Explore in edit mode.
+   */
+  private async clickOnActionsPopoverButton(toolbar: Locator, item: string): Promise<boolean> {
+    const buttonName = getPanelActionsPopoverButtonName(item, this.ctx.selectors.constants.PanelActionsPopover);
+    if (!buttonName) {
+      return false;
+    }
+    const button = toolbar.getByRole('button', { name: buttonName });
+    // Explore is added once its URL resolves, so the button isn't necessarily there when the popover opens
+    const hasButton = await button
+      .waitFor({ state: 'visible', timeout: POPOVER_BUTTON_TIMEOUT_MS })
+      .then(() => true)
+      .catch(() => false);
+    if (!hasButton) {
+      return false;
+    }
+    await button.click();
+    return true;
   }
 
   /**
