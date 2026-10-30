@@ -9,6 +9,7 @@ import {
   BannerPlugin,
   Compilation,
   CopyRspackPlugin,
+  LightningCssMinimizerRspackPlugin,
   SubresourceIntegrityPlugin,
   SwcJsMinimizerRspackPlugin,
   type Configuration,
@@ -22,6 +23,7 @@ import RspackLiveReloadPlugin from './LiveReloadRspackPlugin.ts';
 import { BuildModeRspackPlugin } from './BuildModeRspackPlugin.ts';
 import { LicenseRspackPlugin } from './LicenseRspackPlugin.ts';
 import DiagnosticsRspackPlugin from './DiagnosticsRspackPlugin.ts';
+import { PluginCssRspackPlugin } from './PluginCssRspackPlugin.ts';
 import { DIST_DIR, SOURCE_DIR } from '../bundler/constants.ts';
 import { getCPConfigVersion, getEntries, getPackageJson, getPluginJson, isWSL } from '../bundler/utils.ts';
 import { externals } from '../bundler/externals.ts';
@@ -52,9 +54,15 @@ const config = async (env: Env): Promise<Configuration> => {
 
     devtool: env.production ? 'source-map' : 'eval-source-map',
 
-    entry: await getEntries(),
+    // grafana-public-path sets the public path first. grafana-plugin-css adds ./module.css to the define() dependencies
+    entry: Object.fromEntries(
+      Object.entries(await getEntries()).map(([name, entryPath]) => [
+        name,
+        ['grafana-public-path', 'grafana-plugin-css', entryPath],
+      ])
+    ),
 
-    externals,
+    externals: [...externals, { 'grafana-plugin-css': './module.css' }],
 
     // Support WebAssembly according to latest spec - makes WebAssembly module async
     experiments: {
@@ -64,19 +72,15 @@ const config = async (env: Env): Promise<Configuration> => {
     mode: env.production ? 'production' : 'development',
 
     module: {
+      parser: {
+        // keeps default imports of CSS modules working: `import styles from './x.module.css'`
+        'css/auto': { namedExports: false },
+      },
+      generator: {
+        // class names of CSS modules start with the plugin id
+        'css/auto': { localIdentName: '[uniqueName]-[local]-[hash:6]' },
+      },
       rules: [
-        // This must come first in the rules array otherwise it breaks sourcemaps.
-        {
-          test: /src\/(?:.*\/)?module\.tsx?$/,
-          use: [
-            {
-              loader: 'imports-loader',
-              options: {
-                imports: `side-effects grafana-public-path`,
-              },
-            },
-          ],
-        },
         {
           exclude: /(node_modules)/,
           test: /\.[tj]sx?$/,
@@ -103,11 +107,12 @@ const config = async (env: Env): Promise<Configuration> => {
         },
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
+          type: 'css/auto',
         },
         {
           test: /\.s[ac]ss$/,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
+          use: ['sass-loader'],
+          type: 'css/auto',
         },
         {
           test: /\.(png|jpe?g|gif|svg)$/,
@@ -136,6 +141,7 @@ const config = async (env: Env): Promise<Configuration> => {
             compress: { pure_funcs: ['console.log', 'console.info'] },
           },
         }),
+        new LightningCssMinimizerRspackPlugin(),
       ],
     },
 
@@ -145,6 +151,8 @@ const config = async (env: Env): Promise<Configuration> => {
       },
       filename: '[name].js',
       chunkFilename: env.production ? '[name].js?_cache=[contenthash]' : '[name].js',
+      cssFilename: '[name].css',
+      cssChunkFilename: env.production ? '[name].css?_cache=[contenthash]' : '[name].css',
       library: {
         type: 'amd',
       },
@@ -157,6 +165,7 @@ const config = async (env: Env): Promise<Configuration> => {
     plugins: [
       new BuildModeRspackPlugin(),
       new LicenseRspackPlugin(),
+      new PluginCssRspackPlugin({ pluginId, publicPath: `public/plugins/${pluginId}/` }),
       virtualPublicPath,
       // Insert create plugin version information into the bundle
       new BannerPlugin({
@@ -166,6 +175,7 @@ const config = async (env: Env): Promise<Configuration> => {
         ].join('\n'),
         raw: true,
         entryOnly: true,
+        test: /\.js$/,
         // after minification to prevent banner removal and before source maps and hashes are generated so they include it.
         stage: Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE + 1,
       }),
