@@ -11,7 +11,8 @@ import { EOL } from 'node:os';
 
 export type FeatureFlags = {
   bundleGrafanaUI?: boolean;
-  useExperimentalRspack?: boolean;
+  // set by `add rspack` in .config/.cprc.json. not a default flag, so --feature-flags cannot set it
+  useRspack?: boolean;
   useExperimentalUpdates?: boolean;
 };
 

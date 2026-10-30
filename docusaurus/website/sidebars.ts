@@ -336,6 +336,7 @@ const sidebars: SidebarsConfig = {
           ],
         },
         'migration-guides/migrate-from-toolkit',
+        'migration-guides/migrate-to-rspack',
       ],
     },
 

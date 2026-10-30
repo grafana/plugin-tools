@@ -140,16 +140,8 @@ function getActionsForTemplateFolder({
     files = files.filter((file) => path.basename(file) !== 'npmrc');
   }
 
-  // filter out frontend bundler based on user choice
-  files = files.filter((file) => {
-    if (file.includes('webpack') && templateData.useExperimentalRspack) {
-      return false;
-    }
-    if (file.includes('rspack') && !templateData.useExperimentalRspack) {
-      return false;
-    }
-    return true;
-  });
+  // new plugins always use webpack. the rspack templates are only rendered by `add rspack`
+  files = files.filter((file) => !file.includes('rspack'));
 
   function getFileExportPath(f: string) {
     return path.relative(folderPath, path.dirname(f));
