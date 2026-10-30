@@ -4,6 +4,9 @@ import { Compilation, type Compiler } from '@rspack/core';
 const PLUGIN_NAME = 'PluginCssRspackPlugin';
 const URL_PATTERN = /url\(\s*(["']?)([^"')]+)\1\s*\)/g;
 const CHARSET_PATTERN = /^@charset[^;]+;/;
+const MODULE_CSS_DEPENDENCY = '"./module.css"';
+// the AMD wrapper rspack writes before minification: define([deps], function(params){
+const AMD_WRAPPER_PATTERN = /^define\(\[([^\]]*)\], function\(([^)]*)\)\{/;
 
 interface PluginCssRspackPluginOptions {
   pluginId: string;
@@ -19,7 +22,7 @@ export class PluginCssRspackPlugin {
   }
 
   apply(compiler: Compiler) {
-    const { ConcatSource, RawSource, ReplaceSource } = compiler.rspack.sources;
+    const { ConcatSource, ReplaceSource } = compiler.rspack.sources;
     const { pluginId, publicPath } = this.options;
     const layer = `plugin-${pluginId}`;
 
@@ -31,13 +34,38 @@ export class PluginCssRspackPlugin {
           stage: Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE,
         },
         (assets) => {
-          // module.js depends on ./module.css, and a 404 fails the whole plugin load
+          // a 404 on ./module.css fails the whole plugin load, so entries without CSS drop the dependency
           for (const [entryName, entrypoint] of compilation.entrypoints) {
-            const cssFile = `${entryName}.css`;
-            const hasCss = entrypoint.getFiles().some((file) => file.split('?')[0] === cssFile);
-            if (!hasCss && !assets[cssFile]) {
-              compilation.emitAsset(cssFile, new RawSource(''));
+            const files = entrypoint.getFiles().map((file) => file.split('?')[0]);
+            const jsFile = `${entryName}.js`;
+            if (files.includes(`${entryName}.css`) || !assets[jsFile]) {
+              continue;
             }
+
+            const source = assets[jsFile];
+            const js = source.source().toString();
+            if (!js.includes(MODULE_CSS_DEPENDENCY)) {
+              continue;
+            }
+
+            const wrapper = js.match(AMD_WRAPPER_PATTERN);
+            const dependencies = wrapper?.[1].split(',') ?? [];
+            const params = wrapper?.[2].split(',').map((param) => param.trim()) ?? [];
+            const index = dependencies.indexOf(MODULE_CSS_DEPENDENCY);
+            if (!wrapper || index === -1 || dependencies.length !== params.length) {
+              throw new Error(`${PLUGIN_NAME}: could not remove ./module.css from the define() wrapper in ${jsFile}.`);
+            }
+
+            // the bundle still reads the external's parameter, so it becomes an undefined local
+            const [param] = params.splice(index, 1);
+            dependencies.splice(index, 1);
+            const updated = new ReplaceSource(source);
+            updated.replace(
+              0,
+              wrapper[0].length - 1,
+              `define([${dependencies.join(',')}], function(${params.join(', ')}){var ${param};`
+            );
+            compilation.updateAsset(jsFile, updated);
           }
 
           for (const assetName of Object.keys(assets)) {

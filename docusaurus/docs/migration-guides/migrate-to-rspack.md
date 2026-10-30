@@ -47,7 +47,7 @@ The migration changes these files:
 - `src/plugin.json`: raises `grafanaDependency` to `>=12.2.5`, if it allows an older version. Earlier versions of Grafana don't provide `react/jsx-runtime`, which the Rspack configuration loads from Grafana.
 - `.config/.cprc.json`: sets the `useRspack` feature flag, so that later `create-plugin update` runs treat your plugin as an Rspack plugin.
 
-The Rspack configuration builds your CSS into a `module.css` file next to `module.js`, and Grafana loads it before your plugin code runs. CSS that only lazy-loaded code imports goes into a separate file that loads with that code. The CSS changes in these ways:
+The Rspack configuration builds the CSS your entry code imports into a `module.css` file next to `module.js`, and Grafana loads it before your plugin code runs. CSS that only lazy-loaded code imports goes into separate files that load with that code, and CSS that several lazy-loaded parts share goes into one file. If your plugin imports no CSS, it has no CSS files. The CSS changes in these ways:
 
 - Files named `*.module.css` or `*.module.scss` are CSS modules. Their class names start with your plugin ID, so they don't clash with other plugins.
 - Other CSS files apply to the whole Grafana page, as before.

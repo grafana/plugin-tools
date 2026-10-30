@@ -104,7 +104,7 @@ With a custom config, the build is expected to fail at this point with the `[rsp
 ## Verify
 
 1. Install dependencies, then run the `typecheck` and `build` scripts. Both must pass, with any unportable code commented out.
-2. Check that `dist/` contains `module.js`, `module.css`, `plugin.json`, and every file that plugin code or `plugin.json` refers to by path at runtime. Imported images are hashed, so their names change.
+2. Check that `dist/` contains `module.js`, `plugin.json`, `module.css` if the entry code imports any CSS, and every file that plugin code or `plugin.json` refers to by path at runtime. Imported images are hashed, so their names change.
 3. Run the `dev` script briefly and check that it compiles and keeps watching.
 4. Fix only breakage caused by this migration.
 
