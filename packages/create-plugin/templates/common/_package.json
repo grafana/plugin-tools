@@ -18,7 +18,7 @@
   "devDependencies": {
     "@grafana/eslint-config": "^10.0.0",
     "@grafana/plugin-e2e": "^3.15.2",
-    "@grafana/sign-plugin": "^3.3.3",
+    "@grafana/sign-plugin": "^4.0.0",
     "@grafana/tsconfig": "^2.2.0",
     "@playwright/test": "^1.62.1",{{#if useRspack}}
     "@rspack/core": "^2.2.0",
@@ -76,11 +76,11 @@
   },
   "dependencies": {
     "@emotion/css": "11.10.6",
-    "@grafana/data": "13.2.4",
-    "@grafana/i18n": "13.2.4",
-    "@grafana/runtime": "13.2.4",
-    "@grafana/ui": "13.2.4",
-    "@grafana/schema": "13.2.4",{{#if_eq pluginType "scenesapp" }}
+    "@grafana/data": "13.3.0",
+    "@grafana/i18n": "13.3.0",
+    "@grafana/runtime": "13.3.0",
+    "@grafana/ui": "13.3.0",
+    "@grafana/schema": "13.3.0",{{#if_eq pluginType "scenesapp" }}
     "@grafana/scenes": "{{ scenesVersion }}",{{/if_eq}}
     "react": "^19.0.0",
     "react-dom": "^19.0.0"{{#if isAppType}},
