@@ -44,7 +44,7 @@
     "eslint-plugin-mdx": "^3.6.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "glob": "^13.0.1",
+    "glob": "^14.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.0",
     "nx": "^23.1.0",
