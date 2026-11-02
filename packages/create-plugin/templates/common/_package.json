@@ -36,8 +36,8 @@
     "@types/ws": "^8.18.1",{{/if}}
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",{{#unless useRspack}}
-    "copy-webpack-plugin": "^14.0.0",{{/unless}}
-    "css-loader": "^7.1.0",
+    "copy-webpack-plugin": "^14.0.0",
+    "css-loader": "^7.1.0",{{/unless}}
     "diagnostics-webpack-plugin": "^1.0.1",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.0",
@@ -45,8 +45,8 @@
     "eslint-plugin-react": "^7.37.0",
     "eslint-plugin-react-hooks": "^7.1.0",{{#unless useRspack}}
     "fork-ts-checker-webpack-plugin": "^9.1.0",{{/unless}}
-    "identity-obj-proxy": "^3.0.0",
-    "imports-loader": "^5.0.0",
+    "identity-obj-proxy": "^3.0.0",{{#unless useRspack}}
+    "imports-loader": "^5.0.0",{{/unless}}
     "intersection-observer": "^0.12.2",
     "jest": "^30.5.0",
     "jest-canvas-mock": "^2.5.2",
@@ -57,8 +57,8 @@
     "rspack-plugin-virtual-module": "^1.0.0",{{/if}}
     "sass": "^1.89.0",
     "sass-loader": "^16.0.0",
-    "semver": "^7.7.0",
-    "style-loader": "^4.0.0",{{#unless useRspack}}
+    "semver": "^7.7.0",{{#unless useRspack}}
+    "style-loader": "^4.0.0",
     "swc-loader": "^0.2.0",
     "terser-webpack-plugin": "^5.3.0",{{/unless}}
     "ts-node": "^10.9.0",{{#if useRspack}}

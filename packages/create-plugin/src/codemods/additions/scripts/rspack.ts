@@ -24,6 +24,7 @@ const RSPACK_CONFIG_FILES = [
   '.config/rspack/LiveReloadRspackPlugin.ts',
   '.config/rspack/LicenseRspackPlugin.ts',
   '.config/rspack/DiagnosticsRspackPlugin.ts',
+  '.config/rspack/PluginCssRspackPlugin.ts',
 ];
 
 // files the rspack template used to ship under another name. removed so they do not linger
@@ -80,6 +81,7 @@ export default function rspack(context: Context): Context {
 
   followUps.push(...addRootRspackConfigStub(context));
   followUps.push(...updatePackageJson(context));
+  followUps.push(...raiseGrafanaDependency(context));
   followUps.push(...deleteWebpackTemplateFiles(context));
   reportFollowUps(context, followUps);
 
@@ -232,6 +234,34 @@ function raiseNodeEngine(context: Context): void {
   context.updateFile('package.json', JSON.stringify({ ...packageJson, engines }, null, 2));
 }
 
+// the base config externalizes react/jsx-runtime, which Grafana provides from 12.2.5
+const MIN_GRAFANA_VERSION = '12.2.5';
+
+function raiseGrafanaDependency(context: Context): string[] {
+  const pluginJsonPath = 'src/plugin.json';
+  if (!context.doesFileExist(pluginJsonPath)) {
+    return [];
+  }
+
+  const pluginJson = readJsonFile<{ dependencies?: Record<string, unknown> }>(context, pluginJsonPath);
+  const grafanaRange = pluginJson.dependencies?.grafanaDependency;
+  if (typeof grafanaRange !== 'string' || !validRange(grafanaRange)) {
+    return [];
+  }
+
+  const lowestAllowedVersion = minVersion(grafanaRange);
+  if (!lowestAllowedVersion || !lt(lowestAllowedVersion, MIN_GRAFANA_VERSION)) {
+    return [];
+  }
+
+  const grafanaDependency = `>=${MIN_GRAFANA_VERSION}`;
+  const dependencies = { ...pluginJson.dependencies, grafanaDependency };
+  context.updateFile(pluginJsonPath, JSON.stringify({ ...pluginJson, dependencies }, null, 2));
+  return [
+    `Raised grafanaDependency in src/plugin.json from ${grafanaRange} to ${grafanaDependency}. Earlier versions of Grafana do not provide react/jsx-runtime, which the rspack config loads from Grafana.`,
+  ];
+}
+
 // npm refuses to move @rspack/cli and @rspack/core from 1 to 2 in one install while the lockfile
 // still pins the old versions (ERESOLVE). dropping the locked @rspack packages lets npm resolve
 // them again from package.json. pnpm and yarn upgrade them without help
@@ -310,7 +340,7 @@ export const RSPACK_DEV_DEPENDENCIES = [
   'rspack-merge',
   'rspack-plugin-virtual-module',
   'ts-checker-rspack-plugin',
-  // style-loader and imports-loader still need webpack, and diagnostics-webpack-plugin peers on webpack ^5.106
+  // diagnostics-webpack-plugin peers on webpack ^5.106
   'webpack',
   'ws',
 ];
@@ -318,8 +348,11 @@ export const RSPACK_DEV_DEPENDENCIES = [
 // packages only the webpack base config uses. removed unless a root build file still imports them
 export const WEBPACK_ONLY_DEV_DEPENDENCIES = [
   'copy-webpack-plugin',
+  'css-loader',
   'eslint-webpack-plugin',
   'fork-ts-checker-webpack-plugin',
+  'imports-loader',
+  'style-loader',
   'swc-loader',
   'terser-webpack-plugin',
   'webpack-cli',
@@ -331,15 +364,7 @@ export const WEBPACK_ONLY_DEV_DEPENDENCIES = [
 // packages the rendered .config/rspack and .config/bundler files load at build time that every
 // scaffold gets, so older plugins may have removed some of them. added only when missing.
 // @swc/helpers is needed because builtin:swc-loader runs with externalHelpers, which webpack did not
-export const BASE_CONFIG_DEV_DEPENDENCIES = [
-  '@swc/helpers',
-  'css-loader',
-  'imports-loader',
-  'replace-in-file-webpack-plugin',
-  'sass',
-  'sass-loader',
-  'style-loader',
-];
+export const BASE_CONFIG_DEV_DEPENDENCIES = ['@swc/helpers', 'replace-in-file-webpack-plugin', 'sass', 'sass-loader'];
 
 // the lists above say which packages the addition manages. their versions come from the package.json
 // template, so they always match the .config files rendered from that same template. the template is
