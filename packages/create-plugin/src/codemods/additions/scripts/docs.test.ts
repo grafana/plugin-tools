@@ -225,7 +225,7 @@ describe('docs scaffolding', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
-      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.8.0');
+      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.13.0');
     });
 
     it('adds docs:serve and docs:validate scripts, with no separate release script', () => {
@@ -358,9 +358,9 @@ describe('docs scaffolding', () => {
       );
     });
 
-    it('raises package-plugin to package-plugin/v1.3.3', () => {
+    it('raises package-plugin to package-plugin/v1.3.6', () => {
       expect(bumped('uses: grafana/plugin-actions/package-plugin@package-plugin/v1.3.2\n')).toBe(
-        'uses: grafana/plugin-actions/package-plugin@package-plugin/v1.3.3\n'
+        'uses: grafana/plugin-actions/package-plugin@package-plugin/v1.3.6\n'
       );
     });
 
@@ -1851,7 +1851,7 @@ describe('docs codemod', () => {
         'uses: grafana/plugin-actions/package-plugin@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n'
       );
       const body = nextSteps(context).join('\n');
-      expect(body).toContain('Docs need package-plugin/v1.3.3 or later.');
+      expect(body).toContain('Docs need package-plugin/v1.3.6 or later.');
       expect(body).not.toContain('Make sure your release pipeline');
     });
 
