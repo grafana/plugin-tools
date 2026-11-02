@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.19.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.18.0...@grafana/create-plugin@7.19.0) (2026-11-02)
+
+
+### Features
+
+* extract CSS into separate files in rspack builds ([#3040](https://github.com/grafana/plugin-tools/issues/3040)) ([2fd22de](https://github.com/grafana/plugin-tools/commit/2fd22de25721a0bfc718e266b6cc1bcddcd37457))
+
 ## [7.18.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.17.0...@grafana/create-plugin@7.18.0) (2026-11-02)
 
 
