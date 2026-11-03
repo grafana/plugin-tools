@@ -1,6 +1,31 @@
+import { join } from 'node:path';
 import type { Context } from '../../context.js';
-import { readJsonFile } from '../../utils.js';
+import { additionsDebug, readJsonFile } from '../../utils.js';
 import { assertSupportedPluginType, assertValidDocsPath, hasDocsPages } from './docs.js';
+
+const COPY_FILES_PATH = join('.config', 'bundler', 'copyFiles.ts');
+const CONSTANTS_PATH = join('.config', 'bundler', 'constants.ts');
+
+const OLD_IMPORT = "import { getPluginJson, hasReadme } from './utils.ts';\n";
+const NEW_IMPORT = `import fs from 'fs';
+import path from 'path';
+import { SOURCE_DIR } from './constants.ts';
+${OLD_IMPORT}`;
+
+const OLD_SCREENSHOT_PATHS =
+  'const screenshotPaths: string[] = pluginJson.info?.screenshots?.map((s: { path: string }) => s.path) || [];\n';
+const NEW_SCREENSHOT_PATHS = `${OLD_SCREENSHOT_PATHS}
+// a screenshot outside src, such as one in the docs folder, resolves from the project root
+function resolveScreenshotSource(screenshotPath: string) {
+  const root = process.cwd();
+  const isOutsideSource =
+    !fs.existsSync(path.resolve(root, SOURCE_DIR, screenshotPath)) && fs.existsSync(path.resolve(root, screenshotPath));
+  return isOutsideSource ? path.resolve(root, screenshotPath) : screenshotPath;
+}
+`;
+
+const OLD_SCREENSHOT_FROM = '    from: screenshotPath,\n';
+const NEW_SCREENSHOT_FROM = '    from: resolveScreenshotSource(screenshotPath),\n';
 
 // the agent step does the writing. this only stops it from starting on a plugin with no docs pages to fill
 export default function docsContent(context: Context): Context {
@@ -28,5 +53,31 @@ export default function docsContent(context: Context): Context {
     );
   }
 
+  // the agent may point info.screenshots into the docs folder, which an older copyFiles.ts only looks for under src
+  allowScreenshotsOutsideSource(context);
+
   return context;
+}
+
+/** Updates an unmodified `.config/bundler/copyFiles.ts` to match the current template, and leaves any other alone. */
+export function allowScreenshotsOutsideSource(context: Context): void {
+  const content = context.getFile(COPY_FILES_PATH);
+  if (content === undefined || content.includes('resolveScreenshotSource')) {
+    return;
+  }
+  if (!context.doesFileExist(CONSTANTS_PATH)) {
+    additionsDebug(`${CONSTANTS_PATH} not found, leaving ${COPY_FILES_PATH} as is`);
+    return;
+  }
+  if (![OLD_IMPORT, OLD_SCREENSHOT_PATHS, OLD_SCREENSHOT_FROM].every((part) => content.includes(part))) {
+    additionsDebug(`${COPY_FILES_PATH} has been customised, leaving it as is`);
+    return;
+  }
+  context.updateFile(
+    COPY_FILES_PATH,
+    content
+      .replace(OLD_IMPORT, NEW_IMPORT)
+      .replace(OLD_SCREENSHOT_PATHS, NEW_SCREENSHOT_PATHS)
+      .replace(OLD_SCREENSHOT_FROM, NEW_SCREENSHOT_FROM)
+  );
 }

@@ -1,6 +1,7 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { Context } from '../../context.js';
-import docsContent from './docs-content.js';
+import docsContent, { allowScreenshotsOutsideSource } from './docs-content.js';
 
 function makeContext(pluginJson: Record<string, unknown>, files: Record<string, string> = {}): Context {
   const context = new Context('/virtual');
@@ -99,5 +100,103 @@ describe('docs-content', () => {
     const context = makeContext({ ...wiredPanel, type: 'renderer' }, { 'catalog-docs/index.md': '# Renderer\n' });
 
     expect(() => docsContent(context)).toThrow('create-plugin add docs-content needs a plugin type of panel');
+  });
+});
+
+const COPY_FILES_PATH = '.config/bundler/copyFiles.ts';
+const CONSTANTS_FILE = { '.config/bundler/constants.ts': "export const SOURCE_DIR = 'src';\n" };
+
+const currentCopyFiles = readFileSync(
+  new URL('../../../../templates/common/.config/bundler/copyFiles.ts', import.meta.url),
+  'utf-8'
+);
+
+const previousCopyFiles = `import { getPluginJson, hasReadme } from './utils.ts';
+
+const pluginJson = getPluginJson();
+const logoPaths: string[] = Array.from(new Set([pluginJson.info?.logos?.large, pluginJson.info?.logos?.small])).filter(
+  Boolean
+);
+const screenshotPaths: string[] = pluginJson.info?.screenshots?.map((s: { path: string }) => s.path) || [];
+
+export const copyFilePatterns = [
+  // If src/README.md exists use it; otherwise the root README
+  // To \`compiler.options.output\`
+  { from: hasReadme() ? 'README.md' : '../README.md', to: '.', force: true },
+  { from: 'plugin.json', to: '.' },
+  { from: '../LICENSE', to: '.' },
+  { from: '../CHANGELOG.md', to: '.', force: true },
+  { from: '**/*.json', to: '.' },
+  { from: '**/query_help.md', to: '.', noErrorOnMissing: true },
+  ...logoPaths.map((logoPath) => ({ from: logoPath, to: logoPath })),
+  ...screenshotPaths.map((screenshotPath) => ({
+    from: screenshotPath,
+    to: screenshotPath,
+  })),
+];
+`;
+
+describe('allowScreenshotsOutsideSource', () => {
+  it('should turn the previous bundler copyFiles.ts into the current template', () => {
+    const context = makeContext(wiredPanel, { ...CONSTANTS_FILE, [COPY_FILES_PATH]: previousCopyFiles });
+
+    allowScreenshotsOutsideSource(context);
+
+    expect(context.getFile(COPY_FILES_PATH)).toBe(currentCopyFiles);
+  });
+
+  it('should update copyFiles.ts when docs-content runs', () => {
+    const context = makeContext(wiredPanel, {
+      'catalog-docs/index.md': '# Clock\n',
+      'catalog-docs/AGENTS.md': '# Agents\n',
+      ...CONSTANTS_FILE,
+      [COPY_FILES_PATH]: previousCopyFiles,
+    });
+
+    expect(docsContent(context).getFile(COPY_FILES_PATH)).toBe(currentCopyFiles);
+  });
+
+  it('should leave a current copyFiles.ts alone', () => {
+    const context = makeContext(wiredPanel, { ...CONSTANTS_FILE, [COPY_FILES_PATH]: currentCopyFiles });
+
+    const before = context.getFile(COPY_FILES_PATH);
+
+    allowScreenshotsOutsideSource(context);
+
+    expect(context.getFile(COPY_FILES_PATH)).toBe(before);
+  });
+
+  it('should leave a customised copyFiles.ts alone', () => {
+    const customised = previousCopyFiles.replace(
+      '    from: screenshotPath,\n',
+      '    from: `shots/${screenshotPath}`,\n'
+    );
+    const context = makeContext(wiredPanel, { ...CONSTANTS_FILE, [COPY_FILES_PATH]: customised });
+
+    const before = context.getFile(COPY_FILES_PATH);
+
+    allowScreenshotsOutsideSource(context);
+
+    expect(context.getFile(COPY_FILES_PATH)).toBe(before);
+  });
+
+  it('should leave copyFiles.ts alone when constants.ts is missing', () => {
+    const context = makeContext(wiredPanel, { [COPY_FILES_PATH]: previousCopyFiles });
+
+    const before = context.getFile(COPY_FILES_PATH);
+
+    allowScreenshotsOutsideSource(context);
+
+    expect(context.getFile(COPY_FILES_PATH)).toBe(before);
+  });
+
+  it('should do nothing for a bundler config without copyFiles.ts', () => {
+    const context = makeContext(wiredPanel, CONSTANTS_FILE);
+
+    const before = context.getFile(COPY_FILES_PATH);
+
+    allowScreenshotsOutsideSource(context);
+
+    expect(context.getFile(COPY_FILES_PATH)).toBe(before);
   });
 });
