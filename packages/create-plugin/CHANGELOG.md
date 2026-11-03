@@ -1,5 +1,14 @@
 # Changelog
 
+## [8.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@8.0.0...@grafana/create-plugin@8.0.1) (2026-11-03)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @grafana/plugin-docs-parser bumped from 0.6.0 to 0.6.1
+
 ## [8.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.19.0...@grafana/create-plugin@8.0.0) (2026-11-03)
 
 

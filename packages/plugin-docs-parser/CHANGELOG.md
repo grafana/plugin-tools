@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.6.0...@grafana/plugin-docs-parser@0.6.1) (2026-11-03)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency unist-util-visit to v5.2.0 ([#3056](https://github.com/grafana/plugin-tools/issues/3056)) ([9f622d0](https://github.com/grafana/plugin-tools/commit/9f622d07a81cf8e201f88b0dc927236c20615193))
+
 ## [0.6.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.5.0...@grafana/plugin-docs-parser@0.6.0) (2026-10-21)
 
 
