@@ -42,7 +42,7 @@ Plugin docs are an experimental feature. Breaking changes might happen without n
 
 Run this script from the root of your plugin to enable plugin docs:
 
-```bash
+```shell npm2yarn
 npx @grafana/create-plugin@latest add docs
 ```
 
@@ -209,7 +209,7 @@ The instructions live in `AGENTS.md` and `CLAUDE.md` in your docs folder. To mak
 
 This step is optional. To have an agent write the first version of your pages, commit the changes from `add docs`, then run:
 
-```bash
+```shell npm2yarn
 npx @grafana/create-plugin@latest add docs-content
 ```
 
