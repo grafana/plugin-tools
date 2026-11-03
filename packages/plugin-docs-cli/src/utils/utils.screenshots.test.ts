@@ -74,6 +74,11 @@ describe('isInside', () => {
     expect(isInside(root, 'img/screenshots/grid.png')).toBe(true);
   });
 
+  it('should accept a name that only starts with two dots', () => {
+    expect(isInside(root, '..hidden.png')).toBe(true);
+    expect(isInside(root, '..dir/a.png')).toBe(true);
+  });
+
   it('should reject a path that leaves the root', () => {
     expect(isInside(root, '../outside.png')).toBe(false);
     expect(isInside(root, 'img/../../outside.png')).toBe(false);

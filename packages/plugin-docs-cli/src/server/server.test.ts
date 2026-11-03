@@ -263,6 +263,32 @@ describe('startServer', () => {
       expect((await request(server.app).get('/outside.png')).status).toBe(404);
     });
 
+    it('should not serve a listed file that is not an image', async () => {
+      const plugin = await makePlugin('catalog-docs', '../src/img/screenshots/grid.png');
+      server = await startServer({
+        ...plugin,
+        screenshots: { ...plugin.screenshots, paths: ['img/screenshots/grid.png', 'plugin.json'] },
+        port: 0,
+      });
+
+      expect((await request(server.app).get('/src/img/screenshots/grid.png')).status).toBe(200);
+      expect((await request(server.app).get('/src/plugin.json')).status).toBe(404);
+    });
+
+    it('should serve a screenshot with a # in its name at the url the page uses', async () => {
+      const plugin = await makePlugin('catalog-docs', '../src/img/screenshots/grid%231.png');
+      await writeFile(join(plugin.screenshots.root, 'img', 'screenshots', 'grid#1.png'), 'png');
+      server = await startServer({
+        ...plugin,
+        screenshots: { ...plugin.screenshots, paths: ['img/screenshots/grid#1.png'] },
+        port: 0,
+      });
+
+      const docs = await request(server.app).get('/docs');
+      expect(docs.text).toContain('src="/src/img/screenshots/grid%231.png"');
+      expect((await request(server.app).get('/src/img/screenshots/grid%231.png')).status).toBe(200);
+    });
+
     it('should not serve other files from src', async () => {
       const plugin = await makePlugin('catalog-docs', '../src/img/screenshots/grid.png');
       server = await startServer({ ...plugin, port: 0 });

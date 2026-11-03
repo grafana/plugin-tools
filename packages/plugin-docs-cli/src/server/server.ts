@@ -1,5 +1,5 @@
 import express, { type Express, type Request, type Response } from 'express';
-import { join, dirname, relative, resolve, sep } from 'node:path';
+import { join, dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
@@ -13,7 +13,8 @@ import { validate } from '../validation/engine.js';
 import { formatResult } from '../validation/format.js';
 import { allRules } from '../validation/rules/index.js';
 import { readFirstReadme } from '../utils/utils.plugin.js';
-import { isInside } from '../utils/utils.screenshots.js';
+import { encodeRefPath, isInside } from '../utils/utils.screenshots.js';
+import { ALLOWED_IMAGE_EXTENSIONS } from '../validation/rules/filesystem.js';
 import type { PluginScreenshots } from '../validation/types.js';
 import {
   docPageHref,
@@ -175,11 +176,11 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // each plugin screenshot is served at the url the parser gives it, and nothing else outside the docs folder
   const screenshotUrls = new Map(
     (screenshots?.paths ?? [])
-      .filter((path) => isInside(screenshots!.root, path))
+      .filter((path) => isInside(screenshots!.root, path) && ALLOWED_IMAGE_EXTENSIONS.has(extname(path).toLowerCase()))
       .map((path) => {
         const file = resolve(screenshots!.root, path);
         const fromDocs = relative(docsPath, file).split(sep).join('/');
-        return [new URL(fromDocs, `https://preview.local${DOCS_BASE}/`).pathname, file];
+        return [new URL(encodeRefPath(fromDocs), `https://preview.local${DOCS_BASE}/`).pathname, file];
       })
   );
   app.use((req, res, next) => {

@@ -50,11 +50,11 @@ export function resolveScreenshotRef(
 // a screenshot path that leaves the plugin isn't in the plugin archive, so it never counts
 export function isInside(root: string, path: string): boolean {
   const fromRoot = relative(root, resolve(root, path));
-  return fromRoot !== '' && !fromRoot.startsWith('..') && !isAbsolute(fromRoot);
+  return fromRoot !== '' && fromRoot !== '..' && !fromRoot.startsWith(`..${sep}`) && !isAbsolute(fromRoot);
 }
 
 // percent-encodes what would end a markdown link destination or break it as a URL
-function encodeRefPath(path: string): string {
+export function encodeRefPath(path: string): string {
   return path
     .split('/')
     .map((segment) => encodeURIComponent(segment).replace(/\(/g, '%28').replace(/\)/g, '%29'))
