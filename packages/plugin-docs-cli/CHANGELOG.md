@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.14.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.13.1...@grafana/plugin-docs-cli@0.14.0) (2026-11-03)
+
+
+### Features
+
+* **plugin-docs-cli:** let pages show plugin screenshots from src ([#3053](https://github.com/grafana/plugin-tools/issues/3053)) ([2a3804e](https://github.com/grafana/plugin-tools/commit/2a3804ede153003084c18537c6c1de02f72b03df))
+
+
+### Bug Fixes
+
+* **plugin-docs-cli:** make title and description length warnings ([#3049](https://github.com/grafana/plugin-tools/issues/3049)) ([e89f11a](https://github.com/grafana/plugin-tools/commit/e89f11a59b821af339761ed6ed221152659a24b7))
+
 ## [0.13.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.13.0...@grafana/plugin-docs-cli@0.13.1) (2026-11-02)
 
 

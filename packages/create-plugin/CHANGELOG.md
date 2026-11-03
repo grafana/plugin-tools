@@ -1,5 +1,21 @@
 # Changelog
 
+## [8.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.19.0...@grafana/create-plugin@8.0.0) (2026-11-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048))
+
+### Features
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048)) ([0f16572](https://github.com/grafana/plugin-tools/commit/0f16572a15189061581aceb3fc773bba4bca5bdd))
+
+
+### Bug Fixes
+
+* transform .mjs files in jest config ([#3051](https://github.com/grafana/plugin-tools/issues/3051)) ([566a5b7](https://github.com/grafana/plugin-tools/commit/566a5b783186eece8b6ee163bb4ea46624ee022c))
+
 ## [7.19.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.18.0...@grafana/create-plugin@7.19.0) (2026-11-02)
 
 

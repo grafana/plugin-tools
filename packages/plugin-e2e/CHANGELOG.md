@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.4...@grafana/plugin-e2e@4.0.0) (2026-11-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048))
+
+### Features
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048)) ([0f16572](https://github.com/grafana/plugin-tools/commit/0f16572a15189061581aceb3fc773bba4bca5bdd))
+
 ## [3.15.4](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.3...@grafana/plugin-e2e@3.15.4) (2026-10-28)
 
 
