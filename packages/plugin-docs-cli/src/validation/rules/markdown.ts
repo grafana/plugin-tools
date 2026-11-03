@@ -2,6 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import { ALLOWED_HTML_TAGS, CALLOUT_TYPES, getYouTubeVideoId } from '@grafana/plugin-docs-parser';
+import { resolveScreenshotRef } from '../../utils/utils.screenshots.js';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import {
   escapesDocsRoot,
@@ -366,15 +367,15 @@ export async function checkMarkdown(input: ValidationInput): Promise<Diagnostic[
         continue;
       }
 
-      // no-path-traversal: image refs must stay inside the docs folder
-      if (escapesDocsRoot(ref, relPath)) {
+      // no-path-traversal: image refs must stay inside the docs folder, apart from the plugin's own screenshots
+      if (escapesDocsRoot(ref, relPath) && !resolveScreenshotRef(ref, relPath, input.docsPath, input.screenshots)) {
         diagnostics.push({
           rule: Rule.NoPathTraversal,
           severity: 'error',
           file: relPath,
           line,
           title: `Path traversal in ${kind} reference`,
-          detail: `"${ref}" points outside the docs folder. ${isVideo ? 'Video' : 'Image'} references must stay inside it.`,
+          detail: `"${ref}" points outside the docs folder. ${isVideo ? 'Video' : 'Image'} references must stay inside it${isVideo ? '' : ', unless the image is one of the screenshots in "info.screenshots" in plugin.json'}.`,
         });
         continue;
       }

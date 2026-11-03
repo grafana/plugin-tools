@@ -3,6 +3,9 @@ import { mkdtemp, rm, readFile, mkdir, writeFile, cp, access } from 'node:fs/pro
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { buildDocs } from './build.command.js';
+import { validate } from '../validation/engine.js';
+import { allRules } from '../validation/rules/index.js';
+import { Rule } from '../validation/types.js';
 
 describe('build', () => {
   let tmpDir: string;
@@ -126,5 +129,97 @@ describe('build', () => {
 
   it('should throw when docs path does not exist', async () => {
     await expect(buildDocs(tmpDir, join(tmpDir, 'nonexistent'))).rejects.toThrow();
+  });
+
+  describe('plugin screenshots', () => {
+    // the rules that decide whether a page may show a screenshot, and whether the built docs hold together
+    const SCREENSHOT_RULES = new Set<string>([
+      Rule.NoPathTraversal,
+      Rule.ReferencedImagesExist,
+      Rule.DistManifestMatchesDocs,
+      Rule.DistManifestValid,
+    ]);
+    const screenshots = () => ({ root: join(tmpDir, 'src'), paths: ['img/screenshots/grid.png'] });
+
+    // the plugin build has already copied the screenshot into dist when the docs build runs
+    const addScreenshotPages = async () => {
+      await mkdir(join(tmpDir, 'dist', 'img', 'screenshots'), { recursive: true });
+      await writeFile(join(tmpDir, 'dist', 'img', 'screenshots', 'grid.png'), 'png');
+      await mkdir(join(docsPath, 'options'), { recursive: true });
+      await writeFile(
+        join(docsPath, 'gallery.md'),
+        '---\ntitle: Gallery\ndescription: A page that shows a screenshot\n---\n\n![Grid](../src/img/screenshots/grid.png)\n'
+      );
+      await writeFile(
+        join(docsPath, 'options', 'legend.md'),
+        '---\ntitle: Legend\ndescription: A nested page that shows a screenshot\n---\n\n![Grid](../../src/img/screenshots/grid.png)\n'
+      );
+    };
+
+    it('should point built pages at the screenshot in the built plugin', async () => {
+      await addScreenshotPages();
+
+      await buildDocs(tmpDir, docsPath, screenshots());
+
+      const outputDir = join(tmpDir, 'dist', 'docs');
+      expect(await readFile(join(outputDir, 'gallery.md'), 'utf-8')).toContain('![Grid](../img/screenshots/grid.png)');
+      expect(await readFile(join(outputDir, 'options', 'legend.md'), 'utf-8')).toContain(
+        '![Grid](../../img/screenshots/grid.png)'
+      );
+    });
+
+    it('should leave the pages in the source as they are', async () => {
+      await addScreenshotPages();
+
+      await buildDocs(tmpDir, docsPath, screenshots());
+
+      expect(await readFile(join(docsPath, 'gallery.md'), 'utf-8')).toContain('../src/img/screenshots/grid.png');
+    });
+
+    it('should write the rewritten text into the manifest', async () => {
+      await addScreenshotPages();
+
+      await buildDocs(tmpDir, docsPath, screenshots());
+
+      const manifest = JSON.parse(await readFile(join(tmpDir, 'dist', 'docs', 'manifest.json'), 'utf-8'));
+      const gallery = manifest.pages.find((p: { slug: string }) => p.slug === 'gallery');
+      expect(gallery.content).toContain('![Grid](../img/screenshots/grid.png)');
+      expect(gallery.content).not.toContain('src/img');
+    });
+
+    it('should produce docs that pass validation of the built plugin', async () => {
+      await addScreenshotPages();
+
+      await buildDocs(tmpDir, docsPath, screenshots());
+
+      const result = await validate(
+        {
+          docsPath: join(tmpDir, 'dist', 'docs'),
+          mode: 'dist',
+          screenshots: { root: join(tmpDir, 'dist'), paths: screenshots().paths },
+        },
+        allRules
+      );
+      const problems = result.diagnostics.filter((d) => d.severity === 'error' && SCREENSHOT_RULES.has(d.rule));
+      expect(problems).toEqual([]);
+    });
+
+    it('should pass validation of the source docs', async () => {
+      await addScreenshotPages();
+      await mkdir(join(tmpDir, 'src', 'img', 'screenshots'), { recursive: true });
+      await writeFile(join(tmpDir, 'src', 'img', 'screenshots', 'grid.png'), 'png');
+
+      const result = await validate({ docsPath, screenshots: screenshots() }, allRules);
+
+      expect(result.diagnostics.filter((d) => SCREENSHOT_RULES.has(d.rule))).toEqual([]);
+    });
+
+    it('should leave the manifest alone when no page shows a screenshot', async () => {
+      await buildDocs(tmpDir, docsPath, screenshots());
+
+      const outputDir = join(tmpDir, 'dist', 'docs');
+      const manifest = JSON.parse(await readFile(join(outputDir, 'manifest.json'), 'utf-8'));
+      expect(manifest.pages).toHaveLength(5);
+    });
   });
 });

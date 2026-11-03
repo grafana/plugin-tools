@@ -1,6 +1,7 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, extname, dirname, relative, normalize } from 'node:path';
+import { resolveScreenshotRef } from '../../utils/utils.screenshots.js';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { ALLOWED_IMAGE_EXTENSIONS, ALLOWED_VIDEO_EXTENSIONS } from './filesystem.js';
 import { decodeRefPath, formatBytes, getReferenceDefinitions, isMetaFile } from './utils.js';
@@ -150,6 +151,26 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
     for (const ref of imageRefs) {
       // skip refs that aren't local file paths; data URIs are rejected by no-base64-images and no-dangerous-urls
       if (/^https?:\/\//i.test(ref) || /^\/\//.test(ref) || /^blob:/i.test(ref) || /^data:/i.test(ref)) {
+        continue;
+      }
+
+      // a plugin screenshot lives outside the docs folder, so it is checked where the plugin keeps it
+      const screenshot = resolveScreenshotRef(ref, mdRelPath, input.docsPath, input.screenshots);
+      if (screenshot) {
+        const exists = await stat(screenshot).then(
+          (st) => st.isFile(),
+          () => false
+        );
+        if (!exists) {
+          diagnostics.push({
+            rule: Rule.ReferencedImagesExist,
+            severity: 'error',
+            file: mdRelPath,
+            line: findRefLine(content, ref),
+            title: 'Referenced image does not exist',
+            detail: `Image "${ref}" referenced in markdown does not exist on disk.`,
+          });
+        }
         continue;
       }
 

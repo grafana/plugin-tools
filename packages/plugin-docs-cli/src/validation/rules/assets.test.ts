@@ -200,6 +200,44 @@ describe('checkAssets', () => {
       expect(findings.filter((f) => f.rule === Rule.ReferencedImagesExist)).toHaveLength(0);
     });
 
+    describe('plugin screenshots', () => {
+      // a plugin with its docs in catalog-docs and its screenshots in src
+      const makePlugin = async (options: { screenshotExists: boolean }) => {
+        const project = await mkdtemp(join(tmpdir(), 'asset-test-'));
+        await mkdir(join(project, 'catalog-docs'));
+        await writeFile(join(project, 'catalog-docs', 'index.md'), md('![grid](../src/img/screenshots/grid.png)'));
+        if (options.screenshotExists) {
+          await mkdir(join(project, 'src', 'img', 'screenshots'), { recursive: true });
+          await writeFile(join(project, 'src', 'img', 'screenshots', 'grid.png'), bufferOfSize(100));
+        }
+        return {
+          docsPath: join(project, 'catalog-docs'),
+          screenshots: { root: join(project, 'src'), paths: ['img/screenshots/grid.png'] },
+        };
+      };
+
+      it('should find a screenshot where the plugin keeps it', async () => {
+        const findings = await checkAssets(await makePlugin({ screenshotExists: true }));
+
+        expect(findings).toHaveLength(0);
+      });
+
+      it('should report a screenshot that does not exist', async () => {
+        const findings = await checkAssets(await makePlugin({ screenshotExists: false }));
+
+        const refs = findings.filter((f) => f.rule === Rule.ReferencedImagesExist);
+        expect(refs).toHaveLength(1);
+        expect(refs[0].detail).toContain('grid.png');
+      });
+
+      it('should not find the screenshot when the plugin lists none', async () => {
+        const { docsPath } = await makePlugin({ screenshotExists: true });
+
+        const findings = await checkAssets({ docsPath });
+        expect(findings.filter((f) => f.rule === Rule.ReferencedImagesExist)).toHaveLength(1);
+      });
+    });
+
     it('should report when referenced image does not exist', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'asset-test-'));
       await writeFile(join(tmp, 'index.md'), md('![alt](img/missing.png)'));
