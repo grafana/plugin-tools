@@ -240,9 +240,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # We keep the node version in .nvmrc out of this matrix as it's tested above in jobs.test
         node-version:
           - 22
-          - 26
+          - 24
     env:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
