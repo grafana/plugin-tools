@@ -852,6 +852,47 @@ describe('checkMarkdown', () => {
       expect(findings.find((f) => f.rule === Rule.InternalLinksRelative)).toBeDefined();
     });
 
+    describe('plugin screenshots', () => {
+      // a plugin with its docs in catalog-docs and its screenshots in src
+      const makePlugin = async (page: string) => {
+        const project = await mkdtemp(join(tmpdir(), 'md-test-'));
+        await mkdir(join(project, 'catalog-docs'));
+        await writeFile(join(project, 'catalog-docs', 'index.md'), md(page));
+        return {
+          docsPath: join(project, 'catalog-docs'),
+          screenshots: { root: join(project, 'src'), paths: ['img/screenshots/grid.png'] },
+        };
+      };
+
+      it('should allow an image that shows a screenshot from src', async () => {
+        const plugin = await makePlugin('![grid](../src/img/screenshots/grid.png)');
+
+        const findings = await checkMarkdown(plugin);
+        expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeUndefined();
+      });
+
+      it('should report an image in src that is not a screenshot', async () => {
+        const plugin = await makePlugin('![other](../src/img/other.png)');
+
+        const findings = await checkMarkdown(plugin);
+        expect(findings.find((f) => f.rule === Rule.NoPathTraversal)?.detail).toContain('info.screenshots');
+      });
+
+      it('should report a link to a screenshot', async () => {
+        const plugin = await makePlugin('[grid](../src/img/screenshots/grid.png)');
+
+        const findings = await checkMarkdown(plugin);
+        expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeDefined();
+      });
+
+      it('should report the image when the plugin has no screenshots', async () => {
+        const plugin = await makePlugin('![grid](../src/img/screenshots/grid.png)');
+
+        const findings = await checkMarkdown({ docsPath: plugin.docsPath });
+        expect(findings.find((f) => f.rule === Rule.NoPathTraversal)).toBeDefined();
+      });
+    });
+
     it('should report ../ from a nested page that leaves the docs folder', async () => {
       const tmp = await mkdtemp(join(tmpdir(), 'md-test-'));
       await mkdir(join(tmp, 'options'));

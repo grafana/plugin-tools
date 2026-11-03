@@ -170,6 +170,13 @@ relative path:
 - Always write alt text that describes the image. Screen readers read it out, and it's shown if
   the image fails to load.
 
+To show a screenshot that `info.screenshots` in `plugin.json` lists without a second copy in your
+docs folder, link to it where it is. Only listed screenshots can be outside the docs folder:
+
+```markdown
+![Ten traffic lights in a grid](../src/img/screenshots/grid-layout.png)
+```
+
 ## Callouts
 
 Use a callout to make a note, tip or warning stand out from the text around it. Start a blockquote

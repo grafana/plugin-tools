@@ -2,6 +2,7 @@ import type minimist from 'minimist';
 import createDebug from 'debug';
 import type { SnippetValues } from '@grafana/plugin-docs-parser';
 import { startServer } from '../server/server.js';
+import type { PluginScreenshots } from '../validation/types.js';
 
 const debug = createDebug('plugin-docs-cli:serve');
 
@@ -11,7 +12,8 @@ export const serve = async (
   pluginType?: string,
   readmePaths?: string[],
   docsPathSetting?: string,
-  snippetValues?: SnippetValues
+  snippetValues?: SnippetValues,
+  screenshots?: PluginScreenshots
 ) => {
   debug('Serve command invoked with args: %O', argv);
 
@@ -33,6 +35,7 @@ export const serve = async (
       pluginType,
       docsPathSetting,
       snippetValues,
+      screenshots,
     });
   } catch (error) {
     debug('Failed to start server: %O', error);

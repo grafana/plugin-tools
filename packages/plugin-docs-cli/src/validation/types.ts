@@ -103,6 +103,17 @@ export interface Diagnostic {
 }
 
 /**
+ * The screenshots that `info.screenshots` in `plugin.json` lists. A docs page may show one from where the
+ * plugin keeps it, instead of from the docs folder.
+ */
+export interface PluginScreenshots {
+  /** The absolute path of the folder the screenshot paths resolve against: `src` in the repository, the plugin root in built docs. */
+  root: string;
+  /** The `path` of each screenshot, as written in `plugin.json`. */
+  paths: string[];
+}
+
+/**
  * Data available to rule runners. Grows as slices add more rule categories.
  */
 export interface ValidationInput {
@@ -128,6 +139,11 @@ export interface ValidationInput {
    * the snippets that need a value.
    */
   snippetValues?: SnippetValues;
+  /**
+   * The plugin's screenshots. Image references to them may leave the docs folder. When this is unset,
+   * every reference outside the docs folder is reported.
+   */
+  screenshots?: PluginScreenshots;
 }
 
 /**

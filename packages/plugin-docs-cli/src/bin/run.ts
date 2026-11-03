@@ -4,6 +4,7 @@ import minimist from 'minimist';
 import createDebug from 'debug';
 import type { SnippetValues } from '@grafana/plugin-docs-parser';
 import { resolve } from 'node:path';
+import type { PluginScreenshots } from '../validation/types.js';
 import { readmeCandidates, resolveBuiltPluginJson, resolvePluginJson } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
 import { buildDocs } from '../commands/build.command.js';
@@ -45,8 +46,9 @@ async function main() {
   let docsPathSetting: string;
   let pluginType: string | undefined;
   let snippetValues: SnippetValues | undefined;
+  let screenshots: PluginScreenshots;
   try {
-    ({ docsPath, docsPathSetting, pluginType, snippetValues } = distRoot
+    ({ docsPath, docsPathSetting, pluginType, snippetValues, screenshots } = distRoot
       ? await resolveBuiltPluginJson(distRoot)
       : await resolvePluginJson());
   } catch (error) {
@@ -91,11 +93,11 @@ async function main() {
           reload: false,
         },
       });
-      await serve(serveArgv, docsPath, pluginType, readmeCandidates(), docsPathSetting, snippetValues);
+      await serve(serveArgv, docsPath, pluginType, readmeCandidates(), docsPathSetting, snippetValues, screenshots);
       break;
     }
     case 'build': {
-      await buildDocs(process.cwd(), docsPath);
+      await buildDocs(process.cwd(), docsPath, screenshots);
       break;
     }
     case 'validate': {
@@ -105,6 +107,7 @@ async function main() {
         mode: distRoot ? 'dist' : 'source',
         docsPathSetting,
         snippetValues,
+        screenshots,
       });
       break;
     }

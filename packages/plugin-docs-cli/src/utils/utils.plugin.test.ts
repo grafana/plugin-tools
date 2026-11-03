@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { resolveBuiltPluginJson, resolvePluginJson } from './utils.plugin.js';
@@ -16,6 +16,24 @@ describe('resolvePluginJson', () => {
       docsPathSetting: 'docs',
       pluginType: 'datasource',
       snippetValues: { pluginName: 'Test Plugin', pluginId: 'test-plugin' },
+      screenshots: { root: join(projectRoot, 'src'), paths: [] },
+    });
+  });
+
+  it('should read the screenshots in info.screenshots, relative to src', async () => {
+    const projectRoot = await mkdtemp(join(tmpdir(), 'source-plugin-'));
+    await mkdir(join(projectRoot, 'src'));
+    await writeFile(
+      join(projectRoot, 'src', 'plugin.json'),
+      JSON.stringify({
+        docsPath: 'docs',
+        info: { screenshots: [{ name: 'Grid', path: 'img/grid.png' }, { name: 'No path' }, null, { path: '' }] },
+      })
+    );
+
+    expect((await resolvePluginJson(projectRoot)).screenshots).toEqual({
+      root: join(projectRoot, 'src'),
+      paths: ['img/grid.png'],
     });
   });
 
@@ -46,7 +64,17 @@ describe('resolveBuiltPluginJson', () => {
       docsPath: join(root, 'docs'),
       docsPathSetting: 'docs',
       pluginType: 'panel',
+      screenshots: { root, paths: [] },
     });
+  });
+
+  it('should read the screenshots in info.screenshots, relative to the plugin root', async () => {
+    const root = await writePlugin({
+      docsPath: 'docs',
+      info: { screenshots: [{ name: 'Grid', path: 'img/grid.png' }] },
+    });
+
+    expect((await resolveBuiltPluginJson(root)).screenshots).toEqual({ root, paths: ['img/grid.png'] });
   });
 
   it('should throw with a build hint when plugin.json is missing', async () => {

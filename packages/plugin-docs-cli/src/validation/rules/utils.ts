@@ -238,6 +238,9 @@ export function getNonProseLines(content: string): Set<number> {
 }
 
 // matches a reference definition, [label]: url "title", but not a footnote definition [^1]: text
+/** Matches an inline markdown image, `![alt](url)`, with the url in group 2. */
+export const IMAGE_REF_RE = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
+
 const REFERENCE_DEFINITION_RE = /^ {0,3}\[([^\]^][^\]]*)\]:\s*(?:<([^>]*)>|(\S+))/;
 
 // matches an image that uses a reference: ![alt][label], ![label][] or ![label]

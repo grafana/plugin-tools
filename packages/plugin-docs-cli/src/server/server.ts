@@ -1,5 +1,5 @@
 import express, { type Express, type Request, type Response } from 'express';
-import { join, dirname } from 'node:path';
+import { join, dirname, extname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import createDebug from 'debug';
@@ -13,6 +13,9 @@ import { validate } from '../validation/engine.js';
 import { formatResult } from '../validation/format.js';
 import { allRules } from '../validation/rules/index.js';
 import { readFirstReadme } from '../utils/utils.plugin.js';
+import { encodeRefPath, isInside } from '../utils/utils.screenshots.js';
+import { ALLOWED_IMAGE_EXTENSIONS } from '../validation/rules/filesystem.js';
+import type { PluginScreenshots } from '../validation/types.js';
 import {
   docPageHref,
   DOCS_BASE,
@@ -43,6 +46,8 @@ export interface ServerOptions {
   /** The `docsPath` as written in plugin.json, for the `docs-path-valid` rule. */
   docsPathSetting?: string;
   snippetValues?: SnippetValues;
+  /** The plugin's screenshots. A page may show one from the plugin's `src` folder, which is served for those files only. */
+  screenshots?: PluginScreenshots;
 }
 
 export interface Server {
@@ -82,6 +87,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
     pluginType,
     docsPathSetting,
     snippetValues,
+    screenshots,
   } = options;
 
   debug('Starting server with options: docsPath=%s, port=%d, liveReload=%s', docsPath, port, liveReload);
@@ -98,7 +104,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   // author actually has to fix.
   const runValidation = async () => {
     try {
-      const result = await validate({ docsPath, pluginType, docsPathSetting, snippetValues }, allRules);
+      const result = await validate({ docsPath, pluginType, docsPathSetting, snippetValues, screenshots }, allRules);
       const styleFindings = result.diagnostics.filter((d) => d.rule.startsWith('style-'));
       const rest = { ...result, diagnostics: result.diagnostics.filter((d) => !d.rule.startsWith('style-')) };
 
@@ -166,6 +172,28 @@ export async function startServer(options: ServerOptions): Promise<Server> {
       return next();
     }
     docsStatic(req, res, next);
+  });
+  // each plugin screenshot is served at the url the parser gives it, and nothing else outside the docs folder
+  const screenshotUrls = new Map(
+    (screenshots?.paths ?? [])
+      .filter((path) => isInside(screenshots!.root, path) && ALLOWED_IMAGE_EXTENSIONS.has(extname(path).toLowerCase()))
+      .map((path) => {
+        const file = resolve(screenshots!.root, path);
+        const fromDocs = relative(docsPath, file).split(sep).join('/');
+        return [new URL(encodeRefPath(fromDocs), `https://preview.local${DOCS_BASE}/`).pathname, file];
+      })
+  );
+  app.use((req, res, next) => {
+    const file = screenshotUrls.get(req.path);
+    if (!file) {
+      return next();
+    }
+    // sendFile refuses any path with a dot folder in it by default, and the plugin itself may sit under one
+    res.sendFile(file, { dotfiles: 'allow' }, (error) => {
+      if (error) {
+        next();
+      }
+    });
   });
   app.use('/styles', express.static(join(__dirname, 'styles')));
 
