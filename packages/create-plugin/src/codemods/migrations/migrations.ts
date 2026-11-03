@@ -142,7 +142,7 @@ export default [
   },
   {
     name: '021-jest-transform-mjs',
-    version: '0.0.0-unreleased', // x-release-please-version
+    version: '8.0.0', // x-release-please-version
     description: 'Fix ESM import errors in Jest for .mjs files',
     scriptPath: import.meta.resolve('./scripts/021-jest-transform-mjs.js'),
   },

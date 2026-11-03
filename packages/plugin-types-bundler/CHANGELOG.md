@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.7.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-types-bundler@0.6.0...@grafana/plugin-types-bundler@0.7.0) (2026-11-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048))
+
+### Features
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048)) ([0f16572](https://github.com/grafana/plugin-tools/commit/0f16572a15189061581aceb3fc773bba4bca5bdd))
+
 ## v0.4.4 (Tue Aug 05 2025)
 
 #### 🐛 Bug Fix
