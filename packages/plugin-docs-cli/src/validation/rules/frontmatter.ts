@@ -224,7 +224,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
     if (typeof data.title === 'string' && data.title.length > MAX_TITLE_LENGTH) {
       diagnostics.push({
         rule: Rule.TitleLength,
-        severity: 'error',
+        severity: 'warning',
         file: relativePath,
         line: findFieldLine(raw, 'title'),
         title: `Title exceeds ${MAX_TITLE_LENGTH} characters`,
@@ -247,7 +247,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       } else if (data.description.length > MAX_DESCRIPTION_LENGTH) {
         diagnostics.push({
           rule: Rule.DescriptionLength,
-          severity: 'error',
+          severity: 'warning',
           file: relativePath,
           line: findFieldLine(raw, 'description'),
           title: `Description exceeds ${MAX_DESCRIPTION_LENGTH} characters`,

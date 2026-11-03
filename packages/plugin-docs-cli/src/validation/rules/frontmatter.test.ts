@@ -340,7 +340,7 @@ describe('checkFrontmatter', () => {
     expect(findings.find((f) => f.rule === Rule.DuplicateSlug)).toBeUndefined();
   });
 
-  it('should report frontmatter-title-length as error for a title over 60 characters', async () => {
+  it('should report frontmatter-title-length as warning for a title over 60 characters', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     const longTitle = 'A'.repeat(61);
     await writeFile(
@@ -351,7 +351,7 @@ describe('checkFrontmatter', () => {
     const findings = await checkFrontmatter(input(tmp));
     const finding = findings.find((f) => f.rule === Rule.TitleLength);
     expect(finding).toBeDefined();
-    expect(finding!.severity).toBe('error');
+    expect(finding!.severity).toBe('warning');
   });
 
   it('should not report frontmatter-title-length for a title at or under 60 characters', async () => {
@@ -385,7 +385,7 @@ describe('checkFrontmatter', () => {
     const findings = await checkFrontmatter(input(tmp));
     const finding = findings.find((f) => f.rule === Rule.DescriptionLength);
     expect(finding).toBeDefined();
-    expect(finding!.severity).toBe('error');
+    expect(finding!.severity).toBe('warning');
     expect(finding!.title).toContain('exceeds');
   });
 
