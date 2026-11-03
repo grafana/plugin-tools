@@ -73,7 +73,18 @@
   },
   "engines": {
     "node": ">=22.23"
-  },
+  },{{#if isNPM}}
+  "overrides": {
+    "basic-ftp": "^6.2.1"
+  },{{/if}}{{#if_eq packageManagerName "yarn"}}
+  "resolutions": {
+    "basic-ftp": "^6.2.1"
+  },{{/if_eq}}{{#if_eq packageManagerName "pnpm"}}
+  "pnpm": {
+    "overrides": {
+      "basic-ftp": "^6.2.1"
+    }
+  },{{/if_eq}}
   "dependencies": {
     "@emotion/css": "11.10.6",
     "@grafana/data": "13.2.4",
