@@ -128,11 +128,11 @@ An array of link objects to be displayed on this plugin's project page in the fo
 
 **Item Properties**
 
-| Name       | Type     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Required |
-| ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------: |
-| **name**   | `string` | Display name of the link. Special names with predefined behavior: <br/>• `documentation` - sets Documentation link on plugins detail page<br/>• `repository` - used to determine and link to repository of the plugin<br/>• `license` - sets License link on plugins detail page<br/>• `raise issue` - sets `Raise an Issue` link on plugins detail page<br/>• `sponsorship` - sets `Sponsor this developer` link on plugins detail page to direct users to how they can support your work<br/> |          |
-| **url**    | `string` | URL value to use for this specific link.<br/>Format: `"uri"`<br/>                                                                                                                                                                                                                                                                                                                                                                                                                               |          |
-| **target** | `string` | A string that indicates where to display the linked resource<br/>Possible values are: `"_blank"`, `"_self"`, `"_parent"`, `"_top"`<br/>                                                                                                                                                                                                                                                                                                                                                         |          |
+| Name       | Type     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Required |
+| ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------: |
+| **name**   | `string` | Display name of the link. Special names with predefined behavior: <br/>• `documentation` - sets Documentation link on plugins detail page<br/>• `repository` - used to determine and link to repository of the plugin<br/>• `license` - sets License link on plugins detail page. **Required for marketplace plugins**<br/>• `privacy` - sets Privacy link on plugins detail page. **Required for marketplace plugins**<br/>• `raise issue` - sets `Raise an Issue` link on plugins detail page<br/>• `sponsorship` - sets `Sponsor this developer` link on plugins detail page to direct users to how they can support your work<br/> |          |
+| **url**    | `string` | URL value to use for this specific link.<br/>Format: `"uri"`<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |          |
+| **target** | `string` | A string that indicates where to display the linked resource<br/>Possible values are: `"_blank"`, `"_self"`, `"_parent"`, `"_top"`<br/>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |          |
 
 <a name="infologos"></a>
 
@@ -334,12 +334,12 @@ Parameters for the token authentication request.
 
 **Properties**
 
-| Name               | Type     | Description                                                                                    | Required |
-| ------------------ | -------- | ---------------------------------------------------------------------------------------------- | :------: |
-| **grant\_type**    | `string` | OAuth grant type<br/>                                                                          |          |
-| **client\_id**     | `string` | OAuth client ID<br/>                                                                           |          |
-| **client\_secret** | `string` | OAuth client secret. Usually populated by decrypting the secret from the SecureJson blob.<br/> |          |
-| **resource**       | `string` | OAuth resource<br/>                                                                            |          |
+| Name              | Type     | Description                                                                                    | Required |
+| ----------------- | -------- | ---------------------------------------------------------------------------------------------- | :------: |
+| **grant_type**    | `string` | OAuth grant type<br/>                                                                          |          |
+| **client_id**     | `string` | OAuth client ID<br/>                                                                           |          |
+| **client_secret** | `string` | OAuth client secret. Usually populated by decrypting the secret from the SecureJson blob.<br/> |          |
+| **resource**      | `string` | OAuth resource<br/>                                                                            |          |
 
 <a name="routesjwttokenauth"></a>
 
@@ -372,11 +372,11 @@ Parameters for the JWT token authentication request.
 
 **Properties**
 
-| Name              | Type     | Description | Required |
-| ----------------- | -------- | ----------- | :------: |
-| **token\_uri**    | `string` |             |          |
-| **client\_email** | `string` |             |          |
-| **private\_key**  | `string` |             |          |
+| Name             | Type     | Description | Required |
+| ---------------- | -------- | ----------- | :------: |
+| **token_uri**    | `string` |             |          |
+| **client_email** | `string` |             |          |
+| **private_key**  | `string` |             |          |
 
 <a name="routesurlparams"></a>
 
