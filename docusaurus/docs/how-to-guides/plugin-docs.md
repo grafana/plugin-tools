@@ -36,7 +36,7 @@ Plugin docs are an experimental feature. Breaking changes might happen without n
 ## Before you begin
 
 - A plugin scaffolded with [`create-plugin`](../get-started.md).
-- [Node.js](https://nodejs.org/) installed.
+- [Node.js](https://nodejs.org/) 22 or later installed.
 
 ## Get started
 
