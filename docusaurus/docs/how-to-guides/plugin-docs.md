@@ -193,8 +193,6 @@ Keep images and videos inside your docs folder and reference them with relative 
 
 Use PNG or WebP for screenshots. SVG files aren't allowed, because they can contain scripts. Keep files small, because the whole docs folder ships inside your plugin archive.
 
-To show a screenshot that `info.screenshots` in `plugin.json` already lists, link to it where it is instead of copying it into your docs folder, for example `![Grid layout](../src/img/screenshots/grid-layout.png)`. The docs build points the link at the same screenshot in your plugin archive, so you keep one copy.
-
 For allowed file types and size limits, refer to [Validation rules](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/validation-rules.md).
 
 ## Style

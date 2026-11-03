@@ -170,20 +170,12 @@ relative path:
 - Always write alt text that describes the image. Screen readers read it out, and it's shown if
   the image fails to load.
 
-### Plugin screenshots
-
-A page can show a screenshot that `info.screenshots` in `plugin.json` lists from where your plugin
-already keeps it, so you don't need a second copy in your docs folder. Use the path from the page
-to the file:
+To show a screenshot that `info.screenshots` in `plugin.json` lists without a second copy in your
+docs folder, link to it where it is. Only listed screenshots can be outside the docs folder:
 
 ```markdown
 ![Ten traffic lights in a grid](../src/img/screenshots/grid-layout.png)
 ```
-
-- This only works for images that `info.screenshots` lists. Any other path outside your docs
-  folder is an error.
-- The size limits above don't apply, because the screenshot already ships with your plugin.
-- When the docs are built, the path is changed to point at the same screenshot in the plugin.
 
 ## Callouts
 
