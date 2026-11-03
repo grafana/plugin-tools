@@ -9,6 +9,7 @@ import {
   getCodeBlockLines,
   getNonProseLines,
   getReferenceDefinitions,
+  IMAGE_REF_RE,
   isInExcludedFolder,
   isMetaFile,
   maskInlineCode,
@@ -35,9 +36,6 @@ const SCRIPT_TAG_RE = /<script\b[^>]*>/gi;
 
 // matches HTML event handler attributes like onclick="...", onerror="...", ontoggle=alert(1)
 const EVENT_HANDLER_RE = /\bon[a-z]+\s*=\s*(?:["'][^"']*["']|[^\s>]+)/gi;
-
-// matches markdown image references: ![alt](url)
-const IMAGE_REF_RE = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
 
 // matches markdown links: [text](url)
 const LINK_RE = /\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;

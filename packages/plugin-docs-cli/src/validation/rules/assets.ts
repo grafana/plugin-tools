@@ -4,7 +4,7 @@ import { join, extname, dirname, relative, normalize } from 'node:path';
 import { resolveScreenshotRef } from '../../utils/utils.screenshots.js';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { ALLOWED_IMAGE_EXTENSIONS, ALLOWED_VIDEO_EXTENSIONS } from './filesystem.js';
-import { decodeRefPath, formatBytes, getReferenceDefinitions, isMetaFile } from './utils.js';
+import { decodeRefPath, formatBytes, getReferenceDefinitions, IMAGE_REF_RE, isMetaFile } from './utils.js';
 
 const IMAGE_FILE_NAME_RE = /^[a-zA-Z0-9\-_.]+$/;
 const MAX_STATIC_SIZE = 300 * 1024; // 300KB
@@ -141,9 +141,8 @@ export async function checkAssets(input: ValidationInput): Promise<Diagnostic[]>
       continue;
     }
 
-    const imageRefRe = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+(?:"[^"]*"|'[^']*'))?\)/g;
     const imageRefs = [
-      ...Array.from(content.matchAll(imageRefRe), (match) => match[2]),
+      ...Array.from(content.matchAll(IMAGE_REF_RE), (match) => match[2]),
       ...getReferenceDefinitions(content, new Set())
         .filter((definition) => definition.isImage)
         .map((definition) => definition.ref),

@@ -53,6 +53,18 @@ describe('resolveScreenshotRef', () => {
   it('should match nothing without screenshots', () => {
     expect(resolveScreenshotRef('../src/img/screenshots/grid.png', 'index.md', docsPath)).toBeUndefined();
   });
+
+  it('should not match a screenshot inside the docs folder, which is an ordinary docs image', () => {
+    const inSource = { root: resolve('/repo/src'), paths: ['docs/img/grid.png'] };
+
+    expect(resolveScreenshotRef('img/grid.png', 'index.md', resolve('/repo/src/docs'), inSource)).toBeUndefined();
+  });
+
+  it('should not match a screenshot path that leaves the plugin', () => {
+    const outside = { root: resolve('/repo/src'), paths: ['../../shared/hero.png'] };
+
+    expect(resolveScreenshotRef('../../shared/hero.png', 'index.md', docsPath, outside)).toBeUndefined();
+  });
 });
 
 describe('rewriteScreenshotRefs', () => {
@@ -118,6 +130,23 @@ describe('rewriteScreenshotRefs', () => {
 
     expect(rewriteScreenshotRefs('![Grid](../../src/img/screenshots/grid.png)', 'index.md', nested)).toBe(
       '![Grid](../../img/screenshots/grid.png)'
+    );
+  });
+
+  it('should percent-encode a file name that would break the link', () => {
+    const spaced: BuiltDocs = { ...built, screenshots: { ...screenshots, paths: ['img/my shot (1).png'] } };
+
+    expect(rewriteScreenshotRefs('![Shot](../src/img/my%20shot%20%281%29.png)', 'index.md', spaced)).toBe(
+      '![Shot](../img/my%20shot%20%281%29.png)'
+    );
+  });
+
+  it('should rewrite the destination of a definition whose label repeats it', () => {
+    const ref = '../src/img/screenshots/grid.png';
+    const content = `![Grid][${ref}]\n\n[${ref}]: ${ref}\n`;
+
+    expect(rewriteScreenshotRefs(content, 'index.md', built)).toBe(
+      `![Grid][${ref}]\n\n[${ref}]: ../img/screenshots/grid.png\n`
     );
   });
 });

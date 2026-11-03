@@ -20,9 +20,6 @@ const debug = createDebug('plugin-docs-cli:build');
 export async function buildDocs(projectRoot: string, docsPath: string, screenshots?: PluginScreenshots): Promise<void> {
   debug('Build invoked with projectRoot: %s, docsPath: %s', projectRoot, docsPath);
 
-  // scan docs folder and generate manifest
-  let { manifest } = await scanDocsFolder(docsPath);
-
   // determine output directory: dist/{relative docsPath}/
   const relativeDocsPath = relative(projectRoot, docsPath);
   const builtRoot = join(projectRoot, 'dist');
@@ -46,10 +43,12 @@ export async function buildDocs(projectRoot: string, docsPath: string, screensho
   });
   debug('Copied docs folder to %s', outputDir);
 
-  // the manifest holds the text of every page, so it is made from the pages as they now ship
-  if (screenshots && (await rewriteScreenshotRefsInPages({ docsPath, outputDir, builtRoot, screenshots })) > 0) {
-    ({ manifest } = await scanDocsFolder(outputDir));
+  if (screenshots) {
+    await rewriteScreenshotRefsInPages({ docsPath, outputDir, builtRoot, screenshots });
   }
+
+  // the manifest holds the text of every page, so it is made from the pages as they ship
+  const { manifest } = await scanDocsFolder(outputDir);
 
   // write generated manifest
   const manifestPath = join(outputDir, 'manifest.json');
@@ -67,19 +66,16 @@ export async function buildDocs(projectRoot: string, docsPath: string, screensho
 
 /**
  * Points the screenshots that built pages show from `src` at the same files in the built plugin.
- *
- * @returns How many pages changed
  */
 async function rewriteScreenshotRefsInPages(options: {
   docsPath: string;
   outputDir: string;
   builtRoot: string;
   screenshots: PluginScreenshots;
-}): Promise<number> {
+}): Promise<void> {
   const { docsPath, outputDir, builtRoot, screenshots } = options;
   const entries = await readdir(outputDir, { recursive: true, withFileTypes: true });
 
-  let changed = 0;
   for (const entry of entries) {
     if (!entry.isFile() || !entry.name.endsWith('.md')) {
       continue;
@@ -95,9 +91,7 @@ async function rewriteScreenshotRefsInPages(options: {
     });
     if (rewritten !== content) {
       await writeFile(builtPage, rewritten);
-      changed++;
       debug('Rewrote screenshot references in %s', pageRelPath);
     }
   }
-  return changed;
 }

@@ -208,8 +208,8 @@ describe('startServer', () => {
     const page = (src: string) => `---\ntitle: Home\ndescription: The landing page\n---\n\n![Grid](${src})\n`;
 
     // a plugin with a screenshot in src/img/screenshots and its docs at docsPath
-    const makePlugin = async (docsFolder: string, src: string) => {
-      const project = await mkdtemp(join(tmpdir(), 'serve-screenshots-'));
+    const makePlugin = async (docsFolder: string, src: string, parentFolder = '') => {
+      const project = join(await mkdtemp(join(tmpdir(), 'serve-screenshots-')), parentFolder);
       const docsPath = join(project, ...docsFolder.split('/'));
       await mkdir(docsPath, { recursive: true });
       await writeFile(join(docsPath, 'index.md'), page(src));
@@ -238,6 +238,14 @@ describe('startServer', () => {
       expect(docs.text).toContain('src="/img/screenshots/grid.png"');
 
       const image = await request(server.app).get('/img/screenshots/grid.png');
+      expect(image.status).toBe(200);
+    });
+
+    it('should serve the screenshot when the plugin sits under a dot folder', async () => {
+      const plugin = await makePlugin('catalog-docs', '../src/img/screenshots/grid.png', '.worktrees/plugin');
+      server = await startServer({ ...plugin, port: 0 });
+
+      const image = await request(server.app).get('/src/img/screenshots/grid.png');
       expect(image.status).toBe(200);
     });
 

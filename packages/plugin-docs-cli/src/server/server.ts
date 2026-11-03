@@ -171,8 +171,7 @@ export async function startServer(options: ServerOptions): Promise<Server> {
     }
     docsStatic(req, res, next);
   });
-  // a page shows a plugin screenshot by its path relative to the docs folder, which the parser resolves
-  // against the docs url. each one is served at that url, and nothing else outside the docs folder is
+  // each plugin screenshot is served at the url the parser gives it, and nothing else outside the docs folder
   const screenshotUrls = new Map(
     (screenshots?.paths ?? []).map((path) => {
       const file = resolve(screenshots!.root, path);
@@ -185,7 +184,12 @@ export async function startServer(options: ServerOptions): Promise<Server> {
     if (!file) {
       return next();
     }
-    res.sendFile(file);
+    // sendFile refuses any path with a dot folder in it by default, and the plugin itself may sit under one
+    res.sendFile(file, { dotfiles: 'allow' }, (error) => {
+      if (error) {
+        next();
+      }
+    });
   });
   app.use('/styles', express.static(join(__dirname, 'styles')));
 
