@@ -48,7 +48,7 @@ export function resolveScreenshotRef(
 }
 
 // a screenshot path that leaves the plugin isn't in the plugin archive, so it never counts
-function isInside(root: string, path: string): boolean {
+export function isInside(root: string, path: string): boolean {
   const fromRoot = relative(root, resolve(root, path));
   return fromRoot !== '' && !fromRoot.startsWith('..') && !isAbsolute(fromRoot);
 }

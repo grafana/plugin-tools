@@ -249,6 +249,20 @@ describe('startServer', () => {
       expect(image.status).toBe(200);
     });
 
+    it('should not serve a screenshot path that leaves the plugin', async () => {
+      const plugin = await makePlugin('catalog-docs', '../src/img/screenshots/grid.png');
+      const outside = join(plugin.docsPath, '..', 'outside.png');
+      await writeFile(outside, 'secret');
+      server = await startServer({
+        ...plugin,
+        screenshots: { ...plugin.screenshots, paths: ['img/screenshots/grid.png', '../outside.png', outside] },
+        port: 0,
+      });
+
+      expect((await request(server.app).get('/src/img/screenshots/grid.png')).status).toBe(200);
+      expect((await request(server.app).get('/outside.png')).status).toBe(404);
+    });
+
     it('should not serve other files from src', async () => {
       const plugin = await makePlugin('catalog-docs', '../src/img/screenshots/grid.png');
       server = await startServer({ ...plugin, port: 0 });

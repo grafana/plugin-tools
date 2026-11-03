@@ -13,6 +13,7 @@ import { validate } from '../validation/engine.js';
 import { formatResult } from '../validation/format.js';
 import { allRules } from '../validation/rules/index.js';
 import { readFirstReadme } from '../utils/utils.plugin.js';
+import { isInside } from '../utils/utils.screenshots.js';
 import type { PluginScreenshots } from '../validation/types.js';
 import {
   docPageHref,
@@ -173,11 +174,13 @@ export async function startServer(options: ServerOptions): Promise<Server> {
   });
   // each plugin screenshot is served at the url the parser gives it, and nothing else outside the docs folder
   const screenshotUrls = new Map(
-    (screenshots?.paths ?? []).map((path) => {
-      const file = resolve(screenshots!.root, path);
-      const fromDocs = relative(docsPath, file).split(sep).join('/');
-      return [new URL(fromDocs, `https://preview.local${DOCS_BASE}/`).pathname, file];
-    })
+    (screenshots?.paths ?? [])
+      .filter((path) => isInside(screenshots!.root, path))
+      .map((path) => {
+        const file = resolve(screenshots!.root, path);
+        const fromDocs = relative(docsPath, file).split(sep).join('/');
+        return [new URL(fromDocs, `https://preview.local${DOCS_BASE}/`).pathname, file];
+      })
   );
   app.use((req, res, next) => {
     const file = screenshotUrls.get(req.path);

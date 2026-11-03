@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { resolve } from 'node:path';
-import { resolveScreenshotRef, rewriteScreenshotRefs, type BuiltDocs } from './utils.screenshots.js';
+import { isInside, resolveScreenshotRef, rewriteScreenshotRefs, type BuiltDocs } from './utils.screenshots.js';
 
 const screenshots = { root: resolve('/repo/src'), paths: ['img/screenshots/grid.png', 'img/logo.svg'] };
 const docsPath = resolve('/repo/catalog-docs');
@@ -64,6 +64,24 @@ describe('resolveScreenshotRef', () => {
     const outside = { root: resolve('/repo/src'), paths: ['../../shared/hero.png'] };
 
     expect(resolveScreenshotRef('../../shared/hero.png', 'index.md', docsPath, outside)).toBeUndefined();
+  });
+});
+
+describe('isInside', () => {
+  const root = resolve('/repo/src');
+
+  it('should accept a path inside the root', () => {
+    expect(isInside(root, 'img/screenshots/grid.png')).toBe(true);
+  });
+
+  it('should reject a path that leaves the root', () => {
+    expect(isInside(root, '../outside.png')).toBe(false);
+    expect(isInside(root, 'img/../../outside.png')).toBe(false);
+  });
+
+  it('should reject an absolute path and the root itself', () => {
+    expect(isInside(root, resolve('/etc/passwd'))).toBe(false);
+    expect(isInside(root, '.')).toBe(false);
   });
 });
 
