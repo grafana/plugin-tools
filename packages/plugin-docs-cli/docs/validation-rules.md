@@ -68,8 +68,8 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-h1-heading`                  | Don't add a `# Heading` in the page body - the page title already comes from frontmatter, and any h1 you add will be stripped and replaced. Use `##` or lower. | Warning  |
 | `no-duplicate-sidebar-position`  | Pages in the same folder can't share a `sidebar_position` - each needs a unique value to control its order.                                                    | Error    |
 | `no-duplicate-slugs`             | A custom `slug` must be unique across all of your pages.                                                                                                       | Error    |
-| `frontmatter-title-length`       | `title` should be 60 characters or shorter - search engines truncate longer titles in search results.                                                          | Error    |
-| `frontmatter-description-length` | `description` should be between 20 and 160 characters - long enough to be useful, short enough that search engines don't cut it off.                           | Error    |
+| `frontmatter-title-length`       | `title` should be 60 characters or shorter - search engines truncate longer titles in search results.                                                          | Warning  |
+| `frontmatter-description-length` | `description` should be between 20 and 160 characters. Over 160 is a warning, under 20 is an error.                                                            | Varies   |
 
 ## Images & other assets
 
