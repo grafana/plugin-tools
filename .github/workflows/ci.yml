@@ -240,9 +240,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # We keep the node version in .nvmrc out of this matrix as it's tested above in jobs.test
         node-version:
           - 22
-          - 26
+          - 24
     env:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
@@ -281,10 +282,11 @@ jobs:
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
+      # There is no clone of the repo in this job so cannot use node-version-file.
       - name: Setup nodejs
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '24'
+          node-version: '26'
 
       - name: Scaffold plugin using the earliest create-plugin version mentioned in migrations
         run: npx -y @grafana/create-plugin@5.27.1 --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
@@ -399,10 +401,11 @@ jobs:
             DOCKERHUB_USERNAME=dockerhub:username
             DOCKERHUB_PASSWORD=dockerhub:password
 
+      # There is no clone of the repo in this job so cannot use node-version-file.
       - name: Setup nodejs
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '24'
+          node-version: '26'
 
       - name: Download packed artifacts
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -599,23 +602,3 @@ jobs:
       - name: Failing build due to test failures (latest versions)
         if: steps.run-e2e-tests.outcome != 'success' || steps.run-e2e-tests-min-version.outcome != 'success'
         run: exit 1
-
-  # TEMP DISABLED 2026-06-18: deploy-report-pages pushes an unsigned commit to gh-pages,
-  # which will be rejected once unsigned commits are blocked. Re-enable once resolved.
-  # publish-report:
-  #   if: ${{ always() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
-  #   needs: [generate-plugins]
-  #   runs-on: ubuntu-x64
-  #   permissions:
-  #     contents: write
-  #     pull-requests: write
-  #   steps:
-  #     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-  #       with:
-  #         persist-credentials: false
-  #
-  #     - name: Publish report
-  #       uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@376226a5245b6b8bbb95127241c430ef8d6aa643 # deploy-report-pages/v1.0.1
-  #       with:
-  #         github-token: ${{ secrets.GITHUB_TOKEN }}
-  #         retention-days: 7

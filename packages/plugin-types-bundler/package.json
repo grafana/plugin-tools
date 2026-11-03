@@ -47,7 +47,7 @@
     "url": "https://github.com/grafana/plugin-tools/issues"
   },
   "engines": {
-    "node": ">=18.8.0"
+    "node": ">=22"
   },
   "dependencies": {
     "@grafana/levitate": "^0.17.0",
