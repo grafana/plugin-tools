@@ -140,6 +140,12 @@ export default [
       'Rename the useExperimentalRspack feature flag to useRspack in .config/.cprc.json, and remove it from the plugin .cprc.json.',
     scriptPath: import.meta.resolve('./scripts/020-rename-rspack-feature-flag.js'),
   },
+  {
+    name: '021-jest-transform-mjs',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description: 'Fix ESM import errors in Jest for .mjs files',
+    scriptPath: import.meta.resolve('./scripts/021-jest-transform-mjs.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
