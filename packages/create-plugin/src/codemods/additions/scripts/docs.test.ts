@@ -225,7 +225,7 @@ describe('docs scaffolding', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
-      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.13.0');
+      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.14.0');
     });
 
     it('adds docs:serve and docs:validate scripts, with no separate release script', () => {
@@ -352,15 +352,15 @@ describe('docs scaffolding', () => {
       return context.getFile('.github/workflows/release.yml');
     }
 
-    it('raises build-plugin to build-plugin/v1.2.0', () => {
+    it('raises build-plugin to build-plugin/v2.0.0', () => {
       expect(bumped('uses: grafana/plugin-actions/build-plugin@v1.0.2\n')).toBe(
-        'uses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\n'
+        'uses: grafana/plugin-actions/build-plugin@build-plugin/v2.0.0\n'
       );
     });
 
-    it('raises package-plugin to package-plugin/v1.3.6', () => {
+    it('raises package-plugin to package-plugin/v2.0.2', () => {
       expect(bumped('uses: grafana/plugin-actions/package-plugin@package-plugin/v1.3.2\n')).toBe(
-        'uses: grafana/plugin-actions/package-plugin@package-plugin/v1.3.6\n'
+        'uses: grafana/plugin-actions/package-plugin@package-plugin/v2.0.2\n'
       );
     });
 
@@ -956,7 +956,7 @@ describe('docs codemod', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
       expect(context.getFile('.github/workflows/release.yml') ?? '').toContain(
-        'grafana/plugin-actions/build-plugin@build-plugin/v1.2.0'
+        'grafana/plugin-actions/build-plugin@build-plugin/v2.0.0'
       );
     });
 
@@ -1841,7 +1841,7 @@ describe('docs codemod', () => {
     it('asks to check a build-plugin ref pinned to a branch or commit', () => {
       const context = makeContext();
       context.updateFile('.github/workflows/release.yml', 'uses: grafana/plugin-actions/build-plugin@my-branch\n');
-      expect(nextSteps(context).join('\n')).toContain('Docs need build-plugin/v1.2.0 or later.');
+      expect(nextSteps(context).join('\n')).toContain('Docs need build-plugin/v2.0.0 or later.');
     });
 
     it('asks to check a package-plugin ref pinned to a commit', () => {
@@ -1851,7 +1851,7 @@ describe('docs codemod', () => {
         'uses: grafana/plugin-actions/package-plugin@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n'
       );
       const body = nextSteps(context).join('\n');
-      expect(body).toContain('Docs need package-plugin/v1.3.6 or later.');
+      expect(body).toContain('Docs need package-plugin/v2.0.2 or later.');
       expect(body).not.toContain('Make sure your release pipeline');
     });
 

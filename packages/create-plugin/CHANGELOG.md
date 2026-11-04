@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.0.2](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@8.0.1...@grafana/create-plugin@8.0.2) (2026-11-04)
+
+
+### Bug Fixes
+
+* **create-plugin:** link plugin screenshots from src in docs-content ([#3061](https://github.com/grafana/plugin-tools/issues/3061)) ([17987a5](https://github.com/grafana/plugin-tools/commit/17987a5555dd48aff99ef88dbee81a2b7492248e))
+* **create-plugin:** require docs-cli 0.14 and v2 actions in add docs ([#3059](https://github.com/grafana/plugin-tools/issues/3059)) ([b41834e](https://github.com/grafana/plugin-tools/commit/b41834eb16df0bb75b3a2bd0092e57dd105e3707))
+
 ## [8.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@8.0.0...@grafana/create-plugin@8.0.1) (2026-11-03)
 
 
