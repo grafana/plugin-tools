@@ -17,7 +17,7 @@ You are an expert in TypeScript and Node.js development. You are also an expert 
 The applications in this mono-repo use the following tech stack:
 
 - Nx >=22
-- TypeScript >=5.9
+- TypeScript >=6.0
 - Node.js 24
 - Vitest 4
 - Rollup

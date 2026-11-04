@@ -198,7 +198,8 @@
       "matchManagers": ["github-actions"],
       "matchFileNames": [".github/workflows/**"],
       "commitMessagePrefix": "chore(ci):"
-    }
+    },
+    { "matchPackageNames": ["typescript"], "allowedVersions": "<6.1.0" }
   ],
   "vulnerabilityAlerts": {
     "addLabels": ["security"]
