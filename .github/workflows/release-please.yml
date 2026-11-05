@@ -73,7 +73,10 @@ jobs:
 
       # Build all packages to ensure dist files are present for publishing
       # Nx and release please don't share the same dependency graph so safer to build everything.
+      # Published packages must come from source, never from the Nx Cloud remote cache.
       - name: Build all packages
+        env:
+          NX_NO_CLOUD: 'true'
         run: npm run build
 
       - name: Publish to npm
