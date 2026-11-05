@@ -62,13 +62,12 @@ jobs:
         run: npm ci --no-audit
 
       # The jobs that scaffold plugins from the packed packages only need to run when a published package
-      # (or something it depends on) changed, or when the files they are configured by changed.
+      # is affected. Files they are configured by (see sharedGlobals in nx.json) count as affecting every package.
       - name: Detect whether integration jobs are needed
         id: integration
         run: |
           affected_packages="$(npx nx show projects --affected -p 'tag:npm:public')"
-          changed_config="$(git diff --name-only "$NX_BASE" "$NX_HEAD" -- .github/workflows/ci.yml .github/knip.json .nvmrc)"
-          if [ "$affected_packages" != "[]" ] || [ -n "$changed_config" ]; then
+          if [ "$affected_packages" != "[]" ]; then
             echo "integration=true" >> "$GITHUB_OUTPUT"
           else
             echo "integration=false" >> "$GITHUB_OUTPUT"
