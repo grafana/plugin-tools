@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   test:
     runs-on: ubuntu-x64
@@ -19,6 +23,8 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    outputs:
+      integration: ${{ steps.integration.outputs.integration }}
     env:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
@@ -54,6 +60,21 @@ jobs:
 
       - name: Install dependencies
         run: npm ci --no-audit
+
+      # The jobs that scaffold plugins from the packed packages only need to run when a published package
+      # (or something it depends on) changed, or when the files they are configured by changed.
+      - name: Detect whether integration jobs are needed
+        id: integration
+        run: |
+          affected_packages="$(npx nx show projects --affected -p 'tag:npm:public')"
+          changed_config="$(git diff --name-only "$NX_BASE" "$NX_HEAD" -- .github/workflows/ci.yml .github/knip.json .nvmrc)"
+          if [ "$affected_packages" != "[]" ] || [ -n "$changed_config" ]; then
+            echo "integration=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "integration=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Affected public packages: $affected_packages"
+
       - name: Check types
         run: npm exec nx affected -- --target typecheck --parallel
       - name: Lint
@@ -82,7 +103,7 @@ jobs:
 
   test-node-versions:
     runs-on: ubuntu-x64
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: "needs.test.outputs.integration == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Test node versions
     permissions:
       contents: read
@@ -277,7 +298,7 @@ jobs:
   test-updates:
     name: Test create-plugin update command
     runs-on: ubuntu-x64
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: "needs.test.outputs.integration == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: [test]
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
@@ -355,7 +376,7 @@ jobs:
 
   generate-plugins:
     name: Test plugin scaffolding
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: "needs.test.outputs.integration == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: [test]
     runs-on: ubuntu-x64
     permissions:
