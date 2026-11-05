@@ -24,7 +24,8 @@ jobs:
       contents: read
       id-token: write
     outputs:
-      integration: ${{ steps.integration.outputs.integration }}
+      public-packages-affected: ${{ steps.affected.outputs.public-packages-affected }}
+      create-plugin-affected: ${{ steps.affected.outputs.create-plugin-affected }}
     env:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
@@ -63,16 +64,24 @@ jobs:
 
       # The jobs that scaffold plugins from the packed packages only need to run when a published package
       # is affected. Files they are configured by (see sharedGlobals in nx.json) count as affecting every package.
-      - name: Detect whether integration jobs are needed
-        id: integration
+      # The update test only uses create-plugin, so it has its own output.
+      - name: Detect affected packages
+        id: affected
         run: |
           affected_packages="$(npx nx show projects --affected -p 'tag:npm:public')"
+          affected_create_plugin="$(npx nx show projects --affected -p '@grafana/create-plugin')"
           if [ "$affected_packages" != "[]" ]; then
-            echo "integration=true" >> "$GITHUB_OUTPUT"
+            echo "public-packages-affected=true" >> "$GITHUB_OUTPUT"
           else
-            echo "integration=false" >> "$GITHUB_OUTPUT"
+            echo "public-packages-affected=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ "$affected_create_plugin" != "[]" ]; then
+            echo "create-plugin-affected=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "create-plugin-affected=false" >> "$GITHUB_OUTPUT"
           fi
           echo "Affected public packages: $affected_packages"
+          echo "Affected create-plugin: $affected_create_plugin"
 
       - name: Check types
         run: npm exec nx affected -- --target typecheck --parallel
@@ -102,7 +111,7 @@ jobs:
 
   test-node-versions:
     runs-on: ubuntu-x64
-    if: "needs.test.outputs.integration == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: "needs.test.outputs.public-packages-affected == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Test node versions
     permissions:
       contents: read
@@ -297,7 +306,7 @@ jobs:
   test-updates:
     name: Test create-plugin update command
     runs-on: ubuntu-x64
-    if: "needs.test.outputs.integration == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: "needs.test.outputs.create-plugin-affected == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: [test]
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
@@ -375,7 +384,7 @@ jobs:
 
   generate-plugins:
     name: Test plugin scaffolding
-    if: "needs.test.outputs.integration == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: "needs.test.outputs.public-packages-affected == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: [test]
     runs-on: ubuntu-x64
     permissions:
