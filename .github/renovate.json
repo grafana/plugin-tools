@@ -43,7 +43,7 @@
       "/(^|/)packages/create-plugin/templates/docs/common/workflows/.+\\.ya?ml$/"
     ]
   },
-  "postUpdateOptions": ["npmDedupe"],
+  "postUpdateOptions": ["npmDedupe", "npmInstallTwice"],
   "labels": ["dependencies", "javascript"],
   // Custom regex managers:
   //  1. @grafana/* versions inside create-plugin's template `_package.json`.
