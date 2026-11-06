@@ -34,7 +34,7 @@ const { grafanaESModules, nodeModulesToTransform } = require('./config/jest/util
 ---
 
 `;
-const oldWebpackSection = `### Extending the Webpack config
+const webpackSection = `### Extending the Webpack config
 
 \`\`\`typescript
 import grafanaConfig, { type Env } from './.config/webpack/webpack.config';
@@ -43,7 +43,7 @@ import grafanaConfig, { type Env } from './.config/webpack/webpack.config';
 ---
 
 `;
-const oldReadme = intro + oldSection + oldJestSection + oldWebpackSection + prettierSection;
+const oldReadme = intro + oldSection + oldJestSection + webpackSection + prettierSection;
 const currentReadme = readFileSync(join(TEMPLATE_PATHS.common, README_PATH), 'utf8');
 
 describe('022-config-docs', () => {
@@ -61,29 +61,27 @@ describe('022-config-docs', () => {
     expect(result?.startsWith(intro)).toBe(true);
     expect(result?.endsWith(prettierSection)).toBe(true);
     expect(result).toContain(oldJestSection);
-    expect(result).toContain(oldWebpackSection);
+    expect(result).toContain(webpackSection);
   });
 
   it('leaves the current generated README unchanged', () => {
     const context = new Context('/virtual');
     context.addFile('eslint.config.mjs', 'export default [];');
     context.addFile('.config/jest/utils.js', 'module.exports = {};');
-    context.addFile('.config/webpack/webpack.config.ts', 'export default {};');
     context.addFile(README_PATH, currentReadme);
 
     expect(migrate(context).getFile(README_PATH)).toBe(currentReadme);
   });
 
-  it('repairs the Jest and Webpack examples independently of the ESLint config', () => {
+  it('repairs the Jest example independently of the ESLint config', () => {
     const context = new Context('/virtual');
     context.addFile('.config/jest/utils.js', 'module.exports = {};');
-    context.addFile('.config/webpack/webpack.config.ts', 'export default {};');
     context.addFile(README_PATH, oldReadme);
 
     const result = migrate(context).getFile(README_PATH);
 
     expect(result).toContain("require('./.config/jest/utils')");
-    expect(result).toContain("from './.config/webpack/webpack.config.ts';");
+    expect(result).toContain(webpackSection);
     expect(result).toContain(oldSection);
     expect(result?.startsWith(intro)).toBe(true);
     expect(result?.endsWith(prettierSection)).toBe(true);
@@ -98,15 +96,12 @@ describe('022-config-docs', () => {
 
     expect(result).toContain("require('./.config/jest/utils')");
     expect(result).toContain(oldSection);
-    expect(result).toContain(oldWebpackSection);
+    expect(result).toContain(webpackSection);
   });
 
-  it.each([
-    ["require('./.config/jest/utils')", "require('./config/jest/utils')"],
-    ["from './.config/webpack/webpack.config.ts';", "from './.config/webpack/webpack.config';"],
-  ])('ships a template with the usable configuration reference %s', (currentReference, oldReference) => {
-    expect(currentReadme).toContain(currentReference);
-    expect(currentReadme).not.toContain(oldReference);
+  it('ships a template with the correct Jest helper path', () => {
+    expect(currentReadme).toContain("require('./.config/jest/utils')");
+    expect(currentReadme).not.toContain("require('./config/jest/utils')");
   });
 
   it('does not create a missing README', () => {
@@ -135,7 +130,6 @@ describe('022-config-docs', () => {
   it('is idempotent', async () => {
     const context = new Context('/virtual');
     context.addFile('.config/jest/utils.js', 'module.exports = {};');
-    context.addFile('.config/webpack/webpack.config.ts', 'export default {};');
     context.addFile('eslint.config.mjs', 'export default [];');
     context.addFile(README_PATH, oldReadme);
 

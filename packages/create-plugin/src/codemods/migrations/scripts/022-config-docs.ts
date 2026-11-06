@@ -15,11 +15,6 @@ const CONFIG_SECTIONS = [
     configFile: '.config/jest/utils.js',
     legacyReference: /\.\/config\/jest\/utils/,
   },
-  {
-    name: 'Webpack',
-    configFile: '.config/webpack/webpack.config.ts',
-    legacyReference: /(['"])\.\/\.config\/webpack\/webpack\.config\1/,
-  },
 ];
 
 export default function migrate(context: Context): Context {
