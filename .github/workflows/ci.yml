@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -68,20 +68,19 @@ jobs:
       - name: Detect affected packages
         id: affected
         run: |
-          affected_packages="$(npx nx show projects --affected -p 'tag:npm:public')"
-          affected_create_plugin="$(npx nx show projects --affected -p '@grafana/create-plugin')"
+          # --json is explicit: without it nx only prints JSON when it detects an AI agent.
+          affected_packages="$(npx nx show projects --affected -p 'tag:npm:public' --json)"
+          echo "Affected public packages: $affected_packages"
           if [ "$affected_packages" != "[]" ]; then
             echo "public-packages-affected=true" >> "$GITHUB_OUTPUT"
           else
             echo "public-packages-affected=false" >> "$GITHUB_OUTPUT"
           fi
-          if [ "$affected_create_plugin" != "[]" ]; then
+          if [[ "$affected_packages" == *'"@grafana/create-plugin"'* ]]; then
             echo "create-plugin-affected=true" >> "$GITHUB_OUTPUT"
           else
             echo "create-plugin-affected=false" >> "$GITHUB_OUTPUT"
           fi
-          echo "Affected public packages: $affected_packages"
-          echo "Affected create-plugin: $affected_create_plugin"
 
       - name: Check types
         run: npm exec nx affected -- --target typecheck --parallel
