@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.14.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-meta-extractor@0.13.0...@grafana/plugin-meta-extractor@0.14.0) (2026-11-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade to typescript 6 ([#3070](https://github.com/grafana/plugin-tools/issues/3070))
+
+### Features
+
+* upgrade to typescript 6 ([#3070](https://github.com/grafana/plugin-tools/issues/3070)) ([c197bd0](https://github.com/grafana/plugin-tools/commit/c197bd0b726f54fc2dc6d6c62fe73da3ba99a1fb))
+
 ## v0.10.0 (Tue Oct 07 2025)
 
 #### 🐛 Bug Fix
