@@ -70,7 +70,7 @@ A common issue with the current jest config involves importing an npm package th
 
 ```javascript
 process.env.TZ = 'UTC';
-const { grafanaESModules, nodeModulesToTransform } = require('./config/jest/utils');
+const { grafanaESModules, nodeModulesToTransform } = require('./.config/jest/utils');
 
 module.exports = {
   // Jest configuration provided by Grafana
@@ -171,7 +171,7 @@ We are going to use [`webpack-merge`](https://github.com/survivejs/webpack-merge
 // webpack.config.ts
 import type { Configuration } from 'webpack';
 import { merge } from 'webpack-merge';
-import grafanaConfig, { type Env } from './.config/webpack/webpack.config';
+import grafanaConfig, { type Env } from './.config/webpack/webpack.config.ts';
 
 const config = async (env: Env): Promise<Configuration> => {
   const baseConfig = await grafanaConfig(env);
