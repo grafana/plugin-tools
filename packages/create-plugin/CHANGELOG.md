@@ -1,5 +1,21 @@
 # Changelog
 
+## [9.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@8.0.2...@grafana/create-plugin@9.0.0) (2026-11-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **create-plugin:** require node 24 and sign-plugin v4 in scaffolded plugins ([#3071](https://github.com/grafana/plugin-tools/issues/3071))
+
+### Features
+
+* **create-plugin:** require node 24 and sign-plugin v4 in scaffolded plugins ([#3071](https://github.com/grafana/plugin-tools/issues/3071)) ([d263c01](https://github.com/grafana/plugin-tools/commit/d263c01eb77d99ce51fc252382e5e07dc7710b5d))
+
+
+### Bug Fixes
+
+* **templates:** Update dependency @grafana/plugin-e2e to v3.15.3 ([#3028](https://github.com/grafana/plugin-tools/issues/3028)) ([1664c4a](https://github.com/grafana/plugin-tools/commit/1664c4ab3b6fb70c5254c65bfc1f77ce96951977))
+
 ## [8.0.2](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@8.0.1...@grafana/create-plugin@8.0.2) (2026-11-04)
 
 
