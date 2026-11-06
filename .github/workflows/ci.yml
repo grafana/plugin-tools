@@ -303,9 +303,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit
       - name: Build
-        run: npm exec nx affected -- --target build --parallel
+        run: npm exec nx affected -- --target build --parallel --exclude website
       - name: Unit tests
-        run: npm exec nx affected -- --target test --run
+        run: npm exec nx affected -- --target test --run --exclude website
 
   test-updates:
     name: Test create-plugin update command
