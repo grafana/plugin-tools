@@ -13,13 +13,14 @@ import {
   runGoModTidy,
 } from './utils.js';
 import { join } from 'node:path';
-import { mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, rm, symlink, writeFile } from 'node:fs/promises';
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { execSync } from 'node:child_process';
 import which from 'which';
 import { output } from '../utils/utils.console.js';
 import { vi } from 'vitest';
+import { createRequire } from 'node:module';
 
 vi.mock(import('node:child_process'), async (importOriginal) => ({
   ...(await importOriginal()),
@@ -144,6 +145,22 @@ describe('utils', () => {
       flushChanges(context);
       expect(readFileSync(join(tmpDir, 'file.json'), 'utf-8')).toBe('[{ "foo": "bar", "baz": "qux" }]\n');
       expect(readFileSync(join(tmpDir, 'file.txt'), 'utf-8')).toBe("file which isn't supported");
+    });
+
+    it('uses Prettier defaults when the project has no configuration', async () => {
+      const prettierPackage = createRequire(import.meta.url).resolve('prettier/package.json');
+      await mkdir(join(tmpDir, 'node_modules'));
+      await symlink(join(prettierPackage, '..'), join(tmpDir, 'node_modules/prettier'), 'dir');
+      const context = new Context(tmpDir);
+      context.addFile('file.json', '[{"foo":"bar"}]');
+      const cwd = vi.spyOn(process, 'cwd').mockReturnValue(tmpDir);
+
+      try {
+        await formatFiles(context);
+        expect(context.getFile('file.json')).toBe('[{ "foo": "bar" }]\n');
+      } finally {
+        cwd.mockRestore();
+      }
     });
   });
 

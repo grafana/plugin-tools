@@ -86,7 +86,7 @@ export async function formatFiles(context: Context) {
   const files = context.listChanges();
   for (const [filePath, { content, changeType }] of Object.entries(files)) {
     if (changeType !== 'delete' && content) {
-      const prettierOptions = await prettier.resolveConfig(filePath);
+      const prettierOptions = (await prettier.resolveConfig(filePath)) ?? {};
       const supported = await prettier.getFileInfo(filePath, prettierOptions as any);
 
       if (filePath.endsWith('.eslintrc')) {
