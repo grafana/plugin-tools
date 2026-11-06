@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.3](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.2...@grafana/plugin-docs-cli@0.14.3) (2026-11-06)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency chokidar to v6 ([#3074](https://github.com/grafana/plugin-tools/issues/3074)) ([c238e79](https://github.com/grafana/plugin-tools/commit/c238e79daffbbcb348c28298a1181a374f0c6dcc))
+
 ## [0.14.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.1...@grafana/plugin-docs-cli@0.14.2) (2026-11-06)
 
 
