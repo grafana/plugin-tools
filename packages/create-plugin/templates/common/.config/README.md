@@ -70,7 +70,7 @@ A common issue with the current jest config involves importing an npm package th
 
 ```javascript
 process.env.TZ = 'UTC';
-const { grafanaESModules, nodeModulesToTransform } = require('./config/jest/utils');
+const { grafanaESModules, nodeModulesToTransform } = require('./.config/jest/utils');
 
 module.exports = {
   // Jest configuration provided by Grafana
