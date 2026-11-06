@@ -263,8 +263,7 @@ jobs:
 
   unit-test-node-versions:
     runs-on: ubuntu-x64
-    if: "needs.test.outputs.public-packages-affected == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
-    needs: [test]
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Run unit tests (node ${{ matrix.node-version }})
     permissions:
       contents: read
@@ -304,9 +303,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit
       - name: Build
-        run: npm exec nx affected -- --target build --parallel
+        run: npm exec nx affected -- --target build --parallel --exclude 'tag:npm:private'
       - name: Unit tests
-        run: npm exec nx affected -- --target test --run
+        run: npm exec nx affected -- --target test --run --exclude 'tag:npm:private'
 
   test-updates:
     name: Test create-plugin update command
