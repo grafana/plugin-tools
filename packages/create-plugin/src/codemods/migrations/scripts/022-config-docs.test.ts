@@ -34,16 +34,7 @@ const { grafanaESModules, nodeModulesToTransform } = require('./config/jest/util
 ---
 
 `;
-const webpackSection = `### Extending the Webpack config
-
-\`\`\`typescript
-import grafanaConfig, { type Env } from './.config/webpack/webpack.config';
-\`\`\`
-
----
-
-`;
-const oldReadme = intro + oldSection + oldJestSection + webpackSection + prettierSection;
+const oldReadme = intro + oldSection + oldJestSection + prettierSection;
 const currentReadme = readFileSync(join(TEMPLATE_PATHS.common, README_PATH), 'utf8');
 
 describe('022-config-docs', () => {
@@ -61,7 +52,6 @@ describe('022-config-docs', () => {
     expect(result?.startsWith(intro)).toBe(true);
     expect(result?.endsWith(prettierSection)).toBe(true);
     expect(result).toContain(oldJestSection);
-    expect(result).toContain(webpackSection);
   });
 
   it('leaves the current generated README unchanged', () => {
@@ -81,7 +71,6 @@ describe('022-config-docs', () => {
     const result = migrate(context).getFile(README_PATH);
 
     expect(result).toContain("require('./.config/jest/utils')");
-    expect(result).toContain(webpackSection);
     expect(result).toContain(oldSection);
     expect(result?.startsWith(intro)).toBe(true);
     expect(result?.endsWith(prettierSection)).toBe(true);
@@ -96,7 +85,6 @@ describe('022-config-docs', () => {
 
     expect(result).toContain("require('./.config/jest/utils')");
     expect(result).toContain(oldSection);
-    expect(result).toContain(webpackSection);
   });
 
   it('ships a template with the correct Jest helper path', () => {
