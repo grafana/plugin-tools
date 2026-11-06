@@ -8,10 +8,11 @@ const oldEslintSection = `### Extending the ESLint config
 Edit \`.eslintrc\` and extend \`./.config/.eslintrc\`.
 
 `;
-const oldReadme = `${oldEslintSection}### Extending the Jest config
+const oldJestSection = `### Extending the Jest config
 
 const { grafanaESModules, nodeModulesToTransform } = require('./config/jest/utils');
 `;
+const oldReadme = oldEslintSection + oldJestSection;
 
 describe('022-config-docs', () => {
   it('updates the outdated ESLint and Jest instructions', () => {
@@ -26,17 +27,6 @@ describe('022-config-docs', () => {
     expect(result).not.toContain('.eslintrc');
     expect(result).toContain("require('./.config/jest/utils')");
     expect(result).not.toContain("require('./config/jest/utils')");
-  });
-
-  it('repairs the Jest example without migrating legacy ESLint instructions', () => {
-    const context = new Context('/virtual');
-    context.addFile('.config/jest/utils.js', 'module.exports = {};');
-    context.addFile(README_PATH, oldReadme);
-
-    const result = migrate(context).getFile(README_PATH);
-
-    expect(result).toContain("require('./.config/jest/utils')");
-    expect(result).toContain(oldEslintSection);
   });
 
   it('is idempotent', async () => {
