@@ -27,7 +27,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@typescript-eslint/parser": "8.64.0",
+    "@typescript-eslint/parser": "8.72.1",
     "@typescript-eslint/typescript-estree": "8.72.1",
     "minimist": "1.2.8",
     "pm-detect": "0.6.0",
