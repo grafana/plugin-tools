@@ -4,6 +4,10 @@ Lightweight library for parsing Grafana plugin documentation from markdown to HA
 
 Plugin docs are plain markdown pages that ship with each plugin release. This package turns a page into a [HAST](https://github.com/syntax-tree/hast) tree with its frontmatter and headings, so a site can render it. The [Grafana plugin catalog](https://grafana.com/grafana/plugins/) uses it to show a plugin's Documentation tab, and [`@grafana/plugin-docs-cli`](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-docs-cli) uses it for the local preview and validation.
 
+Markdown goes in. You get the page's frontmatter, its headings and a sanitized HAST tree, which you render with `hast-util-to-html`, `hast-util-to-jsx-runtime` or your own components.
+
+![Markdown goes through @grafana/plugin-docs-parser to a HAST tree, which you render as an HTML string or as React](https://raw.githubusercontent.com/grafana/plugin-tools/main/packages/plugin-docs-parser/assets/parser-flow.jpg)
+
 ## Requirements
 
 - Node.js 22 or later.
