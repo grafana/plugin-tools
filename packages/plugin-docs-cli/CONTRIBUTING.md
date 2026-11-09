@@ -1,7 +1,7 @@
 # Contributing to Grafana / Plugin Docs CLI
 
 We are always grateful to receive contributions!<br />
-The following guidelines help you on how to start with the codebase and how to submit your work.
+The following guidelines help you get started with the codebase and submit your work.
 
 ## Installation
 
