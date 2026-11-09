@@ -123,7 +123,7 @@ function frontmatterProblemDiagnostic(
       return {
         rule: Rule.ValidYaml,
         line: problem.line,
-        title: 'Frontmatter must be a list of fields',
+        title: 'Frontmatter must use key: value fields',
         detail: 'Write each field on its own line as "key: value", such as "title: Configure the data source".',
       };
   }

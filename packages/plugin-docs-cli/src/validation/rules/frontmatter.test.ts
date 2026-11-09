@@ -289,7 +289,7 @@ describe('checkFrontmatter', () => {
     const findings = await checkFrontmatter(input(tmp));
 
     expect(findings).toEqual([
-      expect.objectContaining({ rule: Rule.ValidYaml, line: 2, title: 'Frontmatter must be a list of fields' }),
+      expect.objectContaining({ rule: Rule.ValidYaml, line: 2, title: 'Frontmatter must use key: value fields' }),
     ]);
   });
 

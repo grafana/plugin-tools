@@ -79,10 +79,17 @@ describe('readFrontmatter', () => {
     expect(result.problem).toEqual({ kind: 'invalid-yaml', line: 3, message: 'duplicated mapping key' });
   });
 
+  it('reports the line of frontmatter that is not a mapping after blank and comment lines', () => {
+    const result = readFrontmatter('---\n# note\n\n- a\n---\nbody');
+    expect(result.problem).toEqual({ kind: 'not-a-mapping', line: 4 });
+  });
+
   it.each([
     ['a list', '---\n- a\n- b\n---\nbody'],
     ['a string', '---\njust text\n---\nbody'],
     ['a date', '---\n2024-01-02\n---\nbody'],
+    ['null', '---\nnull\n---\nbody'],
+    ['a tilde', '---\n~\n---\nbody'],
   ])('reports frontmatter that is %s', (_name, content) => {
     const result = readFrontmatter(content);
     expect(result.data).toEqual({});

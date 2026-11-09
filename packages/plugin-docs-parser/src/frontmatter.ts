@@ -41,9 +41,15 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
   return Object.prototype.toString.call(value) === '[object Object]';
 }
 
+const BLANK_LINE_RE = /^\s*(?:#.*)?$/;
+
 // js-yaml throws on a document with no content, but an empty block is fine
 function isBlank(yamlText: string): boolean {
-  return yamlText.split('\n').every((line) => /^\s*(?:#.*)?$/.test(line));
+  return yamlText.split('\n').every((line) => BLANK_LINE_RE.test(line));
+}
+
+function firstContentLineOffset(yamlText: string): number {
+  return yamlText.split('\n').findIndex((line) => !BLANK_LINE_RE.test(line));
 }
 
 function lineAt(text: string, index: number): number {
@@ -93,7 +99,12 @@ export function readFrontmatter(content: string): FrontmatterResult {
     return { hasBlock: true, data: {}, body };
   }
   if (!isPlainObject(parsed)) {
-    return { hasBlock: true, data: {}, body, problem: { kind: 'not-a-mapping', line: yamlLine } };
+    return {
+      hasBlock: true,
+      data: {},
+      body,
+      problem: { kind: 'not-a-mapping', line: yamlLine + firstContentLineOffset(yamlText) },
+    };
   }
   return { hasBlock: true, data: parsed, body };
 }

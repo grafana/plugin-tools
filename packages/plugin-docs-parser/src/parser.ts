@@ -116,7 +116,7 @@ export function readSnippets(content: string): { snippets: SnippetLocation[]; pr
 export function parseMarkdown(content: string, options?: ParseOptions): ParsedMarkdown {
   const { data: frontmatter, body: markdownContent, problem } = readFrontmatter(content);
   if (problem?.kind === 'invalid-yaml') {
-    throw new Error(`Failed to extract frontmatter: ${problem.message}`);
+    throw new Error(`Failed to extract frontmatter (line ${problem.line}): ${problem.message}`);
   }
 
   // build the unified pipeline: markdown → mdast → hast.
