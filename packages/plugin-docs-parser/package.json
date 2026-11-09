@@ -59,6 +59,8 @@
   },
   "devDependencies": {
     "@types/js-yaml": "4.0.9",
+    "@types/mdast": "4.0.4",
+    "@types/unist": "3.0.3",
     "hast-util-to-html": "9.0.6"
   }
 }

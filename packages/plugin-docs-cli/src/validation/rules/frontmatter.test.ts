@@ -257,6 +257,52 @@ describe('checkFrontmatter', () => {
     expect(finding!.severity).toBe('error');
   });
 
+  it('should report the line of invalid YAML', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(join(tmp, 'page.md'), '---\ntitle: A\ntitle: B\n---\n## Content\n');
+
+    const findings = await checkFrontmatter(input(tmp));
+
+    expect(findings).toEqual([
+      expect.objectContaining({ rule: Rule.ValidYaml, line: 3, detail: 'duplicated mapping key' }),
+    ]);
+  });
+
+  it('should report a frontmatter block that is not closed', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(join(tmp, 'page.md'), `---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\n\n${LONG_BODY}\n`);
+
+    const findings = await checkFrontmatter(input(tmp));
+
+    expect(findings).toEqual([
+      expect.objectContaining({ rule: Rule.BlockExists, severity: 'error', title: 'Frontmatter block is not closed' }),
+    ]);
+  });
+
+  it.each([
+    ['a string', 'just text'],
+    ['a list', '- title'],
+  ])('should report frontmatter that is %s instead of crashing', async (_name, yaml) => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(join(tmp, 'page.md'), `---\n${yaml}\n---\n${LONG_BODY}\n`);
+
+    const findings = await checkFrontmatter(input(tmp));
+
+    expect(findings).toEqual([
+      expect.objectContaining({ rule: Rule.ValidYaml, line: 2, title: 'Frontmatter must be a list of fields' }),
+    ]);
+  });
+
+  it('should read a page that starts with a byte order mark', async () => {
+    const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+    await writeFile(
+      join(tmp, 'page.md'),
+      `\uFEFF---\ntitle: Page\ndescription: ${GOOD_DESCRIPTION}\n---\n${LONG_BODY}\n`
+    );
+
+    expect(await checkFrontmatter(input(tmp))).toEqual([]);
+  });
+
   it('should report no-duplicate-sidebar-position for siblings with same position', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     const fm = (pos: number) => `---\ntitle: Page\ndescription: A page\nsidebar_position: ${pos}\n---\n`;
