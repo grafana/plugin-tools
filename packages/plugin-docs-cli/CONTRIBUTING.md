@@ -36,7 +36,7 @@ npm install
 
 ## Development
 
-There are a collection of [commands](#commands) to assist with developing `@grafana/plugin-docs-cli`. Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code changes to the project.
+There is a collection of [commands](#commands) to assist with developing `@grafana/plugin-docs-cli`. Please read the main [contributing guide](../../CONTRIBUTING.md) before contributing any code changes to the project.
 
 ### Commands
 
