@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.1...@grafana/plugin-docs-cli@0.14.2) (2026-11-06)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency hast-util-to-html to v9.0.6 ([#3054](https://github.com/grafana/plugin-tools/issues/3054)) ([50c538e](https://github.com/grafana/plugin-tools/commit/50c538ea2e25748a408c603ee7dd7a6cb251b6ec))
+
 ## [0.14.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.0...@grafana/plugin-docs-cli@0.14.1) (2026-11-03)
 
 

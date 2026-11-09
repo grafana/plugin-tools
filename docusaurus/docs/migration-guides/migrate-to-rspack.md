@@ -33,6 +33,16 @@ If you have Claude Code or OpenAI Codex installed, `create-plugin` asks whether 
 
 To learn how agents work with the `add` command, refer to [Add features to your plugin](../how-to-guides/add-features-to-a-plugin.md). If you don't have an agent, or prefer to port the configuration yourself, refer to [Migrate without an agent](#migrate-without-an-agent).
 
+:::info
+
+To have your own coding agent run the migration, give it this prompt:
+
+```text
+Run `npx @grafana/create-plugin@latest add rspack` and follow its instructions. Don't commit.
+```
+
+:::
+
 ## What changes in your project
 
 The migration changes these files:
