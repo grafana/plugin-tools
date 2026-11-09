@@ -89,7 +89,7 @@ export function readFrontmatter(content: string): FrontmatterResult {
     return { hasBlock: true, data: {}, body, problem: { kind: 'invalid-yaml', line, message } };
   }
 
-  if (parsed === undefined || parsed === null) {
+  if (parsed === undefined) {
     return { hasBlock: true, data: {}, body };
   }
   if (!isPlainObject(parsed)) {
