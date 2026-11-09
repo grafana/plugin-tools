@@ -5,4 +5,3 @@
 The `.config/` directory contains the default tooling configuration for developing, testing, and building Grafana plugins.
 
 To customize these settings, follow the [Extend default configurations guide](https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations).
-For Rspack, see the [Rspack configuration example](https://grafana.com/developers/plugin-tools/migration-guides/migrate-to-rspack#port-a-webpack-configuration).
