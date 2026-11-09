@@ -75,8 +75,7 @@ The script adds these files, depending on your plugin type:
 │   ├── examples.md
 │   ├── troubleshooting.md
 │   ├── README.md             # notes for you, not published
-│   ├── AGENTS.md             # instructions for coding agents, not published
-│   └── CLAUDE.md             # points Claude Code at AGENTS.md
+│   └── AGENTS.md             # instructions for coding agents, not published
 ├── .github/workflows/
 │   └── validate-docs.yml     # validates docs on pull requests
 ├── .config/AGENTS/
@@ -99,8 +98,7 @@ The script adds these files, depending on your plugin type:
 │   ├── dashboards.md         # only when plugin.json includes a dashboard
 │   ├── troubleshooting.md
 │   ├── README.md             # notes for you, not published
-│   ├── AGENTS.md             # instructions for coding agents, not published
-│   └── CLAUDE.md             # points Claude Code at AGENTS.md
+│   └── AGENTS.md             # instructions for coding agents, not published
 ├── .github/workflows/
 │   └── validate-docs.yml     # validates docs on pull requests
 ├── .config/AGENTS/
@@ -121,8 +119,7 @@ The script adds these files, depending on your plugin type:
 │   ├── permissions.md        # only when plugin.json has roles, iam or page roles
 │   ├── troubleshooting.md
 │   ├── README.md             # notes for you, not published
-│   ├── AGENTS.md             # instructions for coding agents, not published
-│   └── CLAUDE.md             # points Claude Code at AGENTS.md
+│   └── AGENTS.md             # instructions for coding agents, not published
 ├── .github/workflows/
 │   └── validate-docs.yml     # validates docs on pull requests
 ├── .config/AGENTS/
@@ -203,7 +200,7 @@ Plugin docs follow the [Grafana Writers' Toolkit](https://grafana.com/docs/write
 
 The script scaffolds instructions for coding agents. They explain what to document and how to use `plugin-docs-cli` to validate and preview your docs. With them, your agent of choice can write meaningful, valid docs from short prompts such as "document the new panel option" or "document the new query editor mode".
 
-The instructions live in `AGENTS.md` and `CLAUDE.md` in your docs folder. To make sure agents find them, link to `<docsPath>/AGENTS.md` from the agent files in the root of your plugin.
+The instructions live in `AGENTS.md` in your docs folder. To make sure agents find them, link to `<docsPath>/AGENTS.md` from the agent files in the root of your plugin.
 
 ### Draft the first version
 
