@@ -149,7 +149,7 @@ export default [
   {
     name: '022-config-docs',
     version: '0.0.0-unreleased', // x-release-please-version
-    description: 'Update generated README ESLint and Jest configuration instructions.',
+    description: 'Link the generated configuration README to the official guide.',
     scriptPath: import.meta.resolve('./scripts/022-config-docs.js'),
   },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
