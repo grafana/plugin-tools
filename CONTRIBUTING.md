@@ -234,6 +234,17 @@ The PR-title check (`.github/workflows/check-pr-title.yml`) blocks merges when t
 
 ¹ `bump-minor-pre-major: true` in `release-please-config.json` preserves the project's historical behaviour for 0.x packages — `feat:` produces a minor bump rather than the release-please default of patch.
 
+### Breaking changes in a monorepo
+
+A `feat!:` title or a `BREAKING CHANGE:` footer marks every package the commit touches as breaking, even when the change isn't breaking for some of them. release-please then proposes a major bump for each of those packages, or a minor bump for 0.x packages.
+
+Before you merge a breaking PR, check the diff of each package it touches:
+
+- If the change affects consumers of the package, it's breaking. Peer dependencies, public API, and shipped behavior all count.
+- If the change only affects `devDependencies` or tooling, it isn't breaking.
+
+Move the changes for any non-breaking package to a separate PR with a `fix:` or `chore:` title. If you can't split the PR, plan to add a `Release-As:` footer when you merge. Refer to [Fix an unwanted major bump](#fix-an-unwanted-major-bump).
+
 ### How a release happens
 
 1. **PRs merge to `main`.** Each conventional-commit PR title joins the history.
