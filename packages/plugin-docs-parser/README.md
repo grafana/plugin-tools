@@ -83,19 +83,20 @@ For everything plugin authors can write, see [Supported markdown](https://github
 
 ### Helpers
 
-| Export                         | Description                                                                                                                                  |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `readSnippets(content)`        | Lists the snippets in a page with their line numbers, and the problems that make the page show its fallback text. See [Snippets](#snippets). |
-| `SNIPPET_NAMES`                | The names of every snippet the parser knows.                                                                                                 |
-| `getSnippetSource(name)`       | A snippet's markdown with its `{{placeholder}}` markers left in. Returns `undefined` for an unknown name.                                    |
-| `renderSnippet(name, values?)` | A snippet's current markdown with the values filled in. Returns `undefined` for an unknown name or a missing value.                          |
-| `CALLOUT_TYPES`                | The callout types the parser supports, mapped to their titles.                                                                               |
-| `ALLOWED_HTML_TAGS`            | The raw HTML tags the parser keeps.                                                                                                          |
-| `getYouTubeVideoId(url)`       | The video ID of a YouTube watch, `youtu.be`, embed or Shorts URL. Returns `undefined` for any other URL.                                     |
+| Export                         | Description                                                                                                                                                                                                                                                          |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `readFrontmatter(content)`     | Reads a page's frontmatter block. Returns `hasBlock`, the `data`, the `body` after the block and a `problem` when the block can't be read: it's never closed, holds invalid YAML or isn't a set of `key: value` fields. `parseMarkdown` only throws on invalid YAML. |
+| `readSnippets(content)`        | Lists the snippets in a page with their line numbers, and the problems that make the page show its fallback text. See [Snippets](#snippets).                                                                                                                         |
+| `SNIPPET_NAMES`                | The names of every snippet the parser knows.                                                                                                                                                                                                                         |
+| `getSnippetSource(name)`       | A snippet's markdown with its `{{placeholder}}` markers left in. Returns `undefined` for an unknown name.                                                                                                                                                            |
+| `renderSnippet(name, values?)` | A snippet's current markdown with the values filled in. Returns `undefined` for an unknown name or a missing value.                                                                                                                                                  |
+| `CALLOUT_TYPES`                | The callout types the parser supports, mapped to their titles.                                                                                                                                                                                                       |
+| `ALLOWED_HTML_TAGS`            | The raw HTML tags the parser keeps.                                                                                                                                                                                                                                  |
+| `getYouTubeVideoId(url)`       | The video ID of a YouTube watch, `youtu.be`, embed or Shorts URL. Returns `undefined` for any other URL.                                                                                                                                                             |
 
 ### Types
 
-`Manifest`, `Page` and `Frontmatter` describe the `manifest.json` that `plugin-docs-cli build` writes. `MarkdownFiles` maps a docs file's path to its content. `Heading`, `ParsedMarkdown`, `ParseOptions`, `SnippetValues`, `SnippetLocation`, `SnippetProblem`, `SnippetName` and `CalloutType` describe what the functions take and return.
+`Manifest`, `Page` and `Frontmatter` describe the `manifest.json` that `plugin-docs-cli build` writes. `MarkdownFiles` maps a docs file's path to its content. `Heading`, `ParsedMarkdown`, `ParseOptions`, `FrontmatterResult`, `FrontmatterProblem`, `SnippetValues`, `SnippetLocation`, `SnippetProblem`, `SnippetName` and `CalloutType` describe what the functions take and return.
 
 ## Snippets
 
