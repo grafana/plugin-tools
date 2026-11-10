@@ -1,5 +1,20 @@
 # Changelog
 
+## [9.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.0...@grafana/create-plugin@9.0.1) (2026-11-10)
+
+
+### Bug Fixes
+
+* **create-plugin:** stop add docs creating CLAUDE.md and GEMINI.md ([#3089](https://github.com/grafana/plugin-tools/issues/3089)) ([1921b5e](https://github.com/grafana/plugin-tools/commit/1921b5e9012ba5e960c5822fd21c33621cf61ac9))
+* **templates:** Update dependency @grafana/plugin-e2e to v4 ([#3088](https://github.com/grafana/plugin-tools/issues/3088)) ([f279930](https://github.com/grafana/plugin-tools/commit/f2799302b871b92a2e542437d9dc008baf6e1074))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @grafana/plugin-docs-parser bumped from 0.6.1 to 0.7.0
+
 ## [9.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@8.0.2...@grafana/create-plugin@9.0.0) (2026-11-06)
 
 

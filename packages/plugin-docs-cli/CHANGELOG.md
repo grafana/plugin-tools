@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.14.3](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.2...@grafana/plugin-docs-cli@0.14.3) (2026-11-10)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency chokidar to v6 ([#3074](https://github.com/grafana/plugin-tools/issues/3074)) ([c238e79](https://github.com/grafana/plugin-tools/commit/c238e79daffbbcb348c28298a1181a374f0c6dcc))
+* **plugin-docs-cli:** read frontmatter with the parser ([#3091](https://github.com/grafana/plugin-tools/issues/3091)) ([0a638a1](https://github.com/grafana/plugin-tools/commit/0a638a1ee33ad73c8ef43e098f58df4d0b9250b1))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 0.6.1 to 0.7.0
+
 ## [0.14.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.1...@grafana/plugin-docs-cli@0.14.2) (2026-11-06)
 
 
