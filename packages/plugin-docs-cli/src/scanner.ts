@@ -1,10 +1,10 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative, parse, sep } from 'node:path';
 import GithubSlugger from 'github-slugger';
-import matter from 'gray-matter';
 import createDebug from 'debug';
 import {
   parseMarkdown,
+  readFrontmatter,
   type Manifest,
   type Page,
   type MarkdownFiles,
@@ -140,11 +140,11 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
 
     // read and parse the file
     const fileContent = await readFile(absolutePath, 'utf-8');
-    const parsed = matter(fileContent);
+    const { data, body, problem } = readFrontmatter(fileContent);
 
-    // skip files without required frontmatter (validation rules report these)
-    const frontmatter = parsed.data as Partial<Frontmatter>;
-    if (typeof frontmatter.title !== 'string' || typeof frontmatter.description !== 'string') {
+    // skip files without readable, complete frontmatter (validation rules report these)
+    const frontmatter = data as Partial<Frontmatter>;
+    if (problem || typeof frontmatter.title !== 'string' || typeof frontmatter.description !== 'string') {
       continue;
     }
 
@@ -152,7 +152,7 @@ async function scanMarkdownFiles(docsPath: string): Promise<ScannedFile[]> {
       absolutePath,
       relativePath,
       frontmatter: frontmatter as Frontmatter,
-      content: parsed.content, // markdown body without frontmatter
+      content: body, // markdown body without frontmatter
     });
   }
 

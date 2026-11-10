@@ -1,4 +1,6 @@
 export { parseMarkdown, readSnippets } from './parser.js';
+export { readFrontmatter } from './frontmatter.js';
+export type { FrontmatterProblem, FrontmatterResult } from './frontmatter.js';
 export type { ParsedMarkdown, ParseOptions, SnippetLocation } from './parser.js';
 export { toMarkdown } from './markdown.js';
 export type { ToMarkdownOptions } from './markdown.js';

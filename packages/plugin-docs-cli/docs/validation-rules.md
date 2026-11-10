@@ -59,8 +59,8 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 
 | Rule                             | What it checks                                                                                                                                                 | Severity |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `frontmatter-block-exists`       | The page must start with a frontmatter block.                                                                                                                  | Error    |
-| `frontmatter-valid-yaml`         | The frontmatter must be valid YAML.                                                                                                                            | Error    |
+| `frontmatter-block-exists`       | The page must start with a frontmatter block: a line with `---`, the fields, then another line with `---`. Spaces or tabs after either `---` are allowed.      | Error    |
+| `frontmatter-valid-yaml`         | The frontmatter must be valid YAML, written as `key: value` fields.                                                                                            | Error    |
 | `frontmatter-required-fields`    | `title` and `description` must be present.                                                                                                                     | Error    |
 | `frontmatter-field-types`        | `title` and `description` must be strings, `sidebar_position` (if set) must be a number and `keywords` (if set) must be a list of non-empty strings.           | Error    |
 | `frontmatter-valid-slug`         | A custom `slug` field must only use letters, digits, underscores, hyphens and forward slashes.                                                                 | Warning  |
