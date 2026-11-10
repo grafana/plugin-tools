@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
-import matter from 'gray-matter';
+import { readFrontmatter, type FrontmatterProblem } from '@grafana/plugin-docs-parser';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { isInExcludedFolder, isMetaFile } from './utils.js';
 
@@ -101,6 +101,34 @@ function findH1Lines(raw: string): number[] {
   return result;
 }
 
+function frontmatterProblemDiagnostic(
+  problem: FrontmatterProblem
+): Pick<Diagnostic, 'rule' | 'line' | 'title' | 'detail'> {
+  switch (problem.kind) {
+    case 'unclosed':
+      return {
+        rule: Rule.BlockExists,
+        line: problem.line,
+        title: 'Frontmatter block is not closed',
+        detail: 'End the frontmatter block with a line that holds only ---.',
+      };
+    case 'invalid-yaml':
+      return {
+        rule: Rule.ValidYaml,
+        line: problem.line,
+        title: 'Invalid YAML in frontmatter',
+        detail: problem.message,
+      };
+    case 'not-a-mapping':
+      return {
+        rule: Rule.ValidYaml,
+        line: problem.line,
+        title: 'Frontmatter must use key: value fields',
+        detail: 'Write each field on its own line as "key: value", such as "title: Configure the data source".',
+      };
+  }
+}
+
 // tracks per-file data needed for cross-file duplicate checks
 interface FileRecord {
   relativePath: string;
@@ -142,8 +170,8 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       continue;
     }
 
-    // frontmatter-block-exists: file must start with ---
-    if (!raw.startsWith('---')) {
+    const { hasBlock, data, body, problem } = readFrontmatter(raw);
+    if (!hasBlock) {
       diagnostics.push({
         rule: Rule.BlockExists,
         severity: 'error',
@@ -154,21 +182,8 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       });
       continue;
     }
-
-    // frontmatter-valid-yaml: gray-matter throws on invalid YAML
-    let data: Record<string, unknown>;
-    let body: string;
-    try {
-      ({ data, content: body } = matter(raw));
-    } catch (err) {
-      diagnostics.push({
-        rule: Rule.ValidYaml,
-        severity: 'error',
-        file: relativePath,
-        line: 1,
-        title: 'Invalid YAML in frontmatter',
-        detail: err instanceof Error ? err.message : 'YAML parse error.',
-      });
+    if (problem) {
+      diagnostics.push({ ...frontmatterProblemDiagnostic(problem), severity: 'error', file: relativePath });
       continue;
     }
 

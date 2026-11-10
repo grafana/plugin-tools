@@ -85,6 +85,7 @@ For everything plugin authors can write, see [Supported markdown](https://github
 
 | Export                         | Description                                                                                                                                                                                                                                                          |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `toMarkdown(hast, options?)`   | Turns the `hast` from `parseMarkdown` back into GitHub-flavored Markdown. See [Markdown output](#markdown-output).                                                                                                                                                   |
 | `readFrontmatter(content)`     | Reads a page's frontmatter block. Returns `hasBlock`, the `data`, the `body` after the block and a `problem` when the block can't be read: it's never closed, holds invalid YAML or isn't a set of `key: value` fields. `parseMarkdown` only throws on invalid YAML. |
 | `readSnippets(content)`        | Lists the snippets in a page with their line numbers, and the problems that make the page show its fallback text. See [Snippets](#snippets).                                                                                                                         |
 | `SNIPPET_NAMES`                | The names of every snippet the parser knows.                                                                                                                                                                                                                         |
@@ -96,7 +97,7 @@ For everything plugin authors can write, see [Supported markdown](https://github
 
 ### Types
 
-`Manifest`, `Page` and `Frontmatter` describe the `manifest.json` that `plugin-docs-cli build` writes. `MarkdownFiles` maps a docs file's path to its content. `Heading`, `ParsedMarkdown`, `ParseOptions`, `FrontmatterResult`, `FrontmatterProblem`, `SnippetValues`, `SnippetLocation`, `SnippetProblem`, `SnippetName` and `CalloutType` describe what the functions take and return.
+`Manifest`, `Page` and `Frontmatter` describe the `manifest.json` that `plugin-docs-cli build` writes. `MarkdownFiles` maps a docs file's path to its content. `Heading`, `ParsedMarkdown`, `ParseOptions`, `FrontmatterResult`, `FrontmatterProblem`, `ToMarkdownOptions`, `SnippetValues`, `SnippetLocation`, `SnippetProblem`, `SnippetName` and `CalloutType` describe what the functions take and return.
 
 ## Snippets
 
@@ -114,6 +115,37 @@ A page keeps its fallback text when the parser doesn't know a snippet, when a va
 
 - Snippets are add-only. A snippet's text can change, but its name is never renamed or removed.
 - Sites that render plugin docs update the parser before `create-plugin` scaffolds a new snippet. If one doesn't, the fallback text covers the gap.
+
+## Markdown output
+
+`toMarkdown` turns the `hast` from `parseMarkdown` back into GitHub-flavored Markdown, for sites that serve a Markdown version of each page to AI agents. Because it starts from the parsed tree, the Markdown matches the rendered page: snippets are swapped, raw HTML outside the allowlist is dropped, the h1 is removed and image paths are the ones `parseMarkdown` resolved.
+
+```ts
+import { parseMarkdown, toMarkdown } from '@grafana/plugin-docs-parser';
+
+const pageUrl = 'https://grafana.com/grafana/plugins/my-plugin/docs/guides/setup';
+
+const { hast } = parseMarkdown(markdownContent, { assetBaseUrl, file });
+const markdown = toMarkdown(hast, {
+  resolveHref: (href) => new URL(href, pageUrl).toString(),
+});
+```
+
+`resolveHref` is called with the href of every link, as `parseMarkdown` left it, and returns the href to write. Use it to make doc links absolute. Resolve against the URL of the page itself, as a browser does, so that `#install` and links from pages in subfolders point to the right place. Without it, hrefs are written unchanged.
+
+`toMarkdown` doesn't change the tree it's given, so one cached parse can feed both the HTML page and its Markdown version.
+
+Parser-specific markup comes out as:
+
+| Markup              | Markdown                                                                 |
+| ------------------- | ------------------------------------------------------------------------ |
+| Callout             | A GitHub alert, such as `> [!NOTE]`                                      |
+| Collapsible section | `<details>` and `<summary>` around the body, as on GitHub                |
+| YouTube embed       | A link to the video                                                      |
+| Video               | A link to the video file                                                 |
+| Footnote            | A GFM footnote, such as `[^1]`, numbered in the order the page uses them |
+
+`toMarkdown` also works for a plugin README parsed with `parseMarkdown`. READMEs often use raw HTML, such as `<img>`, `<p align="center">` or `<a>`, and `parseMarkdown` drops those tags, so images and badges written as HTML don't appear in the output.
 
 ## Related packages
 

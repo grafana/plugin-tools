@@ -89,6 +89,12 @@ keywords:
     expect(html).toContain('<span class="hljs-number">42</span>');
   });
 
+  it('should name the line of invalid frontmatter in the error', () => {
+    expect(() => parseMarkdown('---\ntitle: A\ntitle: B\n---\nbody')).toThrow(
+      'Failed to extract frontmatter (line 3): duplicated mapping key'
+    );
+  });
+
   it('should handle empty frontmatter', () => {
     const markdown = `---
 ---
