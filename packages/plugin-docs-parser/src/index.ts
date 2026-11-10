@@ -1,5 +1,7 @@
 export { parseMarkdown, readSnippets } from './parser.js';
 export type { ParsedMarkdown, ParseOptions, SnippetLocation } from './parser.js';
+export { toMarkdown } from './markdown.js';
+export type { ToMarkdownOptions } from './markdown.js';
 export type { SnippetProblem } from './plugins/remark-snippets.js';
 export { CALLOUT_TYPES } from './plugins/rehype-callouts.js';
 export type { CalloutType } from './plugins/rehype-callouts.js';
