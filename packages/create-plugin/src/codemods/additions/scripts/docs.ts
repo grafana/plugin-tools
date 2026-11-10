@@ -425,7 +425,7 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
 // instructions.md imports e2e-testing.md, so the two are created together
 const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
 // the scaffold's files that aren't pages, so they're added on every run
-const SCAFFOLD_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
+const SCAFFOLD_META_FILES = ['README.md', 'AGENTS.md'];
 const DASHBOARDS_PAGE: FeaturePage = {
   page: 'dashboards',
   templateFlag: 'hasDashboards',
