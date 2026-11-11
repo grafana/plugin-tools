@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.15.0...@grafana/plugin-docs-cli@1.0.0) (2026-11-11)
+
+
+### Bug Fixes
+
+* release plugin-docs-cli and plugin-docs-parser as 1.0 ([#3099](https://github.com/grafana/plugin-tools/issues/3099)) ([c1b233a](https://github.com/grafana/plugin-tools/commit/c1b233a2da6b11dd6de476961b7496ed9abb1303))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 0.7.0 to 1.0.0
+
 ## [0.15.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.3...@grafana/plugin-docs-cli@0.15.0) (2026-11-11)
 
 
