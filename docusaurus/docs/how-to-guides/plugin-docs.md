@@ -8,7 +8,6 @@ keywords:
   - plugin
   - documentation
   - docs
-unlisted: true
 ---
 
 import Tabs from '@theme/Tabs';
@@ -18,12 +17,6 @@ Plugin docs let you write your plugin's documentation in markdown, right next to
 
 This guide shows you how to set up plugin docs, preview and validate them and publish them with a release.
 
-:::important
-
-Plugin docs are an experimental feature. Breaking changes might happen without notice, such as renamed commands, changed validation rules or a different file structure.
-
-:::
-
 ## Why plugin docs
 
 - **Close to your code.** Docs change in the same pull request as the feature they describe, so reviewers see both together and the two don't drift apart.
@@ -31,6 +24,7 @@ Plugin docs are an experimental feature. Breaking changes might happen without n
 - **No styling to maintain.** Grafana handles the layout, so you don't need CSS, a theme or a site to host.
 - **Consistent by default.** Validation checks structure and naming before you publish, and every plugin's docs share the same layout and navigation. Users who know one plugin's docs know where to look in yours.
 - **Checked before release.** Validation checks structure, links, images and writing style while you write and again before you publish, so broken pages never reach your users.
+- **Easy to find.** Your pages are public web pages on your plugin's catalog page, listed in the catalog sitemap, so search engines and AI agents can find them. Each page is also available as Markdown for agents.
 - **Agent-friendly.** The scaffold includes instructions for coding agents, so the pages they write follow the conventions and pass validation. An optional script has an agent draft the first version of your pages. Structured, topic-based pages also make your plugin easier for assistants such as Grafana Assistant to find and explain.
 
 ## Before you begin
