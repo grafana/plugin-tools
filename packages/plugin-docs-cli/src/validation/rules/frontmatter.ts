@@ -400,8 +400,8 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
   }
 
   // no-duplicate-descriptions: search engines show the description as the page snippet, so pages that
-  // share one are hard to tell apart. compared ignoring case and whitespace differences. descriptions
-  // under the minimum length are skipped, frontmatter-description-length already reports those
+// share one are hard to tell apart. Compare descriptions while ignoring case and whitespace differences.
+// Descriptions under the minimum length are skipped because frontmatter-description-length already reports them.
   const byDescription = Map.groupBy(
     records.filter((r) => r.normalizedDescription),
     (r) => r.normalizedDescription
