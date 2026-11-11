@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.0.3](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.2...@grafana/create-plugin@9.0.3) (2026-11-11)
+
+
+### Bug Fixes
+
+* **create-plugin:** require docs-cli 1.0 in `add docs` codemod ([#3101](https://github.com/grafana/plugin-tools/issues/3101)) ([3fafcd0](https://github.com/grafana/plugin-tools/commit/3fafcd05b711d519b1795e42f1d917239b9f83f7))
+
 ## [9.0.2](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.1...@grafana/create-plugin@9.0.2) (2026-11-11)
 
 
