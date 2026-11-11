@@ -22,10 +22,10 @@ This guide shows you how to set up plugin docs, preview and validate them and pu
 - **Close to your code.** Docs change in the same pull request as the feature they describe, so reviewers see both together and the two don't drift apart.
 - **Simple by design.** Use standard markdown with one file per page, folders for sections and frontmatter for titles and order. There's no build step to set up.
 - **No styling to maintain.** Grafana handles the layout, so you don't need CSS, a theme or a site to host.
-- **Consistent by default.** Validation checks structure and naming before you publish, and every plugin's docs share the same layout and navigation. Users who know one plugin's docs know where to look in yours.
-- **Checked before release.** Validation checks structure, links, images and writing style while you write and again before you publish, so broken pages never reach your users.
+- **Consistent by default.** Every plugin's docs share the same layout and navigation, so users who know one plugin's docs know where to look in yours.
+- **Checked before release.** Validation checks structure, links, images and writing style while you write and again before you publish, so broken links and images between your pages never reach your users.
 - **Easy to find.** Your pages are public web pages on your plugin's catalog page, listed in the catalog sitemap, so search engines and AI agents can find them. Each page is also available as Markdown for agents.
-- **Agent-friendly.** The scaffold includes instructions for coding agents, so the pages they write follow the conventions and pass validation. An optional script has an agent draft the first version of your pages. Structured, topic-based pages also make your plugin easier for assistants such as Grafana Assistant to find and explain.
+- **Agent-friendly.** The scaffold includes instructions for coding agents, so the pages they write follow the conventions and pass validation. An optional script has an agent draft the first version of your pages.
 
 ## Before you begin
 
@@ -172,9 +172,9 @@ For page shape and conventions, refer to the [Authoring guide](https://github.co
 
 Pages use [CommonMark](https://commonmark.org/) plus [GitHub Flavored Markdown](https://github.github.com/gfm/) extensions such as tables, task lists and footnotes. On top of that you get callouts for notes and warnings, collapsible sections, YouTube embeds and short video clips.
 
-There's no MDX and no templating, and the only HTML you can use is for collapsible sections, line breaks and horizontal rules. What you write renders the same way in the catalog, in the local preview and on GitHub.
+There's no MDX and no templating, and the only HTML you can use is for collapsible sections, line breaks and horizontal rules. What you write renders the same way in the catalog and in the local preview, and reads cleanly on GitHub.
 
-Every page starts with frontmatter that sets at least `title` and `description`. Use `sidebar_position` to order pages within a folder and `keywords` to add a list of search keywords.
+Every page starts with frontmatter that sets at least `title` and `description`. Use `sidebar_position` to order pages within a folder and `keywords` to set the page's meta keywords.
 
 For everything you can write, refer to [Supported markdown](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/supported-markdown.md).
 
@@ -217,7 +217,7 @@ Run `add docs-content` once, after `add docs`. After that, update pages as part 
 
 Use `docs:serve` while you write. It shows your pages as they'll look in the catalog and reports problems as you save. Run `docs:validate` before you open a pull request.
 
-Validation warns about empty headings and about legacy `section-brief:start` blocks, because the catalog shows their text. Section briefs you leave in a page are only suggestions, because the catalog doesn't show them. Finish with none of these left.
+Validation warns about empty headings, because the catalog shows them. Section briefs you leave in a page are only suggestions, because the catalog doesn't show them. Finish with neither left.
 
 For every check, refer to [Validation rules](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/validation-rules.md).
 
@@ -225,13 +225,15 @@ For every check, refer to [Validation rules](https://github.com/grafana/plugin-t
 
 Docs publish as part of a plugin release:
 
-1. `validate-docs.yml` runs `docs:validate` on every pull request that changes your docs folder or `src/plugin.json`. Warnings don't fail it, so you can merge docs in progress.
+1. `validate-docs.yml` runs `docs:validate` on every pull request that changes your docs folder, `src/plugin.json`, `package.json` or your lockfile. Warnings don't fail it, so you can merge docs in progress.
 1. When you release, the plugin validator checks your docs again. Errors fail the release. Warnings don't, so check that `docs:validate` reports none before you release.
 1. The release build adds the docs to the plugin archive.
 1. When you submit the new version, Grafana reviews the docs as part of the plugin submission.
 1. After Grafana approves the version, the docs appear in the catalog.
 
 There are no docs-only releases. To publish a docs change, release a new plugin version. Until then, the catalog keeps showing the docs from your current version.
+
+If your release doesn't use the `build-plugin` or `package-plugin` action, add the docs yourself. Run `npx @grafana/plugin-docs-cli build` after your plugin build, which copies the docs into `dist`, then `npx @grafana/plugin-docs-cli validate --dist` to check what you ship.
 
 For the full process, refer to [Publish your plugins](../publish-a-plugin/index.md).
 
@@ -244,3 +246,7 @@ A new version can add rules or tighten existing ones, so run `docs:validate` aft
 ## Turn off plugin docs
 
 Remove `docsPath` from `src/plugin.json` and release a new version. The catalog stops showing the **Documentation** tab for that version. You can keep or delete the docs folder, because without `docsPath` the release pipeline ignores it.
+
+## Get help
+
+For questions, reach out on the [Community forum](https://community.grafana.com/c/plugin-development/30). To report a bug in the docs tooling, [open an issue](https://github.com/grafana/plugin-tools/issues/new?template=bug_report.yml) in plugin-tools.
