@@ -24,7 +24,7 @@ This guide shows you how to set up plugin docs, preview and validate them and pu
 - **No styling to maintain.** Grafana handles the layout, so you don't need CSS, a theme or a site to host.
 - **Consistent by default.** Every plugin's docs share the same layout and navigation, so users who know one plugin's docs know where to look in yours.
 - **Checked before release.** Validation checks structure, links, images and writing style while you write and again before you publish, so broken links and images between your pages never reach your users.
-- **Easy to find.** Your pages are public web pages on your plugin's catalog page, listed in the catalog sitemap, so search engines and AI agents can find them. Each page is also available as Markdown for agents.
+- **Help users find answers.** Your docs are indexed by grafana.com site search and search engines.
 - **Agent-friendly.** The scaffold includes instructions for coding agents, so the pages they write follow the conventions and pass validation. An optional script has an agent draft the first version of your pages.
 
 ## Before you begin
