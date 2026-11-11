@@ -70,6 +70,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-duplicate-slugs`             | A custom `slug` must be unique across all of your pages.                                                                                                       | Error    |
 | `frontmatter-title-length`       | `title` should be 60 characters or shorter - search engines truncate longer titles in search results.                                                          | Warning  |
 | `frontmatter-description-length` | `description` should be between 20 and 160 characters. Over 160 is a warning, under 20 is an error.                                                            | Varies   |
+| `no-duplicate-descriptions`      | Each page needs its own `description`. Search engines show it as the page snippet, so pages that share one are hard to tell apart in results.                  | Warning  |
 
 ## Images & other assets
 
