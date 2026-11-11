@@ -386,6 +386,111 @@ describe('checkFrontmatter', () => {
     expect(findings.find((f) => f.rule === Rule.DuplicateSlug)).toBeUndefined();
   });
 
+  describe('no-duplicate-descriptions', () => {
+    const page = (description: string) => `---\ntitle: Page\ndescription: ${description}\n---\n\n${LONG_BODY}\n`;
+
+    it('should warn on every page that shares a description', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+      await writeFile(join(tmp, 'a.md'), page(GOOD_DESCRIPTION));
+      await writeFile(join(tmp, 'b.md'), page(GOOD_DESCRIPTION));
+      await writeFile(join(tmp, 'c.md'), page('A different page with its own description'));
+
+      const dups = (await checkFrontmatter(input(tmp))).filter((f) => f.rule === Rule.DuplicateDescription);
+
+      expect(dups.map((d) => d.file).sort()).toEqual(['a.md', 'b.md']);
+      expect(dups[0].severity).toBe('warning');
+      expect(dups[0].line).toBe(3);
+      expect(dups.find((d) => d.file === 'a.md')!.detail).toContain('b.md');
+    });
+
+    it('should compare ignoring case and extra whitespace', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+      await writeFile(join(tmp, 'a.md'), page('Configure the  panel   options and legend'));
+      await writeFile(join(tmp, 'b.md'), page('configure the panel options and LEGEND'));
+
+      const dups = (await checkFrontmatter(input(tmp))).filter((f) => f.rule === Rule.DuplicateDescription);
+      expect(dups).toHaveLength(2);
+    });
+
+    it('should list every other page in the detail when three share a description', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+      for (const name of ['a.md', 'b.md', 'c.md']) {
+        await writeFile(join(tmp, name), page(GOOD_DESCRIPTION));
+      }
+
+      const dups = (await checkFrontmatter(input(tmp))).filter((f) => f.rule === Rule.DuplicateDescription);
+      expect(dups).toHaveLength(3);
+      expect(dups.find((d) => d.file === 'a.md')!.detail).toContain('b.md, c.md');
+    });
+
+    it('should find duplicates across folders', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+      await mkdir(join(tmp, 'guides'));
+      await writeFile(join(tmp, 'a.md'), page(GOOD_DESCRIPTION));
+      await writeFile(join(tmp, 'guides', 'b.md'), page(GOOD_DESCRIPTION));
+
+      const dups = (await checkFrontmatter(input(tmp))).filter((f) => f.rule === Rule.DuplicateDescription);
+      expect(dups.map((d) => d.file).sort()).toEqual(['a.md', join('guides', 'b.md')]);
+    });
+
+    it('should not warn when every description is different', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+      await writeFile(join(tmp, 'a.md'), page(GOOD_DESCRIPTION));
+      await writeFile(join(tmp, 'b.md'), page('A different page with its own description'));
+
+      const findings = await checkFrontmatter(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.DuplicateDescription)).toBeUndefined();
+    });
+
+    it('should not treat missing, empty or blank descriptions as duplicates', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+      await writeFile(join(tmp, 'a.md'), `---\ntitle: A\n---\n\n${LONG_BODY}\n`);
+      await writeFile(join(tmp, 'b.md'), `---\ntitle: B\n---\n\n${LONG_BODY}\n`);
+      await writeFile(join(tmp, 'c.md'), page('""'));
+      await writeFile(join(tmp, 'd.md'), page('""'));
+      await writeFile(join(tmp, 'e.md'), page('"                              "'));
+      await writeFile(join(tmp, 'f.md'), page('"                              "'));
+
+      const findings = await checkFrontmatter(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.DuplicateDescription)).toBeUndefined();
+    });
+
+    it('should leave descriptions that are too short to frontmatter-description-length', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+      await writeFile(join(tmp, 'a.md'), page('TODO'));
+      await writeFile(join(tmp, 'b.md'), page('TODO'));
+
+      const findings = await checkFrontmatter(input(tmp));
+      expect(findings.filter((f) => f.rule === Rule.DescriptionLength)).toHaveLength(2);
+      expect(findings.find((f) => f.rule === Rule.DuplicateDescription)).toBeUndefined();
+    });
+
+    it('should not count a page whose frontmatter is invalid', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+      await writeFile(join(tmp, 'a.md'), page(GOOD_DESCRIPTION));
+      await writeFile(
+        join(tmp, 'b.md'),
+        `---\ntitle: "unclosed\ndescription: ${GOOD_DESCRIPTION}\n---\n\n${LONG_BODY}\n`
+      );
+
+      const findings = await checkFrontmatter(input(tmp));
+      expect(findings.find((f) => f.rule === Rule.ValidYaml)).toBeDefined();
+      expect(findings.find((f) => f.rule === Rule.DuplicateDescription)).toBeUndefined();
+    });
+
+    it('should name only a few pages and count the rest when many share a description', async () => {
+      const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
+      for (const name of ['a.md', 'b.md', 'c.md', 'd.md', 'e.md', 'f.md']) {
+        await writeFile(join(tmp, name), page(GOOD_DESCRIPTION));
+      }
+
+      const dups = (await checkFrontmatter(input(tmp))).filter((f) => f.rule === Rule.DuplicateDescription);
+      expect(dups).toHaveLength(6);
+      expect(dups.find((d) => d.file === 'a.md')!.detail).toContain('b.md, c.md, d.md and 2 more');
+      expect(dups.find((d) => d.file === 'f.md')!.detail).toContain('a.md, b.md, c.md and 2 more');
+    });
+  });
+
   it('should report frontmatter-title-length as warning for a title over 60 characters', async () => {
     const tmp = await mkdtemp(join(tmpdir(), 'fm-test-'));
     const longTitle = 'A'.repeat(61);
