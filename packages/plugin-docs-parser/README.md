@@ -1,6 +1,6 @@
 # @grafana/plugin-docs-parser
 
-Lightweight library for parsing Grafana plugin documentation from markdown to HAST.
+Parse Grafana plugin documentation from markdown to HAST.
 
 Plugin docs are plain markdown pages that ship with each plugin release. This package turns a page into a [HAST](https://github.com/syntax-tree/hast) tree with its frontmatter and headings, so a site can render it. The [Grafana plugin catalog](https://grafana.com/grafana/plugins/) uses it to show a plugin's Documentation tab, and [`@grafana/plugin-docs-cli`](https://github.com/grafana/plugin-tools/tree/main/packages/plugin-docs-cli) uses it for the local preview and validation.
 

@@ -1,6 +1,6 @@
 # @grafana/plugin-docs-cli
 
-CLI tool for developing, validating and building Grafana plugin documentation locally.
+Preview, validate and build Grafana plugin documentation locally.
 
 Plugin docs are plain markdown pages that live next to your plugin's code. They ship with each release and appear as a **Documentation** tab on the plugin's catalog page. This CLI previews them, checks them against the same rules the release pipeline uses and builds them for publishing.
 
