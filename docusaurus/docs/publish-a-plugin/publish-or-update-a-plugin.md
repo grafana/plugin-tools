@@ -12,6 +12,8 @@ keywords:
   - provision
 ---
 
+import submissionForm from '@site/static/img/plugins-submission-create.png';
+
 # Publish or update a plugin
 
 You've just built your plugin and now you want to share it with the world! 
@@ -45,19 +47,21 @@ Follow these steps to publish your plugin for the first time.
 1. In the left menu, under Org Settings, click **My Plugins**.
 1. Click **Submit New Plugin**. The Create Plugin Submission dialog box appears.
 
-   ![Submit plugin.](/img/plugins-submission-create.png)
+   <img src={submissionForm} alt="Create Plugin Submission form." width="450" />
 
 1. Enter the information requested by the form.
-   - **OS & Architecture:**
-     - Select **Single** if your plugin archive contains binaries for multiple architectures.
-     - Select **Multiple** if you'd like to submit separate plugin archives for each architecture.
-       This can lead to faster downloads since users can select the specific architecture on which they want to install the plugin.
-   - **URL:** A URL that points to a ZIP archive of your packaged plugin.
-   - **Source code URL:** A URL that points to a public Git repository or ZIP archive of your complete plugin source code.
-   - **SHA1:** The SHA1 hash of the plugin specified by the **URL**.
-   - **Testing guidance:** An overview covering the installation, configuration, and usage of your plugin.
-   - **Provisioning provided for test environment:** Check this box if you have [configured provisioning](./provide-test-environment.md). If you've done this, rest assured it will be identified during the review, and no additional action is needed on your part.
-   - The remaining questions help us determine the [signature level](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) for your plugin.
+   - **How do you want to list your plugin?**
+     - Select **Public (free)** to share your plugin with the Grafana community through the Grafana plugin catalog.
+     - Select **Marketplace (paid)** to list a paid plugin in the Grafana Marketplace. Refer to [Monetize your plugin](#monetize-your-plugin).
+   - **Plugin (zip file):** Select **Paste a URL** and enter a URL that points to a ZIP archive of your packaged plugin, or select **Upload file** to upload the ZIP archive directly.
+   - **MD5 or SHA1:** The MD5 or SHA1 checksum of the plugin ZIP archive, or a URL that points to a file containing the checksum, for example `https://example.com/plugin.zip.sha1`.
+   - **Source code:** Select **Paste a URL** and enter a URL that points to a public Git repository or ZIP archive of your complete plugin source code, or select **Upload file** to upload a ZIP archive of up to 200 MB. Grafana Labs uses the source code to verify your plugin. If you use a Git repository, include the branch or tag that corresponds to this submission in the URL.
+   - **Testing guidance:** An overview covering the installation, configuration, and usage of your plugin. Include any links to credentials needed to test it.
+   - **Provisioning provided for test environment:** Select **Yes** if you have [configured provisioning](./provide-test-environment.md). If you've done this, rest assured it will be identified during the review, and no additional action is needed on your part.
+   - **Are you affiliated with the project/product the plugin integrates with?** Select **Yes** if you work for a company who provides or supports the project or service related to the plugin.
+   - **Does the plugin integrate with a commercial product?** Select **Yes** if the plugin integrates with a commercial (charged for) service.
+
+     Your answers to the last two questions help us determine the [signature level](https://grafana.com/legal/plugins/#what-are-the-different-classifications-of-plugins) for your plugin.
 1. Click **Submit**.
 
 ### Plugin submission review
