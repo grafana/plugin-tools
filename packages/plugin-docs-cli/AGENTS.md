@@ -43,8 +43,8 @@ change. Which guide covers what:
 Background and setup - why plugin docs, what the codemod scaffolds, the `docs:*` scripts and how docs are
 validated and published - live on the developer portal in
 [`docusaurus/docs/how-to-guides/plugin-docs.md`](../../docusaurus/docs/how-to-guides/plugin-docs.md), not in
-`docs/`. Update it in the same change when any of those change. The page is `unlisted` until launch, and the
-guides link to its `#get-started` and `#scripts` anchors, so keep those headings.
+`docs/`. Update it in the same change when any of those change. The guides link to its `#get-started` and
+`#scripts` anchors, so keep those headings.
 
 Two other places depend on file names under `docs/`. If you rename or move a guide, update them:
 
