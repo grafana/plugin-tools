@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.3...@grafana/plugin-docs-cli@0.15.0) (2026-11-11)
+
+
+### Features
+
+* **plugin-docs-cli:** warn when pages share a description ([#3096](https://github.com/grafana/plugin-tools/issues/3096)) ([8a120eb](https://github.com/grafana/plugin-tools/commit/8a120ebc52eff19178adeed2899fd9d18cf1d1a8))
+
 ## [0.14.3](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.2...@grafana/plugin-docs-cli@0.14.3) (2026-11-10)
 
 
