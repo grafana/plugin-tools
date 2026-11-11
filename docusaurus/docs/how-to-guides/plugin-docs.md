@@ -243,7 +243,7 @@ For the full process, refer to [Publish your plugins](../publish-a-plugin/index.
 
 ## Keep the docs CLI up to date
 
-The script adds `@grafana/plugin-docs-cli` with a `^` range, such as `^0.14.0`. While the CLI is below version 1.0, that range only takes patch releases, so a new minor version reaches your plugin only when you, Dependabot or Renovate update it.
+The script adds `@grafana/plugin-docs-cli` with a `^` range, such as `^1.0.0`. That range takes minor and patch releases, and a new major version reaches your plugin only when you, Dependabot or Renovate update it.
 
 A new version can add rules or tighten existing ones, so run `docs:validate` after you update and fix anything new before your next release.
 

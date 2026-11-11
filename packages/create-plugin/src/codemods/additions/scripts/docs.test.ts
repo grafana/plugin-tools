@@ -225,7 +225,7 @@ describe('docs scaffolding', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
-      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.14.0');
+      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^1.0.0');
     });
 
     it('adds docs:serve and docs:validate scripts, with no separate release script', () => {
