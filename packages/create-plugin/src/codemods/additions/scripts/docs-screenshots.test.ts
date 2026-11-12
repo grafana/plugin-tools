@@ -54,7 +54,8 @@ describe('docs-screenshots', () => {
 
     expect(scripts).toEqual({
       'docs:validate': 'plugin-docs-cli validate',
-      'docs:screenshots': 'playwright test --config docs-screenshots/playwright.config.ts && plugin-docs-cli validate',
+      'docs:screenshots':
+        'playwright install chromium && playwright test --config docs-screenshots/playwright.config.ts && plugin-docs-cli validate',
     });
   });
 
@@ -110,19 +111,61 @@ describe('docs-screenshots', () => {
     expect(() => docsScreenshots(context)).toThrow('create-plugin add docs-screenshots needs a plugin type of panel');
   });
 
-  it.each([
-    ['@grafana/plugin-e2e', { '@playwright/test': '^1.62.1' }],
-    ['@playwright/test', { '@grafana/plugin-e2e': '^4.0.0' }],
-  ])('should stop when %s is missing', (missing, devDependencies) => {
-    const context = makeContext(panel, docsFiles, { devDependencies });
+  it('should add plugin-e2e and Playwright when the plugin has neither', () => {
+    const result = docsScreenshots(makeContext(panel, docsFiles, { scripts: {} }));
+    const { devDependencies } = JSON.parse(result.getFile('package.json') ?? '{}');
 
-    expect(() => docsScreenshots(context)).toThrow(`there's no ${missing} in devDependencies`);
+    expect(devDependencies).toEqual({ '@grafana/plugin-e2e': '^4.0.0', '@playwright/test': '^1.62.1' });
   });
 
-  it('should stop when there is no playwright.config.ts', () => {
-    const { 'playwright.config.ts': _config, ...files } = docsFiles;
-    const context = makeContext(panel, files);
+  it('should keep the versions a plugin already has', () => {
+    const devDependencies = { '@grafana/plugin-e2e': '^3.1.0', '@playwright/test': '^1.55.0' };
+    const result = docsScreenshots(makeContext(panel, docsFiles, { devDependencies }));
 
-    expect(() => docsScreenshots(context)).toThrow("there's no playwright.config.ts");
+    expect(JSON.parse(result.getFile('package.json') ?? '{}').devDependencies).toEqual(devDependencies);
+  });
+
+  it('should raise a plugin-e2e that is too old for the theme option', () => {
+    const devDependencies = { '@grafana/plugin-e2e': '^1.8.0', '@playwright/test': '^1.55.0' };
+    const result = docsScreenshots(makeContext(panel, docsFiles, { devDependencies }));
+
+    expect(JSON.parse(result.getFile('package.json') ?? '{}').devDependencies).toEqual({
+      '@grafana/plugin-e2e': '^2.2.0',
+      '@playwright/test': '^1.55.0',
+    });
+  });
+
+  it('should extend the plugin Playwright config when there is one', () => {
+    const result = docsScreenshots(makeContext());
+
+    expect(result.getFile('docs-screenshots/playwright.config.ts')).toContain("from '../playwright.config'");
+  });
+
+  it('should write a standalone Playwright config when the plugin has none', () => {
+    const { 'playwright.config.ts': _config, ...files } = docsFiles;
+    const result = docsScreenshots(makeContext(panel, files, { scripts: {} }));
+    const config = result.getFile('docs-screenshots/playwright.config.ts');
+
+    expect(config).not.toContain("from '../playwright.config'");
+    expect(config).toContain("name: 'auth'");
+    expect(config).toContain('process.env.GRAFANA_URL');
+    expect(result.doesFileExist('playwright.config.ts')).toBe(false);
+  });
+
+  it('should ignore the Playwright output and stored login in git', () => {
+    const result = docsScreenshots(
+      makeContext(panel, { ...docsFiles, '.gitignore': 'node_modules/\ntest-results/\n' })
+    );
+
+    expect(result.getFile('.gitignore')).toBe(
+      'node_modules/\ntest-results/\n\n# docs screenshots\n/playwright/.auth/\n'
+    );
+  });
+
+  it('should leave a gitignore that already has the entries alone', () => {
+    const gitignore = 'node_modules/\n/test-results/\n/playwright/.auth/\n';
+    const result = docsScreenshots(makeContext(panel, { ...docsFiles, '.gitignore': gitignore }));
+
+    expect(result.getFile('.gitignore')).toBe(gitignore);
   });
 });

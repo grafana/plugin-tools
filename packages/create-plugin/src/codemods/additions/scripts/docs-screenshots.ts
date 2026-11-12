@@ -2,17 +2,32 @@ import { join } from 'node:path';
 import type { Context } from '../../context.js';
 import { TEMPLATES_DIR } from '../../../constants.js';
 import { output } from '../../../utils/utils.console.js';
-import { additionsDebug, getTemplateDataFromContext, readJsonFile, renderTemplate } from '../../utils.js';
+import {
+  additionsDebug,
+  addDependenciesToPackageJson,
+  getTemplateDataFromContext,
+  readJsonFile,
+  renderTemplate,
+} from '../../utils.js';
 import { appendToAgentInstructions } from '../../utils.agents.js';
 import { assertDocsSetUp } from './docs.js';
 
 const SCREENSHOTS_DIR = 'docs-screenshots';
 const SCRIPT_NAME = 'docs:screenshots';
-const SCRIPT = `playwright test --config ${SCREENSHOTS_DIR}/playwright.config.ts && plugin-docs-cli validate`;
-const REQUIRED_DEV_DEPENDENCIES = ['@grafana/plugin-e2e', '@playwright/test'];
+const SCRIPT = `playwright install chromium && playwright test --config ${SCREENSHOTS_DIR}/playwright.config.ts && plugin-docs-cli validate`;
+const PLUGIN_PLAYWRIGHT_CONFIG = 'playwright.config.ts';
+// a plugin without them gets `added`. one that has them keeps its version unless it's below `minimum`:
+// plugin-e2e 2.2.0 added the userPreferences option the theme uses, and plugin-e2e needs Playwright 1.52
+const E2E_DEV_DEPENDENCIES: Record<string, { added: string; minimum: string }> = {
+  '@grafana/plugin-e2e': { added: '^4.0.0', minimum: '^2.2.0' },
+  '@playwright/test': { added: '^1.62.1', minimum: '^1.52.0' },
+};
+// the stored session holds a Grafana login cookie, so it must never be committed
+const GITIGNORE_ENTRIES = ['/test-results/', '/playwright/.auth/'];
 
 interface PackageJson {
   scripts?: Record<string, string>;
+  dependencies?: Record<string, string>;
   devDependencies?: Record<string, string>;
   [key: string]: unknown;
 }
@@ -20,15 +35,23 @@ interface PackageJson {
 // the agent step takes the screenshots. this sets up the Playwright project they're taken with
 export default function docsScreenshots(context: Context): Context {
   const { docsPath, pluginType } = assertDocsSetUp(context, 'docs-screenshots');
-  assertE2eSetUp(context);
+  addE2eDependencies(context);
+  addGitignoreEntries(context);
 
   const data = { ...getTemplateDataFromContext(context), docsPath };
 
   const commonDir = join(TEMPLATES_DIR, 'docs', 'common', 'screenshots');
   // added only when missing, because the author owns these after the first run
-  for (const file of ['playwright.config.ts', 'helpers.ts']) {
-    addFileIfMissing(context, `${SCREENSHOTS_DIR}/${file}`, () => renderTemplate(join(commonDir, file), false, data));
-  }
+  // a plugin with its own Playwright config shares its URL, user and provisioning with the screenshots
+  const configTemplate = context.doesFileExist(PLUGIN_PLAYWRIGHT_CONFIG)
+    ? 'playwright.config.ts'
+    : 'playwright.config.standalone.ts';
+  addFileIfMissing(context, `${SCREENSHOTS_DIR}/playwright.config.ts`, () =>
+    renderTemplate(join(commonDir, configTemplate), false, data)
+  );
+  addFileIfMissing(context, `${SCREENSHOTS_DIR}/helpers.ts`, () =>
+    renderTemplate(join(commonDir, 'helpers.ts'), false, data)
+  );
   // a pattern to copy, so it's only added to a folder that has no specs of its own yet
   if (!context.readDir(SCREENSHOTS_DIR).some((file) => file.endsWith('.spec.ts'))) {
     const exampleTemplate = join(TEMPLATES_DIR, 'docs', pluginType, 'screenshots', 'example.spec.ts');
@@ -52,14 +75,31 @@ export default function docsScreenshots(context: Context): Context {
   return context;
 }
 
-function assertE2eSetUp(context: Context): void {
-  const { devDependencies = {} } = readJsonFile<PackageJson>(context, 'package.json');
-  const missing = REQUIRED_DEV_DEPENDENCIES.filter((dependency) => !devDependencies[dependency]);
-  if (missing.length > 0 || !context.doesFileExist('playwright.config.ts')) {
-    const what = missing.length > 0 ? `${missing.join(' and ')} in devDependencies` : 'playwright.config.ts';
-    throw new Error(
-      `create-plugin add docs-screenshots takes screenshots with the plugin's e2e setup, but there's no ${what}.\n  Set up e2e testing first, commit the result, then run this again:\n  https://grafana.com/developers/plugin-tools/e2e-test-a-plugin/get-started`
-    );
+function addE2eDependencies(context: Context): void {
+  const { dependencies = {}, devDependencies = {} } = readJsonFile<PackageJson>(context, 'package.json');
+  const versions = Object.fromEntries(
+    Object.entries(E2E_DEV_DEPENDENCIES).map(([name, { added, minimum }]) => [
+      name,
+      dependencies[name] || devDependencies[name] ? minimum : added,
+    ])
+  );
+  addDependenciesToPackageJson(context, {}, versions);
+}
+
+function addGitignoreEntries(context: Context): void {
+  const existing = context.getFile('.gitignore') ?? '';
+  const lines = existing.split('\n').map((line) => line.trim());
+  const missing = GITIGNORE_ENTRIES.filter((entry) => !lines.includes(entry) && !lines.includes(entry.slice(1)));
+  if (missing.length === 0) {
+    return;
+  }
+  const kept = existing.trimEnd();
+  const added = ['# docs screenshots', ...missing].join('\n');
+  const content = `${kept ? `${kept}\n\n` : ''}${added}\n`;
+  if (context.doesFileExist('.gitignore')) {
+    context.updateFile('.gitignore', content);
+  } else {
+    context.addFile('.gitignore', content);
   }
 }
 

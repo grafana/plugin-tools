@@ -12,10 +12,11 @@ The catalog docs pages for this plugin mark where a screenshot belongs with a sc
 
 `create-plugin add docs-screenshots` has already set up the tools for this:
 
-- `docs-screenshots/`, a Playwright project that extends the plugin's `playwright.config.ts` with a fixed viewport and theme. Each screenshot is one spec in this folder. The theme is dark, or light when `DOCS_SCREENSHOTS_THEME=light` is set.
+- `@grafana/plugin-e2e` and `@playwright/test` in `devDependencies`, added or raised to the minimum version when needed, and installed.
+- `docs-screenshots/`, a Playwright project with a fixed viewport and theme. When the plugin has its own `playwright.config.ts`, it extends that one, so it uses the same Grafana URL and user as the plugin's e2e tests. Each screenshot is one spec in this folder. The theme is dark, or light when `DOCS_SCREENSHOTS_THEME=light` is set.
 - `docs-screenshots/helpers.ts`, which exports `captureDocsScreenshot(target, name)`. It saves a page or an element as `{docsPath}/img/<name>.webp`, returns the path to use on the page and fails when the image is over the docs size limit.
 - `docs-screenshots/example.spec.ts`, a skipped example spec to copy, when the folder had no specs yet.
-- A `docs:screenshots` script that runs every spec, then `docs:validate`.
+- A `docs:screenshots` script that installs the Chromium browser when it's missing, runs every spec, then runs `docs:validate`.
 
 Throughout, `{docsPath}` means the `docsPath` value in `src/plugin.json`.
 
@@ -39,7 +40,7 @@ Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guide
 2. **Print the shot list** before writing any code, so the author can redirect you: the page, the marker text and the image name for each screenshot. Name images in lowercase with hyphens after what they show, such as `grid-layout` or `query-editor-builder`.
 
 3. **Write one spec per screenshot** in `docs-screenshots/`, named after the image, such as `grid-layout.spec.ts`. Import `test` and `expect` from `@grafana/plugin-e2e` and `captureDocsScreenshot` from `./helpers`, and follow `example.spec.ts`.
-   - Open the UI with the `@grafana/plugin-e2e` fixtures, such as `gotoDashboardPage`, `gotoPanelEditPage`, `createDataSourceConfigPage`, `explorePage` and `gotoAppPage`. `.config/AGENTS/e2e-testing.md` lists them and how to select elements, and the plugin's own tests in `tests/` show what works for this plugin.
+   - Open the UI with the `@grafana/plugin-e2e` fixtures, such as `gotoDashboardPage`, `gotoPanelEditPage`, `createDataSourceConfigPage`, `explorePage` and `gotoAppPage`. `.config/AGENTS/e2e-testing.md` lists them and how to select elements, and the plugin's own tests in `tests/`, if it has any, show what works for this plugin.
    - Start from the dashboards and data sources under `provisioning/` when they show the state you need, with `readProvisionedDashboard` and `gotoDashboardPage` or `gotoPanelEditPage`. That's steadier than building a panel and typing into a query editor. Otherwise use TestData scenarios with fixed values. Set a fixed time range, so the screenshot only changes when the UI does.
    - Wait for what the image shows with `expect(...).toBeVisible()` or a similar check before capturing, so nothing is still loading.
    - Capture the smallest element that shows everything the marker describes, such as the panel, the options pane or the query editor, rather than the whole page. It's easier to read and stays under the size limit. When the subject is small inside a wide element, capture a tighter element or make the panel smaller, so the image isn't mostly empty space.
