@@ -5,19 +5,25 @@ import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { isInExcludedFolder, isMetaFile } from './utils.js';
 
 /**
- * Pages every plugin of a given type must have at the root of its docs folder, so that authors,
- * users and agents find the same information in the same place across every plugin.
+ * Pages every plugin must have at the root of its docs folder, so that authors, users and agents
+ * find the same information in the same place across every plugin.
  */
-const REQUIRED_PAGES: Record<string, string[]> = {
-  panel: ['options', 'data-formats'],
+const COMMON_REQUIRED_PAGES = ['troubleshooting'];
+
+/** Extra pages required for a given plugin type, on top of the common ones. */
+const REQUIRED_PAGES_BY_TYPE: Record<string, string[]> = {
+  panel: ['options', 'data-formats', 'examples'],
   datasource: ['query-editor', 'configure'],
 };
 
 export async function checkRequiredPages(input: ValidationInput): Promise<Diagnostic[]> {
-  if (!input.pluginType || !Object.hasOwn(REQUIRED_PAGES, input.pluginType)) {
+  if (!input.pluginType) {
     return [];
   }
-  const required = REQUIRED_PAGES[input.pluginType];
+  const typeSpecific = Object.hasOwn(REQUIRED_PAGES_BY_TYPE, input.pluginType)
+    ? REQUIRED_PAGES_BY_TYPE[input.pluginType]
+    : [];
+  const required = [...typeSpecific, ...COMMON_REQUIRED_PAGES];
 
   let entries: Dirent[] = [];
   try {
