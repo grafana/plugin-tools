@@ -63,6 +63,13 @@ const additions: Addition[] = [
     prompt: import.meta.resolve('./prompts/docs-content.md'),
     verify: ['docs:validate'],
   },
+  {
+    name: 'docs-screenshots',
+    description: 'Takes screenshots of the running plugin for the screenshot markers in its docs with an AI agent',
+    scriptPath: import.meta.resolve('./scripts/docs-screenshots.js'),
+    prompt: import.meta.resolve('./prompts/docs-screenshots.md'),
+    verify: ['docs:validate'],
+  },
 ];
 
 export default additions;

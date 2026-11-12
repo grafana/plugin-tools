@@ -8,6 +8,7 @@ import { getCodeBlockLines, isInExcludedFolder, isMetaFile, maskInlineCode } fro
 const LEGACY_BRIEF_START_RE = /<!--\s*section-brief:start\s*-->/;
 // a comment that starts with `section-brief`, not the legacy `section-brief:start` marker
 const BRIEF_COMMENT_RE = /^<!--\s*section-brief(?![\w:-])/;
+const SCREENSHOT_COMMENT_RE = /^<!--\s*screenshot:/;
 const HEADING_RE = /^ {0,3}(#{1,6})\s+\S/;
 const FENCE_RE = /^ {0,3}(`{3,}|~{3,})/;
 
@@ -15,6 +16,7 @@ interface Section {
   /** Absent for the text before the first heading. */
   heading?: { level: number; line: number };
   briefLines: number[];
+  screenshotLines: number[];
   hasContent: boolean;
 }
 
@@ -24,7 +26,7 @@ interface Section {
  */
 function parseSections(raw: string): Section[] {
   const lines = raw.split('\n');
-  const sections: Section[] = [{ briefLines: [], hasContent: false }];
+  const sections: Section[] = [{ briefLines: [], screenshotLines: [], hasContent: false }];
 
   let start = 0;
   if (lines[0]?.trim() === '---') {
@@ -68,6 +70,8 @@ function parseSections(raw: string): Section[] {
       const comment = rest.slice(open);
       if (BRIEF_COMMENT_RE.test(comment)) {
         current.briefLines.push(i + 1);
+      } else if (SCREENSHOT_COMMENT_RE.test(comment)) {
+        current.screenshotLines.push(i + 1);
       }
       inComment = true;
       rest = comment.slice(4);
@@ -84,7 +88,12 @@ function parseSections(raw: string): Section[] {
     }
     const heading = HEADING_RE.exec(visible);
     if (heading) {
-      sections.push({ heading: { level: heading[1].length, line: i + 1 }, briefLines: [], hasContent: false });
+      sections.push({
+        heading: { level: heading[1].length, line: i + 1 },
+        briefLines: [],
+        screenshotLines: [],
+        hasContent: false,
+      });
       continue;
     }
     current.hasContent = true;
@@ -100,8 +109,9 @@ function parseSections(raw: string): Section[] {
  *   section brief. A heading is not empty when a deeper heading follows it directly.
  * - `unfilled-section-brief`: a brief left in a section that has content, or a legacy
  *   `section-brief:start` marker block.
+ * - `missing-screenshot`: a `<!-- screenshot: ... -->` marker, a spot that still needs its image.
  *
- * A finding about a `section-brief` comment is info, since the comment never renders. An empty heading
+ * A finding about a `section-brief` or `screenshot` comment is info, since the comment never renders. An empty heading
  * without a brief and a legacy marker block, whose text does render, are warnings. None of them fail
  * `validate`, so a freshly scaffolded docs folder still passes.
  */
@@ -152,6 +162,18 @@ export async function checkStubContent(input: ValidationInput): Promise<Diagnost
 
     const sections = parseSections(raw);
     sections.forEach((section, index) => {
+      for (const line of section.screenshotLines) {
+        diagnostics.push({
+          rule: Rule.MissingScreenshot,
+          severity: 'info',
+          file: relativePath,
+          line,
+          title: 'Screenshot still to take',
+          detail:
+            'This page has a screenshot marker. Take the screenshot it describes, save it in the docs folder and replace the marker with the image.',
+        });
+      }
+
       const next = sections[index + 1];
       const hasBrief = section.briefLines.length > 0;
       const isParentHeading =

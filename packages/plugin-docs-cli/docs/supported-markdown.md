@@ -177,6 +177,13 @@ docs folder, link to it where it is. Only listed screenshots can be outside the 
 ![Ten traffic lights in a grid](../src/img/screenshots/grid-layout.png)
 ```
 
+To mark a spot that still needs an image, leave a screenshot marker on its own line. It's an HTML
+comment, so it isn't shown. [Screenshots](./screenshots.md) covers markers and how to take screenshots:
+
+```markdown
+<!-- screenshot: the query editor in builder mode with one filter -->
+```
+
 ## Callouts
 
 Use a callout to make a note, tip or warning stand out from the text around it. Start a blockquote
