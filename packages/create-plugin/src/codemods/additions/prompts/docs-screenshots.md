@@ -23,9 +23,9 @@ Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guide
 
 ## Check first
 
-1. **Find the work.** Search `{docsPath}` for `<!-- screenshot:` markers. They are the shot list.
+1. **Find the work.** Search the pages in `{docsPath}` for `<!-- screenshot:` markers. They are the shot list. Skip `AGENTS.md`, `README.md` and markers inside code blocks, which are examples. A recent `docs:validate` also lists each real marker as a `missing-screenshot` suggestion.
    - When there are no markers but `docs-screenshots/` has specs other than the example, this is a refresh. Run `docs:screenshots`, check every image as step 5 says and stop there.
-   - When there are no markers and no specs, nothing is asked for. Say so, suggest running `create-plugin add docs-content` or adding markers by hand, and change nothing.
+   - When there are no markers and no specs, nothing is asked for. Say so and suggest running `create-plugin add docs-content` or adding markers by hand. Change nothing.
 2. **Check that Grafana is running with the plugin.** The URL is `GRAFANA_URL` when it's set and `http://localhost:3000` otherwise.
    - `curl -s <url>/api/health` returns JSON.
    - `curl -s -u admin:admin <url>/api/plugins/<id>/settings` returns 200, where `<id>` is the `id` in `src/plugin.json`.
@@ -51,7 +51,7 @@ Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guide
 
 5. **Look at every image** you took, with your file or image viewing tool. Check that it shows what the marker describes, that nothing is cut off or still loading and that nothing sensitive is visible. Fix the spec and run it again until the image is right. If you can't view images, say so in the summary and list them for the author to check.
 
-6. **Replace each marker** with the image, using the path `captureDocsScreenshot` returned, for example `![The panel in grid layout with the series counter on](./img/grid-layout.webp)`. Write alt text that says what the image shows, based on the marker's description and what the image really shows. Leave a marker you couldn't do where it is.
+6. **Replace each marker** with the image, using the path `captureDocsScreenshot` returned, for example `![The panel in grid layout with the series counter on](./img/grid-layout.webp)`. That path is relative to a page at the top of `{docsPath}`, so on a page in a subfolder, such as `features/`, use `../img/grid-layout.webp` instead. Write alt text that says what the image shows, based on the marker's description and what the image really shows. Leave a marker you couldn't do where it is.
 
 7. **Validate** with the `docs:validate` script and fix what it reports for the pages and images you changed. Remove any image under `{docsPath}/img/` that you took and no page uses.
 

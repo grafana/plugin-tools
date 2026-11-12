@@ -15,8 +15,9 @@ interface CaptureOptions {
 }
 
 /**
- * Saves a screenshot of a page or an element as `<docsPath>/img/<name>.webp` and returns the path to use
- * in a page, such as `./img/<name>.webp`. Fails when the image is over the docs size limit.
+ * Saves a screenshot of a page or an element as `<docsPath>/img/<name>.webp` and returns its path from a page
+ * at the top of the docs folder, `./img/<name>.webp`. A page in a subfolder needs `../img/<name>.webp`.
+ * Fails when the image is over the docs size limit.
  */
 export async function captureDocsScreenshot(
   target: Page | Locator,
@@ -30,13 +31,11 @@ export async function captureDocsScreenshot(
   const page = 'goto' in target ? target : target.page();
   const png = await target.screenshot({ animations: 'disabled', caret: 'hide', scale: 'css', mask: options.mask });
 
-  for (const quality of WEBP_QUALITIES) {
-    const webp = await encodeWebp(page, png, quality);
-    if (webp.length <= MAX_IMAGE_BYTES) {
-      mkdirSync(IMG_DIR, { recursive: true });
-      writeFileSync(join(IMG_DIR, `${name}.webp`), webp);
-      return `./img/${name}.webp`;
-    }
+  const webp = await encodeWebp(page, png);
+  if (webp) {
+    mkdirSync(IMG_DIR, { recursive: true });
+    writeFileSync(join(IMG_DIR, `${name}.webp`), webp);
+    return `./img/${name}.webp`;
   }
 
   throw new Error(
@@ -45,11 +44,11 @@ export async function captureDocsScreenshot(
 }
 
 // re-encoded in a blank page, so the plugin page's content security policy can't block the data URL
-async function encodeWebp(page: Page, png: Buffer, quality: number): Promise<Buffer> {
+async function encodeWebp(page: Page, png: Buffer): Promise<Buffer | undefined> {
   const scratch = await page.context().newPage();
   try {
     const dataUrl = await scratch.evaluate(
-      async ({ base64, quality }) => {
+      async ({ base64, qualities, maxBytes }) => {
         const image = new Image();
         image.src = `data:image/png;base64,${base64}`;
         await image.decode();
@@ -57,10 +56,20 @@ async function encodeWebp(page: Page, png: Buffer, quality: number): Promise<Buf
         canvas.width = image.naturalWidth;
         canvas.height = image.naturalHeight;
         canvas.getContext('2d')?.drawImage(image, 0, 0);
-        return canvas.toDataURL('image/webp', quality);
+        for (const quality of qualities) {
+          const url = canvas.toDataURL('image/webp', quality);
+          // base64 is 4 characters for every 3 bytes. a non-WebP result is returned so the caller can report it
+          if (!url.startsWith('data:image/webp') || ((url.length - url.indexOf(',') - 1) * 3) / 4 <= maxBytes) {
+            return url;
+          }
+        }
+        return undefined;
       },
-      { base64: png.toString('base64'), quality }
+      { base64: png.toString('base64'), qualities: WEBP_QUALITIES, maxBytes: MAX_IMAGE_BYTES }
     );
+    if (dataUrl === undefined) {
+      return undefined;
+    }
     if (!dataUrl.startsWith('data:image/webp')) {
       throw new Error('This browser cannot encode WebP images. Run docs:screenshots in Chromium.');
     }

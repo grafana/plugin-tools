@@ -674,10 +674,13 @@ const DOCS_CLI_META_FILES = [
 
 /**
  * Stops an addition that works on existing docs pages, such as `docs-content`, when `add docs` hasn't set them
- * up yet. Returns the docs folder.
+ * up yet. Returns the docs folder and the plugin type.
  */
-export function assertDocsSetUp(context: Context, additionName: string): string {
-  assertSupportedPluginType(context, additionName);
+export function assertDocsSetUp(
+  context: Context,
+  additionName: string
+): { docsPath: string; pluginType: SupportedPluginType } {
+  const pluginType = assertSupportedPluginType(context, additionName);
 
   const { docsPath } = readJsonFile<{ docsPath?: unknown }>(context, 'src/plugin.json');
   if (docsPath === undefined) {
@@ -701,7 +704,7 @@ export function assertDocsSetUp(context: Context, additionName: string): string 
     );
   }
 
-  return docsPath;
+  return { docsPath, pluginType };
 }
 
 export function hasDocsPages(context: Context, docsPath: string): boolean {

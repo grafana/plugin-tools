@@ -4,7 +4,7 @@ import { TEMPLATES_DIR } from '../../../constants.js';
 import { output } from '../../../utils/utils.console.js';
 import { additionsDebug, getTemplateDataFromContext, readJsonFile, renderTemplate } from '../../utils.js';
 import { appendToAgentInstructions } from '../../utils.agents.js';
-import { assertDocsSetUp, assertSupportedPluginType } from './docs.js';
+import { assertDocsSetUp } from './docs.js';
 
 const SCREENSHOTS_DIR = 'docs-screenshots';
 const SCRIPT_NAME = 'docs:screenshots';
@@ -19,12 +19,10 @@ interface PackageJson {
 
 // the agent step takes the screenshots. this sets up the Playwright project they're taken with
 export default function docsScreenshots(context: Context): Context {
-  const docsPath = assertDocsSetUp(context, 'docs-screenshots');
-  const pluginType = assertSupportedPluginType(context, 'docs-screenshots');
+  const { docsPath, pluginType } = assertDocsSetUp(context, 'docs-screenshots');
   assertE2eSetUp(context);
 
-  const { id: pluginId } = readJsonFile<{ id?: string }>(context, 'src/plugin.json');
-  const data = { ...getTemplateDataFromContext(context), docsPath, pluginId };
+  const data = { ...getTemplateDataFromContext(context), docsPath };
 
   const commonDir = join(TEMPLATES_DIR, 'docs', 'common', 'screenshots');
   // added only when missing, because the author owns these after the first run

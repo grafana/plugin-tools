@@ -11,23 +11,40 @@ if (theme !== 'dark' && theme !== 'light') {
  * Takes the screenshots for the plugin docs. Run it with the `docs:screenshots` script while Grafana is running.
  * Set DOCS_SCREENSHOTS_THEME to "light" for light theme screenshots.
  */
-export default defineConfig<PluginOptions>(baseConfig, {
+const config = defineConfig<PluginOptions>(baseConfig, {
   testDir: '.',
   outputDir: '../test-results/docs-screenshots',
   retries: 0,
   reporter: 'list',
-  // a device preset in the base config sets its own viewport, so these are set per project to win
-  projects: (baseConfig.projects ?? []).map((project) =>
-    project.name === 'auth'
-      ? project
-      : {
-          ...project,
-          use: {
-            ...project.use,
-            viewport: { width: 1280, height: 800 },
-            deviceScaleFactor: 1,
-            userPreferences: { theme },
-          },
-        }
-  ),
 });
+
+// one Chromium project, because every project would take each screenshot again and WebKit can't encode WebP
+const projects = config.projects ?? [];
+const setupProjects = new Set(projects.flatMap((project) => project.dependencies ?? []));
+const browserProject = projects.find(
+  (project) =>
+    !setupProjects.has(project.name ?? '') &&
+    (project.use?.defaultBrowserType ?? project.use?.browserName ?? 'chromium') === 'chromium'
+);
+if (!browserProject) {
+  throw new Error('docs:screenshots needs a Chromium project in playwright.config.ts.');
+}
+
+// a project's own testDir and a device preset's viewport win over the top-level settings, so they're set here
+config.projects = [
+  ...projects.filter((project) => browserProject.dependencies?.includes(project.name ?? '')),
+  {
+    ...browserProject,
+    testDir: '.',
+    testMatch: undefined,
+    testIgnore: undefined,
+    use: {
+      ...browserProject.use,
+      viewport: { width: 1280, height: 800 },
+      deviceScaleFactor: 1,
+      userPreferences: { theme },
+    },
+  },
+];
+
+export default config;
