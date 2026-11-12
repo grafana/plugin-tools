@@ -119,9 +119,10 @@ screenshot that nobody has taken yet, leave a screenshot marker on its own line 
 <!-- screenshot: one sentence saying what the screenshot shows -->
 ```
 
-When the plugin has a `docs-screenshots/` folder, every screenshot comes from a Playwright spec in it. Run
-`{{packageManagerName}} run docs:screenshots` with Grafana running to take them all again. When you change UI
-that a screenshot shows, update the screenshot in the same change.
+When the plugin has a `docs-screenshots/` folder, every screenshot comes from a Playwright spec in it. After
+any change to the plugin's UI, run `{{packageManagerName}} run docs:screenshots` with Grafana running. It takes
+every screenshot again. Then look at each image that changed, fix a spec that fails or no longer shows what
+its page says and add a spec or a marker for a new feature that needs a picture.
 
 ## Validate
 

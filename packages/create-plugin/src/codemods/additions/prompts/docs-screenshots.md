@@ -40,16 +40,17 @@ Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guide
 
 3. **Write one spec per screenshot** in `docs-screenshots/`, named after the image, such as `grid-layout.spec.ts`. Import `test` and `expect` from `@grafana/plugin-e2e` and `captureDocsScreenshot` from `./helpers`, and follow `example.spec.ts`.
    - Open the UI with the `@grafana/plugin-e2e` fixtures, such as `gotoDashboardPage`, `gotoPanelEditPage`, `createDataSourceConfigPage`, `explorePage` and `gotoAppPage`. `.config/AGENTS/e2e-testing.md` lists them and how to select elements, and the plugin's own tests in `tests/` show what works for this plugin.
-   - Use the dashboards and data sources under `provisioning/`, and TestData scenarios with fixed values. Set a fixed time range, so the screenshot only changes when the UI does.
+   - Start from the dashboards and data sources under `provisioning/` when they show the state you need, with `readProvisionedDashboard` and `gotoDashboardPage` or `gotoPanelEditPage`. That's steadier than building a panel and typing into a query editor. Otherwise use TestData scenarios with fixed values. Set a fixed time range, so the screenshot only changes when the UI does.
    - Wait for what the image shows with `expect(...).toBeVisible()` or a similar check before capturing, so nothing is still loading.
-   - Capture the element the marker is about, such as the panel, the options pane or the query editor, rather than the whole page. It's easier to read and stays under the size limit.
+   - Capture the smallest element that shows everything the marker describes, such as the panel, the options pane or the query editor, rather than the whole page. It's easier to read and stays under the size limit. When the subject is small inside a wide element, capture a tighter element or make the panel smaller, so the image isn't mostly empty space.
+   - An element inside a scrolling area, such as the options pane, is cut off at the bottom of the window. When it doesn't fit, make the window taller for that spec with `test.use({ viewport: { width: 1280, height: 1200 } })`, or capture a smaller part of it.
    - When the UI needs a state you can't reproduce from provisioned data or with the fixtures, don't fake it. Skip that marker and list it in the summary.
 
    Delete `example.spec.ts` once the folder has a spec of its own.
 
 4. **Run** the `docs:screenshots` script. When a spec fails, fix the spec. When `captureDocsScreenshot` reports an image over the size limit, capture a smaller element.
 
-5. **Look at every image** you took, with your file or image viewing tool. Check that it shows what the marker describes, that nothing is cut off or still loading and that nothing sensitive is visible. Fix the spec and run it again until the image is right. If you can't view images, say so in the summary and list them for the author to check.
+5. **Look at every image** you took, with your file or image viewing tool. Check that it shows what the marker describes and that nothing sensitive is visible. An image is wrong when it ends partway through a control or a label, when something is still loading or when it's mostly empty space. Fix the spec and run it again until the image is right. If you can't view images, say so in the summary and list them for the author to check.
 
 6. **Replace each marker** with the image, using the path `captureDocsScreenshot` returned, for example `![The panel in grid layout with the series counter on](./img/grid-layout.webp)`. That path is relative to a page at the top of `{docsPath}`, so on a page in a subfolder, such as `features/`, use `../img/grid-layout.webp` instead. Write alt text that says what the image shows, based on the marker's description and what the image really shows. Leave a marker you couldn't do where it is.
 

@@ -85,5 +85,5 @@ function addScreenshotsScript(context: Context): void {
 }
 
 function buildInstructionsSection(docsPath: string): string {
-  return `## Docs screenshots\n\nThe screenshots in \`${docsPath}/img/\` are taken by the Playwright specs in \`${SCREENSHOTS_DIR}/\`. When a change alters UI that a screenshot shows, update its spec, make sure Grafana is running and run the \`${SCRIPT_NAME}\` script, then look at the new images before you finish. When a page needs a new screenshot, add a spec for it the same way. Refer to \`screenshots.md\` in the plugin docs guides that \`${docsPath}/AGENTS.md\` points to.\n`;
+  return `## Docs screenshots\n\nThe screenshots in \`${docsPath}/img/\` are taken by the Playwright specs in \`${SCREENSHOTS_DIR}/\`. After any change to the plugin's UI, make sure Grafana is running and run the \`${SCRIPT_NAME}\` script, which takes every screenshot again. Look at each image that changed before you finish, and fix a spec that fails or no longer shows what its page says. When you document a new feature and a picture would help, add a spec for it. Refer to \`screenshots.md\` in the plugin docs guides that \`${docsPath}/AGENTS.md\` points to.\n`;
 }

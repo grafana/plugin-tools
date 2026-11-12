@@ -65,6 +65,12 @@ Screenshots are published, so treat them like the text of a page:
 
 ## Keep screenshots current
 
-A screenshot is part of the page that shows it. When a change alters UI that a screenshot shows, update
-the screenshot in the same change. With a `docs:screenshots` script, update the spec if the steps
-changed, then run it again.
+A screenshot is part of the page that shows it, so update it in the same change as the UI. With a
+`docs:screenshots` script:
+
+1. After any change to the plugin's UI, run `docs:screenshots`. It takes every screenshot again, so new UI,
+   such as a new option in the options pane, shows up without changing a spec.
+2. Look at each image that changed. Change a spec only when it fails, or when its image no longer shows what
+   the page says, for example because a default changed.
+3. When you document a new feature and a picture would help, add a spec for it, or a screenshot marker if
+   you can't take it yet.
