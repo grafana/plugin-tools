@@ -31,7 +31,7 @@
     "@typescript-eslint/typescript-estree": "8.72.1",
     "minimist": "1.2.8",
     "pm-detect": "0.6.0",
-    "snyk-nodejs-lockfile-parser": "2.10.5",
+    "snyk-nodejs-lockfile-parser": "2.10.6",
     "source-map": "0.8.0",
     "tinyglobby": "0.2.17"
   },

@@ -50,7 +50,7 @@
     "hast-util-to-mdast": "10.1.2",
     "js-yaml": "5.4.3",
     "mdast-util-gfm": "3.1.0",
-    "mdast-util-to-markdown": "2.2.0",
+    "mdast-util-to-markdown": "2.2.3",
     "rehype-highlight": "7.0.2",
     "rehype-sanitize": "6.0.0",
     "remark-gfm": "4.0.1",
