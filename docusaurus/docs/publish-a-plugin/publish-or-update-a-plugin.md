@@ -66,6 +66,14 @@ Follow these steps to publish your plugin for the first time.
 
 ### Plugin submission review
 
+:::caution
+
+The Grafana Plugins team studies each plugin submission individually and approves any given plugin on a case-by-case basis. 
+
+The review process is thorough. Approval of a previous version, following [best practices](../publish-a-plugin/publishing-best-practices.md) or [providing testing information](../publish-a-plugin/provide-test-environment.md) doesn't guarantee the approval of a submitted plugin. 
+
+:::
+
 After you submit your plugin:
 
 1. The Grafana Plugins team runs an automated validation to make sure it adheres to the Grafana guidelines.
@@ -76,17 +84,11 @@ After you submit your plugin:
     * We may ask you to assist us in configuring a test environment for your plugin.
     * We'll use this test environment whenever you submit a plugin update.
 
-:::note
-
-Following [best practices](./publishing-best-practices.md) or [providing a test environment](./provide-test-environment.md) does not guarantee the approval of a submitted plugin. The Grafana Plugins team studies each submission individually and decides on a case-by-case basis. 
-
-:::
-
 ## Update your plugin
 
 To update a plugin, follow the same guidance as for [publish your plugin](#publish-your-plugin), except in Step 3 where you can now click **Submit Update** for the plugin you want to update.
 
-All plugin submissions, new or updates, go through the same automated and rigorous manual review process. Because we may have a test environment already setup for an existing plugin, plugin update reviews may go faster.
+All plugin submissions, new or updates, go through the same automated and rigorous manual review process. The Grafana Plugins team may ask you to fix issues present in previous versions. 
 
 ## Monetize your plugin
 
@@ -96,7 +98,7 @@ Marketplace plugins are published in the Grafana Catalog with a `Marketplace` la
 
 For more background, refer to the [Grafana Labs Opens the Grafana Marketplace](https://grafana.com/press/2026/10/20/marketplace-ga/) press release. 
 
-:::caution
+:::note
 
 Marketplace submissions follow a separate review process from free plugins. If you have any questions or wish to submit a monetizable plugin, contact the Grafana Marketplace team at [plugins-marketplace@grafana.com](mailto:plugins-marketplace@grafana.com). 
 
