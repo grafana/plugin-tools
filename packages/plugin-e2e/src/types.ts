@@ -24,6 +24,7 @@ import { VariableEditPage } from './models/pages/VariableEditPage';
 import { VariablePage } from './models/pages/VariablePage';
 import { VersionedAPIs } from './selectors/versionedAPIs';
 import { VersionedConstants } from './selectors/versionedConstants';
+import type { DataSnapshotOptions } from './matchers/dataSnapshot';
 
 /**
  * Value types supported by OpenFeature flags.
@@ -150,6 +151,27 @@ export type PluginOptions = {
    * If no credentials are provided, the server default admin:admin credentials will be used.
    */
   grafanaAPICredentials: Credentials;
+
+  /**
+   * Default options for every `toMatchDataSnapshot` assertion, e.g. patterns to redact from all snapshots.
+   * Options passed to a single assertion are added to these. Pass `inheritDefaults: false` there to ignore them.
+   *
+   * @example
+   * ```typescript
+   * // for the whole suite in playwright.config.ts
+   * export default defineConfig({
+   *   use: {
+   *     dataSnapshot: { redact: [{ pattern: /i-([0-9a-f]{2})[0-9a-f]+/g, replacement: 'i-$1...' }] },
+   *   },
+   * });
+   *
+   * // for tests in a specific file
+   * test.use({ dataSnapshot: { ignorePaths: ['series.*.meta.notices'] } });
+   * ```
+   *
+   * @alpha - the API is not yet stable and may change without a major version bump. Use with caution.
+   */
+  dataSnapshot: DataSnapshotOptions;
 };
 
 export type PluginFixture = {
