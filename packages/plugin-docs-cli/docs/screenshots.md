@@ -64,8 +64,10 @@ Screenshots are published, so treat them like the text of a page:
   values such as `<API_KEY>` or `https://example.com` into forms, and mask anything else that's sensitive.
 - Use provisioned dashboards and data sources, and TestData scenarios with fixed values and a fixed time
   range. Then a screenshot only changes when the UI does.
-- Prefer a screenshot of one element, such as the panel or the query editor, to the whole page. It's
-  easier to read and stays under the size limit.
+- Capture a section of the page, such as the panel, the options pane or the whole query row, not just one
+  control and not always the whole page. Include enough of the surroundings, such as the header and the
+  neighbouring rows, that readers can tell where in Grafana they are. A section is easier to read than the
+  whole page and stays under the size limit.
 
 ## Keep screenshots current
 
