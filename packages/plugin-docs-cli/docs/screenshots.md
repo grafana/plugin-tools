@@ -64,10 +64,12 @@ Screenshots are published, so treat them like the text of a page:
   values such as `<API_KEY>` or `https://example.com` into forms, and mask anything else that's sensitive.
 - Use provisioned dashboards and data sources, and TestData scenarios with fixed values and a fixed time
   range. Then a screenshot only changes when the UI does.
-- Capture a section of the page, such as the panel, the options pane or the whole query row, not just one
-  control and not always the whole page. Include enough of the surroundings, such as the header and the
-  neighbouring rows, that readers can tell where in Grafana they are. A section is easier to read than the
-  whole page and stays under the size limit.
+- Show the screen the way readers see it, with the page title, tabs, editor header or toolbar that tells
+  them where they are. Don't crop to the one form or control the text describes. For an app page or config
+  page, that's the page with its title and tabs. For a query editor, it's the query tab or the whole query
+  row.
+- Keep a normal window size, such as 1280x800. Long content can run past the bottom of the image, as it
+  does on screen. Don't stretch the window to fit a long list into one tall image.
 
 ## Keep screenshots current
 
