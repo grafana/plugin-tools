@@ -208,16 +208,37 @@ The agent reads your README, your source code and any existing docs, and moves w
 
 Run `add docs-content` once, after `add docs`. After that, update pages as part of your normal work.
 
+### Add screenshots
+
+`add docs-content` can't run your plugin, so it doesn't take new screenshots. Instead, it marks where each one belongs with a screenshot marker, an HTML comment that the catalog doesn't show:
+
+```markdown
+<!-- screenshot: the panel in grid layout with the "Show series counter" option on -->
+```
+
+To have an agent take the screenshots, build your plugin, start Grafana, commit your changes, then run:
+
+```shell npm2yarn
+npx @grafana/create-plugin@latest add docs-screenshots
+```
+
+It first checks that Grafana is running with your plugin at `http://localhost:3000`, and stops if it isn't. When Grafana runs somewhere else, pass its URL with `--grafanaUrl`, for example `--grafanaUrl=http://localhost:3001`.
+
+This adds a `docs-screenshots/` folder of Playwright specs that use `@grafana/plugin-e2e`, plus a `docs:screenshots` script. If your plugin doesn't have `@grafana/plugin-e2e` and `@playwright/test` yet, it adds them. If it has its own Playwright config, the specs reuse it. The agent also proposes screenshots for other spots where one would help, and asks you which to keep. It writes one spec per screenshot, runs them, checks each image and puts it on its page. Because the specs stay in your repository, `docs:screenshots` takes every screenshot again after a UI change.
+
+You can also take a screenshot yourself and replace its marker by hand. For the rules screenshots follow, refer to [Screenshots](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/screenshots.md).
+
 ## Scripts
 
-| Script          | Runs                                         | What it does                                                                  |
-| --------------- | -------------------------------------------- | ----------------------------------------------------------------------------- |
-| `docs:serve`    | `plugin-docs-cli serve --port 3001 --reload` | Starts a local preview at `http://localhost:3001` that reloads when you save. |
-| `docs:validate` | `plugin-docs-cli validate`                   | Checks your docs, the same way the release pipeline does.                     |
+| Script             | Runs                                                                                                                        | What it does                                                                                                           |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `docs:serve`       | `plugin-docs-cli serve --port 3001 --reload`                                                                                | Starts a local preview at `http://localhost:3001` that reloads when you save.                                          |
+| `docs:validate`    | `plugin-docs-cli validate`                                                                                                  | Checks your docs, the same way the release pipeline does.                                                              |
+| `docs:screenshots` | `playwright install chromium && playwright test --config docs-screenshots/playwright.config.ts && plugin-docs-cli validate` | Takes every screenshot in `docs-screenshots/`, then validates. Added by `add docs-screenshots`. Needs Grafana running. |
 
 Use `docs:serve` while you write. It shows your pages as they'll look in the catalog and reports problems as you save. Run `docs:validate` before you open a pull request.
 
-Validation warns about empty headings, because the catalog shows them. Section briefs you leave in a page are only suggestions, because the catalog doesn't show them. Finish with neither left.
+Validation warns about empty headings, because the catalog shows them. Section briefs you leave in a page are only suggestions, because the catalog doesn't show them. Finish with neither left. Screenshot markers are suggestions too, and you can leave them until the screenshots are taken.
 
 For every check, refer to [Validation rules](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/validation-rules.md).
 

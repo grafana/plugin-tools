@@ -210,3 +210,49 @@ describe('checkStubContent with comment briefs', () => {
     expect(findings[0].severity).toBe('warning');
   });
 });
+
+describe('checkStubContent with screenshot markers', () => {
+  const marker = '<!-- screenshot: the panel in grid layout -->';
+
+  async function check(body: string) {
+    const tmp = await mkdtemp(join(tmpdir(), 'stub-test-'));
+    await writeFile(join(tmp, 'index.md'), md(body));
+    return checkStubContent({ docsPath: tmp });
+  }
+
+  it('reports a screenshot marker as info, with its line', async () => {
+    const findings = await check(`## Options\n\nOne row per option.\n\n${marker}\n`);
+
+    expect(findings).toHaveLength(1);
+    expect(findings[0]).toMatchObject({ rule: Rule.MissingScreenshot, severity: 'info', line: 9 });
+  });
+
+  it('reports every marker on a page', async () => {
+    const findings = await check(`${marker}\n\nIntro.\n\n## Options\n\nText.\n\n${marker}\n`);
+
+    expect(findings.map((f) => [f.rule, f.line])).toEqual([
+      [Rule.MissingScreenshot, 5],
+      [Rule.MissingScreenshot, 13],
+    ]);
+  });
+
+  it('does not count a marker as content', async () => {
+    const findings = await check(`## Options\n\n${marker}\n\n## Next\n\nReal text.\n`);
+
+    expect(findings.map((f) => f.rule).sort()).toEqual([Rule.EmptySection, Rule.MissingScreenshot].sort());
+  });
+
+  it('keeps briefs and markers apart', async () => {
+    const findings = await check(
+      `## Options\n\n<!-- section-brief\nAdd a screenshot: of the options.\n-->\n\nText.\n\n${marker}\n`
+    );
+
+    expect(findings.map((f) => f.rule).sort()).toEqual([Rule.MissingScreenshot, Rule.UnfilledSectionBrief].sort());
+  });
+
+  it('ignores markers in code blocks and inline code', async () => {
+    const findings = await check(`## Options\n\nUse \`${marker}\`.\n\n\`\`\`markdown\n${marker}\n\`\`\`\n`);
+
+    expect(findings).toEqual([]);
+  });
+});

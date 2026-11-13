@@ -20,7 +20,7 @@ This usually runs once, after `add docs`. Running it again is safe, because it o
 
 ## Check first
 
-Search the docs folder for `section-brief` comments. A section that still has its brief is yours to write. A section without one has been written by the author, so never rewrite it. Text between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers is maintained by Grafana, so never edit inside a snippet.
+Search the docs folder for `section-brief` comments. A section that still has its brief is yours to write. A section without one has been written by the author, so never rewrite it. Text between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers is maintained by Grafana, so never edit inside a snippet. Keep every `<!-- screenshot: ... -->` marker that is already there. It marks an image still to take.
 
 If no briefs remain, the pages are already written. Do steps 1 and 3, adding any README or linked-docs content that isn't on the pages yet without rewriting what is there, then steps 7 to 10. If nothing is left to migrate, say so in the summary and change nothing.
 
@@ -67,6 +67,14 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
 
    **Images.** Show each image the README or linked docs used on the page its section moved to, so no illustration is lost. A screenshot that `info.screenshots` lists stays where it is, so the plugin keeps one copy. Link it from the page by its relative path to the file under `src`, for example `![Grid layout](../src/img/screenshots/grid-layout.png)` from a page at the top of `{docsPath}`. Don't copy it into `{docsPath}`, because the build points the page at the copy the plugin archive already ships. Copy any other image, one that `info.screenshots` doesn't list, into `{docsPath}/img/` and reference that copy. When `docs:validate` rejects a link to a listed screenshot as a path outside the docs folder, the installed `@grafana/plugin-docs-cli` is older than 0.14.0. Then copy the screenshot into `{docsPath}/img/` instead and say so in the summary. When `docs:validate` reports an image over its size limit, resize the copy in `{docsPath}/img/` and leave the original alone.
 
+   **Screenshot markers.** You can't run the plugin, so you can't take new screenshots. Instead, mark where they belong. Wherever a screenshot of the plugin would help a reader and the repository has none, add a screenshot marker on its own line next to the text it illustrates, as `screenshots.md` in the guides describes: `<!-- screenshot: <one sentence saying what the image shows> -->`. Write the description so someone who has never seen the plugin can take the screenshot: name the page or editor, the options that are set and what the image focuses on. Aim for about one marker per page and no more than one per section. Good spots:
+   - Panel: the panel showing its main options at the top of `index.md` or `options.md`, and one per example in `examples.md`.
+   - Data source: the config editor on `configure.md`, and each query editor mode on `query-editor.md`.
+   - App: each page in `includes` and the config page.
+   - Skip `troubleshooting.md`, unless an error or empty state is easy to reproduce from provisioned data.
+
+   Never put a marker or an image between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers, since the parser replaces everything inside a snippet. Put it before or after the snippet. Don't add a marker next to an image that's already there, or where a marker already is. `docs:validate` lists every marker as a `missing-screenshot` suggestion. That's expected and doesn't mean the page is unfinished.
+
    **App pages.** Trace each page in `includes` from its route into the component it renders, including its tabs and drilldowns, which `src/plugin.json` doesn't list, and use the UI labels from source or from the e2e tests. You can't run the app, so when neither shows what a page displays, don't guess. Write what they support and add the page to the gaps in step 10. Describe UI that only appears behind a feature flag or a condition as "when X is enabled", and list each flag in the gaps.
 
    **Secrets rule.** Never copy a real credential, token, API key, password or internal hostname onto a page, even when `provisioning/`, the README or a linked doc contains one. Use an obvious placeholder such as `<API_KEY>` or `https://example.com` instead. The pages are published.
@@ -109,7 +117,7 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
     - Optional pages you added, and the trigger in source for each.
     - README feature bullets you couldn't add because the README was left as the scaffold default.
     - Pages added from author-named topics.
-    - Screenshots linked from `src` and images copied into `{docsPath}/img/`, and which pages they landed on. Name each duplicate original you deleted, and each one you kept with the file that still uses it. Name each image from the README or linked docs that no page shows. Flag pages that would benefit from a screenshot where the repo has none.
+    - Screenshots linked from `src` and images copied into `{docsPath}/img/`, and which pages they landed on. Name each duplicate original you deleted, and each one you kept with the file that still uses it. Name each image from the README or linked docs that no page shows. List each screenshot marker you added, with its page and description.
     - Gaps flagged for the author:
       - Contradictions found under the contradiction rule, within source and between the README or linked docs and source (cite file and line).
       - Option descriptions you wrote because source had none, or reworded because the verbatim text caused a `docs:validate` warning.
@@ -125,11 +133,11 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
       - README sections you removed, and which page each moved to, so the author can spot-check the migration.
     - Final `docs:validate` result.
 
-    End the summary with a note that you didn't take any new screenshots and only reused images already in the repository. Recommend that the author adds screenshots of the plugin in use, starting with the pages you flagged, and references them from those pages.
+    End the summary with a note that you didn't take any new screenshots and only reused images already in the repository. When you added screenshot markers, recommend that the author builds the plugin, starts Grafana and runs `create-plugin add docs-screenshots`, which takes the screenshots and replaces the markers. Replacing a marker with an image by hand works too.
 
 ## Verify
 
-`docs:validate` reports no warnings and no `section-brief` suggestions, as step 9 says. Limit fixes to problems in pages you wrote or changed.
+`docs:validate` reports no warnings and no `section-brief` suggestions, as step 9 says. `missing-screenshot` suggestions for the markers you added are expected. Limit fixes to problems in pages you wrote or changed.
 
 A passing `docs:validate` checks the structure of the pages, not whether they are true. After it passes, re-read every page you wrote. For each claim about what the plugin does, such as a default, a behavior, an option's effect or what an example produces, name the source line that shows it. Fix or delete any claim you can't trace to source. Don't describe how a standard Grafana feature affects this plugin, such as thresholds, Min and Max, units or overrides, from general knowledge. Read how the plugin's code uses it, because the plugin may call it in a mode that changes the answer.
 

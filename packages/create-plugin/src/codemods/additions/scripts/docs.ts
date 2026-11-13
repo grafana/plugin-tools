@@ -346,6 +346,13 @@ function buildNextStepsMessage(opts: {
       title: 'Preview the pages',
       detail: `Run ${run('docs:serve')}, which also lists every section left to fill.`,
     },
+    {
+      title: 'Add screenshots of the plugin',
+      detail: [
+        'With the plugin built and Grafana running, have an agent take the screenshots the pages mark:',
+        output.formatCode(`${createPluginCmd} add docs-screenshots`),
+      ],
+    },
   ];
 
   const warnings: NextStep[] = [];
@@ -664,6 +671,41 @@ const DOCS_CLI_META_FILES = [
   'AGENTS.MD',
   'CLAUDE.MD',
 ];
+
+/**
+ * Stops an addition that works on existing docs pages, such as `docs-content`, when `add docs` hasn't set them
+ * up yet. Returns the docs folder and the plugin type.
+ */
+export function assertDocsSetUp(
+  context: Context,
+  additionName: string
+): { docsPath: string; pluginType: SupportedPluginType } {
+  const pluginType = assertSupportedPluginType(context, additionName);
+
+  const { docsPath } = readJsonFile<{ docsPath?: unknown }>(context, 'src/plugin.json');
+  if (docsPath === undefined) {
+    throw new Error(
+      'src/plugin.json has no docsPath, so there are no docs pages to write yet.\n  Scaffold them first, commit the result, then run this again:\n  create-plugin add docs'
+    );
+  }
+
+  assertValidDocsPath(docsPath, `add ${additionName}`, 'run create-plugin add docs to scaffold the pages there');
+
+  if (!hasDocsPages(context, docsPath)) {
+    throw new Error(
+      `src/plugin.json sets docsPath to '${docsPath}', but that folder has no docs pages.\n  Scaffold the pages first, commit the result, then run this again:\n  create-plugin add docs --docsPath ${docsPath}`
+    );
+  }
+
+  // the prompts rely on its page-to-source table, and re-running add docs adds it without touching pages
+  if (!context.doesFileExist(`${docsPath}/AGENTS.md`)) {
+    throw new Error(
+      `${docsPath}/AGENTS.md is missing, and the agent needs it to know which source each page documents.\n  Add it, commit the result, then run this again:\n  create-plugin add docs --docsPath ${docsPath}`
+    );
+  }
+
+  return { docsPath, pluginType };
+}
 
 export function hasDocsPages(context: Context, docsPath: string): boolean {
   const addedInContext = Object.entries(context.listChanges())
