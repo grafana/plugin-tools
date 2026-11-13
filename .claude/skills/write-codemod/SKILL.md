@@ -10,7 +10,7 @@ Codemods automate changes to plugin projects scaffolded by `@grafana/create-plug
 |                | Migration                                                                  | Addition                                                        |
 | -------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------- |
 | Purpose        | Bring existing plugins in line with newer create-plugin output             | Opt-in feature an author asks for                               |
-| Runs via       | `npx create-plugin update` — automatic, version-gated                      | `npx create-plugin add <name>` — on demand                      |
+| Runs via       | `npx @grafana/create-plugin update` — automatic, version-gated             | `npx @grafana/create-plugin add <name>` — on demand             |
 | Registry entry | `{ name, version, description, scriptPath }` in `migrations/migrations.ts` | `{ name, description, scriptPath }` in `additions/additions.ts` |
 | Naming         | `NNN-migration-title` — next number in sequence, ≤3-word kebab-case title  | Descriptive kebab-case — the name becomes the CLI subcommand    |
 
@@ -222,7 +222,7 @@ Additions live in `additions/scripts/` as `addition-name.ts` + `addition-name.te
 
 ```ts
 {
-  name: 'externalize-jsx-runtime',  // the CLI subcommand: npx create-plugin add externalize-jsx-runtime
+  name: 'externalize-jsx-runtime',  // the CLI subcommand: npx @grafana/create-plugin add externalize-jsx-runtime
   description: 'Externalizes the react JSX runtime to help migrate plugins to React 19',
   scriptPath: import.meta.resolve('./scripts/externalize-jsx-runtime.js'),
 },
