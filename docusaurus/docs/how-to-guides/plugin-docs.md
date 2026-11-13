@@ -147,8 +147,8 @@ The script creates stub pages that depend on your plugin type. You can add more 
 
 Some pages are required, and validation fails without them:
 
-- All plugins: an `index.md` at the root, which is the landing page.
-- Panel plugins: `options` and `data-formats`, or a folder with the same name.
+- All plugins: an `index.md` at the root, which is the landing page, and `troubleshooting` or a folder with the same name.
+- Panel plugins: `options`, `data-formats` and `examples`, or a folder with the same name.
 - Data source plugins: `query-editor` and `configure`, or a folder with the same name.
 - App plugins: nothing else.
 

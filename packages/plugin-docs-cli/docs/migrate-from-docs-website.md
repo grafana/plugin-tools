@@ -22,8 +22,8 @@ shortcodes, frontmatter and links. For everything plugin docs support, refer to
    or delete any stub you don't replace.
 3. Rename every `_index.md` to `index.md`.
 4. Keep the required pages for your plugin type at the root, and rename existing pages to match:
-   `configure` and `query-editor` for a data source, `options` and `data-formats` for a panel.
-   For example, `configuration.md` becomes `configure.md`.
+   `configure` and `query-editor` for a data source, `options`, `data-formats` and `examples` for a panel,
+   and `troubleshooting` for every plugin type. For example, `configuration.md` becomes `configure.md`.
 
 ## 2. Convert frontmatter
 
