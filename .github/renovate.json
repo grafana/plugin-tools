@@ -73,7 +73,7 @@
         "/(^|/)packages/create-plugin/src/codemods/additions/scripts/docs\\.ts$/"
       ],
       "matchStrings": [
-        "const PLUGIN_DOCS_CLI_VERSION = '\\^?(?<currentValue>[^']+)';"
+        "const PLUGIN_DOCS_CLI_VERSION = '(?<currentValue>[^']+)';"
       ],
       "depNameTemplate": "@grafana/plugin-docs-cli",
       "datasourceTemplate": "npm"
@@ -166,6 +166,7 @@
     },
     // Bumps the @grafana/plugin-docs-cli version `create-plugin add docs` installs (custom.regex manager).
     // Not automerged: the guides it ships change with each version, so the scaffolded AGENTS.md may need a look.
+    // The match keeps the caret, so only a release outside the range opens a PR.
     {
       "automerge": false,
       "groupName": "plugin-docs-cli docs addition version",
