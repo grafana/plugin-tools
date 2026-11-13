@@ -14,6 +14,10 @@ them from the running plugin.
 - Put each image next to the text it illustrates. About one image per page is a good start. More than
   one per section is rarely useful.
 
+Never put an image or a marker between `<!-- snippet:<name> -->` and `<!-- /snippet:<name> -->` markers.
+Grafana keeps that text up to date and replaces everything inside it, so the image would be lost. Put it
+before or after the snippet. [Snippets](./snippets.md) explains how they work.
+
 [Supported markdown](./supported-markdown.md#images) has the full image syntax, and
 [Validation rules](./validation-rules.md#images--other-assets) has every image check.
 

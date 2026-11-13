@@ -73,7 +73,7 @@ If no briefs remain, the pages are already written. Do steps 1 and 3, adding any
    - App: each page in `includes` and the config page.
    - Skip `troubleshooting.md`, unless an error or empty state is easy to reproduce from provisioned data.
 
-   Don't add a marker next to an image that's already there, or where a marker already is. `docs:validate` lists every marker as a `missing-screenshot` suggestion. That's expected and doesn't mean the page is unfinished.
+   Never put a marker or an image between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers, since the parser replaces everything inside a snippet. Put it before or after the snippet. Don't add a marker next to an image that's already there, or where a marker already is. `docs:validate` lists every marker as a `missing-screenshot` suggestion. That's expected and doesn't mean the page is unfinished.
 
    **App pages.** Trace each page in `includes` from its route into the component it renders, including its tabs and drilldowns, which `src/plugin.json` doesn't list, and use the UI labels from source or from the e2e tests. You can't run the app, so when neither shows what a page displays, don't guess. Write what they support and add the page to the gaps in step 10. Describe UI that only appears behind a feature flag or a condition as "when X is enabled", and list each flag in the gaps.
 

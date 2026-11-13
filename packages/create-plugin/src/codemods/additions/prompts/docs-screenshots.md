@@ -39,6 +39,8 @@ Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guide
 
    When the pages have no markers and few images, this step decides where the screenshots go, so read each page in full, section by section, and don't skim headings. For each section, work out which part of the plugin it describes, from the page text and the source in the "Pages and their source" table in `{docsPath}/AGENTS.md`. Then decide whether a reader would understand it faster with a screenshot of that part, and which one image would show it best. Propose a spot only when you can say what the image shows and how to get the plugin into that state. Don't spread images evenly over the pages, and don't add one just because a page has none.
 
+   Never propose a spot between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers. The parser replaces everything inside a snippet, so an image there is lost and the page no longer matches what readers see. Propose a spot before or after the snippet instead.
+
    Good spots:
    - Panel: the panel showing its main options, the options pane and each example that changes how the panel looks.
    - Data source: the config editor, and each query editor mode.
@@ -63,7 +65,7 @@ Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guide
 
 6. **Look at every image** you took, with your file or image viewing tool. Check that it shows what its description says and that nothing sensitive is visible. An image is wrong when it ends partway through a control or a label, when something is still loading or when it's mostly empty space. Fix the spec and run it again until the image is right. If you can't view images, say so in the summary and list them for the author to check.
 
-7. **Put each image on its page.** Replace each marker with its image. Insert each kept proposal on its own line next to the text it illustrates, with a blank line before and after. Use the path `captureDocsScreenshot` returned, for example `![The panel in grid layout with the series counter on](./img/grid-layout.webp)`. That path is relative to a page at the top of `{docsPath}`, so on a page in a subfolder, such as `features/`, use `../img/grid-layout.webp` instead. Write alt text that says what the image shows, based on its description and what the image really shows. Leave a marker you couldn't do where it is, and drop a proposal you couldn't do.
+7. **Put each image on its page.** Replace each marker with its image. When a marker sits inside a snippet, move the image to just before or after the snippet, since the parser replaces everything between the snippet markers. Insert each kept proposal on its own line next to the text it illustrates, with a blank line before and after. Use the path `captureDocsScreenshot` returned, for example `![The panel in grid layout with the series counter on](./img/grid-layout.webp)`. That path is relative to a page at the top of `{docsPath}`, so on a page in a subfolder, such as `features/`, use `../img/grid-layout.webp` instead. Write alt text that says what the image shows, based on its description and what the image really shows. Leave a marker you couldn't do where it is, and drop a proposal you couldn't do.
 
 8. **Validate** with the `docs:validate` script and fix what it reports for the pages and images you changed. Remove any image under `{docsPath}/img/` that you took and no page uses.
 
@@ -92,7 +94,7 @@ Screenshots are published, so treat them like the text of a page:
 ## Out of scope
 
 - Change only files inside `docs-screenshots/` and `{docsPath}/`. Everything else stays as it is, including `.config/`, source code, `tests/`, `provisioning/`, dependencies, scripts and workflows.
-- Change pages only to replace markers with images and to insert the proposed images the author kept. Don't rewrite page text.
+- Change pages only to replace markers with images and to insert the proposed images the author kept. Don't rewrite page text. Never put an image inside a snippet, between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers.
 - Don't create images with an image model or draw mock UI. Every image comes from the running plugin.
 - When a spec can't be made to work, leave a `TODO(docs-screenshots):` comment in it saying why, and mark the test with `test.fixme` so the `docs:screenshots` script still passes. Never leave a `TODO` on a page.
 - You may use a browser tool, such as a Playwright or Chrome DevTools MCP server, to look around the UI and find selectors. Every image must still come from a spec, so the next refresh can take it again.
