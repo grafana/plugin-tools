@@ -44,7 +44,7 @@ Each screenshot is a small Playwright spec in the `docs-screenshots/` folder:
 1. Build the plugin and start Grafana, for example with the `dev` and `server` scripts. Set
    `GRAFANA_URL` if Grafana runs somewhere other than `http://localhost:3000`.
 2. Add or change the spec for the screenshot. Use the `@grafana/plugin-e2e` fixtures to open the page,
-   and `captureDocsScreenshot` from `docs-screenshots/helpers.ts` to save the image. The helper saves a
+   and `captureDocsScreenshot` from `.config/docs-screenshots/helpers.ts` to save the image. The helper saves a
    WebP file in `img/` and fails when the image is over the size limit.
 3. Run `docs:screenshots`. It takes every screenshot, then runs `validate`.
 4. Open each new image and check that it shows what the page says, that nothing is cut off and that

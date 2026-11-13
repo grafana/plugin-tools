@@ -1,5 +1,5 @@
 import { expect, test } from '@grafana/plugin-e2e';
-import { captureDocsScreenshot } from './helpers';
+import { captureDocsScreenshot } from '../.config/docs-screenshots/helpers';
 
 // a pattern to copy, one spec per screenshot. Delete this file once the folder has real specs
 test.skip('example: the app root page', async ({ gotoAppPage, page }) => {

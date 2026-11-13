@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import type { Context } from '../../context.js';
-import { TEMPLATES_DIR } from '../../../constants.js';
+import { TEMPLATE_PATHS, TEMPLATES_DIR } from '../../../constants.js';
 import { output } from '../../../utils/utils.console.js';
 import {
   additionsDebug,
@@ -13,6 +13,7 @@ import { appendToAgentInstructions } from '../../utils.agents.js';
 import { assertDocsSetUp } from './docs.js';
 
 const SCREENSHOTS_DIR = 'docs-screenshots';
+const HELPERS_PATH = '.config/docs-screenshots/helpers.ts';
 const SCRIPT_NAME = 'docs:screenshots';
 const SCRIPT = `playwright install chromium && playwright test --config ${SCREENSHOTS_DIR}/playwright.config.ts && plugin-docs-cli validate`;
 const PLUGIN_PLAYWRIGHT_CONFIG = 'playwright.config.ts';
@@ -49,9 +50,7 @@ export default function docsScreenshots(context: Context): Context {
   addFileIfMissing(context, `${SCREENSHOTS_DIR}/playwright.config.ts`, () =>
     renderTemplate(join(commonDir, configTemplate), false, data)
   );
-  addFileIfMissing(context, `${SCREENSHOTS_DIR}/helpers.ts`, () =>
-    renderTemplate(join(commonDir, 'helpers.ts'), false, data)
-  );
+  addHelpers(context, data);
   // a pattern to copy, so it's only added to a folder that has no specs of its own yet
   if (!context.readDir(SCREENSHOTS_DIR).some((file) => file.endsWith('.spec.ts'))) {
     const exampleTemplate = join(TEMPLATES_DIR, 'docs', pluginType, 'screenshots', 'example.spec.ts');
@@ -100,6 +99,16 @@ function addGitignoreEntries(context: Context): void {
     context.updateFile('.gitignore', content);
   } else {
     context.addFile('.gitignore', content);
+  }
+}
+
+// .config/ belongs to create-plugin, so this always takes the latest version
+function addHelpers(context: Context, data: Record<string, unknown>): void {
+  const rendered = renderTemplate(join(TEMPLATE_PATHS.common, HELPERS_PATH), false, data);
+  if (!context.doesFileExist(HELPERS_PATH)) {
+    context.addFile(HELPERS_PATH, rendered);
+  } else if (context.getFile(HELPERS_PATH) !== rendered) {
+    context.updateFile(HELPERS_PATH, rendered);
   }
 }
 
