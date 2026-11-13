@@ -35,7 +35,11 @@ Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guide
 
 1. **Read what each marker asks for.** For each marker, read the page text around it and the source the page documents, from the "Pages and their source" table in `{docsPath}/AGENTS.md`. Note which page, editor or panel to open, which options to set and what to capture.
 
-2. **Propose more screenshots.** Read every page in `{docsPath}`, apart from `AGENTS.md` and `README.md`, and find spots where a screenshot of the plugin would clearly help a reader and there's no image or marker yet. Write a one-sentence description for each, as a marker would have. Keep it to about one image per page, counting the images and markers already there, and no more than one per section. Good spots:
+2. **Propose more screenshots.** Read every page in `{docsPath}`, apart from `AGENTS.md` and `README.md`, and find spots where a screenshot of the plugin would clearly help a reader and there's no image or marker yet. Write a one-sentence description for each, as a marker would have. Keep it to about one image per page, counting the images and markers already there, and no more than one per section.
+
+   When the pages have no markers and few images, this step decides where the screenshots go, so read each page in full, section by section, and don't skim headings. For each section, work out which part of the plugin it describes, from the page text and the source in the "Pages and their source" table in `{docsPath}/AGENTS.md`. Then decide whether a reader would understand it faster with a screenshot of that part, and which one image would show it best. Propose a spot only when you can say what the image shows and how to get the plugin into that state. Don't spread images evenly over the pages, and don't add one just because a page has none.
+
+   Good spots:
    - Panel: the panel showing its main options, the options pane and each example that changes how the panel looks.
    - Data source: the config editor, and each query editor mode.
    - App: each page in `includes` and the config page.
