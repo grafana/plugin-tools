@@ -12,9 +12,9 @@ test.use({
 /**
  * Skips the test unless the panel actions popover replaced the panel header menu button.
  *
- * TODO: the popover is added by https://github.com/grafana/grafana/pull/135057, which isn't merged yet.
- * Once it is released, replace this runtime check with a version check on the first Grafana release that contains it,
- * e.g. test.skip(lt(grafanaVersion, '13.3.0'), ...) if it ships in 13.3.0.
+ * The popover is on Grafana main but not yet in a release. This is a runtime check rather than a version check because
+ * nightly builds report pre-release versions (e.g. 13.4.0-<build>), which sort below the release that ships the
+ * popover, so a version check would skip the nightly builds that have it.
  */
 async function skipWithoutActionsPopover(dashboardPage: DashboardPage, panel: Panel, selectors: E2ESelectorGroups) {
   await expect(panel.locator).toBeVisible();
