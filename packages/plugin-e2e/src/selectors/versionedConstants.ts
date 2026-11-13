@@ -34,6 +34,31 @@ export const versionedConstants = {
       [MIN_GRAFANA_VERSION]: 'Data links',
     },
   },
+  // accessible names in the panel actions popover, shown when the grafana.panelActionsPopover feature flag is on.
+  // button names are prefixes, because the buttons append keyboard shortcut hints, e.g. 'Edit (e)'
+  PanelActionsPopover: {
+    toolbar: {
+      [MIN_GRAFANA_VERSION]: 'Panel actions',
+    },
+    expandButton: {
+      [MIN_GRAFANA_VERSION]: 'Expand',
+    },
+    editButton: {
+      [MIN_GRAFANA_VERSION]: 'Edit',
+    },
+    exploreButton: {
+      [MIN_GRAFANA_VERSION]: 'Explore',
+    },
+    copyButton: {
+      [MIN_GRAFANA_VERSION]: 'Copy to clipboard',
+    },
+    duplicateButton: {
+      [MIN_GRAFANA_VERSION]: 'Duplicate',
+    },
+    removeButton: {
+      [MIN_GRAFANA_VERSION]: 'Remove',
+    },
+  },
 } satisfies VersionedSelectorGroup;
 
 export type VersionedConstants = typeof versionedConstants;
