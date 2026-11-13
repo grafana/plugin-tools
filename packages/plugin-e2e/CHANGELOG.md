@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@4.0.1...@grafana/plugin-e2e@4.1.0) (2026-11-13)
+
+
+### Features
+
+* **plugin-e2e:** Support the panel actions popover in clickOnMenuItem ([#2988](https://github.com/grafana/plugin-tools/issues/2988)) ([b445745](https://github.com/grafana/plugin-tools/commit/b44574577387679f22f62a7ecf9b4ea74b87cff4))
+
 ## [4.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@4.0.0...@grafana/plugin-e2e@4.0.1) (2026-11-06)
 
 
