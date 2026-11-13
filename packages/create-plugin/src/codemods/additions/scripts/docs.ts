@@ -56,7 +56,7 @@ export const schema = v.object({
 type Options = v.InferOutput<typeof schema>;
 
 // kept current by a Renovate custom manager in .github/renovate.json, which matches this exact line
-const PLUGIN_DOCS_CLI_VERSION = '^0.8.0';
+const PLUGIN_DOCS_CLI_VERSION = '^1.0.0';
 
 // each type needs a template set under `templates/docs/<type>/`
 const SUPPORTED_PLUGIN_TYPES = ['panel', 'datasource', 'app'] as const;
@@ -425,7 +425,7 @@ function isSupportedPluginType(type: string | undefined): type is SupportedPlugi
 // instructions.md imports e2e-testing.md, so the two are created together
 const CONFIG_AGENT_FILES = ['instructions.md', 'e2e-testing.md'];
 // the scaffold's files that aren't pages, so they're added on every run
-const SCAFFOLD_META_FILES = ['README.md', 'AGENTS.md', 'CLAUDE.md'];
+const SCAFFOLD_META_FILES = ['README.md', 'AGENTS.md'];
 const DASHBOARDS_PAGE: FeaturePage = {
   page: 'dashboards',
   templateFlag: 'hasDashboards',
@@ -708,8 +708,8 @@ const LOCK_FILES: Record<string, string> = {
 const RELEASE_WORKFLOW_PATH = '.github/workflows/release.yml';
 // the oldest release of each action that builds docs into the plugin archive
 const REQUIRED_ACTION_REFS: Record<string, string> = {
-  'grafana/plugin-actions/build-plugin': 'build-plugin/v1.2.0',
-  'grafana/plugin-actions/package-plugin': 'package-plugin/v1.3.3',
+  'grafana/plugin-actions/build-plugin': 'build-plugin/v2.0.0',
+  'grafana/plugin-actions/package-plugin': 'package-plugin/v2.0.2',
 };
 
 const DOCS_SCRIPTS: Record<string, string> = {

@@ -195,6 +195,7 @@ const sidebars: SidebarsConfig = {
       },
       items: [
         'how-to-guides/add-anonymous-usage-reporting',
+        'how-to-guides/plugin-docs',
         'how-to-guides/add-features-to-a-plugin',
         'how-to-guides/add-user-storage',
         'how-to-guides/extend-configurations',
@@ -336,6 +337,7 @@ const sidebars: SidebarsConfig = {
           ],
         },
         'migration-guides/migrate-from-toolkit',
+        'migration-guides/migrate-to-rspack',
       ],
     },
 

@@ -1,5 +1,38 @@
 # Changelog
 
+## [4.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@4.0.0...@grafana/plugin-e2e@4.0.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* **plugin-e2e:** skip viz picker toggle when picker is open ([#3079](https://github.com/grafana/plugin-tools/issues/3079)) ([5648132](https://github.com/grafana/plugin-tools/commit/564813287809774faac112f6e2f8039c3e74e2f3))
+
+## [4.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.4...@grafana/plugin-e2e@4.0.0) (2026-11-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048))
+
+### Features
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048)) ([0f16572](https://github.com/grafana/plugin-tools/commit/0f16572a15189061581aceb3fc773bba4bca5bdd))
+
+## [3.15.4](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.3...@grafana/plugin-e2e@3.15.4) (2026-10-28)
+
+
+### Bug Fixes
+
+* allow node 26 in plugin-e2e engines ([#3024](https://github.com/grafana/plugin-tools/issues/3024)) ([58b1ff9](https://github.com/grafana/plugin-tools/commit/58b1ff9c03ab009b600ed21957fe06c34bf3a5a0))
+* detect dashboard layout from the page in addPanel ([#3031](https://github.com/grafana/plugin-tools/issues/3031)) ([9adcf12](https://github.com/grafana/plugin-tools/commit/9adcf1236d280df48acf325dbfaacaabfcf42a85))
+
+## [3.15.3](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.2...@grafana/plugin-e2e@3.15.3) (2026-10-22)
+
+
+### Bug Fixes
+
+* **plugin-e2e:** derive AxeBuilder type from the dynamic import ([#3019](https://github.com/grafana/plugin-tools/issues/3019)) ([7779b05](https://github.com/grafana/plugin-tools/commit/7779b05c3c7e25f123f667c03637ea8f48fa53cb))
+
 ## [3.15.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.1...@grafana/plugin-e2e@3.15.2) (2026-10-19)
 
 

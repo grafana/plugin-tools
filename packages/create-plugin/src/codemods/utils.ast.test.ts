@@ -7,6 +7,10 @@ import {
   findObjectProperty,
   createImport,
   insertImports,
+  findImports,
+  findNamedImport,
+  findFunctionDeclaration,
+  callsFunction,
 } from './utils.ast.js';
 
 // Helper to create a simple test AST from source code
@@ -31,6 +35,58 @@ function findFirstNode<T extends recast.types.namedTypes.Node>(ast: recast.types
 }
 
 describe('utils.ast', () => {
+  describe('Declaration Utilities', () => {
+    describe('findFunctionDeclaration', () => {
+      it('should find a function declaration by name', () => {
+        const ast = createTestAST(`function foo() {}\nfunction bar() {}`);
+
+        const declaration = findFunctionDeclaration(ast, 'bar');
+
+        expect(declaration?.id?.name).toBe('bar');
+      });
+
+      it('should find an exported function declaration', () => {
+        const ast = createTestAST(`export async function getEntries() {}`);
+
+        const declaration = findFunctionDeclaration(ast, 'getEntries');
+
+        expect(declaration?.async).toBe(true);
+      });
+
+      it('should return null when the function is not declared', () => {
+        const ast = createTestAST(`const getEntries = () => {};`);
+
+        expect(findFunctionDeclaration(ast, 'getEntries')).toBeNull();
+      });
+    });
+
+    describe('callsFunction', () => {
+      it('should return true when the function is called', () => {
+        const ast = createTestAST(`async function run() { const files = await glob('**/*.ts'); }`);
+
+        expect(callsFunction(ast, 'glob')).toBe(true);
+      });
+
+      it('should return true for nested calls', () => {
+        const ast = createTestAST(`items.map((item) => wrap(glob(item)));`);
+
+        expect(callsFunction(ast, 'glob')).toBe(true);
+      });
+
+      it('should return false when the function is only referenced', () => {
+        const ast = createTestAST(`const fn = glob;`);
+
+        expect(callsFunction(ast, 'glob')).toBe(false);
+      });
+
+      it('should return false for a method with the same name', () => {
+        const ast = createTestAST(`fs.glob('**/*.ts');`);
+
+        expect(callsFunction(ast, 'glob')).toBe(false);
+      });
+    });
+  });
+
   describe('Property Utilities', () => {
     describe('isProperty', () => {
       it('should return true for Property nodes', () => {
@@ -189,6 +245,101 @@ describe('utils.ast', () => {
 
         const output = printAST(ast, {});
         expect(output).toBe(`import React from 'react';\nimport { map } from 'lodash';\nconst x = 1;`);
+      });
+    });
+
+    describe('findImports', () => {
+      it('should return an empty array when the package is not imported', () => {
+        const ast = createTestAST(`import React from 'react';\nconst x = 1;`);
+
+        expect(findImports(ast, 'glob')).toEqual([]);
+      });
+
+      it('should return the matching import declaration', () => {
+        const ast = createTestAST(`import React from 'react';\nimport { glob } from 'glob';`);
+
+        const imports = findImports(ast, 'glob');
+
+        expect(imports).toHaveLength(1);
+        expect(imports[0].source.value).toBe('glob');
+      });
+
+      it('should return every declaration importing the package', () => {
+        const ast = createTestAST(`import { glob } from 'glob';\nimport type { GlobOptions } from 'glob';`);
+
+        expect(findImports(ast, 'glob')).toHaveLength(2);
+      });
+
+      it('should not match packages with a similar name', () => {
+        const ast = createTestAST(`import globParent from 'glob-parent';\nimport { glob } from 'node:fs/promises';`);
+
+        expect(findImports(ast, 'glob')).toEqual([]);
+      });
+    });
+
+    describe('findNamedImport', () => {
+      it('should find a named import', () => {
+        const ast = createTestAST(`import { glob } from 'glob';`);
+
+        const match = findNamedImport(ast, 'glob', 'glob');
+
+        expect(match).toBeDefined();
+        expect(match?.declaration.source.value).toBe('glob');
+        expect(match?.specifier.imported.name).toBe('glob');
+        expect(match?.specifier.local?.name).toBe('glob');
+      });
+
+      it('should find an aliased named import by its imported name', () => {
+        const ast = createTestAST(`import { glob as g } from 'glob';`);
+
+        const match = findNamedImport(ast, 'glob', 'glob');
+
+        expect(match).toBeDefined();
+        expect(match?.specifier.local?.name).toBe('g');
+      });
+
+      it('should find the specifier among other specifiers', () => {
+        const ast = createTestAST(`import { globSync, glob } from 'glob';`);
+
+        const match = findNamedImport(ast, 'glob', 'glob');
+
+        expect(match).toBeDefined();
+        expect(match?.declaration.specifiers).toHaveLength(2);
+        expect(match?.specifier.imported.name).toBe('glob');
+      });
+
+      it('should find the specifier in a later declaration of the same package', () => {
+        const ast = createTestAST(`import type { GlobOptions } from 'glob';\nimport { glob } from 'glob';`);
+        const [, secondDeclaration] = findImports(ast, 'glob');
+
+        const match = findNamedImport(ast, 'glob', 'glob');
+
+        expect(match).toBeDefined();
+        expect(match?.declaration).toBe(secondDeclaration);
+      });
+
+      it('should return undefined when only other named imports exist', () => {
+        const ast = createTestAST(`import { globSync } from 'glob';`);
+
+        expect(findNamedImport(ast, 'glob', 'glob')).toBeUndefined();
+      });
+
+      it('should return undefined for a default import', () => {
+        const ast = createTestAST(`import glob from 'glob';`);
+
+        expect(findNamedImport(ast, 'glob', 'glob')).toBeUndefined();
+      });
+
+      it('should return undefined for a namespace import', () => {
+        const ast = createTestAST(`import * as glob from 'glob';`);
+
+        expect(findNamedImport(ast, 'glob', 'glob')).toBeUndefined();
+      });
+
+      it('should return undefined when the package is not imported', () => {
+        const ast = createTestAST(`import { glob } from 'node:fs/promises';`);
+
+        expect(findNamedImport(ast, 'glob', 'glob')).toBeUndefined();
       });
     });
   });

@@ -108,6 +108,8 @@ To fill a section:
 Briefs are not shown in the preview or the catalog, so a section you haven't written looks like a bare
 heading. `docs:validate` lists every section that still has only its brief.
 
+Text between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers is maintained by Grafana. Never edit inside it - refer to `snippets.md` in the guides.
+
 ## Validate
 
 ```bash

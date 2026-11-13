@@ -1,5 +1,21 @@
 # Changelog
 
+## [10.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/eslint-config@10.0.0...@grafana/eslint-config@10.0.1) (2026-11-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade to typescript 6 ([#3070](https://github.com/grafana/plugin-tools/issues/3070))
+
+### Features
+
+* upgrade to typescript 6 ([#3070](https://github.com/grafana/plugin-tools/issues/3070)) ([c197bd0](https://github.com/grafana/plugin-tools/commit/c197bd0b726f54fc2dc6d6c62fe73da3ba99a1fb))
+
+
+### Bug Fixes
+
+* document supported typescript versions in eslint-config ([#3073](https://github.com/grafana/plugin-tools/issues/3073)) ([1708622](https://github.com/grafana/plugin-tools/commit/17086222fc7ccb9441ad5bd8369e7fc03d3d7e2e))
+
 ## 10.0.0
 
 - Support Eslint 10

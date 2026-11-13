@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   test:
     runs-on: ubuntu-x64
@@ -19,11 +23,15 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    outputs:
+      public-packages-affected: ${{ steps.affected.outputs.public-packages-affected }}
+      create-plugin-affected: ${{ steps.affected.outputs.create-plugin-affected }}
     env:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
+      # The read-write Nx Cloud token is only available on main. Everywhere else Nx uses the read-only token in nx.json.
       - id: get-secrets
-        if: ${{ github.event.pull_request.head.repo.fork != true }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: grafana/shared-workflows/actions/get-vault-secrets@2f1ddaf3ce1aa677356243d0dd584be33cfa35e3 # get-vault-secrets/v2.1
         with:
           # Secrets placed in the ci/repo/grafana/plugin-tools in vault
@@ -32,19 +40,21 @@ jobs:
 
       # get-vault-secrets v2 no longer exports env vars, and Nx reads the token from the environment.
       - name: Export Nx Cloud token
-        if: ${{ github.event.pull_request.head.repo.fork != true }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         env:
-          NX_CLOUD_ACCESS_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets).NX_CLOUD_ACCESS_TOKEN }}
+          # Step env is evaluated even when the step is skipped, so fall back to '{}' to keep fromJSON from failing.
+          NX_CLOUD_ACCESS_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').NX_CLOUD_ACCESS_TOKEN }}
         run: echo "NX_CLOUD_ACCESS_TOKEN=${NX_CLOUD_ACCESS_TOKEN}" >> "$GITHUB_ENV"
 
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          filter: tree:0
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
+      - uses: nrwl/nx-set-shas@e602fada7ad5987b0f7b1905e7a99ea1c661514c # v5.1.0
       - name: Setup nodejs
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
@@ -54,6 +64,27 @@ jobs:
 
       - name: Install dependencies
         run: npm ci --no-audit
+
+      # The jobs that scaffold plugins from the packed packages only need to run when a published package
+      # is affected. Files they are configured by (see sharedGlobals in nx.json) count as affecting every package.
+      # The update test only uses create-plugin, so it has its own output.
+      - name: Detect affected packages
+        id: affected
+        run: |
+          # --json is explicit: without it nx only prints JSON when it detects an AI agent.
+          affected_packages="$(npx nx show projects --affected -p 'tag:npm:public' --json)"
+          echo "Affected public packages: $affected_packages"
+          if [ "$affected_packages" != "[]" ]; then
+            echo "public-packages-affected=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "public-packages-affected=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [[ "$affected_packages" == *'"@grafana/create-plugin"'* ]]; then
+            echo "create-plugin-affected=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "create-plugin-affected=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Check types
         run: npm exec nx affected -- --target typecheck --parallel
       - name: Lint
@@ -82,7 +113,7 @@ jobs:
 
   test-node-versions:
     runs-on: ubuntu-x64
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: "needs.test.outputs.public-packages-affected == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     name: Test node versions
     permissions:
       contents: read
@@ -91,10 +122,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version:
-          - 22
-          - 24
-          - 26
+        include:
+          - node-version: 22
+            test-signing: false
+          - node-version: 24
+            test-signing: true
+          - node-version: 26
+            test-signing: true
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
@@ -136,11 +170,11 @@ jobs:
           npm install ../packed-artifacts/${TSCONFIG_PACKAGE}
         working-directory: ./${{ env.WORKING_DIR }}
 
-      - name: Install packed plugin-e2e and eslint-config
+      - name: Install packed plugin-e2e, eslint-config, and sign-plugin
         run: |
           PLUGIN_E2E_PACKAGE=$(ls ../packed-artifacts/grafana-plugin-e2e-*.tgz | xargs basename)
           ESLINT_CONFIG_PACKAGE=$(ls ../packed-artifacts/grafana-eslint-config-*.tgz | xargs basename)
-          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE} ../packed-artifacts/${ESLINT_CONFIG_PACKAGE}
+          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE} ../packed-artifacts/${ESLINT_CONFIG_PACKAGE} ../packed-artifacts/grafana-sign-plugin-*.tgz
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: Lint plugin frontend
@@ -219,12 +253,12 @@ jobs:
         working-directory: ./${{ env.WORKING_DIR }}
 
       - name: '@grafana/sign-plugin - use GRAFANA_ACCESS_POLICY_TOKEN to sign generate-panel plugin'
-        if: ${{ github.event.pull_request.head.repo.fork != true }}
+        if: ${{ github.event.pull_request.head.repo.fork != true && matrix.test-signing }}
         env:
           # Step env is evaluated even when the step is skipped, so fall back to '{}'
           # to keep fromJSON from failing the job on fork PRs where get-secrets is skipped.
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').GRAFANA_ACCESS_POLICY_TOKEN }}
-        run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        run: npm run sign -- --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ env.WORKING_DIR }}
 
   unit-test-node-versions:
@@ -237,14 +271,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # We keep the node version in .nvmrc out of this matrix as it's tested above in jobs.test
         node-version:
           - 22
-          - 26
+          - 24
     env:
       NX_BRANCH: ${{ github.event.number || github.ref_name }}
     steps:
+      # The read-write Nx Cloud token is only available on main. Everywhere else Nx uses the read-only token in nx.json.
       - id: get-secrets
-        if: ${{ github.event.pull_request.head.repo.fork != true }}
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: grafana/shared-workflows/actions/get-vault-secrets@f1614b210386ac420af6807a997ac7f6d96e477a # get-vault-secrets/v1.3.1
         with:
           repo_secrets: |
@@ -253,12 +289,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          filter: tree:0
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: nrwl/nx-set-shas@afb73a62d26e41464e9254689e1fd6122ee683c1 # v5.0.1
+      - uses: nrwl/nx-set-shas@e602fada7ad5987b0f7b1905e7a99ea1c661514c # v5.1.0
       - name: Setup nodejs
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -266,22 +303,23 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit
       - name: Build
-        run: npm exec nx affected -- --target build --parallel
+        run: npm exec nx affected -- --target build --parallel --exclude website
       - name: Unit tests
-        run: npm exec nx affected -- --target test --run
+        run: npm exec nx affected -- --target test --run --exclude website
 
   test-updates:
     name: Test create-plugin update command
     runs-on: ubuntu-x64
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: "needs.test.outputs.create-plugin-affected == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: [test]
     env:
       WORKING_DIR: 'myorg-nobackend-panel'
     steps:
+      # There is no clone of the repo in this job so cannot use node-version-file.
       - name: Setup nodejs
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '24'
+          node-version: '26'
 
       - name: Scaffold plugin using the earliest create-plugin version mentioned in migrations
         run: npx -y @grafana/create-plugin@5.27.1 --plugin-name='no-backend' --org-name='myorg' --plugin-type='panel'
@@ -350,7 +388,7 @@ jobs:
 
   generate-plugins:
     name: Test plugin scaffolding
-    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
+    if: "needs.test.outputs.public-packages-affected == 'true' && !contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, 'skip ci')"
     needs: [test]
     runs-on: ubuntu-x64
     permissions:
@@ -396,10 +434,11 @@ jobs:
             DOCKERHUB_USERNAME=dockerhub:username
             DOCKERHUB_PASSWORD=dockerhub:password
 
+      # There is no clone of the repo in this job so cannot use node-version-file.
       - name: Setup nodejs
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '24'
+          node-version: '26'
 
       - name: Download packed artifacts
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -420,10 +459,10 @@ jobs:
         run: npm install --no-audit
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Install plugin-e2e
+      - name: Install packed plugin-e2e and sign-plugin
         run: |
           PLUGIN_E2E_PACKAGE=$(ls ../packed-artifacts/grafana-plugin-e2e-*.tgz | xargs basename)
-          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE}
+          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE} ../packed-artifacts/grafana-sign-plugin-*.tgz
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Install tsconfig
@@ -484,7 +523,7 @@ jobs:
 
       - name: Log in to Docker Hub
         if: ${{ github.event.pull_request.head.repo.fork != true }}
-        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
         with:
           username: ${{ fromJSON(steps.get-dockerhub-secrets.outputs.secrets).DOCKERHUB_USERNAME }}
           password: ${{ fromJSON(steps.get-dockerhub-secrets.outputs.secrets).DOCKERHUB_PASSWORD }}
@@ -580,7 +619,7 @@ jobs:
           # Step env is evaluated even when the step is skipped, so fall back to '{}'
           # to keep fromJSON from failing the job on fork PRs where get-secrets is skipped.
           GRAFANA_ACCESS_POLICY_TOKEN: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').GRAFANA_ACCESS_POLICY_TOKEN }}
-        run: sign-plugin --rootUrls http://www.example.com --signatureType private
+        run: npm run sign -- --rootUrls http://www.example.com --signatureType private
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Frontend Knip Report
@@ -596,23 +635,3 @@ jobs:
       - name: Failing build due to test failures (latest versions)
         if: steps.run-e2e-tests.outcome != 'success' || steps.run-e2e-tests-min-version.outcome != 'success'
         run: exit 1
-
-  # TEMP DISABLED 2026-06-18: deploy-report-pages pushes an unsigned commit to gh-pages,
-  # which will be rejected once unsigned commits are blocked. Re-enable once resolved.
-  # publish-report:
-  #   if: ${{ always() && !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false) }}
-  #   needs: [generate-plugins]
-  #   runs-on: ubuntu-x64
-  #   permissions:
-  #     contents: write
-  #     pull-requests: write
-  #   steps:
-  #     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-  #       with:
-  #         persist-credentials: false
-  #
-  #     - name: Publish report
-  #       uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@376226a5245b6b8bbb95127241c430ef8d6aa643 # deploy-report-pages/v1.0.1
-  #       with:
-  #         github-token: ${{ secrets.GITHUB_TOKEN }}
-  #         retention-days: 7

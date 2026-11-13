@@ -1,7 +1,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
-import matter from 'gray-matter';
+import { readFrontmatter, type FrontmatterProblem } from '@grafana/plugin-docs-parser';
 import { type Diagnostic, type ValidationInput, Rule } from '../types.js';
 import { isInExcludedFolder, isMetaFile } from './utils.js';
 
@@ -17,6 +17,9 @@ const OPTIONAL_FIELDS: Array<{ key: string; type: string }> = [{ key: 'sidebar_p
 const MAX_TITLE_LENGTH = 60;
 const MIN_DESCRIPTION_LENGTH = 20;
 const MAX_DESCRIPTION_LENGTH = 160;
+
+// how many other pages a duplicate-description warning names before it says "and N more"
+const MAX_SHOWN_DUPLICATES = 3;
 
 // below this, a page body is almost certainly a stub rather than real content
 const MIN_CONTENT_LENGTH = 150;
@@ -101,6 +104,38 @@ function findH1Lines(raw: string): number[] {
   return result;
 }
 
+function frontmatterProblemDiagnostic(
+  problem: FrontmatterProblem
+): Pick<Diagnostic, 'rule' | 'line' | 'title' | 'detail'> {
+  switch (problem.kind) {
+    case 'unclosed':
+      return {
+        rule: Rule.BlockExists,
+        line: problem.line,
+        title: 'Frontmatter block is not closed',
+        detail: 'End the frontmatter block with a line that holds only ---.',
+      };
+    case 'invalid-yaml':
+      return {
+        rule: Rule.ValidYaml,
+        line: problem.line,
+        title: 'Invalid YAML in frontmatter',
+        detail: problem.message,
+      };
+    case 'not-a-mapping':
+      return {
+        rule: Rule.ValidYaml,
+        line: problem.line,
+        title: 'Frontmatter must use key: value fields',
+        detail: 'Write each field on its own line as "key: value", such as "title: Configure the data source".',
+      };
+  }
+}
+
+function normalizeDescription(description: string): string {
+  return description.replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
 // tracks per-file data needed for cross-file duplicate checks
 interface FileRecord {
   relativePath: string;
@@ -109,6 +144,9 @@ interface FileRecord {
   sidebarPositionLine: number | undefined;
   customSlug: string | undefined;
   customSlugLine: number | undefined;
+  // empty when the page has no description or one too short to count
+  normalizedDescription: string;
+  descriptionLine: number | undefined;
 }
 
 export async function checkFrontmatter(input: ValidationInput): Promise<Diagnostic[]> {
@@ -142,8 +180,8 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       continue;
     }
 
-    // frontmatter-block-exists: file must start with ---
-    if (!raw.startsWith('---')) {
+    const { hasBlock, data, body, problem } = readFrontmatter(raw);
+    if (!hasBlock) {
       diagnostics.push({
         rule: Rule.BlockExists,
         severity: 'error',
@@ -154,21 +192,8 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       });
       continue;
     }
-
-    // frontmatter-valid-yaml: gray-matter throws on invalid YAML
-    let data: Record<string, unknown>;
-    let body: string;
-    try {
-      ({ data, content: body } = matter(raw));
-    } catch (err) {
-      diagnostics.push({
-        rule: Rule.ValidYaml,
-        severity: 'error',
-        file: relativePath,
-        line: 1,
-        title: 'Invalid YAML in frontmatter',
-        detail: err instanceof Error ? err.message : 'YAML parse error.',
-      });
+    if (problem) {
+      diagnostics.push({ ...frontmatterProblemDiagnostic(problem), severity: 'error', file: relativePath });
       continue;
     }
 
@@ -224,7 +249,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
     if (typeof data.title === 'string' && data.title.length > MAX_TITLE_LENGTH) {
       diagnostics.push({
         rule: Rule.TitleLength,
-        severity: 'error',
+        severity: 'warning',
         file: relativePath,
         line: findFieldLine(raw, 'title'),
         title: `Title exceeds ${MAX_TITLE_LENGTH} characters`,
@@ -247,7 +272,7 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       } else if (data.description.length > MAX_DESCRIPTION_LENGTH) {
         diagnostics.push({
           rule: Rule.DescriptionLength,
-          severity: 'error',
+          severity: 'warning',
           file: relativePath,
           line: findFieldLine(raw, 'description'),
           title: `Description exceeds ${MAX_DESCRIPTION_LENGTH} characters`,
@@ -319,6 +344,11 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       customSlug:
         typeof data.slug === 'string' && isSlugSafe(data.slug) ? data.slug.trim().replace(/^\/+|\/+$/g, '') : undefined,
       customSlugLine: findFieldLine(raw, 'slug'),
+      normalizedDescription:
+        typeof data.description === 'string' && data.description.length >= MIN_DESCRIPTION_LENGTH
+          ? normalizeDescription(data.description)
+          : '',
+      descriptionLine: findFieldLine(raw, 'description'),
     });
   }
 
@@ -367,6 +397,36 @@ export async function checkFrontmatter(input: ValidationInput): Promise<Diagnost
       title: `Duplicate slug: "${record.customSlug}"`,
       detail: `Slug "${record.customSlug}" is used by multiple pages. Each page must have a unique URL slug.`,
     });
+  }
+
+  // no-duplicate-descriptions: search engines show the description as the page snippet, so pages that
+// share one are hard to tell apart. Compare descriptions while ignoring case and whitespace differences.
+// Descriptions under the minimum length are skipped because frontmatter-description-length already reports them.
+  const byDescription = Map.groupBy(
+    records.filter((r) => r.normalizedDescription),
+    (r) => r.normalizedDescription
+  );
+  for (const sharing of byDescription.values()) {
+    if (sharing.length <= 1) {
+      continue;
+    }
+    const paths = sharing.map((r) => r.relativePath);
+    for (const record of sharing) {
+      const shown = paths
+        .slice(0, MAX_SHOWN_DUPLICATES + 1)
+        .filter((path) => path !== record.relativePath)
+        .slice(0, MAX_SHOWN_DUPLICATES);
+      const hidden = paths.length - 1 - shown.length;
+      const others = hidden > 0 ? `${shown.join(', ')} and ${hidden} more` : shown.join(', ');
+      diagnostics.push({
+        rule: Rule.DuplicateDescription,
+        severity: 'warning',
+        file: record.relativePath,
+        line: record.descriptionLine,
+        title: 'Description is shared with another page',
+        detail: `This "description" is also used by ${others}. Search engines show it as the page snippet, so give each page its own.`,
+      });
+    }
   }
 
   return diagnostics;

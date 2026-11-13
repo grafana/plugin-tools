@@ -17,7 +17,7 @@ You are an expert in TypeScript and Node.js development. You are also an expert 
 The applications in this mono-repo use the following tech stack:
 
 - Nx >=22
-- TypeScript >=5.9
+- TypeScript >=6.0
 - Node.js 24
 - Vitest 4
 - Rollup
@@ -60,6 +60,12 @@ To run commands for multiple packages refer to the `nx` instructions below but a
 - Always use NPM to install missing packages
 - Always install dependencies in the workspace that uses them, e.g. `npm install <package_name> -w <workspace>`
 - Any devDependency installation that is used by more than one workspace should be installed in the workspace root package.json
+
+## Releases and Breaking Changes
+
+- Before using `feat!:` or a `BREAKING CHANGE:` footer on a PR that touches several packages, check each package's diff. A change that only affects `devDependencies` or tooling isn't breaking for that package.
+- Tell the user about non-breaking packages in the diff and suggest splitting them into a separate `fix:` or `chore:` PR.
+- If a mixed PR can't be split, remind the user to add `Release-As: x.y.z` in the merge dialog. Squash merges here drop commit footers. Refer to the "Breaking changes in a monorepo" and "Fix an unwanted major bump" sections in @CONTRIBUTING.md.
 
 ## Private libraries
 

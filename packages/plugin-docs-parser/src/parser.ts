@@ -4,8 +4,8 @@ import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import rehypeHighlight from 'rehype-highlight';
-import * as yaml from 'js-yaml';
 import { VFile } from 'vfile';
+import { readFrontmatter } from './frontmatter.js';
 import { rehypeSlug } from './plugins/rehype-slug.js';
 import type { Root as HastRoot } from 'hast';
 import { rehypeRewriteAssetPaths } from './plugins/rehype-rewrite-asset-paths.js';
@@ -16,6 +16,8 @@ import { rehypeCallouts } from './plugins/rehype-callouts.js';
 import { rehypeYouTube } from './plugins/rehype-youtube.js';
 import { rehypeVideo } from './plugins/rehype-video.js';
 import { rehypeRawAllowlist } from './plugins/rehype-raw-allowlist.js';
+import { readSnippetBlocks, remarkSnippets, type SnippetProblem } from './plugins/remark-snippets.js';
+import type { SnippetValues } from './snippets.js';
 import type { Heading } from './types.js';
 export type { Heading } from './types.js';
 
@@ -38,6 +40,12 @@ export interface ParseOptions {
    * when `assetBaseUrl` is omitted.
    */
   file?: string;
+
+  /**
+   * Values from the plugin's `plugin.json` that snippets show. Without them, a snippet that needs a
+   * value keeps its fallback text.
+   */
+  snippetValues?: SnippetValues;
 }
 
 /**
@@ -67,19 +75,34 @@ export interface ParsedMarkdown {
 // the default schema already allows id (via clobber) and className on code (for language-* classes).
 const sanitizeSchema = { ...defaultSchema, clobberPrefix: '' };
 
-const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)([\s\S]*)$/;
+/**
+ * A snippet in a page, with the 1-based lines of its opening and closing markers.
+ */
+export interface SnippetLocation {
+  name: string;
+  startLine: number;
+  endLine: number;
+}
 
-function parseFrontmatter(content: string): { data: Record<string, unknown>; content: string } {
-  const match = content.match(FRONTMATTER_RE);
-  if (!match) {
-    return { data: {}, content };
+/**
+ * Reads the snippets in a page the way `parseMarkdown` does, with line numbers in the whole file.
+ * When `problems` isn't empty, `parseMarkdown` shows the fallback text of every snippet on the page.
+ *
+ * @param content - The raw markdown content, frontmatter included
+ */
+export function readSnippets(content: string): { snippets: SnippetLocation[]; problems: SnippetProblem[] } {
+  if (!content.includes('snippet:')) {
+    return { snippets: [], problems: [] };
   }
-  // yaml.load can return scalars or arrays for malformed frontmatter; coerce
-  // anything that isn't a plain object back to {} so the public type holds.
-  const parsed = yaml.load(match[1]);
-  const data =
-    parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Record<string, unknown>) : {};
-  return { data, content: match[2] };
+  const { body } = readFrontmatter(content);
+  const lineOffset = content.slice(0, content.length - body.length).split('\n').length - 1;
+  const tree = unified().use(remarkParse).use(remarkGfm).parse(body);
+  const { blocks, problems } = readSnippetBlocks(tree);
+  const lineAt = (index: number) => (tree.children[index].position?.start.line ?? 0) + lineOffset;
+  return {
+    snippets: blocks.map((block) => ({ name: block.name, startLine: lineAt(block.start), endLine: lineAt(block.end) })),
+    problems: problems.map((problem) => ({ ...problem, line: problem.line + lineOffset })),
+  };
 }
 
 /**
@@ -88,27 +111,21 @@ function parseFrontmatter(content: string): { data: Record<string, unknown>; con
  * @param content - The raw markdown content to parse
  * @param options - Optional parsing options for asset path rewriting
  * @returns The parsed result with frontmatter, HAST and headings
- * @throws {Error} If markdown parsing fails
+ * @throws {Error} If the frontmatter is invalid YAML
  */
 export function parseMarkdown(content: string, options?: ParseOptions): ParsedMarkdown {
-  // extract frontmatter
-  let frontmatter: Record<string, unknown>;
-  let markdownContent: string;
-
-  try {
-    const result = parseFrontmatter(content);
-    frontmatter = result.data;
-    markdownContent = result.content;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    throw new Error(`Failed to extract frontmatter: ${message}`);
+  const { data: frontmatter, body: markdownContent, problem } = readFrontmatter(content);
+  if (problem?.kind === 'invalid-yaml') {
+    throw new Error(`Failed to extract frontmatter (line ${problem.line}): ${problem.message}`);
   }
 
   // build the unified pipeline: markdown → mdast → hast.
-  // raw HTML is parsed, but only the tags authors may write are kept from it
+  // raw HTML is parsed, but only the tags authors may write are kept from it.
+  // snippets are swapped in before that, since it drops the comments that mark them
   const processor = unified()
     .use(remarkParse)
     .use(remarkGfm)
+    .use(remarkSnippets, { values: options?.snippetValues })
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRawAllowlist)
     .use(rehypeStripH1)

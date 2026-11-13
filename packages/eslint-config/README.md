@@ -8,15 +8,7 @@
 npm install @grafana/eslint-config --save-dev
 ```
 
-Don't forget to install peerDependencies.
-
-1. Install the correct versions of each package, which are listed by the command:
-
-```sh
-npm info "@grafana/eslint-config@latest" peerDependencies
-```
-
-If using a different package manager, run `npm info "@grafana/eslint-config@latest" peerDependencies` to list the peer dependencies and versions. Then run `yarn add --dev <dependency1>@<version> <dependency2>@<version> <dependency3>@<version>` for the listed peer dependencies.
+This package supports TypeScript `>=5.5.0` and is tested against TypeScript 6.
 
 ## Configuration
 

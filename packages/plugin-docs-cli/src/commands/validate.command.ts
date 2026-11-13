@@ -1,9 +1,10 @@
 import createDebug from 'debug';
+import type { SnippetValues } from '@grafana/plugin-docs-parser';
 import { validate } from '../validation/engine.js';
 import { formatResult } from '../validation/format.js';
 import { allRules } from '../validation/rules/index.js';
 import { guidesLocation } from '../utils/utils.guides.js';
-import { Rule } from '../validation/types.js';
+import { Rule, type PluginScreenshots } from '../validation/types.js';
 
 const debug = createDebug('plugin-docs-cli:validate');
 
@@ -33,6 +34,8 @@ export async function validateCommand(
     pluginType?: string;
     mode?: 'source' | 'dist';
     docsPathSetting?: string;
+    snippetValues?: SnippetValues;
+    screenshots?: PluginScreenshots;
   } = { json: false }
 ): Promise<void> {
   const mode = options.mode ?? 'source';
@@ -45,7 +48,14 @@ export async function validateCommand(
   );
 
   const result = await validate(
-    { docsPath, pluginType: options.pluginType, mode, docsPathSetting: options.docsPathSetting },
+    {
+      docsPath,
+      pluginType: options.pluginType,
+      mode,
+      docsPathSetting: options.docsPathSetting,
+      snippetValues: options.snippetValues,
+      screenshots: options.screenshots,
+    },
     allRules
   );
 

@@ -59,6 +59,7 @@ export default function appSdk(context: Context): Context {
   referenceAgentInstructions(context, data);
   addGenerateScript(context);
   addFeatureToggle(context);
+  addGrafanaVersionOverride(context);
   wireGoBackend(context, data);
 
   // Only guide the user when we actually scaffolded something; a re-run should stay quiet.
@@ -238,6 +239,60 @@ function addFeatureToggle(context: Context) {
   composeData.setIn(['services', 'grafana', 'environment', 'GF_FEATURE_TOGGLES_ENABLE'], toggles.join(','));
 
   context.updateFile(composePath, stringify(composeData, { lineWidth: 120, singleQuote: true }));
+}
+
+// The app-sdk needs a newer Grafana than the default the plugin was scaffolded with, so the root
+// compose file overrides the build args, while still letting GRAFANA_IMAGE/GRAFANA_VERSION win.
+const GRAFANA_BUILD_ARGS: Record<string, string> = {
+  grafana_image: '${GRAFANA_IMAGE:-grafana}',
+  grafana_version: '${GRAFANA_VERSION:-nightly}',
+};
+
+/**
+ * Overrides the default Grafana image and version in the root docker-compose.yaml. Build args the
+ * user has already set are left alone.
+ */
+function addGrafanaVersionOverride(context: Context) {
+  const composePath = 'docker-compose.yaml';
+  const composeContent = context.getFile(composePath);
+
+  if (!composeContent) {
+    additionsDebug(`Could not find ${composePath}. Skipping the Grafana version override.`);
+    return;
+  }
+
+  const composeData = parseDocument(composeContent);
+
+  if (!(composeData.getIn(['services', 'grafana']) instanceof YAMLMap)) {
+    additionsDebug(`Could not find the grafana service in ${composePath}. Skipping the Grafana version override.`);
+    return;
+  }
+
+  const build = composeData.getIn(['services', 'grafana', 'build']);
+  if (build !== undefined && !(build instanceof YAMLMap)) {
+    additionsDebug(`services.grafana.build in ${composePath} is not a mapping. Skipping the Grafana version override.`);
+    return;
+  }
+
+  const args = composeData.getIn(['services', 'grafana', 'build', 'args']);
+  if (args !== undefined && !(args instanceof YAMLMap)) {
+    additionsDebug(
+      `services.grafana.build.args in ${composePath} is not a mapping. Skipping the Grafana version override.`
+    );
+    return;
+  }
+
+  let changed = false;
+  for (const [name, value] of Object.entries(GRAFANA_BUILD_ARGS)) {
+    if (!composeData.hasIn(['services', 'grafana', 'build', 'args', name])) {
+      composeData.setIn(['services', 'grafana', 'build', 'args', name], value);
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    context.updateFile(composePath, stringify(composeData, { lineWidth: 120, singleQuote: true }));
+  }
 }
 
 /**

@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { stripVTControlCharacters } from 'node:util';
+import { readSnippets, renderSnippet } from '@grafana/plugin-docs-parser';
 import * as v from 'valibot';
 import { parse as parseYaml } from 'yaml';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -77,6 +78,7 @@ const PAGES_BY_TYPE: Record<string, string[]> = {
   app: ['index', 'configure', 'overview', 'reports', 'dashboards', 'permissions', 'troubleshooting'],
 };
 const PLUGIN_TYPES = Object.keys(PAGES_BY_TYPE);
+const SNIPPET_MARKER_RE = /^<!-- \/?snippet:\S+ -->$/gm;
 
 // scaffolds once and writes it to disk, so the re-run sees a plugin that is already fully set up
 function scaffoldThenRerun(
@@ -223,7 +225,7 @@ describe('docs scaffolding', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
-      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.8.0');
+      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^1.0.0');
     });
 
     it('adds docs:serve and docs:validate scripts, with no separate release script', () => {
@@ -350,15 +352,15 @@ describe('docs scaffolding', () => {
       return context.getFile('.github/workflows/release.yml');
     }
 
-    it('raises build-plugin to build-plugin/v1.2.0', () => {
+    it('raises build-plugin to build-plugin/v2.0.0', () => {
       expect(bumped('uses: grafana/plugin-actions/build-plugin@v1.0.2\n')).toBe(
-        'uses: grafana/plugin-actions/build-plugin@build-plugin/v1.2.0\n'
+        'uses: grafana/plugin-actions/build-plugin@build-plugin/v2.0.0\n'
       );
     });
 
-    it('raises package-plugin to package-plugin/v1.3.3', () => {
+    it('raises package-plugin to package-plugin/v2.0.2', () => {
       expect(bumped('uses: grafana/plugin-actions/package-plugin@package-plugin/v1.3.2\n')).toBe(
-        'uses: grafana/plugin-actions/package-plugin@package-plugin/v1.3.3\n'
+        'uses: grafana/plugin-actions/package-plugin@package-plugin/v2.0.2\n'
       );
     });
 
@@ -508,7 +510,7 @@ describe('docs codemod', () => {
 
       expect(context.doesFileExist('docs/troubleshooting.md')).toBe(false);
       expect(context.doesFileExist('docs/options.md')).toBe(false);
-      for (const meta of ['README.md', 'AGENTS.md', 'CLAUDE.md']) {
+      for (const meta of ['README.md', 'AGENTS.md']) {
         expect(context.doesFileExist(`docs/${meta}`), meta).toBe(true);
       }
     });
@@ -749,7 +751,7 @@ describe('docs codemod', () => {
         const content = context.getFile(`docs/${page}.md`) ?? '';
         const briefs = content.match(/<!-- section-brief\n[\s\S]*?-->/g) ?? [];
         expect(briefs.length, page).toBeGreaterThan(0);
-        expect(content.match(/<!--/g)?.length, page).toBe(briefs.length);
+        expect(content.replace(SNIPPET_MARKER_RE, '').match(/<!--/g)?.length, page).toBe(briefs.length);
         expect(content, page).not.toContain('section-brief:');
       }
     });
@@ -829,7 +831,7 @@ describe('docs codemod', () => {
         troubleshooting: [
           'This page explains how to fix common issues when you configure or use the My Plugin data source. For setup instructions, refer to [Configure the My Plugin data source](./configure.md).',
           'To see the raw request and response for a panel, open the panel editor and click **Query inspector**.',
-          'In self-managed Grafana, you can also find more detail in the Grafana server logs:',
+          'In self-managed Grafana, the Grafana server logs show more detail:',
           "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-datasource`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
           "If this page doesn't solve your problem:",
           '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
@@ -867,7 +869,7 @@ describe('docs codemod', () => {
         troubleshooting: [
           'This page explains how to fix common issues when you set up or use My Plugin. For setup instructions, refer to the [Introduction](./index.md).',
           'For errors in the app, open the developer tools in your browser and check the console.',
-          'In self-managed Grafana, you can also find more detail in the Grafana server logs:',
+          'In self-managed Grafana, the Grafana server logs show more detail:',
           "1. Set the log level to `debug` in the Grafana configuration file:\n\n   ```ini\n   [log]\n   level = debug\n   ```\n\n1. Restart Grafana and reproduce the error.\n1. Look for log lines with `logger=plugin.acme-test-app`.\n1. Set the log level back to `info` when you're done, to keep the logs small.",
           "If this page doesn't solve your problem:",
           '- Search the [Grafana community forums](https://community.grafana.com/).\n- If your Grafana Cloud or Grafana Enterprise plan includes support, contact Grafana Support.',
@@ -886,6 +888,7 @@ describe('docs codemod', () => {
           let left = (context.getFile(`docs/${page}.md`) ?? '')
             .replace(/^---\n[\s\S]*?\n---\n/, '')
             .replace(/<!-- section-brief\n[\s\S]*?-->/g, '')
+            .replace(SNIPPET_MARKER_RE, '')
             .replace(/^#{1,6} .*$/gm, '');
           for (const text of FIXED_TEXT[type][page] ?? []) {
             expect(left, page).toContain(text);
@@ -895,6 +898,39 @@ describe('docs codemod', () => {
         }
       }
     );
+
+    // when the parser's text for a snippet changes, the fallback in the template must follow
+    it.each(PLUGIN_TYPES)('scaffolds %s snippets whose fallback is the parser current text', (type) => {
+      const pluginJson = FULL_PLUGIN_JSON[type];
+      const context = makeContext(pluginJson);
+      docs(context, { docsPath: 'docs' });
+      const values = { pluginName: String(pluginJson.name), pluginId: String(pluginJson.id) };
+      const collapse = (text: string) => text.replace(/\s+/g, ' ').trim();
+      const names: string[] = [];
+
+      for (const page of PAGES_BY_TYPE[type]) {
+        const content = context.getFile(`docs/${page}.md`) ?? '';
+        const { snippets, problems } = readSnippets(content);
+        expect(problems, page).toEqual([]);
+        const lines = content.split('\n');
+        for (const { name, startLine, endLine } of snippets) {
+          names.push(name);
+          expect(collapse(lines.slice(startLine, endLine - 1).join('\n')), `${page} ${name}`).toBe(
+            collapse(renderSnippet(name, values) ?? '')
+          );
+        }
+      }
+
+      expect(names.length).toBeGreaterThan(0);
+    });
+
+    it.each(['datasource', 'app'])('leaves the server logs snippet out of a %s without a backend', (type) => {
+      const context = makeContext({ ...FULL_PLUGIN_JSON[type], backend: false });
+      docs(context, { docsPath: 'docs' });
+      const content = context.getFile('docs/troubleshooting.md') ?? '';
+      expect(content).not.toContain('snippet:server-debug-logs');
+      expect(readSnippets(content)).toEqual({ snippets: [], problems: [] });
+    });
 
     it('interpolates pluginName into the index page', () => {
       const context = makeContext({ type: 'panel', id: 'acme-test-panel', name: 'My Panel' });
@@ -920,7 +956,7 @@ describe('docs codemod', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
       expect(context.getFile('.github/workflows/release.yml') ?? '').toContain(
-        'grafana/plugin-actions/build-plugin@build-plugin/v1.2.0'
+        'grafana/plugin-actions/build-plugin@build-plugin/v2.0.0'
       );
     });
 
@@ -961,7 +997,6 @@ describe('docs codemod', () => {
         ...PAGES_BY_TYPE.datasource.map((page) => `${page}.md`).filter((file) => !conditionalPages.includes(file)),
         'README.md',
         'AGENTS.md',
-        'CLAUDE.md',
       ];
       for (const file of files) {
         expect(context.doesFileExist(`docs/${file}`), file).toBe(true);
@@ -1131,7 +1166,7 @@ describe('docs codemod', () => {
 
     it('scaffolds the pages every app needs, and no gated pages when the app declares nothing', () => {
       const context = scaffold(app);
-      expect(docsFiles(context)).toEqual(['AGENTS.md', 'CLAUDE.md', 'README.md', 'index.md', 'troubleshooting.md']);
+      expect(docsFiles(context)).toEqual(['AGENTS.md', 'README.md', 'index.md', 'troubleshooting.md']);
     });
 
     it.each([
@@ -1169,7 +1204,6 @@ describe('docs codemod', () => {
       });
       expect(docsFiles(context)).toEqual([
         'AGENTS.md',
-        'CLAUDE.md',
         'README.md',
         'configure.md',
         'home.md',
@@ -1412,7 +1446,7 @@ describe('docs codemod', () => {
 
     it('ignores a page whose name is not a string', () => {
       const context = scaffold({ ...app, includes: [{ type: 'page', name: 123, path: '/a/%PLUGIN_ID%/x' }] });
-      expect(docsFiles(context)).toEqual(['AGENTS.md', 'CLAUDE.md', 'README.md', 'index.md', 'troubleshooting.md']);
+      expect(docsFiles(context)).toEqual(['AGENTS.md', 'README.md', 'index.md', 'troubleshooting.md']);
     });
 
     it.each([
@@ -1483,7 +1517,7 @@ describe('docs codemod', () => {
         const context = scaffold({ ...FULL_PLUGIN_JSON.app, includes });
         const positionOf = (file: string) =>
           Number(/\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1]);
-        const pages = docsFiles(context).filter((file) => !['AGENTS.md', 'CLAUDE.md', 'README.md'].includes(file));
+        const pages = docsFiles(context).filter((file) => !['AGENTS.md', 'README.md'].includes(file));
 
         const byFolder = Object.groupBy(pages, (file) => file.split('/').slice(0, -1).join('/'));
         for (const [folder, files] of Object.entries(byFolder)) {
@@ -1603,10 +1637,10 @@ describe('docs codemod', () => {
       expect(content).toContain('Installation tab');
     });
 
-    it('scaffolds CLAUDE.md in the docs folder as an import of AGENTS.md', () => {
+    it('does not scaffold CLAUDE.md in the docs folder', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
-      expect(context.getFile('docs/CLAUDE.md')).toEqual('@AGENTS.md\n');
+      expect(context.doesFileExist('docs/CLAUDE.md')).toBe(false);
     });
 
     it('no longer scaffolds an authoring guide under .config', () => {
@@ -1667,13 +1701,12 @@ describe('docs codemod', () => {
       expect(content).toContain('[`docs/AGENTS.md`](../../docs/AGENTS.md)');
     });
 
-    it('creates root AGENTS.md, CLAUDE.md and GEMINI.md when absent, pointing at .config/AGENTS/instructions.md', () => {
+    it('creates only root AGENTS.md when absent, pointing at .config/AGENTS/instructions.md', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
-      for (const filename of ['AGENTS.md', 'CLAUDE.md', 'GEMINI.md']) {
-        const content = context.getFile(filename) ?? '';
-        expect(content).toContain('.config/AGENTS/instructions.md');
-      }
+      expect(context.getFile('AGENTS.md')).toContain('.config/AGENTS/instructions.md');
+      expect(context.doesFileExist('CLAUDE.md')).toBe(false);
+      expect(context.doesFileExist('GEMINI.md')).toBe(false);
     });
 
     it('keeps existing content in root AGENTS.md, CLAUDE.md and GEMINI.md, appending a pointer to instructions.md', () => {
@@ -1805,7 +1838,7 @@ describe('docs codemod', () => {
     it('asks to check a build-plugin ref pinned to a branch or commit', () => {
       const context = makeContext();
       context.updateFile('.github/workflows/release.yml', 'uses: grafana/plugin-actions/build-plugin@my-branch\n');
-      expect(nextSteps(context).join('\n')).toContain('Docs need build-plugin/v1.2.0 or later.');
+      expect(nextSteps(context).join('\n')).toContain('Docs need build-plugin/v2.0.0 or later.');
     });
 
     it('asks to check a package-plugin ref pinned to a commit', () => {
@@ -1815,7 +1848,7 @@ describe('docs codemod', () => {
         'uses: grafana/plugin-actions/package-plugin@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n'
       );
       const body = nextSteps(context).join('\n');
-      expect(body).toContain('Docs need package-plugin/v1.3.3 or later.');
+      expect(body).toContain('Docs need package-plugin/v2.0.2 or later.');
       expect(body).not.toContain('Make sure your release pipeline');
     });
 

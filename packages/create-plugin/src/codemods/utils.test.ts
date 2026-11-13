@@ -236,8 +236,11 @@ describe('utils', () => {
 
     it('reads feature flags from the .cprc.json files', async () => {
       await mkdir(join(tmpDir, '.config'));
-      await writeFile(join(tmpDir, '.config/.cprc.json'), JSON.stringify({ features: { bundleGrafanaUI: true } }));
-      await writeFile(join(tmpDir, '.cprc.json'), JSON.stringify({ features: { useExperimentalRspack: true } }));
+      await writeFile(
+        join(tmpDir, '.config/.cprc.json'),
+        JSON.stringify({ features: { bundleGrafanaUI: true, useRspack: true } })
+      );
+      await writeFile(join(tmpDir, '.cprc.json'), JSON.stringify({ features: { bundleGrafanaUI: true } }));
       expect(getTemplateDataFromContext(pluginContext())).toMatchObject({
         bundleGrafanaUI: true,
         frontendBundler: 'rspack',

@@ -1,3 +1,5 @@
+import type { SnippetValues } from '@grafana/plugin-docs-parser';
+
 export type Severity = 'error' | 'warning' | 'info';
 
 export const Rule = {
@@ -29,6 +31,7 @@ export const Rule = {
   DuplicateSlug: 'no-duplicate-slugs',
   TitleLength: 'frontmatter-title-length',
   DescriptionLength: 'frontmatter-description-length',
+  DuplicateDescription: 'no-duplicate-descriptions',
   MinContentLength: 'min-content-length',
   // content-completeness rules
   UnfilledSectionBrief: 'unfilled-section-brief',
@@ -55,6 +58,10 @@ export const Rule = {
   ValidCalloutMarker: 'valid-callout-marker',
   ValidYoutubeLink: 'valid-youtube-link',
   ValidDetailsBlock: 'valid-details-block',
+  // snippet rules
+  KnownSnippet: 'known-snippet',
+  ValidSnippetBlock: 'valid-snippet-block',
+  SnippetTextCurrent: 'snippet-text-current',
   // cross-file rules
   InternalLinksResolve: 'internal-links-resolve',
   AnchorLinksResolve: 'anchor-links-resolve',
@@ -97,6 +104,17 @@ export interface Diagnostic {
 }
 
 /**
+ * The screenshots that `info.screenshots` in `plugin.json` lists. A docs page may show one from where the
+ * plugin keeps it, instead of from the docs folder.
+ */
+export interface PluginScreenshots {
+  /** The absolute path of the folder the screenshot paths resolve against: `src` in the repository, the plugin root in built docs. */
+  root: string;
+  /** The `path` of each screenshot, as written in `plugin.json`. */
+  paths: string[];
+}
+
+/**
  * Data available to rule runners. Grows as slices add more rule categories.
  */
 export interface ValidationInput {
@@ -117,6 +135,16 @@ export interface ValidationInput {
    * `required-pages` rule, which reports nothing when this is unset.
    */
   pluginType?: string;
+  /**
+   * Values from `plugin.json` that snippets show. When this is unset, `snippet-text-current` skips
+   * the snippets that need a value.
+   */
+  snippetValues?: SnippetValues;
+  /**
+   * The plugin's screenshots. Image references to them may leave the docs folder. When this is unset,
+   * every reference outside the docs folder is reported.
+   */
+  screenshots?: PluginScreenshots;
 }
 
 /**

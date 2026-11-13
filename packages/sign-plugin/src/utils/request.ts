@@ -1,6 +1,5 @@
 import https, { RequestOptions } from 'node:https';
 import { URL } from 'node:url';
-import { ProxyAgent } from 'proxy-agent';
 
 interface Headers {
   Authorization: string;
@@ -12,7 +11,7 @@ interface Response<R> {
   status: number;
 }
 
-const agent = new ProxyAgent();
+const agent = new https.Agent({ proxyEnv: process.env });
 
 export async function postData(urlString: string, data: unknown, headers: Headers): Promise<Response<string>> {
   return new Promise<Response<string>>((resolve, reject) => {

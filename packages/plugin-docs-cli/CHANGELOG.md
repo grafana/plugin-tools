@@ -1,5 +1,102 @@
 # Changelog
 
+## [1.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.15.0...@grafana/plugin-docs-cli@1.0.0) (2026-11-11)
+
+
+### Bug Fixes
+
+* release plugin-docs-cli and plugin-docs-parser as 1.0 ([#3099](https://github.com/grafana/plugin-tools/issues/3099)) ([c1b233a](https://github.com/grafana/plugin-tools/commit/c1b233a2da6b11dd6de476961b7496ed9abb1303))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 0.7.0 to 1.0.0
+
+## [0.15.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.3...@grafana/plugin-docs-cli@0.15.0) (2026-11-11)
+
+
+### Features
+
+* **plugin-docs-cli:** warn when pages share a description ([#3096](https://github.com/grafana/plugin-tools/issues/3096)) ([8a120eb](https://github.com/grafana/plugin-tools/commit/8a120ebc52eff19178adeed2899fd9d18cf1d1a8))
+
+## [0.14.3](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.2...@grafana/plugin-docs-cli@0.14.3) (2026-11-10)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency chokidar to v6 ([#3074](https://github.com/grafana/plugin-tools/issues/3074)) ([c238e79](https://github.com/grafana/plugin-tools/commit/c238e79daffbbcb348c28298a1181a374f0c6dcc))
+* **plugin-docs-cli:** read frontmatter with the parser ([#3091](https://github.com/grafana/plugin-tools/issues/3091)) ([0a638a1](https://github.com/grafana/plugin-tools/commit/0a638a1ee33ad73c8ef43e098f58df4d0b9250b1))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 0.6.1 to 0.7.0
+
+## [0.14.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.1...@grafana/plugin-docs-cli@0.14.2) (2026-11-06)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency hast-util-to-html to v9.0.6 ([#3054](https://github.com/grafana/plugin-tools/issues/3054)) ([50c538e](https://github.com/grafana/plugin-tools/commit/50c538ea2e25748a408c603ee7dd7a6cb251b6ec))
+
+## [0.14.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.14.0...@grafana/plugin-docs-cli@0.14.1) (2026-11-03)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 0.6.0 to 0.6.1
+
+## [0.14.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.13.1...@grafana/plugin-docs-cli@0.14.0) (2026-11-03)
+
+
+### Features
+
+* **plugin-docs-cli:** let pages show plugin screenshots from src ([#3053](https://github.com/grafana/plugin-tools/issues/3053)) ([2a3804e](https://github.com/grafana/plugin-tools/commit/2a3804ede153003084c18537c6c1de02f72b03df))
+
+
+### Bug Fixes
+
+* **plugin-docs-cli:** make title and description length warnings ([#3049](https://github.com/grafana/plugin-tools/issues/3049)) ([e89f11a](https://github.com/grafana/plugin-tools/commit/e89f11a59b821af339761ed6ed221152659a24b7))
+
+## [0.13.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.13.0...@grafana/plugin-docs-cli@0.13.1) (2026-11-02)
+
+
+### Bug Fixes
+
+* **deps:** Update auto-merged patch dependencies ([#3030](https://github.com/grafana/plugin-tools/issues/3030)) ([d61f463](https://github.com/grafana/plugin-tools/commit/d61f4636c20a140ab1a36d45012b0beda64f9fa5))
+
+## [0.13.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.12.0...@grafana/plugin-docs-cli@0.13.0) (2026-10-22)
+
+
+### Features
+
+* **create-plugin:** scaffold docs snippets with fallback text ([#3021](https://github.com/grafana/plugin-tools/issues/3021)) ([7ef65e4](https://github.com/grafana/plugin-tools/commit/7ef65e418a9ed5951d62184954511297196aa0ee))
+
+## [0.12.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.11.0...@grafana/plugin-docs-cli@0.12.0) (2026-10-21)
+
+
+### Features
+
+* **plugin-docs-parser:** render shared snippets in plugin docs ([#2995](https://github.com/grafana/plugin-tools/issues/2995)) ([3d8f526](https://github.com/grafana/plugin-tools/commit/3d8f526ccc7b9c3e18023a4e5c7d5e3f10257eae))
+
+
+### Bug Fixes
+
+* **deps:** Update dependency ejs to v7.0.2 ([#3012](https://github.com/grafana/plugin-tools/issues/3012)) ([9fc2dea](https://github.com/grafana/plugin-tools/commit/9fc2dea7d3892d8ea7ea37d90e81428bd0c78b7c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 0.5.0 to 0.6.0
+
 ## [0.11.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.10.0...@grafana/plugin-docs-cli@0.11.0) (2026-10-21)
 
 

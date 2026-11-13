@@ -2,7 +2,9 @@
 import { stat } from 'node:fs/promises';
 import minimist from 'minimist';
 import createDebug from 'debug';
+import type { SnippetValues } from '@grafana/plugin-docs-parser';
 import { resolve } from 'node:path';
+import type { PluginScreenshots } from '../validation/types.js';
 import { readmeCandidates, resolveBuiltPluginJson, resolvePluginJson } from '../utils/utils.plugin.js';
 import { serve } from '../commands/serve.command.js';
 import { buildDocs } from '../commands/build.command.js';
@@ -22,6 +24,7 @@ async function main() {
     console.error('');
     console.error('Commands:');
     console.error('  serve      Start the local docs preview server');
+    console.error('             --port <port> sets the port (default: 3001), --reload reloads the browser on save');
     console.error('  build      Build docs for publishing (generates manifest, copies to dist/)');
     console.error('  validate   Validate documentation (--json for machine-readable output)');
     console.error('             --dist [dir] validates the built docs of the plugin in dir (default: dist)');
@@ -39,12 +42,14 @@ async function main() {
   const distRoot =
     command === 'validate' && validateArgv.dist !== undefined ? resolve(validateArgv.dist || 'dist') : undefined;
 
-  // resolve docs path and plugin type once for all commands.
+  // resolve docs path, plugin type and snippet values once for all commands.
   let docsPath: string;
   let docsPathSetting: string;
   let pluginType: string | undefined;
+  let snippetValues: SnippetValues | undefined;
+  let screenshots: PluginScreenshots;
   try {
-    ({ docsPath, docsPathSetting, pluginType } = distRoot
+    ({ docsPath, docsPathSetting, pluginType, snippetValues, screenshots } = distRoot
       ? await resolveBuiltPluginJson(distRoot)
       : await resolvePluginJson());
   } catch (error) {
@@ -89,11 +94,11 @@ async function main() {
           reload: false,
         },
       });
-      await serve(serveArgv, docsPath, pluginType, readmeCandidates(), docsPathSetting);
+      await serve(serveArgv, docsPath, pluginType, readmeCandidates(), docsPathSetting, snippetValues, screenshots);
       break;
     }
     case 'build': {
-      await buildDocs(process.cwd(), docsPath);
+      await buildDocs(process.cwd(), docsPath, screenshots);
       break;
     }
     case 'validate': {
@@ -102,6 +107,8 @@ async function main() {
         pluginType,
         mode: distRoot ? 'dist' : 'source',
         docsPathSetting,
+        snippetValues,
+        screenshots,
       });
       break;
     }

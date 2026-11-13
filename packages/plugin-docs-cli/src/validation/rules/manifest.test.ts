@@ -1,9 +1,15 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { join } from 'node:path';
 import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { checkManifest, checkManifestSize } from './manifest.js';
+import { scanDocsFolder } from '../../scanner.js';
 import { Rule } from '../types.js';
+
+vi.mock('../../scanner.js', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../scanner.js')>();
+  return { ...actual, scanDocsFolder: vi.fn(actual.scanDocsFolder) };
+});
 
 const input = (docsPath: string) => ({ docsPath });
 
@@ -97,10 +103,17 @@ describe('checkManifest', () => {
     });
 
     it('should report the manifest the build would write when it is too large', async () => {
-      const tmp = await mkdtemp(join(tmpdir(), 'manifest-test-'));
-      await writeFile(join(tmp, 'index.md'), md('Home', bigBody));
+      // parsing a >1 MiB page for real is slow enough to time out on CI
+      vi.mocked(scanDocsFolder).mockResolvedValueOnce({
+        manifest: {
+          version: '1.0',
+          title: 'Docs',
+          pages: [{ title: 'Home', slug: '', file: 'index.md', content: bigBody }],
+        },
+        files: {},
+      });
 
-      const findings = await checkManifestSize(input(tmp));
+      const findings = await checkManifestSize(input('/unused'));
 
       expect(findings).toHaveLength(1);
       expect(findings[0]).toMatchObject({ rule: Rule.MaxManifestSize, severity: 'error' });

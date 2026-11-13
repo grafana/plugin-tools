@@ -94,6 +94,13 @@ describe('checkWritingStyle', () => {
       expect(await checkWritingStyle(input(tmp))).toHaveLength(0);
     });
 
+    it('should ignore text inside a snippet', async () => {
+      const tmp = await withDoc(
+        ['<!-- snippet:use-example-json -->', '', offending, '', '<!-- /snippet:use-example-json -->'].join('\n')
+      );
+      expect(await checkWritingStyle(input(tmp))).toHaveLength(0);
+    });
+
     it('should ignore text inside an indented code block', async () => {
       const tmp = await withDoc(['Some prose here.', '', `    const x = 'datasource';`].join('\n'));
       expect(await checkWritingStyle(input(tmp))).toHaveLength(0);

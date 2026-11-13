@@ -120,7 +120,9 @@ export class PanelEditPage extends GrafanaPage {
           expect((await allVisualizationsTab.isVisible()) || (await openVizPickerButton.isVisible())).toBe(true);
         }).toPass();
 
-        if (await openVizPickerButton.isVisible()) {
+        // grafana 12.4.x shows a "Back" button with the same test id while the picker is open on a new panel,
+        // so only click the toggle when the picker is closed (the tab is not visible)
+        if (!(await allVisualizationsTab.isVisible()) && (await openVizPickerButton.isVisible())) {
           await openVizPickerButton.click();
         }
 

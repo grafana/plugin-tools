@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.7.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-types-bundler@0.7.0...@grafana/plugin-types-bundler@0.7.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* **deps:** update @grafana/levitate to ^0.18.0 ([#3064](https://github.com/grafana/plugin-tools/issues/3064)) ([5126f0a](https://github.com/grafana/plugin-tools/commit/5126f0a336f7fef861c7e81ee1f8fa2f23d2d765))
+
+## [0.7.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-types-bundler@0.6.0...@grafana/plugin-types-bundler@0.7.0) (2026-11-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048))
+
+### Features
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048)) ([0f16572](https://github.com/grafana/plugin-tools/commit/0f16572a15189061581aceb3fc773bba4bca5bdd))
+
 ## v0.4.4 (Tue Aug 05 2025)
 
 #### 🐛 Bug Fix

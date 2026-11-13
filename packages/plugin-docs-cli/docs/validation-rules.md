@@ -59,8 +59,8 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 
 | Rule                             | What it checks                                                                                                                                                 | Severity |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `frontmatter-block-exists`       | The page must start with a frontmatter block.                                                                                                                  | Error    |
-| `frontmatter-valid-yaml`         | The frontmatter must be valid YAML.                                                                                                                            | Error    |
+| `frontmatter-block-exists`       | The page must start with a frontmatter block: a line with `---`, the fields, then another line with `---`. Spaces or tabs after either `---` are allowed.      | Error    |
+| `frontmatter-valid-yaml`         | The frontmatter must be valid YAML, written as `key: value` fields.                                                                                            | Error    |
 | `frontmatter-required-fields`    | `title` and `description` must be present.                                                                                                                     | Error    |
 | `frontmatter-field-types`        | `title` and `description` must be strings, `sidebar_position` (if set) must be a number and `keywords` (if set) must be a list of non-empty strings.           | Error    |
 | `frontmatter-valid-slug`         | A custom `slug` field must only use letters, digits, underscores, hyphens and forward slashes.                                                                 | Warning  |
@@ -68,15 +68,16 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-h1-heading`                  | Don't add a `# Heading` in the page body - the page title already comes from frontmatter, and any h1 you add will be stripped and replaced. Use `##` or lower. | Warning  |
 | `no-duplicate-sidebar-position`  | Pages in the same folder can't share a `sidebar_position` - each needs a unique value to control its order.                                                    | Error    |
 | `no-duplicate-slugs`             | A custom `slug` must be unique across all of your pages.                                                                                                       | Error    |
-| `frontmatter-title-length`       | `title` should be 60 characters or shorter - search engines truncate longer titles in search results.                                                          | Error    |
-| `frontmatter-description-length` | `description` should be between 20 and 160 characters - long enough to be useful, short enough that search engines don't cut it off.                           | Error    |
+| `frontmatter-title-length`       | `title` should be 60 characters or shorter - search engines truncate longer titles in search results.                                                          | Warning  |
+| `frontmatter-description-length` | `description` should be between 20 and 160 characters. Over 160 is a warning, under 20 is an error.                                                            | Varies   |
+| `no-duplicate-descriptions`      | Each page needs its own `description`. Search engines show it as the page snippet, so pages that share one are hard to tell apart in results.                  | Warning  |
 
 ## Images & other assets
 
 | Rule                      | What it checks                                                                                                           | Severity   |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------- |
 | `no-svg-files`            | SVG images aren't allowed - they can contain embedded scripts, which is a security risk. Use PNG or WebP instead.        | Error      |
-| `referenced-images-exist` | An image referenced in a page (`![alt](img/foo.png)`) must actually exist in your docs folder.                           | Error      |
+| `referenced-images-exist` | An image a page references (`![alt](img/foo.png)`) must exist. A screenshot must exist where your plugin keeps it.       | Error      |
 | `max-image-size`          | Static images (png/jpg/webp) must be 300KB or smaller; GIFs must be 1MB or smaller. Compress or resize oversized images. | Error      |
 | `max-video-size`          | Videos (mp4/webm) must be 3MB or smaller. Shorten or compress the video, or upload it to YouTube and link to it.         | Error      |
 | `max-total-images-size`   | The total size of all images in your docs folder must stay under 5MB.                                                    | Warning    |
@@ -90,7 +91,7 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `no-raw-html`          | Raw HTML tags aren't allowed in the page body, except `details`, `summary`, `br` and `hr` - use markdown syntax instead. Any other tag is removed when the page is rendered.                                                       | Error    |
 | `no-script-tags`       | `<script>` tags and inline event handlers (`onclick`, `onerror`, etc.) aren't allowed anywhere in a page - they're a security risk.                                                                                                | Error    |
 | `no-dangerous-urls`    | Links and images can't use a `javascript:`, `vbscript:` or `data:` URL scheme.                                                                                                                                                     | Error    |
-| `no-path-traversal`    | Links and image references must stay inside your docs folder. `../` is fine as long as it doesn't go above the docs root.                                                                                                          | Error    |
+| `no-path-traversal`    | Links and image references must stay inside your docs folder. `../` is fine as long as it doesn't go above the docs root. An image that `info.screenshots` in `plugin.json` lists is the one exception.                            | Error    |
 | `no-base64-images`     | Images can't be embedded as base64 data - save them as a file in your `img/` folder instead.                                                                                                                                       | Error    |
 | `no-external-images`   | Images must be hosted in your docs folder, not linked from an external `http(s)://` URL. Download the image and reference it locally.                                                                                              | Error    |
 | `no-hugo-shortcodes`   | Docs website shortcodes like `{{< admonition >}}` or `{{% docs/shared %}}` aren't supported and show up as plain text. Write the content in plain markdown instead, as described in [Supported markdown](./supported-markdown.md). | Error    |
@@ -115,6 +116,17 @@ Every page needs a frontmatter block (the `---`-delimited section at the top of 
 | `min-content-length`     | A page's body should have at least 150 characters of real content. A heads-up, not a hard requirement - catches pages that are still effectively blank.                                                                                                                                                                                       | Suggestion            |
 | `empty-section`          | A heading needs content before the next heading, and a heading followed directly by a deeper heading is fine. A section that still has only its `section-brief` comment is a suggestion, because the brief never renders: write it or remove the heading.                                                                                     | Warning or Suggestion |
 | `unfilled-section-brief` | A `section-brief` comment left in a section that already has content is a suggestion. It isn't shown in the catalog, so delete it to keep the page tidy. A page scaffolded earlier may use `<!-- section-brief:start -->` / `<!-- section-brief:end -->` markers instead. Their text is shown, so they are a warning: remove the whole block. | Warning or Suggestion |
+
+## Snippets
+
+These check the [snippets](./snippets.md) in your pages. None of them block publishing, because a page
+whose snippets have a problem still shows their fallback text.
+
+| Rule                   | What it checks                                                                                                                                                                                                                                                                                                                                          | Severity   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `known-snippet`        | A snippet's name must be one that Grafana knows. Check the name against [Available snippets](./snippets.md#available-snippets), or delete both markers to keep the text as your own. A newer `create-plugin` can scaffold a snippet that an older `plugin-docs-cli` doesn't know yet, so update `plugin-docs-cli` if the name is right.                 | Warning    |
+| `valid-snippet-block`  | Each snippet marker must be alone on its own line, with a blank line before it and outside lists, quotes and collapsible sections. Every opening marker needs a closing marker with the same name, snippets can't be nested and a snippet can't contain a heading. While a page has any of these problems, all snippets on it show their fallback text. | Warning    |
+| `snippet-text-current` | The text inside a snippet differs from its current text. The catalog shows the current text, so this only affects what GitHub shows. To update it, copy the text from [Current text](./snippets.md#current-text).                                                                                                                                       | Suggestion |
 
 ## Writing style
 

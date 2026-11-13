@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-types-bundler",
-  "version": "0.6.0",
+  "version": "0.7.1",
   "description": "Bundle grafana plugin typescript types for sharing with other plugins",
   "bin": "./dist/bin/run.js",
   "type": "module",
@@ -47,10 +47,10 @@
     "url": "https://github.com/grafana/plugin-tools/issues"
   },
   "engines": {
-    "node": ">=18.8.0"
+    "node": ">=22"
   },
   "dependencies": {
-    "@grafana/levitate": "^0.17.0",
+    "@grafana/levitate": "^0.18.0",
     "@types/minimist": "^1.2.2",
     "@types/node": "^24.0.0",
     "debug": "^4.3.4",

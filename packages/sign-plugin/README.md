@@ -10,6 +10,7 @@ Sign Grafana plugins with ease.
     - [Sign a private plugin](#sign-a-private-plugin)
       - [`npx`](#npx)
       - [`yarn` (\> 2.x)](#yarn--2x)
+  - [Requirements and proxy configuration](#requirements-and-proxy-configuration)
   - [Contributing](#contributing)
 
 **`@grafana/sign-plugin`** works on macOS, Windows and Linux.<br />
@@ -61,6 +62,29 @@ npx @grafana/sign-plugin@latest
 ```bash
 yarn dlx @grafana/sign-plugin@latest
 ```
+
+## Requirements and proxy configuration
+
+Starting with v4, `@grafana/sign-plugin` requires Node.js 24.15.0 or later.
+
+To sign through an HTTP or HTTPS proxy, set `HTTPS_PROXY` before running the signing command:
+
+```bash
+export HTTPS_PROXY=http://proxy.example.com:8080
+export NO_PROXY=localhost,127.0.0.1
+```
+
+Proxy URLs must include `http://` or `https://`. Basic proxy authentication is supported with a URL such as `http://username:password@proxy.example.com:8080`. Lowercase `https_proxy` and `no_proxy` take precedence over their uppercase equivalents. `NO_PROXY` accepts comma-separated hosts or patterns to bypass the proxy. You don't need to set `NODE_USE_ENV_PROXY`.
+
+### Breaking changes in v4
+
+Starting with v4, `@grafana/sign-plugin` uses Node.js built-in proxy support instead of `proxy-agent`:
+
+- Node.js versions earlier than 24.15.0 are no longer supported.
+- PAC files and SOCKS proxies are no longer supported. Configure an HTTP or HTTPS proxy directly instead.
+- `ALL_PROXY` is no longer read. Move HTTP or HTTPS proxy URLs to `HTTPS_PROXY`. `HTTP_PROXY` alone doesn't configure HTTPS signing requests.
+- Proxy URLs without a scheme are no longer supported. Add `http://` or `https://`.
+- Space-separated `NO_PROXY` entries are no longer supported. Use commas instead. Refer to the [Node.js proxy documentation](https://nodejs.org/docs/latest-v24.x/api/http.html#built-in-proxy-support) for matching rules.
 
 ## Contributing
 

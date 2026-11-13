@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.8.0](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.6...@grafana/react-detect@0.8.0) (2026-11-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048))
+
+### Features
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048)) ([0f16572](https://github.com/grafana/plugin-tools/commit/0f16572a15189061581aceb3fc773bba4bca5bdd))
+
+## [0.7.6](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.5...@grafana/react-detect@0.7.6) (2026-11-02)
+
+
+### Bug Fixes
+
+* **deps:** Update auto-merged patch dependencies ([#3030](https://github.com/grafana/plugin-tools/issues/3030)) ([d61f463](https://github.com/grafana/plugin-tools/commit/d61f4636c20a140ab1a36d45012b0beda64f9fa5))
+* **deps:** Update dependency @typescript-eslint/typescript-estree to v8.72.0 ([#2882](https://github.com/grafana/plugin-tools/issues/2882)) ([1e26def](https://github.com/grafana/plugin-tools/commit/1e26def6b75f6d80696b1c9ed8c139ba14044956))
+
 ## [0.7.5](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.4...@grafana/react-detect@0.7.5) (2026-10-19)
 
 

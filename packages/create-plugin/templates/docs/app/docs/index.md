@@ -24,6 +24,8 @@ Fill this in: Keep the list above. Add a bullet in the same **Label:** form for 
 
 ## Enable the app
 
+<!-- snippet:enable-app -->
+
 To enable {{{pluginName}}}:
 
 1. Click **Administration** > **Plugins and data** > **Plugins** in the left-side menu.
@@ -31,8 +33,10 @@ To enable {{{pluginName}}}:
 1. Select **{{{pluginName}}}**.
 1. Click **Enable**.
 
+<!-- /snippet:enable-app -->
+
 <!-- section-brief
-Fill this in: If `src/plugin.json` sets `"autoEnabled": true`, the app is enabled when it's installed, so remove this section. Otherwise keep the steps above and remove only this brief.
+Fill this in: If `src/plugin.json` sets `"autoEnabled": true`, the app is enabled when it's installed, so remove this section, including the steps and their snippet markers. Otherwise keep the steps above and remove only this brief.
 -->
 {{#if hasConfigPage}}
 

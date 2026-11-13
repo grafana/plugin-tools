@@ -89,8 +89,17 @@ describe('buildSystemPrompt', () => {
     expect(systemPrompt).toContain('Write it with your file-writing tool, not a shell command.');
   });
 
-  it('should tell the agent to fix failing checks rather than suppress them', () => {
-    expect(systemPrompt).toContain('fix the cause. Never make it pass by suppressing it');
+  it('should tell the agent to fix failing checks rather than hide them', () => {
+    expect(systemPrompt).toContain('fix the cause. Never hide a failure');
+  });
+
+  it('should defer to the addition instructions for setting aside what cannot be applied', () => {
+    // additions keep the build passing by commenting out unportable code under a TODO marker,
+    // so the contract must not forbid that or tell the agent to leave the check failing instead
+    expect(systemPrompt).toContain(
+      'If the addition instructions say how to set aside something that cannot be applied, such as commenting it out under a `TODO(<addition-name>):` marker, follow them.'
+    );
+    expect(systemPrompt).not.toMatch(/or changed scripts\./);
   });
 
   it('should render the package manager commands', () => {

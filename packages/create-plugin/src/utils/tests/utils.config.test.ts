@@ -44,6 +44,16 @@ describe('getConfig', () => {
       });
     });
 
+    it('should not let cli args switch new plugins to rspack', async () => {
+      mocks.argv = {
+        'feature-flags': 'useRspack',
+      };
+      const config = getConfig(tmpDir);
+
+      expect(config.features).toEqual(DEFAULT_FEATURE_FLAGS);
+      expect(config.features).not.toHaveProperty('useRspack');
+    });
+
     it('should override default feature flags via cli args', async () => {
       mocks.argv = {
         'feature-flags': 'bundleGrafanaUI',

@@ -1,5 +1,124 @@
 # Changelog
 
+## [9.0.3](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.2...@grafana/create-plugin@9.0.3) (2026-11-11)
+
+
+### Bug Fixes
+
+* **create-plugin:** require docs-cli 1.0 in `add docs` codemod ([#3101](https://github.com/grafana/plugin-tools/issues/3101)) ([3fafcd0](https://github.com/grafana/plugin-tools/commit/3fafcd05b711d519b1795e42f1d917239b9f83f7))
+
+## [9.0.2](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.1...@grafana/create-plugin@9.0.2) (2026-11-11)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @grafana/plugin-docs-parser bumped from 0.7.0 to 1.0.0
+
+## [9.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.0...@grafana/create-plugin@9.0.1) (2026-11-10)
+
+
+### Bug Fixes
+
+* **create-plugin:** stop add docs creating CLAUDE.md and GEMINI.md ([#3089](https://github.com/grafana/plugin-tools/issues/3089)) ([1921b5e](https://github.com/grafana/plugin-tools/commit/1921b5e9012ba5e960c5822fd21c33621cf61ac9))
+* **templates:** Update dependency @grafana/plugin-e2e to v4 ([#3088](https://github.com/grafana/plugin-tools/issues/3088)) ([f279930](https://github.com/grafana/plugin-tools/commit/f2799302b871b92a2e542437d9dc008baf6e1074))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @grafana/plugin-docs-parser bumped from 0.6.1 to 0.7.0
+
+## [9.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@8.0.2...@grafana/create-plugin@9.0.0) (2026-11-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **create-plugin:** require node 24 and sign-plugin v4 in scaffolded plugins ([#3071](https://github.com/grafana/plugin-tools/issues/3071))
+
+### Features
+
+* **create-plugin:** require node 24 and sign-plugin v4 in scaffolded plugins ([#3071](https://github.com/grafana/plugin-tools/issues/3071)) ([d263c01](https://github.com/grafana/plugin-tools/commit/d263c01eb77d99ce51fc252382e5e07dc7710b5d))
+
+
+### Bug Fixes
+
+* **templates:** Update dependency @grafana/plugin-e2e to v3.15.3 ([#3028](https://github.com/grafana/plugin-tools/issues/3028)) ([1664c4a](https://github.com/grafana/plugin-tools/commit/1664c4ab3b6fb70c5254c65bfc1f77ce96951977))
+
+## [8.0.2](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@8.0.1...@grafana/create-plugin@8.0.2) (2026-11-04)
+
+
+### Bug Fixes
+
+* **create-plugin:** link plugin screenshots from src in docs-content ([#3061](https://github.com/grafana/plugin-tools/issues/3061)) ([17987a5](https://github.com/grafana/plugin-tools/commit/17987a5555dd48aff99ef88dbee81a2b7492248e))
+* **create-plugin:** require docs-cli 0.14 and v2 actions in add docs ([#3059](https://github.com/grafana/plugin-tools/issues/3059)) ([b41834e](https://github.com/grafana/plugin-tools/commit/b41834eb16df0bb75b3a2bd0092e57dd105e3707))
+
+## [8.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@8.0.0...@grafana/create-plugin@8.0.1) (2026-11-03)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @grafana/plugin-docs-parser bumped from 0.6.0 to 0.6.1
+
+## [8.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.19.0...@grafana/create-plugin@8.0.0) (2026-11-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048))
+
+### Features
+
+* update minimum supported node version ([#3048](https://github.com/grafana/plugin-tools/issues/3048)) ([0f16572](https://github.com/grafana/plugin-tools/commit/0f16572a15189061581aceb3fc773bba4bca5bdd))
+
+
+### Bug Fixes
+
+* transform .mjs files in jest config ([#3051](https://github.com/grafana/plugin-tools/issues/3051)) ([566a5b7](https://github.com/grafana/plugin-tools/commit/566a5b783186eece8b6ee163bb4ea46624ee022c))
+
+## [7.19.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.18.0...@grafana/create-plugin@7.19.0) (2026-11-02)
+
+
+### Features
+
+* extract CSS into separate files in rspack builds ([#3040](https://github.com/grafana/plugin-tools/issues/3040)) ([2fd22de](https://github.com/grafana/plugin-tools/commit/2fd22de25721a0bfc718e266b6cc1bcddcd37457))
+
+## [7.18.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.17.0...@grafana/create-plugin@7.18.0) (2026-11-02)
+
+
+### Features
+
+* add AI-agent assisted rspack addition ([#2912](https://github.com/grafana/plugin-tools/issues/2912)) ([250a2d3](https://github.com/grafana/plugin-tools/commit/250a2d362527b10f9aae0c3d7bd62003d2b17819))
+
+
+### Bug Fixes
+
+* **create-plugin:** bump deps in `add docs` codemod ([#3043](https://github.com/grafana/plugin-tools/issues/3043)) ([cee49b3](https://github.com/grafana/plugin-tools/commit/cee49b367aee2a0c0bd7b23531f8b9f938cbe398))
+
+## [7.17.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.16.0...@grafana/create-plugin@7.17.0) (2026-10-28)
+
+
+### Features
+
+* remove dependency on glob ([#2655](https://github.com/grafana/plugin-tools/issues/2655)) ([9db0649](https://github.com/grafana/plugin-tools/commit/9db0649fd4dee9b5745a248ba421998cd9b86764))
+
+
+### Bug Fixes
+
+* **templates:** Update dependency @grafana/plugin-e2e to v3.15.2 ([#3022](https://github.com/grafana/plugin-tools/issues/3022)) ([2115b27](https://github.com/grafana/plugin-tools/commit/2115b27767554a555640300c7b4dc9c9e1842909))
+
+## [7.16.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.15.1...@grafana/create-plugin@7.16.0) (2026-10-22)
+
+
+### Features
+
+* **create-plugin:** Override the default Grafana version in the experimental-app-sdk addition ([#3014](https://github.com/grafana/plugin-tools/issues/3014)) ([8d35cd5](https://github.com/grafana/plugin-tools/commit/8d35cd55d2213b454f8e465ec7b9e01cc3039010))
+* **create-plugin:** scaffold docs snippets with fallback text ([#3021](https://github.com/grafana/plugin-tools/issues/3021)) ([7ef65e4](https://github.com/grafana/plugin-tools/commit/7ef65e418a9ed5951d62184954511297196aa0ee))
+
 ## [7.15.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@7.15.0...@grafana/create-plugin@7.15.1) (2026-10-21)
 
 

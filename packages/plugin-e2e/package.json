@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-e2e",
-  "version": "3.15.2",
+  "version": "4.0.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -33,7 +33,7 @@
     "playwright:test": "npx playwright test"
   },
   "engines": {
-    "node": ">=20 <=24"
+    "node": ">=22"
   },
   "peerDependenciesMeta": {
     "@axe-core/playwright": {

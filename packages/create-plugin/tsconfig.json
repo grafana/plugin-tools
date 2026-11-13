@@ -1,9 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    "outDir": "./dist"
-  },
-  "exclude": ["node_modules", "templates"],
+  "exclude": ["${configDir}/node_modules", "${configDir}/templates", "${configDir}/dist"],
   "extends": "../../tsconfig.base.json",
-  "include": ["src", "vitest.d.ts"]
+  "include": ["${configDir}/src", "${configDir}/vitest.d.ts"]
 }

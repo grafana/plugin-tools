@@ -2,6 +2,7 @@ import { readFile, readdir } from 'node:fs/promises';
 import type { Dirent } from 'node:fs';
 import { join, relative } from 'node:path';
 import type { Diagnostic, Severity, StyleRuleId, ValidationInput } from '../types.js';
+import { getSnippetLines } from './snippets.js';
 import { getCodeBlockLines, getNonProseLines, isInExcludedFolder, isMetaFile, matchOutsideCode } from './utils.js';
 
 /**
@@ -886,7 +887,8 @@ export async function checkWritingStyle(input: ValidationInput): Promise<Diagnos
     }
 
     const codeLines = getCodeBlockLines(content);
-    const skipLines = getNonProseLines(content);
+    // snippet text is Grafana's, so the author can't act on style advice about it
+    const skipLines = new Set([...getNonProseLines(content), ...getSnippetLines(content, input.snippetValues)]);
     const headingLines = getHeadingLines(content, codeLines);
     const lines = content.split('\n');
     const counts = new Map<string, number>();

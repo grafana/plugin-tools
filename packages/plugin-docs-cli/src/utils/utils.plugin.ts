@@ -1,6 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import createDebug from 'debug';
+import type { SnippetValues } from '@grafana/plugin-docs-parser';
+import type { PluginScreenshots } from '../validation/types.js';
 
 const debug = createDebug('plugin-docs-cli:utils:plugin');
 
@@ -9,6 +11,10 @@ export interface PluginJson {
   /** The `docsPath` exactly as written in plugin.json, while `docsPath` is resolved to an absolute path. */
   docsPathSetting: string;
   pluginType?: string;
+  /** Unset when `plugin.json` has no `name` or `id`. */
+  snippetValues?: SnippetValues;
+  /** The screenshots in `info.screenshots`, with the folder their paths resolve against. */
+  screenshots: PluginScreenshots;
 }
 
 /**
@@ -29,7 +35,7 @@ async function readPluginJson(pluginJsonPath: string, label: string, notFoundMes
     throw new Error(notFoundMessage);
   }
 
-  let pluginJson: { docsPath?: string; type?: string };
+  let pluginJson: { docsPath?: string; type?: string; name?: unknown; id?: unknown; info?: { screenshots?: unknown } };
   try {
     pluginJson = JSON.parse(raw);
   } catch (error) {
@@ -40,19 +46,25 @@ async function readPluginJson(pluginJsonPath: string, label: string, notFoundMes
     throw new Error(`"docsPath" is not set in ${label}`);
   }
 
-  return { docsPath: pluginJson.docsPath, pluginType: pluginJson.type };
+  const { name, id } = pluginJson;
+  const snippetValues =
+    typeof name === 'string' && typeof id === 'string' ? { pluginName: name, pluginId: id } : undefined;
+  const screenshotPaths = (Array.isArray(pluginJson.info?.screenshots) ? pluginJson.info.screenshots : [])
+    .map((screenshot: unknown) => (screenshot as { path?: unknown } | null)?.path)
+    .filter((path: unknown): path is string => typeof path === 'string' && path !== '');
+  return { docsPath: pluginJson.docsPath, pluginType: pluginJson.type, snippetValues, screenshotPaths };
 }
 
 /**
- * Resolves the docs path and plugin type by reading src/plugin.json.
+ * Resolves the docs path, plugin type and snippet values by reading src/plugin.json.
  *
  * @param projectRoot - The root directory of the plugin project (defaults to cwd)
- * @returns The resolved absolute path to the docs directory, and the plugin's type
+ * @returns The resolved absolute path to the docs directory, the plugin's type and the values snippets show
  * @throws {Error} If plugin.json is missing or lacks docsPath
  */
 export async function resolvePluginJson(projectRoot?: string): Promise<PluginJson> {
   const root = projectRoot || process.cwd();
-  const { docsPath, pluginType } = await readPluginJson(
+  const { docsPath, pluginType, snippetValues, screenshotPaths } = await readPluginJson(
     join(root, 'src', 'plugin.json'),
     'src/plugin.json',
     `Could not find src/plugin.json in ${root}`
@@ -60,7 +72,13 @@ export async function resolvePluginJson(projectRoot?: string): Promise<PluginJso
 
   const resolved = resolve(root, docsPath);
   debug('Resolved docsPath from plugin.json: %s -> %s', docsPath, resolved);
-  return { docsPath: resolved, docsPathSetting: docsPath, pluginType };
+  return {
+    docsPath: resolved,
+    docsPathSetting: docsPath,
+    pluginType,
+    snippetValues,
+    screenshots: { root: join(root, 'src'), paths: screenshotPaths },
+  };
 }
 
 /**
@@ -73,7 +91,7 @@ export async function resolvePluginJson(projectRoot?: string): Promise<PluginJso
  */
 export async function resolveBuiltPluginJson(distRoot: string): Promise<PluginJson> {
   const root = resolve(distRoot);
-  const { docsPath, pluginType } = await readPluginJson(
+  const { docsPath, pluginType, snippetValues, screenshotPaths } = await readPluginJson(
     join(root, 'plugin.json'),
     'plugin.json',
     `Could not find plugin.json in ${root}. Build the plugin and run the docs build first.`
@@ -90,7 +108,13 @@ export async function resolveBuiltPluginJson(distRoot: string): Promise<PluginJs
 
   const resolved = join(root, folder);
   debug('Resolved built docsPath: %s -> %s', docsPath, resolved);
-  return { docsPath: resolved, docsPathSetting: docsPath, pluginType };
+  return {
+    docsPath: resolved,
+    docsPathSetting: docsPath,
+    pluginType,
+    snippetValues,
+    screenshots: { root, paths: screenshotPaths },
+  };
 }
 
 /**

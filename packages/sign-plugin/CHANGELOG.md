@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/sign-plugin@3.3.3...@grafana/sign-plugin@4.0.0) (2026-10-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* **sign-plugin:** use Node 24.15 native proxy ([#3013](https://github.com/grafana/plugin-tools/issues/3013))
+
+### Features
+
+* **sign-plugin:** use Node 24.15 native proxy ([#3013](https://github.com/grafana/plugin-tools/issues/3013)) ([328805f](https://github.com/grafana/plugin-tools/commit/328805fb9a8d8c89b223649f140732cb7f16b92d))
+
 ## [3.3.3](https://github.com/grafana/plugin-tools/compare/@grafana/sign-plugin@3.3.2...@grafana/sign-plugin@3.3.3) (2026-07-14)
 
 

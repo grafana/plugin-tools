@@ -127,9 +127,28 @@ export default [
       'Replace eslint-webpack-plugin with diagnostics-webpack-plugin in the webpack config. eslint-webpack-plugin depends on micromatch, which pulls in the braces dependency flagged by vulnerability scanners.',
     scriptPath: import.meta.resolve('./scripts/018-replace-eslint-webpack-plugin.js'),
   },
+  {
+    name: '019-remove-glob-dependency',
+    version: '7.17.0',
+    description: 'Replace the glob package with the Node.js built-in fs.glob in bundler utils.',
+    scriptPath: import.meta.resolve('./scripts/019-remove-glob-dependency.js'),
+  },
+  {
+    name: '020-rename-rspack-feature-flag',
+    version: '7.18.0',
+    description:
+      'Rename the useExperimentalRspack feature flag to useRspack in .config/.cprc.json, and remove it from the plugin .cprc.json.',
+    scriptPath: import.meta.resolve('./scripts/020-rename-rspack-feature-flag.js'),
+  },
+  {
+    name: '021-jest-transform-mjs',
+    version: '8.0.0',
+    description: 'Fix ESM import errors in Jest for .mjs files',
+    scriptPath: import.meta.resolve('./scripts/021-jest-transform-mjs.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
-  // New migrations never pick a version: copy the unreleased version line from ../AGENTS.md exactly.
+  // New migrations should never specify a version: copy the unreleased version line from ../AGENTS.md exactly.
   // Do not paste it into a comment in this file, as release-please rewrites every line that carries it.
 ] satisfies Migration[];

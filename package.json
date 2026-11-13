@@ -44,22 +44,22 @@
     "eslint-plugin-mdx": "^3.6.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "glob": "^13.0.1",
+    "glob": "^14.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.0",
-    "nx": "^23.1.0",
+    "nx": "^24.0.0",
     "pkg-pr-new": "^0.0.91",
-    "prettier": "3.9.9",
+    "prettier": "3.9.10",
     "publint": "^0.3.12",
     "rollup": "^4.57.1",
     "rollup-plugin-delete": "^3.0.2",
     "rollup-plugin-dts": "^6.3.0",
     "rollup-plugin-esbuild": "^6.2.1",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vitest": "^5.0.0"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=26"
   },
   "workspaces": [
     "docusaurus/website",
@@ -84,14 +84,9 @@
     "*.{css,md,json}": "prettier --write"
   },
   "overrides": {
-    "serialize-javascript": "7.0.7",
+    "serialize-javascript": "7.1.4",
     "uuid": "^11.1.1",
-    "basic-ftp": "^6.2.1",
-    "postcss-selector-parser": "7.1.6",
-    "tinypool": "2.2.0",
-    "nx": {
-      "undici": "7.29.1"
-    }
+    "tinypool": "2.2.0"
   },
-  "packageManager": "npm@12.2.0"
+  "packageManager": "npm@12.2.1"
 }

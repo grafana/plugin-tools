@@ -1,7 +1,7 @@
-{{#unless useExperimentalRspack}}import type { Configuration, ExternalItemFunctionData } from 'webpack';{{/unless}}{{#if useExperimentalRspack}}
-import type { RspackOptions, ExternalItemFunctionData } from '@rspack/core';{{/if}}
+{{#unless useRspack}}import type { Configuration, ExternalItemFunctionData } from 'webpack';{{/unless}}{{#if useRspack}}
+import type { ExternalItem, ExternalItemFunctionData } from '@rspack/core';{{/if}}
 
-{{#unless useExperimentalRspack}} type ExternalsType = Configuration['externals'];{{/unless}}{{#if useExperimentalRspack}}type ExternalsType = RspackOptions['externals'];{{/if}}
+{{#unless useRspack}} type ExternalsType = Configuration['externals'];{{/unless}}{{#if useRspack}}type ExternalsType = ExternalItem[];{{/if}}
 
 export const externals: ExternalsType = [
   // Required for dynamic publicPath resolution
