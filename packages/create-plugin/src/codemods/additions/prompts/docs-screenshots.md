@@ -10,8 +10,9 @@ The catalog docs pages for this plugin mark where a screenshot belongs with a sc
 
 `create-plugin add docs-content` adds these markers, and authors can add them by hand. This task takes each screenshot from the plugin running in Grafana, saves it in the docs folder and replaces the marker with the image. It also proposes screenshots for other spots where one would clearly help, and takes the ones the author keeps.
 
-`create-plugin add docs-screenshots` has already set up the tools for this:
+`create-plugin add docs-screenshots` has already checked that Grafana is running with the plugin and set up the tools for this:
 
+- `GRAFANA_URL` in this session's environment, set to the Grafana it found. The Playwright config reads it.
 - `@grafana/plugin-e2e` and `@playwright/test` in `devDependencies`, added or raised to the minimum version when needed, and installed.
 - `docs-screenshots/`, a Playwright project with a fixed viewport and theme. When the plugin has its own `playwright.config.ts`, it extends that one, so it uses the same Grafana URL and user as the plugin's e2e tests. Each screenshot is one spec in this folder. The theme is dark, or light when `DOCS_SCREENSHOTS_THEME=light` is set.
 - `.config/docs-screenshots/helpers.ts`, which exports `captureDocsScreenshot(target, name)`. `create-plugin` owns it, so don't edit it. It saves a page or an element as `{docsPath}/img/<name>.webp`, returns the path to use on the page and fails when the image is over the docs size limit.
@@ -25,11 +26,7 @@ Read `{docsPath}/AGENTS.md` before starting and follow it to the authoring guide
 ## Check first
 
 1. **Find the markers.** Search the pages in `{docsPath}` for `<!-- screenshot:` markers. They start the shot list. Skip `AGENTS.md`, `README.md` and markers inside code blocks, which are examples. A recent `docs:validate` also lists each real marker as a `missing-screenshot` suggestion.
-2. **Check that Grafana is running with the plugin.** The URL is `GRAFANA_URL` when it's set and `http://localhost:3000` otherwise.
-   - `curl -s <url>/api/health` returns JSON.
-   - `curl -s -u admin:admin <url>/api/plugins/<id>/settings` returns 200, where `<id>` is the `id` in `src/plugin.json`.
-
-   When either fails, ask the author to build the plugin and start Grafana, for example with the `dev` and `server` scripts, then wait for them. Don't start Grafana or a watch build yourself, since both keep running.
+2. **Grafana is running.** `create-plugin` checked this before handing over, at the URL in `GRAFANA_URL`. If a spec later fails because Grafana doesn't answer, or `curl -s $GRAFANA_URL/api/health` stops returning JSON, ask the author to build the plugin and start Grafana, for example with the `dev` and `server` scripts, then wait for them. Don't start Grafana or a watch build yourself, since both keep running.
 
 ## Steps
 

@@ -222,6 +222,8 @@ To have an agent take the screenshots, build your plugin, start Grafana, commit 
 npx @grafana/create-plugin@latest add docs-screenshots
 ```
 
+It first checks that Grafana is running with your plugin at `http://localhost:3000`, and stops if it isn't. When Grafana runs somewhere else, pass its URL with `--grafanaUrl`, for example `--grafanaUrl=http://localhost:3001`.
+
 This adds a `docs-screenshots/` folder of Playwright specs that use `@grafana/plugin-e2e`, plus a `docs:screenshots` script. If your plugin doesn't have `@grafana/plugin-e2e` and `@playwright/test` yet, it adds them. If it has its own Playwright config, the specs reuse it. The agent also proposes screenshots for other spots where one would help, and asks you which to keep. It writes one spec per screenshot, runs them, checks each image and puts it on its page. Because the specs stay in your repository, `docs:screenshots` takes every screenshot again after a UI change.
 
 You can also take a screenshot yourself and replace its marker by hand. For the rules screenshots follow, refer to [Screenshots](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/screenshots.md).

@@ -1,4 +1,5 @@
 import { join } from 'node:path';
+import * as v from 'valibot';
 import type { Context } from '../../context.js';
 import { TEMPLATE_PATHS, TEMPLATES_DIR } from '../../../constants.js';
 import { output } from '../../../utils/utils.console.js';
@@ -12,6 +13,20 @@ import {
 import { appendToAgentInstructions } from '../../utils.agents.js';
 import { assertDocsSetUp } from './docs.js';
 
+export const schema = v.object({
+  grafanaUrl: v.optional(
+    v.pipe(
+      v.string(),
+      v.url('grafanaUrl must be a URL.'),
+      v.regex(/^https?:\/\//, 'grafanaUrl must start with http:// or https://.')
+    )
+  ),
+});
+
+type Options = v.InferOutput<typeof schema>;
+
+const DEFAULT_GRAFANA_URL = 'http://localhost:3000';
+const GRAFANA_TIMEOUT_MS = 5000;
 const SCREENSHOTS_DIR = 'docs-screenshots';
 const HELPERS_PATH = '.config/docs-screenshots/helpers.ts';
 const SCRIPT_NAME = 'docs:screenshots';
@@ -34,8 +49,13 @@ interface PackageJson {
 }
 
 // the agent step takes the screenshots. this sets up the Playwright project they're taken with
-export default function docsScreenshots(context: Context): Context {
+export default async function docsScreenshots(context: Context, options: Options = {}): Promise<Context> {
   const { docsPath, pluginType } = assertDocsSetUp(context, 'docs-screenshots');
+  const grafanaUrl = (options.grafanaUrl ?? process.env.GRAFANA_URL ?? DEFAULT_GRAFANA_URL).replace(/\/+$/, '');
+  await assertGrafanaRunning(grafanaUrl, readJsonFile<{ id: string }>(context, 'src/plugin.json').id);
+  // the agent session and the Playwright config both read GRAFANA_URL, and the session inherits this process's env
+  process.env.GRAFANA_URL = grafanaUrl;
+
   addE2eDependencies(context);
   addGitignoreEntries(context);
 
@@ -63,15 +83,57 @@ export default function docsScreenshots(context: Context): Context {
   const run = (script: string) => output.formatCode(`${data.packageManagerName} run ${script}`);
   context.setMessage({
     level: 'log',
-    title: 'Before the screenshots are taken',
+    title: 'Taking the screenshots',
     body: [
-      `Build the plugin and start Grafana, for example with ${run('dev')} and ${run('server')}.`,
-      'Set GRAFANA_URL when Grafana runs somewhere other than http://localhost:3000.',
-      `Then ${run(SCRIPT_NAME)} takes every screenshot in ${SCREENSHOTS_DIR}/ and validates the docs.`,
+      `Found Grafana with the plugin at ${grafanaUrl}. Keep it running until the screenshots are taken.`,
+      `Later, ${run(SCRIPT_NAME)} takes every screenshot in ${SCREENSHOTS_DIR}/ again and validates the docs.`,
+      `It needs Grafana running too. Set GRAFANA_URL when Grafana runs somewhere other than ${DEFAULT_GRAFANA_URL}.`,
     ],
   });
 
   return context;
+}
+
+async function assertGrafanaRunning(grafanaUrl: string, pluginId: string): Promise<void> {
+  const notRunning = [
+    `create-plugin add docs-screenshots needs Grafana running with the plugin, and found no Grafana at ${grafanaUrl}.`,
+    'Build the plugin and start Grafana, for example with the dev and server scripts, then run this again.',
+    'Pass --grafanaUrl when Grafana runs somewhere else.',
+  ].join('\n');
+
+  const health = await fetchGrafana(`${grafanaUrl}/api/health`);
+  if (!health?.ok || !(await isGrafanaHealth(health))) {
+    throw new Error(notRunning);
+  }
+
+  // only a 404 proves the plugin is missing. a Grafana that requires login answers 401 for any plugin
+  const settings = await fetchGrafana(`${grafanaUrl}/api/plugins/${encodeURIComponent(pluginId)}/settings`);
+  if (settings?.status === 404) {
+    throw new Error(
+      [
+        `Grafana is running at ${grafanaUrl}, but it hasn't loaded the ${pluginId} plugin.`,
+        'Build the plugin and restart Grafana, then run this again.',
+      ].join('\n')
+    );
+  }
+}
+
+async function fetchGrafana(url: string): Promise<Response | undefined> {
+  try {
+    return await fetch(url, { signal: AbortSignal.timeout(GRAFANA_TIMEOUT_MS) });
+  } catch {
+    return undefined;
+  }
+}
+
+// another server on the port answers too, so the body must look like Grafana's health response
+async function isGrafanaHealth(response: Response): Promise<boolean> {
+  try {
+    const body: unknown = await response.json();
+    return typeof body === 'object' && body !== null && 'database' in body;
+  } catch {
+    return false;
+  }
 }
 
 function addE2eDependencies(context: Context): void {
