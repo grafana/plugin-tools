@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.8.0](https://github.com/grafana/plugin-tools/compare/@grafana/eslint-plugin-plugins@0.7.0...@grafana/eslint-plugin-plugins@0.8.0) (2026-11-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrade to typescript 6 ([#3070](https://github.com/grafana/plugin-tools/issues/3070))
+
+### Features
+
+* upgrade to typescript 6 ([#3070](https://github.com/grafana/plugin-tools/issues/3070)) ([c197bd0](https://github.com/grafana/plugin-tools/commit/c197bd0b726f54fc2dc6d6c62fe73da3ba99a1fb))
+
+
+### Bug Fixes
+
+* **deps:** update @grafana/levitate to ^0.18.0 ([#3064](https://github.com/grafana/plugin-tools/issues/3064)) ([5126f0a](https://github.com/grafana/plugin-tools/commit/5126f0a336f7fef861c7e81ee1f8fa2f23d2d765))
+
 ## v0.6.4 (Wed Mar 11 2026)
 
 #### 🐛 Bug Fix

@@ -93,14 +93,16 @@ And you should be ready to go!
 
 Plugin-tools is a mono-repo consisting of multiple projects. Please refer to their contributing guides to understand how to develop each one.
 
-| Package Name  | Readme                                                   |
-| ------------- | -------------------------------------------------------- |
-| Create Plugin | [Link](./packages/create-plugin/CONTRIBUTING.md)         |
-| ESlint Plugin | [Link](./packages/eslint-plugin-plugins/CONTRIBUTING.md) |
-| Plugin E2E    | [Link](./packages/plugin-e2e/CONTRIBUTING.md)            |
-| Sign Plugin   | [Link](./packages/sign-plugin/CONTRIBUTING.md)           |
-| TSconfig      | [Link](./packages/tsconfig/CONTRIBUTING.md)              |
-| Website       | [Link](./docusaurus/website/CONTRIBUTING.md)             |
+| Package Name       | Readme                                                   |
+| ------------------ | -------------------------------------------------------- |
+| Create Plugin      | [Link](./packages/create-plugin/CONTRIBUTING.md)         |
+| ESlint Plugin      | [Link](./packages/eslint-plugin-plugins/CONTRIBUTING.md) |
+| Plugin Docs CLI    | [Link](./packages/plugin-docs-cli/CONTRIBUTING.md)       |
+| Plugin Docs Parser | [Link](./packages/plugin-docs-parser/CONTRIBUTING.md)    |
+| Plugin E2E         | [Link](./packages/plugin-e2e/CONTRIBUTING.md)            |
+| Sign Plugin        | [Link](./packages/sign-plugin/CONTRIBUTING.md)           |
+| TSconfig           | [Link](./packages/tsconfig/CONTRIBUTING.md)              |
+| Website            | [Link](./docusaurus/website/CONTRIBUTING.md)             |
 
 ## Contributor License Agreement (CLA)
 
@@ -233,6 +235,34 @@ The PR-title check (`.github/workflows/check-pr-title.yml`) blocks merges when t
 | `chore`, `docs`, `refactor`, `test`, `build`, `ci`, `style`, `revert` | no bump     | no bump     | Hidden — no changelog entry |
 
 ¹ `bump-minor-pre-major: true` in `release-please-config.json` preserves the project's historical behaviour for 0.x packages — `feat:` produces a minor bump rather than the release-please default of patch.
+
+### Breaking changes in a monorepo
+
+A `feat!:` title or a `BREAKING CHANGE:` footer marks every package the commit touches as breaking, even when the change isn't breaking for some of them. release-please then proposes a major bump for each of those packages, or a minor bump for 0.x packages.
+
+Before you merge a breaking PR, check the diff of each package it touches:
+
+- If the change affects consumers of the package, it's breaking. Peer dependencies, public API, and shipped behavior all count.
+- If the change only affects `devDependencies` or tooling, it isn't breaking.
+
+Move the changes for any non-breaking package to a separate PR with a `fix:` or `chore:` title. If you can't split the PR, plan to add a `Release-As:` footer when you merge. Refer to [Fix an unwanted major bump](#fix-an-unwanted-major-bump).
+
+### Fix an unwanted major bump
+
+Use these steps when the release PR proposes a major bump for a package that has no breaking change.
+
+This repository squash merges with the PR title as the subject and a blank body. GitHub drops footers on the branch commits, so `Release-As:` only takes effect when you add it in the merge dialog.
+
+1. Open a PR that changes a file that ships in the affected package, such as its `README.md`. release-please attributes a commit to a package only when it changes files under the package path, so an empty commit doesn't work.
+2. Give the PR a `fix:` title with no scope.
+3. In the merge dialog, enter `Release-As: x.y.z` in the extended description. Replace `x.y.z` with the non-breaking version you want.
+4. Select **Confirm squash and merge**.
+5. Wait for the release-please workflow run on the merge commit to finish.
+6. Open the release PR and check that release-please recalculated the package version to `x.y.z`.
+7. After release-please recalculates the version, remove the stale breaking change and feature entries for the package from `packages/<package>/CHANGELOG.md` on the release branch and from the release PR body. release-please reads the PR body to create tags and GitHub releases, so edit both.
+
+> [!CAUTION]
+> release-please regenerates the release PR when new commits land on `main`, and the new run overwrites your edits to the release PR. Tell the team you're fixing the release, and ask them not to merge to `main` until you merge the release PR.
 
 ### How a release happens
 

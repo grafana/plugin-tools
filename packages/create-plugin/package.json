@@ -1,6 +1,6 @@
 {
   "name": "@grafana/create-plugin",
-  "version": "8.0.2",
+  "version": "9.0.3",
   "repository": {
     "type": "git",
     "directory": "packages/create-plugin",
@@ -43,7 +43,7 @@
     "yaml": "2.9.1"
   },
   "devDependencies": {
-    "@grafana/plugin-docs-parser": "0.6.1",
+    "@grafana/plugin-docs-parser": "1.0.0",
     "@libs/find-up": "1.0.0",
     "@libs/output": "1.0.3",
     "@libs/version": "1.0.2",

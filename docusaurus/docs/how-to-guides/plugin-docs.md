@@ -8,7 +8,6 @@ keywords:
   - plugin
   - documentation
   - docs
-unlisted: true
 ---
 
 import Tabs from '@theme/Tabs';
@@ -18,20 +17,15 @@ Plugin docs let you write your plugin's documentation in markdown, right next to
 
 This guide shows you how to set up plugin docs, preview and validate them and publish them with a release.
 
-:::important
-
-Plugin docs are an experimental feature. Breaking changes might happen without notice, such as renamed commands, changed validation rules or a different file structure.
-
-:::
-
 ## Why plugin docs
 
 - **Close to your code.** Docs change in the same pull request as the feature they describe, so reviewers see both together and the two don't drift apart.
 - **Simple by design.** Use standard markdown with one file per page, folders for sections and frontmatter for titles and order. There's no build step to set up.
 - **No styling to maintain.** Grafana handles the layout, so you don't need CSS, a theme or a site to host.
-- **Consistent by default.** Validation checks structure and naming before you publish, and every plugin's docs share the same layout and navigation. Users who know one plugin's docs know where to look in yours.
-- **Checked before release.** Validation checks structure, links, images and writing style while you write and again before you publish, so broken pages never reach your users.
-- **Agent-friendly.** The scaffold includes instructions for coding agents, so the pages they write follow the conventions and pass validation. An optional script has an agent draft the first version of your pages. Structured, topic-based pages also make your plugin easier for assistants such as Grafana Assistant to find and explain.
+- **Consistent by default.** Every plugin's docs share the same layout and navigation, so users who know one plugin's docs know where to look in yours.
+- **Checked before release.** Validation checks structure, links, images and writing style while you write and again before you publish, so broken links and images between your pages never reach your users.
+- **Help users find answers.** Your docs are indexed by grafana.com site search and search engines.
+- **Agent-friendly.** The scaffold includes instructions for coding agents, so the pages they write follow the conventions and pass validation. An optional script has an agent draft the first version of your pages.
 
 ## Before you begin
 
@@ -75,8 +69,7 @@ The script adds these files, depending on your plugin type:
 │   ├── examples.md
 │   ├── troubleshooting.md
 │   ├── README.md             # notes for you, not published
-│   ├── AGENTS.md             # instructions for coding agents, not published
-│   └── CLAUDE.md             # points Claude Code at AGENTS.md
+│   └── AGENTS.md             # instructions for coding agents, not published
 ├── .github/workflows/
 │   └── validate-docs.yml     # validates docs on pull requests
 ├── .config/AGENTS/
@@ -99,8 +92,7 @@ The script adds these files, depending on your plugin type:
 │   ├── dashboards.md         # only when plugin.json includes a dashboard
 │   ├── troubleshooting.md
 │   ├── README.md             # notes for you, not published
-│   ├── AGENTS.md             # instructions for coding agents, not published
-│   └── CLAUDE.md             # points Claude Code at AGENTS.md
+│   └── AGENTS.md             # instructions for coding agents, not published
 ├── .github/workflows/
 │   └── validate-docs.yml     # validates docs on pull requests
 ├── .config/AGENTS/
@@ -121,8 +113,7 @@ The script adds these files, depending on your plugin type:
 │   ├── permissions.md        # only when plugin.json has roles, iam or page roles
 │   ├── troubleshooting.md
 │   ├── README.md             # notes for you, not published
-│   ├── AGENTS.md             # instructions for coding agents, not published
-│   └── CLAUDE.md             # points Claude Code at AGENTS.md
+│   └── AGENTS.md             # instructions for coding agents, not published
 ├── .github/workflows/
 │   └── validate-docs.yml     # validates docs on pull requests
 ├── .config/AGENTS/
@@ -181,9 +172,9 @@ For page shape and conventions, refer to the [Authoring guide](https://github.co
 
 Pages use [CommonMark](https://commonmark.org/) plus [GitHub Flavored Markdown](https://github.github.com/gfm/) extensions such as tables, task lists and footnotes. On top of that you get callouts for notes and warnings, collapsible sections, YouTube embeds and short video clips.
 
-There's no MDX and no templating, and the only HTML you can use is for collapsible sections, line breaks and horizontal rules. What you write renders the same way in the catalog, in the local preview and on GitHub.
+There's no MDX and no templating, and the only HTML you can use is for collapsible sections, line breaks and horizontal rules. What you write renders the same way in the catalog and in the local preview, and reads cleanly on GitHub.
 
-Every page starts with frontmatter that sets at least `title` and `description`. Use `sidebar_position` to order pages within a folder and `keywords` to add a list of search keywords.
+Every page starts with frontmatter that sets at least `title` and `description`. Use `sidebar_position` to order pages within a folder and `keywords` to set the page's meta keywords.
 
 For everything you can write, refer to [Supported markdown](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/supported-markdown.md).
 
@@ -203,7 +194,7 @@ Plugin docs follow the [Grafana Writers' Toolkit](https://grafana.com/docs/write
 
 The script scaffolds instructions for coding agents. They explain what to document and how to use `plugin-docs-cli` to validate and preview your docs. With them, your agent of choice can write meaningful, valid docs from short prompts such as "document the new panel option" or "document the new query editor mode".
 
-The instructions live in `AGENTS.md` and `CLAUDE.md` in your docs folder. To make sure agents find them, link to `<docsPath>/AGENTS.md` from the agent files in the root of your plugin.
+The instructions live in `AGENTS.md` in your docs folder. To make sure agents find them, link to `<docsPath>/AGENTS.md` from the agent files in the root of your plugin.
 
 ### Draft the first version
 
@@ -226,7 +217,7 @@ Run `add docs-content` once, after `add docs`. After that, update pages as part 
 
 Use `docs:serve` while you write. It shows your pages as they'll look in the catalog and reports problems as you save. Run `docs:validate` before you open a pull request.
 
-Validation warns about empty headings and about legacy `section-brief:start` blocks, because the catalog shows their text. Section briefs you leave in a page are only suggestions, because the catalog doesn't show them. Finish with none of these left.
+Validation warns about empty headings, because the catalog shows them. Section briefs you leave in a page are only suggestions, because the catalog doesn't show them. Finish with neither left.
 
 For every check, refer to [Validation rules](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/validation-rules.md).
 
@@ -234,7 +225,7 @@ For every check, refer to [Validation rules](https://github.com/grafana/plugin-t
 
 Docs publish as part of a plugin release:
 
-1. `validate-docs.yml` runs `docs:validate` on every pull request that changes your docs folder or `src/plugin.json`. Warnings don't fail it, so you can merge docs in progress.
+1. `validate-docs.yml` runs `docs:validate` on every pull request that changes your docs folder, `src/plugin.json`, `package.json` or your lockfile. Warnings don't fail it, so you can merge docs in progress.
 1. When you release, the plugin validator checks your docs again. Errors fail the release. Warnings don't, so check that `docs:validate` reports none before you release.
 1. The release build adds the docs to the plugin archive.
 1. When you submit the new version, Grafana reviews the docs as part of the plugin submission.
@@ -242,14 +233,20 @@ Docs publish as part of a plugin release:
 
 There are no docs-only releases. To publish a docs change, release a new plugin version. Until then, the catalog keeps showing the docs from your current version.
 
+If your release doesn't use the `build-plugin` or `package-plugin` action, add the docs yourself. Run `npx @grafana/plugin-docs-cli build` after your plugin build, which copies the docs into `dist`, then `npx @grafana/plugin-docs-cli validate --dist` to check what you ship.
+
 For the full process, refer to [Publish your plugins](../publish-a-plugin/index.md).
 
 ## Keep the docs CLI up to date
 
-The script adds `@grafana/plugin-docs-cli` with a `^` range, such as `^0.14.0`. While the CLI is below version 1.0, that range only takes patch releases, so a new minor version reaches your plugin only when you, Dependabot or Renovate update it.
+The script adds `@grafana/plugin-docs-cli` with a `^` range, such as `^1.0.0`. That range takes minor and patch releases, and a new major version reaches your plugin only when you, Dependabot or Renovate update it.
 
 A new version can add rules or tighten existing ones, so run `docs:validate` after you update and fix anything new before your next release.
 
 ## Turn off plugin docs
 
 Remove `docsPath` from `src/plugin.json` and release a new version. The catalog stops showing the **Documentation** tab for that version. You can keep or delete the docs folder, because without `docsPath` the release pipeline ignores it.
+
+## Get help
+
+For questions, reach out on the [Community forum](https://community.grafana.com/c/plugin-development/30). To report a bug in the docs tooling, [open an issue](https://github.com/grafana/plugin-tools/issues/new?template=bug_report.yml) in plugin-tools.

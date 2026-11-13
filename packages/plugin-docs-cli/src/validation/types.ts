@@ -31,6 +31,7 @@ export const Rule = {
   DuplicateSlug: 'no-duplicate-slugs',
   TitleLength: 'frontmatter-title-length',
   DescriptionLength: 'frontmatter-description-length',
+  DuplicateDescription: 'no-duplicate-descriptions',
   MinContentLength: 'min-content-length',
   // content-completeness rules
   UnfilledSectionBrief: 'unfilled-section-brief',

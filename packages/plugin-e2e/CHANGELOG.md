@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@4.0.0...@grafana/plugin-e2e@4.0.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* **plugin-e2e:** skip viz picker toggle when picker is open ([#3079](https://github.com/grafana/plugin-tools/issues/3079)) ([5648132](https://github.com/grafana/plugin-tools/commit/564813287809774faac112f6e2f8039c3e74e2f3))
+
 ## [4.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@3.15.4...@grafana/plugin-e2e@4.0.0) (2026-11-03)
 
 
