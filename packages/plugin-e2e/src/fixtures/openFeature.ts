@@ -1,6 +1,7 @@
 import { APIResponse, Page, Route } from '@playwright/test';
 
 import { FeatureFlagValue, PlaywrightArgs } from '../types';
+import { isTeardownError, summarizeError } from '../utils/routeErrors';
 
 /**
  * Represents a single flag in the OFREP response
@@ -24,22 +25,6 @@ interface OFREPBulkResponse {
  */
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-// returns true for errors that occur when the page/context is torn down mid-request
-function isTeardownError(error: unknown): boolean {
-  return (
-    error instanceof Error &&
-    (error.message.includes('Target page, context or browser has been closed') ||
-      error.message.includes('Fetch response has been disposed') ||
-      error.message.includes('Test ended') ||
-      error.message.includes('Test timeout of'))
-  );
-}
-
-// Playwright appends a multi-line call log to error messages, so keep only the first line
-function summarizeError(error: unknown): string {
-  return error instanceof Error ? error.message.split('\n')[0] : String(error);
 }
 
 /**
