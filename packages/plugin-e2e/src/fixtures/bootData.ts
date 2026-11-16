@@ -1,4 +1,5 @@
 import { PlaywrightTestArgs, TestFixture } from '@playwright/test';
+import { prerelease } from 'semver';
 
 interface BootData {
   version: string | undefined;
@@ -18,6 +19,10 @@ interface BuildInfo {
 type BootDataFixture = TestFixture<BootData, PlaywrightTestArgs>;
 
 let hasLoggedBuildInfo = false;
+
+export function isPrereleaseBuild(version: string | undefined): boolean {
+  return Boolean(version && prerelease(version));
+}
 
 export function formatBuildInfo({ version, commit, edition, buildstamp }: BuildInfo): string {
   const details = [
@@ -58,7 +63,7 @@ export const bootData: BootDataFixture = async ({ context }, use) => {
     });
 
     // bootData is test scoped, so this logs once per worker process rather than once per test
-    if (!hasLoggedBuildInfo) {
+    if (!hasLoggedBuildInfo && isPrereleaseBuild(bootDataSettings.version)) {
       hasLoggedBuildInfo = true;
       console.log(formatBuildInfo(bootDataSettings.buildInfo));
     }

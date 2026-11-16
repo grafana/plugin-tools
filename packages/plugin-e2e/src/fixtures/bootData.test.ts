@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatBuildInfo } from './bootData';
+import { formatBuildInfo, isPrereleaseBuild } from './bootData';
 
 describe('formatBuildInfo', () => {
   it('includes the version, edition, commit and build time', () => {
@@ -22,5 +22,15 @@ describe('formatBuildInfo', () => {
 
   it('reports an unknown version when buildInfo has none', () => {
     expect(formatBuildInfo({})).toBe('@grafana/plugin-e2e: testing against Grafana unknown version');
+  });
+});
+
+describe('isPrereleaseBuild', () => {
+  it.each(['13.4.0-19285619520', '11.0.0-pre', '12.1.0-abc123'])('is true for %s', (version) => {
+    expect(isPrereleaseBuild(version)).toBe(true);
+  });
+
+  it.each(['13.3.1', '9.4.17', '', undefined, 'not-a-version'])('is false for %s', (version) => {
+    expect(isPrereleaseBuild(version)).toBe(false);
   });
 });
