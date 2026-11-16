@@ -101,10 +101,12 @@ jobs:
           nproc
           free -h
 
-      # admin-wide-screen reruns the whole admin suite at 1920x1080 - the nightly workflow keeps that coverage
+      # the nightly workflow runs the whole admin suite at 1920x1080, PRs only run the dashboard smoke spec there
       - name: Run Playwright tests
         id: run-tests
-        run: npm run playwright:test --w @grafana/plugin-e2e -- --project=admin --project=viewer --workers=75%
+        env:
+          WIDE_SCREEN_SMOKE_ONLY: 'true'
+        run: npm run playwright:test --w @grafana/plugin-e2e -- --workers=75%
 
       - name: Upload e2e test summary
         uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@fa3356df288e68f5e900ab466e98b0bf9bad3118 # upload-report-artifacts/v1.0.1
