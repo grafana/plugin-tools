@@ -1,11 +1,7 @@
-import { gte } from '../utils/version';
 import { FeatureFlagValue } from '../types';
 
-// the value is the first Grafana version whose frontend reads the flag through OpenFeature and ignores the
-// legacy toggle. The "-0" lets pre-release builds of that version match, since the change is in them already.
-const MIGRATED_TO_OPEN_FEATURE: Record<string, string> = {
-  dashboardNewLayouts: '13.3.0-0',
-};
+// mirroring is harmless on Grafana versions that still read these from boot data, since their frontend ignores OFREP
+const MIGRATED_TO_OPEN_FEATURE = new Set(['dashboardNewLayouts']);
 
 /**
  * Returns the flags to apply through OpenFeature, with legacy toggles that Grafana has migrated mirrored in.
@@ -13,17 +9,11 @@ const MIGRATED_TO_OPEN_FEATURE: Record<string, string> = {
  */
 export function mirrorMigratedToggles(
   featureToggles: Record<string, boolean>,
-  flags: Record<string, FeatureFlagValue>,
-  grafanaVersion: string
+  flags: Record<string, FeatureFlagValue>
 ): Record<string, FeatureFlagValue> {
-  const mirrored: Record<string, FeatureFlagValue> = {};
-
-  for (const [toggle, value] of Object.entries(featureToggles)) {
-    const migratedIn = MIGRATED_TO_OPEN_FEATURE[toggle];
-    if (migratedIn && gte(grafanaVersion, migratedIn)) {
-      mirrored[toggle] = value;
-    }
-  }
+  const mirrored = Object.fromEntries(
+    Object.entries(featureToggles).filter(([toggle]) => MIGRATED_TO_OPEN_FEATURE.has(toggle))
+  );
 
   return { ...mirrored, ...flags };
 }

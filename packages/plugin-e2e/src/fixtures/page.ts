@@ -20,7 +20,7 @@ type PageFixture = TestFixture<Page, PlaywrightArgs>;
  * Legacy toggles that Grafana has since migrated to OpenFeature are also applied through OpenFeature, as the
  * frontend ignores them otherwise.
  *
- * The `featureToggles` option uses the legacy approach only.
+ * The `featureToggles` option uses the legacy approach, apart from the migrated toggles above.
  * The `openFeature` option uses OFREP API interception and requires Grafana >= 12.1.0.
  *
  * page.addInitScript adds a script which would be evaluated in one of the following scenarios:
@@ -36,7 +36,7 @@ export const page: PageFixture = async (
   const hasFeatureToggles = Object.keys(featureToggles).length > 0;
   const mergedFlags = {
     ...DEFAULT_OPEN_FEATURE_FLAGS,
-    ...mirrorMigratedToggles(featureToggles, openFeature.flags, grafanaVersion),
+    ...mirrorMigratedToggles(featureToggles, openFeature.flags),
   };
   const hasOpenFeature = Object.keys(mergedFlags).length > 0;
   const hasUserPreferences = Object.keys(userPreferences).length > 0;

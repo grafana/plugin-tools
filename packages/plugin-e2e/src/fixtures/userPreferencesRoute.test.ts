@@ -13,7 +13,6 @@ function createRoute(overrides: { fetch?: () => Promise<unknown> } = {}) {
     route: {
       fetch: vi.fn(overrides.fetch ?? (() => Promise.resolve(response))),
       fulfill: vi.fn().mockResolvedValue(undefined),
-      continue: vi.fn().mockResolvedValue(undefined),
     } as unknown as Route,
   };
 }
@@ -60,10 +59,9 @@ describe('handleMergedPreferencesRoute', () => {
 
     expect(errorSpy).not.toHaveBeenCalled();
     expect(route.fulfill).not.toHaveBeenCalled();
-    expect(route.continue).not.toHaveBeenCalled();
   });
 
-  it('logs one line and continues the request on other errors', async () => {
+  it('logs one line and fulfills with a 500 when the fetch fails', async () => {
     const { route } = createRoute({
       fetch: () => Promise.reject(new Error('route.fetch: connect ECONNREFUSED\nCall log:\n  - GET http://x')),
     });
@@ -73,6 +71,16 @@ describe('handleMergedPreferencesRoute', () => {
     expect(errorSpy).toHaveBeenCalledExactlyOnceWith(
       '@grafana/plugin-e2e: Failed to intercept merged preferences: route.fetch: connect ECONNREFUSED'
     );
-    expect(route.continue).toHaveBeenCalled();
+    expect(route.fulfill).toHaveBeenCalledWith(expect.objectContaining({ status: 500 }));
+  });
+
+  it('fulfills with the fetched response when the body cannot be parsed', async () => {
+    const response = { ok: () => true, json: vi.fn().mockRejectedValue(new SyntaxError('Unexpected token <')) };
+    const { route } = createRoute({ fetch: () => Promise.resolve(response) });
+
+    await handleMergedPreferencesRoute(route, { theme: 'light' });
+
+    expect(route.fetch).toHaveBeenCalledTimes(1);
+    expect(route.fulfill).toHaveBeenCalledExactlyOnceWith({ response });
   });
 });

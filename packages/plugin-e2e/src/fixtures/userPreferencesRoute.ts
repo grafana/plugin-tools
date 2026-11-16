@@ -1,4 +1,4 @@
-import { Route } from '@playwright/test';
+import { APIResponse, Route } from '@playwright/test';
 
 import { UserPreferences } from '../types';
 import { isTeardownError, summarizeError } from '../utils/routeErrors';
@@ -7,8 +7,10 @@ import { isTeardownError, summarizeError } from '../utils/routeErrors';
  * Merges the user preferences option into the k8s merged preferences API response.
  */
 export async function handleMergedPreferencesRoute(route: Route, userPreferences: UserPreferences) {
+  let response: APIResponse | undefined;
+
   try {
-    const response = await route.fetch();
+    response = await route.fetch();
     if (!response.ok()) {
       await route.fulfill({ response });
       return;
@@ -24,9 +26,17 @@ export async function handleMergedPreferencesRoute(route: Route, userPreferences
     }
     console.error(`@grafana/plugin-e2e: Failed to intercept merged preferences: ${summarizeError(error)}`);
     try {
-      await route.continue();
+      if (response) {
+        await route.fulfill({ response });
+      } else {
+        await route.fulfill({
+          status: 500,
+          body: JSON.stringify({ error: 'Failed to intercept merged preferences request' }),
+          headers: { 'content-type': 'application/json' },
+        });
+      }
     } catch {
-      // ignore errors when continuing after a previous failure
+      // ignore errors when fulfilling after a previous failure
     }
   }
 }
