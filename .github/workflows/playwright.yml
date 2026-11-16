@@ -46,22 +46,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: ".nvmrc"
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build frontend
-        run: npm run build --w @grafana/plugin-e2e
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
-
       # Fork PRs never get an OIDC id-token, so Vault secrets are unavailable there.
       # Skipping the Docker Hub login falls back to anonymous image pulls (rate-limit risk only).
       - name: Get secrets for DockerHub login
@@ -81,15 +65,36 @@ jobs:
           username: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').DOCKERHUB_USERNAME }}
           password: ${{ fromJSON(steps.get-secrets.outputs.secrets || '{}').DOCKERHUB_PASSWORD }}
 
+      # runs in the background so the image pull and Grafana boot overlap with the install and build steps below
       - name: Start Grafana
         working-directory: ./packages/plugin-e2e
         run: |
-          ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} docker compose up -d
+          ANONYMOUS_AUTH_ENABLED=false GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} nohup docker compose up -d > "$RUNNER_TEMP/grafana-up.log" 2>&1 &
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: ".nvmrc"
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build --w @grafana/plugin-e2e
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
 
       - name: Wait for grafana server
         uses: grafana/plugin-actions/wait-for-grafana@686ff644d420875e6eeb7b4c10d52d634feeacee # wait-for-grafana/v1.0.4
         with:
           url: http://localhost:3000/login
+
+      - name: Show docker compose output
+        if: ${{ failure() }}
+        run: cat "$RUNNER_TEMP/grafana-up.log" || true
 
       # admin-wide-screen reruns the whole admin suite at 1920x1080 - the nightly workflow keeps that coverage
       - name: Run Playwright tests
