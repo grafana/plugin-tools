@@ -49,11 +49,23 @@ describe('handleMergedPreferencesRoute', () => {
     expect(route.fulfill).toHaveBeenCalledWith({ response });
   });
 
-  it.each([
-    'route.fetch: Target page, context or browser has been closed',
-    'apiResponse.json: Response has been disposed',
-  ])('ignores teardown errors: %s', async (message) => {
-    const { route } = createRoute({ fetch: () => Promise.reject(new Error(message)) });
+  it('ignores teardown errors while fetching', async () => {
+    const { route } = createRoute({
+      fetch: () => Promise.reject(new Error('route.fetch: Target page, context or browser has been closed')),
+    });
+
+    await handleMergedPreferencesRoute(route, { theme: 'light' });
+
+    expect(errorSpy).not.toHaveBeenCalled();
+    expect(route.fulfill).not.toHaveBeenCalled();
+  });
+
+  it('ignores teardown errors while parsing the response', async () => {
+    const response = {
+      ok: () => true,
+      json: vi.fn().mockRejectedValue(new Error('apiResponse.json: Response has been disposed')),
+    };
+    const { route } = createRoute({ fetch: () => Promise.resolve(response) });
 
     await handleMergedPreferencesRoute(route, { theme: 'light' });
 
