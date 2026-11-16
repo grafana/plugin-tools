@@ -17,7 +17,7 @@ function fakeLocator(chain: string[]): FakeLocator {
   };
 }
 
-function getQueryEditorRow(grafanaVersion: string, withQueryEditorNextSelectors: boolean) {
+function getQueryEditorRow(grafanaVersion: string, withQueryEditorNextSelectors: boolean, refId = 'A') {
   const ctx = {
     page: { locator: (selector: string) => fakeLocator([selector]) },
     grafanaVersion,
@@ -34,7 +34,7 @@ function getQueryEditorRow(grafanaVersion: string, withQueryEditorNextSelectors:
     },
   } as unknown as PluginTestCtx;
 
-  return (new PanelEditPage(ctx, { id: '1' }).getQueryEditorRow('A') as unknown as FakeLocator).chain;
+  return (new PanelEditPage(ctx, { id: '1' }).getQueryEditorRow(refId) as unknown as FakeLocator).chain;
 }
 
 describe('PanelEditPage.getQueryEditorRow', () => {
@@ -52,5 +52,13 @@ describe('PanelEditPage.getQueryEditorRow', () => {
 
     expect(chain).toContain('or');
     expect(chain).toContain('[data-testid="data-testid Panel editor content"]');
+  });
+
+  it('accepts a refId with regex metacharacters', () => {
+    expect(() => getQueryEditorRow('13.4.0', true, 'A (copy')).not.toThrow();
+  });
+
+  it('also matches the selected query editor on a Grafana dev build of the new query editor release', () => {
+    expect(getQueryEditorRow('13.4.0-19285619520', true)).toContain('or');
   });
 });

@@ -110,4 +110,18 @@ describe('DashboardPage.enterEditMode', () => {
       '[data-testid="data-testid Dashboard mode editing option"]',
     ]);
   });
+
+  it('opens the mode picker on a Grafana dev build of the mode picker release', async () => {
+    const { enterEditMode, clicks } = createPage('13.4.0-19285619520', {
+      '[data-testid="data-testid Dashboard mode picker button"]': true,
+      '[data-testid="data-testid Dashboard mode editing option"]': true,
+    });
+
+    await enterEditMode();
+
+    expect(clicks).toEqual([
+      '[data-testid="data-testid Dashboard mode picker button"]',
+      '[data-testid="data-testid Dashboard mode editing option"]',
+    ]);
+  });
 });

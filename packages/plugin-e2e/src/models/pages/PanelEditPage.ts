@@ -8,6 +8,7 @@ import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
 import { DashboardPage } from './DashboardPage';
 import { isDataQueryUrl } from '../../utils/dataSourceRequests';
+import { escapeRegExp } from '../../utils/glob';
 import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
 
 const QUERY_EDITOR_NEXT_SELECTORS_MIN_VERSION = '13.4.0';
@@ -202,14 +203,14 @@ export class PanelEditPage extends GrafanaPage {
     const rows = this.getByGrafanaSelector(components.QueryEditorRows.rows);
     const row = rows.filter({ has: this.getByGrafanaSelector(components.QueryEditorRow.title(refId)) });
 
-    // runtime selectors replace the bundled ones, so older Grafana versions don't have the new editor selectors
-    if (lt(this.ctx.grafanaVersion, QUERY_EDITOR_NEXT_SELECTORS_MIN_VERSION)) {
+    // runtime selectors replace the bundled ones, so older Grafana versions (but not 13.4.0-<build>) lack the new editor selectors
+    if (lt(this.ctx.grafanaVersion.replace(/-.*/, ''), QUERY_EDITOR_NEXT_SELECTORS_MIN_VERSION)) {
       return row;
     }
 
     // queryEditorNext replaces the rows with one editor for the selected query, whose header shows the refId
     const selectedQueryName = this.getByGrafanaSelector(components.QueryEditorNext.queryName).filter({
-      hasText: new RegExp(`^${refId}$`),
+      hasText: new RegExp(`^${escapeRegExp(refId)}$`),
     });
     const selectedQueryEditor = this.getByGrafanaSelector(components.PanelEditor.General.content).filter({
       has: selectedQueryName,
@@ -222,7 +223,7 @@ export class PanelEditPage extends GrafanaPage {
   /**
    * Clicks the "Refresh" button in the panel editor. Returns the response promise for the data query
    *
-   * By default, this method will wait for any response that has the url '/api/ds/query'.
+   * By default, this method will wait for any data query response, sent to either '/api/ds/query' or the query apiserver.
    * If you need to wait for a specific response, you can pass a callback to the `waitForResponsePredicateCallback` option.
    * e.g
    * panelEditPage.refreshPanel({
