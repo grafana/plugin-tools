@@ -21,6 +21,16 @@ export const versionedAPIs = {
     query: {
       [MIN_GRAFANA_VERSION]: '/api/ds/query',
     },
+    appPlatformQueryPattern: {
+      [MIN_GRAFANA_VERSION]: '**/apis/*.grafana.app/*/namespaces/*/query?ds_type=**',
+    },
+    appPlatformResourcePattern: {
+      [MIN_GRAFANA_VERSION]: '**/apis/*.datasource.grafana.app/*/namespaces/*/datasources/*/resources',
+    },
+    appPlatformHealthPattern: {
+      [MIN_GRAFANA_VERSION]: (uid: string) =>
+        `**/apis/*.datasource.grafana.app/*/namespaces/*/datasources/${uid}/health`,
+    },
     health: {
       '9.4.0': (uid: string, _: string) => `/api/datasources/uid/${uid}/health`,
       [MIN_GRAFANA_VERSION]: (_: string, id: string) => `/api/datasources/${id}/health`,

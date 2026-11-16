@@ -7,6 +7,7 @@ import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
 import { DashboardPage } from './DashboardPage';
+import { isDataQueryUrl } from '../../utils/dataSourceRequests';
 import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
 
 const QUERY_EDITOR_NEXT_SELECTORS_MIN_VERSION = '13.4.0';
@@ -231,7 +232,7 @@ export class PanelEditPage extends GrafanaPage {
     })
    */
   async refreshPanel(options?: RequestOptions) {
-    const defaultPredicate = (resp: Response) => resp.url().includes(this.ctx.selectors.apis.DataSource.query);
+    const defaultPredicate = (resp: Response) => isDataQueryUrl(resp.url(), this.ctx.selectors.apis.DataSource.query);
     const responsePromise = this.ctx.page.waitForResponse(
       options?.waitForResponsePredicateCallback ?? defaultPredicate,
       options

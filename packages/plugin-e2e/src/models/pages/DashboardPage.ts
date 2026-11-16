@@ -7,6 +7,7 @@ import { PanelEditPage } from './PanelEditPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { isLegacyFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
+import { isDataQueryUrl } from '../../utils/dataSourceRequests';
 
 const ADD_PANE_OPEN_TIMEOUT = 2000;
 const MODE_PICKER_SELECTORS_MIN_VERSION = '13.4.0';
@@ -32,13 +33,13 @@ export class DashboardPage extends GrafanaPage {
   async goto(options: NavigateOptions = {}) {
     // arm listeners before navigation to capture responses from panels that load instantly
     this.ctx.page.on('request', (req) => {
-      if (req.url().includes(this.ctx.selectors.apis.DataSource.query)) {
+      if (isDataQueryUrl(req.url(), this.ctx.selectors.apis.DataSource.query)) {
         this.pendingQueryCount++;
         this.hasSeenQuery = true;
       }
     });
     this.ctx.page.on('response', (res) => {
-      if (res.url().includes(this.ctx.selectors.apis.DataSource.query)) {
+      if (isDataQueryUrl(res.url(), this.ctx.selectors.apis.DataSource.query)) {
         this.pendingQueryCount = Math.max(0, this.pendingQueryCount - 1);
       }
     });
