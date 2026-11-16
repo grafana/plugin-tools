@@ -18,5 +18,5 @@ test('a legacy dashboardNewLayouts toggle turns the new layout off on 13.3+', as
 
   const panelEditPage = await dashboardPage.addPanel();
   await expect(panelEditPage.panel.locator).toBeVisible();
-  expect(page.url()).toContain('editPanel');
+  await expect(page).toHaveURL(/editPanel/);
 });

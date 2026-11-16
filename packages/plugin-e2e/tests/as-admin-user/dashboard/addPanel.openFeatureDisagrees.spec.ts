@@ -12,5 +12,5 @@ test('addPanel follows the rendered layout when only OpenFeature turns dashboard
   test.skip(semver.lt(grafanaVersion, '13.0.0'), 'dashboardNewLayouts toggle only applies to Grafana 13+');
   const panelEditPage = await dashboardPage.addPanel();
   await expect(panelEditPage.panel.locator).toBeVisible();
-  expect(page.url()).toContain('editPanel');
+  await expect(page).toHaveURL(/editPanel/);
 });

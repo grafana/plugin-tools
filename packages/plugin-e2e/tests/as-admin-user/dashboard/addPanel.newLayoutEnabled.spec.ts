@@ -17,5 +17,5 @@ test('addPanel opens the panel edit page when dashboardNewLayouts is enabled', a
   test.skip(semver.lt(grafanaVersion, '13.0.0'), 'dashboardNewLayouts toggle only applies to Grafana 13+');
   const panelEditPage = await dashboardPage.addPanel();
   await expect(panelEditPage.panel.locator).toBeVisible();
-  await expect(page.url()).toContain('editPanel');
+  await expect(page).toHaveURL(/editPanel/);
 });
