@@ -5,6 +5,8 @@ import { PlaywrightArgs } from '../types';
 import { DEFAULT_OPEN_FEATURE_FLAGS } from '../options';
 import { setupOpenFeatureRoutes } from './openFeature';
 import { overrideGrafanaBootData } from './scripts/overrideGrafanaBootData';
+import { handleMergedPreferencesRoute } from './userPreferencesRoute';
+import { mirrorMigratedToggles } from './migratedFeatureToggles';
 
 type PageFixture = TestFixture<Page, PlaywrightArgs>;
 
@@ -15,7 +17,10 @@ type PageFixture = TestFixture<Page, PlaywrightArgs>;
  * 1. Legacy: Added directly to the window.grafanaBootData.settings.featureToggles object via init script
  * 2. OpenFeature: Intercepted and merged into OFREP API responses (Grafana 12.1.0+)
  *
- * The `featureToggles` option uses the legacy approach only.
+ * Legacy toggles that Grafana has since migrated to OpenFeature are also applied through OpenFeature, as the
+ * frontend ignores them otherwise.
+ *
+ * The `featureToggles` option uses the legacy approach, apart from the migrated toggles above.
  * The `openFeature` option uses OFREP API interception and requires Grafana >= 12.1.0.
  *
  * page.addInitScript adds a script which would be evaluated in one of the following scenarios:
@@ -29,7 +34,10 @@ export const page: PageFixture = async (
   use
 ) => {
   const hasFeatureToggles = Object.keys(featureToggles).length > 0;
-  const mergedFlags = { ...DEFAULT_OPEN_FEATURE_FLAGS, ...openFeature.flags };
+  const mergedFlags = {
+    ...DEFAULT_OPEN_FEATURE_FLAGS,
+    ...mirrorMigratedToggles(featureToggles, openFeature.flags),
+  };
   const hasOpenFeature = Object.keys(mergedFlags).length > 0;
   const hasUserPreferences = Object.keys(userPreferences).length > 0;
 
@@ -38,12 +46,9 @@ export const page: PageFixture = async (
     try {
       await page.addInitScript(overrideGrafanaBootData, { featureToggles, userPreferences });
       // override new k8s merged preferences API to ensure userPreferences are applied in the frontend
-      await page.route('**/apis/preferences.grafana.app/*/namespaces/*/preferences/merged', async (route) => {
-        const response = await route.fetch();
-        const json = await response.json();
-        json.spec = { ...json.spec, ...userPreferences };
-        await route.fulfill({ response, json });
-      });
+      await page.route('**/apis/preferences.grafana.app/*/namespaces/*/preferences/merged', (route) =>
+        handleMergedPreferencesRoute(route, userPreferences)
+      );
     } catch (error) {
       console.error('Failed to set feature toggles', error);
     }

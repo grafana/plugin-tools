@@ -51,6 +51,8 @@ export type PluginOptions = {
    * (via `window.grafanaBootData.settings.featureToggles`).
    *
    * **For OpenFeature-based flags, use the `openFeature` option instead.**
+   * Toggles that Grafana has migrated to OpenFeature (`dashboardNewLayouts` from Grafana 13.3) are also applied
+   * through OpenFeature automatically, unless the same key is set in `openFeature.flags`.
    * The `openFeature` option supports multi-type values (boolean, string, number, object)
    * as required by the OpenFeature specification.
    *
