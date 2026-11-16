@@ -181,21 +181,47 @@ export class DashboardPage extends GrafanaPage {
   }
 
   /**
+   * Switches an existing dashboard to edit mode, either with the edit button or with the dashboard mode picker
+   * that replaces it when grafana.dashboardPreviewMode is on.
+   */
+  private async enterEditMode() {
+    const { editButton, modePickerButton, modeEditingOption } = this.ctx.selectors.components.NavToolbar.editDashboard;
+    const editButtonLocator = this.getByGrafanaSelector(editButton);
+    const modePickerLocator = this.getByGrafanaSelector(modePickerButton);
+
+    await expect(async () => {
+      expect((await editButtonLocator.isVisible()) || (await modePickerLocator.isVisible())).toBe(true);
+    }).toPass();
+
+    if (await editButtonLocator.isVisible()) {
+      await editButtonLocator.click();
+      return;
+    }
+
+    await modePickerLocator.click();
+    await this.getByGrafanaSelector(modeEditingOption).click();
+  }
+
+  /**
    * Returns the add panel UI the page renders. Boot data toggles can disagree with the UI (#3016).
    */
   private async detectDashboardLayout(): Promise<'sidebar' | 'toolbar'> {
     const { components, constants } = this.ctx.selectors;
     const sidebar = this.getByGrafanaSelector(components.Sidebar.container);
+    // small viewports collapse the sidebar and leave only its toggle
+    const sidebarToggle = this.getByGrafanaSelector(components.Sidebar.showHideToggle);
     const toolbarAddButton = this.getByGrafanaSelector(
       components.PageToolbar.itemButton(constants.PageToolBar.itemButtonTitle)
     );
 
     // `.or().first()` can resolve to a hidden element, so poll each one
     await expect(async () => {
-      expect((await sidebar.isVisible()) || (await toolbarAddButton.isVisible())).toBe(true);
+      expect(
+        (await sidebar.isVisible()) || (await sidebarToggle.isVisible()) || (await toolbarAddButton.isVisible())
+      ).toBe(true);
     }).toPass();
 
-    if (await sidebar.isVisible()) {
+    if ((await sidebar.isVisible()) || (await sidebarToggle.isVisible())) {
       return 'sidebar';
     }
     return 'toolbar';
@@ -216,7 +242,7 @@ export class DashboardPage extends GrafanaPage {
 
     // In scenes powered dashboards, one needs to click the edit button before adding a new panel in already existing dashboards
     if (scenesEnabled && this.dashboard?.uid) {
-      await this.getByGrafanaSelector(components.NavToolbar.editDashboard.editButton).click();
+      await this.enterEditMode();
     }
     // on small screens, the toolbar buttons are hidden behind a "Show more items" button
     const viewportDimensions = await this.ctx.page.viewportSize();
@@ -237,6 +263,9 @@ export class DashboardPage extends GrafanaPage {
       gte(this.ctx.grafanaVersion, '13.0.0') && (await this.detectDashboardLayout()) === 'sidebar';
 
     if (useNewSidebarLayout) {
+      if (!(await this.getByGrafanaSelector(components.Sidebar.container).isVisible())) {
+        await this.getByGrafanaSelector(components.Sidebar.showHideToggle).click();
+      }
       const newPanelButton = this.getByGrafanaSelector(components.Sidebar.newPanelButton);
       // new dashboards open the add pane themselves; toggling it too early closes it
       const isAddPaneOpen = this.dashboard?.uid

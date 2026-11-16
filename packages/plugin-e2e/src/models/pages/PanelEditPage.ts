@@ -195,9 +195,20 @@ export class PanelEditPage extends GrafanaPage {
    * Returns the locator for the query editor row with the given refId
    */
   getQueryEditorRow(refId: string): Locator {
-    return this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRows.rows).filter({
-      has: this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRow.title(refId)),
+    const { components } = this.ctx.selectors;
+    const rows = this.getByGrafanaSelector(components.QueryEditorRows.rows);
+    const row = rows.filter({ has: this.getByGrafanaSelector(components.QueryEditorRow.title(refId)) });
+
+    // queryEditorNext replaces the rows with one editor for the selected query, whose header shows the refId
+    const selectedQueryName = this.getByGrafanaSelector(components.QueryEditorNext.queryName).filter({
+      hasText: new RegExp(`^${refId}$`),
     });
+    const selectedQueryEditor = this.getByGrafanaSelector(components.PanelEditor.General.content).filter({
+      has: selectedQueryName,
+      hasNot: rows,
+    });
+
+    return row.or(selectedQueryEditor);
   }
 
   /**
