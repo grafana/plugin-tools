@@ -29,6 +29,7 @@ test.describe('default user preferences', () => {
     test.skip(page.url().includes('/login'), 'auth state not valid in this environment');
     const header = page.getByRole('banner');
     await expect(header).toBeVisible({ timeout: 10_000 });
-    await expect(header).toHaveCSS('background-color', 'rgb(24, 27, 31)');
+    // the dark background differs with grafana.visualDesignRefresh, which is on by default in newer Grafana
+    await expect(header).toHaveCSS('background-color', /^rgb\((24, 27, 31|4, 6, 8)\)$/);
   });
 });
