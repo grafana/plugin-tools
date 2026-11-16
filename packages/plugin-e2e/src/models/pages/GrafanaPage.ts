@@ -81,7 +81,7 @@ export abstract class GrafanaPage {
    */
   async waitForQueryDataRequest(cb?: (request: Request) => boolean | Promise<boolean>) {
     return this.ctx.page.waitForRequest((request) => {
-      if (isDataQueryUrl(request.url(), this.ctx.selectors.apis.DataSource.query) && request.method() === 'POST') {
+      if (isDataQueryUrl(request.url(), this.ctx.selectors.apis.DataSource) && request.method() === 'POST') {
         return cb ? cb(request) : true;
       }
       return false;
@@ -95,7 +95,7 @@ export abstract class GrafanaPage {
    */
   async waitForQueryDataResponse(cb?: (request: Response) => boolean | Promise<boolean>) {
     return this.ctx.page.waitForResponse((response) => {
-      if (isDataQueryUrl(response.url(), this.ctx.selectors.apis.DataSource.query)) {
+      if (isDataQueryUrl(response.url(), this.ctx.selectors.apis.DataSource)) {
         return cb ? cb(response) : true;
       }
       return false;
@@ -119,7 +119,7 @@ export abstract class GrafanaPage {
   ): Promise<{ response: Response; body: T | null }> {
     let body: T | null = null;
     const response = await this.ctx.page.waitForResponse(async (response) => {
-      if (!isDataQueryUrl(response.url(), this.ctx.selectors.apis.DataSource.query)) {
+      if (!isDataQueryUrl(response.url(), this.ctx.selectors.apis.DataSource)) {
         return false;
       }
       const parsedBody = (await response.json().catch(() => null)) as T | null;

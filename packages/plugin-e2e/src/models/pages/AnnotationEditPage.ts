@@ -40,7 +40,7 @@ export class AnnotationEditPage extends GrafanaPage {
    */
   async runQuery(options?: RequestOptions) {
     const responsePromise = this.ctx.page.waitForResponse(
-      (resp) => isDataQueryUrl(resp.url(), this.ctx.selectors.apis.DataSource.query),
+      (resp) => isDataQueryUrl(resp.url(), this.ctx.selectors.apis.DataSource),
       options
     );
 

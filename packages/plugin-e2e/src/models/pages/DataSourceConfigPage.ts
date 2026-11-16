@@ -50,15 +50,18 @@ export class DataSourceConfigPage extends GrafanaPage {
    * May be useful for data source plugins that don't have a backend.
    */
   async saveAndTest(options?: TriggerRequestOptions): Promise<Response> {
-    const { datasourceByUID, health } = this.ctx.selectors.apis.DataSource;
+    const { datasourceByUID, health, appPlatformDataSourcePattern, appPlatformHealthPattern } =
+      this.ctx.selectors.apis.DataSource;
     const { uid, id } = this.datasource;
     const saveResponsePromise = this.ctx.page.waitForResponse((resp) =>
-      isDataSourceSaveUrl(resp.url(), uid, datasourceByUID(uid))
+      isDataSourceSaveUrl(resp.url(), datasourceByUID(uid), appPlatformDataSourcePattern(uid))
     );
     // a custom health path is the one the plugin calls, so only the default health check can move to the apiserver
     const healthResponsePromise = options?.path
       ? this.ctx.page.waitForResponse((resp) => resp.url().includes(options.path!))
-      : this.ctx.page.waitForResponse((resp) => isHealthCheckUrl(resp.url(), uid, health(uid, id.toString())));
+      : this.ctx.page.waitForResponse((resp) =>
+          isHealthCheckUrl(resp.url(), health(uid, id.toString()), appPlatformHealthPattern(uid))
+        );
     await this.getByGrafanaSelector(this.ctx.selectors.pages.DataSource.saveAndTest).click();
     return saveResponsePromise.then(() => healthResponsePromise);
   }

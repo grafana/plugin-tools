@@ -33,13 +33,13 @@ export class DashboardPage extends GrafanaPage {
   async goto(options: NavigateOptions = {}) {
     // arm listeners before navigation to capture responses from panels that load instantly
     this.ctx.page.on('request', (req) => {
-      if (isDataQueryUrl(req.url(), this.ctx.selectors.apis.DataSource.query)) {
+      if (isDataQueryUrl(req.url(), this.ctx.selectors.apis.DataSource)) {
         this.pendingQueryCount++;
         this.hasSeenQuery = true;
       }
     });
     this.ctx.page.on('response', (res) => {
-      if (isDataQueryUrl(res.url(), this.ctx.selectors.apis.DataSource.query)) {
+      if (isDataQueryUrl(res.url(), this.ctx.selectors.apis.DataSource)) {
         this.pendingQueryCount = Math.max(0, this.pendingQueryCount - 1);
       }
     });

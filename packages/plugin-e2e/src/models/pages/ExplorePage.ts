@@ -70,7 +70,7 @@ export class ExplorePage extends GrafanaPage {
   async runQuery(options?: RequestOptions) {
     const components = this.ctx.selectors.components;
     const responsePromise = this.ctx.page.waitForResponse(
-      (resp) => isDataQueryUrl(resp.url(), this.ctx.selectors.apis.DataSource.query),
+      (resp) => isDataQueryUrl(resp.url(), this.ctx.selectors.apis.DataSource),
       options
     );
     try {

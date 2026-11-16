@@ -232,7 +232,7 @@ export class PanelEditPage extends GrafanaPage {
     })
    */
   async refreshPanel(options?: RequestOptions) {
-    const defaultPredicate = (resp: Response) => isDataQueryUrl(resp.url(), this.ctx.selectors.apis.DataSource.query);
+    const defaultPredicate = (resp: Response) => isDataQueryUrl(resp.url(), this.ctx.selectors.apis.DataSource);
     const responsePromise = this.ctx.page.waitForResponse(
       options?.waitForResponsePredicateCallback ?? defaultPredicate,
       options
