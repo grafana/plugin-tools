@@ -96,10 +96,15 @@ jobs:
         if: ${{ failure() }}
         run: cat "$RUNNER_TEMP/grafana-up.log" || true
 
+      - name: Show runner resources
+        run: |
+          nproc
+          free -h
+
       # admin-wide-screen reruns the whole admin suite at 1920x1080 - the nightly workflow keeps that coverage
       - name: Run Playwright tests
         id: run-tests
-        run: npm run playwright:test --w @grafana/plugin-e2e -- --project=admin --project=viewer
+        run: npm run playwright:test --w @grafana/plugin-e2e -- --project=admin --project=viewer --workers=75%
 
       - name: Upload e2e test summary
         uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@fa3356df288e68f5e900ab466e98b0bf9bad3118 # upload-report-artifacts/v1.0.1
