@@ -5,6 +5,7 @@ import { PlaywrightArgs } from '../types';
 import { DEFAULT_OPEN_FEATURE_FLAGS } from '../options';
 import { setupOpenFeatureRoutes } from './openFeature';
 import { overrideGrafanaBootData } from './scripts/overrideGrafanaBootData';
+import { handleMergedPreferencesRoute } from './userPreferencesRoute';
 
 type PageFixture = TestFixture<Page, PlaywrightArgs>;
 
@@ -38,12 +39,9 @@ export const page: PageFixture = async (
     try {
       await page.addInitScript(overrideGrafanaBootData, { featureToggles, userPreferences });
       // override new k8s merged preferences API to ensure userPreferences are applied in the frontend
-      await page.route('**/apis/preferences.grafana.app/*/namespaces/*/preferences/merged', async (route) => {
-        const response = await route.fetch();
-        const json = await response.json();
-        json.spec = { ...json.spec, ...userPreferences };
-        await route.fulfill({ response, json });
-      });
+      await page.route('**/apis/preferences.grafana.app/*/namespaces/*/preferences/merged', (route) =>
+        handleMergedPreferencesRoute(route, userPreferences)
+      );
     } catch (error) {
       console.error('Failed to set feature toggles', error);
     }
