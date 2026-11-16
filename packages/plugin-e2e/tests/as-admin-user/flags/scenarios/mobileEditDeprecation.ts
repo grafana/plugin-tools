@@ -3,7 +3,7 @@ import { expect, test } from '../../../../src';
 
 export function mobileEditDeprecationScenarios(enabled: boolean) {
   test.describe(`grafana.mobileEditDeprecation ${enabled ? 'on' : 'off'}`, () => {
-    test.skip(({ grafanaVersion }) => semver.lt(grafanaVersion, '13.3.0'), 'flag is only relevant on Grafana 13.3+');
+    test.skip(({ grafanaVersion }) => semver.lt(grafanaVersion, '13.3.0'), 'these specs run on Grafana 13.3+ only');
 
     if (enabled) {
       test('hides the edit controls below 576px', async ({
