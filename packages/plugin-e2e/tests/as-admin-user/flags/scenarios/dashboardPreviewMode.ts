@@ -14,7 +14,7 @@ export function dashboardPreviewModeScenarios(enabled: boolean) {
       const dashboardPage = await gotoDashboardPage(dashboard);
       const panelEditPage = await dashboardPage.addPanel();
       await expect(panelEditPage.panel.locator).toBeVisible();
-      expect(page.url()).toContain('editPanel');
+      await expect(page).toHaveURL(/editPanel/);
     });
   });
 }
