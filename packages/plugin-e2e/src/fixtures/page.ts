@@ -6,6 +6,7 @@ import { DEFAULT_OPEN_FEATURE_FLAGS } from '../options';
 import { setupOpenFeatureRoutes } from './openFeature';
 import { overrideGrafanaBootData } from './scripts/overrideGrafanaBootData';
 import { handleMergedPreferencesRoute } from './userPreferencesRoute';
+import { mirrorMigratedToggles } from './migratedFeatureToggles';
 
 type PageFixture = TestFixture<Page, PlaywrightArgs>;
 
@@ -15,6 +16,9 @@ type PageFixture = TestFixture<Page, PlaywrightArgs>;
  * Feature toggles are applied in two ways:
  * 1. Legacy: Added directly to the window.grafanaBootData.settings.featureToggles object via init script
  * 2. OpenFeature: Intercepted and merged into OFREP API responses (Grafana 12.1.0+)
+ *
+ * Legacy toggles that Grafana has since migrated to OpenFeature are also applied through OpenFeature, as the
+ * frontend ignores them otherwise.
  *
  * The `featureToggles` option uses the legacy approach only.
  * The `openFeature` option uses OFREP API interception and requires Grafana >= 12.1.0.
@@ -30,7 +34,10 @@ export const page: PageFixture = async (
   use
 ) => {
   const hasFeatureToggles = Object.keys(featureToggles).length > 0;
-  const mergedFlags = { ...DEFAULT_OPEN_FEATURE_FLAGS, ...openFeature.flags };
+  const mergedFlags = {
+    ...DEFAULT_OPEN_FEATURE_FLAGS,
+    ...mirrorMigratedToggles(featureToggles, openFeature.flags, grafanaVersion),
+  };
   const hasOpenFeature = Object.keys(mergedFlags).length > 0;
   const hasUserPreferences = Object.keys(userPreferences).length > 0;
 
