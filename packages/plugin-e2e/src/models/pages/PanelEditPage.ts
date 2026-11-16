@@ -9,6 +9,8 @@ import { radioButtonSetChecked } from '../utils';
 import { DashboardPage } from './DashboardPage';
 import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
 
+const QUERY_EDITOR_NEXT_SELECTORS_MIN_VERSION = '13.4.0';
+
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
   timeRange: TimeRange;
@@ -198,6 +200,11 @@ export class PanelEditPage extends GrafanaPage {
     const { components } = this.ctx.selectors;
     const rows = this.getByGrafanaSelector(components.QueryEditorRows.rows);
     const row = rows.filter({ has: this.getByGrafanaSelector(components.QueryEditorRow.title(refId)) });
+
+    // runtime selectors replace the bundled ones, so older Grafana versions don't have the new editor selectors
+    if (lt(this.ctx.grafanaVersion, QUERY_EDITOR_NEXT_SELECTORS_MIN_VERSION)) {
+      return row;
+    }
 
     // queryEditorNext replaces the rows with one editor for the selected query, whose header shows the refId
     const selectedQueryName = this.getByGrafanaSelector(components.QueryEditorNext.queryName).filter({

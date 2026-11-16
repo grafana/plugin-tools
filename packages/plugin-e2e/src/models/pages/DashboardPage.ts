@@ -9,6 +9,7 @@ import { Panel } from '../components/Panel';
 import { isLegacyFeatureEnabled } from '../../fixtures/isFeatureToggleEnabled';
 
 const ADD_PANE_OPEN_TIMEOUT = 2000;
+const MODE_PICKER_SELECTORS_MIN_VERSION = '13.4.0';
 
 export class DashboardPage extends GrafanaPage {
   dataSourcePicker: any;
@@ -187,6 +188,13 @@ export class DashboardPage extends GrafanaPage {
   private async enterEditMode() {
     const { editButton, modePickerButton, modeEditingOption } = this.ctx.selectors.components.NavToolbar.editDashboard;
     const editButtonLocator = this.getByGrafanaSelector(editButton);
+
+    // runtime selectors replace the bundled ones, so older Grafana versions don't have the mode picker selectors
+    if (lt(this.ctx.grafanaVersion, MODE_PICKER_SELECTORS_MIN_VERSION)) {
+      await editButtonLocator.click();
+      return;
+    }
+
     const modePickerLocator = this.getByGrafanaSelector(modePickerButton);
 
     await expect(async () => {
