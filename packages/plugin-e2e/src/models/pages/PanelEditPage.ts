@@ -49,6 +49,9 @@ export class PanelEditPage extends GrafanaPage {
     options.queryParams.append('editPanel', this.args.id);
 
     await super.navigate(url, options);
+    await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.General.content).waitFor({
+      state: 'visible',
+    });
   }
 
   async toggleTableView() {
