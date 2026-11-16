@@ -26,12 +26,13 @@ export function mobileEditDeprecationScenarios(enabled: boolean) {
     test('addPanel opens the panel editor on an existing dashboard at a small viewport', async ({
       gotoDashboardPage,
       readProvisionedDashboard,
+      selectors,
       page,
     }) => {
       const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
       const dashboardPage = await gotoDashboardPage(dashboard);
       const panelEditPage = await dashboardPage.addPanel();
-      await expect(panelEditPage.panel.locator).toBeVisible();
+      await expect(panelEditPage.getByGrafanaSelector(selectors.components.PanelEditor.General.content)).toBeVisible();
       await expect(page).toHaveURL(/editPanel/);
     });
   });
