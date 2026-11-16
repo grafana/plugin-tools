@@ -10,7 +10,9 @@ export function mobileEditDeprecationScenarios(enabled: boolean) {
         gotoDashboardPage,
         readProvisionedDashboard,
         selectors,
+        grafanaVersion,
       }) => {
+        test.skip(semver.lt(grafanaVersion, '13.4.0'), 'the flag ships in Grafana 13.4');
         const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
         const dashboardPage = await gotoDashboardPage(dashboard);
         await expect(dashboardPage.getPanelByTitle('Table data').locator).toBeVisible();
