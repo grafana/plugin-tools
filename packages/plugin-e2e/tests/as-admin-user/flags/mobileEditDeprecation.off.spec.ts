@@ -4,6 +4,7 @@ import { mobileEditDeprecationScenarios } from './scenarios/mobileEditDeprecatio
 test.use({
   openFeature: { flags: { 'grafana.mobileEditDeprecation': false } },
   viewport: { width: 500, height: 900 },
+  hasTouch: true,
 });
 
 mobileEditDeprecationScenarios(false);
