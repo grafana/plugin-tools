@@ -53,9 +53,13 @@ export class PanelEditPage extends GrafanaPage {
     options.queryParams.append('editPanel', this.args.id);
 
     await super.navigate(url, options);
-    await this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.General.content).waitFor({
-      state: 'visible',
-    });
+    // an unknown panel id makes Grafana redirect to the dashboard, so the editor never shows up
+    await Promise.race([
+      this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.General.content).waitFor({
+        state: 'visible',
+      }),
+      this.ctx.page.waitForURL((pageUrl) => !pageUrl.searchParams.has('editPanel'), { waitUntil: 'commit' }),
+    ]);
   }
 
   async toggleTableView() {
@@ -203,8 +207,8 @@ export class PanelEditPage extends GrafanaPage {
     const rows = this.getByGrafanaSelector(components.QueryEditorRows.rows);
     const row = rows.filter({ has: this.getByGrafanaSelector(components.QueryEditorRow.title(refId)) });
 
-    // runtime selectors replace the bundled ones, so older Grafana versions (but not 13.4.0-<build>) lack the new editor selectors
-    if (lt(this.ctx.grafanaVersion.replace(/-.*/, ''), QUERY_EDITOR_NEXT_SELECTORS_MIN_VERSION)) {
+    // runtime selectors replace the bundled ones, so older Grafana versions lack the new editor selectors
+    if (lt(this.ctx.grafanaVersion, QUERY_EDITOR_NEXT_SELECTORS_MIN_VERSION)) {
       return row;
     }
 

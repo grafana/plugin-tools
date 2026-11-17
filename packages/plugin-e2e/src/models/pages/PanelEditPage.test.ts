@@ -38,8 +38,7 @@ function getQueryEditorRow(grafanaVersion: string, withQueryEditorNextSelectors:
 }
 
 describe('PanelEditPage.getQueryEditorRow', () => {
-  // runtime selectors replace the bundled ones, so a Grafana that predates the new query editor selectors serves a
-  // tree without them. Reading one there would throw, and this method is used on every Grafana version.
+  // a Grafana that predates the new query editor selectors serves a runtime tree without them, so reading one throws
   it('only matches the query editor rows on a Grafana without the new query editor selectors', () => {
     const chain = getQueryEditorRow('13.3.1', false);
 
@@ -57,8 +56,38 @@ describe('PanelEditPage.getQueryEditorRow', () => {
   it('accepts a refId with regex metacharacters', () => {
     expect(() => getQueryEditorRow('13.4.0', true, 'A (copy')).not.toThrow();
   });
+});
 
-  it('also matches the selected query editor on a Grafana dev build of the new query editor release', () => {
-    expect(getQueryEditorRow('13.4.0-19285619520', true)).toContain('or');
+describe('PanelEditPage.goto', () => {
+  function createPage({ isEditorShown, redirectedUrl }: { isEditorShown: boolean; redirectedUrl?: string }) {
+    const pending = new Promise<void>(() => {});
+    const ctx = {
+      page: {
+        goto: async () => {},
+        locator: () => ({ waitFor: () => (isEditorShown ? Promise.resolve() : pending) }),
+        waitForURL: (predicate: (url: URL) => boolean) =>
+          redirectedUrl && predicate(new URL(redirectedUrl)) ? Promise.resolve() : pending,
+      },
+      grafanaVersion: '13.4.0',
+      selectors: {
+        pages: { Dashboard: { url: (uid: string) => `/d/${uid}` } },
+        components: {
+          PanelEditor: { General: { content: 'data-testid Panel editor content' } },
+          Panels: { Panel: { title: (title: string) => `data-testid Panel header ${title}` } },
+        },
+      },
+    } as unknown as PluginTestCtx;
+
+    return new PanelEditPage(ctx, { id: '999', dashboard: { uid: 'abc' } });
+  }
+
+  it('resolves once the panel editor is visible', async () => {
+    await expect(createPage({ isEditorShown: true }).goto()).resolves.toBeUndefined();
+  });
+
+  it('resolves when Grafana redirects away from an unknown panel id', async () => {
+    await expect(
+      createPage({ isEditorShown: false, redirectedUrl: 'http://localhost:3000/d/abc' }).goto()
+    ).resolves.toBeUndefined();
   });
 });
