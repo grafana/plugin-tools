@@ -53,12 +53,13 @@ export class DataSourceConfigPage extends GrafanaPage {
     const { datasourceByUID, health, appPlatformDataSourcePattern, appPlatformHealthPattern } =
       this.ctx.selectors.apis.DataSource;
     const { uid, id } = this.datasource;
+    const customHealthPath = options?.path;
     const saveResponsePromise = this.ctx.page.waitForResponse((resp) =>
       isDataSourceSaveUrl(resp.url(), datasourceByUID(uid), appPlatformDataSourcePattern(uid))
     );
     // a custom health path is the one the plugin calls, so only the default health check can move to the apiserver
-    const healthResponsePromise = options?.path
-      ? this.ctx.page.waitForResponse((resp) => resp.url().includes(options.path!))
+    const healthResponsePromise = customHealthPath
+      ? this.ctx.page.waitForResponse((resp) => resp.url().includes(customHealthPath))
       : this.ctx.page.waitForResponse((resp) =>
           isHealthCheckUrl(resp.url(), health(uid, id.toString()), appPlatformHealthPattern(uid))
         );

@@ -190,8 +190,8 @@ export class DashboardPage extends GrafanaPage {
     const { editButton, modePickerButton, modeEditingOption } = this.ctx.selectors.components.NavToolbar.editDashboard;
     const editButtonLocator = this.getByGrafanaSelector(editButton);
 
-    // runtime selectors replace the bundled ones, so older Grafana versions (but not 13.4.0-<build>) lack the mode picker selectors
-    if (lt(this.ctx.grafanaVersion.replace(/-.*/, ''), MODE_PICKER_SELECTORS_MIN_VERSION)) {
+    // runtime selectors replace the bundled ones, so older Grafana versions lack the mode picker selectors
+    if (lt(this.ctx.grafanaVersion, MODE_PICKER_SELECTORS_MIN_VERSION)) {
       await editButtonLocator.click();
       return;
     }

@@ -3,16 +3,18 @@ import { expect, test } from '../../../../src';
 
 export function mobileEditDeprecationScenarios(enabled: boolean) {
   test.describe(`grafana.mobileEditDeprecation ${enabled ? 'on' : 'off'}`, () => {
-    test.skip(({ grafanaVersion }) => semver.lt(grafanaVersion, '13.3.0'), 'these specs run on Grafana 13.3+ only');
+    const minVersion = enabled ? '13.4.0' : '13.3.0';
+    test.skip(
+      ({ grafanaVersion }) => semver.lt(grafanaVersion, minVersion),
+      `these specs run on Grafana ${minVersion}+ only`
+    );
 
     if (enabled) {
       test('hides the edit controls below 576px', async ({
         gotoDashboardPage,
         readProvisionedDashboard,
         selectors,
-        grafanaVersion,
       }) => {
-        test.skip(semver.lt(grafanaVersion, '13.4.0'), 'the flag ships in Grafana 13.4');
         const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
         const dashboardPage = await gotoDashboardPage(dashboard);
         await expect(dashboardPage.getPanelByTitle('Table data').locator).toBeVisible();

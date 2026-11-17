@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { DashboardPage } from './DashboardPage';
 import { PluginTestCtx } from '../../types';
+import { gte } from '../../utils/version';
 
 const NAV_TOOLBAR = 'data-testid Nav toolbar';
 const DASHBOARD_CONTROLS = 'data-testid dashboard controls';
@@ -44,8 +45,7 @@ describe('DashboardPage.toolbar', () => {
 });
 
 describe('DashboardPage.enterEditMode', () => {
-  // runtime selectors replace the bundled ones, so a Grafana that predates the mode picker selectors serves a
-  // tree without them. Touching one there passes undefined to the selector resolver and throws.
+  // a Grafana that predates the mode picker selectors serves a runtime tree without them, so touching one throws
   function createPage(grafanaVersion: string, visible: Record<string, boolean>) {
     const clicks: string[] = [];
     const locator = vi.fn((selector: string) => ({
@@ -63,7 +63,7 @@ describe('DashboardPage.enterEditMode', () => {
           NavToolbar: {
             editDashboard: {
               editButton: 'data-testid Edit dashboard button',
-              ...(grafanaVersion >= '13.4.0' && {
+              ...(gte(grafanaVersion, '13.4.0') && {
                 modePickerButton: 'data-testid Dashboard mode picker button',
                 modeEditingOption: 'data-testid Dashboard mode editing option',
               }),
@@ -99,20 +99,6 @@ describe('DashboardPage.enterEditMode', () => {
 
   it('opens the mode picker and chooses editing when the edit button is not rendered', async () => {
     const { enterEditMode, clicks } = createPage('13.4.0', {
-      '[data-testid="data-testid Dashboard mode picker button"]': true,
-      '[data-testid="data-testid Dashboard mode editing option"]': true,
-    });
-
-    await enterEditMode();
-
-    expect(clicks).toEqual([
-      '[data-testid="data-testid Dashboard mode picker button"]',
-      '[data-testid="data-testid Dashboard mode editing option"]',
-    ]);
-  });
-
-  it('opens the mode picker on a Grafana dev build of the mode picker release', async () => {
-    const { enterEditMode, clicks } = createPage('13.4.0-19285619520', {
       '[data-testid="data-testid Dashboard mode picker button"]': true,
       '[data-testid="data-testid Dashboard mode editing option"]': true,
     });

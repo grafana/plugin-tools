@@ -1,5 +1,5 @@
 import { PlaywrightTestArgs, TestFixture } from '@playwright/test';
-import { prerelease } from 'semver';
+import { valid } from '../utils/version';
 
 interface BootData {
   version: string | undefined;
@@ -21,14 +21,15 @@ type BootDataFixture = TestFixture<BootData, PlaywrightTestArgs>;
 let hasLoggedBuildInfo = false;
 
 export function isPrereleaseBuild(version: string | undefined): boolean {
-  return Boolean(version && prerelease(version));
+  return Boolean(valid(version)?.includes('-'));
 }
 
 export function formatBuildInfo({ version, commit, edition, buildstamp }: BuildInfo): string {
+  const builtAt = buildstamp ? new Date(buildstamp * 1000) : undefined;
   const details = [
     edition,
     commit && `commit ${commit}`,
-    buildstamp && `built ${new Date(buildstamp * 1000).toISOString()}`,
+    builtAt && !isNaN(builtAt.getTime()) && `built ${builtAt.toISOString()}`,
   ].filter(Boolean);
   const suffix = details.length > 0 ? ` (${details.join(', ')})` : '';
   return `@grafana/plugin-e2e: testing against Grafana ${version || 'unknown version'}${suffix}`;
