@@ -25,8 +25,19 @@ export const versionedAPIs = {
       '9.4.0': (uid: string, _: string) => `/api/datasources/uid/${uid}/health`,
       [MIN_GRAFANA_VERSION]: (_: string, id: string) => `/api/datasources/${id}/health`,
     },
+    healthPattern: {
+      '13.0.0': (uid: string, _: string) =>
+        `**/{api/datasources/uid,apis/*.datasource.grafana.app/v0alpha1/namespaces/*/datasources}/${uid}/health`,
+      '9.4.0': (uid: string, _: string) => `**/api/datasources/uid/${uid}/health`,
+      [MIN_GRAFANA_VERSION]: (_: string, id: string) => `**/api/datasources/${id}/health`,
+    },
     datasourceByUID: {
       [MIN_GRAFANA_VERSION]: (uid: string) => `/api/datasources/uid/${uid}`,
+    },
+    datasourceByUIDPattern: {
+      '13.0.0': (uid: string) =>
+        `**/{api/datasources/uid,apis/*.datasource.grafana.app/v0alpha1/namespaces/*/datasources}/${uid}`,
+      [MIN_GRAFANA_VERSION]: (uid: string) => `**/api/datasources/uid/${uid}`,
     },
     proxy: {
       '9.4.0': (uid: string, _: string) => `api/datasources/proxy/uid/${uid}`,

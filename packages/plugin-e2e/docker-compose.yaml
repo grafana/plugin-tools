@@ -11,6 +11,8 @@ services:
       - GF_PANELS_ENABLE_ALPHA=true
       - GF_FEATURE_TOGGLES_splashScreen=true
       - GF_FEATURE_TOGGLES_dashboardNewLayouts=true
+      - GF_FEATURE_TOGGLES_datasource.useNewCRUDAPIs=true
+      - GF_FEATURE_TOGGLES_datasourcesApiServerEnableHealthEndpoint=true
     ports:
       - 3000:3000/tcp
     volumes:
