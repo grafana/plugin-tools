@@ -49,8 +49,8 @@ export class PluginCssRspackPlugin {
             }
 
             const wrapper = js.match(AMD_WRAPPER_PATTERN);
-            const dependencies = wrapper?.[1].split(',') ?? [];
-            const params = wrapper?.[2].split(',').map((param) => param.trim()) ?? [];
+            const dependencies = wrapper?.[1]?.split(',') ?? [];
+            const params = wrapper?.[2]?.split(',').map((param) => param.trim()) ?? [];
             const index = dependencies.indexOf(MODULE_CSS_DEPENDENCY);
             if (!wrapper || index === -1 || dependencies.length !== params.length) {
               throw new Error(`${PLUGIN_NAME}: could not remove ./module.css from the define() wrapper in ${jsFile}.`);
@@ -70,18 +70,21 @@ export class PluginCssRspackPlugin {
 
           for (const assetName of Object.keys(assets)) {
             const fileName = assetName.split('?')[0];
-            if (!fileName.endsWith('.css')) {
+            if (!fileName?.endsWith('.css')) {
               continue;
             }
 
             const source = assets[assetName];
+            if (!source) {
+              throw new Error(`${PLUGIN_NAME}: missing asset ${assetName}.`);
+            }
             const css = source.source().toString();
             const updated = new ReplaceSource(source);
 
             // SystemJS and the browser resolve url() against the CSS file, not the page
             for (const match of css.matchAll(URL_PATTERN)) {
               const url = match[2];
-              if (!url.startsWith(publicPath)) {
+              if (!url?.startsWith(publicPath)) {
                 continue;
               }
               const relativeUrl = posix.relative(posix.dirname(fileName), url.slice(publicPath.length));
@@ -89,7 +92,7 @@ export class PluginCssRspackPlugin {
               updated.replace(start, start + url.length - 1, relativeUrl);
             }
 
-            // the layer keeps Grafana's unlayered styles winning at equal specificity. @charset must stay first
+            // the layer keeps Grafana's non-layered styles winning at equal specificity. @charset must stay first
             const charset = css.match(CHARSET_PATTERN)?.[0];
             if (charset) {
               updated.replace(0, charset.length - 1, '');
