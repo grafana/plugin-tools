@@ -6,6 +6,7 @@ test.use({
 });
 
 dataSourceApiserverUrlsScenarios({
+  withResourceTest: true,
   title: 'datasources.apiserver.fe-allowed-types on',
   expectedHealthPath: (namespace, uid) =>
     `/apis/grafana-test-datasource.datasource.grafana.app/v0alpha1/namespaces/${namespace}/datasources/${uid}/health`,

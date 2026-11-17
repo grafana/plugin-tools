@@ -6,6 +6,7 @@ test.use({
 });
 
 dataQueryUrlsScenarios({
+  withBodyTest: true,
   title: 'datasources.querier.fe-allowed-types on',
   expectedPath: (namespace) => `/apis/query.grafana.app/v0alpha1/namespaces/${namespace}/query`,
 });
