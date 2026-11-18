@@ -8,10 +8,7 @@ import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
 import { DashboardPage } from './DashboardPage';
 import { isDataQueryUrl } from '../../utils/dataSourceRequests';
-import { escapeRegExp } from '../../utils/glob';
 import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
-
-const QUERY_EDITOR_NEXT_SELECTORS_MIN_VERSION = '13.4.0';
 
 export class PanelEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
@@ -203,25 +200,9 @@ export class PanelEditPage extends GrafanaPage {
    * Returns the locator for the query editor row with the given refId
    */
   getQueryEditorRow(refId: string): Locator {
-    const { components } = this.ctx.selectors;
-    const rows = this.getByGrafanaSelector(components.QueryEditorRows.rows);
-    const row = rows.filter({ has: this.getByGrafanaSelector(components.QueryEditorRow.title(refId)) });
-
-    // runtime selectors replace the bundled ones, so older Grafana versions lack the new editor selectors
-    if (lt(this.ctx.grafanaVersion, QUERY_EDITOR_NEXT_SELECTORS_MIN_VERSION)) {
-      return row;
-    }
-
-    // queryEditorNext replaces the rows with one editor for the selected query, whose header shows the refId
-    const selectedQueryName = this.getByGrafanaSelector(components.QueryEditorNext.queryName).filter({
-      hasText: new RegExp(`^${escapeRegExp(refId)}$`),
+    return this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRows.rows).filter({
+      has: this.getByGrafanaSelector(this.ctx.selectors.components.QueryEditorRow.title(refId)),
     });
-    const selectedQueryEditor = this.getByGrafanaSelector(components.PanelEditor.General.content).filter({
-      has: selectedQueryName,
-      hasNot: rows,
-    });
-
-    return row.or(selectedQueryEditor);
   }
 
   /**

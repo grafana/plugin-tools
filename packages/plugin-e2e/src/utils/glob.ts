@@ -1,7 +1,3 @@
-export function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 export function globToRegExp(glob: string): RegExp {
   const escaped = glob
     .replace(/[.+?^${}()|[\]\\]/g, '\\$&')
