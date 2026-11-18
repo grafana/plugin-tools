@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.0.4](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.3...@grafana/create-plugin@9.0.4) (2026-11-18)
+
+
+### Bug Fixes
+
+* **create-plugin:** use production React transform in rspack dev builds ([#3116](https://github.com/grafana/plugin-tools/issues/3116)) ([cad4ba0](https://github.com/grafana/plugin-tools/commit/cad4ba0d8374a22ae85983c3606eec99151492fd))
+
 ## [9.0.3](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.2...@grafana/create-plugin@9.0.3) (2026-11-11)
 
 
