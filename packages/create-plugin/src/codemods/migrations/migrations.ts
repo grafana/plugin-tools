@@ -148,7 +148,7 @@ export default [
   },
   {
     name: '022-rspack-jsx-runtime',
-    version: '0.0.0-unreleased', // x-release-please-version
+    version: '9.0.4',
     description: 'Fix JSX runtime mismatch in rspack dev builds.',
     scriptPath: import.meta.resolve('./scripts/022-rspack-jsx-runtime.js'),
   },
