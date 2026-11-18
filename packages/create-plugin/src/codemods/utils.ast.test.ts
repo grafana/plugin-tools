@@ -5,6 +5,9 @@ import {
   printAST,
   isProperty,
   findObjectProperty,
+  findNestedProperty,
+  isBooleanLiteral,
+  isStringLiteral,
   createImport,
   insertImports,
   findImports,
@@ -154,6 +157,96 @@ describe('utils.ast', () => {
         const prop = findObjectProperty(objExpr!, 'foo');
 
         expect(prop).toBeUndefined();
+      });
+    });
+
+    describe('findNestedProperty', () => {
+      it('should return the property at the end of the path', () => {
+        const ast = createTestAST(`const obj = { outer: { middle: { inner: true } } };`);
+        const objExpr = findFirstNode<recast.types.namedTypes.ObjectExpression>(ast, 'ObjectExpression');
+
+        const property = findNestedProperty(objExpr!, ['outer', 'middle', 'inner']);
+
+        expect(property?.value.type).toMatch(/BooleanLiteral|Literal/);
+      });
+
+      it('should return a property whose value is an object', () => {
+        const ast = createTestAST(`const obj = { outer: { middle: {} } };`);
+        const objExpr = findFirstNode<recast.types.namedTypes.ObjectExpression>(ast, 'ObjectExpression');
+
+        expect(findNestedProperty(objExpr!, ['outer', 'middle'])?.value.type).toBe('ObjectExpression');
+      });
+
+      it('should return a direct property for a single-step path', () => {
+        const ast = createTestAST(`const obj = { outer: 1 };`);
+        const objExpr = findFirstNode<recast.types.namedTypes.ObjectExpression>(ast, 'ObjectExpression');
+
+        expect(findNestedProperty(objExpr!, ['outer'])).toBeDefined();
+      });
+
+      it('should return undefined when the final property is missing', () => {
+        const ast = createTestAST(`const obj = { outer: {} };`);
+        const objExpr = findFirstNode<recast.types.namedTypes.ObjectExpression>(ast, 'ObjectExpression');
+
+        expect(findNestedProperty(objExpr!, ['outer', 'missing'])).toBeUndefined();
+      });
+
+      it('should return undefined when a value along the path is not an object', () => {
+        const ast = createTestAST(`const obj = { outer: { middle: 'text' } };`);
+        const objExpr = findFirstNode<recast.types.namedTypes.ObjectExpression>(ast, 'ObjectExpression');
+
+        expect(findNestedProperty(objExpr!, ['outer', 'middle', 'inner'])).toBeUndefined();
+      });
+    });
+
+    describe('isStringLiteral', () => {
+      function getFirstPropertyValue(source: string) {
+        const ast = createTestAST(source);
+        const objExpr = findFirstNode<recast.types.namedTypes.ObjectExpression>(ast, 'ObjectExpression');
+        const prop = objExpr!.properties[0];
+        if (!isProperty(prop)) {
+          throw new Error('Expected the first node to be a property');
+        }
+        return prop.value;
+      }
+
+      it('should return true when the string matches the expected value', () => {
+        expect(isStringLiteral(getFirstPropertyValue(`const obj = { a: 'foo' };`), 'foo')).toBe(true);
+      });
+
+      it('should return false when the string differs from the expected value', () => {
+        expect(isStringLiteral(getFirstPropertyValue(`const obj = { a: 'foo' };`), 'bar')).toBe(false);
+      });
+
+      it('should return false for non-string nodes', () => {
+        expect(isStringLiteral(getFirstPropertyValue(`const obj = { a: foo };`), 'foo')).toBe(false);
+        expect(isStringLiteral(getFirstPropertyValue(`const obj = { a: 1 };`), 'foo')).toBe(false);
+      });
+    });
+
+    describe('isBooleanLiteral', () => {
+      function getFirstPropertyValue(source: string) {
+        const ast = createTestAST(source);
+        const objExpr = findFirstNode<recast.types.namedTypes.ObjectExpression>(ast, 'ObjectExpression');
+        const prop = objExpr!.properties[0];
+        if (!isProperty(prop)) {
+          throw new Error('Expected the first node to be a property');
+        }
+        return prop.value;
+      }
+
+      it('should return true when the literal matches the expected value', () => {
+        expect(isBooleanLiteral(getFirstPropertyValue(`const obj = { a: false };`), false)).toBe(true);
+        expect(isBooleanLiteral(getFirstPropertyValue(`const obj = { a: true };`), true)).toBe(true);
+      });
+
+      it('should return false when the literal differs from the expected value', () => {
+        expect(isBooleanLiteral(getFirstPropertyValue(`const obj = { a: true };`), false)).toBe(false);
+      });
+
+      it('should return false for non-boolean nodes', () => {
+        expect(isBooleanLiteral(getFirstPropertyValue(`const obj = { a: !env.production };`), false)).toBe(false);
+        expect(isBooleanLiteral(getFirstPropertyValue(`const obj = { a: 0 };`), false)).toBe(false);
       });
     });
   });
