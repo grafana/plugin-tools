@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { DashboardPage } from './DashboardPage';
 import { PluginTestCtx } from '../../types';
-import { gte } from '../../utils/version';
 
 const NAV_TOOLBAR = 'data-testid Nav toolbar';
 const DASHBOARD_CONTROLS = 'data-testid dashboard controls';
@@ -45,8 +44,8 @@ describe('DashboardPage.toolbar', () => {
 });
 
 describe('DashboardPage.enterEditMode', () => {
-  // a Grafana that predates the mode picker selectors serves a runtime tree without them, so touching one throws
-  function createPage(grafanaVersion: string, visible: Record<string, boolean>) {
+  // a Grafana build without the mode picker selectors serves a tree without them, so touching one throws
+  function createPage(hasModePickerSelectors: boolean, visible: Record<string, boolean>) {
     const clicks: string[] = [];
     const locator = vi.fn((selector: string) => ({
       isVisible: () => Promise.resolve(visible[selector] ?? false),
@@ -57,13 +56,13 @@ describe('DashboardPage.enterEditMode', () => {
     }));
     const ctx = {
       page: { locator },
-      grafanaVersion,
+      grafanaVersion: '13.4.0',
       selectors: {
         components: {
           NavToolbar: {
             editDashboard: {
               editButton: 'data-testid Edit dashboard button',
-              ...(gte(grafanaVersion, '13.4.0') && {
+              ...(hasModePickerSelectors && {
                 modePickerButton: 'data-testid Dashboard mode picker button',
                 modeEditingOption: 'data-testid Dashboard mode editing option',
               }),
@@ -77,8 +76,8 @@ describe('DashboardPage.enterEditMode', () => {
     return { enterEditMode, clicks };
   }
 
-  it('clicks the edit button on a Grafana without the mode picker selectors', async () => {
-    const { enterEditMode, clicks } = createPage('13.3.1', {
+  it('clicks the edit button on a Grafana build without the mode picker selectors', async () => {
+    const { enterEditMode, clicks } = createPage(false, {
       '[data-testid="data-testid Edit dashboard button"]': true,
     });
 
@@ -88,7 +87,7 @@ describe('DashboardPage.enterEditMode', () => {
   });
 
   it('clicks the edit button when it is rendered on a Grafana with the mode picker selectors', async () => {
-    const { enterEditMode, clicks } = createPage('13.4.0', {
+    const { enterEditMode, clicks } = createPage(true, {
       '[data-testid="data-testid Edit dashboard button"]': true,
     });
 
@@ -98,7 +97,7 @@ describe('DashboardPage.enterEditMode', () => {
   });
 
   it('opens the mode picker and chooses editing when the edit button is not rendered', async () => {
-    const { enterEditMode, clicks } = createPage('13.4.0', {
+    const { enterEditMode, clicks } = createPage(true, {
       '[data-testid="data-testid Dashboard mode picker button"]': true,
       '[data-testid="data-testid Dashboard mode editing option"]': true,
     });
