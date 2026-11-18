@@ -95,7 +95,6 @@ const config = async (env: Env): Promise<Configuration> => {
                 },
                 transform: {
                   react: {
-                    // Grafana provides the production JSX runtime in both modes.
                     development: false,
                     refresh: false,
                   },
