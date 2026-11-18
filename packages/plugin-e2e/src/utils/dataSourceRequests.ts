@@ -17,10 +17,17 @@ function matchesPathPattern(url: string, pattern: string): boolean {
 }
 
 /**
+ * Whether the url is a data source query request to the query apiserver, whatever its query string.
+ */
+export function isAppPlatformQueryUrl(url: string, appPlatformQueryPattern: string): boolean {
+  return matchesPathPattern(url, appPlatformQueryPattern);
+}
+
+/**
  * Whether the url is a data source query request, sent to either the legacy API or the query apiserver.
  */
 export function isDataQueryUrl(url: string, apis: Pick<DataSourceApis, 'query' | 'appPlatformQueryPattern'>): boolean {
-  return url.includes(apis.query) || matchesPathPattern(url, apis.appPlatformQueryPattern);
+  return url.includes(apis.query) || isAppPlatformQueryUrl(url, apis.appPlatformQueryPattern);
 }
 
 /**

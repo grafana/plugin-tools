@@ -1,7 +1,7 @@
 import { Locator, Request, Response } from '@playwright/test';
 import { getByGrafanaSelectorOptions, GrafanaPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { resolveGrafanaSelector } from '../utils';
-import { isDataQueryUrl } from '../../utils/dataSourceRequests';
+import { isAppPlatformQueryUrl, isDataQueryUrl } from '../../utils/dataSourceRequests';
 
 /**
  * Base class for all Grafana pages.
@@ -44,9 +44,13 @@ export abstract class GrafanaPage {
       await route.fulfill({ json, status });
     });
     // queries go to the query apiserver instead when the querier feature flags are on
-    await this.ctx.page.route(this.ctx.selectors.apis.DataSource.appPlatformQueryPattern, async (route) => {
-      await route.fulfill({ json, status });
-    });
+    // routed with the matcher the waiters use, so a query is mocked whatever its query string
+    await this.ctx.page.route(
+      (url) => isAppPlatformQueryUrl(url.href, this.ctx.selectors.apis.DataSource.appPlatformQueryPattern),
+      async (route) => {
+        await route.fulfill({ json, status });
+      }
+    );
   }
 
   /**

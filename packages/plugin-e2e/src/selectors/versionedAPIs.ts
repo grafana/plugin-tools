@@ -22,7 +22,7 @@ export const versionedAPIs = {
       [MIN_GRAFANA_VERSION]: '/api/ds/query',
     },
     appPlatformQueryPattern: {
-      [MIN_GRAFANA_VERSION]: '**/apis/*.grafana.app/*/namespaces/*/query?ds_type=**',
+      [MIN_GRAFANA_VERSION]: '**/apis/*.grafana.app/*/namespaces/*/query',
     },
     appPlatformResourcePattern: {
       [MIN_GRAFANA_VERSION]: '**/apis/*.datasource.grafana.app/*/namespaces/*/datasources/*/resources',

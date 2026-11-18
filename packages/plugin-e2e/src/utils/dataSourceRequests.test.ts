@@ -20,6 +20,7 @@ describe('isDataQueryUrl', () => {
     `${ORIGIN}/apis/query.grafana.app/v0alpha1/namespaces/default/query?ds_type=grafana-test-datasource`,
     `${ORIGIN}/apis/datasource.grafana.app/v0alpha1/namespaces/stacks-1/query?ds_type=prometheus&expression=true`,
     `${ORIGIN}/apis/query.grafana.app/v0alpha1/namespaces/default/query`,
+    `${ORIGIN}/apis/query.grafana.app/v0alpha1/namespaces/default/query?expression=true&ds_type=prometheus`,
   ])('matches %s', (url) => {
     expect(isDataQueryUrl(url, apis)).toBe(true);
   });
