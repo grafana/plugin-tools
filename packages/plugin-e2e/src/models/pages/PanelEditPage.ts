@@ -7,6 +7,7 @@ import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
 import { radioButtonSetChecked } from '../utils';
 import { DashboardPage } from './DashboardPage';
+import { isDataQueryUrl } from '../../utils/dataSourceRequests';
 import { PanelEditOptionsGroup } from '../components/PanelEditOptionsGroup';
 
 export class PanelEditPage extends GrafanaPage {
@@ -49,6 +50,13 @@ export class PanelEditPage extends GrafanaPage {
     options.queryParams.append('editPanel', this.args.id);
 
     await super.navigate(url, options);
+    // an unknown panel id makes Grafana redirect to the dashboard, so the editor never shows up
+    await Promise.race([
+      this.getByGrafanaSelector(this.ctx.selectors.components.PanelEditor.General.content).waitFor({
+        state: 'visible',
+      }),
+      this.ctx.page.waitForURL((pageUrl) => !pageUrl.searchParams.has('editPanel'), { waitUntil: 'commit' }),
+    ]);
   }
 
   async toggleTableView() {
@@ -200,7 +208,7 @@ export class PanelEditPage extends GrafanaPage {
   /**
    * Clicks the "Refresh" button in the panel editor. Returns the response promise for the data query
    *
-   * By default, this method will wait for any response that has the url '/api/ds/query'.
+   * By default, this method will wait for any data query response, sent to either '/api/ds/query' or the query apiserver.
    * If you need to wait for a specific response, you can pass a callback to the `waitForResponsePredicateCallback` option.
    * e.g
    * panelEditPage.refreshPanel({
@@ -210,7 +218,7 @@ export class PanelEditPage extends GrafanaPage {
     })
    */
   async refreshPanel(options?: RequestOptions) {
-    const defaultPredicate = (resp: Response) => resp.url().includes(this.ctx.selectors.apis.DataSource.query);
+    const defaultPredicate = (resp: Response) => isDataQueryUrl(resp.url(), this.ctx.selectors.apis.DataSource);
     const responsePromise = this.ctx.page.waitForResponse(
       options?.waitForResponsePredicateCallback ?? defaultPredicate,
       options

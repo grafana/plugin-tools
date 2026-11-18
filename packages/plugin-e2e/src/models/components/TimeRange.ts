@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test';
 import { gte } from '../../utils/version';
 import { TimeRangeArgs } from '../../types';
 import { ScopedComponent } from './ScopedComponent';
@@ -8,12 +9,21 @@ export class TimeRange extends ScopedComponent {
    */
   async set({ from, to, zone }: TimeRangeArgs) {
     const { TimeZonePicker, TimePicker, Select } = this.ctx.selectors.components;
-    try {
-      await this.getByGrafanaSelector(TimePicker.openButton, { root: this.root }).click();
-    } catch (e) {
-      // seems like in older versions of Grafana the time picker markup is rendered twice
-      await this.ctx.page.locator('[aria-controls="TimePickerContent"]').last().click();
-    }
+    const absoluteTimeRangeTitle = this.getByGrafanaSelector(TimePicker.absoluteTimeRangeTitle);
+
+    // a click that lands while the page is still rendering can leave the picker closed, so only click again when it is
+    await expect(async () => {
+      if (await absoluteTimeRangeTitle.isVisible()) {
+        return;
+      }
+      try {
+        await this.getByGrafanaSelector(TimePicker.openButton, { root: this.root }).click();
+      } catch (e) {
+        // seems like in older versions of Grafana the time picker markup is rendered twice
+        await this.ctx.page.locator('[aria-controls="TimePickerContent"]').last().click();
+      }
+      await expect(absoluteTimeRangeTitle).toBeVisible({ timeout: 2000 });
+    }).toPass();
 
     if (zone) {
       const changeTimeSettingsButton = gte(this.ctx.grafanaVersion, '11.0.0')

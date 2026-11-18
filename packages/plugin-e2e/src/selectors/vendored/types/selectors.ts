@@ -1,4 +1,4 @@
-// Vendored from grafana/grafana@655af3aa6da50e3de90c8e9012458c9c351f3f32/packages/grafana-e2e-selectors/src/types/selectors.ts. Do not edit - run `npm run sync-selectors`.
+// Vendored from grafana/grafana@8e436e3277e79ab7cc5ddea30007911b849b4886/packages/grafana-e2e-selectors/src/types/selectors.ts. Do not edit - run `npm run sync-selectors`.
 /**
  * A string selector
  */

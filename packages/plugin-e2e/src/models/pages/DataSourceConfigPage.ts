@@ -1,9 +1,13 @@
 import { Response } from '@playwright/test';
 import { DataSourceSettings, NavigateOptions, PluginTestCtx, TriggerRequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
+import { isDataSourceSaveUrl, isHealthCheckUrl } from '../../utils/dataSourceRequests';
 
 export class DataSourceConfigPage extends GrafanaPage {
-  constructor(ctx: PluginTestCtx, public datasource: DataSourceSettings) {
+  constructor(
+    ctx: PluginTestCtx,
+    public datasource: DataSourceSettings
+  ) {
     super(ctx);
   }
   async deleteDataSource() {
@@ -29,6 +33,13 @@ export class DataSourceConfigPage extends GrafanaPage {
         await route.fulfill({ json, status });
       }
     );
+    // the health check goes to the datasource apiserver instead when the apiserver feature flags are on
+    await this.ctx.page.route(
+      this.ctx.selectors.apis.DataSource.appPlatformHealthPattern(this.datasource.uid),
+      async (route) => {
+        await route.fulfill({ json, status });
+      }
+    );
   }
 
   /**
@@ -39,12 +50,19 @@ export class DataSourceConfigPage extends GrafanaPage {
    * May be useful for data source plugins that don't have a backend.
    */
   async saveAndTest(options?: TriggerRequestOptions): Promise<Response> {
-    const { datasourceByUID, health } = this.ctx.selectors.apis.DataSource;
+    const { datasourceByUID, health, appPlatformDataSourcePattern, appPlatformHealthPattern } =
+      this.ctx.selectors.apis.DataSource;
+    const { uid, id } = this.datasource;
+    const customHealthPath = options?.path;
     const saveResponsePromise = this.ctx.page.waitForResponse((resp) =>
-      resp.url().includes(datasourceByUID(this.datasource.uid))
+      isDataSourceSaveUrl(resp.url(), datasourceByUID(uid), appPlatformDataSourcePattern(uid))
     );
-    const healthPath = options?.path ?? health(this.datasource.uid, this.datasource.id.toString());
-    const healthResponsePromise = this.ctx.page.waitForResponse((resp) => resp.url().includes(healthPath));
+    // a custom health path is the one the plugin calls, so only the default health check can move to the apiserver
+    const healthResponsePromise = customHealthPath
+      ? this.ctx.page.waitForResponse((resp) => resp.url().includes(customHealthPath))
+      : this.ctx.page.waitForResponse((resp) =>
+          isHealthCheckUrl(resp.url(), health(uid, id.toString()), appPlatformHealthPattern(uid))
+        );
     await this.getByGrafanaSelector(this.ctx.selectors.pages.DataSource.saveAndTest).click();
     return saveResponsePromise.then(() => healthResponsePromise);
   }

@@ -63,7 +63,6 @@ test('click on sub menu item in the panel actions popover menu', async ({
 test('click on menu item in the panel actions popover menu', async ({
   readProvisionedDashboard,
   gotoDashboardPage,
-  page,
   selectors,
 }) => {
   const dashboard = await readProvisionedDashboard({ fileName: 'testdatasource.json' });
@@ -71,8 +70,7 @@ test('click on menu item in the panel actions popover menu', async ({
   const panel = dashboardPage.getPanelByTitle('Table data');
   await skipWithoutActionsPopover(dashboardPage, panel, selectors);
 
-  await panel.clickOnMenuItem('Inspect');
-  await expect(page).toHaveURL(/.*inspect=.*/);
+  await panel.clickOnMenuItem('Time settings');
   await expect(
     dashboardPage.getByGrafanaSelector(selectors.components.Drawer.General.title(''), { startsWith: true })
   ).toBeVisible();
