@@ -20,7 +20,12 @@ Plugins that use `@grafana/ui` components and theme tokens pick up most of the n
 
 ## Before you begin
 
-To preview the refresh in your local development environment, enable the `grafana.visualDesignRefresh` feature toggle.
+To preview the refresh in your local development environment, enable the `grafana.visualDesignRefresh` feature toggle in `custom.ini`.
+
+```shell
+[feature_toggles]
+grafana.visualDesignRefresh = true
+```
 
 Then go through every screen of your plugin and compare it with the surrounding Grafana UI. Anything that doesn't match usually points to a hardcoded value. Replace hardcoded values with theme tokens, which you can access with the `useStyles2` hook:
 
