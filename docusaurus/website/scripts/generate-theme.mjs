@@ -1,11 +1,14 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, writeFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { flattenTheme } from './theme-tokens.mjs';
 
 const THEME_ID = 'visual_refresh_dark';
-const REGISTRY_PATH = 'packages/grafana-data/dist/esm/themes/registry.mjs';
+// The CJS build is used because the ESM build imports named exports from CommonJS lodash, which native Node ESM rejects.
+const REGISTRY_PATH = 'packages/grafana-data/dist/cjs/themes/registry.cjs';
+const require = createRequire(import.meta.url);
 const OUTPUT_PATH = fileURLToPath(new URL('../src/css/theme.css', import.meta.url));
 
 function fail(message) {
@@ -48,7 +51,7 @@ async function main() {
     );
   }
 
-  const { getThemeById } = await import(pathToFileURL(registryFile).href);
+  const { getThemeById } = require(registryFile);
   const theme = getThemeById(THEME_ID);
   if (theme.colors.mode !== 'dark') {
     return fail(`Expected ${THEME_ID} to be a dark theme but got mode "${theme.colors.mode}".`);
