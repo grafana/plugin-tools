@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.0.5](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.4...@grafana/create-plugin@9.0.5) (2026-11-19)
+
+
+### Bug Fixes
+
+* **create-plugin:** resolve typecheck issues for rspack ([#3118](https://github.com/grafana/plugin-tools/issues/3118)) ([8166856](https://github.com/grafana/plugin-tools/commit/81668566961ab1ad65206af190239847656f8c03))
+
 ## [9.0.4](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.3...@grafana/create-plugin@9.0.4) (2026-11-18)
 
 

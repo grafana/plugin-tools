@@ -154,7 +154,7 @@ export default [
   },
   {
     name: '023-fix-rspack-typecheck',
-    version: '0.0.0-unreleased', // x-release-please-version
+    version: '9.0.5', // x-release-please-version
     description: 'Guard Rspack asset and regex access for strict TypeScript checks.',
     scriptPath: import.meta.resolve('./scripts/023-fix-rspack-typecheck.js'),
   },
