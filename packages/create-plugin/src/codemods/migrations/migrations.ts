@@ -146,15 +146,15 @@ export default [
     description: 'Fix ESM import errors in Jest for .mjs files',
     scriptPath: import.meta.resolve('./scripts/021-jest-transform-mjs.js'),
   },
-  {
-    name: '022-config-docs',
-    version: '0.0.0-unreleased', // x-release-please-version
-    description: 'Link the generated configuration README to the official guide.',
-    scriptPath: import.meta.resolve('./scripts/022-config-docs.js'),
-  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
   // New migrations should never specify a version: copy the unreleased version line from ../AGENTS.md exactly.
   // Do not paste it into a comment in this file, as release-please rewrites every line that carries it.
+  {
+    name: '023-config-docs',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description: 'Link the generated configuration README to the official guide.',
+    scriptPath: import.meta.resolve('./scripts/023-config-docs.js'),
+  },
 ] satisfies Migration[];

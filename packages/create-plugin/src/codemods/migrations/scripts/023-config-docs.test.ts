@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { Context } from '../../context.js';
-import migrate from './022-config-docs.js';
+import migrate from './023-config-docs.js';
 
 const README_PATH = '.config/README.md';
 const oldReadme = '### Extending the ESLint config\n\nEdit `.eslintrc`.\n';
 
-describe('022-config-docs', () => {
+describe('023-config-docs', () => {
   it('replaces the generated README with a warning and a link to the configuration guide', () => {
     const context = new Context('/virtual');
     context.addFile(README_PATH, oldReadme);
