@@ -56,6 +56,12 @@ export async function extractAllSources(sourcemapFilePaths: string[]): Promise<S
   return allSources;
 }
 
+// React's own JSX runtime only shows up in the source maps when the plugin bundles it
+// instead of loading it from Grafana.
+export function bundlesJsxRuntime(sources: SourceFile[]): boolean {
+  return sources.some((source) => source.packageName === 'react' && /jsx-(dev-)?runtime/.test(source.path));
+}
+
 function classifySource(sourcePath: string): { type: SourceFileType; packageName?: string } {
   if (sourcePath.includes('node_modules')) {
     const packageName = getPackageName(sourcePath);
