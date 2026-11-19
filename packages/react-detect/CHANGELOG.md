@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.8.0...@grafana/react-detect@0.8.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* **react-detect:** only flag jsx-runtime imports when react/jsx-runtime is bundled ([#3122](https://github.com/grafana/plugin-tools/issues/3122)) ([be67107](https://github.com/grafana/plugin-tools/commit/be67107d27447ebbe1766738dd9ec333eb6efe0f))
+
 ## [0.8.0](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.7.6...@grafana/react-detect@0.8.0) (2026-11-03)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.1.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@4.1.0...@grafana/plugin-e2e@4.1.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* **plugin-e2e:** support Grafana flags that change the UI and datasource URLs ([#3111](https://github.com/grafana/plugin-tools/issues/3111)) ([293922b](https://github.com/grafana/plugin-tools/commit/293922b7c4f73de1d47b2bedaf9344645f34db5a))
+
 ## [4.1.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-e2e@4.0.1...@grafana/plugin-e2e@4.1.0) (2026-11-18)
 
 
