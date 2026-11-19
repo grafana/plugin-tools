@@ -152,6 +152,12 @@ export default [
     description: 'Fix JSX runtime mismatch in rspack dev builds.',
     scriptPath: import.meta.resolve('./scripts/022-rspack-jsx-runtime.js'),
   },
+  {
+    name: '023-fix-rspack-typecheck',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description: 'Guard Rspack asset and regex access for strict TypeScript checks.',
+    scriptPath: import.meta.resolve('./scripts/023-fix-rspack-typecheck.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
