@@ -27,7 +27,7 @@
   border-radius: 4px;
   font-size: 1rem;
   outline: none;
-  background-color: #22252b;
+  background-color: var(--background-secondary);
   width: 100%;
   box-sizing: border-box;
 }
@@ -43,7 +43,7 @@
   color: var(--ifm-color-primary);
   cursor: pointer;
   transition: background-color 0.2s;
-  background-color: #3d71d9;
+  background-color: var(--info-main);
   border: none;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .privacyPolicyLink {
-  color: rgb(110, 159, 255);
+  color: var(--text-link);
   text-decoration: underline;
 }
 
