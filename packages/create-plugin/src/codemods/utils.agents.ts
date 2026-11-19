@@ -5,19 +5,21 @@ import { addTemplateFolder, codemodsDebug } from './utils.js';
 
 export const AGENT_INSTRUCTIONS_PATH = '.config/AGENTS/instructions.md';
 
+// Claude Code reads AGENTS.md when a project has no CLAUDE.md, so only AGENTS.md is created
 const ROOT_AGENT_FILES = ['AGENTS.md', 'CLAUDE.md', 'GEMINI.md'];
+const CREATED_ROOT_AGENT_FILES = ['AGENTS.md'];
 // matches the pointer line in templates/common/{AGENTS,CLAUDE,GEMINI}.md
 export const INSTRUCTIONS_POINTER = `## Project knowledge\nThis repository contains a **Grafana plugin**. You must Read @./${AGENT_INSTRUCTIONS_PATH} before doing changes.\n`;
 const IMPORTS_INSTRUCTIONS = /@(\.\/)?\.config\/AGENTS\/instructions\.md/;
 const IMPORTS_AGENTS_MD = /(^|\s)@(\.\/)?AGENTS\.md\b/m;
 
 /**
- * Creates the missing root agent files. Appends a pointer to the instructions to any existing one that
+ * Creates a missing root AGENTS.md. Appends a pointer to the instructions to any existing one that
  * doesn't reach them, and returns those files.
  */
 export function ensureRootAgentFiles(context: Context, templateDir: string): string[] {
   const existing = ROOT_AGENT_FILES.filter((file) => context.doesFileExist(file));
-  for (const file of ROOT_AGENT_FILES) {
+  for (const file of CREATED_ROOT_AGENT_FILES) {
     if (!existing.includes(file)) {
       context.addFile(file, readFileSync(join(templateDir, file), 'utf-8'));
     }

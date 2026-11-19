@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.7.0...@grafana/plugin-docs-parser@1.0.0) (2026-11-11)
+
+
+### Bug Fixes
+
+* release plugin-docs-cli and plugin-docs-parser as 1.0 ([#3099](https://github.com/grafana/plugin-tools/issues/3099)) ([c1b233a](https://github.com/grafana/plugin-tools/commit/c1b233a2da6b11dd6de476961b7496ed9abb1303))
+
+## [0.7.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.6.1...@grafana/plugin-docs-parser@0.7.0) (2026-11-10)
+
+
+### Features
+
+* **plugin-docs-parser:** add markdown output ([#3094](https://github.com/grafana/plugin-tools/issues/3094)) ([27d18e9](https://github.com/grafana/plugin-tools/commit/27d18e912bb6ce0cbaa8e9363a0b65bc8f8af6f2))
+
+
+### Bug Fixes
+
+* **plugin-docs-cli:** read frontmatter with the parser ([#3091](https://github.com/grafana/plugin-tools/issues/3091)) ([0a638a1](https://github.com/grafana/plugin-tools/commit/0a638a1ee33ad73c8ef43e098f58df4d0b9250b1))
+
 ## [0.6.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.6.0...@grafana/plugin-docs-parser@0.6.1) (2026-11-03)
 
 

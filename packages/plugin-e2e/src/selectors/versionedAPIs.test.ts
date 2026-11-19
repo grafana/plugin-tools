@@ -1,16 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { globToRegExp } from '../utils/glob';
 import { versionedAPIs } from './versionedAPIs';
-
-function globToRegExp(glob: string): RegExp {
-  const escaped = glob
-    .replace(/[.+?^${}()|[\]\\]/g, '\\$&')
-    .replace(/\*\*/g, '__DOUBLE_STAR__')
-    .replace(/\*/g, '[^/]*')
-    .replace(/__DOUBLE_STAR__/g, '.*');
-
-  return new RegExp(`^${escaped}$`);
-}
 
 describe('versionedAPIs', () => {
   describe('OpenFeature', () => {

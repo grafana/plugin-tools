@@ -1,6 +1,7 @@
 import { Locator, Request, Response } from '@playwright/test';
 import { getByGrafanaSelectorOptions, GrafanaPageArgs, NavigateOptions, PluginTestCtx } from '../../types';
 import { resolveGrafanaSelector } from '../utils';
+import { isAppPlatformQueryUrl, isDataQueryUrl } from '../../utils/dataSourceRequests';
 
 /**
  * Base class for all Grafana pages.
@@ -42,6 +43,14 @@ export abstract class GrafanaPage {
     await this.ctx.page.route(this.ctx.selectors.apis.DataSource.queryPattern, async (route) => {
       await route.fulfill({ json, status });
     });
+    // queries go to the query apiserver instead when the querier feature flags are on
+    // routed with the matcher the waiters use, so a query is mocked whatever its query string
+    await this.ctx.page.route(
+      (url) => isAppPlatformQueryUrl(url.href, this.ctx.selectors.apis.DataSource.appPlatformQueryPattern),
+      async (route) => {
+        await route.fulfill({ json, status });
+      }
+    );
   }
 
   /**
@@ -60,6 +69,13 @@ export abstract class GrafanaPage {
     await this.ctx.page.route(`${this.ctx.selectors.apis.DataSource.resourcePattern}/${path}`, async (route) => {
       await route.fulfill({ json, status });
     });
+    // resources go to the datasource apiserver instead when the apiserver feature flags are on
+    await this.ctx.page.route(
+      `${this.ctx.selectors.apis.DataSource.appPlatformResourcePattern}/${path}`,
+      async (route) => {
+        await route.fulfill({ json, status });
+      }
+    );
   }
 
   /**
@@ -69,7 +85,7 @@ export abstract class GrafanaPage {
    */
   async waitForQueryDataRequest(cb?: (request: Request) => boolean | Promise<boolean>) {
     return this.ctx.page.waitForRequest((request) => {
-      if (request.url().includes(this.ctx.selectors.apis.DataSource.query) && request.method() === 'POST') {
+      if (isDataQueryUrl(request.url(), this.ctx.selectors.apis.DataSource) && request.method() === 'POST') {
         return cb ? cb(request) : true;
       }
       return false;
@@ -83,7 +99,7 @@ export abstract class GrafanaPage {
    */
   async waitForQueryDataResponse(cb?: (request: Response) => boolean | Promise<boolean>) {
     return this.ctx.page.waitForResponse((response) => {
-      if (response.url().includes(this.ctx.selectors.apis.DataSource.query)) {
+      if (isDataQueryUrl(response.url(), this.ctx.selectors.apis.DataSource)) {
         return cb ? cb(response) : true;
       }
       return false;
@@ -107,7 +123,7 @@ export abstract class GrafanaPage {
   ): Promise<{ response: Response; body: T | null }> {
     let body: T | null = null;
     const response = await this.ctx.page.waitForResponse(async (response) => {
-      if (!response.url().includes(this.ctx.selectors.apis.DataSource.query)) {
+      if (!isDataQueryUrl(response.url(), this.ctx.selectors.apis.DataSource)) {
         return false;
       }
       const parsedBody = (await response.json().catch(() => null)) as T | null;

@@ -12,7 +12,10 @@ import {
   printAST, // print AST back to source string
   findVariableDeclaration, // find a VariableDeclarator by name
   findObjectProperty, // find a property in an ObjectExpression
+  findNestedProperty, // find a property by key path, e.g. ['options', 'jsc', 'transform']
   isProperty, // type guard: Property | ObjectProperty
+  isStringLiteral, // value check that handles both Literal and StringLiteral nodes
+  isBooleanLiteral, // value check that handles both Literal and BooleanLiteral nodes
   createImport, // build an ImportDeclaration node
   insertImports, // insert ImportDeclarations after the last existing import
 } from '../../utils.ast.js';
@@ -82,6 +85,19 @@ if (externals && isProperty(externals)) {
   externals.value = builders.identifier('myNewValue');
   context.updateFile('webpack.config.ts', printAST(parsed.ast));
 }
+```
+
+## Pattern: modify a deeply nested option
+
+Use `findNestedProperty` instead of chaining `findObjectProperty`. It returns `undefined` when any step is missing or isn't an object literal. Use `isStringLiteral` and `isBooleanLiteral` instead of comparing `.type`, because the parser can emit either `Literal` or `StringLiteral`/`BooleanLiteral`.
+
+```ts
+const development = findNestedProperty(rule, ['options', 'jsc', 'transform', 'react', 'development']);
+if (!development || isBooleanLiteral(development.value, false)) {
+  return context;
+}
+
+development.value = builders.literal(false);
 ```
 
 ## Pattern: traverse and visit nodes

@@ -146,6 +146,12 @@ export default [
     description: 'Fix ESM import errors in Jest for .mjs files',
     scriptPath: import.meta.resolve('./scripts/021-jest-transform-mjs.js'),
   },
+  {
+    name: '022-rspack-jsx-runtime',
+    version: '9.0.4',
+    description: 'Fix JSX runtime mismatch in rspack dev builds.',
+    scriptPath: import.meta.resolve('./scripts/022-rspack-jsx-runtime.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //

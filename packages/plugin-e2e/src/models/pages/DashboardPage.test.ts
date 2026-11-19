@@ -42,3 +42,71 @@ describe('DashboardPage.toolbar', () => {
     expect(resolveToolbarSelector(grafanaVersion)).toBe(expected);
   });
 });
+
+describe('DashboardPage.enterEditMode', () => {
+  // a Grafana build without the mode picker selectors serves a tree without them, so touching one throws
+  function createPage(hasModePickerSelectors: boolean, visible: Record<string, boolean>) {
+    const clicks: string[] = [];
+    const locator = vi.fn((selector: string) => ({
+      isVisible: () => Promise.resolve(visible[selector] ?? false),
+      click: () => {
+        clicks.push(selector);
+        return Promise.resolve();
+      },
+    }));
+    const ctx = {
+      page: { locator },
+      grafanaVersion: '13.4.0',
+      selectors: {
+        components: {
+          NavToolbar: {
+            editDashboard: {
+              editButton: 'data-testid Edit dashboard button',
+              ...(hasModePickerSelectors && {
+                modePickerButton: 'data-testid Dashboard mode picker button',
+                modeEditingOption: 'data-testid Dashboard mode editing option',
+              }),
+            },
+          },
+        },
+      },
+    } as unknown as PluginTestCtx;
+    const enterEditMode = () =>
+      (new DashboardPage(ctx) as unknown as { enterEditMode(): Promise<void> }).enterEditMode();
+    return { enterEditMode, clicks };
+  }
+
+  it('clicks the edit button on a Grafana build without the mode picker selectors', async () => {
+    const { enterEditMode, clicks } = createPage(false, {
+      '[data-testid="data-testid Edit dashboard button"]': true,
+    });
+
+    await enterEditMode();
+
+    expect(clicks).toEqual(['[data-testid="data-testid Edit dashboard button"]']);
+  });
+
+  it('clicks the edit button when it is rendered on a Grafana with the mode picker selectors', async () => {
+    const { enterEditMode, clicks } = createPage(true, {
+      '[data-testid="data-testid Edit dashboard button"]': true,
+    });
+
+    await enterEditMode();
+
+    expect(clicks).toEqual(['[data-testid="data-testid Edit dashboard button"]']);
+  });
+
+  it('opens the mode picker and chooses editing when the edit button is not rendered', async () => {
+    const { enterEditMode, clicks } = createPage(true, {
+      '[data-testid="data-testid Dashboard mode picker button"]': true,
+      '[data-testid="data-testid Dashboard mode editing option"]': true,
+    });
+
+    await enterEditMode();
+
+    expect(clicks).toEqual([
+      '[data-testid="data-testid Dashboard mode picker button"]',
+      '[data-testid="data-testid Dashboard mode editing option"]',
+    ]);
+  });
+});

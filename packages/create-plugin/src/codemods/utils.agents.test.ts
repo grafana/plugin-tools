@@ -13,12 +13,12 @@ describe('utils.agents', () => {
   describe('ensureRootAgentFiles', () => {
     const templateDir = join(__dirname, '..', '..', 'templates', 'common');
 
-    it('creates the missing root agent files', () => {
+    it('creates a missing AGENTS.md, but no CLAUDE.md or GEMINI.md', () => {
       const context = new Context('/virtual');
       expect(ensureRootAgentFiles(context, templateDir)).toEqual([]);
-      for (const file of ['AGENTS.md', 'CLAUDE.md', 'GEMINI.md']) {
-        expect(context.getFile(file), file).toContain(AGENT_INSTRUCTIONS_PATH);
-      }
+      expect(context.getFile('AGENTS.md')).toContain(AGENT_INSTRUCTIONS_PATH);
+      expect(context.doesFileExist('CLAUDE.md')).toBe(false);
+      expect(context.doesFileExist('GEMINI.md')).toBe(false);
     });
 
     it('appends a pointer to an existing file that never reaches instructions.md', () => {

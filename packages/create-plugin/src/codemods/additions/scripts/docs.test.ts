@@ -225,7 +225,7 @@ describe('docs scaffolding', () => {
       const context = makeContext();
       call(context);
       const pkg = JSON.parse(context.getFile('package.json') ?? '{}');
-      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^0.14.0');
+      expect(pkg.devDependencies?.['@grafana/plugin-docs-cli']).toBe('^1.0.0');
     });
 
     it('adds docs:serve and docs:validate scripts, with no separate release script', () => {
@@ -510,7 +510,7 @@ describe('docs codemod', () => {
 
       expect(context.doesFileExist('docs/troubleshooting.md')).toBe(false);
       expect(context.doesFileExist('docs/options.md')).toBe(false);
-      for (const meta of ['README.md', 'AGENTS.md', 'CLAUDE.md']) {
+      for (const meta of ['README.md', 'AGENTS.md']) {
         expect(context.doesFileExist(`docs/${meta}`), meta).toBe(true);
       }
     });
@@ -997,7 +997,6 @@ describe('docs codemod', () => {
         ...PAGES_BY_TYPE.datasource.map((page) => `${page}.md`).filter((file) => !conditionalPages.includes(file)),
         'README.md',
         'AGENTS.md',
-        'CLAUDE.md',
       ];
       for (const file of files) {
         expect(context.doesFileExist(`docs/${file}`), file).toBe(true);
@@ -1167,7 +1166,7 @@ describe('docs codemod', () => {
 
     it('scaffolds the pages every app needs, and no gated pages when the app declares nothing', () => {
       const context = scaffold(app);
-      expect(docsFiles(context)).toEqual(['AGENTS.md', 'CLAUDE.md', 'README.md', 'index.md', 'troubleshooting.md']);
+      expect(docsFiles(context)).toEqual(['AGENTS.md', 'README.md', 'index.md', 'troubleshooting.md']);
     });
 
     it.each([
@@ -1205,7 +1204,6 @@ describe('docs codemod', () => {
       });
       expect(docsFiles(context)).toEqual([
         'AGENTS.md',
-        'CLAUDE.md',
         'README.md',
         'configure.md',
         'home.md',
@@ -1448,7 +1446,7 @@ describe('docs codemod', () => {
 
     it('ignores a page whose name is not a string', () => {
       const context = scaffold({ ...app, includes: [{ type: 'page', name: 123, path: '/a/%PLUGIN_ID%/x' }] });
-      expect(docsFiles(context)).toEqual(['AGENTS.md', 'CLAUDE.md', 'README.md', 'index.md', 'troubleshooting.md']);
+      expect(docsFiles(context)).toEqual(['AGENTS.md', 'README.md', 'index.md', 'troubleshooting.md']);
     });
 
     it.each([
@@ -1519,7 +1517,7 @@ describe('docs codemod', () => {
         const context = scaffold({ ...FULL_PLUGIN_JSON.app, includes });
         const positionOf = (file: string) =>
           Number(/\nsidebar_position: (\d+)\n/.exec(context.getFile(`docs/${file}`) ?? '')?.[1]);
-        const pages = docsFiles(context).filter((file) => !['AGENTS.md', 'CLAUDE.md', 'README.md'].includes(file));
+        const pages = docsFiles(context).filter((file) => !['AGENTS.md', 'README.md'].includes(file));
 
         const byFolder = Object.groupBy(pages, (file) => file.split('/').slice(0, -1).join('/'));
         for (const [folder, files] of Object.entries(byFolder)) {
@@ -1639,10 +1637,10 @@ describe('docs codemod', () => {
       expect(content).toContain('Installation tab');
     });
 
-    it('scaffolds CLAUDE.md in the docs folder as an import of AGENTS.md', () => {
+    it('does not scaffold CLAUDE.md in the docs folder', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
-      expect(context.getFile('docs/CLAUDE.md')).toEqual('@AGENTS.md\n');
+      expect(context.doesFileExist('docs/CLAUDE.md')).toBe(false);
     });
 
     it('no longer scaffolds an authoring guide under .config', () => {
@@ -1703,13 +1701,12 @@ describe('docs codemod', () => {
       expect(content).toContain('[`docs/AGENTS.md`](../../docs/AGENTS.md)');
     });
 
-    it('creates root AGENTS.md, CLAUDE.md and GEMINI.md when absent, pointing at .config/AGENTS/instructions.md', () => {
+    it('creates only root AGENTS.md when absent, pointing at .config/AGENTS/instructions.md', () => {
       const context = makeContext();
       docs(context, { docsPath: 'docs' });
-      for (const filename of ['AGENTS.md', 'CLAUDE.md', 'GEMINI.md']) {
-        const content = context.getFile(filename) ?? '';
-        expect(content).toContain('.config/AGENTS/instructions.md');
-      }
+      expect(context.getFile('AGENTS.md')).toContain('.config/AGENTS/instructions.md');
+      expect(context.doesFileExist('CLAUDE.md')).toBe(false);
+      expect(context.doesFileExist('GEMINI.md')).toBe(false);
     });
 
     it('keeps existing content in root AGENTS.md, CLAUDE.md and GEMINI.md, appending a pointer to instructions.md', () => {

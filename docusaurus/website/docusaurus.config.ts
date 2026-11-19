@@ -16,9 +16,6 @@ dotenv.config({ path: `${__dirname}/${envFile}`, encoding: 'utf8' });
 const PORTAL_URL = `https://${process.env.DEV_PORTAL_HOST}`;
 const PORTAL_HOME_HREF = `${PORTAL_URL}/developers`;
 
-// unlisted pages are left out of the sidebar and sitemap, but search and llms.txt ignore `unlisted`
-const UNLISTED_ROUTES = ['**/how-to-guides/plugin-docs'];
-
 // Replace background and color to better match Grafana theme.
 const grafanaPrismTheme: PrismTheme = {
   ...themes.oneDark,
@@ -79,7 +76,6 @@ const config: Config = {
       'docusaurus-lunr-search',
       {
         disableVersioning: true,
-        excludeRoutes: UNLISTED_ROUTES,
       },
     ],
     [
@@ -101,7 +97,6 @@ const config: Config = {
           includeBlog: false,
           includePages: false,
           includeDocs: true,
-          excludeRoutes: UNLISTED_ROUTES,
           beforeDefaultRehypePlugins: [rehypeRemoveDocActions],
         },
         llmsTxt: {
@@ -109,7 +104,6 @@ const config: Config = {
           includeBlog: false,
           includePages: false,
           includeDocs: true,
-          excludeRoutes: UNLISTED_ROUTES,
         },
       },
     ],

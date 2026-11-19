@@ -103,6 +103,36 @@ export function findObjectProperty(obj: recast.types.namedTypes.ObjectExpression
   return property;
 }
 
+export function findNestedProperty(
+  parent: recast.types.namedTypes.ObjectExpression,
+  propertyPath: [string, ...string[]]
+): recast.types.namedTypes.Property | recast.types.namedTypes.ObjectProperty | undefined {
+  const parentPath = propertyPath.slice(0, -1);
+  const propertyName = propertyPath[propertyPath.length - 1];
+  let current = parent;
+
+  for (const parentName of parentPath) {
+    const property = findObjectProperty(current, parentName);
+    if (!property || !isProperty(property) || property.value.type !== 'ObjectExpression') {
+      return undefined;
+    }
+    current = property.value;
+  }
+
+  const target = findObjectProperty(current, propertyName);
+  return target && isProperty(target) ? target : undefined;
+}
+
+export function isStringLiteral(node: recast.types.ASTNode, expectedValue: string): boolean {
+  const { StringLiteral, Literal } = recast.types.namedTypes;
+  return (StringLiteral.check(node) || Literal.check(node)) && node.value === expectedValue;
+}
+
+export function isBooleanLiteral(node: recast.types.ASTNode, expectedValue: boolean): boolean {
+  const { BooleanLiteral, Literal } = recast.types.namedTypes;
+  return (BooleanLiteral.check(node) || Literal.check(node)) && node.value === expectedValue;
+}
+
 export function createImport(
   specifiers: {
     default?: string;

@@ -24,6 +24,7 @@ async function main() {
     console.error('');
     console.error('Commands:');
     console.error('  serve      Start the local docs preview server');
+    console.error('             --port <port> sets the port (default: 3001), --reload reloads the browser on save');
     console.error('  build      Build docs for publishing (generates manifest, copies to dist/)');
     console.error('  validate   Validate documentation (--json for machine-readable output)');
     console.error('             --dist [dir] validates the built docs of the plugin in dir (default: dist)');

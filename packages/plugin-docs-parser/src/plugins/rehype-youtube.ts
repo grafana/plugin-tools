@@ -35,7 +35,7 @@ export function getYouTubeVideoId(href: string): string | undefined {
   return id && VIDEO_ID_RE.test(id) ? id : undefined;
 }
 
-function getText(node: ElementContent): string {
+export function getText(node: ElementContent): string {
   if (node.type === 'text') {
     return node.value;
   }

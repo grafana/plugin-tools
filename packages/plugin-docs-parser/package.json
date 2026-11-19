@@ -1,6 +1,6 @@
 {
   "name": "@grafana/plugin-docs-parser",
-  "version": "0.6.1",
+  "version": "1.0.0",
   "description": "A lightweight library for parsing Grafana plugin documentation from markdown to HAST.",
   "type": "module",
   "main": "./dist/index.js",
@@ -47,7 +47,10 @@
   "dependencies": {
     "@types/hast": "3.0.5",
     "hast-util-raw": "9.1.0",
+    "hast-util-to-mdast": "10.1.2",
     "js-yaml": "5.4.3",
+    "mdast-util-gfm": "3.1.0",
+    "mdast-util-to-markdown": "2.2.0",
     "rehype-highlight": "7.0.2",
     "rehype-sanitize": "6.0.0",
     "remark-gfm": "4.0.1",
@@ -59,6 +62,8 @@
   },
   "devDependencies": {
     "@types/js-yaml": "4.0.9",
+    "@types/mdast": "4.0.4",
+    "@types/unist": "3.0.3",
     "hast-util-to-html": "9.0.6"
   }
 }

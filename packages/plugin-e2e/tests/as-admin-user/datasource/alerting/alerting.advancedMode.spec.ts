@@ -66,11 +66,13 @@ test.describe('Test new alert rules', () => {
     await alertRuleEditPage.enableAdvancedQueryMode();
     const queryA = await alertRuleEditPage.getQueryRow();
     await queryA.datasource.set(ds.name);
-    const rowCount = await alertRuleEditPage.getByGrafanaSelector(rows).count();
+    const queryRows = alertRuleEditPage.getByGrafanaSelector(rows);
+    await expect(queryRows).not.toHaveCount(0);
+    const rowCount = await queryRows.count();
     await alertRuleEditPage.clickAddQueryRow();
-    await expect(alertRuleEditPage.getByGrafanaSelector(rows)).toHaveCount(rowCount + 1);
+    await expect(queryRows).toHaveCount(rowCount + 1);
     await alertRuleEditPage.clickAddQueryRow();
-    await expect(alertRuleEditPage.getByGrafanaSelector(rows)).toHaveCount(rowCount + 2);
+    await expect(queryRows).toHaveCount(rowCount + 2);
   });
 });
 

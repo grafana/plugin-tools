@@ -1,4 +1,5 @@
 import { PlaywrightTestArgs, TestFixture } from '@playwright/test';
+import { valid } from '../utils/version';
 
 interface BootData {
   version: string | undefined;
@@ -8,7 +9,31 @@ interface BootData {
   selectorsUrl: string | undefined;
 }
 
+interface BuildInfo {
+  version?: string;
+  commit?: string;
+  edition?: string;
+  buildstamp?: number;
+}
+
 type BootDataFixture = TestFixture<BootData, PlaywrightTestArgs>;
+
+let hasLoggedBuildInfo = false;
+
+export function isPrereleaseBuild(version: string | undefined): boolean {
+  return Boolean(valid(version)?.includes('-'));
+}
+
+export function formatBuildInfo({ version, commit, edition, buildstamp }: BuildInfo): string {
+  const builtAt = buildstamp ? new Date(buildstamp * 1000) : undefined;
+  const details = [
+    edition,
+    commit && `commit ${commit}`,
+    builtAt && !isNaN(builtAt.getTime()) && `built ${builtAt.toISOString()}`,
+  ].filter(Boolean);
+  const suffix = details.length > 0 ? ` (${details.join(', ')})` : '';
+  return `@grafana/plugin-e2e: testing against Grafana ${version || 'unknown version'}${suffix}`;
+}
 
 /**
  * Internal fixture that fetches boot data from Grafana.
@@ -29,12 +54,20 @@ export const bootData: BootDataFixture = async ({ context }, use) => {
       const selectorsUrl = jsFilePath
         ? new URL(jsFilePath.replace(/[^/]+$/, 'e2e-selectors.json'), document.baseURI).href
         : undefined;
+      const { version, commitShort, commit, edition, buildstamp } = window.grafanaBootData.settings.buildInfo;
       return {
-        version: window.grafanaBootData.settings.buildInfo.version,
+        version,
         namespace: window.grafanaBootData.settings.namespace,
         selectorsUrl,
+        buildInfo: { version, commit: commitShort || commit, edition, buildstamp },
       };
     });
+
+    // bootData is test scoped, so this logs once per worker process rather than once per test
+    if (!hasLoggedBuildInfo && isPrereleaseBuild(bootDataSettings.version)) {
+      hasLoggedBuildInfo = true;
+      console.log(formatBuildInfo(bootDataSettings.buildInfo));
+    }
 
     await use({
       version: bootDataSettings.version,

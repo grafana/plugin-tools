@@ -161,6 +161,10 @@ declare global {
         featureToggles: Record<string, boolean>;
         buildInfo: {
           version: string;
+          commit?: string;
+          commitShort?: string;
+          edition?: string;
+          buildstamp?: number;
         };
         namespace: string;
       };
