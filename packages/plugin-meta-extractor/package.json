@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@grafana/data": "~13.1.0",
-    "@types/node": "^24.10.11",
+    "@types/node": "^26.0.0",
     "react": "^18.2.0"
   }
 }
