@@ -31,7 +31,7 @@ To maintain reliability and compatibility, plugin developers must regularly perf
 
 The `e2e-versions` GitHub Action generates a matrix of Grafana image names and versions for use in end-to-end testing a Grafana plugin within a GitHub workflow. The Action supports two modes:
 
-- **`plugin-grafana-dependency:`** This mode resolves the most recent `grafana-dev` image and returns all the latest patch releases of Grafana since the version specified as `grafanaDependency` in the `plugin.json` file. To prevent the initiation of too many jobs, the output is capped at 6 versions. This is the default mode.
+- **`plugin-grafana-dependency:`** This mode resolves the `nightly` Grafana OSS image and all the latest patch releases of Grafana since the version specified as `grafanaDependency` in the `plugin.json` file. To prevent the initiation of too many jobs, the output is capped at 6 versions. This is the default mode.
 - **`version-support-policy:`** In this mode, the action resolves versions based on Grafana's plugin compatibility support policy. It retrieves the latest patch release for each minor version within the current major Grafana version. Additionally, it includes the most recent release for the latest minor version of the previous major Grafana version.
 
 For detailed information on configuring the `inputs`, visit the `e2e-versions` [GitHub page](https://github.com/grafana/plugin-actions/tree/main/e2e-version).
