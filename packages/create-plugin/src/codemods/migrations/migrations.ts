@@ -163,4 +163,10 @@ export default [
   //
   // New migrations should never specify a version: copy the unreleased version line from ../AGENTS.md exactly.
   // Do not paste it into a comment in this file, as release-please rewrites every line that carries it.
+  {
+    name: '023-config-docs',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description: 'Link the generated configuration README to the official guide.',
+    scriptPath: import.meta.resolve('./scripts/023-config-docs.js'),
+  },
 ] satisfies Migration[];
