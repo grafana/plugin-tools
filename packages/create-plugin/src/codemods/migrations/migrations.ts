@@ -158,6 +158,13 @@ export default [
     description: 'Guard Rspack asset and regex access for strict TypeScript checks.',
     scriptPath: import.meta.resolve('./scripts/023-fix-rspack-typecheck.js'),
   },
+  {
+    name: '024-oss-grafana-image',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description:
+      'The grafana-enterprise nightly image on Docker Hub is no longer updated, so e2e tests against nightly ran a stale build. Switch the local Docker environment and the e2e-version action to the Grafana OSS image.',
+    scriptPath: import.meta.resolve('./scripts/024-oss-grafana-image.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
