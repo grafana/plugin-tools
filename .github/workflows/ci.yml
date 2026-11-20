@@ -554,7 +554,7 @@ jobs:
           plugin-name: ${{ matrix.workingDir }}
           report-dir: ./${{ matrix.workingDir }}/playwright-report
           grafana-version: latest
-          grafana-image: grafana-enterprise
+          grafana-image: grafana
           test-outcome: ${{ steps.run-e2e-tests.outcome }}
 
       - name: Get plugin min version
@@ -598,7 +598,7 @@ jobs:
           plugin-name: ${{ matrix.workingDir }}
           report-dir: ./${{ matrix.workingDir }}/playwright-report
           grafana-version: ${{ steps.min-version.outputs.MIN_VERSION }}
-          grafana-image: grafana-enterprise
+          grafana-image: grafana
           test-outcome: ${{ steps.run-e2e-tests-min-version.outcome }}
 
       - name: Check plugin.json

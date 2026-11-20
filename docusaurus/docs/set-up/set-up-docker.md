@@ -52,7 +52,7 @@ To test a plugin across different versions of Grafana, set an environment variab
 
 ## Configure the Grafana image
 
-The default Docker image in the plugin tool is `grafana-enterprise`. To override this image, alter the `docker-compose.yaml` by changing the `grafana_image` build argument:
+The default Docker image in the plugin tool is `grafana`. To override this image, alter the `docker-compose.yaml` by changing the `grafana_image` build argument:
 
 ```yaml title="docker-compose.yaml"
 version: '3.7'
@@ -65,10 +65,10 @@ services:
     build:
       args:
         grafana_version: ${GRAFANA_VERSION:-9.1.2}
-        grafana_image: ${GRAFANA_IMAGE:-grafana}
+        grafana_image: ${GRAFANA_IMAGE:-grafana-enterprise}
 ```
 
-This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker compose` commands.
+This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana-enterprise`. This gives you the option to set the value when running `docker compose` commands.
 
 ## Debugging a plugin's backend
 
@@ -100,4 +100,3 @@ You can attach a debugger client to this port to debug your backend code. For ex
   ]
 }
 ```
-
