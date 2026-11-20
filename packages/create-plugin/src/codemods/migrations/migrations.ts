@@ -158,6 +158,13 @@ export default [
     description: 'Guard Rspack asset and regex access for strict TypeScript checks.',
     scriptPath: import.meta.resolve('./scripts/023-fix-rspack-typecheck.js'),
   },
+  {
+    name: '024-grafana-repository-input',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description:
+      'Allow the Grafana Docker image to come from registries other than Docker Hub. The Dockerfile hard-coded the `grafana/` prefix, so add a `GRAFANA_REPOSITORY` build arg that overrides it.',
+    scriptPath: import.meta.resolve('./scripts/024-grafana-repository-input.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
