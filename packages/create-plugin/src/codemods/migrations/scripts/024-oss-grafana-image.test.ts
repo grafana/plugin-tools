@@ -106,6 +106,35 @@ describe('024-oss-grafana-image', () => {
     expect(context.getFile(COMPOSE_PATH)).toContain('grafana_image: ${GRAFANA_IMAGE:-grafana} # keep me');
   });
 
+  it('should keep the formatting of the rest of the compose file', () => {
+    const compose = `services:
+  grafana:
+    build:
+      args:
+        grafana_image: \${GRAFANA_IMAGE:-grafana-enterprise}
+    ports:
+    - 3000:3000/tcp
+    environment:
+      GF_INSTALL_PLUGINS: ${'a'.repeat(100)} ${'b'.repeat(30)}
+      FOO:   bar
+`;
+    const context = migrate(createContext({ [COMPOSE_PATH]: compose }));
+
+    expect(context.getFile(COMPOSE_PATH)).toBe(
+      compose.replace('${GRAFANA_IMAGE:-grafana-enterprise}', '${GRAFANA_IMAGE:-grafana}')
+    );
+  });
+
+  it('should warn when a customised base compose file keeps the grafana-enterprise image', () => {
+    const compose = oldFiles[COMPOSE_PATH].replace('${GRAFANA_IMAGE:-grafana-enterprise}', 'grafana-enterprise');
+    const context = migrate(createContext({ [COMPOSE_PATH]: compose }));
+
+    expect(context.getFile(COMPOSE_PATH)).toBe(compose);
+    expect(output.warning).toHaveBeenCalledWith(
+      expect.objectContaining({ title: '.config/docker-compose-base.yaml uses the grafana-enterprise image' })
+    );
+  });
+
   it('should leave custom images alone and warn', () => {
     const files = {
       [DOCKERFILE_PATH]: oldFiles[DOCKERFILE_PATH].replace(

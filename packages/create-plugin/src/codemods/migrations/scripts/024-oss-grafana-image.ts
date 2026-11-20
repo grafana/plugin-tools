@@ -39,9 +39,14 @@ const NEW_README_SECTION = OLD_README_SECTION.replace('By default, `grafana-ente
   .replace('grafana_image: ${GRAFANA_IMAGE:-grafana}', 'grafana_image: ${GRAFANA_IMAGE:-grafana-enterprise}')
   .replace('with a default value of `grafana`.', 'with a default value of `grafana-enterprise`.');
 
+interface CustomImage {
+  path: string;
+  image: string;
+}
+
 export default function migrate(context: Context): Context {
   const customised = [migrateDockerfile(context), migrateBaseCompose(context)].filter(
-    (path): path is string => path !== undefined
+    (custom): custom is CustomImage => custom !== undefined
   );
   migrateReadme(context);
   const unpinnable = migrateWorkflows(context);
@@ -50,7 +55,7 @@ export default function migrate(context: Context): Context {
     output.warning({
       title: 'The default Grafana image was not changed in some files',
       body: [
-        `${customised.join(' and ')} set a custom Grafana image, so they were left as they are.`,
+        `${joinPaths(customised.map(({ path }) => path))} ${customised.length === 1 ? 'sets' : 'set'} a custom Grafana image, so ${customised.length === 1 ? 'it was' : 'they were'} left as is.`,
         'New plugins default to the Grafana OSS image (`grafana`). Update these files by hand if you want the same.',
       ],
     });
@@ -60,15 +65,19 @@ export default function migrate(context: Context): Context {
     output.warning({
       title: `${E2E_VERSION_ACTION} could not be updated`,
       body: [
-        `${unpinnable.join(' and ')} pin ${E2E_VERSION_ACTION} to a branch or commit SHA.`,
+        `${joinPaths(unpinnable)} ${unpinnable.length === 1 ? 'pins' : 'pin'} ${E2E_VERSION_ACTION} to a branch or commit SHA.`,
         `Update it to ${E2E_VERSION_MINIMUM} or later by hand so e2e tests run against the Grafana OSS image.`,
       ],
     });
   }
 
-  if (rootComposeUsesEnterprise(context)) {
+  const enterprise = [
+    ...customised.filter(({ image }) => image.includes('grafana-enterprise')).map(({ path }) => path),
+    ...(rootComposeUsesEnterprise(context) ? [ROOT_COMPOSE_PATH] : []),
+  ];
+  if (enterprise.length > 0) {
     output.warning({
-      title: `${ROOT_COMPOSE_PATH} uses the grafana-enterprise image`,
+      title: `${joinPaths(enterprise)} ${enterprise.length === 1 ? 'uses' : 'use'} the grafana-enterprise image`,
       body: [
         `Local development keeps using Grafana Enterprise, but ${E2E_VERSION_ACTION} v4 resolves the Grafana OSS image by default.`,
         `If your e2e tests need Enterprise features, add \`grafana-image: grafana-enterprise\` to the ${E2E_VERSION_ACTION} step in your workflow.`,
@@ -79,8 +88,11 @@ export default function migrate(context: Context): Context {
   return context;
 }
 
-// returns the path when the file sets a custom image
-function migrateDockerfile(context: Context): string | undefined {
+function joinPaths(paths: string[]): string {
+  return paths.length <= 1 ? paths.join('') : `${paths.slice(0, -1).join(', ')} and ${paths.at(-1)}`;
+}
+
+function migrateDockerfile(context: Context): CustomImage | undefined {
   if (!context.doesFileExist(DOCKERFILE_PATH)) {
     migrationsDebug(`${DOCKERFILE_PATH} not found, skipping`);
     return undefined;
@@ -97,19 +109,19 @@ function migrateDockerfile(context: Context): string | undefined {
   }
   if (image !== 'grafana-enterprise') {
     migrationsDebug(`${DOCKERFILE_PATH} defaults to a custom image '${image}', skipping`);
-    return DOCKERFILE_PATH;
+    return { path: DOCKERFILE_PATH, image };
   }
   context.updateFile(DOCKERFILE_PATH, content.replace(DOCKERFILE_IMAGE_ARG, 'ARG grafana_image=grafana'));
   return undefined;
 }
 
-// returns the path when the file sets a custom image
-function migrateBaseCompose(context: Context): string | undefined {
+function migrateBaseCompose(context: Context): CustomImage | undefined {
   if (!context.doesFileExist(BASE_COMPOSE_PATH)) {
     migrationsDebug(`${BASE_COMPOSE_PATH} not found, skipping`);
     return undefined;
   }
-  const document = parseDocument(context.getFile(BASE_COMPOSE_PATH) ?? '');
+  const content = context.getFile(BASE_COMPOSE_PATH) ?? '';
+  const document = parseDocument(content);
   if (document.errors.length > 0) {
     migrationsDebug(`Failed to parse ${BASE_COMPOSE_PATH}: ${document.errors[0].message}, skipping`);
     return undefined;
@@ -125,11 +137,16 @@ function migrateBaseCompose(context: Context): string | undefined {
   }
   if (image.value !== OLD_COMPOSE_IMAGE) {
     migrationsDebug(`${BASE_COMPOSE_PATH} sets a custom grafana_image '${String(image.value)}', skipping`);
-    return BASE_COMPOSE_PATH;
+    return { path: BASE_COMPOSE_PATH, image: String(image.value) };
   }
-  // set the value on the node so comments on the line are kept
-  image.value = NEW_COMPOSE_IMAGE;
-  context.updateFile(BASE_COMPOSE_PATH, document.toString({ lineWidth: 120 }));
+  if (!image.range) {
+    migrationsDebug(`${BASE_COMPOSE_PATH} grafana_image has no source range, skipping`);
+    return undefined;
+  }
+  // replace only the value's source text so the rest of the file keeps its formatting
+  const [start, end] = image.range;
+  const value = content.slice(start, end).replace(OLD_COMPOSE_IMAGE, NEW_COMPOSE_IMAGE);
+  context.updateFile(BASE_COMPOSE_PATH, `${content.slice(0, start)}${value}${content.slice(end)}`);
   return undefined;
 }
 
