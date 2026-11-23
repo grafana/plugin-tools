@@ -228,4 +228,12 @@ services:
 
 In this example, we assign the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana-enterprise`. This will allow you to set the value while running the docker compose commands, which might be convenient in some scenarios.
 
+To use a different registry or repository, set `GRAFANA_REPOSITORY` to the full repository path without a tag:
+
+```shell
+GRAFANA_REPOSITORY=registry.example.com/team/grafana GRAFANA_VERSION=13.2.4 docker compose up --build
+```
+
+`GRAFANA_REPOSITORY` replaces the entire `grafana/${GRAFANA_IMAGE}` path. `GRAFANA_VERSION` still sets the tag. If `GRAFANA_REPOSITORY` is unset or empty, the image remains `grafana/${GRAFANA_IMAGE}`.
+
 ---
