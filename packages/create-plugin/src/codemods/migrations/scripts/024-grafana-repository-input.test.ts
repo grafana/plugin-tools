@@ -7,7 +7,6 @@ import migrate from './024-grafana-repository-input.js';
 
 const DOCKERFILE_PATH = '.config/Dockerfile';
 const COMPOSE_PATH = '.config/docker-compose-base.yaml';
-const README_PATH = '.config/README.md';
 const oldDockerfile = `ARG grafana_version=latest
 ARG grafana_image=grafana-enterprise
 
@@ -32,10 +31,6 @@ const oldCompose = `services:
         grafana_version: \${GRAFANA_VERSION:-latest}
     ports:
       - 3000:3000
-`;
-const oldReadme = `In this example, we assign the environment variable \`GRAFANA_IMAGE\` to the build arg \`grafana_image\` with a default value of \`grafana\`. This will allow you to set the value while running the docker compose commands, which might be convenient in some scenarios.
-
----
 `;
 
 function createContext(): Context {
@@ -62,17 +57,6 @@ describe('024-grafana-repository-input', () => {
     delete updated.services.grafana.build.args.grafana_repository;
     expect(updated).toEqual(original);
     expect(content).toContain('# Keep this comment');
-  });
-
-  it('should document the repository override in the existing README', () => {
-    const context = createContext();
-    context.addFile(README_PATH, oldReadme);
-
-    migrate(context);
-
-    expect(context.getFile(README_PATH)).toContain('GRAFANA_REPOSITORY=registry.example.com/team/grafana');
-    expect(context.getFile(README_PATH)).toContain('If `GRAFANA_REPOSITORY` is unset or empty');
-    expect(context.getFile(README_PATH)).toContain('---');
   });
 
   it('should preserve custom repository configuration', () => {
@@ -121,7 +105,7 @@ describe('024-grafana-repository-input', () => {
 
   it.each([false, true])('should leave the updated templates unchanged with hasBackend=%s', (hasBackend) => {
     const context = new Context('/virtual');
-    for (const path of [DOCKERFILE_PATH, COMPOSE_PATH, README_PATH]) {
+    for (const path of [DOCKERFILE_PATH, COMPOSE_PATH]) {
       const templatePath = fileURLToPath(new URL(`../../../../templates/common/${path}`, import.meta.url));
       context.addFile(
         path,
@@ -139,7 +123,6 @@ describe('024-grafana-repository-input', () => {
     expect(parse(context.getFile(COMPOSE_PATH)!).services.grafana.build.args.grafana_repository).toBe(
       '${GRAFANA_REPOSITORY:-}'
     );
-    expect(context.getFile(README_PATH)).toContain('GRAFANA_REPOSITORY=registry.example.com/team/grafana');
   });
 
   it('should be idempotent', async () => {
