@@ -6,4 +6,9 @@
  */
 
 This `.config/` directory holds the default configuration files for the tooling used to develop, test and build grafana plugins.
+
+## How to extend tooling configuration
 If you need to extend these configurations do not edit them directly, instead refer to the [Extend default configurations guide](https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations).
+
+## How to configure docker
+If you would like to use a different version or image of Grafana please refer to the [Docker development environment guide](https://grafana.com/developers/plugin-tools/set-up/set-up-docker)

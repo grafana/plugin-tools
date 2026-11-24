@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Context } from '../../context.js';
-import migrate from './023-config-docs.js';
+import migrate from './025-config-docs.js';
 
 const README_PATH = '.config/README.md';
 const oldReadme = '### Extending the ESLint config\n\nEdit `.eslintrc`.\n';
