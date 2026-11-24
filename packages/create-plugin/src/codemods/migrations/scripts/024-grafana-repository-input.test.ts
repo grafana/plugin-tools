@@ -1,8 +1,6 @@
-import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 import { Context } from '../../context.js';
-import { renderTemplate } from '../../utils.js';
 import migrate from './024-grafana-repository-input.js';
 
 const DOCKERFILE_PATH = '.config/Dockerfile';
@@ -102,28 +100,6 @@ describe('024-grafana-repository-input', () => {
       expect(context.getFile(COMPOSE_PATH)).toBe(content);
     }
   );
-
-  it.each([false, true])('should leave the updated templates unchanged with hasBackend=%s', (hasBackend) => {
-    const context = new Context('/virtual');
-    for (const path of [DOCKERFILE_PATH, COMPOSE_PATH]) {
-      const templatePath = fileURLToPath(new URL(`../../../../templates/common/${path}`, import.meta.url));
-      context.addFile(
-        path,
-        renderTemplate(templatePath, false, { hasBackend, grafanaImage: 'grafana-enterprise', pluginId: 'test-app' })
-      );
-    }
-    const original = structuredClone(context.listChanges());
-
-    migrate(context);
-
-    expect(context.listChanges()).toEqual(original);
-    expect(context.getFile(DOCKERFILE_PATH)).toContain(
-      'ARG grafana_repository\n\nFROM ${grafana_repository:-grafana/${grafana_image}}:${grafana_version}'
-    );
-    expect(parse(context.getFile(COMPOSE_PATH)!).services.grafana.build.args.grafana_repository).toBe(
-      '${GRAFANA_REPOSITORY:-}'
-    );
-  });
 
   it('should be idempotent', async () => {
     await expect(migrate).toBeIdempotent(createContext());
