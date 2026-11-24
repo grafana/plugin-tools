@@ -165,6 +165,12 @@ export default [
       'Allow the Grafana Docker image to come from registries other than Docker Hub. The Dockerfile hard-coded the `grafana/` prefix, so add a `GRAFANA_REPOSITORY` build arg that overrides it.',
     scriptPath: import.meta.resolve('./scripts/024-grafana-repository-input.js'),
   },
+  {
+    name: '025-config-docs',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description: 'Replace the generated configuration README with links to official documentation.',
+    scriptPath: import.meta.resolve('./scripts/025-config-docs.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
