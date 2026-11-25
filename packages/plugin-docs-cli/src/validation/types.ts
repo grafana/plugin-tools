@@ -36,6 +36,7 @@ export const Rule = {
   // content-completeness rules
   UnfilledSectionBrief: 'unfilled-section-brief',
   EmptySection: 'empty-section',
+  MissingScreenshot: 'missing-screenshot',
   // asset rules
   NoSvg: 'no-svg-files',
   ReferencedImagesExist: 'referenced-images-exist',

@@ -1783,6 +1783,7 @@ describe('docs codemod', () => {
         ' 1. Read docs/README.md',
         ' 2. Write the pages, yourself or with an AI agent',
         ' 3. Preview the pages',
+        ' 4. Add screenshots of the plugin',
       ]);
     });
 
@@ -1795,6 +1796,12 @@ describe('docs codemod', () => {
         '    npx -y @grafana/create-plugin@latest add docs-content',
         '    Review its work either way.',
       ]);
+    });
+
+    it('points at docs-screenshots for the screenshots the pages mark', () => {
+      const body = nextSteps(makeContext());
+      const step = body.indexOf(' 4. Add screenshots of the plugin');
+      expect(body[step + 2]).toBe('    npx -y @grafana/create-plugin@latest add docs-screenshots');
     });
 
     it('indents each detail line under its step', () => {

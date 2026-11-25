@@ -94,6 +94,20 @@ heading. `docs:validate` lists every section that still has only its brief.
 
 Text between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers is maintained by Grafana. Never edit inside it - refer to `snippets.md` in the guides.
 
+## Screenshots
+
+Screenshots of the plugin go in `img/`, as `screenshots.md` in the guides describes. Where a page needs a
+screenshot that nobody has taken yet, leave a screenshot marker on its own line where the image belongs:
+
+```markdown
+<!-- screenshot: one sentence saying what the screenshot shows -->
+```
+
+When the plugin has a `docs-screenshots/` folder, every screenshot comes from a Playwright spec in it. After
+any change to the plugin's UI, run `{{packageManagerName}} run docs:screenshots` with Grafana running. It takes
+every screenshot again. Then look at each image that changed, fix a spec that fails or no longer shows what
+its page says and add a spec or a marker for a new feature that needs a picture.
+
 ## Validate
 
 ```bash
