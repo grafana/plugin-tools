@@ -96,15 +96,15 @@ Text between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers is maint
 
 ## Screenshots
 
-Screenshots of the plugin go in `img/`, as `screenshots.md` in the guides describes. Where a page needs a
-screenshot that nobody has taken yet, leave a screenshot marker on its own line where the image belongs:
+Screenshots go in `img/`, as `screenshots.md` in the guides describes. Where a page needs one that nobody has
+taken yet, leave a marker on its own line:
 
 ```markdown
 <!-- screenshot: one sentence saying what the screenshot shows -->
 ```
 
-After any change to the plugin's UI, check each screenshot that shows it and take it again when it no longer
-matches. When you document a new feature that needs a picture, take one or leave a marker.
+After a UI change, take again each screenshot that shows it. For a new feature that needs a picture, take one
+or leave a marker.
 
 ## Validate
 

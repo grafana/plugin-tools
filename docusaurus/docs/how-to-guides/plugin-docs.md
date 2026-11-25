@@ -210,13 +210,13 @@ Run `add docs-content` once, after `add docs`. After that, update pages as part 
 
 ### Add screenshots
 
-`add docs-content` can't run your plugin, so it doesn't take new screenshots. Instead, it marks where each one belongs with a screenshot marker, an HTML comment that the catalog doesn't show:
+`add docs-content` can't run your plugin, so it marks where a screenshot belongs with a screenshot marker. The catalog doesn't show it:
 
 ```markdown
 <!-- screenshot: the panel in grid layout with the "Show size" option on -->
 ```
 
-To resolve a marker, build your plugin, start Grafana, take the screenshot, save it in your docs folder's `img/` folder and replace the marker with the image. You can take it by hand or ask a coding agent that has a browser tool, such as the Playwright or Chrome DevTools MCP server, or a Playwright script. `docs:validate` lists each marker that's left as a suggestion, so markers never block a release. For where images go and the rules they follow, refer to [Screenshots](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/screenshots.md).
+To resolve a marker, start Grafana with your plugin, take the screenshot and replace the marker with the image in your docs folder's `img/` folder. Use a browser tool such as the Playwright or Chrome DevTools MCP server, or take it by hand. `docs:validate` lists markers that are left as suggestions and doesn't fail on them. For the rules images follow, refer to [Screenshots](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/screenshots.md).
 
 ## Scripts
 
