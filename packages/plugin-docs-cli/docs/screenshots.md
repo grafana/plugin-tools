@@ -46,7 +46,8 @@ and don't draw mock UI.
 
 1. Build the plugin and start Grafana with it.
 2. Open the page, editor or panel the marker describes and set the options it names.
-3. Take the screenshot and save it in `img/`, then replace the marker with the image.
+3. Take the screenshot and save it in `img/`, then replace the marker with the image. Take it by hand, with
+   a browser tool such as the Playwright or Chrome DevTools MCP server, or with a Playwright script.
 4. Open each new image and check that it shows what the page says, that nothing is cut off and that
    nothing is still loading.
 5. Run `docs:validate` to check the image against the rules on this page.
