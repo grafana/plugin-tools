@@ -75,7 +75,6 @@
           "default",
           "^default",
           "{workspaceRoot}/eslint.config.mjs",
-          "{workspaceRoot}/docusaurus/docs/*.@(md|mdx)",
           "{workspaceRoot}/docusaurus/docs/**/*.@(md|mdx)"
         ]
       }
