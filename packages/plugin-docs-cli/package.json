@@ -65,6 +65,6 @@
     "@types/github-slugger": "2.0.0",
     "@types/minimist": "1.2.5",
     "@types/supertest": "7.2.1",
-    "supertest": "7.3.1"
+    "supertest": "7.3.2"
   }
 }
