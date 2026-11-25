@@ -94,6 +94,18 @@ heading. `docs:validate` lists every section that still has only its brief.
 
 Text between `<!-- snippet:... -->` and `<!-- /snippet:... -->` markers is maintained by Grafana. Never edit inside it - refer to `snippets.md` in the guides.
 
+## Screenshots
+
+Screenshots go in `img/`, as `screenshots.md` in the guides describes. Where a page needs one that nobody has
+taken yet, leave a marker on its own line:
+
+```markdown
+<!-- screenshot: one sentence saying what the screenshot shows -->
+```
+
+After a UI change, take again each screenshot that shows it. For a new feature that needs a picture, take one
+or leave a marker.
+
 ## Validate
 
 ```bash

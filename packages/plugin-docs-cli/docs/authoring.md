@@ -127,7 +127,8 @@ Validation can't catch these, so they are on you:
 - Don't describe how a standard Grafana feature affects this plugin, such as thresholds, Min and Max, units
   or overrides, from general knowledge. Read how the plugin's code uses it. The plugin may call it in a
   mode that changes the answer.
-- Don't generate images. Flag missing images for the author to add.
+- Don't create images with an image model or draw mock UI. Take screenshots of the running plugin, as
+  [Screenshots](./screenshots.md) describes. Where you can't, leave a screenshot marker where the image belongs.
 - Don't write installation instructions, such as `grafana-cli plugins install`, a download or a Docker
   setup. The Installation tab on the plugin page owns them, and your docs start from a plugin that is
   already installed. This applies to every plugin type.

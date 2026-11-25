@@ -35,7 +35,7 @@
     "@tsconfig/node24": "^24.0.4",
     "@tsconfig/recommended": "^1.0.13",
     "@types/glob": "^9.0.0",
-    "@types/node": "^24.10.11",
+    "@types/node": "^26.0.0",
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",
@@ -48,7 +48,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.0.0",
     "nx": "^24.0.0",
-    "pkg-pr-new": "^0.0.91",
+    "pkg-pr-new": "^0.0.94",
     "prettier": "3.9.10",
     "publint": "^0.3.12",
     "rollup": "^4.57.1",
@@ -88,5 +88,5 @@
     "uuid": "^11.1.1",
     "tinypool": "2.2.0"
   },
-  "packageManager": "npm@12.2.1"
+  "packageManager": "npm@12.2.3"
 }

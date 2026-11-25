@@ -166,11 +166,17 @@ export default [
     scriptPath: import.meta.resolve('./scripts/024-grafana-repository-input.js'),
   },
   {
-    name: '025-oss-grafana-image',
+    name: '025-config-docs',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description: 'Replace the generated configuration README with links to official documentation.',
+    scriptPath: import.meta.resolve('./scripts/025-config-docs.js'),
+  },
+  {
+    name: '026-oss-grafana-image',
     version: '0.0.0-unreleased', // x-release-please-version
     description:
       'The grafana-enterprise nightly image on Docker Hub is no longer updated, so e2e tests against nightly ran a stale build. Switch the local Docker environment and the e2e-version action to the Grafana OSS image.',
-    scriptPath: import.meta.resolve('./scripts/025-oss-grafana-image.js'),
+    scriptPath: import.meta.resolve('./scripts/026-oss-grafana-image.js'),
   },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.

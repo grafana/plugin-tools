@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../context.js';
 import { renderTemplate } from '../../utils.js';
 import { output } from '../../../utils/utils.console.js';
-import migrate from './025-oss-grafana-image.js';
+import migrate from './026-oss-grafana-image.js';
 
 const DOCKERFILE_PATH = '.config/Dockerfile';
 const COMPOSE_PATH = '.config/docker-compose-base.yaml';
@@ -52,7 +52,7 @@ function createContext(files: Record<string, string> = oldFiles): Context {
   return context;
 }
 
-describe('025-oss-grafana-image', () => {
+describe('026-oss-grafana-image', () => {
   beforeEach(() => {
     vi.spyOn(output, 'warning').mockImplementation(() => {});
   });
