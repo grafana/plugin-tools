@@ -7,6 +7,7 @@ version of the CLI you have installed. Read the one that fits what you are doing
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | Writing or changing a page                              | [Authoring guide](./authoring.md)                                                                         |
 | Unsure what markdown you can use                        | [Supported markdown](./supported-markdown.md)                                                             |
+| Adding or updating screenshots                          | [Screenshots](./screenshots.md)                                                                           |
 | Working with text inside `<!-- snippet:... -->` markers | [Snippets](./snippets.md)                                                                                 |
 | Moving docs from the docs website                       | [Migrate from the docs website](./migrate-from-docs-website.md)                                           |
 | Fixing something `validate` reports                     | [Validation rules](./validation-rules.md)                                                                 |

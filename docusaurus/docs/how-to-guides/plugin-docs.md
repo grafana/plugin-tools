@@ -208,6 +208,16 @@ The agent reads your README, your source code and any existing docs, and moves w
 
 Run `add docs-content` once, after `add docs`. After that, update pages as part of your normal work.
 
+### Add screenshots
+
+`add docs-content` can't run your plugin, so it doesn't take new screenshots. Instead, it marks where each one belongs with a screenshot marker, an HTML comment that the catalog doesn't show:
+
+```markdown
+<!-- screenshot: the panel in grid layout with the "Show size" option on -->
+```
+
+To resolve a marker, build your plugin, start Grafana, take the screenshot, save it in your docs folder's `img/` folder and replace the marker with the image. `docs:validate` lists each marker that's left as a suggestion, so markers never block a release. For where images go and the rules they follow, refer to [Screenshots](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/screenshots.md).
+
 ## Scripts
 
 | Script          | Runs                                         | What it does                                                                  |
@@ -217,7 +227,7 @@ Run `add docs-content` once, after `add docs`. After that, update pages as part 
 
 Use `docs:serve` while you write. It shows your pages as they'll look in the catalog and reports problems as you save. Run `docs:validate` before you open a pull request.
 
-Validation warns about empty headings, because the catalog shows them. Section briefs you leave in a page are only suggestions, because the catalog doesn't show them. Finish with neither left.
+Validation warns about empty headings, because the catalog shows them. Section briefs you leave in a page are only suggestions, because the catalog doesn't show them. Finish with neither left. Screenshot markers are suggestions too, and you can leave them until the screenshots are taken.
 
 For every check, refer to [Validation rules](https://github.com/grafana/plugin-tools/blob/main/packages/plugin-docs-cli/docs/validation-rules.md).
 
