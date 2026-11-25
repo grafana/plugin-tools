@@ -7,7 +7,6 @@ import { output } from '../../../utils/utils.console.js';
 const DOCKERFILE_PATH = '.config/Dockerfile';
 const BASE_COMPOSE_PATH = '.config/docker-compose-base.yaml';
 const ROOT_COMPOSE_PATH = 'docker-compose.yaml';
-const README_PATH = '.config/README.md';
 const WORKFLOWS_DIR = '.github/workflows';
 const E2E_VERSION_ACTION = 'grafana/plugin-actions/e2e-version';
 const E2E_VERSION_MINIMUM = 'e2e-version/v4.0.1';
@@ -15,29 +14,6 @@ const IMAGE_ARG_PATH = ['services', 'grafana', 'build', 'args', 'grafana_image']
 const OLD_COMPOSE_IMAGE = '${GRAFANA_IMAGE:-grafana-enterprise}';
 const NEW_COMPOSE_IMAGE = '${GRAFANA_IMAGE:-grafana}';
 const DOCKERFILE_IMAGE_ARG = /^ARG grafana_image=(.*)$/m;
-
-const OLD_README_SECTION = `By default, \`grafana-enterprise\` will be used as the docker image for all docker related commands. If you want to override this behavior, simply alter the \`docker-compose.yaml\` by adding the following build arg \`grafana_image\`.
-
-**Example:**
-
-\`\`\`yaml
-version: '3.7'
-
-services:
-  grafana:
-    extends:
-      file: .config/docker-compose-base.yaml
-      service: grafana
-    build:
-      args:
-        grafana_version: \${GRAFANA_VERSION:-9.1.2}
-        grafana_image: \${GRAFANA_IMAGE:-grafana}
-\`\`\`
-
-In this example, we assign the environment variable \`GRAFANA_IMAGE\` to the build arg \`grafana_image\` with a default value of \`grafana\`.`;
-const NEW_README_SECTION = OLD_README_SECTION.replace('By default, `grafana-enterprise`', 'By default, `grafana`')
-  .replace('grafana_image: ${GRAFANA_IMAGE:-grafana}', 'grafana_image: ${GRAFANA_IMAGE:-grafana-enterprise}')
-  .replace('with a default value of `grafana`.', 'with a default value of `grafana-enterprise`.');
 
 interface CustomImage {
   path: string;
@@ -48,7 +24,6 @@ export default function migrate(context: Context): Context {
   const customised = [migrateDockerfile(context), migrateBaseCompose(context)].filter(
     (custom): custom is CustomImage => custom !== undefined
   );
-  migrateReadme(context);
   const unpinnable = migrateWorkflows(context);
 
   if (customised.length > 0) {
@@ -148,19 +123,6 @@ function migrateBaseCompose(context: Context): CustomImage | undefined {
   const value = content.slice(start, end).replace(OLD_COMPOSE_IMAGE, NEW_COMPOSE_IMAGE);
   context.updateFile(BASE_COMPOSE_PATH, `${content.slice(0, start)}${value}${content.slice(end)}`);
   return undefined;
-}
-
-function migrateReadme(context: Context) {
-  if (!context.doesFileExist(README_PATH)) {
-    migrationsDebug(`${README_PATH} not found, skipping`);
-    return;
-  }
-  const content = context.getFile(README_PATH) ?? '';
-  if (!content.includes(OLD_README_SECTION)) {
-    migrationsDebug(`${README_PATH} has no default Grafana image section to update, skipping`);
-    return;
-  }
-  context.updateFile(README_PATH, content.replace(OLD_README_SECTION, NEW_README_SECTION));
 }
 
 // returns the workflows that pin e2e-version to a ref bumpActionRefs can't raise

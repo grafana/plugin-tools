@@ -1,49 +1,46 @@
-import { fileURLToPath } from 'node:url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Context } from '../../context.js';
-import { renderTemplate } from '../../utils.js';
 import { output } from '../../../utils/utils.console.js';
 import migrate from './026-oss-grafana-image.js';
 
 const DOCKERFILE_PATH = '.config/Dockerfile';
 const COMPOSE_PATH = '.config/docker-compose-base.yaml';
-const README_PATH = '.config/README.md';
 const CI_PATH = '.github/workflows/ci.yml';
-const TEMPLATE_DATA = {
-  hasBackend: true,
-  grafanaImage: 'grafana',
-  pluginId: 'test-app',
-  packageManagerName: 'npm',
-  packageManagerInstallCmd: 'npm ci',
-};
 
-function render(templatePath: string): string {
-  return renderTemplate(fileURLToPath(new URL(`../../../../templates/${templatePath}`, import.meta.url)), false, {
-    ...TEMPLATE_DATA,
-  });
-}
+const oldFiles: Record<string, string> = {
+  [DOCKERFILE_PATH]: `ARG grafana_version=latest
+ARG grafana_image=grafana-enterprise
+ARG grafana_repository
+
+FROM \${grafana_repository:-grafana/\${grafana_image}}:\${grafana_version}
+`,
+  [COMPOSE_PATH]: `services:
+  grafana:
+    build:
+      context: .
+      args:
+        grafana_image: \${GRAFANA_IMAGE:-grafana-enterprise}
+        grafana_repository: \${GRAFANA_REPOSITORY:-}
+        grafana_version: \${GRAFANA_VERSION:-13.2.4}
+    ports:
+      - 3000:3000/tcp
+`,
+  [CI_PATH]: `jobs:
+  resolve-versions:
+    steps:
+      - name: Resolve Grafana E2E versions
+        id: resolve-versions
+        uses: grafana/plugin-actions/e2e-version@e2e-version/v3.2.4
+`,
+};
 
 const newFiles: Record<string, string> = {
-  [DOCKERFILE_PATH]: render('common/.config/Dockerfile'),
-  [COMPOSE_PATH]: render('common/.config/docker-compose-base.yaml'),
-  [README_PATH]: render('common/.config/README.md'),
-  [CI_PATH]: render('github/workflows/ci.yml'),
-};
-
-// the templates as they were before the switch to the OSS image
-const oldFiles: Record<string, string> = {
-  [DOCKERFILE_PATH]: newFiles[DOCKERFILE_PATH].replace(
-    'ARG grafana_image=grafana\n',
-    'ARG grafana_image=grafana-enterprise\n'
+  [DOCKERFILE_PATH]: oldFiles[DOCKERFILE_PATH].replace(
+    'ARG grafana_image=grafana-enterprise',
+    'ARG grafana_image=grafana'
   ),
-  [COMPOSE_PATH]: newFiles[COMPOSE_PATH].replace(
-    'grafana_image: ${GRAFANA_IMAGE:-grafana}',
-    'grafana_image: ${GRAFANA_IMAGE:-grafana-enterprise}'
-  ),
-  [README_PATH]: newFiles[README_PATH].replace('By default, `grafana`', 'By default, `grafana-enterprise`')
-    .replace('grafana_image: ${GRAFANA_IMAGE:-grafana-enterprise}', 'grafana_image: ${GRAFANA_IMAGE:-grafana}')
-    .replace('with a default value of `grafana-enterprise`.', 'with a default value of `grafana`.'),
-  [CI_PATH]: newFiles[CI_PATH].replace('e2e-version@e2e-version/v4.0.1', 'e2e-version@e2e-version/v3.0.1'),
+  [COMPOSE_PATH]: oldFiles[COMPOSE_PATH].replace('${GRAFANA_IMAGE:-grafana-enterprise}', '${GRAFANA_IMAGE:-grafana}'),
+  [CI_PATH]: oldFiles[CI_PATH].replace('e2e-version@e2e-version/v3.2.4', 'e2e-version@e2e-version/v4.0.1'),
 };
 
 function createContext(files: Record<string, string> = oldFiles): Context {
@@ -61,13 +58,7 @@ describe('026-oss-grafana-image', () => {
     vi.restoreAllMocks();
   });
 
-  it('should derive the old fixtures from the templates', () => {
-    Object.keys(newFiles).forEach((path) => {
-      expect(oldFiles[path], path).not.toBe(newFiles[path]);
-    });
-  });
-
-  it('should migrate every file to match the new templates', () => {
+  it('should switch the image and bump e2e-version', () => {
     const context = migrate(createContext());
 
     Object.entries(newFiles).forEach(([path, content]) => {
@@ -153,13 +144,6 @@ describe('026-oss-grafana-image', () => {
     expect(output.warning).toHaveBeenCalledWith(
       expect.objectContaining({ title: 'The default Grafana image was not changed in some files' })
     );
-  });
-
-  it('should leave a customised README alone', () => {
-    const readme = '### Configure grafana image to use when running docker\n\nWe use our own image.\n';
-    const context = migrate(createContext({ [README_PATH]: readme }));
-
-    expect(context.getFile(README_PATH)).toBe(readme);
   });
 
   it('should bump e2e-version in every workflow and leave other actions alone', () => {
