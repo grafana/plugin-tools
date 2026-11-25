@@ -25,7 +25,6 @@
     "@libs/output",
     "@libs/version"
   ],
-  "separateMajorMinor": false,
   // Lockfile-only installs. Full installs leave node_modules behind between branches, and lock file
   // maintenance then rebuilds package-lock.json from it instead of resolving fresh versions.
   "skipInstalls": true,
@@ -85,7 +84,6 @@
     // Grafana libs ship inside our published packages, so their bumps must release. Patch bumps are
     // batched into one PR (groupSlug = branch name). Skips zero major due to !/^0/.
     {
-      "automerge": false,
       "groupName": "grafana patch dependencies",
       "groupSlug": "all-grafana-patch",
       "labels": ["dependencies", "javascript"],
@@ -119,32 +117,7 @@
       "rangeStrategy": "bump",
       "matchPackageNames": ["/@?docusaurus/"]
     },
-    // Dev-only deps never ship and auto-merge. Excludes 0.x due to risk of breaking changes.
-    {
-      "automerge": true,
-      "groupName": "auto-merged devDependencies",
-      "groupSlug": "dev-dependencies-automerge",
-      "matchCurrentVersion": "!/^0/",
-      "matchDepTypes": ["devDependencies", "optionalDependencies"],
-      "matchPackageNames": [
-        "!/^@?docusaurus/",
-        "!/@grafana/*/"
-      ],
-      "matchUpdateTypes": ["patch", "minor"]
-    },
-    // Auto-merge non-0.x production patch bumps. This rule only ADDS automerge — the fix(deps):
-    // prefix comes from the catch-all below, which runs after it and wins.
-    {
-      "automerge": true,
-      "groupName": "auto-merged patch dependencies",
-      "groupSlug": "prod-dependencies-automerge",
-      "matchCurrentVersion": "!/^0/",
-      "matchDepTypes": ["dependencies"],
-      "matchUpdateTypes": ["patch"],
-      "matchPackageNames": ["!/^@?docusaurus/", "!/@grafana/*/"]
-    },
-    // Prod dependencies of published packages should ship to consumers. This group should come after the auto-merge
-    // rule for fix(deps).
+    // Prod dependencies of published packages should ship to consumers.
     {
       "matchFileNames": ["packages/**"],
       "matchDepTypes": ["dependencies"],
@@ -154,7 +127,6 @@
     // Bumps the @grafana/plugin-e2e version inside create-plugin's scaffolding template
     // (_package.json, via the custom.regex manager). Routes to create-plugin by path so use fix(templates):.
     {
-      "automerge": true,
       "groupName": "plugin-e2e template version",
       "labels": ["dependencies", "javascript"],
       "matchManagers": ["custom.regex"],
@@ -192,14 +164,44 @@
     },
     // This repo's own CI workflows (.github/workflows) are not shipped in any package so chore(ci) / no release.
     {
-      "automerge": false,
       "groupName": "auto-merged gitHub actions",
       "labels": ["ci", "github_actions", "dependencies"],
       "matchManagers": ["github-actions"],
       "matchFileNames": [".github/workflows/**"],
       "commitMessagePrefix": "chore(ci):"
     },
-    { "matchPackageNames": ["typescript"], "allowedVersions": "<6.1.0" }
+    { "matchPackageNames": ["typescript"], "allowedVersions": "<6.1.0" },
+    // Automerge tiers for the renovate-approve gate (see grafana-catalog-team docs/renovate-automerge).
+    // Keep these last so they set automerge for everything above. The workflow approves on the label alone,
+    // so the two human-only groups above (create-plugin template actions, plugin-docs-cli) are excluded here.
+    {
+      "description": "Automerge: minor/major updates need an approval from the Claude gate workflow before GitHub auto-merge fires",
+      "matchUpdateTypes": ["minor", "major"],
+      "matchPackageNames": ["!@grafana/plugin-docs-cli"],
+      "matchFileNames": [
+        "!packages/create-plugin/templates/github/workflows/**",
+        "!packages/create-plugin/templates/docs/common/workflows/**"
+      ],
+      "automerge": true,
+      "addLabels": ["claude-gate"]
+    },
+    {
+      "description": "Automerge: clear-cut updates get a direct bot approval, required CI checks still gate the merge",
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "matchPackageNames": ["!@grafana/plugin-docs-cli"],
+      "matchFileNames": [
+        "!packages/create-plugin/templates/github/workflows/**",
+        "!packages/create-plugin/templates/docs/common/workflows/**"
+      ],
+      "automerge": true,
+      "addLabels": ["automerge-direct"]
+    },
+    {
+      "description": "Automerge: lock file maintenance gets a direct bot approval. Its own rule because it has no package name for the exclusions above to match.",
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "automerge": true,
+      "addLabels": ["automerge-direct"]
+    }
   ],
   "vulnerabilityAlerts": {
     "addLabels": ["security"]
