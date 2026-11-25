@@ -459,10 +459,11 @@ jobs:
         run: npm install --no-audit
         working-directory: ./${{ matrix.workingDir }}
 
-      - name: Install packed plugin-e2e and sign-plugin
+      - name: Install packed plugin-e2e, eslint-config, and sign-plugin
         run: |
           PLUGIN_E2E_PACKAGE=$(ls ../packed-artifacts/grafana-plugin-e2e-*.tgz | xargs basename)
-          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE} ../packed-artifacts/grafana-sign-plugin-*.tgz
+          ESLINT_CONFIG_PACKAGE=$(ls ../packed-artifacts/grafana-eslint-config-*.tgz | xargs basename)
+          npm install ../packed-artifacts/${PLUGIN_E2E_PACKAGE} ../packed-artifacts/${ESLINT_CONFIG_PACKAGE} ../packed-artifacts/grafana-sign-plugin-*.tgz
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Install tsconfig
