@@ -5,6 +5,7 @@ import { DataSourcePicker } from '../components/DataSourcePicker';
 import { GrafanaPage } from './GrafanaPage';
 import { TimeRange } from '../components/TimeRange';
 import { Panel } from '../components/Panel';
+import { isDataQueryUrl } from '../../utils/dataSourceRequests';
 
 const TIME_SERIES_PANEL_SELECTOR_SUFFIX = 'Graph';
 const TABLE_PANEL_SELECTOR_SUFFIX = 'Table';
@@ -69,7 +70,7 @@ export class ExplorePage extends GrafanaPage {
   async runQuery(options?: RequestOptions) {
     const components = this.ctx.selectors.components;
     const responsePromise = this.ctx.page.waitForResponse(
-      (resp) => resp.url().includes(this.ctx.selectors.apis.DataSource.query),
+      (resp) => isDataQueryUrl(resp.url(), this.ctx.selectors.apis.DataSource),
       options
     );
     try {

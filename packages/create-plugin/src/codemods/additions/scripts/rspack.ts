@@ -149,7 +149,7 @@ function addRootRspackConfigStub(context: Context): string[] {
   context.addFile('rspack.config.ts', getRootRspackConfigStub(rootWebpackConfig));
 
   return [
-    `rspack.config.ts was added and fails the build until the customisations in ${rootWebpackConfig} are ported to it.`,
+    `rspack.config.ts was added and fails the build until the customizations in ${rootWebpackConfig} are ported to it.`,
   ];
 }
 
@@ -432,7 +432,7 @@ import { merge } from 'rspack-merge';
 
 import grafanaConfig, { type Env } from './.config/rspack/rspack.config.ts';
 
-// TODO(rspack): port the customisations in ./${rootWebpackConfig} to this file, then delete it.
+// TODO(rspack): port the customizations in ./${rootWebpackConfig} to this file, then delete it.
 // Run \`npx @grafana/create-plugin@latest add rspack --agent\` to have an AI agent do the port,
 // or follow https://grafana.com/developers/plugin-tools/how-to-guides/extend-configurations
 // This file is loaded as native ESM, so CommonJS globals are not available. Use import.meta.dirname,

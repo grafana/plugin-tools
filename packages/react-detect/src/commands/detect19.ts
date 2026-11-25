@@ -5,7 +5,7 @@ import { generateAnalysisResults } from '../results.js';
 import { DependencyContext } from '../utils/dependencies.js';
 import { jsonReporter } from '../reporters/json.js';
 import { consoleReporter } from '../reporters/console.js';
-import { extractAllSources } from '../source-extractor.js';
+import { bundlesJsxRuntime, extractAllSources } from '../source-extractor.js';
 import { analyzeSourceFiles } from '../analyzer.js';
 import { output } from '../utils/output.js';
 /**
@@ -19,7 +19,7 @@ export async function detect19(argv: minimist.ParsedArgs) {
     const skipBuildTooling = argv.skipBuildTooling || false;
     const jsonOutput = argv.json || false;
 
-    const allMatches = await getAllMatches(distDir);
+    const { matches: allMatches, jsxRuntimeBundled } = await getAllMatches(distDir);
 
     // Conditionally load dependencies
     let depContext: DependencyContext | null = null;
@@ -57,6 +57,7 @@ export async function detect19(argv: minimist.ParsedArgs) {
     const results = generateAnalysisResults(matchesWithRootDependency, distDir, pluginRoot, depContext, {
       skipBuildTooling,
       skipDependencies,
+      jsxRuntimeBundled,
     });
 
     if (argv.json) {
@@ -94,5 +95,5 @@ async function getAllMatches(distDir: string) {
 
   const matches = await analyzeSourceFiles(sources);
 
-  return matches;
+  return { matches, jsxRuntimeBundled: bundlesJsxRuntime(sources) };
 }

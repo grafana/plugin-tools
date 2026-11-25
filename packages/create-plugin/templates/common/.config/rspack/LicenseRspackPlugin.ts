@@ -25,7 +25,11 @@ export class LicenseRspackPlugin {
 
           const comments = new Set<string>();
           for (const assetName of chunkLicenseFiles) {
-            const content = assets[assetName].source().toString();
+            const asset = assets[assetName];
+            if (!asset) {
+              throw new Error(`${PLUGIN_NAME}: missing asset ${assetName}.`);
+            }
+            const content = asset.source().toString();
             content
               .split(/\n{2,}/)
               .map((comment) => comment.trim())

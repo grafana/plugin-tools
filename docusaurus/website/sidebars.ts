@@ -338,6 +338,7 @@ const sidebars: SidebarsConfig = {
         },
         'migration-guides/migrate-from-toolkit',
         'migration-guides/migrate-to-rspack',
+        'migration-guides/visual-design-refresh',
       ],
     },
 

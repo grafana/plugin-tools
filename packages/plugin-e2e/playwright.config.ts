@@ -81,6 +81,7 @@ export default defineConfig<PluginOptions>({
     {
       name: 'admin-wide-screen',
       testDir: './tests/as-admin-user',
+      testMatch: process.env.WIDE_SCREEN_SMOKE_ONLY ? /dashboardSmoke\.spec\.ts/ : undefined,
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/admin.json',

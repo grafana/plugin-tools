@@ -39,15 +39,16 @@ For what you can write in a page, refer to [Supported markdown](./supported-mark
 
 ## Required pages
 
-Panel and data source plugins must document a few fixed topics, so authors, users and agents
+Every plugin must document a few fixed topics, so authors, users and agents
 find the same information in the same place across every plugin. Each topic can be a single page
 (`options.md`) or a folder (`options/`) with at least one page inside it, at the root of your
 docs folder.
 
-- **Panel:** `options` and `data-formats`
+- **All plugins:** `troubleshooting`
+- **Panel:** `options`, `data-formats` and `examples`
 - **Data source:** `query-editor` and `configure`
 
-App plugins have no required pages, because what an app does varies too much for a fixed set of topics.
+App plugins have no other required pages, because what an app does varies too much for a fixed set of topics.
 
 | Rule             | What it checks                                                                   | Severity |
 | ---------------- | -------------------------------------------------------------------------------- | -------- |

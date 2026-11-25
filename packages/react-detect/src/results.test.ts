@@ -42,6 +42,7 @@ describe('generateAnalysisResults', () => {
   const options: AnalysisOptions = {
     skipBuildTooling: true,
     skipDependencies: false,
+    jsxRuntimeBundled: false,
   };
 
   beforeEach(() => {
@@ -131,6 +132,27 @@ describe('generateAnalysisResults', () => {
       const reportedDeps = results.issues.critical.filter((i) => i.location.type === 'dependency');
       expect(reportedDeps).toHaveLength(1);
       expect(reportedDeps[0].packageName).toBe('axios');
+    });
+  });
+
+  describe('jsx-runtime imports from dependencies', () => {
+    const matches = [createDependencyMatch('@floating-ui/react', '@grafana/scenes', 'jsxRuntimeImport')];
+
+    it('reports nothing when the build loads react/jsx-runtime from Grafana', () => {
+      const results = generateAnalysisResults(matches, distDir, pluginRoot, depContext, options);
+
+      expect(results.issues.dependencies).toEqual([]);
+    });
+
+    it('reports the dependency when the build bundles react/jsx-runtime', () => {
+      const results = generateAnalysisResults(matches, distDir, pluginRoot, depContext, {
+        ...options,
+        jsxRuntimeBundled: true,
+      });
+
+      expect(
+        results.issues.dependencies.map((dep) => [dep.packageName, dep.issues.map((issue) => issue.pattern)])
+      ).toEqual([['@floating-ui/react', ['jsxRuntimeImport']]]);
     });
   });
 });

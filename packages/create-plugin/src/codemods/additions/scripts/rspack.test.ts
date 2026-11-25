@@ -27,6 +27,15 @@ vi.mock(import('../../../utils/utils.config.js'), async (importOriginal) => {
   };
 });
 
+// getTemplateData() would otherwise spawn `npm --version` to resolve the package manager
+vi.mock(import('../../../utils/utils.packagejson.js'), async (importOriginal) => {
+  const originalModule = await importOriginal();
+  return {
+    ...originalModule,
+    getPackageJson: () => ({ packageManager: 'npm@10.0.0', scripts: {}, devDependencies: {}, dependencies: {} }),
+  };
+});
+
 vi.mock(import('../../utils.js'), async (importOriginal) => {
   const originalModule = await importOriginal();
 

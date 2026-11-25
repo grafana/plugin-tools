@@ -66,9 +66,18 @@ services:
       args:
         grafana_version: ${GRAFANA_VERSION:-9.1.2}
         grafana_image: ${GRAFANA_IMAGE:-grafana}
+        grafana_repository: ${GRAFANA_REPOSITORY:-}
 ```
 
 This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker compose` commands.
+
+To use a different registry or repository, set `GRAFANA_REPOSITORY` to the full repository path without a tag. It replaces the entire `grafana/${GRAFANA_IMAGE}` path, while `GRAFANA_VERSION` continues to set the tag. If `GRAFANA_REPOSITORY` is unset or empty, the image remains `grafana/${GRAFANA_IMAGE}`.
+
+For example, set `GRAFANA_REPOSITORY` when you start the Docker Compose environment:
+
+```sh
+GRAFANA_REPOSITORY=registry.example.com/team/grafana GRAFANA_VERSION=13.2.4 docker compose up --build
+```
 
 ## Debugging a plugin's backend
 
@@ -100,4 +109,3 @@ You can attach a debugger client to this port to debug your backend code. For ex
   ]
 }
 ```
-

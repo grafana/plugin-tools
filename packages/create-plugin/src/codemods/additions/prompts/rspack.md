@@ -11,7 +11,7 @@ This plugin is moving its frontend build to rspack 2. The `create-plugin add rsp
 - If the plugin has a root `webpack.config.*`, added a root `rspack.config.ts` that throws an `[rspack]` error until the custom config is ported.
 - Raised `engines.node` to `>=22.23` if it allowed older versions.
 
-What is left is the plugin's own build customisation, which needs judgement to port. The previous base config is still in git: `git show HEAD:.config/webpack/webpack.config.ts`. Compare it with `.config/rspack/rspack.config.ts` when you need to know how a base rule or plugin changed.
+What is left is the plugin's own build customization, which needs judgment to port. The previous base config is still in git: `git show HEAD:.config/webpack/webpack.config.ts`. Compare it with `.config/rspack/rspack.config.ts` when you need to know how a base rule or plugin changed.
 
 ## Check first
 

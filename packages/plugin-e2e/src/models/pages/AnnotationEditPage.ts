@@ -2,6 +2,7 @@ import { gte, lt } from '../../utils/version';
 import { DataSourcePicker } from '../components/DataSourcePicker';
 import { DashboardEditViewArgs, NavigateOptions, PluginTestCtx, RequestOptions } from '../../types';
 import { GrafanaPage } from './GrafanaPage';
+import { isDataQueryUrl } from '../../utils/dataSourceRequests';
 
 export class AnnotationEditPage extends GrafanaPage {
   datasource: DataSourcePicker;
@@ -39,7 +40,7 @@ export class AnnotationEditPage extends GrafanaPage {
    */
   async runQuery(options?: RequestOptions) {
     const responsePromise = this.ctx.page.waitForResponse(
-      (resp) => resp.url().includes(this.ctx.selectors.apis.DataSource.query),
+      (resp) => isDataQueryUrl(resp.url(), this.ctx.selectors.apis.DataSource),
       options
     );
 

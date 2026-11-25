@@ -29,5 +29,5 @@ test('backToDashboard method should be backwards compatible and navigate to dash
   const dashboardPage = await gotoDashboardPage(dashboard);
   const panelEditPage = await dashboardPage.addPanel();
   await panelEditPage.backToDashboard();
-  await expect(page.url()).not.toContain('editPanel');
+  await expect(page).not.toHaveURL(/editPanel/);
 });

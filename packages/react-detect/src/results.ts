@@ -8,6 +8,7 @@ import path from 'node:path';
 export interface AnalysisOptions {
   skipBuildTooling: boolean;
   skipDependencies: boolean;
+  jsxRuntimeBundled: boolean;
 }
 
 export function generateAnalysisResults(
@@ -15,9 +16,9 @@ export function generateAnalysisResults(
   distDir: string,
   pluginRoot: string,
   depContext: DependencyContext | null,
-  options: AnalysisOptions = { skipBuildTooling: false, skipDependencies: false }
+  options: AnalysisOptions = { skipBuildTooling: false, skipDependencies: false, jsxRuntimeBundled: false }
 ): PluginAnalysisResults {
-  const filtered = filterMatches(matches, options.skipBuildTooling, pluginRoot);
+  const filtered = filterMatches(matches, options, pluginRoot);
   const pluginJson = getPluginJson(distDir);
 
   // Filter out externalized dependencies
@@ -79,9 +80,9 @@ function shouldIncludeDependencyMatch(match: AnalyzedMatch, _depContext: Depende
   return true;
 }
 
-function filterMatches(matches: AnalyzedMatch[], skipBuildTooling: boolean, pluginRoot: string): AnalyzedMatch[] {
+function filterMatches(matches: AnalyzedMatch[], options: AnalysisOptions, pluginRoot: string): AnalyzedMatch[] {
   // Only check webpack config if NOT skipping build tooling
-  const externalisedJsxRuntime = skipBuildTooling ? false : hasExternalisedJsxRuntime(pluginRoot);
+  const externalisedJsxRuntime = options.skipBuildTooling ? false : hasExternalisedJsxRuntime(pluginRoot);
   const filtered = matches.filter((match) => {
     // TODO: add mode for strict / loose filtering
     if (match.type === 'source' && (match.confidence === 'none' || match.confidence === 'unknown')) {
@@ -107,11 +108,12 @@ function filterMatches(matches: AnalyzedMatch[], skipBuildTooling: boolean, plug
       return false;
     }
 
-    // JSX runtime imports are only an issue if they are not externalised in webpack config.
-    if (
-      match.type === 'dependency' &&
-      (match.pattern === 'jsxRuntimeImport' || match.pattern === '__SECRET_INTERNALS')
-    ) {
+    // Importing react/jsx-runtime is only an issue when the build bundles it instead of loading it from Grafana.
+    if (match.type === 'dependency' && match.pattern === 'jsxRuntimeImport') {
+      return options.jsxRuntimeBundled;
+    }
+
+    if (match.type === 'dependency' && match.pattern === '__SECRET_INTERNALS') {
       return !externalisedJsxRuntime;
     }
 

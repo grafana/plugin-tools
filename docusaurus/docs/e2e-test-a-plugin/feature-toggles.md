@@ -50,6 +50,12 @@ Feature toggles that are defined this way are propagated to `window.grafanaBootD
 
 :::
 
+:::note
+
+Newer Grafana versions read some feature toggles through OpenFeature instead of `window.grafanaBootData.settings.featureToggles`. `@grafana/plugin-e2e` applies `dashboardNewLayouts` through OpenFeature as well on Grafana 13.3 and later, so setting it with `featureToggles` keeps working. If the same key is set in the `openFeature` option, that value wins.
+
+:::
+
 ## Override feature toggles in a specific test file
 
 To override feature toggles for tests in a specific test file, use code like this.
