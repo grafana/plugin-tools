@@ -212,7 +212,7 @@ Run `add docs-content` once, after `add docs`. After that, update pages as part 
 
 `add docs-content` can't run your plugin, so it marks where a screenshot belongs with a screenshot marker. The catalog doesn't show it:
 
-```markdown
+```html
 <!-- screenshot: the panel in grid layout with the "Show size" option on -->
 ```
 

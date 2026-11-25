@@ -69,6 +69,14 @@
         "outputs": [
           "{projectRoot}/build"
         ]
+      },
+      "lint": {
+        "inputs": [
+          "default",
+          "^default",
+          "{workspaceRoot}/eslint.config.mjs",
+          "{workspaceRoot}/docusaurus/docs/**/*.@(md|mdx)"
+        ]
       }
     }
   }
