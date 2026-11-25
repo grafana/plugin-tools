@@ -23,7 +23,7 @@
     "@playwright/test": "^1.62.1",{{#if useRspack}}
     "@rspack/core": "^2.2.0",
     "@rspack/cli": "^2.2.0",{{/if}}
-    "@stylistic/eslint-plugin": "^5.10.0",
+    "@stylistic/eslint-plugin": "^6.0.1",
     "@swc/core": "^1.15.0",
     "@swc/helpers": "^0.5.0",
     "@swc/jest": "^0.2.0",
