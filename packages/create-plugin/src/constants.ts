@@ -51,7 +51,7 @@ export const UNRELEASED = '0.0.0-unreleased';
 // This gets merged into variables coming from user prompts (when scaffolding) or any other dynamic variables,
 // and will be available to use in the templates.
 export const EXTRA_TEMPLATE_VARIABLES = {
-  grafanaImage: 'grafana-enterprise',
+  grafanaImage: 'grafana',
 };
 
 export const DEFAULT_FEATURE_FLAGS = {

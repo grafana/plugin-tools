@@ -1,5 +1,5 @@
 ARG grafana_version=latest
-ARG grafana_image=grafana-enterprise
+ARG grafana_image=grafana
 ARG grafana_repository
 
 FROM ${grafana_repository:-grafana/${grafana_image}}:${grafana_version}

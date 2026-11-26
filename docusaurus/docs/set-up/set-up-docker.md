@@ -52,7 +52,7 @@ To test a plugin across different versions of Grafana, set an environment variab
 
 ## Configure the Grafana image
 
-The default Docker image in the plugin tool is `grafana-enterprise`. To override this image, alter the `docker-compose.yaml` by changing the `grafana_image` build argument:
+The default Docker image in the plugin tool is `grafana`. To override this image, alter the `docker-compose.yaml` by changing the `grafana_image` build argument:
 
 ```yaml title="docker-compose.yaml"
 version: '3.7'
@@ -65,11 +65,11 @@ services:
     build:
       args:
         grafana_version: ${GRAFANA_VERSION:-9.1.2}
-        grafana_image: ${GRAFANA_IMAGE:-grafana}
+        grafana_image: ${GRAFANA_IMAGE:-grafana-enterprise}
         grafana_repository: ${GRAFANA_REPOSITORY:-}
 ```
 
-This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana`. This gives you the option to set the value when running `docker compose` commands.
+This example assigns the environment variable `GRAFANA_IMAGE` to the build arg `grafana_image` with a default value of `grafana-enterprise`. This gives you the option to set the value when running `docker compose` commands.
 
 To use a different registry or repository, set `GRAFANA_REPOSITORY` to the full repository path without a tag. It replaces the entire `grafana/${GRAFANA_IMAGE}` path, while `GRAFANA_VERSION` continues to set the tag. If `GRAFANA_REPOSITORY` is unset or empty, the image remains `grafana/${GRAFANA_IMAGE}`.
 
