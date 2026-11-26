@@ -549,7 +549,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (latest)
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@fa3356df288e68f5e900ab466e98b0bf9bad3118 # upload-report-artifacts/v1.0.1
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@2311d422543154f07aa4a01f966243f4ad4de266 # upload-report-artifacts/v1.0.3
         if: ${{ always() && steps.run-e2e-tests.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
@@ -593,7 +593,7 @@ jobs:
         working-directory: ./${{ matrix.workingDir }}
 
       - name: Upload e2e test summary (${{ steps.min-version.outputs.MIN_VERSION }})
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@fa3356df288e68f5e900ab466e98b0bf9bad3118 # upload-report-artifacts/v1.0.1
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@2311d422543154f07aa4a01f966243f4ad4de266 # upload-report-artifacts/v1.0.3
         if: ${{ always() && steps.run-e2e-tests-min-version.outcome == 'failure' }}
         with:
           plugin-name: ${{ matrix.workingDir }}
