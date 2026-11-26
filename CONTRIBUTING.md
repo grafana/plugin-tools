@@ -16,6 +16,7 @@
 - Manage Something ✅🙆🏼💃👔
   - [Preview Your Changes Before Release](#preview-your-changes-before-release)
   - [Create a Release](#create-a-release)
+  - [Troubleshooting Releases](#troubleshooting-releases)
 
 ## Introduction
 
@@ -247,23 +248,6 @@ Before you merge a breaking PR, check the diff of each package it touches:
 
 Move the changes for any non-breaking package to a separate PR with a `fix:` or `chore:` title. If you can't split the PR, plan to add a `Release-As:` footer when you merge. Refer to [Fix an unwanted major bump](#fix-an-unwanted-major-bump).
 
-### Fix an unwanted major bump
-
-Use these steps when the release PR proposes a major bump for a package that has no breaking change.
-
-This repository squash merges with the PR title as the subject and a blank body. GitHub drops footers on the branch commits, so `Release-As:` only takes effect when you add it in the merge dialog.
-
-1. Open a PR that changes a file that ships in the affected package, such as its `README.md`. release-please attributes a commit to a package only when it changes files under the package path, so an empty commit doesn't work.
-2. Give the PR a `fix:` title with no scope.
-3. In the merge dialog, enter `Release-As: x.y.z` in the extended description. Replace `x.y.z` with the non-breaking version you want.
-4. Select **Confirm squash and merge**.
-5. Wait for the release-please workflow run on the merge commit to finish.
-6. Open the release PR and check that release-please recalculated the package version to `x.y.z`.
-7. After release-please recalculates the version, remove the stale breaking change and feature entries for the package from `packages/<package>/CHANGELOG.md` on the release branch and from the release PR body. release-please reads the PR body to create tags and GitHub releases, so edit both.
-
-> [!CAUTION]
-> release-please regenerates the release PR when new commits land on `main`, and the new run overwrites your edits to the release PR. Tell the team you're fixing the release, and ask them not to merge to `main` until you merge the release PR.
-
 ### How a release happens
 
 1. **PRs merge to `main`.** Each conventional-commit PR title joins the history.
@@ -285,3 +269,49 @@ After the Slack notification fires:
 3. Verify the staged versions then **Approve** each to send them to the NPM registry.
 
 If you spot a problem with a staged package before approving, **Reject** removes the staged version without publishing.
+
+## Troubleshooting releases
+
+### Fix an unwanted major bump
+
+Use these steps when the release PR proposes a major bump for a package that has no breaking change.
+
+This repository squash merges with the PR title as the subject and a blank body. GitHub drops footers on the branch commits, so `Release-As:` only takes effect when you add it in the merge dialog.
+
+1. Open a PR that changes a file that ships in the affected package, such as its `README.md`. release-please attributes a commit to a package only when it changes files under the package path, so an empty commit doesn't work.
+2. Give the PR a `fix:` title with no scope.
+3. In the merge dialog, enter `Release-As: x.y.z` in the extended description. Replace `x.y.z` with the non-breaking version you want.
+4. Select **Confirm squash and merge**.
+5. Wait for the release-please workflow run on the merge commit to finish.
+6. Open the release PR and check that release-please recalculated the package version to `x.y.z`.
+7. After release-please recalculates the version, remove the stale breaking change and feature entries for the package from `packages/<package>/CHANGELOG.md` on the release branch and from the release PR body. release-please reads the PR body to create tags and GitHub releases, so edit both.
+
+> [!CAUTION]
+> release-please regenerates the release PR when new commits land on `main`, and the new run overwrites your edits to the release PR. Tell the team you're fixing the release, and ask them not to merge to `main` until you merge the release PR.
+
+### Recover from a partial staging failure
+
+The `publish` job stages packages one at a time and stops at the first error. If it fails part way through, some packages are staged and the rest are not. Re-running the job starts again at the first package, which fails with `409 Conflict` because that version is already staged.
+
+Common causes:
+
+- `E401 Unable to authenticate` while staging a package: the npm trusted publisher configuration for that package has expired. A configuration that has not completed a successful publish expires 48 hours after you create it. Recreate it on npmjs.com to start a new 48-hour window. Refer to the [GitHub changelog](https://github.blog/changelog/2026-10-02-unvalidated-npm-trusted-publishing-configurations-now-expire/).
+- `E409 Cannot stage previously published version`: an earlier run already staged that version.
+
+To recover:
+
+1. In the failed run's log, note which packages staged and which did not.
+2. For each package, confirm the version isn't on the registry. If the version is published the view command returns the version number. A missing version exits with a non-zero code and `E404`. Any other error code means the check itself failed, not that the version is missing.
+
+   ```shell
+   npm view <name>@<version> version --json --silent
+   ```
+
+3. Log in to npm and confirm the version isn't already staged.
+4. Fix the cause of the failure, for example by recreating an expired trusted publisher configuration. Check every package that has not yet staged, not only the one that failed.
+5. On npmjs.com, **Reject** the versions that were already staged.
+6. Re-run the failed job from the Actions UI and approve the `npm-publish` environment. A re-run uses the workflow file from the original commit.
+7. [Approve the staged packages](#approving-staged-packages-on-npm).
+
+> [!NOTE]
+> Only reject and re-run if you want every package to stage from the same run. A version must be both absent from the registry and absent from `npm stage list` before the job can stage it.
