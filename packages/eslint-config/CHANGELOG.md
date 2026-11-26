@@ -1,5 +1,12 @@
 # Changelog
 
+## [10.0.2](https://github.com/grafana/plugin-tools/compare/@grafana/eslint-config@10.0.1...@grafana/eslint-config@10.0.2) (2026-11-26)
+
+
+### Bug Fixes
+
+* support ESLint Stylistic v6 ([#3141](https://github.com/grafana/plugin-tools/issues/3141)) ([95bee84](https://github.com/grafana/plugin-tools/commit/95bee844cd5df0fa15a408e365ba45fba5836ab4))
+
 ## [10.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/eslint-config@10.0.0...@grafana/eslint-config@10.0.1) (2026-11-06)
 
 
