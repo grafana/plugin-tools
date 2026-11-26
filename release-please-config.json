@@ -37,10 +37,6 @@
       "component": "@grafana/plugin-docs-parser"
     },
     "packages/plugin-e2e": { "package-name": "@grafana/plugin-e2e", "component": "@grafana/plugin-e2e" },
-    "packages/plugin-meta-extractor": {
-      "package-name": "@grafana/plugin-meta-extractor",
-      "component": "@grafana/plugin-meta-extractor"
-    },
     "packages/plugin-types-bundler": {
       "package-name": "@grafana/plugin-types-bundler",
       "component": "@grafana/plugin-types-bundler"
