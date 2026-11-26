@@ -154,26 +154,26 @@ export default [
   },
   {
     name: '023-fix-rspack-typecheck',
-    version: '10.0.0', // x-release-please-version
+    version: '10.0.0',
     description: 'Guard Rspack asset and regex access for strict TypeScript checks.',
     scriptPath: import.meta.resolve('./scripts/023-fix-rspack-typecheck.js'),
   },
   {
     name: '024-grafana-repository-input',
-    version: '10.0.0', // x-release-please-version
+    version: '10.0.0',
     description:
       'Allow the Grafana Docker image to come from registries other than Docker Hub. The Dockerfile hard-coded the `grafana/` prefix, so add a `GRAFANA_REPOSITORY` build arg that overrides it.',
     scriptPath: import.meta.resolve('./scripts/024-grafana-repository-input.js'),
   },
   {
     name: '025-config-docs',
-    version: '10.0.0', // x-release-please-version
+    version: '10.0.0',
     description: 'Replace the generated configuration README with links to official documentation.',
     scriptPath: import.meta.resolve('./scripts/025-config-docs.js'),
   },
   {
     name: '026-oss-grafana-image',
-    version: '10.0.0', // x-release-please-version
+    version: '10.0.0',
     description:
       'The grafana-enterprise nightly image on Docker Hub is no longer updated, so e2e tests against nightly ran a stale build. Switch the local Docker environment and the e2e-version action to the Grafana OSS image.',
     scriptPath: import.meta.resolve('./scripts/026-oss-grafana-image.js'),
