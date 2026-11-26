@@ -113,7 +113,7 @@ jobs:
         run: npm run playwright:test --w @grafana/plugin-e2e -- --workers=75%
 
       - name: Upload e2e test summary
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@fa3356df288e68f5e900ab466e98b0bf9bad3118 # upload-report-artifacts/v1.0.1
+        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@2311d422543154f07aa4a01f966243f4ad4de266 # upload-report-artifacts/v1.0.3
         if: ${{ always() && !cancelled() }}
         with:
           test-outcome: ${{ steps.run-tests.outcome }}
