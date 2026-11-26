@@ -1,5 +1,36 @@
 # Changelog
 
+## [10.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.4...@grafana/create-plugin@10.0.0) (2026-11-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* **create-plugin:** default to the Grafana OSS image ([#3126](https://github.com/grafana/plugin-tools/issues/3126))
+
+### Features
+
+* add screenshot markers to plugin docs ([#3137](https://github.com/grafana/plugin-tools/issues/3137)) ([dc39a50](https://github.com/grafana/plugin-tools/commit/dc39a5009ade0e6d8548b2ce05c439ebd8796781))
+* **create-plugin:** accept GRAFANA_REPOSITORY Docker input ([#3121](https://github.com/grafana/plugin-tools/issues/3121)) ([d85c2f6](https://github.com/grafana/plugin-tools/commit/d85c2f66bad40140a901bb1a84c55b57ce11f5e3))
+* **create-plugin:** default to the Grafana OSS image ([#3126](https://github.com/grafana/plugin-tools/issues/3126)) ([0421471](https://github.com/grafana/plugin-tools/commit/0421471b4794d015617432e9935a8aaaca835ac3))
+
+
+### Bug Fixes
+
+* **create-plugin:** link configuration README to the official guide ([#3081](https://github.com/grafana/plugin-tools/issues/3081)) ([74be2ef](https://github.com/grafana/plugin-tools/commit/74be2efe78035d2c2634b69b239a5219621e7008))
+* **create-plugin:** resolve typecheck issues for rspack ([#3118](https://github.com/grafana/plugin-tools/issues/3118)) ([8166856](https://github.com/grafana/plugin-tools/commit/81668566961ab1ad65206af190239847656f8c03))
+* **deps:** Update dependency @babel/parser to v7.29.15 ([#2960](https://github.com/grafana/plugin-tools/issues/2960)) ([57b82ee](https://github.com/grafana/plugin-tools/commit/57b82ee2b58b897f0fa09300160269c9c27b9941))
+* **deps:** Update dependency recast to v0.24.3 ([#3148](https://github.com/grafana/plugin-tools/issues/3148)) ([0e59513](https://github.com/grafana/plugin-tools/commit/0e59513776f6de8503644dfd386c4734aee30774))
+* support ESLint Stylistic v6 ([#3141](https://github.com/grafana/plugin-tools/issues/3141)) ([95bee84](https://github.com/grafana/plugin-tools/commit/95bee844cd5df0fa15a408e365ba45fba5836ab4))
+* **templates:** Update dependency @grafana/plugin-e2e to v4.1.1 ([#3128](https://github.com/grafana/plugin-tools/issues/3128)) ([8b814ef](https://github.com/grafana/plugin-tools/commit/8b814efa2d3ea55d6158aed20609a2243f2c845d))
+* **templates:** update Grafana plugin action versions ([#3084](https://github.com/grafana/plugin-tools/issues/3084)) ([b4cab9e](https://github.com/grafana/plugin-tools/commit/b4cab9ef9e44b8de256580b629f331792ddaf781))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @grafana/plugin-docs-parser bumped from 1.0.0 to 1.1.0
+
 ## [9.0.4](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.3...@grafana/create-plugin@9.0.4) (2026-11-18)
 
 

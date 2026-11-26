@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@1.0.0...@grafana/plugin-docs-parser@1.1.0) (2026-11-26)
+
+
+### Features
+
+* add screenshot markers to plugin docs ([#3137](https://github.com/grafana/plugin-tools/issues/3137)) ([dc39a50](https://github.com/grafana/plugin-tools/commit/dc39a5009ade0e6d8548b2ce05c439ebd8796781))
+
+
+### Bug Fixes
+
+* **deps:** Update dependency js-yaml to v5.5.0 ([#3055](https://github.com/grafana/plugin-tools/issues/3055)) ([b85acb2](https://github.com/grafana/plugin-tools/commit/b85acb25fa51a0abde7e84011e4f1a86e671e1ad))
+* **deps:** Update dependency mdast-util-to-markdown to v2.2.4 ([#3147](https://github.com/grafana/plugin-tools/issues/3147)) ([36878d6](https://github.com/grafana/plugin-tools/commit/36878d6fb0c425cd445f64e0b603ded26d9629c6))
+
 ## [1.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@0.7.0...@grafana/plugin-docs-parser@1.0.0) (2026-11-11)
 
 

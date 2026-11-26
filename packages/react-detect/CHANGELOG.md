@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.2](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.8.1...@grafana/react-detect@0.8.2) (2026-11-26)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency @typescript-eslint/parser to v8.73.0 ([#2970](https://github.com/grafana/plugin-tools/issues/2970)) ([946f69b](https://github.com/grafana/plugin-tools/commit/946f69b9ce2922ecbfbab87b6fad16e6741858f5))
+
 ## [0.8.1](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.8.0...@grafana/react-detect@0.8.1) (2026-11-19)
 
 

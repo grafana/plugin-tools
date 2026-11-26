@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.2](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-types-bundler@0.7.1...@grafana/plugin-types-bundler@0.7.2) (2026-11-26)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency @types/node to v26 ([#3072](https://github.com/grafana/plugin-tools/issues/3072)) ([368cefe](https://github.com/grafana/plugin-tools/commit/368cefecd5d26531250fc48af7727074b4ab2191))
+
 ## [0.7.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-types-bundler@0.7.0...@grafana/plugin-types-bundler@0.7.1) (2026-11-06)
 
 

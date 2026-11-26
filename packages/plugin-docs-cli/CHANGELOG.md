@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.1.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@1.0.0...@grafana/plugin-docs-cli@1.1.0) (2026-11-26)
+
+
+### Features
+
+* add screenshot markers to plugin docs ([#3137](https://github.com/grafana/plugin-tools/issues/3137)) ([dc39a50](https://github.com/grafana/plugin-tools/commit/dc39a5009ade0e6d8548b2ce05c439ebd8796781))
+* **plugin-docs-cli:** require troubleshooting and panel examples ([#3106](https://github.com/grafana/plugin-tools/issues/3106)) ([214f24d](https://github.com/grafana/plugin-tools/commit/214f24dbd515e7e32c66e2ab6ed77a8a90889ca3))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 1.0.0 to 1.1.0
+
 ## [1.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@0.15.0...@grafana/plugin-docs-cli@1.0.0) (2026-11-11)
 
 
