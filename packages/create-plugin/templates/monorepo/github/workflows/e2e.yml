@@ -1,0 +1,114 @@
+{{!-- /* 🚨 The `${{ }}` Github workflow expressions need to be escaped so they are not being interpreted by Handlebars. (this comment is going to be removed after scaffolding) 🚨 */ --}}
+name: E2E
+
+# Called once per plugin by ci.yml. Each plugin has its own Grafana version range, so it resolves its own
+# matrix of Grafana images.
+on:
+  workflow_call:
+    inputs:
+      plugin-dir:
+        required: true
+        type: string
+      plugin-id:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  resolve-versions:
+    name: Resolve e2e images
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      has-e2e: $\{{ steps.check-for-e2e.outputs.has-e2e }}
+      matrix: $\{{ steps.resolve-versions.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Check for E2E
+        id: check-for-e2e
+        run: |
+          if [ -f "$\{{ inputs.plugin-dir }}/playwright.config.ts" ]
+          then
+            echo "has-e2e=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Resolve Grafana E2E versions
+        id: resolve-versions
+        if: steps.check-for-e2e.outputs.has-e2e == 'true'
+        uses: grafana/plugin-actions/e2e-version@e2e-version/v3.1.0
+        with:
+          plugin-directory: $\{{ inputs.plugin-dir }}
+
+  playwright-tests:
+    needs: resolve-versions
+    if: $\{{ needs.resolve-versions.outputs.has-e2e == 'true' }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        GRAFANA_IMAGE: $\{{ fromJson(needs.resolve-versions.outputs.matrix) }}
+    name: e2e test $\{{ matrix.GRAFANA_IMAGE.name }}@$\{{ matrix.GRAFANA_IMAGE.VERSION }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Download plugin
+        uses: actions/download-artifact@v8
+        with:
+          name: $\{{ inputs.plugin-id }}
+          path: $\{{ inputs.plugin-dir }}/dist
+
+      - name: Execute permissions on binary
+        run: |
+          if ls $\{{ inputs.plugin-dir }}/dist/gpx_* >/dev/null 2>&1; then
+            chmod +x $\{{ inputs.plugin-dir }}/dist/gpx_*
+          fi
+
+{{#if_eq packageManagerName "pnpm"}}
+      # pnpm action uses the packageManager field in the root package.json to
+      # understand which version to install.
+      - uses: pnpm/action-setup@v6
+{{/if_eq}}
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: '{{ packageManagerName }}'
+
+      - name: Install dev dependencies
+        run: {{ packageManagerInstallCmd }}
+
+      # The root docker-compose.yaml runs one Grafana that loads every plugin in plugins/.
+      - name: Start Grafana
+        run: |
+          docker compose pull
+          ANONYMOUS_AUTH_ENABLED=false GRAFANA_VERSION=$\{{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=$\{{ matrix.GRAFANA_IMAGE.NAME }} docker compose up -d
+
+      - name: Wait for grafana server
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.4
+        with:
+          url: http://localhost:3000/login
+
+      - name: Install Playwright Browsers
+        working-directory: $\{{ inputs.plugin-dir }}
+        run: {{#if_eq packageManagerName "yarn"}}yarn run -T playwright{{else}}{{ packageManagerName }} exec playwright{{/if_eq}} install chromium --with-deps
+
+      - name: Run Playwright tests
+        id: run-tests
+        working-directory: $\{{ inputs.plugin-dir }}
+        run: {{ packageManagerName }} run e2e
+
+      - name: Docker logs
+        if: $\{{ always() && steps.run-tests.outcome == 'failure' }}
+        run: |
+          docker compose logs grafana >& grafana-server.log
+
+      - name: Stop grafana docker
+        run: docker compose down

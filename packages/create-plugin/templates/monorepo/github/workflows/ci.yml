@@ -1,0 +1,160 @@
+{{!-- /* 🚨 The `${{ }}` Github workflow expressions need to be escaped so they are not being interpreted by Handlebars. (this comment is going to be removed after scaffolding) 🚨 */ --}}
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    name: Find plugins
+    runs-on: ubuntu-latest
+    outputs:
+      plugins: $\{{ steps.list.outputs.plugins }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      # Every directory under plugins/ with a src/plugin.json is a plugin, so new plugins need no CI changes.
+      - name: List plugins
+        id: list
+        run: |
+          plugins=$(for pluginJson in plugins/*/src/plugin.json; do
+            dir=$(dirname "$(dirname "$pluginJson")")
+            jq -n --arg dir "$dir" --arg id "$(jq -r .id "$pluginJson")" '{dir: $dir, id: $id}'
+          done | jq -cs .)
+          echo "plugins=${plugins}" >> $GITHUB_OUTPUT
+
+  build:
+    name: Build $\{{ matrix.plugin.id }}
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        plugin: $\{{ fromJson(needs.discover.outputs.plugins) }}
+    defaults:
+      run:
+        working-directory: $\{{ matrix.plugin.dir }}
+    env:
+      GRAFANA_ACCESS_POLICY_TOKEN: $\{{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+{{#if_eq packageManagerName "pnpm"}}
+      # pnpm action uses the packageManager field in the root package.json to
+      # understand which version to install.
+      - uses: pnpm/action-setup@v6
+{{/if_eq}}
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: '{{ packageManagerName }}'
+
+      # One install from the repository root installs every plugin and shared package.
+      - name: Install dependencies
+        working-directory: .
+        run: {{ packageManagerInstallCmd }}
+
+      - name: Check types
+        run: {{ packageManagerName }} run typecheck
+      - name: Lint
+        run: {{ packageManagerName }} run lint
+      - name: Unit tests
+        run: {{ packageManagerName }} run test:ci
+      - name: Build frontend
+        run: {{ packageManagerName }} run build
+
+      - name: Check for backend
+        id: check-for-backend
+        run: |
+          if [ -f "Magefile.go" ]
+          then
+            echo "has-backend=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Go environment
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: $\{{ matrix.plugin.dir }}/go.mod
+
+      - name: Lint backend
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        uses: golangci/golangci-lint-action@82606bf257cbaff209d206a39f5134f0cfbfd2ee # v9.2.1
+        with:
+          version: latest
+          working-directory: $\{{ matrix.plugin.dir }}
+          args: ./...
+
+      - name: Install mage
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        run: go install github.com/magefile/mage@latest
+
+      - name: Build backend
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        run: mage -v buildAll
+
+      - name: Test backend
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        run: mage -v test
+
+      - name: Sign plugin
+        run: {{ packageManagerName }} run sign
+        if: $\{{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
+
+      - name: Get plugin metadata
+        id: metadata
+        run: |
+          export GRAFANA_PLUGIN_VERSION=$(cat dist/plugin.json | jq -r .info.version)
+          echo "plugin-version=${GRAFANA_PLUGIN_VERSION}" >> $GITHUB_OUTPUT
+          echo "archive=${PLUGIN_ID}-${GRAFANA_PLUGIN_VERSION}.zip" >> $GITHUB_OUTPUT
+        env:
+          PLUGIN_ID: $\{{ matrix.plugin.id }}
+
+      - name: Package plugin
+        run: |
+          cp -r dist ${PLUGIN_ID}
+          zip ${ARCHIVE} ${PLUGIN_ID} -r
+        env:
+          ARCHIVE: $\{{ steps.metadata.outputs.archive }}
+          PLUGIN_ID: $\{{ matrix.plugin.id }}
+
+      - name: Check plugin.json
+        run: |
+          docker run --pull=always \
+            -v $PWD/${ARCHIVE}:/archive.zip \
+            grafana/plugin-validator-cli -analyzer=metadatavalid /archive.zip
+        env:
+          ARCHIVE: $\{{ steps.metadata.outputs.archive }}
+
+      - name: Archive Build
+        uses: actions/upload-artifact@v7
+        with:
+          name: $\{{ matrix.plugin.id }}
+          path: $\{{ matrix.plugin.dir }}/dist
+          retention-days: 5
+
+  e2e:
+    name: E2E $\{{ matrix.plugin.id }}
+    needs: [discover, build]
+    strategy:
+      fail-fast: false
+      matrix:
+        plugin: $\{{ fromJson(needs.discover.outputs.plugins) }}
+    uses: ./.github/workflows/e2e.yml
+    with:
+      plugin-dir: $\{{ matrix.plugin.dir }}
+      plugin-id: $\{{ matrix.plugin.id }}

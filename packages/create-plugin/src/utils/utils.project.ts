@@ -123,8 +123,8 @@ export function resolveProject(cwd: string = process.cwd()): ProjectLayout {
 export interface GenerateLocationCheck {
   // Set when a new plugin must not be generated in this location.
   error?: { title: string; body: string[] };
-  // The create-plugin project the new plugin would be added to, if any.
-  project?: ProjectLayout;
+  // The root of the create-plugin monorepo the new plugin is added to, if any.
+  monorepoRoot?: string;
 }
 
 function declaresWorkspaces(dir: string): boolean {
@@ -200,5 +200,6 @@ export function checkGenerateLocation(cwd: string = process.cwd()): GenerateLoca
     };
   }
 
-  return { project: resolveProject(workspaceRoot) };
+  // Single plugins (with a src/plugin.json) were caught above, so this is a create-plugin monorepo root.
+  return { monorepoRoot: workspaceRoot };
 }
