@@ -198,10 +198,6 @@ jobs:
         run: react-detect --json --noErrorExitCode
         working-directory: ./${{ env.WORKING_DIR }}
 
-      - name: '@grafana/plugin-meta-extractor - extract module metadata'
-        run: plugin-meta-extractor src/module.ts
-        working-directory: ./${{ env.WORKING_DIR }}
-
       - name: '@grafana/plugin-types-bundler - bundle plugin types'
         # Write outside dist/ so the bundled types don't end up in the signed plugin.
         run: plugin-types-bundler --entry-point src/types.ts --out-dir ../types-bundler-out
