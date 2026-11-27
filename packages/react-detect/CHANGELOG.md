@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.3](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.8.2...@grafana/react-detect@0.8.3) (2026-11-27)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency snyk-nodejs-lockfile-parser to v2.10.9 ([#3152](https://github.com/grafana/plugin-tools/issues/3152)) ([fce0f60](https://github.com/grafana/plugin-tools/commit/fce0f60676e8a971bb4452201321c7cd2750b817))
+
 ## [0.8.2](https://github.com/grafana/plugin-tools/compare/@grafana/react-detect@0.8.1...@grafana/react-detect@0.8.2) (2026-11-26)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@1.1.0...@grafana/plugin-docs-parser@1.1.1) (2026-11-27)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency hast-util-to-mdast to v10.1.4 ([#3146](https://github.com/grafana/plugin-tools/issues/3146)) ([c133912](https://github.com/grafana/plugin-tools/commit/c1339122f3b916812e041c9c2ff40a891e25e8d9))
+
 ## [1.1.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-parser@1.0.0...@grafana/plugin-docs-parser@1.1.0) (2026-11-26)
 
 

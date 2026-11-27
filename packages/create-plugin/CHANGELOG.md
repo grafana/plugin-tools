@@ -1,5 +1,22 @@
 # Changelog
 
+## [10.0.1](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@10.0.0...@grafana/create-plugin@10.0.1) (2026-11-27)
+
+
+### Bug Fixes
+
+* **create-plugin:** avoid slow regex in react-inlinesvg mock ([#3158](https://github.com/grafana/plugin-tools/issues/3158)) ([8719613](https://github.com/grafana/plugin-tools/commit/871961390cc423c77d5f83a69f408060aac9aa6e))
+* **deps:** Update dependency glob to v14 [SECURITY] ([#3130](https://github.com/grafana/plugin-tools/issues/3130)) ([d182ca8](https://github.com/grafana/plugin-tools/commit/d182ca838980504f4dbb0f73dc6fb4e285549038))
+* **deps:** Update dependency glob to v14.0.6 ([#3151](https://github.com/grafana/plugin-tools/issues/3151)) ([9714b6a](https://github.com/grafana/plugin-tools/commit/9714b6a55f208ee44da4a8e53db41ab7857a2209))
+* **deps:** Update dependency semver to v7.8.6 ([#3149](https://github.com/grafana/plugin-tools/issues/3149)) ([231e893](https://github.com/grafana/plugin-tools/commit/231e893d0a850de72003b790c28debd0ee050a5c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @grafana/plugin-docs-parser bumped from 1.1.0 to 1.1.1
+
 ## [10.0.0](https://github.com/grafana/plugin-tools/compare/@grafana/create-plugin@9.0.4...@grafana/create-plugin@10.0.0) (2026-11-26)
 
 

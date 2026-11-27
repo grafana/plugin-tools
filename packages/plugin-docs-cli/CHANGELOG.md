@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@1.1.0...@grafana/plugin-docs-cli@1.1.1) (2026-11-27)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @grafana/plugin-docs-parser bumped from 1.1.0 to 1.1.1
+
 ## [1.1.0](https://github.com/grafana/plugin-tools/compare/@grafana/plugin-docs-cli@1.0.0...@grafana/plugin-docs-cli@1.1.0) (2026-11-26)
 
 
