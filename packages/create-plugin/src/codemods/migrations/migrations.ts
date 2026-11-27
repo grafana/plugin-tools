@@ -180,7 +180,7 @@ export default [
   },
   {
     name: '027-inlinesvg-mock-regex',
-    version: '0.0.0-unreleased', // x-release-please-version
+    version: '10.0.1', // x-release-please-version
     description:
       'Fix slow regex in the react-inlinesvg Jest mock that could time out tests rendering large inline SVG strings.',
     scriptPath: import.meta.resolve('./scripts/027-inlinesvg-mock-regex.js'),
