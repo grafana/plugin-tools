@@ -73,8 +73,8 @@ html[data-theme='dark'] {
   --ifm-code-background: var(--background-secondary);
   --ifm-color-danger: var(--error-main);
   --ifm-color-info: var(--info-main);
-  --ifm-color-primary-dark: var(--warning-shade);
-  --ifm-color-primary-darker: var(--warning-main);
+  --ifm-color-primary-dark: var(--accent-text);
+  --ifm-color-primary-darker: var(--accent-main);
   --ifm-color-primary: var(--text-primary);
   --ifm-color-secondary: var(--text-secondary);
   --ifm-color-success: var(--success-main);
@@ -88,7 +88,7 @@ html[data-theme='dark'] {
   --ifm-pre-background: var(--background-secondary);
   --ifm-table-border-color: var(--background-primary);
   --ifm-table-stripe-background: var(--background-secondary);
-  --ifm-tabs-color-active-border: var(--warning-main);
+  --ifm-tabs-color-active-border: var(--accent-main);
 }
 
 .gap {

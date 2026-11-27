@@ -20,8 +20,8 @@ const PORTAL_HOME_HREF = `${PORTAL_URL}/developers`;
 const grafanaPrismTheme: PrismTheme = {
   ...themes.oneDark,
   plain: {
-    color: 'rgb(204, 204, 220)',
-    backgroundColor: '#181b1f',
+    color: 'var(--text-primary)',
+    backgroundColor: 'var(--background-primary)',
   },
 };
 
