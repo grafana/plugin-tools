@@ -8,11 +8,10 @@
   "compilerOptions": {
     "alwaysStrict": true,
     "declaration": false,
-    "rootDir": "../src",
+    "rootDir": "${configDir}/src",
     "paths": {
-      "*": ["../src/*"]
+      "*": ["${configDir}/src/*"]
     },
-    "typeRoots": ["../node_modules/@types"],
     "resolveJsonModule": true
   },
   "ts-node": {
@@ -24,6 +23,6 @@
     },
     "transpileOnly": true
   },
-  "include": ["../src", "./types"],
+  "include": ["${configDir}/src", "./types"],
   "extends": "@grafana/tsconfig"
 }

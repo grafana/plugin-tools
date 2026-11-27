@@ -185,6 +185,13 @@ export default [
       'Fix slow regex in the react-inlinesvg Jest mock that could time out tests rendering large inline SVG strings.',
     scriptPath: import.meta.resolve('./scripts/027-inlinesvg-mock-regex.js'),
   },
+  {
+    name: '028-tsconfig-config-dir',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description:
+      'Resolve .config/tsconfig.json paths from the extending tsconfig with ${configDir} and drop the typeRoots override so hoisted @types are found.',
+    scriptPath: import.meta.resolve('./scripts/028-tsconfig-config-dir.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
