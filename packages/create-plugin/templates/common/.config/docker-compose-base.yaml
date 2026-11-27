@@ -8,7 +8,7 @@ services:
       args:
         grafana_image: ${GRAFANA_IMAGE:-{{~grafanaImage~}} }
         grafana_repository: ${GRAFANA_REPOSITORY:-}
-        grafana_version: ${GRAFANA_VERSION:-13.2.4}
+        grafana_version: ${GRAFANA_VERSION:-13.3.2}
         development: ${DEVELOPMENT:-false}
         anonymous_auth_enabled: ${ANONYMOUS_AUTH_ENABLED:-true}
     ports:
