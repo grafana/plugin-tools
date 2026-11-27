@@ -66,6 +66,10 @@ To run commands for multiple packages refer to the `nx` instructions below but a
 - Before using `feat!:` or a `BREAKING CHANGE:` footer on a PR that touches several packages, check each package's diff. A change that only affects `devDependencies` or tooling isn't breaking for that package.
 - Tell the user about non-breaking packages in the diff and suggest splitting them into a separate `fix:` or `chore:` PR.
 - If a mixed PR can't be split, remind the user to add `Release-As: x.y.z` in the merge dialog. Squash merges here drop commit footers. Refer to the "Breaking changes in a monorepo" and "Fix an unwanted major bump" sections in @CONTRIBUTING.md.
+- If the user asks for help with a failed release, read "Troubleshooting releases" in @CONTRIBUTING.md first. Diagnose from the failed run's logs before suggesting fixes.
+- Do not re-run the publish job, stage packages locally, or approve or reject staged versions for the user. Approval needs their 2FA-enabled npm account.
+- Check every package that has not yet staged, not only the one that failed.
+- release-please overwrites edits to the release PR when new commits land on `main`. Tell the user to pause merges before they edit it.
 
 ## Private libraries
 
