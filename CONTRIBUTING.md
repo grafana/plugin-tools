@@ -199,7 +199,7 @@ Consumers install the preview by URL:
 npm i https://pkg.pr.new/grafana/plugin-tools/@grafana/<package-name>@<commit-sha>
 ```
 
-For CLI packages (`create-plugin`, `plugin-docs-cli`, `plugin-meta-extractor`, `plugin-types-bundler`, `react-detect`, `sign-plugin`), you can also run the binary directly without installing:
+For CLI packages (`create-plugin`, `plugin-docs-cli`, `plugin-types-bundler`, `react-detect`, `sign-plugin`), you can also run the binary directly without installing:
 
 ```bash
 npx https://pkg.pr.new/grafana/plugin-tools/@grafana/<cli-package>@<commit-sha>
