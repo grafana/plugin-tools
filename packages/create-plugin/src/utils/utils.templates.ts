@@ -16,6 +16,7 @@ import { type FeatureFlags, getConfig } from './utils.config.js';
 import { getExportFileName } from '../utils/utils.files.js';
 import { getPluginJson } from './utils.plugin.js';
 import { glob } from 'glob';
+import { gte } from 'semver';
 import path from 'node:path';
 
 const templatesDebugger = debug.extend('templates');
@@ -123,6 +124,7 @@ export function buildTemplateData({
     packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName, packageManagerVersion),
     isAppType: isAppType(pluginJson.type),
     isNPM: isNPM(packageManagerName),
+    supportsWorkspaceProtocol: supportsWorkspaceProtocol(packageManagerName, packageManagerVersion),
     version: CURRENT_APP_VERSION,
     bundleGrafanaUI: features.bundleGrafanaUI ?? DEFAULT_FEATURE_FLAGS.bundleGrafanaUI,
     scenesVersion: '^8.17.0',
@@ -138,6 +140,10 @@ function isAppType(pluginType: string) {
 
 function isNPM(packageManagerName: string) {
   return packageManagerName === 'npm';
+}
+
+function supportsWorkspaceProtocol(packageManagerName: string, packageManagerVersion: string) {
+  return packageManagerName === 'pnpm' || (packageManagerName === 'yarn' && gte(packageManagerVersion, '2.0.0'));
 }
 
 export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cwd()): TemplateData {
@@ -165,6 +171,7 @@ export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cw
       packageManagerInstallCmd: getPackageManagerInstallCmd(packageManagerName, packageManagerVersion),
       isAppType: isAppType(cliArgs.pluginType),
       isNPM: isNPM(packageManagerName),
+      supportsWorkspaceProtocol: supportsWorkspaceProtocol(packageManagerName, packageManagerVersion),
       version: currentVersion,
       bundleGrafanaUI,
       scenesVersion: '^8.17.0',

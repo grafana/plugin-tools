@@ -1,0 +1,3 @@
+# .config is a workspace package so the plugin's config files can import it by name.
+packages:
+  - .config
