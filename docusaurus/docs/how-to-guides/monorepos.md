@@ -42,34 +42,28 @@ Each directory under `plugins/` is a complete plugin with its own `src/`, tests,
 
 ## Create a monorepo
 
-Run `create-plugin` with the `--monorepo` flag. It asks the usual questions and creates the monorepo with its first plugin:
-
-```shell
-npx @grafana/create-plugin@latest --monorepo
-```
-
-By default, `create-plugin` names the monorepo directory `<organization>-plugins`. To choose another name, pass `--monorepo-name`:
+Run `create-plugin` with the `--monorepo` flag. It creates the monorepo's root with the shared configuration, CI workflows, and agent instructions, but no plugins yet. Pass the directory name with `--monorepo-name`, or `create-plugin` asks for one:
 
 ```shell
 npx @grafana/create-plugin@latest --monorepo --monorepo-name=my-plugins
 ```
 
-Then install the dependencies for every plugin from the repository root:
-
-```shell
-cd my-plugins
-npm install
-```
+Then add your first plugin.
 
 ## Add a plugin
 
-Run `create-plugin` from the root of the monorepo:
+Run `create-plugin` from the root of the monorepo. It asks the usual questions about the plugin:
 
 ```shell
+cd my-plugins
 npx @grafana/create-plugin@latest
 ```
 
-`create-plugin` creates the plugin in `plugins/<plugin-id>`, then adds it to the development server, the provisioning, and the release configuration. Run `npm install` from the root afterwards.
+`create-plugin` creates the plugin in `plugins/<plugin-id>`, then adds it to the development server, the provisioning, and the release configuration. Then install the dependencies for every plugin from the repository root:
+
+```shell
+npm install
+```
 
 :::note
 
