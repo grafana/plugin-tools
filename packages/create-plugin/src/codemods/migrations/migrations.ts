@@ -178,6 +178,13 @@ export default [
       'The grafana-enterprise nightly image on Docker Hub is no longer updated, so e2e tests against nightly ran a stale build. Switch the local Docker environment and the e2e-version action to the Grafana OSS image.',
     scriptPath: import.meta.resolve('./scripts/026-oss-grafana-image.js'),
   },
+  {
+    name: '027-inlinesvg-mock-regex',
+    version: '0.0.0-unreleased', // x-release-please-version
+    description:
+      'Fix slow regex in the react-inlinesvg Jest mock that could time out tests rendering large inline SVG strings.',
+    scriptPath: import.meta.resolve('./scripts/027-inlinesvg-mock-regex.js'),
+  },
   // Do not use LEGACY_UPDATE_CUTOFF_VERSION for new migrations. It is only used above to force migrations to run
   // for those written before the switch to updates as migrations.
   //
