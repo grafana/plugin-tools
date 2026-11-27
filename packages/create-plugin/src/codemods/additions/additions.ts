@@ -4,6 +4,11 @@ interface AdditionBase {
   // package.json scripts create-plugin runs itself after an agent step, e.g. ['typecheck', 'build'].
   // only used by additions with a prompt
   verify?: string[];
+  // 'repo' additions change shared config (for example .config/) and therefore apply to every plugin.
+  // 'plugin' additions can target specific plugins in a monorepo with --plugin.
+  scope: 'repo' | 'plugin';
+  // Additions that have not been made monorepo-aware refuse to run in a plugin monorepo.
+  supportsMonorepo: boolean;
 }
 
 export interface ScriptAddition extends AdditionBase {
@@ -38,6 +43,8 @@ const additions: Addition[] = [
     name: 'externalize-jsx-runtime',
     description: 'Externalizes the react JSX runtime to help migrate plugins to React 19',
     scriptPath: import.meta.resolve('./scripts/externalize-jsx-runtime.js'),
+    scope: 'repo',
+    supportsMonorepo: true,
   },
   {
     name: 'rspack',
@@ -45,16 +52,22 @@ const additions: Addition[] = [
     scriptPath: import.meta.resolve('./scripts/rspack.js'),
     prompt: import.meta.resolve('./prompts/rspack.md'),
     verify: ['typecheck', 'build'],
+    scope: 'repo',
+    supportsMonorepo: false,
   },
   {
     name: 'experimental-app-sdk',
     description: 'Adds grafana-app-sdk CUE kind code generation to an app plugin',
     scriptPath: import.meta.resolve('./scripts/experimental-app-sdk.js'),
+    scope: 'plugin',
+    supportsMonorepo: false,
   },
   {
     name: 'docs',
     description: 'Scaffolds plugin docs for a Grafana plugin',
     scriptPath: import.meta.resolve('./scripts/docs.js'),
+    scope: 'plugin',
+    supportsMonorepo: false,
   },
   {
     name: 'docs-content',
@@ -62,6 +75,8 @@ const additions: Addition[] = [
     scriptPath: import.meta.resolve('./scripts/docs-content.js'),
     prompt: import.meta.resolve('./prompts/docs-content.md'),
     verify: ['docs:validate'],
+    scope: 'plugin',
+    supportsMonorepo: false,
   },
 ];
 

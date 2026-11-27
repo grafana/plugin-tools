@@ -146,6 +146,14 @@ function supportsWorkspaceProtocol(packageManagerName: string, packageManagerVer
   return packageManagerName === 'pnpm' || (packageManagerName === 'yarn' && gte(packageManagerVersion, '2.0.0'));
 }
 
+function readPluginJsonOrEmpty(srcDir: string) {
+  try {
+    return getPluginJson(srcDir);
+  } catch {
+    return {};
+  }
+}
+
 export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cwd()): TemplateData {
   const { features } = getConfig(rootPath);
   const currentVersion = CURRENT_APP_VERSION;
@@ -181,8 +189,9 @@ export function getTemplateData(cliArgs?: GenerateCliArgs, rootPath = process.cw
     // Updating or migrating a plugin
     // (plugin.json and package.json files are only present if it's an existing plugin)
   } else {
+    // A monorepo root has no src/plugin.json, so templates rendered there only get project-wide data.
     templateData = buildTemplateData({
-      pluginJson: getPluginJson(path.join(rootPath, 'src')),
+      pluginJson: readPluginJsonOrEmpty(path.join(rootPath, 'src')),
       packageManager: getPackageManagerWithFallback(rootPath),
       features,
     });

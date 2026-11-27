@@ -69,6 +69,16 @@ describe('Utils / explicit project root', () => {
     expect(templateData.packageManagerName).toBe('yarn');
   });
 
+  test('getTemplateData() works at a monorepo root, which has no src/plugin.json', () => {
+    fs.rmSync(path.join(projectRoot, 'src'), { recursive: true, force: true });
+
+    const templateData = getTemplateData(undefined, projectRoot);
+
+    expect(templateData.packageManagerName).toBe('yarn');
+    expect(templateData.frontendBundler).toBe('webpack');
+    expect(templateData.pluginId).toBeUndefined();
+  });
+
   test('compileSingleTemplateFile() writes to the given root', () => {
     const templateFile = path.join(TEMPLATE_PATHS.common, 'docker-compose.yaml');
 

@@ -3,6 +3,8 @@ import { getProjectGitPaths, isGitDirectory, isGitDirectoryClean } from './utils
 import { ProjectLayout, resolveProject } from './utils.project.js';
 import { isPluginDirectory } from './utils.plugin.js';
 import { output } from './utils.console.js';
+import { getPackageManagerWithFallback } from './utils.packageManager.js';
+import { lt } from 'semver';
 
 /**
  * Ensures git directory exists, is clean, and we're in a plugin directory
@@ -37,7 +39,8 @@ export async function performPreCodemodChecks(
     process.exit(1);
   }
 
-  if (!isPluginDirectory(project.root) && !argv.force) {
+  // A monorepo root holds its plugins in workspaces, so it has no src/plugin.json of its own.
+  if (project.kind === 'single' && !isPluginDirectory(project.root) && !argv.force) {
     output.error({
       title: 'Are you inside a plugin directory?',
       body: [
@@ -47,5 +50,18 @@ export async function performPreCodemodChecks(
     });
 
     process.exit(1);
+  }
+
+  if (project.kind === 'monorepo') {
+    const { packageManagerName, packageManagerVersion } = getPackageManagerWithFallback(project.root);
+
+    if (packageManagerName === 'yarn' && lt(packageManagerVersion, '2.0.0')) {
+      output.error({
+        title: 'Yarn 1 is not supported in plugin monorepos.',
+        body: [`This monorepo uses yarn ${packageManagerVersion}. Use npm, pnpm, or yarn 2 or later instead.`],
+      });
+
+      process.exit(1);
+    }
   }
 }
