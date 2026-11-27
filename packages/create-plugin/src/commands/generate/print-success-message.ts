@@ -4,7 +4,7 @@ import { styleText } from 'node:util';
 import { TemplateData } from '../../types.js';
 import { output } from '../../utils/utils.console.js';
 import { normalizeId } from '../../utils/utils.handlebars.js';
-import { getPackageManagerFromUserAgent } from '../../utils/utils.packageManager.js';
+import { getPackageManagerExecCmd, getPackageManagerFromUserAgent } from '../../utils/utils.packageManager.js';
 
 export function printGenerateSuccessMessage(answers: TemplateData) {
   const directory = normalizeId(answers.pluginName, answers.orgName, answers.pluginType);
@@ -40,16 +40,39 @@ export function printGenerateSuccessMessage(answers: TemplateData) {
   });
 }
 
+export function printMonorepoCreatedMessage({ templateData, root }: { templateData: TemplateData; root: string }) {
+  const { packageManagerName, packageManagerVersion } = templateData;
+  const rootDir = path.relative(process.cwd(), root) || '.';
+
+  const commands = output.bulletList([
+    output.formatCode(`cd ./${rootDir}`),
+    `${output.formatCode(getPackageManagerExecCmd(packageManagerName, packageManagerVersion))} ${styleText(['dim'], 'to add your first plugin')}`,
+  ]);
+
+  output.log({
+    title: 'Next steps:',
+    body: [
+      'Run the following commands to add a plugin:',
+      ...commands,
+      '',
+      styleText(
+        ['italic'],
+        `Note: We strongly recommend creating a new Git repository by running ${output.formatCode('git init')} in ./${rootDir} before continuing.`
+      ),
+      '',
+      `   Learn more about Grafana Plugin Development at ${output.formatUrl('https://grafana.com/developers/plugin-tools')}`,
+    ],
+  });
+}
+
 export function printMonorepoSuccessMessage({
   templateData,
   root,
   pluginDir,
-  isNewMonorepo,
 }: {
   templateData: TemplateData;
   root: string;
   pluginDir: string;
-  isNewMonorepo: boolean;
 }) {
   const { packageManagerName } = templateData;
   const rootDir = path.relative(process.cwd(), root) || '.';
@@ -70,15 +93,6 @@ export function printMonorepoSuccessMessage({
     body: [
       'Run the following commands to get started:',
       ...commands,
-      ...(isNewMonorepo
-        ? [
-            '',
-            styleText(
-              ['italic'],
-              `Note: We strongly recommend creating a new Git repository by running ${output.formatCode('git init')} in ./${rootDir} before continuing.`
-            ),
-          ]
-        : []),
       '',
       `   Learn more about Grafana Plugin Development at ${output.formatUrl('https://grafana.com/developers/plugin-tools')}`,
     ],

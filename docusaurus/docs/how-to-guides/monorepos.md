@@ -79,7 +79,7 @@ npx @grafana/create-plugin@latest
 
 ## Share code between plugins
 
-Plugins can't import code from each other. Each plugin has its own bundle, signature, and release, so the build fails when a plugin imports another plugin's files or reaches outside its own directory with a relative path.
+Plugins can't import code from each other. Each plugin has its own bundle, signature, and release, so the `@grafana/plugins/no-cross-plugin-imports` ESLint rule reports an error when a plugin imports another plugin's files or reaches outside its own directory with a relative path. The monorepo's shared ESLint configuration turns the rule on, and `npm run lint` and CI run it for every plugin.
 
 Put shared code in a workspace package in `packages/` instead:
 
